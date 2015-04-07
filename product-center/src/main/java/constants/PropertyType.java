@@ -1,8 +1,8 @@
-package constant;
+package constants;
 
-import com.boobee.common.domain.util.ViewEnum;
-import com.boobee.common.jackson.EnumSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.EnumSerializer;
+import common.models.utils.ViewEnum;
 
 /**
  * 类目属性类型，它表示某个属性在特定类目下是什么类型，有

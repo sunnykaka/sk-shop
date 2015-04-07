@@ -1,6 +1,6 @@
-package domain;
+package models;
 
-import com.boobee.common.domain.util.EntityClass;
+import common.models.utils.EntityClass;
 
 import javax.persistence.*;
 

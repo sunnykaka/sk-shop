@@ -1,7 +1,7 @@
-package domain;
+package models;
 
-import com.boobee.common.domain.util.EntityClass;
-import com.boobee.common.domain.util.OperableData;
+import common.models.utils.EntityClass;
+import common.models.utils.OperableData;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -9,26 +9,20 @@ import javax.persistence.*;
 
 /**
  * Created by zhb on 15-4-1.
- * 前台类目
+ * 属性对应的名字
  */
-@Table(name = "navigate")
+@Table(name = "property")
 @Entity
-public class Navigate implements EntityClass<Integer>,OperableData {
+public class Property implements EntityClass<Integer>,OperableData {
 
     private Integer id;
 
     private String name;
 
-    /** 前台类目关键字 */
-    private String keyword;
-
-    private Integer parentId;
-
-    /** 排序 */
+    /**
+     * 排序
+     */
     private Integer priority;
-
-    /** 上下线状态 */
-    private boolean online;
 
     private DateTime createTime;
 
@@ -56,26 +50,6 @@ public class Navigate implements EntityClass<Integer>,OperableData {
         this.name = name;
     }
 
-    @Column(name = "keyword")
-    @Basic
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
-    @Column(name = "parent_id")
-    @Basic
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
     @Column(name = "priority")
     @Basic
     public Integer getPriority() {
@@ -84,16 +58,6 @@ public class Navigate implements EntityClass<Integer>,OperableData {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
-    }
-
-    @Column(name = "online")
-    @Basic
-    public boolean isOnline() {
-        return online;
-    }
-
-    public void setOnline(boolean online) {
-        this.online = online;
     }
 
     @Column(name = "create_time")

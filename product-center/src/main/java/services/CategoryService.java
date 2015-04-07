@@ -1,7 +1,7 @@
-package service;
+package services;
 
 import common.services.GeneralDao;
-import domain.Category;
+import models.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,6 @@ import java.util.List;
  * Created by zhb on 15-4-2.
  */
 @Service
-@Transactional
 public class CategoryService {
 
     private static final Logger log = LoggerFactory.getLogger(CategoryService.class);
@@ -80,6 +79,7 @@ public class CategoryService {
      * @param parentId
      * @return
      */
+    @Transactional(readOnly = true)
     public List<Category> getCategorybyId(int parentId) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -102,11 +102,10 @@ public class CategoryService {
      *
      * @return
      */
+    @Transactional(readOnly = true)
     public List<Category> findFatherCategorys() {
 
-        Search search = new Search(Category.class);
-        search.addFilterEqual("parentId", Category.PARENT_DEFAULT);
-        return generalDAO.search(search);
+        return getCategorybyId(Category.PARENT_DEFAULT);
 
     }
 

@@ -1,7 +1,7 @@
-package domain;
+package models;
 
-import com.boobee.common.domain.util.EntityClass;
-import com.boobee.common.domain.util.OperableData;
+import common.models.utils.EntityClass;
+import common.models.utils.OperableData;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -9,15 +9,17 @@ import javax.persistence.*;
 
 /**
  * Created by zhb on 15-4-1.
- * 属性对应的名字
+ * 属性对应的值
  */
-@Table(name = "property")
+@Table(name = "value")
 @Entity
-public class Property implements EntityClass<Integer>,OperableData {
+public class Value implements EntityClass<Integer>,OperableData {
 
     private Integer id;
 
     private String name;
+
+    private Integer propertyId;
 
     /**
      * 排序
@@ -48,6 +50,16 @@ public class Property implements EntityClass<Integer>,OperableData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "property_id")
+    @Basic
+    public Integer getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Integer propertyId) {
+        this.propertyId = propertyId;
     }
 
     @Column(name = "priority")

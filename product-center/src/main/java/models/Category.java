@@ -1,7 +1,7 @@
-package domain;
+package models;
 
-import com.boobee.common.domain.util.EntityClass;
-import com.boobee.common.domain.util.OperableData;
+import common.models.utils.EntityClass;
+import common.models.utils.OperableData;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -9,22 +9,20 @@ import javax.persistence.*;
 
 /**
  * Created by zhb on 15-4-1.
- * 属性对应的值
+ * 后台类目
  */
-@Table(name = "value")
+@Table(name = "category")
 @Entity
-public class Value implements EntityClass<Integer>,OperableData {
+public class Category implements EntityClass<Integer>,OperableData {
+
+    /** 类目根目录父ID */
+    public static final Integer PARENT_DEFAULT = -1;
 
     private Integer id;
 
     private String name;
 
-    private Integer propertyId;
-
-    /**
-     * 排序
-     */
-    private Integer priority;
+    private Integer parentId;
 
     private DateTime createTime;
 
@@ -52,58 +50,42 @@ public class Value implements EntityClass<Integer>,OperableData {
         this.name = name;
     }
 
-    @Column(name = "property_id")
+    @Column(name = "parent_id")
     @Basic
-    public Integer getPropertyId() {
-        return propertyId;
+    public Integer getParentId() {
+        return parentId;
     }
 
-    public void setPropertyId(Integer propertyId) {
-        this.propertyId = propertyId;
-    }
-
-    @Column(name = "priority")
-    @Basic
-    public Integer getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority = priority;
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     @Column(name = "create_time")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Override
     public DateTime getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(DateTime createTime) {
         this.createTime = createTime;
     }
 
     @Column(name = "update_time")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Override
     public DateTime getUpdateTime() {
         return updateTime;
     }
 
-    @Override
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
     }
 
     @Column(name = "operator_id")
     @Basic
-    @Override
     public Integer getOperatorId() {
         return operatorId;
     }
 
-    @Override
     public void setOperatorId(Integer operatorId) {
         this.operatorId = operatorId;
     }

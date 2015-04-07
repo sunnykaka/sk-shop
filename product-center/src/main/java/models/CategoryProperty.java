@@ -1,7 +1,7 @@
-package domain;
+package models;
 
-import com.boobee.boss.constant.PropertyType;
-import com.boobee.common.domain.util.EntityClass;
+import common.models.utils.EntityClass;
+import constants.PropertyType;
 
 import javax.persistence.*;
 
