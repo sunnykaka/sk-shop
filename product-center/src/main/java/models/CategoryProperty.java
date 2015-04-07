@@ -6,8 +6,8 @@ import constants.PropertyType;
 import javax.persistence.*;
 
 /**
- * Created by zhb on 15-4-1.
  * 类目属性关联
+ * Created by zhb on 15-4-1.
  */
 @Table(name = "category_property")
 @Entity

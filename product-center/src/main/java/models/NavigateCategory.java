@@ -5,8 +5,8 @@ import common.models.utils.EntityClass;
 import javax.persistence.*;
 
 /**
- * Created by zhb on 15-4-1.
  * 前台、后台类目关联
+ * Created by zhb on 15-4-1.
  */
 @Table(name = "navigate_category")
 @Entity

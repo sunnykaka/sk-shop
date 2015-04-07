@@ -8,8 +8,8 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 
 /**
- * Created by zhb on 15-4-1.
  * 属性对应的名字
+ * Created by zhb on 15-4-1.
  */
 @Table(name = "property")
 @Entity

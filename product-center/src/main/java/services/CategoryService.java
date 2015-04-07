@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * 类目操作
- * <p/>
+ *
  * Created by zhb on 15-4-2.
  */
 @Service
@@ -40,6 +40,7 @@ public class CategoryService {
      * @param category
      * @return
      */
+    @Transactional
     public void save(Category category) {
 
         if (null != category && (category.getParentId() == 0 || category.getParentId() == null)) {
@@ -55,6 +56,7 @@ public class CategoryService {
      * @param category
      * @return
      */
+    @Transactional
     public Category update(Category category){
 
         return generalDao.merge(category);
@@ -66,6 +68,7 @@ public class CategoryService {
      * @param category
      * @return
      */
+    @Transactional
     public boolean delete(Category category) {
 
         return generalDao.removeById(Category.class,category.getId());
