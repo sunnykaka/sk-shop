@@ -2,6 +2,7 @@ package productcenter.product;
 
 import constants.PropertyType;
 import models.ProductProperty;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
@@ -17,7 +18,13 @@ import java.util.List;
  */
 public class ProductPropertyServiceTest extends WithApplication {
 
-    private ProductPropertyService productPropertyService = Global.ctx.getBean(ProductPropertyService.class);
+    private ProductPropertyService productPropertyService;
+
+    @Before
+    public void setUp() {
+        super.startPlay();
+        productPropertyService = Global.ctx.getBean(ProductPropertyService.class);
+    }
 
     @Test
     @Rollback(false)

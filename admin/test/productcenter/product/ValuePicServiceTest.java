@@ -1,6 +1,7 @@
 package productcenter.product;
 
 import models.ValuePic;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
@@ -16,7 +17,13 @@ import java.util.List;
  */
 public class ValuePicServiceTest extends WithApplication {
 
-    private ValuePicService valuePicService = Global.ctx.getBean(ValuePicService.class);
+    private ValuePicService valuePicService;
+
+    @Before
+    public void setUp() {
+        super.startPlay();
+        valuePicService = Global.ctx.getBean(ValuePicService.class);
+    }
 
     @Test
     @Rollback(false)

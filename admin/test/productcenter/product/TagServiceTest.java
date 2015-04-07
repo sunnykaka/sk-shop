@@ -1,6 +1,7 @@
 package productcenter.product;
 
 import models.Tag;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
@@ -16,7 +17,13 @@ import java.util.List;
  */
 public class TagServiceTest extends WithApplication {
 
-    private TagService tagService = Global.ctx.getBean(TagService.class);
+    private TagService tagService;
+
+    @Before
+    public void setUp() {
+        super.startPlay();
+        tagService = Global.ctx.getBean(TagService.class);
+    }
 
     @Test
     @Rollback(false)

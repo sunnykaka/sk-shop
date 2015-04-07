@@ -1,6 +1,7 @@
 package productcenter.product;
 
 import models.Product;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
@@ -16,7 +17,13 @@ import java.util.List;
  */
 public class ProductServiceTest extends WithApplication {
 
-    private ProductService productService = Global.ctx.getBean(ProductService.class);
+    private ProductService productService;
+
+    @Before
+    public void setUp() {
+        super.startPlay();
+        productService = Global.ctx.getBean(ProductService.class);
+    }
 
     @Test
     @Rollback(false)

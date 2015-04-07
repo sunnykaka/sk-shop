@@ -2,6 +2,7 @@ package productcenter.product;
 
 import common.utils.Money;
 import models.Sku;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -19,7 +20,13 @@ import java.util.List;
 public class SkuServiceTest extends WithApplication {
 
     @Autowired
-    private SkuService skuService = Global.ctx.getBean(SkuService.class);
+    private SkuService skuService;
+
+    @Before
+    public void setUp() {
+        super.startPlay();
+        skuService = Global.ctx.getBean(SkuService.class);
+    }
 
     @Test
     @Rollback(false)
