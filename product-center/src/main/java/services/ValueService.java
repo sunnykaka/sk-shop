@@ -10,6 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * value 操作
@@ -55,6 +62,27 @@ public class ValueService {
         generalDAO.removeById(Value.class,valueId);
     }
 
+    /**
+     * 根据属性ID查对应值
+     *
+     * @param propertyId
+     * @return
+     */
+    public List<Value> findbyPropertyId(int propertyId){
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Value> cq = cb.createQuery(Value.class);
+        Root<Value> rootValue = cq.from(Value.class);
+
+        List<Predicate> predicateList = new ArrayList<>();
+        predicateList.add(cb.equal(rootValue.get("property_id"), propertyId));
+
+        cq.select(rootValue).where(predicateList.toArray(new Predicate[predicateList.size()]));
+
+        TypedQuery<Value> query = em.createQuery(cq);
+
+        return query.getResultList();
+    }
 
 
 }
