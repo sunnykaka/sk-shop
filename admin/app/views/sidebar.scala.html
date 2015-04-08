@@ -1,0 +1,44 @@
+@()
+
+
+<script type="text/javascript">try{ace.settings.check('sidebar' , 'fixed')}catch(e){}</script>
+
+<ul class="nav nav-list">
+    <li>
+        <a href="index.html">
+            <i class="icon-dashboard"></i>
+            <span class="menu-text"> Dashboard </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="typography.html">
+            <i class="icon-text-width"></i>
+            <span class="menu-text"> Typography </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-desktop"></i>
+            <span class="menu-text"> 订单管理 </span>
+
+            <b class="arrow icon-angle-down"></b>
+        </a>
+
+        <ul class="submenu">
+            <li class="active">
+                <a href="@controllers.order.routes.OrderController.list()">
+                    <i class="icon-double-angle-right"></i>
+                    订单查询
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul><!-- /.nav-list -->
+
+<div class="sidebar-collapse" id="sidebar-collapse">
+    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+</div>
+
+<script>try{ace.settings.check('sidebarexi' , 'collapsed')}catch(e){}</script>

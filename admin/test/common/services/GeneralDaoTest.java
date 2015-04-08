@@ -40,7 +40,7 @@ public class GeneralDaoTest extends WithApplication implements PrepareOrderData 
             generalDao.detach(order);
 
             assert order.getCreateTime() != null;
-            assert order.getUpdateTime() == null;
+            assert order.getUpdateTime() != null;
             assert order.getId() > 0;
 
             //此时更新无用,因为对象已没有被session管理(显式detach)

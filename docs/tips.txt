@@ -1,0 +1,15 @@
+1.  如何解决Controller中反向路由编译错误
+    在idea中按ctrl+alt+shift+S, 在弹出的Project Structure中选中左边的Modules,
+    在admin这个module中选中target/scala-2.11/src_managed/main, 设置为Sources,点击OK退出
+
+2.  如何启动play应用
+    在命令行中,进入项目根目录,输入sbt进入sbt终端,输入project admin切换到admin目录,输入即可run启动, 后面可带端口作为参数, 例如run 9000, 默认为9000
+
+3.  如何在idea中debug play应用
+    首先,在~/.bashrc中加入下面设置环境变量的语句export SBT_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"
+    然后source ~/.bashrc, 然后进入sbt按步骤2中的方法启动play
+    然后,在idea中点击Run/edit configurations, 新建一个Remote, 修改端口为9999, 保存运行.
+
+4.  有时需要清空项目编译的缓存,sbt clean只能清空自己编写的代码,如果要完整清空,可以在命令行中进入项目根目录,
+    然后执行"find . -name target -type d -exec rm -rf {} \;"
+    建议把这行语句加入~/.bashrc并起个别名,例如alias sbtclean="find . -name target -type d -exec rm -rf {} \;"
