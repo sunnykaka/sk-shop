@@ -147,9 +147,9 @@ public class GeneralDao {
         if(t instanceof OperableData) {
             OperableData operableData = (OperableData)t;
             DateTime now = DateUtils.current();
-            operableData.setCreateTime(now);
-            if(!isCreate) {
-                operableData.setUpdateTime(now);
+            operableData.setUpdateTime(now);
+            if(isCreate) {
+                operableData.setCreateTime(now);
             }
             //TODO set operator
         }
