@@ -1,16 +1,18 @@
 package controllers;
 
-import constants.PropertyType;
-import models.CategoryProperty;
-import models.CategoryPropertyValue;
-import models.Property;
-import models.Value;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.*;
+import productcenter.constants.PropertyType;
+import productcenter.models.CategoryProperty;
+import productcenter.models.CategoryPropertyValue;
+import productcenter.models.Property;
+import productcenter.models.Value;
+import productcenter.services.CategoryPropertyService;
+import productcenter.services.CategoryPropertyValueService;
+import productcenter.services.PropertyService;
+import productcenter.services.ValueService;
 
 import java.util.HashSet;
 import java.util.LinkedList;

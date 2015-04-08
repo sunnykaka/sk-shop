@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.CategoryService;
+import productcenter.services.CategoryService;
 
 /**
  * Created by zhb on 15-4-8.
