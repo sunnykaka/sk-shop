@@ -1,10 +1,9 @@
 package productcenter.category;
 
 import base.BaseTest;
-import base.PrepareOrderData;
-import models.Category;
+import productcenter.models.Category;
 import org.junit.Test;
-import services.CategoryService;
+import productcenter.services.CategoryService;
 import utils.Global;
 
 import static play.test.Helpers.fakeApplication;

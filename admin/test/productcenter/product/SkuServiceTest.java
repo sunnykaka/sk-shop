@@ -1,12 +1,12 @@
 package productcenter.product;
 
 import common.utils.Money;
-import models.Sku;
+import productcenter.models.Sku;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.test.WithApplication;
-import services.SkuService;
+import productcenter.services.SkuService;
 import utils.Global;
 
 import java.util.List;

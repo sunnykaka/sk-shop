@@ -1,10 +1,10 @@
 package productcenter.product;
 
-import models.ValuePic;
+import productcenter.models.ValuePic;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
-import services.ValuePicService;
+import productcenter.services.ValuePicService;
 import utils.Global;
 
 import java.util.List;

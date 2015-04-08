@@ -1,10 +1,10 @@
 package productcenter.product;
 
-import models.DesignerPicture;
+import productcenter.models.DesignerPicture;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
-import services.DesignerPictureService;
+import productcenter.services.DesignerPictureService;
 import utils.Global;
 
 import java.util.List;

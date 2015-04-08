@@ -1,10 +1,10 @@
 package productcenter.product;
 
-import models.Tag;
+import productcenter.models.Tag;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
-import services.TagService;
+import productcenter.services.TagService;
 import utils.Global;
 
 import java.util.List;

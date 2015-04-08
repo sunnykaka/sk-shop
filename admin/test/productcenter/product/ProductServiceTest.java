@@ -1,11 +1,10 @@
 package productcenter.product;
 
-import models.Product;
+import productcenter.models.Product;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
-import services.ProductService;
+import productcenter.services.ProductService;
 import utils.Global;
 
 import java.util.List;

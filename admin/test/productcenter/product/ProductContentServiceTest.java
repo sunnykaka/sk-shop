@@ -1,10 +1,10 @@
 package productcenter.product;
 
-import models.ProductContent;
+import productcenter.models.ProductContent;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
-import services.ProductContentService;
+import productcenter.services.ProductContentService;
 import utils.Global;
 
 import java.util.Optional;

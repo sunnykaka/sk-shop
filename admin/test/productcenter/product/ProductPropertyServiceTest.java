@@ -1,11 +1,11 @@
 package productcenter.product;
 
-import constants.PropertyType;
-import models.ProductProperty;
+import productcenter.constants.PropertyType;
+import productcenter.models.ProductProperty;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
-import services.ProductPropertyService;
+import productcenter.services.ProductPropertyService;
 import utils.Global;
 
 import java.util.List;
