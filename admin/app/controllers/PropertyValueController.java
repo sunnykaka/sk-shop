@@ -101,8 +101,18 @@ public class PropertyValueController extends Controller {
 
         CategoryProperty categoryProperty = categoryPropertyService.getCategoryPropertyById(cp.getId());
 
-
-
+        //新属性ID
+        int pid = propertyService.createProperty(new Property(name));
+        //原来属性值重新关联到新属性上
+        List<CategoryPropertyValue> categoryPropertyValues = categoryPropertyValueService.findByCidAndPid(categoryProperty.getCategoryId(), categoryProperty.getPropertyId());
+        for (CategoryPropertyValue categoryPropertyValue : categoryPropertyValues) {
+            categoryPropertyValue.setPropertyId(pid);
+            categoryPropertyValueService.update(categoryPropertyValue);
+        }
+        categoryProperty.setPropertyId(pid);
+        categoryProperty.setMultiValue(cp.isMultiValue());
+        categoryProperty.setType(cp.getType());
+        categoryPropertyService.updateCategoryProperty(categoryProperty);
 
         return ok("true");
 
