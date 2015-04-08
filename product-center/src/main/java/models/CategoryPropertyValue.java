@@ -22,6 +22,14 @@ public class CategoryPropertyValue implements EntityClass<Integer>{
     /** 排序 */
     private Integer priority;
 
+    public CategoryPropertyValue(){}
+
+    public CategoryPropertyValue(int categoryId,int propertyId,int valueId){
+        this.categoryId = categoryId;
+        this.propertyId = propertyId;
+        this.valueId = valueId;
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     public Integer getId() {

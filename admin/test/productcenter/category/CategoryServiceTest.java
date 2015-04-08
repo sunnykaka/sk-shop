@@ -1,5 +1,6 @@
 package productcenter.category;
 
+import base.BaseTest;
 import base.PrepareOrderData;
 import models.Category;
 import org.junit.Test;
@@ -12,7 +13,7 @@ import static play.test.Helpers.running;
 /**
  * Created by zhb on 15-4-7.
  */
-public class CategoryServiceTest implements PrepareOrderData {
+public class CategoryServiceTest implements BaseTest {
 
     @Test
     public void testSaveCategory() {

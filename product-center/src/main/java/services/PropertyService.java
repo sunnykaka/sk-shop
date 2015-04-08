@@ -4,8 +4,7 @@ import common.services.GeneralDao;
 import models.Category;
 import models.CategoryProperty;
 import models.Property;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import models.Sku;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +17,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
 @Transactional
 public class PropertyService {
-
-    private static final Logger log = LoggerFactory.getLogger(PropertyService.class);
 
     @PersistenceContext
     EntityManager em;
@@ -34,15 +33,18 @@ public class PropertyService {
     GeneralDao generalDAO;
 
     /**
-     * 添加修改类目属性
+     * 添加类目属性
      *
      * @param property
-     * @param categoryProgerty
      */
-    public void save(Property property, CategoryProperty categoryProgerty) {
-        generalDAO.persist(property);
-        categoryProgerty.setPropertyId(property.getId());
-        generalDAO.persist(categoryProgerty);
+    public int createProperty(Property property) {
+        Property oldProperty = findByName(property.getName());
+        if (null != oldProperty){
+            return oldProperty.getId();
+        }else{
+            generalDAO.persist(property);
+            return property.getId();
+        }
     }
 
     /**
@@ -50,8 +52,8 @@ public class PropertyService {
      *
      * @param property
      */
-    public Property updatePriority(Property property){
-       return generalDAO.merge(property);
+    public Property updatePriority(Property property) {
+        return generalDAO.merge(property);
     }
 
     /**
@@ -60,8 +62,8 @@ public class PropertyService {
      * @param propertyId
      * @return
      */
-    public Property getPriority(int propertyId){
-       return generalDAO.get(Property.class,propertyId);
+    public Property getPriority(int propertyId) {
+        return generalDAO.get(Property.class, propertyId);
     }
 
     /**
@@ -70,8 +72,8 @@ public class PropertyService {
      * @param property
      * @return
      */
-    public boolean delete(Property property){
-        return generalDAO.removeById(Property.class,property.getId());
+    public boolean delete(Property property) {
+        return generalDAO.removeById(Property.class, property.getId());
     }
 
     /**
@@ -81,7 +83,7 @@ public class PropertyService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Property> findPropertys(int categoryId){
+    public List<Property> findPropertys(int categoryId) {
 
         //查找所有关联
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -99,11 +101,28 @@ public class PropertyService {
 
         List<Property> propertyList = new ArrayList<>();
         //查出属性
-        for(CategoryProperty categoryp:categoryProperties){
+        for (CategoryProperty categoryp : categoryProperties) {
             propertyList.add(getPriority(categoryp.getPropertyId()));
         }
 
         return propertyList;
+    }
+
+    @Transactional(readOnly = true)
+    public Property findByName(String name) {
+
+        String jpql = "select o from property o where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and o.name = :name ";
+        queryParams.put("name", name);
+
+        List<Property> propertyList = generalDAO.query(jpql, null, queryParams);
+        if (propertyList != null && propertyList.size() > 0) {
+            return propertyList.get(0);
+        }
+
+        return null;
+
     }
 
 

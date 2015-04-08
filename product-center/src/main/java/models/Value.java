@@ -32,6 +32,13 @@ public class Value implements EntityClass<Integer>,OperableData {
 
     private Integer operatorId;
 
+    public Value(){}
+
+    public Value(String name,int propertyId){
+        this.name = name;
+        this.propertyId = propertyId;
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     public Integer getId() {

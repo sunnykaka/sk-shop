@@ -1,9 +1,8 @@
 package services;
 
 import common.services.GeneralDao;
+import models.Property;
 import models.Value;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * value 操作
@@ -25,8 +26,6 @@ import java.util.List;
 @Service
 @Transactional
 public class ValueService {
-
-    private static final Logger log = LoggerFactory.getLogger(ValueService.class);
 
     @PersistenceContext
     EntityManager em;
@@ -39,9 +38,14 @@ public class ValueService {
      *
      * @param value
      */
-    public void save(Value value,int propertyId){
-        value.setPropertyId(propertyId);
-        generalDAO.persist(value);
+    public int createValue(Value value){
+       Value oldValue = findByName(value.getName());
+        if (null != oldValue){
+            return oldValue.getId();
+        }else{
+            generalDAO.persist(value);
+            return value.getId();
+        }
     }
 
     /**
@@ -68,6 +72,7 @@ public class ValueService {
      * @param propertyId
      * @return
      */
+    @Transactional(readOnly = true)
     public List<Value> findbyPropertyId(int propertyId){
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -82,6 +87,28 @@ public class ValueService {
         TypedQuery<Value> query = em.createQuery(cq);
 
         return query.getResultList();
+    }
+
+    /**
+     * 根据名字查找属性值
+     * @param name
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Value findByName(String name) {
+
+        String jpql = "select o from value o where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and o.name = :name ";
+        queryParams.put("name", name);
+
+        List<Value> propertyList = generalDAO.query(jpql, null, queryParams);
+        if (propertyList != null && propertyList.size() > 0) {
+            return propertyList.get(0);
+        }
+
+        return null;
+
     }
 
 

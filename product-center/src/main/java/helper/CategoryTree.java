@@ -20,7 +20,7 @@ public class CategoryTree {
 
     private String text;
 
-    /** 是否可张开 */
+    /** 是否可展开 */
     private boolean expanded;
 
     private List<CategoryTree> children;

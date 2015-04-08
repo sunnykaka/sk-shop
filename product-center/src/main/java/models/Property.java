@@ -30,6 +30,12 @@ public class Property implements EntityClass<Integer>,OperableData {
 
     private Integer operatorId;
 
+    public Property(){}
+
+    public Property(String name){
+        this.name = name;
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     public Integer getId() {
