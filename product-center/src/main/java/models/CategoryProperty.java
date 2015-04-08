@@ -1,13 +1,13 @@
-package domain;
+package models;
 
-import com.boobee.boss.constant.PropertyType;
-import com.boobee.common.domain.util.EntityClass;
+import common.models.utils.EntityClass;
+import constants.PropertyType;
 
 import javax.persistence.*;
 
 /**
- * Created by zhb on 15-4-1.
  * 类目属性关联
+ * Created by zhb on 15-4-1.
  */
 @Table(name = "category_property")
 @Entity

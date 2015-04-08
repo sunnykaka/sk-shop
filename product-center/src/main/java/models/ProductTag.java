@@ -1,4 +1,4 @@
-package domain;
+package models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
@@ -8,21 +8,21 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 
 /**
- * Created by zhb on 15-4-1.
- * 后台类目
+ * 产品（商品）标签
+ * Created by lidujun on 2015-04-01.
  */
-@Table(name = "category")
+@Table(name = "product_tag")
 @Entity
-public class Category implements EntityClass<Integer>,OperableData {
+public class ProductTag implements EntityClass<Integer> , OperableData {
 
-    /** 类目根目录父ID */
-    public static final Integer PARENT_DEFAULT = -1;
-
+    /**
+     * 库自增ID
+     */
     private Integer id;
 
-    private String name;
+    private Integer productId;
 
-    private Integer parentId;
+    private Integer tagId;
 
     private DateTime createTime;
 
@@ -30,62 +30,82 @@ public class Category implements EntityClass<Integer>,OperableData {
 
     private Integer operatorId;
 
+    @Override
+    public String toString() {
+        return "ProductTag{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", tagId=" + tagId +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", operatorId=" + operatorId +
+                '}';
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @Column(name = "name")
+    @Column(name = "product_id")
     @Basic
-    public String getName() {
-        return name;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
-    @Column(name = "parent_id")
+    @Column(name = "tag_id")
     @Basic
-    public Integer getParentId() {
-        return parentId;
+    public Integer getTagId() {
+        return tagId;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setTagId(Integer tagId) {
+        this.tagId = tagId;
     }
 
     @Column(name = "create_time")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Override
     public DateTime getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(DateTime createTime) {
         this.createTime = createTime;
     }
 
     @Column(name = "update_time")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Override
     public DateTime getUpdateTime() {
         return updateTime;
     }
 
+    @Override
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
     }
 
     @Column(name = "operator_id")
     @Basic
+    @Override
     public Integer getOperatorId() {
         return operatorId;
     }
 
+    @Override
     public void setOperatorId(Integer operatorId) {
         this.operatorId = operatorId;
     }

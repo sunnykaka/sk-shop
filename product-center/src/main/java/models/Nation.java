@@ -1,34 +1,30 @@
-package domain;
+package models;
 
-import com.boobee.common.domain.util.EntityClass;
-import com.boobee.common.domain.util.OperableData;
+import common.models.utils.EntityClass;
+import common.models.utils.OperableData;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 
 /**
- * Created by zhb on 15-4-1.
- * 前台类目
+ * 国家
+ * Created by lidujun on 2015-04-01.
  */
-@Table(name = "navigate")
+@Table(name = "nation")
 @Entity
-public class Navigate implements EntityClass<Integer>,OperableData {
+public class Nation implements EntityClass<Integer>,OperableData {
 
+    /**
+     * 库自增ID
+     */
     private Integer id;
 
-    private String name;
+    private String nameEn;
 
-    /** 前台类目关键字 */
-    private String keyword;
+    private String nameZh;
 
-    private Integer parentId;
-
-    /** 排序 */
-    private Integer priority;
-
-    /** 上下线状态 */
-    private boolean online;
+    private String picUrl;
 
     private DateTime createTime;
 
@@ -38,62 +34,44 @@ public class Navigate implements EntityClass<Integer>,OperableData {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @Column(name = "name")
+    @Column(name = "name_en")
     @Basic
-    public String getName() {
-        return name;
+    public String getNameEn() {
+        return nameEn;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
     }
 
-    @Column(name = "keyword")
+    @Column(name = "name_zh")
     @Basic
-    public String getKeyword() {
-        return keyword;
+    public String getNameZh() {
+        return nameZh;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setNameZh(String nameZh) {
+        this.nameZh = nameZh;
     }
 
-    @Column(name = "parent_id")
+    @Column(name = "pic_url")
     @Basic
-    public Integer getParentId() {
-        return parentId;
+    public String getPicUrl() {
+        return picUrl;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
-    @Column(name = "priority")
-    @Basic
-    public Integer getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority = priority;
-    }
-
-    @Column(name = "online")
-    @Basic
-    public boolean isOnline() {
-        return online;
-    }
-
-    public void setOnline(boolean online) {
-        this.online = online;
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
     @Column(name = "create_time")
@@ -131,4 +109,5 @@ public class Navigate implements EntityClass<Integer>,OperableData {
     public void setOperatorId(Integer operatorId) {
         this.operatorId = operatorId;
     }
+
 }

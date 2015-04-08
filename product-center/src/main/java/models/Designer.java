@@ -1,28 +1,32 @@
-package domain;
+package models;
 
-import com.boobee.common.domain.util.EntityClass;
-import com.boobee.common.domain.util.OperableData;
+
+import common.models.utils.EntityClass;
+import common.models.utils.OperableData;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 
 /**
- * Created by zhb on 15-4-1.
- * 属性对应的名字
+ * 设计师
+ * Created by lidujun on 2015-04-07.
  */
-@Table(name = "property")
+@Table(name = "designer")
 @Entity
-public class Property implements EntityClass<Integer>,OperableData {
-
+public class Designer implements EntityClass<Integer> , OperableData {
+    /**
+     * 库自增ID
+     */
     private Integer id;
 
     private String name;
 
-    /**
-     * 排序
-     */
-    private Integer priority;
+    private Integer nationId;
+
+    private String introduction;
+
+    private Boolean isDelete;
 
     private DateTime createTime;
 
@@ -30,12 +34,28 @@ public class Property implements EntityClass<Integer>,OperableData {
 
     private Integer operatorId;
 
+    @Override
+    public String toString() {
+        return "Designer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", nationId=" + nationId +
+                ", introduction='" + introduction + '\'' +
+                ", isDelete=" + isDelete +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", operatorId=" + operatorId +
+                '}';
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
@@ -50,14 +70,34 @@ public class Property implements EntityClass<Integer>,OperableData {
         this.name = name;
     }
 
-    @Column(name = "priority")
+    @Column(name = "nation_id")
     @Basic
-    public Integer getPriority() {
-        return priority;
+    public Integer getNationId() {
+        return nationId;
     }
 
-    public void setPriority(Integer priority) {
-        this.priority = priority;
+    public void setNationId(Integer nationId) {
+        this.nationId = nationId;
+    }
+
+    @Column(name = "introduction")
+    @Basic
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    @Column(name = "is_delete")
+    @Basic
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
     @Column(name = "create_time")
@@ -95,4 +135,5 @@ public class Property implements EntityClass<Integer>,OperableData {
     public void setOperatorId(Integer operatorId) {
         this.operatorId = operatorId;
     }
+
 }

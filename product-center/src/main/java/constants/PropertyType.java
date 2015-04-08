@@ -1,8 +1,7 @@
-package constant;
+package constants;
 
-import com.boobee.common.domain.util.ViewEnum;
-import com.boobee.common.jackson.EnumSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.EnumSerializer;
 
 /**
  * 类目属性类型，它表示某个属性在特定类目下是什么类型，有
@@ -15,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * update by lidujun 2015-04-07
  */
 @JsonSerialize(using = EnumSerializer.class)
-public enum PropertyType implements ViewEnum {
+public enum PropertyType {
 
     /**
      * 销售属性
@@ -38,31 +37,11 @@ public enum PropertyType implements ViewEnum {
         this.value = value;
     }
 
-
-    @Override
     public String getName() {
         return this.toString();
     }
 
-    @Override
     public String getValue() {
         return value;
-    }
-
-    /**
-     * 根据值取枚举
-     * @param value
-     * @return
-     */
-    public static PropertyType enumValueOf(String value) {
-        if(value == null) {
-            return null;
-        }
-        for(PropertyType enumValue : values()) {
-            if(value.equalsIgnoreCase(enumValue.value)) {
-                return enumValue;
-            }
-        }
-        return null;
     }
 }
