@@ -1,14 +1,14 @@
 package productcenter.product;
 
-import models.Tag;
+import productcenter.models.Tag;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
-import services.TagService;
+import productcenter.services.TagService;
 import utils.Global;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 标签
@@ -26,52 +26,56 @@ public class TagServiceTest extends WithApplication {
     }
 
     @Test
-    @Rollback(false)
     public void testSave() {
         Tag tag = new Tag();
         tag.setName("测试标签01");
 
-        System.out.println("testSave tag: " + tag.toString());
+        System.out.println("testSave tag: " + tag);
 
         tagService.save(tag);
 
-        System.out.println("after save tag: " + tag.toString());
+        System.out.println("after save tag: " + tag);
     }
 
     @Test
-    @Rollback(false)
     public void testRealDelete() {
-        Tag tag = tagService.getTagById(1);
-        System.out.println("testRealDelete tag: " + tag.toString());
-        tagService.realDelete(1);
+        Optional<Tag> tagOpt = tagService.getTagById(1);
+        if(tagOpt.isPresent()) {
+            Tag tag = tagOpt.get();
+            System.out.println("testRealDelete tag: " + tag);
+            tagService.realDelete(1);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testUpdate() {
-        Tag tag = tagService.getTagById(1);
-        tag.setName("测试标签01_update");
+        Optional<Tag> tagOpt = tagService.getTagById(2);
+        if(tagOpt.isPresent()) {
+            Tag tag = tagOpt.get();
+            tag.setName("测试标签01_update");
 
-        System.out.println("testUpdate tag: " + tag.toString());
+            System.out.println("testUpdate tag: " + tag);
 
-        tagService.update(tag);
+            tagService.update(tag);
 
-        System.out.println("after testUpdate tag: " + tag.toString());
+            System.out.println("after testUpdate tag: " + tag);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testGetTagById() {
-        Tag tag = tagService.getTagById(1);
-        System.out.println("testGetTagById tag: " + tag.toString());
+        Optional<Tag> tagOpt = tagService.getTagById(2);
+        if(tagOpt.isPresent()) {
+            Tag tag = tagOpt.get();
+            System.out.println("testGetTagById tag: " + tag);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testGetTagList() {
         Tag param = new Tag();
         param.setName("测试");
-        List<Tag> tagList = tagService.getTagList(null, param);
+        List<Tag> tagList = tagService.getTagList(Optional.ofNullable(null), param);
         System.out.println("testGetTagList tagList: " + tagList.size() + "\n" + tagList);
     }
 

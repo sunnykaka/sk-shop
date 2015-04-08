@@ -1,9 +1,9 @@
 package productcenter.category;
 
-import base.PrepareOrderData;
-import models.Category;
+import base.BaseTest;
+import productcenter.models.Category;
 import org.junit.Test;
-import services.CategoryService;
+import productcenter.services.CategoryService;
 import utils.Global;
 
 import static play.test.Helpers.fakeApplication;
@@ -12,7 +12,7 @@ import static play.test.Helpers.running;
 /**
  * Created by zhb on 15-4-7.
  */
-public class CategoryServiceTest implements PrepareOrderData {
+public class CategoryServiceTest implements BaseTest {
 
     @Test
     public void testSaveCategory() {

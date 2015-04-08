@@ -1,14 +1,14 @@
 package productcenter.product;
 
-import models.Product;
+import productcenter.models.Product;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
-import services.ProductService;
+import productcenter.services.ProductService;
 import utils.Global;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 产品（商品）内容（详情）Service测试
@@ -26,11 +26,10 @@ public class ProductServiceTest extends WithApplication {
     }
 
     @Test
-    @Rollback(false)
     public void testSave() {
         Product product = new Product();
         product.setName("产品测试_ldj_01");
-        product.setBrandId(1111);
+        product.setDesigerId(2);
         product.setSupplierSpuCode("100001");
         product.setSpuCode("200001");
         product.setCategoryId(2222);
@@ -39,57 +38,60 @@ public class ProductServiceTest extends WithApplication {
         product.setOnline(true);
         product.setIsDelete(true);
 
-        System.out.println("test product: " + product.toString());
+        System.out.println("test product: " + product);
 
         productService.save(product);
 
-        System.out.println("after save product: " + product.toString());
+        System.out.println("after save product: " + product);
     }
 
     @Test
-    @Rollback(false)
     public void testFalseDelete() {
-        Product product = productService.getProductById(1);
-        System.out.println("testFalseDelete product: " + product.toString());
-        productService.falseDelete(1);
-        product = productService.getProductById(1);
-        System.out.println("testFalseDelete product: " + product.toString());
+        Optional<Product> productOpt = productService.getProductById(1);
+        if(productOpt.isPresent()) {
+            Product product =productOpt.get();
+            System.out.println("testFalseDelete product: " + product);
+            productService.falseDelete(1);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testUpdate() {
-        Product product = productService.getProductById(1);
-        product.setName("产品测试_ldj_01");
-        product.setBrandId(1111);
-        product.setSupplierSpuCode("100001");
-        product.setSpuCode("200001");
-        product.setCategoryId(2222);
-        product.setAddress("产品产地测试-字段更新");
-        product.setDescription("产品描述测试");
-        product.setOnline(true);
-        product.setIsDelete(true);
+        Optional<Product> productOpt = productService.getProductById(2);
+        if(productOpt.isPresent()) {
+            Product product =productOpt.get();
+            product.setName("产品测试_ldj_01");
+            product.setDesigerId(2);
+            product.setSupplierSpuCode("100001");
+            product.setSpuCode("200001");
+            product.setCategoryId(2222);
+            product.setAddress("产品产地测试-字段更新");
+            product.setDescription("产品描述测试");
+            product.setOnline(true);
+            product.setIsDelete(true);
 
-        System.out.println("testUpdate product: " + product.toString());
+            System.out.println("testUpdate product: " + product);
 
-        productService.update(product);
+            productService.update(product);
 
-        System.out.println("after testUpdate product: " + product.toString());
+            System.out.println("after testUpdate product: " + product);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testGetProductById() {
-        Product product = productService.getProductById(1);
-        System.out.println("testGetProductById product: " + product.toString());
+        Optional<Product> productOpt = productService.getProductById(2);
+        if(productOpt.isPresent()) {
+            Product product = productOpt.get();
+            System.out.println("testGetProductById product: " + product);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testGetProductList() {
         Product param = new Product();
         param.setName("测试");
-        List<Product> productList = productService.getProductList(null,param);
+        List<Product> productList = productService.getProductList(Optional.ofNullable(null),param);
         System.out.println("testGetProductList productList: " + productList.size() + "\n" + productList);
     }
 
