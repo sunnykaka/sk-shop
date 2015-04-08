@@ -4,8 +4,6 @@ import common.services.GeneralDao;
 import common.utils.page.Page;
 import models.ValuePic;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +21,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ValuePicService {
-    private static final Logger log = LoggerFactory.getLogger(ValuePicService.class);
-
     @Autowired
     private GeneralDao generalDao;
 
@@ -32,7 +28,7 @@ public class ValuePicService {
      * 保存产品（商品）属性个性化图片
      */
     public void save(ValuePic valuePic){
-        log.info("--------ValuePicService save begin exe-----------" + valuePic);
+        play.Logger.info("--------ValuePicService save begin exe-----------" + valuePic);
         generalDao.persist(valuePic);
     }
 
@@ -40,7 +36,7 @@ public class ValuePicService {
      * 删除产品（商品）属性个性化图片
      */
     public void realDelete(Integer valuePicId){
-        log.info("--------ValuePicService realDelete begin exe-----------" + valuePicId);
+        play.Logger.info("--------ValuePicService realDelete begin exe-----------" + valuePicId);
         generalDao.removeById(ValuePic.class, valuePicId);
     }
 
@@ -48,7 +44,7 @@ public class ValuePicService {
      * 更新产品（商品）属性个性化图片
      */
     public void update(ValuePic valuePic){
-        log.info("--------ValuePicService update begin exe-----------" + valuePic);
+        play.Logger.info("--------ValuePicService update begin exe-----------" + valuePic);
         generalDao.merge(valuePic);
     }
 
@@ -56,9 +52,9 @@ public class ValuePicService {
      * 通过主键获取产品（商品）属性个性化图片
      */
     @Transactional(readOnly = true)
-    public ValuePic getValuePicById(Integer valuePicId){
-        log.info("--------ValuePicService getValuePicById begin exe-----------" + valuePicId);
-        return generalDao.get(ValuePic.class, valuePicId);
+    public Optional<ValuePic> getValuePicById(Integer valuePicId){
+        play.Logger.info("--------ValuePicService getValuePicById begin exe-----------" + valuePicId);
+        return Optional.ofNullable(generalDao.get(ValuePic.class, valuePicId));
     }
 
     /**
@@ -66,25 +62,37 @@ public class ValuePicService {
      */
     @Transactional(readOnly = true)
     public List<ValuePic> getValuePicList(Optional<Page<ValuePic>> page, ValuePic param){
-        log.info("--------ValuePicService getValuePicList begin exe-----------" + page + "\n" + param);
+        play.Logger.info("--------ValuePicService getValuePicList begin exe-----------" + page + "\n" + param);
 
-        String jpql = "select o from Product o where 1=1 ";
+        String jpql = "select o from ValuePic o where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
 
         if(param != null) {
             Integer productId = param.getProductId();
             if(productId != null && productId != 0) {
-                jpql += " and o.productId like :productId ";
+                jpql += " and o.productId = :productId ";
                 queryParams.put("productId", productId);
+            }
+
+            Integer valueId = param.getValueId();
+            if(valueId != null && valueId != 0) {
+                jpql += " and o.valueId = :valueId ";
+                queryParams.put("valueId", valueId);
+            }
+
+            Integer skuId = param.getSkuId();
+            if(skuId != null && skuId != 0) {
+                jpql += " and o.skuId = :skuId ";
+                queryParams.put("skuId", skuId);
             }
 
             String picUrl = param.getPicUrl();
             if(!StringUtils.isEmpty(picUrl)) {
-                jpql += " and o.picUrl like :picUrl ";
+                jpql += " and o.picUrl = :picUrl ";
                 queryParams.put("picUrl", picUrl);
             }
         }
-        jpql += " group by o.id";
+        jpql += " order by o.id";
         return generalDao.query(jpql, page, queryParams);
     }
 

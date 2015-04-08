@@ -4,8 +4,6 @@ import common.services.GeneralDao;
 import common.utils.page.Page;
 import models.Sku;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +21,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class SkuService {
-    private static final Logger log = LoggerFactory.getLogger(SkuService.class);
-
     @Autowired
     private GeneralDao generalDao;
 
@@ -32,7 +28,7 @@ public class SkuService {
      * 保存单品SKU
      */
     public void save(Sku sku){
-        log.info("--------SkuService save begin exe-----------" + sku);
+        play.Logger.info("--------SkuService save begin exe-----------" + sku);
         generalDao.persist(sku);
     }
 
@@ -40,7 +36,7 @@ public class SkuService {
      * 删除单品SKU
      */
     public void realDelete(Integer skuId){
-        log.info("--------SkuService realDelete begin exe-----------" + skuId);
+        play.Logger.info("--------SkuService realDelete begin exe-----------" + skuId);
         generalDao.removeById(Sku.class, skuId);
     }
 
@@ -48,7 +44,7 @@ public class SkuService {
      * 更新单品SKU
      */
     public void update(Sku skuId){
-        log.info("--------SkuService update begin exe-----------" + skuId);
+        play.Logger.info("--------SkuService update begin exe-----------" + skuId);
         generalDao.merge(skuId);
     }
 
@@ -56,28 +52,28 @@ public class SkuService {
      * 通过主键获取单品SKU
      */
     @Transactional(readOnly = true)
-    public Sku getSkuById(Integer skuId){
-        log.info("--------SkuService getSKuById begin exe-----------" + skuId);
-        return generalDao.get(Sku.class, skuId);
+    public Optional<Sku> getSkuById(Integer skuId){
+        play.Logger.info("--------SkuService getSKuById begin exe-----------" + skuId);
+        return Optional.ofNullable(generalDao.get(Sku.class, skuId));
     }
 
     /**
      * 通过编号获取单品SKU
      */
     @Transactional(readOnly = true)
-    public Sku getSkuBySkuCode(String skuCode){
-        log.info("--------SkuService getSKuById begin exe-----------" + skuCode);
+    public Optional<Sku> getSkuBySkuCode(String skuCode){
+        play.Logger.info("--------SkuService getSKuById begin exe-----------" + skuCode);
 
-        String jpql = "select o from SKU o where 1=1 ";
+        String jpql = "select o from Sku o where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and o.skuCode = :skuCode ";
         queryParams.put("skuCode", skuCode);
 
-        List<Sku> itemList = generalDao.query(jpql, null, queryParams);
+        List<Sku> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         if(itemList != null && itemList.size() > 0) {
-            return itemList.get(0);
+            return Optional.ofNullable(itemList.get(0));
         }
-        return null;
+        return Optional.ofNullable(null);
     }
 
     /**
@@ -85,9 +81,9 @@ public class SkuService {
      */
     @Transactional(readOnly = true)
     public List<Sku> getSkuList(Optional<Page<Sku>> page, Sku param){
-        log.info("--------SkuService getSkuList begin exe-----------" + page + "\n" + param);
+        play.Logger.info("--------SkuService getSkuList begin exe-----------" + page + "\n" + param);
 
-        String jpql = "select o from Product o where 1=1 ";
+        String jpql = "select o from Sku o where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
 
         if(param != null) {
@@ -96,7 +92,7 @@ public class SkuService {
                 jpql += " and o.productId = :productId ";
                 queryParams.put("productId", productId);
             }
-            Boolean online = param.isOnline();
+            Boolean online = param.getOnline();
             if(online != null) {
                 jpql += " and o.online = :online ";
                 queryParams.put("online", online);
@@ -113,10 +109,9 @@ public class SkuService {
                 jpql += " and o.skuCode = :skuCode ";
                 queryParams.put("skuCode", skuCode);
             }
-
         }
 
-        jpql += " group by o.id";
+        jpql += " order by o.id";
         return generalDao.query(jpql, page, queryParams);
     }
 

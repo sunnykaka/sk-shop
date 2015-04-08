@@ -23,28 +23,64 @@ public class Product implements EntityClass<Integer>, OperableData {
      */
     private Integer id;
 
+    /**
+     * 产品（商品）名称
+     */
     private String name;
 
-    private Integer brandId;
+    /**
+     * 设计师id
+     */
+    private Integer desigerId;
 
+    /**
+     * 提供的产品编码
+     */
     private String supplierSpuCode;
 
+    /**
+     * 产品编码
+     */
     private String spuCode;
 
+    /**
+     * 后台类目id
+     */
     private Integer categoryId;
 
+    /**
+     * 地址
+     */
     private String address;
 
+    /**
+     * 描述
+     */
     private String description;
 
+    /**
+     * 上线标志
+     */
     private Boolean online;
 
+    /**
+     * 删除标志
+     */
     private Boolean isDelete;
 
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override
@@ -52,7 +88,7 @@ public class Product implements EntityClass<Integer>, OperableData {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", brandId=" + brandId +
+                ", desigerId=" + desigerId +
                 ", supplierSpuCode='" + supplierSpuCode + '\'' +
                 ", spuCode='" + spuCode + '\'' +
                 ", categoryId=" + categoryId +
@@ -88,14 +124,14 @@ public class Product implements EntityClass<Integer>, OperableData {
         this.name = name;
     }
 
-    @Column(name = "brand_id")
+    @Column(name = "desiger_id")
     @Basic
-    public Integer getBrandId() {
-        return brandId;
+    public Integer getDesigerId() {
+        return desigerId;
     }
 
-    public void setBrandId(Integer brandId) {
-        this.brandId = brandId;
+    public void setDesigerId(Integer desigerId) {
+        this.desigerId = desigerId;
     }
 
     @Column(name = "supplier_spu_code")

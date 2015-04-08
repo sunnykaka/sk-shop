@@ -20,18 +20,39 @@ public class Designer implements EntityClass<Integer> , OperableData {
      */
     private Integer id;
 
+    /**
+     * 设计师姓名
+     */
     private String name;
 
+    /**
+     * 设计师国籍id
+     */
     private Integer nationId;
 
+    /**
+     * 设计师介绍
+     */
     private String introduction;
 
+    /**
+     * 删除标记
+     */
     private Boolean isDelete;
 
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override

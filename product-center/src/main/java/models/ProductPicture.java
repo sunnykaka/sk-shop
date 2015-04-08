@@ -20,22 +20,49 @@ public class ProductPicture implements EntityClass<Integer>, OperableData {
      */
     private Integer id;
 
+    /**
+     * 产品（商品）id
+     */
     private Integer productId;
 
+    /**
+     * 单品id
+     */
     private Integer skuId;
 
+    /**
+     * 原来的名称
+     */
     private String originalName;
 
+    /**
+     * 名称
+     */
     private String name;
 
+    /**
+     * 图片url
+     */
     private String picUrl;
 
+    /**
+     * 图片类型
+     */
     private String type;
 
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override

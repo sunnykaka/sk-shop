@@ -3,12 +3,12 @@ package productcenter.product;
 import models.Designer;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
 import services.DesignerService;
 import utils.Global;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -27,7 +27,6 @@ public class DesignerTest extends WithApplication {
     }
 
     @Test
-    @Rollback(false)
     public void testSave() {
         Designer designer = new Designer();
         designer.setName("设计师测试_ldj_01");
@@ -35,52 +34,56 @@ public class DesignerTest extends WithApplication {
         designer.setIntroduction("设计师简介");
         designer.setIsDelete(false);
 
-        System.out.println("test designer: " + designer.toString());
+        System.out.println("test designer: " + designer);
 
         designerService.save(designer);
 
-        System.out.println("after save designer: " + designer.toString());
+        System.out.println("after save designer: " + designer);
     }
 
     @Test
-    @Rollback(false)
     public void testFalseDelete() {
-        Designer designer = designerService.getDesignerById(1);
-        System.out.println("testFalseDelete designer: " + designer.toString());
-        designerService.falseDelete(1);
-        designer = designerService.getDesignerById(1);
-        System.out.println("testFalseDelete designer: " + designer.toString());
+        Optional<Designer> designerOpt = designerService.getDesignerById(1);
+        if(designerOpt.isPresent()) {
+            Designer designer = designerOpt.get();
+            System.out.println("testFalseDelete designer: " + designer);
+            designerService.falseDelete(1);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testUpdate() {
-        Designer designer = designerService.getDesignerById(1);
-        designer.setName("设计师测试_ldj_01");
-        designer.setNationId(1001);
-        designer.setIntroduction("设计师简介_update");
-        designer.setIsDelete(false);
+        Optional<Designer> designerOpt = designerService.getDesignerById(2);
+        if(designerOpt.isPresent()) {
+            Designer designer = designerOpt.get();
+            designer.setName("设计师测试_ldj_01");
+            designer.setNationId(1001);
+            designer.setIntroduction("设计师简介_update");
+            designer.setIsDelete(false);
 
-        System.out.println("testUpdate designer: " + designer.toString());
+            System.out.println("testUpdate designer: " + designer);
 
-        designerService.update(designer);
+            designerService.update(designer);
 
-        System.out.println("after testUpdate designer: " + designer.toString());
+            System.out.println("after testUpdate designer: " + designer);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testGetDesignerById() {
-        Designer designer = designerService.getDesignerById(1);
-        System.out.println("testGetDesignerById designer: " + designer.toString());
+        Optional<Designer> designerOpt = designerService.getDesignerById(2);
+        if(designerOpt.isPresent()) {
+            System.out.println("testGetDesignerById designer: " + designerOpt.get());
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testGetDesignerList() {
         Designer param = new Designer();
         param.setName("测试");
-        List<Designer> designerList = designerService.getDesignerList(null, param);
+        param.setNationId(1001);
+        param.setIsDelete(false);
+        List<Designer> designerList = designerService.getDesignerList(Optional.ofNullable(null), param);
         System.out.println("testGetDesignerList designerList: " + designerList.size() + "\n" + designerList);
     }
 

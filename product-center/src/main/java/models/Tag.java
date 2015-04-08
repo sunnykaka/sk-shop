@@ -20,12 +20,24 @@ public class Tag implements EntityClass<Integer>,OperableData {
      */
     private Integer id;
 
+    /**
+     * 标签名称
+     */
     private String name;
 
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override

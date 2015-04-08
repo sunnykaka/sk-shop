@@ -4,8 +4,6 @@ import common.services.GeneralDao;
 import common.utils.page.Page;
 import models.Product;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +22,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ProductService {
-    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
-
     @Autowired
     private GeneralDao generalDao;
 
@@ -33,7 +29,7 @@ public class ProductService {
      * 保存产品（商品）
      */
     public void save(Product product){
-        log.info("--------ProductService save begin exe-----------" + product);
+        play.Logger.info("--------ProductService save begin exe-----------" + product);
         generalDao.persist(product);
     }
 
@@ -41,7 +37,7 @@ public class ProductService {
      * 假删除产品（商品）
      */
     public void falseDelete(Integer productId){
-        log.info("--------ProductService falseDelete begin exe-----------" + productId);
+        play.Logger.info("--------ProductService falseDelete begin exe-----------" + productId);
         Product product = generalDao.get(Product.class, productId);
         product.setIsDelete(false);
         this.update(product);
@@ -51,7 +47,7 @@ public class ProductService {
      * 更新产品（商品）
      */
     public void update(Product product){
-        log.info("--------ProductService update begin exe-----------" + product);
+        play.Logger.info("--------ProductService update begin exe-----------" + product);
         generalDao.merge(product);
     }
 
@@ -59,9 +55,9 @@ public class ProductService {
      * 通过主键获取产品（商品）
      */
     @Transactional(readOnly = true)
-    public Product getProductById(Integer productId){
-        log.info("--------ProductContentService getProductById begin exe-----------" + productId);
-        return generalDao.get(Product.class, productId);
+    public Optional<Product> getProductById(Integer productId){
+        play.Logger.info("--------ProductContentService getProductById begin exe-----------" + productId);
+        return Optional.ofNullable(generalDao.get(Product.class, productId));
     }
 
     /**
@@ -69,7 +65,7 @@ public class ProductService {
      */
     @Transactional(readOnly = true)
     public List<Product> getProductList(Optional<Page<Product>> page, Product param){
-        log.info("--------ProductService getOrderList begin exe-----------" + page + "\n" + param);
+        play.Logger.info("--------ProductService getOrderList begin exe-----------" + page + "\n" + param);
 
         String jpql = "select o from Product o where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
@@ -78,13 +74,13 @@ public class ProductService {
              String name = param.getName();
              if(!StringUtils.isEmpty(name)) {
                  jpql += " and o.name like :name ";
-                 queryParams.put("name", name);
+                 queryParams.put("name", "%" + name + "%");
              }
 
-             Integer brandId = param.getBrandId();
-             if(brandId != null && brandId != 0) {
-                 jpql += " and o.brandId = :brandId ";
-                 queryParams.put("brandId", brandId);
+             Integer desigerId = param.getDesigerId();
+             if(desigerId != null && desigerId != 0) {
+                 jpql += " and o.desigerId = :desigerId ";
+                 queryParams.put("desigerId", desigerId);
              }
 
              String supplierSpuCode = param.getSupplierSpuCode();
@@ -108,7 +104,7 @@ public class ProductService {
              String address = param.getAddress();
              if(!StringUtils.isEmpty(address)) {
                  jpql += " and o.address like :address ";
-                 queryParams.put("address", address);
+                 queryParams.put("address", "%" +address + "%");
              }
 
              Boolean online = param.getOnline();
@@ -123,7 +119,7 @@ public class ProductService {
                  queryParams.put("isDelete", isDelete);
              }
          }
-        jpql += " group by o.name";
+        jpql += " order by o.name";
         return generalDao.query(jpql, page, queryParams);
     }
 

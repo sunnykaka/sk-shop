@@ -20,14 +20,29 @@ public class ProductTag implements EntityClass<Integer> , OperableData {
      */
     private Integer id;
 
+    /**
+     * 产品（商品）id
+     */
     private Integer productId;
 
+    /**
+     * 产品（商品）标签id
+     */
     private Integer tagId;
 
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override

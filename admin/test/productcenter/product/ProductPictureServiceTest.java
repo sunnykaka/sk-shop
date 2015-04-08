@@ -3,12 +3,12 @@ package productcenter.product;
 import models.ProductPicture;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 import play.test.WithApplication;
 import services.ProductPictureService;
 import utils.Global;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 产品（商品）图片 Service测试
@@ -26,7 +26,6 @@ public class ProductPictureServiceTest extends WithApplication {
     }
 
     @Test
-    @Rollback(false)
     public void testSave() {
         ProductPicture productPicture = new ProductPicture();
         productPicture.setProductId(1);
@@ -36,53 +35,56 @@ public class ProductPictureServiceTest extends WithApplication {
         productPicture.setPicUrl("www.baidu.com/1.jpg");
         productPicture.setType("test");
 
-        System.out.println("test productPicture: " + productPicture.toString());
+        System.out.println("test productPicture: " + productPicture);
 
         productPictureService.save(productPicture);
 
-        System.out.println("after save productPicture: " + productPicture.toString());
+        System.out.println("after save productPicture: " + productPicture);
     }
 
     @Test
-    @Rollback(false)
     public void testRealDelete() {
-        ProductPicture productPicture = productPictureService.getProductPictureById(1);
-        System.out.println("testRealDelete productPicture: " + productPicture.toString());
-        productPictureService.realDelete(1);
+        Optional<ProductPicture> productPictureOpt = productPictureService.getProductPictureById(1);
+        if(productPictureOpt.isPresent()) {
+            ProductPicture productPicture = productPictureOpt.get();
+            System.out.println("testRealDelete productPicture: " + productPicture);
+            productPictureService.realDelete(1);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testUpdate() {
-        ProductPicture productPicture = productPictureService.getProductPictureById(1);
-        productPicture.setProductId(2);
-        productPicture.setSkuId(1);
-        productPicture.setOriginalName("pic_ldj_test_01");
-        productPicture.setName("pic_ldj_test_02_更新");
-        productPicture.setPicUrl("www.baidu.com/1.jpg");
-        productPicture.setType("test");
+        Optional<ProductPicture> productPictureOpt = productPictureService.getProductPictureById(2);
+        if(productPictureOpt.isPresent()) {
+            ProductPicture productPicture = productPictureOpt.get();
+            productPicture.setProductId(2);
+            productPicture.setSkuId(1);
+            productPicture.setOriginalName("pic_ldj_test_01");
+            productPicture.setName("pic_ldj_test_02_更新");
+            productPicture.setPicUrl("www.baidu.com/1.jpg");
+            productPicture.setType("test");
 
-        System.out.println("test testUpdate productPicture: " + productPicture.toString());
+            System.out.println("test testUpdate productPicture: " + productPicture);
 
-        productPictureService.update(productPicture);
+            productPictureService.update(productPicture);
 
-        System.out.println("after update productPicture: " + productPicture.toString());
+            System.out.println("after update productPicture: " + productPicture);
+        }
     }
 
     @Test
-    @Rollback(false)
     public void getProductPictureById() {
-        ProductPicture productPicture = productPictureService.getProductPictureById(1);
-        System.out.println("getProductPictureById productPicture: " + productPicture.toString());
+        Optional<ProductPicture> productPictureOpt = productPictureService.getProductPictureById(2);
+        if(productPictureOpt.isPresent()) {
+            System.out.println("getProductPictureById productPicture: " + productPictureOpt.get());
+        }
     }
 
     @Test
-    @Rollback(false)
     public void testGetProductPictureList() {
         ProductPicture param = new ProductPicture();
-        //param.setId(1);
         param.setProductId(1);
-        List<ProductPicture> productPicturetList = productPictureService.getProductPictureList(null, param);
+        List<ProductPicture> productPicturetList = productPictureService.getProductPictureList(Optional.ofNullable(null), param);
         System.out.println("testGetProductPictureList productPicturetList: " + productPicturetList.size() + "\n" + productPicturetList);
     }
 

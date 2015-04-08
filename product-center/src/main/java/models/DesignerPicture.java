@@ -8,12 +8,12 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 
 /**
- * 产品（商品）属性个性化图片
- * Created by lidujun on 2015-04-01.
+ * 设计师图片
+ * Created by lidujun on 2015-04-08.
  */
-@Table(name = "value_pic")
+@Table(name = "designer_picture")
 @Entity
-public class ValuePic implements EntityClass<Integer>,OperableData {
+public class DesignerPicture implements EntityClass<Integer>, OperableData {
     /**
      * 库自增ID
      */
@@ -22,17 +22,12 @@ public class ValuePic implements EntityClass<Integer>,OperableData {
     /**
      * 产品（商品）id
      */
-    private Integer productId;
+    private Integer designerId;
 
     /**
-     * 属性值id
+     * 图片类型
      */
-    private Integer valueId;
-
-    /**
-     * sku id
-     */
-    private Integer skuId;
+    private String type;
 
     /**
      * 图片url
@@ -56,11 +51,10 @@ public class ValuePic implements EntityClass<Integer>,OperableData {
 
     @Override
     public String toString() {
-        return "ValuePic{" +
+        return "DesignerPicture{" +
                 "id=" + id +
-                ", productId=" + productId +
-                ", valueId=" + valueId +
-                ", skuId=" + skuId +
+                ", designerId=" + designerId +
+                ", type='" + type + '\'' +
                 ", picUrl='" + picUrl + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
@@ -80,34 +74,24 @@ public class ValuePic implements EntityClass<Integer>,OperableData {
         this.id = id;
     }
 
-    @Column(name = "product_id")
+    @Column(name = "designer_id")
     @Basic
-    public Integer getProductId() {
-        return productId;
+    public Integer getDesignerId() {
+        return designerId;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setDesignerId(Integer designerId) {
+        this.designerId = designerId;
     }
 
-    @Column(name = "value_id")
+    @Column(name = "type")
     @Basic
-    public Integer getValueId() {
-        return valueId;
+    public String getType() {
+        return type;
     }
 
-    public void setValueId(Integer valueId) {
-        this.valueId = valueId;
-    }
-
-    @Column(name = "sku_id")
-    @Basic
-    public Integer getSkuId() {
-        return skuId;
-    }
-
-    public void setSkuId(Integer skuId) {
-        this.skuId = skuId;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Column(name = "pic_url")

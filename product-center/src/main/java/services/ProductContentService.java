@@ -2,8 +2,6 @@ package services;
 
 import common.services.GeneralDao;
 import models.ProductContent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +16,6 @@ import java.util.*;
 @Service
 @Transactional
 public class ProductContentService {
-    private static final Logger log = LoggerFactory.getLogger(ProductContentService.class);
-
     @Autowired
     GeneralDao generalDao;
 
@@ -27,7 +23,7 @@ public class ProductContentService {
      * 保存产品（商品）内容（详情）
      */
     public void save(ProductContent content){
-        log.info("--------ProductContentService save begin exe-----------" + content);
+        play.Logger.info("--------ProductContentService save begin exe-----------" + content);
         generalDao.persist(content);
     }
 
@@ -35,7 +31,7 @@ public class ProductContentService {
      * 删除产品（商品）内容（详情）
      */
     public void realDelete(Integer contentId){
-        log.info("--------ProductContentService realDelete begin exe-----------" + contentId);
+        play.Logger.info("--------ProductContentService realDelete begin exe-----------" + contentId);
         generalDao.removeById(ProductContent.class, contentId);
     }
 
@@ -43,7 +39,7 @@ public class ProductContentService {
      * 更新产品（商品）内容（详情）
      */
     public void update(ProductContent content){
-        log.info("--------ProductContentService update begin exe-----------" + content);
+        play.Logger.info("--------ProductContentService update begin exe-----------" + content);
         generalDao.merge(content);
     }
 
@@ -51,28 +47,28 @@ public class ProductContentService {
      * 通过主键获取产品（商品）内容（详情）
      */
     @Transactional(readOnly = true)
-    public ProductContent getProductContentById(Integer contentId){
-        log.info("--------ProductContentService getProductContentById begin exe-----------" + contentId);
-        return generalDao.get(ProductContent.class, contentId);
+    public Optional<ProductContent> getProductContentById(Integer contentId){
+        play.Logger.info("--------ProductContentService getProductContentById begin exe-----------" + contentId);
+        return Optional.ofNullable(generalDao.get(ProductContent.class, contentId));
     }
 
     /**
      * 通过产品（商品）主键获取产品（商品）内容（详情）
      */
     @Transactional(readOnly = true)
-    public ProductContent getProductContentByProductId(Integer productId){
-        log.info("--------ProductContentService getProductContentByProductId begin exe-----------" + productId);
+    public Optional<ProductContent> getProductContentByProductId(Integer productId){
+        play.Logger.info("--------ProductContentService getProductContentByProductId begin exe-----------" + productId);
 
         String jpql = "select o from ProductContent o where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and o.productId = :productId ";
         queryParams.put("productId", productId);
 
-        List<ProductContent> itemList = generalDao.query(jpql, null, queryParams);
+        List<ProductContent> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         if(itemList != null && itemList.size() > 0) {
-            return itemList.get(0);
+            return Optional.ofNullable(itemList.get(0));
         }
-        return null;
+        return Optional.ofNullable(null);
     }
 
 }

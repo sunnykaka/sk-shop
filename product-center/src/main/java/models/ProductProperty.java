@@ -11,26 +11,46 @@ import javax.persistence.*;
 /**
  * 产品（商品）关联属性
  *
- * Created by zhb on 15-4-1.
+ * Created by lidujun on 2015-04-08.
  */
 @Table(name = "product_property")
 @Entity
 public class ProductProperty implements EntityClass<Integer>, OperableData {
 
+    /**
+     * 库自增ID
+     */
     private Integer id;
 
+    /**
+     * 产品（商品）id
+     */
     private Integer productId;
 
+    /**
+     * 产品（商品）属性类型
+     */
     private PropertyType type;
 
-    //商品的pidvid json串，表示商品的属性，按属性在类目上的优先级排序
-    // '{"singlePidVidMap":{"1":4294977296,"4":17179879190,"5":21474846488},"pidvid":[4294977296,17179879190,21474846488],"multiPidVidMap":{}}'
+    /**
+     * 商品的pidvid json串，表示商品的属性，按属性在类目上的优先级排序，如：
+     * '{"singlePidVidMap":{"1":4294977296,"4":17179879190,"5":21474846488},"pidvid":[4294977296,17179879190,21474846488],"multiPidVidMap":{}}'
+     */
     private String json;
 
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override

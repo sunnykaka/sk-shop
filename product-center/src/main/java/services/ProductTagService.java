@@ -3,8 +3,6 @@ package services;
 import common.services.GeneralDao;
 import common.utils.page.Page;
 import models.ProductTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 /**
  * 产品（商品）标签 Service
  * User: lidujun
@@ -23,8 +20,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ProductTagService {
-    private static final Logger log = LoggerFactory.getLogger(ProductTagService.class);
-
     @Autowired
     private GeneralDao generalDao;
 
@@ -32,7 +27,7 @@ public class ProductTagService {
      * 保存产品（商品）标签
      */
     public void save(ProductTag tag){
-        log.info("--------ProductTagService save begin exe-----------" + tag);
+        play.Logger.info("--------ProductTagService save begin exe-----------" + tag);
         generalDao.persist(tag);
     }
 
@@ -40,7 +35,7 @@ public class ProductTagService {
      * 删除产品（商品）标签
      */
     public void realDelete(Integer tagId){
-        log.info("--------ProductTagService realDelete begin exe-----------" + tagId);
+        play.Logger.info("--------ProductTagService realDelete begin exe-----------" + tagId);
         generalDao.removeById(ProductTag.class, tagId);
     }
 
@@ -48,7 +43,7 @@ public class ProductTagService {
      * 更新产品（商品）标签
      */
     public void update(ProductTag tag){
-        log.info("--------ProductTagService update begin exe-----------" + tag);
+        play.Logger.info("--------ProductTagService update begin exe-----------" + tag);
         generalDao.merge(tag);
     }
 
@@ -56,9 +51,9 @@ public class ProductTagService {
      * 通过主键获取产品（商品）标签
      */
     @Transactional(readOnly = true)
-    public ProductTag getTagById(Integer tagId){
-        log.info("--------ProductTagService getTagById begin exe-----------" + tagId);
-        return generalDao.get(ProductTag.class, tagId);
+    public Optional<ProductTag> getTagById(Integer tagId){
+        play.Logger.info("--------ProductTagService getTagById begin exe-----------" + tagId);
+        return Optional.ofNullable(generalDao.get(ProductTag.class, tagId));
     }
 
     /**
@@ -66,7 +61,7 @@ public class ProductTagService {
      */
     @Transactional(readOnly = true)
     public List<ProductTag> getTagList(Optional<Page<ProductTag>> page, ProductTag param){
-        log.info("--------ProductTagService getTagList begin exe-----------" + page + "\n" + param);
+        play.Logger.info("--------ProductTagService getTagList begin exe-----------" + page + "\n" + param);
 
         String jpql = "select o from ProductTag o where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
@@ -85,7 +80,7 @@ public class ProductTagService {
              }
 
          }
-        jpql += " group by o.id";
+        jpql += " order by o.id";
         return generalDao.query(jpql, page, queryParams);
     }
 

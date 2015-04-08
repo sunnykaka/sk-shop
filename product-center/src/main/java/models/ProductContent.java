@@ -20,16 +20,34 @@ public class ProductContent implements EntityClass<Integer>, OperableData {
      */
     private Integer id;
 
+    /**
+     * 产品（商品）id
+     */
     private Integer productId;
 
+    /**
+     * 内容标题名称
+     */
     private String name;
 
+    /**
+     * 内容
+     */
     private String content;
 
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override

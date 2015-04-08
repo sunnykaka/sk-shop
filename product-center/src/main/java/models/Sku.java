@@ -11,44 +11,92 @@ import javax.persistence.*;
 /**
  * 单品SKU，表示可以存储的最小的单元
  *
- * Created by zhb on 15-4-1.
+ * Created by zhb on 15-4-1. update by lidujun 2015-04-08
  */
 @Table(name = "sku")
 @Entity
 public class Sku implements EntityClass<Integer>, OperableData {
-
+    /**
+     * 库自增ID
+     */
     private Integer id;
 
+    /**
+     * 产品（商品）id
+     */
     private Integer productId;
 
-    /** SKU状态 */
+    /**
+     * sku属性组合字符窜
+     */
+    private String skuProperty;
+
+    /**
+     * 是否上线
+     */
     private Boolean online;
 
+    /**
+     * 条形码
+     */
     private String barCode;
 
+    /**
+     * 单品编码
+     */
     private String skuCode;
 
+    /**
+     * 协议价
+     */
     private Money price;
 
+    /**
+     * 国内市场价
+     */
     private Money domesticPrice;
 
+    /**
+     * 国外市场价
+     */
     private Money foreignPrice;
 
+    /**
+     * 库存
+     */
     private Integer stock;
 
+    /**
+     * 最多能卖数量
+     */
     private Integer sellMax;
 
+    /**
+     * 状态
+     */
+    private Boolean status;
+
+    /**
+     * 创建时间
+     */
     private DateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private DateTime updateTime;
 
+    /**
+     * 最后操作人
+     */
     private Integer operatorId;
 
     @Override
     public String toString() {
-        return "SKU{" +
+        return "Sku{" +
                 "id=" + id +
                 ", productId=" + productId +
+                ", skuProperty='" + skuProperty + '\'' +
                 ", online=" + online +
                 ", barCode='" + barCode + '\'' +
                 ", skuCode='" + skuCode + '\'' +
@@ -57,6 +105,7 @@ public class Sku implements EntityClass<Integer>, OperableData {
                 ", foreignPrice=" + foreignPrice +
                 ", stock=" + stock +
                 ", sellMax=" + sellMax +
+                ", status=" + status +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", operatorId=" + operatorId +
@@ -85,9 +134,19 @@ public class Sku implements EntityClass<Integer>, OperableData {
         this.productId = productId;
     }
 
+    @Column(name = "sku_property")
+    @Basic
+    public String getSkuProperty() {
+        return skuProperty;
+    }
+
+    public void setSkuProperty(String skuProperty) {
+        this.skuProperty = skuProperty;
+    }
+
     @Column(name = "online")
     @Basic
-    public Boolean isOnline() {
+    public Boolean getOnline() {
         return online;
     }
 
@@ -163,6 +222,16 @@ public class Sku implements EntityClass<Integer>, OperableData {
 
     public void setSellMax(Integer sellMax) {
         this.sellMax = sellMax;
+    }
+
+    @Column(name = "status")
+    @Basic
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     @Column(name = "create_time")
