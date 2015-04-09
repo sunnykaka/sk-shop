@@ -1,10 +1,10 @@
-@(title: String = "尚客平台管理系统")(content: Html)
+@(title: String = "尚客平台管理系统")(staticFile: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
     <head>
         <meta charset="utf-8" />
-        <title>Dashboard - Ace Admin for Bootstrap</title>
+        <title>@title</title>
 
         <meta name="description" content="overview &amp; stats" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -111,10 +111,8 @@
 
             <!-- inline scripts related to this page -->
 
-        <script type="text/javascript">
-        jQuery(function($) {
 
-        })
-        </script>
+        @staticFile
+
     </body>
 </html>

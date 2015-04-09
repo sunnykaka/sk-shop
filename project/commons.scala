@@ -16,7 +16,8 @@ object Commons {
       "local repository" at "http://192.168.1.100:8081/nexus/content/groups/public/",
       Resolver.typesafeRepo("releases"),
       Resolver.sonatypeRepo("releases"),
-      Resolver.sonatypeRepo("snapshots")
+      Resolver.sonatypeRepo("snapshots"),
+      "pk11 repo" at "http://pk11-scratch.googlecode.com/svn/trunk"
     )
   )
 }

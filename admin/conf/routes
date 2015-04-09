@@ -9,6 +9,9 @@ GET        /                    @controllers.Application.index
 #Order
 GET        /orders              @controllers.order.OrderController.list(status ?= null, orderNo ?= null)
 
+#Cache
+GET        /cache/:key          @controllers.test.CacheController.getCache(key)
+PUT        /cache/:key          @controllers.test.CacheController.setCache(key, value)
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file        controllers.Assets.at(path="/public", file)

@@ -21,8 +21,7 @@ object Dependencies {
   )
 
   val springTest = Seq(
-    "org.springframework" % "spring-test" % springVersion % "test" exclude("junit", "junit"),
-    "org.hamcrest" % "hamcrest-all" % "1.3" % "test"
+    "org.springframework" % "spring-test" % springVersion % "test" exclude("junit", "junit")
   )
 
   val c3p0 = Seq("c3p0" % "c3p0" % "0.9.1.2")
@@ -33,8 +32,9 @@ object Dependencies {
   )
 
   val playDependencies = Seq(
-    javaCore exclude("org.hamcrest", "hamcrest-core"),
-    javaWs % "test"
+    javaCore,
+    javaWs  % "test",
+    "com.typesafe.play.plugins" %% "play-plugins-redis" % "2.3.1"
   )
 
   val commonDependencies: Seq[ModuleID] = common ++ springHibernate ++ playDependencies
