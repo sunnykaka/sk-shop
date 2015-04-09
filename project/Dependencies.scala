@@ -34,7 +34,11 @@ object Dependencies {
   val playDependencies = Seq(
     javaCore,
     javaWs  % "test",
-    "com.typesafe.play.plugins" %% "play-plugins-redis" % "2.3.1"
+    cache,
+    //"com.typesafe.play.plugins" %% "play-plugins-redis" % "2.3.1"
+    "biz.source_code" %  "base64coder" % "2010-12-19",
+    "org.sedis" %% "sedis" % "1.2.2"
+
   )
 
   val commonDependencies: Seq[ModuleID] = common ++ springHibernate ++ playDependencies

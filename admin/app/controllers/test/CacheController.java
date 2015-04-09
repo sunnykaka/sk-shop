@@ -18,7 +18,7 @@ public class CacheController extends Controller {
     public Result getCache(String key) {
 
         try {
-            String value = Cache.getOrElse(key, () -> "default value", 0);
+            String value = Cache.getOrElse(key, () -> "set default value", 0);
             return ok(value);
         } catch (Exception e) {
             Logger.error("", e);
@@ -29,7 +29,8 @@ public class CacheController extends Controller {
     public Result setCache(String key, String value) {
         Cache.set(key, value);
 
-        return ok("set ok");
+        return ok(String.valueOf(Cache.get(key)));
     }
+
 
 }
