@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.print.attribute.SetOfIntegerSyntax;
+import java.util.*;
 
 /**
  * Created by zhb on 15-4-7.
@@ -48,6 +47,13 @@ public class CategoryPropertyValueService {
         generalDAO.removeById(CategoryPropertyValue.class,id);
     }
 
+    /**
+     * 查出类目属性值
+     *
+     * @param categoryId 类目Id
+     * @param propertyId 属性Id
+     * @return
+     */
     public List<CategoryPropertyValue> findByCidAndPid(int categoryId,int propertyId){
 
         String jpql = "select o from category_value o where 1=1 ";
@@ -57,6 +63,32 @@ public class CategoryPropertyValueService {
 
         jpql += " and o.property_id = :propertyId ";
         queryParams.put("propertyId", propertyId);
+
+        return generalDAO.query(jpql, null, queryParams);
+
+    }
+
+    /**
+     * 查出类目所有属性
+     *
+     * @param categoryId
+     * @return
+     */
+    public List<CategoryPropertyValue> findByCid(int categoryId){
+
+        String jpql = "select o from category_value o where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and o.category_id = :categoryId ";
+        queryParams.put("categoryId", categoryId);
+
+        List<CategoryPropertyValue> cPVList = generalDAO.query(jpql, null, queryParams);
+
+        Set<Integer> propertyIds = new HashSet<>();
+        if(null != cPVList && cPVList.size() > 0){
+            for(CategoryPropertyValue categoryPropertyValue:cPVList){
+                propertyIds.add(categoryPropertyValue.getPropertyId());
+            }
+        }
 
         return generalDAO.query(jpql, null, queryParams);
 

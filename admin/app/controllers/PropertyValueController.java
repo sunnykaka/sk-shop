@@ -51,6 +51,12 @@ public class PropertyValueController extends Controller {
 
     }
 
+    public void queryInfo(int categoryId){
+        //TODO 04-08
+        //categoryPropertyValueService.
+    }
+
+
     /**
      * 新增属性、值
      *
