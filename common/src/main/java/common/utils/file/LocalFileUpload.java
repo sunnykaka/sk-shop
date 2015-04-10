@@ -18,7 +18,7 @@ import java.util.UUID;
 public class LocalFileUpload implements FileUpload {
 
 
-    private static final String DEFAULT_UPLOAD_ROOT = "/home/amos/skProject/";
+    private static final String DEFAULT_UPLOAD_ROOT = "/var/wwww/";
     /**
      * 网站的静态资源部分:js,css,图片等
      */
