@@ -3,15 +3,25 @@
 # ~~~~
 
 # Home page
-GET        /                    @controllers.Application.index
+GET         /                    @controllers.Application.index
 
 
 #Order
-GET        /orders              @controllers.order.OrderController.list(status ?= null, orderNo ?= null)
+GET         /orders              @controllers.order.OrderController.list(status ?= null, orderNo ?= null)
 
 #Cache
-GET        /cache/:key          @controllers.test.CacheController.getCache(key)
-PUT        /cache/:key          @controllers.test.CacheController.setCache(key, value)
+GET         /cache/:key          @controllers.test.CacheController.getCache(key)
+PUT         /cache/:key          @controllers.test.CacheController.setCache(key, value)
+
+
+#category  zhb
+GET         /category            @controllers.category.CategoryController.findFatherCategorys()
+POST        /category/add        @controllers.category.CategoryController.addFirst()
+
+#property
+GET         /property            @controllers.category.PropertyValueController.propertyIndex()
+
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.at(path="/public", file)
+GET         /assets/*file        controllers.Assets.at(path="/public", file)

@@ -1,6 +1,8 @@
 package productcenter.services;
 
 import common.services.GeneralDao;
+import common.utils.page.Page;
+import org.apache.commons.lang3.StringUtils;
 import productcenter.models.CategoryProperty;
 import productcenter.models.Property;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -73,6 +72,29 @@ public class PropertyService {
     public boolean delete(Property property) {
         return generalDAO.removeById(Property.class, property.getId());
     }
+
+
+    @Transactional(readOnly = true)
+    public List<CategoryProperty> findByPropertyWithGeneralDaoQuery(Optional<Page<CategoryProperty>> page, String name,String type) {
+
+        String jpql = "select cp from CategoryProperty cp join fetch cp.property p where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+
+        if(StringUtils.isNotEmpty(type)) {
+            jpql += " and cp.type = :type ";
+            queryParams.put("type", type);
+        }
+        if(StringUtils.isNotEmpty(name)) {
+            jpql += " and p.name = :name ";
+            queryParams.put("name", name);
+        }
+
+        jpql += " order by p.priority ";
+
+        return generalDAO.query(jpql, page, queryParams);
+
+    }
+
 
     /**
      * 根据类目ID，查找类目属性

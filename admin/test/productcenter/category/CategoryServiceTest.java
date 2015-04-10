@@ -25,7 +25,7 @@ public class CategoryServiceTest implements BaseTest {
             category.setParentId(Category.PARENT_DEFAULT);
             category.setOperatorId(1);
 
-            categoryService.save(category);
+            categoryService.saveOrUpdate(category);
 
         });
     }

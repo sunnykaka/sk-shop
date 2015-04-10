@@ -1,4 +1,4 @@
-package controllers;
+package controllers.category;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import productcenter.services.CategoryPropertyService;
 import productcenter.services.CategoryPropertyValueService;
 import productcenter.services.PropertyService;
 import productcenter.services.ValueService;
+import views.html.category.PVindex;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -44,11 +45,12 @@ public class PropertyValueController extends Controller {
      *
      * @return
      */
-    public void categoryIndex(){
+    public Result propertyIndex(){
 
         play.Logger.info("属性首页");
         //TODO
 
+        return ok(PVindex.render(""));
     }
 
     public void queryInfo(int categoryId){
@@ -66,7 +68,7 @@ public class PropertyValueController extends Controller {
      */
     public Result createProperty(CategoryProperty cp,String name,String value){
 
-        if (cp.getType() == PropertyType.SELL_PROPERTY) {
+        if (cp.getType() == PropertyType.SELL_PROPERTY.value) {
             cp.setMultiValue(true);
         }
         int pid = propertyService.createProperty(new Property(name));
@@ -103,7 +105,7 @@ public class PropertyValueController extends Controller {
      */
     public Result updateProperty(CategoryProperty cp,String name,String jsonValueList){
 
-        if (cp.getType() == PropertyType.SELL_PROPERTY) {
+        if (cp.getType() == PropertyType.SELL_PROPERTY.value) {
             cp.setMultiValue(true);
         }
 

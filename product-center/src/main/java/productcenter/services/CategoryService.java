@@ -37,25 +37,22 @@ public class CategoryService {
      * @return
      */
     @Transactional
-    public void save(Category category) {
-
-        if (null != category && (category.getParentId() == 0 || category.getParentId() == null)) {
-            category.setParentId(category.PARENT_DEFAULT);
+    public Category saveOrUpdate(Category category) {
+        if(null == category){
+            return null;
         }
 
-        generalDao.persist(category);
-    }
+        if(null != category.getId() && category.getId() > 0){
+            System.out.println("1111");
+            return generalDao.merge(category);//更新
+        }else{
+            if (category.getParentId() == null || category.getParentId() == 0) {
+                category.setParentId(category.PARENT_DEFAULT);
+            }
+            generalDao.persist(category);//添加
+            return category;
+        }
 
-    /**
-     * 更新后台类目
-     *
-     * @param category
-     * @return
-     */
-    @Transactional
-    public Category update(Category category){
-
-        return generalDao.merge(category);
     }
 
     /**
@@ -71,6 +68,16 @@ public class CategoryService {
 
     }
 
+    /**
+     * 根据Id查找
+     *
+     * @param id
+     * @return
+     */
+    public Category getCategorybyId(int id){
+        return generalDao.get(Category.class,id);
+    }
+
 
     /**
      * 根据父ID，查找下级类目
@@ -79,7 +86,7 @@ public class CategoryService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Category> getCategorybyId(int parentId) {
+    public List<Category> getCategorybyParentId(int parentId) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Category> cq = cb.createQuery(Category.class);
@@ -104,7 +111,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<Category> findFatherCategorys() {
 
-        return getCategorybyId(Category.PARENT_DEFAULT);
+        return getCategorybyParentId(Category.PARENT_DEFAULT);
 
     }
 
@@ -123,11 +130,11 @@ public class CategoryService {
 //        List<Category> categoryFatherList = generalDAO.search(search);//一级类目
 //        len--;
 //        for (Category categoryFather : categoryFatherList) {
-//            List<Category> categoryChildrenList = getCategorybyId(categoryFather.getParentId());//二级类目
+//            List<Category> categoryChildrenList = getCategorybyParentId(categoryFather.getParentId());//二级类目
 //
 //            List<CategoryTree> treeFatherList = new ArrayList<>();
 //            for (Category categoryChildren : categoryChildrenList) {
-//                List<Category> categoryList = getCategorybyId(categoryChildren.getParentId());//三级类目
+//                List<Category> categoryList = getCategorybyParentId(categoryChildren.getParentId());//三级类目
 //
 //                List<CategoryTree> treeChildrenList = new ArrayList<>();
 //                for (Category category : categoryList) {

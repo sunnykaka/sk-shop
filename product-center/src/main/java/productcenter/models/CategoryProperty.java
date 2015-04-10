@@ -22,7 +22,9 @@ public class CategoryProperty implements EntityClass<Integer> {
     /**
      * 属性类型
      */
-    private PropertyType type;
+    private String type;
+
+    private Property property;
 
     /**
      * 表示在发布商品的时候，这个属性的值是checkbox，可勾选多个，而不是一个单选下拉框
@@ -32,7 +34,7 @@ public class CategoryProperty implements EntityClass<Integer> {
     public CategoryProperty() {
     }
 
-    public CategoryProperty(int categoryId, int propertyId, PropertyType type, boolean multiValue) {
+    public CategoryProperty(int categoryId, int propertyId, String type, boolean multiValue) {
         this.categoryId = categoryId;
         this.propertyId = propertyId;
         this.type = type;
@@ -71,11 +73,11 @@ public class CategoryProperty implements EntityClass<Integer> {
 
     @Column(name = "type")
     @Basic
-    public PropertyType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(PropertyType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -87,5 +89,15 @@ public class CategoryProperty implements EntityClass<Integer> {
 
     public void setMultiValue(boolean multiValue) {
         this.multiValue = multiValue;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "property_id", insertable = false, updatable = false)
+    public Property getProperty() {
+        return property;
+    }
+
+    public void setProperty(Property property) {
+        this.property = property;
     }
 }
