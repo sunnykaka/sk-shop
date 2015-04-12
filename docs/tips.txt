@@ -13,3 +13,16 @@
 4.  有时需要清空项目编译的缓存,sbt clean只能清空自己编写的代码,如果要完整清空,可以在命令行中进入项目根目录,
     然后执行"find . -name target -type d -exec rm -rf {} \;"
     建议把这行语句加入~/.bashrc并起个别名,例如alias sbtclean="find . -name target -type d -exec rm -rf {} \;"
+
+5.  模版中定义变量的三种办法
+    1)@defining("foo") { title=>
+        <div>@title</div>
+        ....
+      }
+    2)@import java.math.BigInteger; var i=1; var k=1
+      <div id='LContent_div@i'>
+        <div id='inner_div_@k'></div>
+      </div>
+    3)@script = {<script>alert("hello");</script>}
+
+    第一种方法只适合定义小范围的变量,第二种适合定义全局变量,第三种只能定义html代码块

@@ -4,53 +4,53 @@
 
 @main(){
     <script type="text/javascript">
-    jQuery(function ($) {
-        $("#submit_btn").click(function () {
-            $("#form1").submit() ;
-        }) ;
+jQuery(function ($) {
+    $("#submit_btn").click(function () {
+        $("#form1").submit() ;
+    }) ;
 
-        $("#buyTime").datetimepicker({format: 'yyyy-mm-dd hh:ii', language: 'zh-CN'});
+    $("#buyTime").datetimepicker({format: 'yyyy-mm-dd hh:ii', language: 'zh-CN'});
 
-        $('#form1').validate({
-            errorElement: 'div',
-            errorClass: 'help-block',
-            focusInvalid: true,
-            rules: {
-                buyerId: {required: true},
-                buyTime: {required: true},
-                status: {required: true}
-            },
+    $('#form1').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: true,
+        rules: {
+            buyerId: {required: true},
+            buyTime: {required: true},
+            status: {required: true}
+        },
 
-            messages: {
-                buyerId: {required: "请输入买家名称"},
-                buyTime: {required: "请输入购买实践"},
-                status: {required: "请输入订单状态"}
-            },
+        messages: {
+            buyerId: {required: "请输入买家名称"},
+            buyTime: {required: "请输入购买实践"},
+            status: {required: "请输入订单状态"}
+        },
 
-            submitHandler: function (form) {
-                var status = $("#status" ).val();
-                if(status != "WAIT_APPROVE") {
-                    bootbox.alert("订单状态请输入WAIT_APPROVE");
-                    return;
-                }
-                form.submit();
+        submitHandler: function (form) {
+            var status = $("#status" ).val();
+            if(status != "WAIT_APPROVE") {
+                bootbox.alert("订单状态请输入WAIT_APPROVE");
+                return;
             }
-        });
-
+            form.submit();
+        }
     });
-    </script>
+
+});
+</script>
 } {
 
     <div class="breadcrumbs" id="breadcrumbs">
         <script type="text/javascript">
-        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-        </script>
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
 
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>订单管理
             </li>
-            <li class="active"><a href="@controllers.order.routes.OrderController.addPage()">订单添加</a></li>
+            <li class="active"><a href="@controllers.order.routes.OrderController.updatePage(form.get.getId)">订单修改</a></li>
         </ul><!-- .breadcrumb -->
     </div>
 
@@ -61,7 +61,7 @@
             <h1>
                 订单管理
                 <small>
-                    <i class="icon-double-angle-right"></i>订单添加
+                    <i class="icon-double-angle-right"></i>订单修改
                 </small>
             </h1>
         </div>
@@ -72,6 +72,15 @@
                     <!-- PAGE CONTENT BEGINS -->
 
                 <form class="form-horizontal" role="form" id="form1" action="@controllers.order.routes.OrderController.saveOrder()" method="post">
+
+                    @*form.value.foreach(o => {
+                        <input type="hidden" id="id" name="id" value="@o.getId" />
+                    })*@
+
+                    @if(form.value.isDefined && form.value.get.getId != null) {
+                        <input type="hidden" id="id" name="id" value="@form.value.get.getId" />
+                    }
+
 
                     <div class="form-group">
                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="buyerId">买家用户名*</label>
@@ -108,9 +117,9 @@
 
                         <div class="col-xs-12 col-sm-9">
                             <div class="clearfix">
-                                @defining(form.value.fold("")(o => if(o.getActualFee != null) o.getActualFee.toString else "")) { actualFeeStr =>
-                                    <input type="text" name="actualFee" id="actualFee" class="col-xs-12 col-sm-6" value="@actualFeeStr" />
-                                }
+                            @defining(form.value.fold("")(o => if(o.getActualFee != null) o.getActualFee.toString else "")) { actualFeeStr =>
+                                <input type="text" name="actualFee" id="actualFee" class="col-xs-12 col-sm-6" value="@actualFeeStr" />
+                            }
                             </div>
                         </div>
                     </div>
@@ -142,6 +151,11 @@
 
                         @for(index <- 0 until form.value.get.getOrderItemList.size()) {
                             @defining(form.value.get.getOrderItemList.get(index)) { oi =>
+
+                                @if(oi.getId != null) {
+                                    <input type="hidden" id="orderItemList[@index].id" name="orderItemList[@index].id" value="@oi.getId" />
+                                }
+
                                 <div class="form-group">
                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[@index].productId">订单项@(index + 1)产品ID</label>
 

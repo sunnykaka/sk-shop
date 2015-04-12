@@ -13,7 +13,7 @@
             @for((key, value) <- form.errors) {
                 @key.toString :
                 @for(err <- value) {
-                    @err.message().toString()
+                    @Messages(err.message().toString())
                 }
             }
         } else {No error returned.}

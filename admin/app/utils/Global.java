@@ -6,6 +6,10 @@ import common.utils.play.MoneyFormatter;
 import org.joda.time.DateTime;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.orm.jpa.EntityManagerHolder;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import play.GlobalSettings;
 import play.Application;
 
@@ -13,6 +17,16 @@ import configs.AppConfig;
 import configs.DataConfig;
 import play.Logger;
 import play.data.format.Formatters;
+import play.libs.F;
+import play.mvc.Action;
+import play.mvc.Http;
+import play.mvc.Result;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
+import javax.persistence.PersistenceException;
+import java.lang.reflect.Method;
 
 public class Global extends GlobalSettings {
 
@@ -36,4 +50,43 @@ public class Global extends GlobalSettings {
         return ctx.getBean(clazz);
     }
 
+    @Override
+    public Action onRequest(Http.Request request, Method actionMethod) {
+
+        final EntityManagerFactory emf = ctx.getBean(EntityManagerFactory.class);
+
+        return new Action.Simple() {
+            public F.Promise<Result> call(Http.Context ctx) throws Throwable {
+
+                boolean participate = false;
+                if (TransactionSynchronizationManager.hasResource(emf)) {
+                    participate = true;
+                } else {
+                    Logger.debug("Opening single JPA EntityManager in Global.onRequest");
+                    try {
+                        EntityManager em = emf.createEntityManager();
+                        EntityManagerHolder emHolder = new EntityManagerHolder(em);
+                        TransactionSynchronizationManager.bindResource(emf, emHolder);
+                    } catch (PersistenceException ex) {
+                        throw new DataAccessResourceFailureException("Could not create JPA EntityManager", ex);
+                    }
+
+                }
+
+                try {
+
+                    return delegate.call(ctx);
+
+                } finally {
+
+                    if (!participate) {
+                        EntityManagerHolder emHolder = (EntityManagerHolder)
+                                TransactionSynchronizationManager.unbindResource(emf);
+                        Logger.debug("Closing JPA EntityManager in Global.onRequest");
+                        EntityManagerFactoryUtils.closeEntityManager(emHolder.getEntityManager());
+                    }
+                }
+            }
+        };
+    }
 }

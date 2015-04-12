@@ -8,6 +8,7 @@ import ordercenter.constants.OrderType;
 import ordercenter.constants.PlatformType;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import play.data.validation.Constraints.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -51,11 +52,13 @@ public class Order implements EntityClass<Integer>, OperableData {
     /**
      * 实付金额
      */
+    @Required
     private Money actualFee = Money.valueOf(0);
 
     /**
      * 买家ID
      */
+    @MinLength(3)
     private String buyerId;
 
     /**

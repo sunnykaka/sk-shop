@@ -1,11 +1,17 @@
 package ordercenter.services;
 
 import common.services.GeneralDao;
+import common.utils.IdUtils;
 import common.utils.page.Page;
+import ordercenter.constants.OrderItemType;
 import ordercenter.constants.OrderStatus;
+import ordercenter.constants.OrderType;
+import ordercenter.constants.PlatformType;
 import ordercenter.dtos.OrderSearcher;
 import ordercenter.models.*;
 import ordercenter.models.Order;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +61,7 @@ public class OrderService {
             predicateList.add(cb.equal(order.get("status"), status.get()));
         }
 
-        cq.select(order).where(predicateList.toArray(new Predicate[predicateList.size()]));
+        cq.select(order).where(predicateList.toArray(new Predicate[predicateList.size()])).orderBy(cb.desc(order.get("updateTime")));
 
         TypedQuery<Order> query = em.createQuery(cq);
 
@@ -244,6 +250,45 @@ public class OrderService {
 
         return generalDao.query(jpql, page, queryParams);
 
+    }
+
+    @Transactional
+    public void saveOrder(Order order) {
+        if(IdUtils.isEmpty(order.getId())) {
+            //ID为空,新增
+            order.setType(OrderType.NORMAL);
+            order.setOrderNo(RandomStringUtils.randomAlphanumeric(8));
+            order.setPlatformType(PlatformType.WEB);
+            generalDao.persist(order);
+
+            for(OrderItem orderItem : order.getOrderItemList()) {
+                orderItem.setPlatformType(PlatformType.WEB);
+                orderItem.setType(OrderItemType.PRODUCT);
+                orderItem.setOrderId(order.getId());
+                generalDao.persist(orderItem);
+            }
+
+        } else {
+            //修改
+            generalDao.merge(order);
+            for(OrderItem orderItem : order.getOrderItemList()) {
+                if(IdUtils.isEmpty(orderItem.getId())) {
+                    //ID为空,新增
+                    orderItem.setPlatformType(PlatformType.WEB);
+                    orderItem.setType(OrderItemType.PRODUCT);
+                    orderItem.setOrderId(order.getId());
+                    generalDao.persist(orderItem);
+                } else {
+                    //修改
+                    generalDao.merge(orderItem);
+                }
+            }
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Order get(Integer id) {
+        return generalDao.get(Order.class, id);
     }
 
 }
