@@ -32,6 +32,19 @@ public class Nation implements EntityClass<Integer>,OperableData {
 
     private Integer operatorId;
 
+    @Override
+    public String toString() {
+        return "Nation{" +
+                "id=" + id +
+                ", nameEn='" + nameEn + '\'' +
+                ", nameZh='" + nameZh + '\'' +
+                ", picUrl='" + picUrl + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", operatorId=" + operatorId +
+                '}';
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override

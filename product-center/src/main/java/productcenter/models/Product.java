@@ -69,6 +69,11 @@ public class Product implements EntityClass<Integer>, OperableData {
     private Boolean isDelete;
 
     /**
+     * 只用用于通过sku查询的查询条件
+     */
+    private String searchSku;
+
+    /**
      * 创建时间
      */
     private DateTime createTime;
@@ -96,10 +101,19 @@ public class Product implements EntityClass<Integer>, OperableData {
                 ", description='" + description + '\'' +
                 ", online=" + online +
                 ", isDelete=" + isDelete +
+                ", searchSku='" + searchSku + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", operatorId=" + operatorId +
                 '}';
+    }
+
+    public String getSearchSku() {
+        return searchSku;
+    }
+
+    public void setSearchSku(String searchSku) {
+        this.searchSku = searchSku;
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)

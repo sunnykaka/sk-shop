@@ -53,7 +53,16 @@ public class DesignerService {
     @Transactional(readOnly = true)
     public Optional<Designer> getDesignerById(Integer designerId){
         play.Logger.info("--------ProductContentService getDesignerById begin exe-----------" + designerId);
-        return Optional.ofNullable(generalDao.get(Designer.class, designerId));
+        //return Optional.ofNullable(generalDao.get(Designer.class, designerId));
+        String jpql = "select o from Designer o left join fetch o.nation oi where 1=1 and o.id = :designerId ";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("designerId", designerId);
+        List<Designer> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        Designer designer = null;
+        if(list != null && list.size() > 0) {
+            designer = list.get(0);
+        }
+        return Optional.ofNullable(designer);
     }
 
     /**
@@ -63,7 +72,7 @@ public class DesignerService {
     public List<Designer> getDesignerList(Optional<Page<Designer>> page, Designer param){
         play.Logger.info("--------DesignerService getDesignerList begin exe-----------" + page + "\n" + param);
 
-        String jpql = "select o from Designer o where 1=1 ";
+        String jpql = "select o from Designer o left join fetch o.nation oi where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
 
          if(param != null) {

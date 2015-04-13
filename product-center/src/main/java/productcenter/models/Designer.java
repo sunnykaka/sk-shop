@@ -26,9 +26,19 @@ public class Designer implements EntityClass<Integer> , OperableData {
     private String name;
 
     /**
+     * 设计师代码
+     */
+    private String code;
+
+    /**
      * 设计师国籍id
      */
     private Integer nationId;
+
+    /**
+     * 国籍
+     */
+    private Nation nation;
 
     /**
      * 设计师介绍
@@ -60,7 +70,9 @@ public class Designer implements EntityClass<Integer> , OperableData {
         return "Designer{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
                 ", nationId=" + nationId +
+                ", nation=" + nation +
                 ", introduction='" + introduction + '\'' +
                 ", isDelete=" + isDelete +
                 ", createTime=" + createTime +
@@ -91,6 +103,16 @@ public class Designer implements EntityClass<Integer> , OperableData {
         this.name = name;
     }
 
+    @Column(name = "code")
+    @Basic
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Column(name = "nation_id")
     @Basic
     public Integer getNationId() {
@@ -99,6 +121,16 @@ public class Designer implements EntityClass<Integer> , OperableData {
 
     public void setNationId(Integer nationId) {
         this.nationId = nationId;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nation_id", referencedColumnName="id", insertable = false, updatable = false)
+    public Nation getNation() {
+        return nation;
+    }
+
+    public void setNation(Nation nation) {
+        this.nation = nation;
     }
 
     @Column(name = "introduction")

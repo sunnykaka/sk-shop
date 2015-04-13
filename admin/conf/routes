@@ -25,3 +25,14 @@ GET         /property            @controllers.category.PropertyValueController.p
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file        controllers.Assets.at(path="/public", file)
+
+
+
+#designer lidujun
+GET         /designerlist            @controllers.designer.DesignerController.designerlist
+GET         /designerForm            @controllers.designer.DesignerController.designerForm
+POST        /addDesigner             @controllers.designer.DesignerController.addDesigner
+GET         /showDesigner            @controllers.designer.DesignerController.showDesigner(designerId:Int ?= 0)
+GET         /editDesignerForm        @controllers.designer.DesignerController.editDesignerForm(designerId:Int ?= 0)
+POST        /editDesigner            @controllers.designer.DesignerController.editDesigner
+GET         /falseDeleteDesigner     @controllers.designer.DesignerController.falseDeleteDesigner(designerId:Int ?= 0)
