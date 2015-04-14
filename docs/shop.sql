@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015-4-2 16:03:33                            */
+/* Created on:     2015-4-14 15:09:11                           */
 /*==============================================================*/
 
 
@@ -75,14 +75,14 @@ create table order_base
    buyer_message        text comment '买家留言',
    remark               text comment '客服备注',
    repo_id              int(11) comment '库房id',
-   buy_time             timestamp default '0000-00-00 00:00:00' comment '下单时间',
-   pay_time             timestamp default '0000-00-00 00:00:00' comment '支付时间',
+   buy_time             datetime default '0000-00-00 00:00:00' comment '下单时间',
+   pay_time             datetime default '0000-00-00 00:00:00' comment '支付时间',
    need_receipt         tinyint(1) default NULL comment '是否需要发票',
    receipt_title        varchar(100) default NULL comment '发票抬头',
    receipt_content      varchar(512) default NULL comment '发票内容',
    platform_type        varchar(10) not null comment '外部平台类型(天猫还是京东)',
-   create_time          timestamp default '0000-00-00 00:00:00' comment '创建时间',
-   update_time          timestamp default '0000-00-00 00:00:00' comment '更新时间',
+   create_time          datetime default '0000-00-00 00:00:00' comment '创建时间',
+   update_time          datetime default '0000-00-00 00:00:00' comment '更新时间',
    operator_id          int(11),
    invoice_id           int(11) comment '发货单信息ID',
    primary key (id)

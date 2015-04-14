@@ -3,6 +3,8 @@ package utils;
 import common.utils.Money;
 import common.utils.play.JodaDateFormatter;
 import common.utils.play.MoneyFormatter;
+import common.utils.play.interceptor.ActionFilterChain;
+import common.utils.play.interceptor.OpenEntityManagerInViewActionFilter;
 import org.joda.time.DateTime;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.ApplicationContext;
@@ -58,34 +60,13 @@ public class Global extends GlobalSettings {
         return new Action.Simple() {
             public F.Promise<Result> call(Http.Context ctx) throws Throwable {
 
-                boolean participate = false;
-                if (TransactionSynchronizationManager.hasResource(emf)) {
-                    participate = true;
-                } else {
-                    Logger.debug("Opening single JPA EntityManager in Global.onRequest");
-                    try {
-                        EntityManager em = emf.createEntityManager();
-                        EntityManagerHolder emHolder = new EntityManagerHolder(em);
-                        TransactionSynchronizationManager.bindResource(emf, emHolder);
-                    } catch (PersistenceException ex) {
-                        throw new DataAccessResourceFailureException("Could not create JPA EntityManager", ex);
-                    }
+                ActionFilterChain filterChain = new ActionFilterChain(
+                        ctx,
+                        new OpenEntityManagerInViewActionFilter(emf)
+                );
+                filterChain.doFilter();
+                return filterChain.result;
 
-                }
-
-                try {
-
-                    return delegate.call(ctx);
-
-                } finally {
-
-                    if (!participate) {
-                        EntityManagerHolder emHolder = (EntityManagerHolder)
-                                TransactionSynchronizationManager.unbindResource(emf);
-                        Logger.debug("Closing JPA EntityManager in Global.onRequest");
-                        EntityManagerFactoryUtils.closeEntityManager(emHolder.getEntityManager());
-                    }
-                }
             }
         };
     }
