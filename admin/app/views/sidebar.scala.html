@@ -46,6 +46,24 @@
     <li>
         <a href="#" class="dropdown-toggle">
             <i class="icon-desktop"></i>
+            <span class="menu-text">商品</span>
+
+            <b class="arrow icon-angle-down"></b>
+        </a>
+
+        <ul class="submenu">
+            <li class="active">
+                <a href="@controllers.designer.routes.DesignerController.designerlist">
+                    <i class="icon-double-angle-right"></i>
+                    设计师管理
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-desktop"></i>
             <span class="menu-text"> 订单管理 </span>
 
             <b class="arrow icon-angle-down"></b>
@@ -57,6 +75,11 @@
                     <i class="icon-double-angle-right"></i>
                     订单查询
                 </a>
+                <a href="@controllers.order.routes.OrderController.addPage()">
+                    <i class="icon-double-angle-right"></i>
+                    订单新增
+                </a>
+
             </li>
         </ul>
     </li>
