@@ -8,6 +8,8 @@ import productcenter.models.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import productcenter.models.PropertyValue;
+import productcenter.models.Value;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +30,34 @@ public class PropertyService {
 
     @Autowired
     GeneralDao generalDAO;
+
+    @Autowired
+    private PropertyValueService propertyValueService;
+
+    @Autowired
+    private ValueService valueService;
+
+    /**
+     * 根据表单内容新建属性、值
+     *
+     * @param name
+     * @param value
+     */
+    public void savePV(String name,String value){
+        int pid = createProperty(new Property(name));
+
+        if (StringUtils.isNotEmpty(value)) {
+            String[] values = value.split(",|，"); //用逗号隔开的多值
+            Set<String> valueSet = new HashSet<>(); //去重
+            for (String v : values) {
+                valueSet.add(v);
+            }
+            for (String valueName : valueSet) {
+                int vid = valueService.createValue(new Value(valueName));
+                propertyValueService.createValue(new PropertyValue(pid,vid));
+            }
+        }
+    }
 
     /**
      * 添加类目属性
@@ -70,10 +100,39 @@ public class PropertyService {
      * @return
      */
     public boolean delete(Property property) {
+
+        List<PropertyValue> pvList = propertyValueService.findByPropertyId(property.getId());
+        if(null != pvList){
+            for(PropertyValue pv:pvList){
+                generalDAO.removeById(PropertyValue.class,pv.getId());
+            }
+        }
+
         return generalDAO.removeById(Property.class, property.getId());
     }
 
+    /**
+     * 分页查询所有属性
+     *
+     * @param page
+     * @param name
+     * @return
+     */
+    public List<Property> findAllProperty(Optional<Page<Property>> page, String name){
+        String jpql = "select p from Property p  where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
 
+        if(StringUtils.isNotEmpty(name)) {
+            jpql += " and p.name = :name ";
+            queryParams.put("name", name);
+        }
+
+        jpql += " order by p.priority desc";
+
+        return generalDAO.query(jpql, page, queryParams);
+    }
+
+    @Deprecated
     @Transactional(readOnly = true)
     public List<CategoryProperty> findByPropertyWithGeneralDaoQuery(Optional<Page<CategoryProperty>> page, String name,String type) {
 
@@ -131,12 +190,12 @@ public class PropertyService {
     @Transactional(readOnly = true)
     public Property findByName(String name) {
 
-        String jpql = "select o from property o where 1=1 ";
+        String jpql = "select p from Property p where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
-        jpql += " and o.name = :name ";
+        jpql += " and p.name = :name ";
         queryParams.put("name", name);
 
-        List<Property> propertyList = generalDAO.query(jpql, null, queryParams);
+        List<Property> propertyList = generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
         if (propertyList != null && propertyList.size() > 0) {
             return propertyList.get(0);
         }

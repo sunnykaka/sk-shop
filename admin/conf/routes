@@ -20,6 +20,8 @@ POST        /category/add        @controllers.category.CategoryController.addFir
 
 #property
 GET         /property            @controllers.category.PropertyValueController.propertyIndex()
+POST        /property/add        @controllers.category.PropertyValueController.createProperty()
+POST        /property/delete     @controllers.category.PropertyValueController.deleteProperty()
 
 
 

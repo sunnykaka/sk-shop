@@ -1,6 +1,95 @@
-@(test: String)
+@(propertyList: List[productcenter.models.Property])
 
-@main()() {
+@import productcenter.models.Value;
+@main(){
+
+    <script type="text/javascript">
+    $ ( "#addProperty" ).on ( 'click', function ( e ) {
+        e.preventDefault ( ) ;
+
+        $ ( "#addPropertyBox" ).dialog ( {
+            resizable : false,
+            width : "400",
+            modal : true,
+            title : "首页 > 属性管理 > 添加属性",
+            title_html : true,
+            buttons :[ {
+                html : "取消",
+                "class" : "btn btn-danger btn-xs",
+                click : function ( ) {
+                    $ ( this ).dialog ( "close" ) ;
+                }
+            }, {
+                html : "提交",
+                "class" : "btn btn-info btn-xs",
+                click : function ( ) {
+                    $("#addPropertyForm" ).submit();
+                }
+            }
+            ]
+        } ) ;
+    } ) ;
+
+    $(".date-del-property").on ( 'click', function ( e ) {
+        e.preventDefault ( ) ;
+        var id = $(this ).parent( ).attr("data-id");
+        $("#delPropertyForm").children().val(id);
+
+        $ ( "#delPropertyBox" ).dialog ( {
+            resizable : false,
+            width : "400",
+            modal : true,
+            title : "确定要删除该属性吗？",
+            title_html : true,
+            buttons :[ {
+                html : "取消",
+                "class" : "btn btn-danger btn-xs",
+                click : function ( ) {
+                    $("#delPropertyForm" ).children().val("");
+                    $ ( this ).dialog ( "close" ) ;
+                }
+                }, {
+                html : "确定",
+                "class" : "btn btn-info btn-xs",
+                click : function ( ) {
+                    $("#delPropertyForm" ).submit();
+                }
+            }
+            ]
+        } ) ;
+    } ) ;
+
+    $(".date-update-property").on ( 'click', function ( e ) {
+            e.preventDefault ( ) ;
+            var id = $(this ).parent( ).attr("data-id");
+            $("#updatePropertyForm").children().val(id);
+
+            $ ( "#updatePropertyBox" ).clone( ).attr("id","dialog-updatePropertyBox").dialog ( {
+                resizable : false,
+                width : "400",
+                modal : true,
+                title : "确定要删除该属性吗？",
+                title_html : true,
+                buttons :[ {
+                    html : "取消",
+                    "class" : "btn btn-danger btn-xs",
+                    click : function ( ) {
+                        $("#updatePropertyForm" ).children().val("");
+                        $ ( this ).dialog ( "close" ) ;
+                    }
+                    }, {
+                    html : "确定",
+                    "class" : "btn btn-info btn-xs",
+                    click : function ( ) {
+                        $("#updatePropertyForm" ).submit();
+                    }
+                }
+                ]
+            } ) ;
+        } ) ;
+
+    </script>
+} {
     <div class="breadcrumbs" id="breadcrumbs">
         <script type="text/javascript">
         try { ace.settings.check ( 'breadcrumbs', 'fixed' ) } catch ( e ) { }
@@ -42,15 +131,69 @@
             </div>
 
             <div class="col-sm-1">
-                <button type="button" class="btn btn-sm">
+                <button id="addProperty" type="button" class="btn btn-sm">
                     添加属性
                 </button>
             </div>
             <div class="col-sm-2">
-                <button type="button" class="btn btn-sm">
+                <button id="descProperty" type="button" class="btn btn-sm">
                     属性排序
                 </button>
             </div>
+
+        </div>
+
+        <div style="display: none">
+            <div class="widget-main" id="addPropertyBox">
+
+                <form id="addPropertyForm" class="form-horizontal" action="@controllers.category.routes.PropertyValueController.createProperty()" method="POST">
+                    <div class="form-group">
+                        <label class="col-sm-4">属性名称：</label>
+                        <input type="text" name="name" placeholder="name" class="col-sm-8">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4">属性值：</label>
+                        <input type="text" name="value" placeholder="多值以逗号隔开" class="col-sm-8">
+                    </div>
+
+                </form>
+
+            </div><!-- /widget-main -->
+
+        </div>
+
+        <div style="display: none">
+            <div class="widget-main" id="delPropertyBox">
+                <form id="delPropertyForm" class="form-horizontal" action="@controllers.category.routes.PropertyValueController.deleteProperty()" method="POST">
+                    <input type="hidden" name="id">
+                </form>
+            </div><!-- /widget-main -->
+        </div>
+
+        <div style="display: none">
+            <div class="widget-main" id="updatePropertyBox">
+
+                <form id="updatePropertyForm" class="form-horizontal" action="@controllers.category.routes.PropertyValueController.createProperty()" method="POST">
+                    <input type="hidden" name="id"/>
+                    <div class="form-group">
+                        <label class="col-sm-4">属性名称：</label>
+                        <input type="text" name="name" placeholder="name" class="col-sm-8">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">属性值：</label>
+                        <input type="hidden" name="id">
+                        <input type="text" name="value" class="col-sm-5">
+                        <div style="padding: 5px;" class="col-sm-2">
+                            <button class="btn btn-info btn-minier"> 更新 </button>
+                        </div>
+                        <div style="padding: 5px;" class="col-sm-2">
+                            <button class="btn btn-success btn-minier"> 删除 </button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div><!-- /widget-main -->
 
         </div>
 
@@ -63,50 +206,33 @@
                         <thead>
                             <tr>
                                 <th class="col-xs-2">序号</th>
-                                <th class="col-xs-3">属性类型</th>
                                 <th class="col-xs-3">属性名称</th>
-                                <th class="col-xs-4">操作</th>
+                                <th class="col-xs-5">属性值</th>
+                                <th class="col-xs-2">操作</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <td class="col-xs-2">123123232</td>
-                                <td class="col-xs-3">13123123323</td>
-                                <td class="col-xs-3">123123123321</td>
-                                <td class="col-xs-4">
-                                    <button class="btn btn-minier"> 查看 </button>
-                                    <button class="btn btn-primary btn-minier"> 编辑 </button>
-                                    <button class="btn btn-info btn-minier"> 删除 </button>
-                                    <button class="btn btn-success btn-minier"> 属性值排序 </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-xs-2">123123232</td>
-                                <td class="col-xs-3">13123123323</td>
-                                <td class="col-xs-3">123123123321</td>
-                                <td class="col-xs-4">
-                                    <button class="btn btn-minier"> 查看 </button>
-                                    <button class="btn btn-primary btn-minier"> 编辑 </button>
-                                    <button class="btn btn-info btn-minier"> 删除 </button>
-                                    <button class="btn btn-success btn-minier"> 属性值排序 </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-xs-2">123123232</td>
-                                <td class="col-xs-3">13123123323</td>
-                                <td class="col-xs-3">123123123321</td>
-                                <td class="col-xs-4">
-                                    <button class="btn btn-minier"> 查看 </button>
-                                    <button class="btn btn-primary btn-minier"> 编辑 </button>
-                                    <button class="btn btn-info btn-minier"> 删除 </button>
-                                    <button class="btn btn-success btn-minier"> 属性值排序 </button>
-                                </td>
-                            </tr>
+                            @for(property <- propertyList) {
+                                <tr>
+                                    <td class="col-xs-2">@property.getId</td>
+                                    <td class="col-xs-3">@property.getName</td>
+                                    <td class="col-xs-3">
+                                        @for(value <- property.getValues) {
+                                            <span class="label">@value.getName</span>
+                                        }
+                                    </td>
+                                    <td class="col-xs-2" data-id="@property.getId">
+                                        <button class="btn btn-primary btn-minier date-update-property"> 编辑 </button>
+                                        <button class="btn btn-info btn-minier date-del-property"> 删除 </button>
+                                        <button class="btn btn-success btn-minier"> 属性值排序 </button>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
-                </div><!-- /.table-responsive -->
-            </div><!-- /span -->
+                </div>
+            </div>
         </div>
 
         <div class="col-xs-12">

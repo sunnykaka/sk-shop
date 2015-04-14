@@ -6,24 +6,20 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
- * 属性对应的名字
+ * 属性 －> 值 关联
  * Created by zhb on 15-4-1.
  */
-@Table(name = "property")
+@Table(name = "property_value")
 @Entity
-public class Property implements EntityClass<Integer>,OperableData {
+public class PropertyValue implements EntityClass<Integer>,OperableData {
 
     private Integer id;
 
-    private String name;
+    private Integer propertyId;
 
-    /**
-     * 排序
-     */
-    private Integer priority;
+    private Integer valueId;
 
     private DateTime createTime;
 
@@ -31,12 +27,11 @@ public class Property implements EntityClass<Integer>,OperableData {
 
     private Integer operatorId;
 
-    private List<Value> values;
+    public PropertyValue(){}
 
-    public Property(){}
-
-    public Property(String name){
-        this.name = name;
+    public PropertyValue(int propertyId,int valueId){
+        this.propertyId = propertyId;
+        this.valueId = valueId;
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,24 +44,24 @@ public class Property implements EntityClass<Integer>,OperableData {
         this.id = id;
     }
 
-    @Column(name = "name")
+    @Column(name = "property_id")
     @Basic
-    public String getName() {
-        return name;
+    public Integer getPropertyId() {
+        return propertyId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPropertyId(Integer propertyId) {
+        this.propertyId = propertyId;
     }
 
-    @Column(name = "priority")
+    @Column(name = "value_id")
     @Basic
-    public Integer getPriority() {
-        return priority;
+    public Integer getValueId() {
+        return valueId;
     }
 
-    public void setPriority(Integer priority) {
-        this.priority = priority;
+    public void setValueId(Integer valueId) {
+        this.valueId = valueId;
     }
 
     @Column(name = "create_time")
@@ -103,14 +98,5 @@ public class Property implements EntityClass<Integer>,OperableData {
     @Override
     public void setOperatorId(Integer operatorId) {
         this.operatorId = operatorId;
-    }
-
-    @Transient
-    public List<Value> getValues() {
-        return values;
-    }
-
-    public void setValues(List<Value> values) {
-        this.values = values;
     }
 }

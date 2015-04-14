@@ -1,24 +1,20 @@
 package controllers.category;
 
+import models.PropertyValueForm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.constants.PropertyType;
-import productcenter.models.CategoryProperty;
-import productcenter.models.CategoryPropertyValue;
-import productcenter.models.Property;
-import productcenter.models.Value;
+import productcenter.models.*;
 import productcenter.services.CategoryPropertyService;
 import productcenter.services.CategoryPropertyValueService;
 import productcenter.services.PropertyService;
 import productcenter.services.ValueService;
 import views.html.category.PVindex;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 属性控制层
@@ -49,51 +45,45 @@ public class PropertyValueController extends Controller {
 
         play.Logger.info("属性首页");
         //TODO
+        List<Property> propertyList = propertyService.findAllProperty(Optional.ofNullable(null), null);
+        for(Property p:propertyList){
+            List<Value> values = valueService.findbyPropertyId(p.getId());
+            p.setValues(values);
+        }
 
-        return ok(PVindex.render(""));
+        return ok(PVindex.render(propertyList));
     }
-
-    public void queryInfo(int categoryId){
-        //TODO 04-08
-        //categoryPropertyValueService.
-    }
-
 
     /**
      * 新增属性、值
      *
-     * @param cp
-     * @param name
-     * @param value
      */
-    public Result createProperty(CategoryProperty cp,String name,String value){
+    public Result createProperty(){
 
-        if (cp.getType() == PropertyType.SELL_PROPERTY.value) {
-            cp.setMultiValue(true);
-        }
-        int pid = propertyService.createProperty(new Property(name));
-        cp.setPropertyId(pid);
+        final Form<PropertyValueForm> PVForm = Form.form(PropertyValueForm.class).bindFromRequest();
+        PropertyValueForm pv = PVForm.get();
 
-        categoryPropertyService.createCategoryProperty(cp);
+        //TODO 较验参数未处理
 
-        if (StringUtils.isNotEmpty(value)) {
-            String[] values = value.split(",|，"); //用逗号隔开的多值
-            Set<String> valueSet = new HashSet<>(); //去重
-            for (String v : values) {
-                valueSet.add(v);
-            }
-            List<Integer> newValue = new LinkedList<>();
-            for (String valueName : valueSet) {
-                int vid = valueService.createValue(new Value(valueName,cp.getPropertyId()));
-                newValue.add(vid);
-            }
-            for (Integer vid : newValue) {
-                categoryPropertyValueService.save(new CategoryPropertyValue(cp.getCategoryId(),pid,vid));
-            }
-        }
+        propertyService.savePV(pv.getName(), pv.getValue());
 
-        return ok("true");
+        return redirect(routes.PropertyValueController.propertyIndex());
 
+    }
+
+    /**
+     * 删除属性、值
+     *
+     * @return
+     */
+    public Result deleteProperty(){
+
+        final Form<Property> PVForm = Form.form(Property.class).bindFromRequest();
+        final Property property = PVForm.get();
+
+        propertyService.delete(property);
+
+        return redirect(routes.PropertyValueController.propertyIndex());
     }
 
     /**
@@ -105,7 +95,7 @@ public class PropertyValueController extends Controller {
      */
     public Result updateProperty(CategoryProperty cp,String name,String jsonValueList){
 
-        if (cp.getType() == PropertyType.SELL_PROPERTY.value) {
+        if (cp.getType() == PropertyType.SELL_PROPERTY.getName()) {
             cp.setMultiValue(true);
         }
 

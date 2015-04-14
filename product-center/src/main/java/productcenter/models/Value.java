@@ -19,8 +19,6 @@ public class Value implements EntityClass<Integer>,OperableData {
 
     private String name;
 
-    private Integer propertyId;
-
     /**
      * 排序
      */
@@ -34,9 +32,8 @@ public class Value implements EntityClass<Integer>,OperableData {
 
     public Value(){}
 
-    public Value(String name,int propertyId){
+    public Value(String name){
         this.name = name;
-        this.propertyId = propertyId;
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -57,16 +54,6 @@ public class Value implements EntityClass<Integer>,OperableData {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Column(name = "property_id")
-    @Basic
-    public Integer getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(Integer propertyId) {
-        this.propertyId = propertyId;
     }
 
     @Column(name = "priority")
