@@ -62,6 +62,7 @@ public class Global extends GlobalSettings {
 
                 ActionFilterChain filterChain = new ActionFilterChain(
                         ctx,
+                        delegate,
                         new OpenEntityManagerInViewActionFilter(emf)
                 );
                 filterChain.doFilter();
