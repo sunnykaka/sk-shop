@@ -17,7 +17,8 @@ object Dependencies {
     "org.springframework" % "spring-tx" % springVersion,
     "org.springframework" % "spring-expression" % springVersion,
     "org.springframework" % "spring-aop" % springVersion,
-    "org.hibernate" % "hibernate-entitymanager" % "4.3.6.Final"
+    "org.hibernate" % "hibernate-entitymanager" % "4.3.6.Final",
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-hibernate4" % "2.2.3"
   )
 
   val springTest = Seq(

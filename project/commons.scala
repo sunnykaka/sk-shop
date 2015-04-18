@@ -13,7 +13,7 @@ object Commons {
     javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-encoding", "UTF-8", "-Xlint:-options"),
     resolvers ++= Seq(
       Opts.resolver.mavenLocalFile,
-      "local repository" at "http://192.168.1.100:8081/nexus/content/groups/public/",
+      //"local repository" at "http://192.168.1.100:8081/nexus/content/groups/public/",
       Resolver.typesafeRepo("releases"),
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots"),

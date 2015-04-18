@@ -3,26 +3,28 @@
 # ~~~~
 
 # Home page
-GET         /                       @controllers.Application.index
+GET         /                           @controllers.Application.index
 
 
 #Order
-GET         /orders                 @controllers.order.OrderController.list(status ?= null, orderNo ?= null)
-GET         /orders/add             @controllers.order.OrderController.addPage()
-POST        /orders/save            @controllers.order.OrderController.saveOrder()
-GET         /orders/:id/update        @controllers.order.OrderController.updatePage(id: Int)
+GET         /orders                     @controllers.order.OrderController.list(status ?= null, orderNo ?= null)
+GET         /orders/add                 @controllers.order.OrderController.addPage()
+POST        /orders/save                @controllers.order.OrderController.saveOrder()
+GET         /orders/:id/update          @controllers.order.OrderController.updatePage(id: Int)
+POST        /orders/save_by_json        @controllers.order.OrderController.createOrderByJson()
+GET         /orders/:id/json            @controllers.order.OrderController.viewOrderByJson(id: Integer)
 
 
 #Cache
-GET         /cache/:key             @controllers.test.CacheController.getCache(key)
-PUT         /cache/:key             @controllers.test.CacheController.setCache(key, value)
+GET         /cache/:key                 @controllers.test.CacheController.getCache(key)
+PUT         /cache/:key                 @controllers.test.CacheController.setCache(key, value)
 
 #category  zhb
-GET         /category               @controllers.category.CategoryController.findFatherCategorys()
-POST        /category/add           @controllers.category.CategoryController.addFirst()
+GET         /category                   @controllers.category.CategoryController.findFatherCategorys()
+POST        /category/add               @controllers.category.CategoryController.addFirst()
 
 #property
-GET         /property               @controllers.category.PropertyValueController.propertyIndex()
+GET         /property                   @controllers.category.PropertyValueController.propertyIndex()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file           controllers.Assets.at(path="/public", file)
+GET         /assets/*file               controllers.Assets.at(path="/public", file)

@@ -270,6 +270,9 @@ public class OrderService {
 
         } else {
             //修改
+
+            Order orderInDb = generalDao.get(Order.class, order.getId());
+
             generalDao.merge(order);
             for(OrderItem orderItem : order.getOrderItemList()) {
                 if(IdUtils.isEmpty(orderItem.getId())) {
