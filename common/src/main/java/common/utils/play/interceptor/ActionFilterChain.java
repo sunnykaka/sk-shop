@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by liubin on 15/4/12.
  */
-public class ActionFilterChain extends Action.Simple {
+public class ActionFilterChain {
 
     public final ActionFilter[] filters;
 
@@ -22,27 +22,21 @@ public class ActionFilterChain extends Action.Simple {
 
     public Http.Context ctx;
 
-    public ActionFilterChain(Http.Context ctx, ActionFilter... filters) {
+    public Action<?> delegate;
+
+    public ActionFilterChain(Http.Context ctx, Action<?> delegate, ActionFilter... filters) {
         if(filters == null) {
             filters = new ActionFilter[0];
         }
 
         this.filters = filters;
         this.ctx = ctx;
-    }
-
-    @Override
-    public F.Promise<Result> call(Http.Context ctx) throws Throwable {
-
-        filters[0].doFilter(this);
-
-        return result;
-
+        this.delegate = delegate;
     }
 
     public void doFilter() throws Throwable {
         if(filters.length <= filterIndex) {
-            result = delegate.call(this.ctx);
+            result = delegate.call(ctx);
         } else {
             filters[filterIndex++].doFilter(this);
         }

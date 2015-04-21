@@ -42,7 +42,7 @@ public class GeneralDao {
      * @param <T>
      * @return
      */
-    public <T extends EntityClass<Integer>> List<T> query(String ql, Optional<Page<T>> page, Map<String, Object> queryParams) {
+    public <T> List<T> query(String ql, Optional<Page<T>> page, Map<String, Object> queryParams) {
 
         Query query = em.createQuery(ql);
         queryParams.forEach(query::setParameter);

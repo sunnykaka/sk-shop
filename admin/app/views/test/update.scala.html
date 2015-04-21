@@ -1,56 +1,56 @@
-@(form: Form[ordercenter.models.Order])
+@(form: Form[ordercenter.models.TestObject])
 
 @import common.utils.DateUtils._
 
 @main(){
     <script type="text/javascript">
-    jQuery(function ($) {
-        $("#submit_btn").click(function () {
-            $("#form1").submit() ;
-        }) ;
+jQuery(function ($) {
+    $("#submit_btn").click(function () {
+        $("#form1").submit() ;
+    }) ;
 
-        $("#buyTime").datetimepicker({format: 'yyyy-mm-dd hh:ii', language: 'zh-CN'});
+    $("#buyTime").datetimepicker({format: 'yyyy-mm-dd hh:ii', language: 'zh-CN'});
 
-        $('#form1').validate({
-            errorElement: 'div',
-            errorClass: 'help-block',
-            focusInvalid: true,
-            rules: {
-                buyerId: {required: true},
-                buyTime: {required: true},
-                status: {required: true}
-            },
+    $('#form1').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: true,
+        rules: {
+            buyerId: {required: true},
+            buyTime: {required: true},
+            status: {required: true}
+        },
 
-            messages: {
-                buyerId: {required: "请输入买家名称"},
-                buyTime: {required: "请输入购买实践"},
-                status: {required: "请输入订单状态"}
-            },
+        messages: {
+            buyerId: {required: "请输入买家名称"},
+            buyTime: {required: "请输入购买实践"},
+            status: {required: "请输入订单状态"}
+        },
 
-            submitHandler: function (form) {
-                var status = $("#status" ).val();
-                if(status != "WAIT_APPROVE") {
-                    bootbox.alert("订单状态请输入WAIT_APPROVE");
-                    return;
-                }
-                form.submit();
+        submitHandler: function (form) {
+            var status = $("#status" ).val();
+            if(status != "WAIT_APPROVE") {
+                bootbox.alert("订单状态请输入WAIT_APPROVE");
+                return;
             }
-        });
-
+            form.submit();
+        }
     });
-    </script>
+
+});
+</script>
 } {
 
     <div class="breadcrumbs" id="breadcrumbs">
         <script type="text/javascript">
-        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-        </script>
+    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
 
         <ul class="breadcrumb">
             <li>
-                <i class="icon-home home-icon"></i>订单管理
+                <i class="icon-home home-icon"></i>测试对象管理
             </li>
-            <li class="active"><a href="@controllers.order.routes.OrderController.addPage()">订单添加</a></li>
+            <li class="active"><a href="@controllers.test.routes.TestObjectController.updatePage(form.get.getId)">测试对象修改</a></li>
         </ul><!-- .breadcrumb -->
     </div>
 
@@ -61,7 +61,7 @@
             <h1>
                 订单管理
                 <small>
-                    <i class="icon-double-angle-right"></i>订单添加
+                    <i class="icon-double-angle-right"></i>测试对象修改
                 </small>
             </h1>
         </div>
@@ -71,7 +71,11 @@
             <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
 
-                <form class="form-horizontal" role="form" id="form1" action="@controllers.order.routes.OrderController.saveOrder()" method="post">
+                <form class="form-horizontal" role="form" id="form1" action="@controllers.test.routes.TestObjectController.saveTestObject()" method="post">
+
+                    @if(form.value.isDefined && form.value.get.getId != null) {
+                        <input type="hidden" id="id" name="id" value="@form.value.get.getId" />
+                    }
 
                     <div class="form-group">
                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="buyerId">买家用户名*</label>
@@ -94,7 +98,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="status">订单状态*</label>
+                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="status">状态*</label>
 
                         <div class="col-xs-12 col-sm-9">
                             <div class="clearfix">
@@ -104,35 +108,35 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="actualFee">订单金额*</label>
+                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="actualFee">金额*</label>
 
                         <div class="col-xs-12 col-sm-9">
                             <div class="clearfix">
-                                @defining(form.value.fold("")(o => if(o.getActualFee != null) o.getActualFee.toString else "")) { actualFeeStr =>
-                                    <input type="text" name="actualFee" id="actualFee" class="col-xs-12 col-sm-6" value="@actualFeeStr" />
-                                }
+                            @defining(form.value.fold("")(o => if(o.getActualFee != null) o.getActualFee.toString else "")) { actualFeeStr =>
+                                <input type="text" name="actualFee" id="actualFee" class="col-xs-12 col-sm-6" value="@actualFeeStr" />
+                            }
                             </div>
                         </div>
                     </div>
 
-                    @if(form.value.isEmpty || form.value.get.getOrderItemList.isEmpty) {
+                    @if(form.value.isEmpty || form.value.get.getTestObjectItemList.isEmpty) {
 
                         <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[0].productId">订单项1产品ID</label>
+                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[0].productId">测试项1产品ID</label>
 
                             <div class="col-xs-12 col-sm-9">
                                 <div class="clearfix">
-                                    <input type="text" name="orderItemList[0].productId" id="orderItemList[0].productId" class="col-xs-12 col-sm-6" value="" />
+                                    <input type="text" name="testObjectItemList[0].productId" id="testObjectItemList[0].productId" class="col-xs-12 col-sm-6" value="" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[0].productSku">订单项1SKU</label>
+                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[0].productSku">测试项1SKU</label>
 
                             <div class="col-xs-12 col-sm-9">
                                 <div class="clearfix">
-                                    <input type="text" name="orderItemList[0].productSku" id="orderItemList[0].productSku" class="col-xs-12 col-sm-6" value="" />
+                                    <input type="text" name="testObjectItemList[0].productSku" id="testObjectItemList[0].productSku" class="col-xs-12 col-sm-6" value="" />
                                 </div>
                             </div>
                         </div>
@@ -140,24 +144,29 @@
 
                     } else {
 
-                        @for(index <- 0 until form.value.get.getOrderItemList.size()) {
-                            @defining(form.value.get.getOrderItemList.get(index)) { oi =>
+                        @for(index <- 0 until form.value.get.getTestObjectItemList.size()) {
+                            @defining(form.value.get.getTestObjectItemList.get(index)) { oi =>
+
+                                @if(oi.getId != null) {
+                                    <input type="hidden" id="testObjectItemList[@index].id" name="testObjectItemList[@index].id" value="@oi.getId" />
+                                }
+
                                 <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[@index].productId">订单项@(index + 1)产品ID</label>
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[@index].productId">订单项@(index + 1)产品ID</label>
 
                                     <div class="col-xs-12 col-sm-9">
                                         <div class="clearfix">
-                                            <input type="text" name="orderItemList[@index].productId" id="orderItemList[@index].productId" class="col-xs-12 col-sm-6" value="@oi.getProductId" />
+                                            <input type="text" name="testObjectItemList[@index].productId" id="testObjectItemList[@index].productId" class="col-xs-12 col-sm-6" value="@oi.getProductId" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[@index].productSku">订单项@(index + 1)SKU</label>
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[@index].productSku">订单项@(index + 1)SKU</label>
 
                                     <div class="col-xs-12 col-sm-9">
                                         <div class="clearfix">
-                                            <input type="text" name="orderItemList[@index].productSku" id="orderItemList[@index].productSku" class="col-xs-12 col-sm-6" value="@oi.getProductSku" />
+                                            <input type="text" name="testObjectItemList[@index].productSku" id="testObjectItemList[@index].productSku" class="col-xs-12 col-sm-6" value="@oi.getProductSku" />
                                         </div>
                                     </div>
                                 </div>

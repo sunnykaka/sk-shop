@@ -1,5 +1,6 @@
 package ordercenter.constants;
 
+import common.models.utils.ViewEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
  * User: liubin
  * Date: 13-12-30
  */
-public enum OrderStatus {
+public enum OrderStatus implements ViewEnum {
 
     /**
      * 手动创建订单,待审核 *
@@ -188,5 +189,14 @@ public enum OrderStatus {
     }
 
 
+    @Override
+    public String getName() {
+        return this.toString();
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
 
 }

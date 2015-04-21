@@ -3,26 +3,27 @@
 # ~~~~
 
 # Home page
-GET         /                       @controllers.Application.index
-
-
-#Order
-GET         /orders                 @controllers.order.OrderController.list(status ?= null, orderNo ?= null)
-GET         /orders/add             @controllers.order.OrderController.addPage()
-POST        /orders/save            @controllers.order.OrderController.saveOrder()
-GET         /orders/:id/update        @controllers.order.OrderController.updatePage(id: Int)
-
-
-#Cache
-GET         /cache/:key             @controllers.test.CacheController.getCache(key)
-PUT         /cache/:key             @controllers.test.CacheController.setCache(key, value)
+GET         /                                 @controllers.Application.index
 
 #category  zhb
-GET         /category               @controllers.category.CategoryController.findFatherCategorys()
-POST        /category/add           @controllers.category.CategoryController.addFirst()
+GET         /category                         @controllers.category.CategoryController.findFatherCategorys()
+POST        /category/add                     @controllers.category.CategoryController.addFirst()
 
 #property
-GET         /property               @controllers.category.PropertyValueController.propertyIndex()
+GET         /property                         @controllers.category.PropertyValueController.propertyIndex()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file           controllers.Assets.at(path="/public", file)
+GET         /assets/*file                     controllers.Assets.at(path="/public", file)
+
+
+#testObject
+GET         /test/objects                     @controllers.test.TestObjectController.list(status ?= null, orderNo ?= null)
+GET         /test/objects/add                 @controllers.test.TestObjectController.addPage()
+POST        /test/objects/save                @controllers.test.TestObjectController.saveTestObject()
+GET         /test/objects/:id/update          @controllers.test.TestObjectController.updatePage(id: Int)
+POST        /test/objects/save_by_json        @controllers.test.TestObjectController.createByJson()
+GET         /test/objects/:id/json            @controllers.test.TestObjectController.viewByJson(id: Integer)
+
+#testCache
+GET         /cache/:key                       @controllers.test.CacheController.getCache(key)
+PUT         /cache/:key                       @controllers.test.CacheController.setCache(key, value)

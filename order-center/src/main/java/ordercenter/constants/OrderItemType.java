@@ -1,12 +1,14 @@
 package ordercenter.constants;
 
 
+import common.models.utils.ViewEnum;
+
 /**
  * 订单明细类型
  * User: liubin
  * Date: 13-12-30
  */
-public enum OrderItemType  {
+public enum OrderItemType implements ViewEnum {
 
     PRODUCT("商品"),
 
@@ -18,6 +20,16 @@ public enum OrderItemType  {
 
     OrderItemType(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String getName() {
+        return toString();
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 
 

@@ -149,7 +149,7 @@ public class PlayForm<T> extends Form<T> {
         }
 
         //copied from play.data.Form.bind
-        //only change "new Form(rootName, backedType, data, errors, None(), groups)" to
+        //change "new Form(rootName, backedType, data, errors, None(), groups)" to
         //"new Form(rootName, backedType, data, errors, Some((T) result.getTarget()), groups);"
         //and "new Form(rootName, backedType, new HashMap<String, String>(data), new HashMap<String, List<ValidationError>>(errors), Some((T) result.getTarget()), groups);"
         //to "new Form(rootName, backedType, new HashMap<String, String>(data), new HashMap<String, List<ValidationError>>(errorsProperty), Some((T) result.getTarget()), groups);"

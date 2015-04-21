@@ -1,4 +1,4 @@
-@(form: Form[ordercenter.models.Order])
+@(form: Form[ordercenter.models.TestObject])
 
 @import common.utils.DateUtils._
 
@@ -48,9 +48,9 @@ jQuery(function ($) {
 
         <ul class="breadcrumb">
             <li>
-                <i class="icon-home home-icon"></i>订单管理
+                <i class="icon-home home-icon"></i>测试对象管理
             </li>
-            <li class="active"><a href="@controllers.order.routes.OrderController.updatePage(form.get.getId)">订单修改</a></li>
+            <li class="active"><a href="@controllers.test.routes.TestObjectController.addPage()">测试对象添加</a></li>
         </ul><!-- .breadcrumb -->
     </div>
 
@@ -61,7 +61,7 @@ jQuery(function ($) {
             <h1>
                 订单管理
                 <small>
-                    <i class="icon-double-angle-right"></i>订单修改
+                    <i class="icon-double-angle-right"></i>测试对象添加
                 </small>
             </h1>
         </div>
@@ -71,16 +71,7 @@ jQuery(function ($) {
             <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
 
-                <form class="form-horizontal" role="form" id="form1" action="@controllers.order.routes.OrderController.saveOrder()" method="post">
-
-                    @*form.value.foreach(o => {
-                        <input type="hidden" id="id" name="id" value="@o.getId" />
-                    })*@
-
-                    @if(form.value.isDefined && form.value.get.getId != null) {
-                        <input type="hidden" id="id" name="id" value="@form.value.get.getId" />
-                    }
-
+                <form class="form-horizontal" role="form" id="form1" action="@controllers.test.routes.TestObjectController.saveTestObject()" method="post">
 
                     <div class="form-group">
                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="buyerId">买家用户名*</label>
@@ -103,7 +94,7 @@ jQuery(function ($) {
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="status">订单状态*</label>
+                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="status">状态*</label>
 
                         <div class="col-xs-12 col-sm-9">
                             <div class="clearfix">
@@ -113,7 +104,7 @@ jQuery(function ($) {
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="actualFee">订单金额*</label>
+                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="actualFee">金额*</label>
 
                         <div class="col-xs-12 col-sm-9">
                             <div class="clearfix">
@@ -124,24 +115,24 @@ jQuery(function ($) {
                         </div>
                     </div>
 
-                    @if(form.value.isEmpty || form.value.get.getOrderItemList.isEmpty) {
+                    @if(form.value.isEmpty || form.value.get.getTestObjectItemList.isEmpty) {
 
                         <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[0].productId">订单项1产品ID</label>
+                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[0].productId">测试项1产品ID</label>
 
                             <div class="col-xs-12 col-sm-9">
                                 <div class="clearfix">
-                                    <input type="text" name="orderItemList[0].productId" id="orderItemList[0].productId" class="col-xs-12 col-sm-6" value="" />
+                                    <input type="text" name="testObjectItemList[0].productId" id="testObjectItemList[0].productId" class="col-xs-12 col-sm-6" value="" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[0].productSku">订单项1SKU</label>
+                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[0].productSku">测试项1SKU</label>
 
                             <div class="col-xs-12 col-sm-9">
                                 <div class="clearfix">
-                                    <input type="text" name="orderItemList[0].productSku" id="orderItemList[0].productSku" class="col-xs-12 col-sm-6" value="" />
+                                    <input type="text" name="testObjectItemList[0].productSku" id="testObjectItemList[0].productSku" class="col-xs-12 col-sm-6" value="" />
                                 </div>
                             </div>
                         </div>
@@ -149,29 +140,29 @@ jQuery(function ($) {
 
                     } else {
 
-                        @for(index <- 0 until form.value.get.getOrderItemList.size()) {
-                            @defining(form.value.get.getOrderItemList.get(index)) { oi =>
+                        @for(index <- 0 until form.value.get.getTestObjectItemList.size()) {
+                            @defining(form.value.get.getTestObjectItemList.get(index)) { oi =>
 
                                 @if(oi.getId != null) {
-                                    <input type="hidden" id="orderItemList[@index].id" name="orderItemList[@index].id" value="@oi.getId" />
+                                    <input type="hidden" id="testObjectItemList[@index].id" name="testObjectItemList[@index].id" value="@oi.getId" />
                                 }
 
                                 <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[@index].productId">订单项@(index + 1)产品ID</label>
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[@index].productId">订单项@(index + 1)产品ID</label>
 
                                     <div class="col-xs-12 col-sm-9">
                                         <div class="clearfix">
-                                            <input type="text" name="orderItemList[@index].productId" id="orderItemList[@index].productId" class="col-xs-12 col-sm-6" value="@oi.getProductId" />
+                                            <input type="text" name="testObjectItemList[@index].productId" id="testObjectItemList[@index].productId" class="col-xs-12 col-sm-6" value="@oi.getProductId" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderItemList[@index].productSku">订单项@(index + 1)SKU</label>
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="testObjectItemList[@index].productSku">订单项@(index + 1)SKU</label>
 
                                     <div class="col-xs-12 col-sm-9">
                                         <div class="clearfix">
-                                            <input type="text" name="orderItemList[@index].productSku" id="orderItemList[@index].productSku" class="col-xs-12 col-sm-6" value="@oi.getProductSku" />
+                                            <input type="text" name="testObjectItemList[@index].productSku" id="testObjectItemList[@index].productSku" class="col-xs-12 col-sm-6" value="@oi.getProductSku" />
                                         </div>
                                     </div>
                                 </div>

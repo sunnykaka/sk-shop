@@ -1,5 +1,9 @@
 package common.utils;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import common.utils.jackson.MoneyDeserializer;
+import common.utils.jackson.MoneySerializer;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -35,6 +39,8 @@ import java.util.Currency;
  * @Version 1.0.0
  * @Copyright (c) 2011 by Kariqu.com
  */
+@JsonDeserialize(using = MoneyDeserializer.class)
+@JsonSerialize(using = MoneySerializer.class)
 public final class Money implements Serializable, Comparable {
 
     /**

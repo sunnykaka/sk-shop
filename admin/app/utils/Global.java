@@ -1,6 +1,7 @@
 package utils;
 
 import common.utils.Money;
+import common.utils.play.BaseGlobal;
 import common.utils.play.JodaDateFormatter;
 import common.utils.play.MoneyFormatter;
 import common.utils.play.interceptor.ActionFilterChain;
@@ -30,9 +31,7 @@ import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceException;
 import java.lang.reflect.Method;
 
-public class Global extends GlobalSettings {
-
-    public static ApplicationContext ctx;
+public class Global extends BaseGlobal {
 
     @Override
     public synchronized void onStart(Application app) {
@@ -62,6 +61,7 @@ public class Global extends GlobalSettings {
 
                 ActionFilterChain filterChain = new ActionFilterChain(
                         ctx,
+                        delegate,
                         new OpenEntityManagerInViewActionFilter(emf)
                 );
                 filterChain.doFilter();

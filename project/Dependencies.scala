@@ -28,7 +28,9 @@ object Dependencies {
   val common = Seq(
     "joda-time" % "joda-time" % "2.6",
     "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" exclude("junit", "junit"),
-    "org.apache.commons" % "commons-lang3" % "3.3.1"
+    "org.apache.commons" % "commons-lang3" % "3.3.1",
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-hibernate4" % "2.2.3",
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.4.4"
   )
 
   val playDependencies = Seq(
@@ -50,6 +52,8 @@ object Dependencies {
   val orderDependencies: Seq[ModuleID] = Seq()
 
   val adminDependencies: Seq[ModuleID] = Seq(mysqlConnector) ++ springTest ++ c3p0
+
+  val shopDependencies: Seq[ModuleID] = adminDependencies
 
 
 }
