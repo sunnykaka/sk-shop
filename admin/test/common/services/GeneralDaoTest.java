@@ -1,10 +1,10 @@
 package common.services;
 
-import base.PrepareOrderData;
+import base.PrepareTestObject;
 import ordercenter.constants.OrderStatus;
 import ordercenter.constants.PlatformType;
-import ordercenter.models.Order;
-import ordercenter.models.OrderItem;
+import ordercenter.models.TestObject;
+import ordercenter.models.TestObjectItem;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import play.test.WithApplication;
@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by liubin on 15-4-2.
  */
-public class GeneralDaoTest extends WithApplication implements PrepareOrderData {
+public class GeneralDaoTest extends WithApplication implements PrepareTestObject {
 
 
     /**
@@ -25,56 +25,55 @@ public class GeneralDaoTest extends WithApplication implements PrepareOrderData 
     @Test
     public void testGeneralDaoMergeAndUpdate() {
 
-        prepareOrders(0, 0);
+        prepareTestObjects(0, 0);
 
-        Order order1 = doInTransactionWithGeneralDao(generalDao -> {
+        TestObject testObject1 = doInTransactionWithGeneralDao(generalDao -> {
 
-            //创建订单
-            Order order = new Order();
-            order.setOrderNo(RandomStringUtils.randomAlphanumeric(8));
-            order.setPlatformType(PlatformType.WEB);
-            order.setStatus(OrderStatus.WAIT_PROCESS);
+            TestObject testObject = new TestObject();
+            testObject.setOrderNo(RandomStringUtils.randomAlphanumeric(8));
+            testObject.setPlatformType(PlatformType.WEB);
+            testObject.setStatus(OrderStatus.WAIT_PROCESS);
 
-            generalDao.persist(order);
+            generalDao.persist(testObject);
             generalDao.flush();
-            generalDao.detach(order);
+            generalDao.detach(testObject);
 
-            assert order.getCreateTime() != null;
-            assert order.getUpdateTime() != null;
-            assert order.getId() > 0;
+            assert testObject.getCreateTime() != null;
+            assert testObject.getUpdateTime() != null;
+            assert testObject.getId() > 0;
 
             //此时更新无用,因为对象已没有被session管理(显式detach)
-            order.setStatus(OrderStatus.INVALID);
+            testObject.setStatus(OrderStatus.INVALID);
 
-            return order;
+            return testObject;
         });
 
         doInTransactionWithGeneralDao(generalDao -> {
 
             //校验之前的更新确实没起作用
-            Order order = generalDao.get(Order.class, order1.getId());
-            assert order.getStatus() == OrderStatus.WAIT_PROCESS;
+            TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
+            assert testObject.getStatus() == OrderStatus.WAIT_PROCESS;
             return null;
         });
 
         doInTransactionWithGeneralDao(generalDao -> {
 
-            //merge,会根据order1的id从数据库load出order2对象,再把order1的属性拷给order2
-            order1.setStatus(OrderStatus.INVALID);
-            Order order2 = generalDao.merge(order1);
-            assert order2.getStatus() == order1.getStatus();
+            //merge,会根据testObject1的id从数据库load出testObject2对象,再把testObject1的属性拷给testObject2
+            testObject1.setStatus(OrderStatus.INVALID);
+            TestObject testObject2 = generalDao.merge(testObject1);
+            assert testObject2.getStatus() == testObject1.getStatus();
 
-            //对order1的更新无用,对order2的更新有用.因为order1没有被session管理
-            order1.setStatus(OrderStatus.PRINTED);
-            order2.setStatus(OrderStatus.INVOICED);
+            //对order1的更新无用,对testObject2的更新有用.因为testObject1没有被session管理
+            testObject1.setStatus(OrderStatus.PRINTED);
+            testObject2.setStatus(OrderStatus.INVOICED);
 
             return null;
         });
 
         doInTransactionWithGeneralDao(generalDao -> {
-            //校验确实是order2的更新起作用
-            Order order = generalDao.get(Order.class, order1.getId());
-            assert order.getStatus() == OrderStatus.INVOICED;
+            //校验确实是testObject2的更新起作用
+            TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
+            assert testObject.getStatus() == OrderStatus.INVOICED;
             return null;
         });
 
@@ -83,10 +82,10 @@ public class GeneralDaoTest extends WithApplication implements PrepareOrderData 
 
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("status", OrderStatus.SIGNED);
-            params.put("id", order1.getId());
+            params.put("id", testObject1.getId());
 
 
-            int update = generalDao.update(" update Order o set o.status = :status where o.id = :id ", params);
+            int update = generalDao.update(" update TestObject o set o.status = :status where o.id = :id ", params);
             assert update == 1;
 
             return null;
@@ -94,7 +93,7 @@ public class GeneralDaoTest extends WithApplication implements PrepareOrderData 
 
         doInTransactionWithGeneralDao(generalDao -> {
 
-            Order order = generalDao.get(Order.class, order1.getId());
+            TestObject order = generalDao.get(TestObject.class, testObject1.getId());
             assert order.getStatus() == OrderStatus.SIGNED;
             return null;
         });
@@ -107,15 +106,15 @@ public class GeneralDaoTest extends WithApplication implements PrepareOrderData 
     @Test
     public void testGeneralDaoFindAll() {
 
-        prepareOrders(50, 3);
+        prepareTestObjects(50, 3);
 
         doInTransactionWithGeneralDao(generalDao -> {
 
-            List<Order> orders = generalDao.findAll(Order.class);
-            List<OrderItem> orderItems = generalDao.findAll(OrderItem.class);
+            List<TestObject> testObjects = generalDao.findAll(TestObject.class);
+            List<TestObjectItem> testObjectItems = generalDao.findAll(TestObjectItem.class);
 
-            assert orders.size() == 50;
-            assert orderItems.size() == 50 * 3;
+            assert testObjects.size() == 50;
+            assert testObjectItems.size() == 50 * 3;
 
             return null;
 

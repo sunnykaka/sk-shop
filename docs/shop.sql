@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015-4-14 15:09:11                           */
+/* Created on:     2015-4-21 16:20:29                           */
 /*==============================================================*/
 
 
@@ -13,6 +13,10 @@ drop table if exists invoice;
 drop table if exists order_base;
 
 drop table if exists order_item;
+
+drop table if exists test_object;
+
+drop table if exists test_object_item;
 
 /*==============================================================*/
 /* Table: bar                                                   */
@@ -110,9 +114,44 @@ create table order_item
    primary key (id)
 );
 
+/*==============================================================*/
+/* Table: test_object                                           */
+/*==============================================================*/
+create table test_object
+(
+   id                   int(11) not null auto_increment,
+   status               varchar(20) not null comment '订单状态',
+   actual_fee           bigint(20) comment '实付金额',
+   buyer_id             varchar(128) comment '买家Id(淘宝号)',
+   buy_time             datetime default '0000-00-00 00:00:00' comment '下单时间',
+   platform_type        varchar(10) not null comment '外部平台类型(天猫还是京东)',
+   create_time          datetime default '0000-00-00 00:00:00' comment '创建时间',
+   update_time          datetime default '0000-00-00 00:00:00' comment '更新时间',
+   operator_id          int(11),
+   order_no             varchar(20) not null comment '订单编号',
+   primary key (id)
+);
+
+/*==============================================================*/
+/* Table: test_object_item                                      */
+/*==============================================================*/
+create table test_object_item
+(
+   id                   int(11) not null auto_increment,
+   product_sku          varchar(32) not null comment '商品条形码',
+   product_id           int(11) not null comment '商品id',
+   test_object_id       int(11) not null comment '订单ID',
+   status               varchar(20) comment '订单项状态',
+   price                bigint(20) comment '商品单价',
+   primary key (id)
+);
+
 alter table order_base add constraint FK_Reference_2 foreign key (invoice_id)
       references invoice (id) on delete restrict on update restrict;
 
 alter table order_item add constraint FK_Reference_1 foreign key (order_id)
       references order_base (id) on delete restrict on update restrict;
+
+alter table test_object_item add constraint FK_Reference_3 foreign key (test_object_id)
+      references test_object (id) on delete restrict on update restrict;
 

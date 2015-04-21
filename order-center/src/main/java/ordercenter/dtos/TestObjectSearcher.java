@@ -8,13 +8,11 @@ import org.joda.time.DateTime;
 /**
  * Created by liubin on 15-4-3.
  */
-public class OrderSearcher {
+public class TestObjectSearcher {
 
     public Integer orderNo;
 
     public OrderStatus status;
-
-    public OrderType type;
 
     public DateTime createTimeStart;
 

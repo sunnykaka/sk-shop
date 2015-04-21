@@ -1,5 +1,6 @@
 package ordercenter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.models.utils.EntityClass;
 import common.utils.Money;
 import ordercenter.constants.OrderItemStatus;
@@ -49,6 +50,7 @@ public class OrderItem implements EntityClass<Integer> {
     //订单ID
     private Integer orderId;
 
+    @JsonIgnore
     private Order order;
 
     /**

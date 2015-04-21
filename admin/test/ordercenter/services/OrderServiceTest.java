@@ -5,7 +5,7 @@ import common.utils.DateUtils;
 import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.constants.*;
-import ordercenter.dtos.OrderSearcher;
+import ordercenter.dtos.TestObjectSearcher;
 import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -126,72 +126,4 @@ public class OrderServiceTest implements PrepareOrderData{
         });
     }
 
-    @Test
-    public void testFindByComplicateKey() {
-        running(fakeApplication(), () -> {
-            OrderService orderService = Global.ctx.getBean(OrderService.class);
-
-            prepareOrders(50, 3);
-            runTestFindByComplicateMethodJpql(orderService::findByComplicateKey);
-            prepareOrders(50, 1);
-            runTestFindByComplicateMethodJpql(orderService::findByComplicateKey);
-        });
-    }
-
-    @Test
-    public void testFindByComplicateKeyWithJpql() {
-        running(fakeApplication(), () -> {
-            OrderService orderService = Global.ctx.getBean(OrderService.class);
-
-            prepareOrders(50, 3);
-            runTestFindByComplicateMethodJpql(orderService::findByComplicateKeyWithJpql);
-            prepareOrders(50, 1);
-            runTestFindByComplicateMethodJpql(orderService::findByComplicateKeyWithJpql);
-
-        });
-    }
-
-    @Test
-    public void testFindByComplicateKeyWithGeneralDaoQuery() {
-        running(fakeApplication(), () -> {
-            OrderService orderService = Global.ctx.getBean(OrderService.class);
-
-            prepareOrders(50, 3);
-            runTestFindByComplicateMethodJpql(orderService::findByComplicateKeyWithGeneralDaoQuery);
-            prepareOrders(50, 1);
-            runTestFindByComplicateMethodJpql(orderService::findByComplicateKeyWithGeneralDaoQuery);
-
-        });
-    }
-
-    private void runTestFindByComplicateMethodJpql(BiFunction<Optional<Page<Order>>, OrderSearcher, List<Order>> method) {
-
-        OrderSearcher orderSearcher = new OrderSearcher();
-        orderSearcher.status = OrderStatus.WAIT_PROCESS;
-        orderSearcher.type = OrderType.NORMAL;
-        orderSearcher.orderItemStatus = OrderItemStatus.NOT_SIGNED;
-
-        List<Order> orders = method.apply(of(new Page<>(1, Page.DEFAULT_PAGE_SIZE)), orderSearcher);
-        assert orders.size() == Page.DEFAULT_PAGE_SIZE;
-
-        Page<Order> page = new Page<>(4, Page.DEFAULT_PAGE_SIZE);
-        orders = method.apply(of(page), orderSearcher);
-        System.out.println(orders.size());
-        assert orders.size() == 5;
-        assert page.getResult().size() == orders.size();
-        assert page.getTotalCount() == 50;
-
-        orderSearcher.orderItemStatus = OrderItemStatus.SIGNED;
-        page = new Page<>(1, Page.DEFAULT_PAGE_SIZE);
-        orders = method.apply(of(page), orderSearcher);
-        assert orders.size() == 0;
-        assert page.getResult().size() == orders.size();
-        assert page.getTotalCount() == 0;
-
-    }
-
 }
-//import static org.hamcrest.MatcherAssert.*;
-
-
-//import static org.hamcrest.Matchers.*;
