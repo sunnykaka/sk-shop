@@ -5,13 +5,6 @@
 # Home page
 GET         /                                 @controllers.Application.index
 
-
-#Order
-GET         /orders                           @controllers.order.OrderController.list(status ?= null, orderNo ?= null)
-GET         /orders/add                       @controllers.order.OrderController.addPage()
-POST        /orders/save                      @controllers.order.OrderController.saveOrder()
-GET         /orders/:id/update                @controllers.order.OrderController.updatePage(id: Int)
-
 #category  zhb
 GET         /category                         @controllers.category.CategoryController.findFatherCategorys()
 POST        /category/add                     @controllers.category.CategoryController.addFirst()

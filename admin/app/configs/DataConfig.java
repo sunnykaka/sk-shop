@@ -85,10 +85,6 @@ public class DataConfig {
             throw new AppBusinessException("启动加载数据库连接配置失败");
         }
 
-//        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName(configuration.getString("db.default.driver"));
-//        dataSource.setUrl(configuration.getString("db.default.url"));
-//        return dataSource;
     }
 
 }

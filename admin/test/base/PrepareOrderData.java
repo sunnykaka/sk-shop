@@ -2,6 +2,7 @@ package base;
 
 import common.utils.DateUtils;
 import common.utils.Money;
+import common.utils.test.BaseTest;
 import ordercenter.constants.OrderItemStatus;
 import ordercenter.constants.OrderItemType;
 import ordercenter.constants.OrderStatus;
@@ -10,7 +11,6 @@ import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 

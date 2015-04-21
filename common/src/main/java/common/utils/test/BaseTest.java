@@ -1,7 +1,7 @@
-package base;
+package common.utils.test;
 
 import common.services.GeneralDao;
-import utils.Global;
+import common.utils.play.BaseGlobal;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,7 +13,7 @@ import javax.persistence.EntityTransaction;
 public interface BaseTest {
 
     default <T> T doInTransaction(EntityManagerCallback<T> callback) {
-        EntityManagerFactory emf = Global.ctx.getBean(EntityManagerFactory.class);
+        EntityManagerFactory emf = BaseGlobal.ctx.getBean(EntityManagerFactory.class);
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = null;
 

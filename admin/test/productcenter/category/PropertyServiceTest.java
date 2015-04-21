@@ -1,6 +1,6 @@
 package productcenter.category;
 
-import base.BaseTest;
+import common.utils.test.BaseTest;
 import org.junit.Test;
 import productcenter.models.CategoryProperty;
 import productcenter.services.PropertyService;
