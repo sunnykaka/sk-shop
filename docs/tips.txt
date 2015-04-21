@@ -26,3 +26,12 @@
     3)@script = {<script>alert("hello");</script>}
 
     第一种方法只适合定义小范围的变量,第二种适合定义全局变量,第三种只能定义html代码块
+
+
+
+坑:
+1.  修改routes或者controller代码之后, 编译报routes is already defined as object routes.
+    这是scala2.11的一个bug(https://issues.scala-lang.org/browse/SI-4549), 仍然没有被fix,
+    临时解决办法是修改routes或者controller代码之后,使用sbt clean
+
+2.
