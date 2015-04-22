@@ -1,0 +1,107 @@
+@(nation: productcenter.models.Nation, designer: productcenter.models.Designer)
+
+@main(){
+    <!--link rel="stylesheet" href="@routes.Assets.at("css/dropzone.css")" /-->
+
+    <!--script type="text/javascript" src="@routes.Assets.at("js/dropzone.min.js")"></script-->
+    <script type="text/javascript">
+       function search() {
+         var name = $("#name");
+          /*
+         if (name.val() == "") {
+           alert("请填写查询内容！");
+           name.focus();
+           return false;
+         }*/
+       }
+
+       $("#cancelBtn" ).on("click",function(){
+          window.location ="@controllers.designer.routes.DesignerController.designerlist";
+       });
+    </script>
+} {
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">商品</a>
+            </li>
+
+            <li>
+                <a href="#">设计师管理</a>
+            </li>
+            <li class="active">添加设计师</li>
+        </ul><!-- /.breadcrumb -->
+    </div>
+
+    <div class="page-content">
+        <!-- /.page-header -->
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- PAGE CONTENT BEGINS enctype="multipart/form-data"-->
+                <form action="@controllers.designer.routes.DesignerController.addDesigner" method="post" class="form-horizontal dropzone dz-clickable" id="dropzone">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="name">设计师姓名：</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" id="name" name="name" placeholder="" class="col-xs-10 col-sm-5">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="nationId">国籍：</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" id="nationId" name="nationId" placeholder="" class="col-xs-10 col-sm-5" value="1001">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="code">设计师代码：</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" id="code" name="code" placeholder="" class="col-xs-10 col-sm-5">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="code">设计师介绍：</label>
+
+                        <div class="col-sm-9">
+                            <textarea id="introduction" name="introduction" class="form-control limited" maxlength="1000"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">设计师图片：</label>
+                        <!--
+                        <div class="dz-default dz-message">
+
+                        </div>
+                        -->
+                    </div>
+
+
+
+
+
+
+
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn" type="button" id="cancelBtn">
+                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                            取消
+                        </button>
+                        &nbsp; &nbsp; &nbsp;
+                        <button class="btn btn-info" type="submit">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            提交
+                        </button>
+                    </div>
+                </div><!-- PAGE CONTENT ENDS -->
+            </div>
+        </div>
+    </div>
+}

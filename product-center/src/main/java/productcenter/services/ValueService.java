@@ -1,6 +1,7 @@
 package productcenter.services;
 
 import common.services.GeneralDao;
+import productcenter.models.PropertyValue;
 import productcenter.models.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,15 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * value 操作
@@ -31,6 +24,9 @@ public class ValueService {
 
     @Autowired
     GeneralDao generalDAO;
+
+    @Autowired
+    private PropertyValueService propertyValueService;
 
     /**
      * 保存value
@@ -74,18 +70,25 @@ public class ValueService {
     @Transactional(readOnly = true)
     public List<Value> findbyPropertyId(int propertyId){
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Value> cq = cb.createQuery(Value.class);
-        Root<Value> rootValue = cq.from(Value.class);
+        List<PropertyValue> pvList = propertyValueService.findByPropertyId(propertyId);
 
-        List<Predicate> predicateList = new ArrayList<>();
-        predicateList.add(cb.equal(rootValue.get("property_id"), propertyId));
+        Set<Integer> vids = new HashSet<>();
+        for(PropertyValue pv:pvList){
+            vids.add(pv.getValueId());
+        }
 
-        cq.select(rootValue).where(predicateList.toArray(new Predicate[predicateList.size()]));
+        if(vids.size() > 0){
 
-        TypedQuery<Value> query = em.createQuery(cq);
+            String jpql = "select v from Value v where 1=1 ";
+            Map<String, Object> queryParams = new HashMap<>();
+            jpql += " and v.id in :id ";
+            queryParams.put("id", vids);
+            return generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
 
-        return query.getResultList();
+        }else{
+            return new ArrayList<>();
+        }
+
     }
 
     /**
@@ -96,14 +99,14 @@ public class ValueService {
     @Transactional(readOnly = true)
     public Value findByName(String name) {
 
-        String jpql = "select o from value o where 1=1 ";
+        String jpql = "select v from Value v where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
-        jpql += " and o.name = :name ";
+        jpql += " and v.name = :name ";
         queryParams.put("name", name);
 
-        List<Value> propertyList = generalDAO.query(jpql, null, queryParams);
-        if (propertyList != null && propertyList.size() > 0) {
-            return propertyList.get(0);
+        List<Value> valueList = generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
+        if (valueList != null && valueList.size() > 0) {
+            return valueList.get(0);
         }
 
         return null;
