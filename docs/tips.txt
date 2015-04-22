@@ -1,37 +1,46 @@
-1.  如何解决Controller中反向路由编译错误
-    在idea中按ctrl+alt+shift+S, 在弹出的Project Structure中选中左边的Modules,
-    在admin这个module中选中target/scala-2.11/src_managed/main, 设置为Sources,点击OK退出
+1.  如何启动play应用
+    在命令行中,进入项目根目录,输入sbt进入sbt终端,输入project shop切换到shop目录,输入即可run启动, 后面可带端口作为参数, 例如run 9000, 默认为9000
 
-2.  如何启动play应用
-    在命令行中,进入项目根目录,输入sbt进入sbt终端,输入project admin切换到admin目录,输入即可run启动, 后面可带端口作为参数, 例如run 9000, 默认为9000
-
-3.  如何在idea中debug play应用
+2.  如何在idea中debug play应用
     首先,在~/.bashrc中加入下面设置环境变量的语句export SBT_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"
     然后source ~/.bashrc, 然后进入sbt按步骤2中的方法启动play
     然后,在idea中点击Run/edit configurations, 新建一个Remote, 修改端口为9999, 保存运行.
 
-4.  有时需要清空项目编译的缓存,sbt clean只能清空自己编写的代码,如果要完整清空,可以在命令行中进入项目根目录,
+3.  有时需要清空项目编译的缓存,sbt clean只能清空自己编写的代码,如果要完整清空,可以在命令行中进入项目根目录,
     然后执行"find . -name target -type d -exec rm -rf {} \;"
     建议把这行语句加入~/.bashrc并起个别名,例如alias sbtclean="find . -name target -type d -exec rm -rf {} \;"
 
-5.  模版中定义变量的三种办法
+4.  模版中定义变量的三种办法
     1)@defining("foo") { title=>
         <div>@title</div>
         ....
       }
+
     2)@import java.math.BigInteger; var i=1; var k=1
       <div id='LContent_div@i'>
         <div id='inner_div_@k'></div>
       </div>
+
     3)@script = {<script>alert("hello");</script>}
 
     第一种方法只适合定义小范围的变量,第二种适合定义全局变量,第三种只能定义html代码块
 
 
 
-坑:
+使用IDEA开发会遇到的坑及如何解决:
 1.  修改routes或者controller代码之后, 编译报routes is already defined as object routes.
     这是scala2.11的一个bug(https://issues.scala-lang.org/browse/SI-4549), 仍然没有被fix,
     临时解决办法是修改routes或者controller代码之后,使用sbt clean
 
-2.
+2.  解决Controller中有时会出现的编译错误.
+    每次使用sbt refresh项目之后, 按ctrl+alt+shift+S, 在弹出的Project Structure中选中左边的Modules, 选中shop项目.
+    正确的环境下, Sources Folders下面有三个目录:app, target/scala-2.11/twirl/main, target/scala-2.11/src_managed/main
+    如果只有app, 需要用右边的sbt refresh整个项目.如果有app, target/scala-2.11/twirl/main中两个目录, 需要手动添加target/scala-2.11/src_managed/main目录.
+    操作方法:选中target/scala-2.11/src_managed/main, 设置为Sources,点击OK退出.
+
+3.  启动Junit测试会报空指针问题.
+    启动Junit测试之前, 进入Run -> Edit Configurations -> 选择左边的Default/Junit,
+    将Working directory改为shop模块的路径,例如/home/liubin/workspace/sk-shop/shop.改完之后在Run -> Edit Configurations里删除所有之前的Junit测试.
+
+5.  upper limit on inotify watches reached问题.修改linux内核配置
+    echo 524288 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
