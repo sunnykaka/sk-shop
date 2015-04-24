@@ -30,6 +30,8 @@ import java.util.Date;
  *   手机号 >> 可以随时设置.
  * </pre>
  */
+@Entity
+@Table(name = "user")
 public class User implements EntityClass<Integer> {
 
     private static final long serialVersionUID = 7993724590252729908L;

@@ -3,4 +3,15 @@
 # ~~~~
 
 # Home page
-GET         /                                 @controllers.Application.index
+GET         /                           @controllers.Application.index
+
+
+# user
+GET         /register                   @controllers.user.LoginController.registerPage
+POST        /register                   @controllers.user.LoginController.register
+GET         /login                      @controllers.user.LoginController.loginPage
+POST        /login                      @controllers.user.LoginController.login
+POST        /user/phone/get_code        @controllers.user.LoginController.requestPhoneCode(phone)
+GET         /user/phone/exist           @controllers.user.LoginController.isPhoneExist(phone)
+GET         /user/username/exist        @controllers.user.LoginController.isUsernameExist(username)
+

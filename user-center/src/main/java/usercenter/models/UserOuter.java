@@ -15,6 +15,8 @@ import java.util.Date;
  * Time: 下午3:12
  * To change this template use File | Settings | File Templates.
  */
+@Entity
+@Table(name = "userouter")
 public class UserOuter implements EntityClass<Integer> {
 
     private Integer id;

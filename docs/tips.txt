@@ -42,5 +42,7 @@
     启动Junit测试之前, 进入Run -> Edit Configurations -> 选择左边的Default/Junit,
     将Working directory改为shop模块的路径,例如/home/liubin/workspace/sk-shop/shop.改完之后在Run -> Edit Configurations里删除所有之前的Junit测试.
 
+4.  如果改了单元测试代码,启动之前需要手动编译(Ctrl + F9)
+
 5.  upper limit on inotify watches reached问题.修改linux内核配置
     echo 524288 | sudo tee -a /proc/sys/fs/inotify/max_user_watches

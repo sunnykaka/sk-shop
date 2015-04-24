@@ -15,6 +15,8 @@ import java.util.Map;
  * @version 1.0.0
  * @since 2013-1-15 下午09:14:58
  */
+@Entity
+@Table(name = "userdata")
 public class UserData implements EntityClass<Integer>{
 
     private static final long serialVersionUID = 7993724590252729908L;
