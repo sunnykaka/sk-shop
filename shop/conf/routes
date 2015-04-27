@@ -3,19 +3,22 @@
 # ~~~~
 
 # Home page
-GET         /                           @controllers.Application.index
+GET         /                                 @controllers.Application.index
 
 
 # user
-GET         /register                   @controllers.user.LoginController.registerPage
-POST        /register                   @controllers.user.LoginController.register
-GET         /login                      @controllers.user.LoginController.loginPage
-POST        /login                      @controllers.user.LoginController.login
-POST        /user/phone/get_code        @controllers.user.LoginController.requestPhoneCode(phone)
-GET         /user/phone/exist           @controllers.user.LoginController.isPhoneExist(phone)
-GET         /user/username/exist        @controllers.user.LoginController.isUsernameExist(username)
+GET         /register                         @controllers.user.LoginController.registerPage
+POST        /register                         @controllers.user.LoginController.register
+GET         /login                            @controllers.user.LoginController.loginPage
+POST        /login                            @controllers.user.LoginController.login
+POST        /user/phone/get_code              @controllers.user.LoginController.requestPhoneCode(phone)
+GET         /user/phone/exist                 @controllers.user.LoginController.isPhoneExist(phone)
+GET         /user/username/exist              @controllers.user.LoginController.isUsernameExist(username)
 
 # my favorites
-GET         /my/favorites            @controllers.user.MyFavoritesController.favoritesIndex(pageNo:Int ?= 1,pageSize:Int ?= 5)
-POST        /my/favorites/del        @controllers.user.MyFavoritesController.favoritesDel(productId:Int)
-POST        /my/favorites/add        @controllers.user.MyFavoritesController.favoritesAdd()
+GET         /my/favorites/product             @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+POST        /my/favorites/product/del         @controllers.user.ProductFavoritesController.del(productId:Int)
+POST        /my/favorites/product/add         @controllers.user.ProductFavoritesController.add()
+GET         /my/favorites/designer            @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+POST        /my/favorites/designer/del        @controllers.user.DesignerFavoritesController.del(designer:Int)
+POST        /my/favorites/designer/add        @controllers.user.DesignerFavoritesController.add()

@@ -93,7 +93,7 @@ public class Product implements EntityClass<Integer>, OperableData {
     /**
      * 是否删除(0表示未删除, 1表示已删除)
      */
-    private Boolean isDelete = false;
+    private Boolean deleted = false;
 
     /**
      * 创建时间
@@ -286,12 +286,12 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     @Column(name = "isDelete")
     @Basic
-    public Boolean isDelete() {
-        return isDelete;
+    public Boolean getDeleted() {
+        return deleted;
     }
 
-    public void setIsDelete(Boolean isDelete) {
-        this.isDelete = isDelete;
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Column(name = "createTime")

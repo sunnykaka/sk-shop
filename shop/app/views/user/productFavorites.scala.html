@@ -4,12 +4,12 @@
 
 <html>
     <head>
-        <title>@Messages("my.favorites")</title>
+        <title>@Messages("my.favorites.product")</title>
     </head>
     <body>
 
         <div>
-            <form action="@controllers.user.routes.MyFavoritesController.favoritesAdd()" method="post">
+            <form action="@controllers.user.routes.ProductFavoritesController.add()" method="post">
                 <table>
                     <tr><td>商品ID</td><td><input type="text" name="productId" value=""></td></tr>
                     <tr><td>商品名称</td><td><input type="text" name="productName" value=""></td></tr>
@@ -27,28 +27,24 @@
         共有多少条数据 @page.getTotalCount <br/>
 
         @if(page.getPageNo > 1){
-            <a href="@controllers.user.routes.MyFavoritesController.favoritesIndex(page.getPageNo()-1,page.getPageSize)">上一页</a>
+            <a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo()-1,page.getPageSize)">上一页</a>
         }
 
         @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
-            <a href="@controllers.user.routes.MyFavoritesController.favoritesIndex(page.getPageNo()+1,page.getPageSize)">下一页</a>
+            <a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo()+1,page.getPageSize)">下一页</a>
         }
 
         <hr>
             <table>
                 <tr>
                     <td>商品ID</td>
-                    <td>商品名</td>
-                    <td>商品价格</td>
                     <td></td>
                 </tr>
                 @for(pc <- page.getResult){
                     <tr>
                         <td>@pc.getProductId</td>
-                        <td>@pc.getProductName</td>
-                        <td>@pc.getUnitPrice</td>
                         <td>
-                            <form action="@controllers.user.routes.MyFavoritesController.favoritesDel(pc.getProductId)" method="post">
+                            <form action="@controllers.user.routes.ProductFavoritesController.del(pc.getProductId)" method="post">
                                 <button type="submit">删除</button>
                             </form>
                         </td>

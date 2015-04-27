@@ -42,6 +42,7 @@ public class ProductProperty implements EntityClass<Integer> {
      *
      * @return
      */
+    @Transient
     public int getPidVidCount() {
         List<Long> longs = PidVidJsonUtil.restore(json).getPidvid();
         return longs.size();

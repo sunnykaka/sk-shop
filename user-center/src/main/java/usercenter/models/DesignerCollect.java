@@ -1,39 +1,46 @@
-package productcenter.models;
+package usercenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.TableTimeData;
+import common.utils.DateUtils;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 
 /**
- * 商品收藏
- *
- * Created by zhb on 15-4-22.
+ * Created by zhb on 15-4-27.
  */
-@Table(name = "productcollect")
+@Table(name = "designer_collect")
 @Entity
-public class ProductCollect implements EntityClass<Integer>,TableTimeData {
+public class DesignerCollect implements EntityClass<Integer>,TableTimeData {
 
     private Integer id;
 
     private int userId;
 
-    private int productId;
+    private int designerId;
 
-    private DateTime collectTime;
+    private Designer designer;
 
     /** 软删 */
     private boolean deleted;
+
+    private DateTime collectTime;
 
     private DateTime createDate;
 
     private DateTime updateDate;
 
-    private Integer skuId;
+    public DesignerCollect(){
+        this.collectTime = DateUtils.current();
+    }
 
-    private Integer quantity;
+    public DesignerCollect(int userId, int designerId){
+        this.userId = userId;
+        this.designerId = designerId;
+        this.collectTime = DateUtils.current();
+    }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -56,23 +63,13 @@ public class ProductCollect implements EntityClass<Integer>,TableTimeData {
         this.userId = userId;
     }
 
-    @Column(name = "productId")
-    public int getProductId() {
-        return productId;
+    @Column(name = "designerId")
+    public int getDesignerId() {
+        return designerId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    @Column(name = "collectTime")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    public DateTime getCollectTime() {
-        return collectTime;
-    }
-
-    public void setCollectTime(DateTime collectTime) {
-        this.collectTime = collectTime;
+    public void setDesignerId(int designerId) {
+        this.designerId = designerId;
     }
 
     @Column(name = "isDelete")
@@ -84,22 +81,14 @@ public class ProductCollect implements EntityClass<Integer>,TableTimeData {
         this.deleted = deleted;
     }
 
-    @Column(name = "skuId")
-    public Integer getSkuId() {
-        return skuId;
+    @Column(name = "collectTime")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    public DateTime getCollectTime() {
+        return collectTime;
     }
 
-    public void setSkuId(Integer skuId) {
-        this.skuId = skuId;
-    }
-
-    @Column(name = "quantity")
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setCollectTime(DateTime collectTime) {
+        this.collectTime = collectTime;
     }
 
     @Column(name = "createDate")
@@ -126,4 +115,12 @@ public class ProductCollect implements EntityClass<Integer>,TableTimeData {
         this.updateDate = updateDate;
     }
 
+    @Transient
+    public Designer getDesigner() {
+        return designer;
+    }
+
+    public void setDesigner(Designer designer) {
+        this.designer = designer;
+    }
 }

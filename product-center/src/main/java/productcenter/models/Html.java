@@ -1,17 +1,14 @@
 package productcenter.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import common.models.utils.EntityClass;
+
+import javax.persistence.*;
 
 /**
  * 商品的超文本描述
  * User: lidujun
  * Date: 2015-04-27
  */
-@Table(name = "Html")
-@Entity
 public class Html {
     private Integer id;
 

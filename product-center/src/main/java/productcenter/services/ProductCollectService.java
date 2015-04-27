@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import productcenter.models.ProductCollect;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +19,8 @@ import java.util.Optional;
 @Transactional
 public class ProductCollectService {
 
-
-
-    @PersistenceContext
-    private EntityManager em;
-
     @Autowired
-    private GeneralDao generalDAO;
+    GeneralDao generalDAO;
 
     /**
      * 新建
@@ -107,7 +99,7 @@ public class ProductCollectService {
         jpql += " and pc.userId = :userId ";
         queryParams.put("userId", userId);
 
-        List<ProductCollect> valueList = generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
+        List<ProductCollect> valueList = generalDAO.query(jpql, Optional.empty(), queryParams);
         if (valueList != null && valueList.size() > 0) {
             return valueList.get(0);
         }

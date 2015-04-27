@@ -1,5 +1,6 @@
 package controllers.user;
 
+import common.utils.JsonResult;
 import common.utils.page.Page;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +9,16 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.models.ProductCollect;
 import productcenter.services.ProductCollectService;
-import views.html.user.myFavorites;
+import views.html.user.productFavorites;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 收藏商品
+ */
 @org.springframework.stereotype.Controller
-public class MyFavoritesController extends Controller {
+public class ProductFavoritesController extends Controller {
 
     /** 每页显示 5 条数据 */
     public static final int DEFAULT_PAGE_SIZE = 5;
@@ -32,39 +36,51 @@ public class MyFavoritesController extends Controller {
      *
      * @return
      */
-    public Result favoritesIndex(int pageNo,int pageSize) {
+    public Result index(int pageNo, int pageSize) {
 
         Page<ProductCollect> page = new Page(pageNo,pageSize);
         List<ProductCollect> pageProductCollcet = productCollectService.getProductCollectList(Optional.of(page),test_userId);
         page.setResult(pageProductCollcet);
 
-        return ok(myFavorites.render(page));
+        return ok(productFavorites.render(page));
 
     }
 
     /**
-     * 删除我的收藏
+     * 删除我的收藏商品
      *
      * @param productId
      * @return
      */
-    public Result favoritesDel(int productId) {
+    public Result del(int productId) {
 
         productCollectService.deleteMyProductCollect(productId,test_userId);
 
-        return redirect(routes.MyFavoritesController.favoritesIndex(DEFAULT_PAGE_NO,DEFAULT_PAGE_SIZE));
+        return redirect(routes.ProductFavoritesController.index(DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE));
 
     }
 
-    public Result favoritesAdd(){
+    /**
+     * 添加我的收藏商品
+     *
+     * @return
+     */
+    public Result add(){
 
         Form<ProductCollect> ProductCollectForm = Form.form(ProductCollect.class).bindFromRequest();
         ProductCollect productCollect = ProductCollectForm.get();
+
+        ProductCollect oldProductCollect = productCollectService.getByProductId(productCollect.getProductId(),test_userId);
+
+        if(null != oldProductCollect){
+            return ok(new JsonResult(false, "已收藏该商品").toNode());
+        }
+
         productCollect.setUserId(test_userId);
         productCollect.setCollectTime(new DateTime());
         productCollectService.createProductCollect(productCollect);
 
-        return redirect(routes.MyFavoritesController.favoritesIndex(DEFAULT_PAGE_NO,DEFAULT_PAGE_SIZE));
+        return ok(new JsonResult(true, "收藏成功").toNode());
 
     }
 

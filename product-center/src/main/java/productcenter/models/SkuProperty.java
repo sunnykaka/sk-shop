@@ -10,8 +10,6 @@ import javax.persistence.Table;
  * User: lidujun
  * Date: 2015-04-27
  */
-@Table(name = "SkuProperty")
-@Entity
 public class SkuProperty {
 
     /**

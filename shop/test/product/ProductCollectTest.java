@@ -24,7 +24,6 @@ public class ProductCollectTest implements BaseTest {
             ProductCollect productCollect = new ProductCollect();
             productCollect.setProductId(10000);
             productCollect.setCollectTime(new DateTime());
-            productCollect.setProductName("测试商品10000");
             productCollect.setUserId(1);
 
             productCollectService.createProductCollect(productCollect);
