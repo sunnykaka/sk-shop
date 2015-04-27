@@ -3,9 +3,7 @@ package product;
 import common.utils.test.BaseTest;
 import org.joda.time.DateTime;
 import org.junit.Test;
-import productcenter.models.Category;
 import productcenter.models.ProductCollect;
-import productcenter.services.CategoryService;
 import productcenter.services.ProductCollectService;
 import utils.Global;
 

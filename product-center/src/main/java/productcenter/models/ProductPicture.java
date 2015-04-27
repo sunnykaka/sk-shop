@@ -1,37 +1,40 @@
 package productcenter.models;
 
 import common.models.utils.EntityClass;
-import common.models.utils.OperableData;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 
 /**
- * 产品（商品）图片
- * Created by lidujun on 2015-04-01.
+ * 产品图片
+ * 对应大图，因为一个商品可能有多张大图，其他小图通过大图的路径加上像素来定位
+ * 商品图片上传的时候会生成各种缩略图
+ * <p/>
+ * 一个商品存在一个主图，主图唯一
+ * 一个sku存在一组图片
+ * User: lidujun
+ * Date: 2015-04-24
  */
-@Table(name = "product_picture")
+@Table(name = "ProductPicture")
 @Entity
-public class ProductPicture implements EntityClass<Integer>, OperableData {
+public class ProductPicture implements EntityClass<Integer> {
 
     /**
-     * 库自增ID
+     * 图片主键id
      */
     private Integer id;
 
     /**
-     * 产品（商品）id
+     * 产品d
      */
     private Integer productId;
 
     /**
-     * 单品id
+     * 单品sku id
      */
-    private Integer skuId;
+    private String skuId;
 
     /**
-     * 原来的名称
+     * 原始名称
      */
     private String originalName;
 
@@ -41,43 +44,43 @@ public class ProductPicture implements EntityClass<Integer>, OperableData {
     private String name;
 
     /**
+     * 是否主图：0 代表不是主图, 1 代表是, 默认是 0
+     */
+    private Boolean mainPic;
+
+    /**
+     *是否副图：0 代表不是主图, 1 代表是, 默认是 0
+     */
+    private Boolean minorPic;
+
+    /**
      * 图片url
      */
-    private String picUrl;
+    private String pictureUrl;
 
     /**
-     * 图片类型
+     * 图片本地url
      */
-    private String type;
+    private String pictureLocalUrl;
 
     /**
-     * 创建时间
+     * 数量
      */
-    private DateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private DateTime updateTime;
-
-    /**
-     * 最后操作人
-     */
-    private Integer operatorId;
+    private int number;
 
     @Override
     public String toString() {
         return "ProductPicture{" +
                 "id=" + id +
                 ", productId=" + productId +
-                ", skuId=" + skuId +
+                ", skuId='" + skuId + '\'' +
                 ", originalName='" + originalName + '\'' +
                 ", name='" + name + '\'' +
-                ", picUrl='" + picUrl + '\'' +
-                ", type='" + type + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", operatorId=" + operatorId +
+                ", mainPic=" + mainPic +
+                ", minorPic=" + minorPic +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", pictureLocalUrl='" + pictureLocalUrl + '\'' +
+                ", number=" + number +
                 '}';
     }
 
@@ -88,12 +91,11 @@ public class ProductPicture implements EntityClass<Integer>, OperableData {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @Column(name = "product_id")
+    @Column(name = "productId")
     @Basic
     public Integer getProductId() {
         return productId;
@@ -103,17 +105,17 @@ public class ProductPicture implements EntityClass<Integer>, OperableData {
         this.productId = productId;
     }
 
-    @Column(name = "sku_id")
+    @Column(name = "skuId")
     @Basic
-    public Integer getSkuId() {
+    public String getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(Integer skuId) {
+    public void setSkuId(String skuId) {
         this.skuId = skuId;
     }
 
-    @Column(name = "original_name")
+    @Column(name = "originalName")
     @Basic
     public String getOriginalName() {
         return originalName;
@@ -133,60 +135,53 @@ public class ProductPicture implements EntityClass<Integer>, OperableData {
         this.name = name;
     }
 
-    @Column(name = "pic_url")
+    @Column(name = "mainPic")
     @Basic
-    public String getPicUrl() {
-        return picUrl;
+    public Boolean isMainPic() {
+        return mainPic;
     }
 
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
+    public void setMainPic(Boolean mainPic) {
+        this.mainPic = mainPic;
     }
 
-    @Column(name = "type")
+    @Column(name = "minorPic")
     @Basic
-    public String getType() {
-        return type;
+    public Boolean isMinorPic() {
+        return minorPic;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setMinorPic(Boolean minorPic) {
+        this.minorPic = minorPic;
     }
 
-    @Column(name = "create_time")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Override
-    public DateTime getCreateTime() {
-        return createTime;
-    }
-
-    @Override
-    public void setCreateTime(DateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    @Column(name = "update_time")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Override
-    public DateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    @Override
-    public void setUpdateTime(DateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Column(name = "operator_id")
+    @Column(name = "pictureUrl")
     @Basic
-    @Override
-    public Integer getOperatorId() {
-        return operatorId;
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
-    @Override
-    public void setOperatorId(Integer operatorId) {
-        this.operatorId = operatorId;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
+    @Column(name = "pictureLocalUrl")
+    @Basic
+    public String getPictureLocalUrl() {
+        return pictureLocalUrl;
+    }
+
+    public void setPictureLocalUrl(String pictureLocalUrl) {
+        this.pictureLocalUrl = pictureLocalUrl;
+    }
+
+    @Column(name = "number")
+    @Basic
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 }

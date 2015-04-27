@@ -2,125 +2,101 @@ package productcenter.services;
 
 import common.services.GeneralDao;
 import common.utils.page.Page;
-import productcenter.models.Product;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import productcenter.models.Product;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 /**
- * 产品（商品）Service
+ * 产品Service
  * User: lidujun
- * Date: 2015-04-01
+ * Date: 2015-04-23
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ProductService {
+
     @Autowired
-    private GeneralDao generalDao;
+    GeneralDao generalDao;
 
     /**
-     * 保存产品（商品）
+     * 获取所有没有被删除的产品
+     * @return
      */
-    public void save(Product product){
-        play.Logger.info("--------ProductService save begin exe-----------" + product);
-        generalDao.persist(product);
+    public List<Product> queryAllProducts() {
+        play.Logger.info("--------ProductService queryAllProducts begin exe-----------");
+
+        String jpql = "select o from Product o where 1=1 and o.isDelete=:isDelete";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
+        jpql += " order by o.name";
+        return generalDao.query(jpql, Optional.<Page<Product>>empty(), queryParams);
     }
 
     /**
-     * 假删除产品（商品）
+     * 通过产品主键id获取产品
+     * @param id
+     * @return
      */
-    public void falseDelete(Integer productId){
-        play.Logger.info("--------ProductService falseDelete begin exe-----------" + productId);
-        Product product = generalDao.get(Product.class, productId);
-        product.setIsDelete(false);
-        this.update(product);
+    public Product getProductById(int id) {
+        play.Logger.info("--------ProductService getProductById begin exe-----------" + id);
+        return generalDao.get(Product.class, id);
     }
 
     /**
-     * 更新产品（商品）
+     * 通过后台类目id获取其下关联的所有产品，不包括已经删除的产品
+     * @param categoryId
+     * @return
      */
-    public void update(Product product){
-        play.Logger.info("--------ProductService update begin exe-----------" + product);
-        generalDao.merge(product);
+    public List<Product> queryProductsByCategoryId(int categoryId) {
+        play.Logger.info("--------ProductService queryProductsByCategoryId begin exe-----------");
+
+        String jpql = "select o from Product o where 1=1 and o.isDelete=:isDelete and categoryId=:categoryId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
+        queryParams.put("categoryId", categoryId);
+        jpql += " order by o.name";
+        return generalDao.query(jpql, Optional.<Page<Product>>empty(), queryParams);
     }
 
     /**
-     * 通过主键获取产品（商品）
+     * 按照条件获取产品（商品）分页列表，默认是未上架
      */
-    @Transactional(readOnly = true)
-    public Optional<Product> getProductById(int productId){
-        play.Logger.info("--------ProductContentService getProductById begin exe-----------" + productId);
-        return Optional.ofNullable(generalDao.get(Product.class, productId));
-    }
-
-    /**
-     * 获取产品（商品）列表
-     */
-    @Transactional(readOnly = true)
     public List<Product> getProductList(Optional<Page<Product>> page, Product param){
         play.Logger.info("--------ProductService getOrderList begin exe-----------" + page + "\n" + param);
 
-        String jpql = "select o from Product o where 1=1 ";
+        String jpql = "select o from Product o where 1=1 and o.isDelete=:isDelete";
         Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
+        if(param != null) {
+            Integer categoryId = param.getCategoryId();
+            if(categoryId != null && categoryId != 0) {
+                jpql += " and o.categoryId = :categoryId ";
+                queryParams.put("categoryId", categoryId);
+            }
 
-         if(param != null) {
-             String name = param.getName();
-             if(!StringUtils.isEmpty(name)) {
-                 jpql += " and o.name like :name ";
-                 queryParams.put("name", "%" + name + "%");
-             }
+            Integer customerId = param.getCustomerId();
+            if(customerId != null && customerId != 0) {
+                jpql += " and o.customerId = :customerId ";
+                queryParams.put("customerId", customerId);
+            }
 
-             Integer desigerId = param.getDesigerId();
-             if(desigerId != null && desigerId != 0) {
-                 jpql += " and o.desigerId = :desigerId ";
-                 queryParams.put("desigerId", desigerId);
-             }
+            Integer brandId = param.getBrandId();
+            if(brandId != null && brandId != 0) {
+                jpql += " and o.brandId = :brandId ";
+                queryParams.put("brandId", brandId);
+            }
 
-             String supplierSpuCode = param.getSupplierSpuCode();
-             if(!StringUtils.isEmpty(supplierSpuCode)) {
-                 jpql += " and o.supplierSpuCode = :supplierSpuCode ";
-                 queryParams.put("supplierSpuCode", supplierSpuCode);
-             }
-
-             String spuCode = param.getSpuCode();
-             if(!StringUtils.isEmpty(spuCode)) {
-                 jpql += " and o.spuCode = :spuCode ";
-                 queryParams.put("spuCode", spuCode);
-             }
-
-             Integer categoryId = param.getCategoryId();
-             if(categoryId != null && categoryId != 0) {
-                 jpql += " and o.categoryId = :categoryId ";
-                 queryParams.put("categoryId", categoryId);
-             }
-
-             String address = param.getAddress();
-             if(!StringUtils.isEmpty(address)) {
-                 jpql += " and o.address like :address ";
-                 queryParams.put("address", "%" +address + "%");
-             }
-
-             Boolean online = param.getOnline();
-             if(online != null) {
-                 jpql += " and o.online = :online ";
-                 queryParams.put("online", online);
-             }
-
-             Boolean isDelete = param.getIsDelete();
-             if(isDelete != null) {
-                 jpql += " and o.isDelete = :isDelete ";
-                 queryParams.put("isDelete", isDelete);
-             }
-         }
+            //默认是未上架
+            jpql += " and o.online = :online ";
+            queryParams.put("online", param.isOnline());
+        }
         jpql += " order by o.name";
         return generalDao.query(jpql, page, queryParams);
     }
-
 }
