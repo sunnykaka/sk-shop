@@ -55,7 +55,7 @@ public class ProductService {
      * 通过主键获取产品（商品）
      */
     @Transactional(readOnly = true)
-    public Optional<Product> getProductById(Integer productId){
+    public Optional<Product> getProductById(int productId){
         play.Logger.info("--------ProductContentService getProductById begin exe-----------" + productId);
         return Optional.ofNullable(generalDao.get(Product.class, productId));
     }

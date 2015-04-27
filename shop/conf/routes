@@ -15,3 +15,7 @@ POST        /user/phone/get_code        @controllers.user.LoginController.reques
 GET         /user/phone/exist           @controllers.user.LoginController.isPhoneExist(phone)
 GET         /user/username/exist        @controllers.user.LoginController.isUsernameExist(username)
 
+# my favorites
+GET         /my/favorites            @controllers.user.MyFavoritesController.favoritesIndex(pageNo:Int ?= 1,pageSize:Int ?= 5)
+POST        /my/favorites/del        @controllers.user.MyFavoritesController.favoritesDel(productId:Int)
+POST        /my/favorites/add        @controllers.user.MyFavoritesController.favoritesAdd()

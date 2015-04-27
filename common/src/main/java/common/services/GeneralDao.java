@@ -2,6 +2,7 @@ package common.services;
 
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
+import common.models.utils.TableTimeData;
 import common.utils.DateUtils;
 import common.utils.page.Page;
 import org.joda.time.DateTime;
@@ -152,6 +153,14 @@ public class GeneralDao {
                 operableData.setCreateTime(now);
             }
             //TODO set operator
+        }
+        if(t instanceof TableTimeData) {
+            TableTimeData tableTimeData = (TableTimeData)t;
+            DateTime now = DateUtils.current();
+            tableTimeData.setUpdateDate(now);
+            if(isCreate) {
+                tableTimeData.setCreateDate(now);
+            }
         }
     }
 
