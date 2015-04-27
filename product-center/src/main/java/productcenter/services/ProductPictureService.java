@@ -62,7 +62,7 @@ public class ProductPictureService {
      * @param skuId
      * @return
      */
-    public List<ProductPicture> queryProductPicturesBySkuId(String skuId) {
+    public List<ProductPicture> queryProductPicturesBySkuId(int skuId) {
         play.Logger.info("------ProductPictureService queryProductPicturesBySkuId begin exe-----------" + skuId);
 
         String jpql = "select o from ProductPicture o where 1=1 and o.skuId=:skuId";
