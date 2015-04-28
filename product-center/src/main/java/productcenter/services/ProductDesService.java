@@ -37,22 +37,6 @@ public class ProductDesService {
         return generalDao.query(jpql, Optional.<Page<Html>>empty(), queryParams);
     }
 
-    public Html getHtmlDesByProductId(int productId) {
-        play.Logger.info("------ProductDesService getByProductId begin exe-----------" + productId);
-
-        String jpql = "select o from Html o where 1=1 and o.productId=:productId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("productId", productId);
-        jpql += " order by o.name";
-
-        List<Html> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
-        Html html = null;
-        if(list != null && list.size() > 0) {
-            html = list.get(0);
-        }
-        return html;
-    }
-
     public List<Html> queryHtmlDesByProductId(int productId) {
         play.Logger.info("------ProductDesService queryByProductId begin exe-----------" + productId);
 

@@ -48,6 +48,16 @@ public class ProductProperty implements EntityClass<Integer> {
         return longs.size();
     }
 
+    @Override
+    public String toString() {
+        return "ProductProperty{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", propertyType=" + propertyType +
+                ", json='" + json + '\'' +
+                '}';
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override

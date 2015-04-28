@@ -1,16 +1,16 @@
 package productcenter.models;
 
-import common.models.utils.EntityClass;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 商品的超文本描述
  * User: lidujun
  * Date: 2015-04-27
  */
-public class Html {
-    private Integer id;
+@Table(name = "Html")
+@Entity
+public class Html implements Serializable {
 
     /**
      * 产品id
@@ -27,8 +27,18 @@ public class Html {
      */
     private String content;
 
+    @Override
+    public String toString() {
+        return "Html{" +
+                "productId=" + productId +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     @Column(name = "productId")
-    @Basic
     public int getProductId() {
         return productId;
     }

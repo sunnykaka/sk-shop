@@ -21,7 +21,7 @@ public class SkuStorage implements EntityClass<Integer> {
     /**
      * sku
      */
-    private long skuId;
+    private int skuId;
     /**
      * 库位编号
      */
@@ -35,6 +35,17 @@ public class SkuStorage implements EntityClass<Integer> {
      * 交易最大数量
      */
     private int tradeMaxNumber;
+
+    @Override
+    public String toString() {
+        return "SkuStorage{" +
+                "id=" + id +
+                ", skuId=" + skuId +
+                ", productStorageId=" + productStorageId +
+                ", stockQuantity=" + stockQuantity +
+                ", tradeMaxNumber=" + tradeMaxNumber +
+                '}';
+    }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -50,11 +61,11 @@ public class SkuStorage implements EntityClass<Integer> {
 
     @Column(name = "skuId")
     @Basic
-    public long getSkuId() {
+    public int getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(long skuId) {
+    public void setSkuId(int skuId) {
         this.skuId = skuId;
     }
 

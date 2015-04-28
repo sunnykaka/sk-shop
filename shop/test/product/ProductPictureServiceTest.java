@@ -28,7 +28,7 @@ public class ProductPictureServiceTest extends WithApplication {
     @Test
     public void queryAllProductPictures() {
         List<ProductPicture> list = productPictureService.queryAllProductPictures();
-        System.out.println("-----------------------------: " + list);
+        System.out.println("-----------------------------: " + list.size() + "\n" + list);
     }
 
     @Test
@@ -40,23 +40,20 @@ public class ProductPictureServiceTest extends WithApplication {
     @Test
     public void queryProductPicturesByProductId() {
         List<ProductPicture> list = productPictureService.queryProductPicturesByProductId(2159);
-        System.out.println("-----------------------------: " + list);
+        System.out.println("-----------------------------: " + list.size() + "\n" + list);
     }
-
 
     @Test
     public void queryProductPicturesBySkuId() {
-        List<ProductPicture> list = productPictureService.queryProductPicturesBySkuId(10);
-        System.out.println("-----------------------------: " + list);
+        List<ProductPicture> list = productPictureService.queryProductPicturesBySkuId("10");
+        System.out.println("-----------------------------: " + list.size() + "\n" + list);
     }
-
 
     @Test
     public void getMainProductPictureByProductId() {
         ProductPicture productPicture = productPictureService.getMainProductPictureByProductId(2159);
         System.out.println("-----------------------------: " + productPicture);
     }
-
 
     @Test
     public void getMinorProductPictureByProductId() {

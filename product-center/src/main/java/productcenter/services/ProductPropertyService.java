@@ -54,7 +54,6 @@ public class ProductPropertyService {
         String jpql = "select o from ProductProperty o where 1=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
-        jpql += " order by o.name";
         return generalDao.query(jpql, Optional.<Page<ProductProperty>>empty(), queryParams);
     }
 

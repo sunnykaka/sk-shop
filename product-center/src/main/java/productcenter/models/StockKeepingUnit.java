@@ -93,6 +93,25 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
         return this.skuState == SKUState.NORMAL;
     }
 
+    @Override
+    public String toString() {
+        return "StockKeepingUnit{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", skuCode='" + skuCode + '\'' +
+                ", barCode='" + barCode + '\'' +
+                ", price=" + price +
+                ", marketPrice=" + marketPrice +
+                ", skuPropertiesInDb='" + skuPropertiesInDb + '\'' +
+                ", skuState=" + skuState +
+                ", stockQuantity=" + stockQuantity +
+                ", skuProperties=" + skuProperties +
+                ", tradeMaxNumber=" + tradeMaxNumber +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override
@@ -155,13 +174,12 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
         this.marketPrice = marketPrice;
     }
 
-    @Transient
+    @Column(name = "skuPropertiesInDb")
+    @Basic
     public String getSkuPropertiesInDb() {
         return skuPropertiesInDb;
     }
 
-    @Column(name = "skuPropertiesInDb")
-    @Basic
     public void setSkuPropertiesInDb(String skuPropertiesInDb) {
         this.skuPropertiesInDb = skuPropertiesInDb;
     }

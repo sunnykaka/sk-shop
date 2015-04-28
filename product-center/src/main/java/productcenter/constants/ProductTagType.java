@@ -3,7 +3,7 @@ package productcenter.constants;
 import common.models.utils.ViewEnum;
 
 /**
- * 订单类型
+ * 产品标签类型
  * User: lidujun
  * Date: 2015-04-24
  */

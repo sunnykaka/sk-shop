@@ -14,7 +14,7 @@ import productcenter.util.PropertyValueUtil;
 import java.util.*;
 
 /**
- * SKU Service类
+ * Sku和库存Service
  * User: lidujun
  * Date: 2015-04-27
  */
@@ -30,7 +30,7 @@ public class SkuAndStorageService {
      * @param stockKeepingUnit
      */
     private void loadSkuProperty(StockKeepingUnit stockKeepingUnit) {
-        List<SkuProperty> skuProperties = new LinkedList<SkuProperty>();
+        List<SkuProperty> skuProperties = new ArrayList<SkuProperty>();
         String skuPropertiesInDb = stockKeepingUnit.getSkuPropertiesInDb(); //把数据库中的字符串pidvid列表转换为Sku属性的List
         if (StringUtils.isNotEmpty(skuPropertiesInDb)) {
             String[] pidvid = skuPropertiesInDb.split(",");
@@ -47,7 +47,7 @@ public class SkuAndStorageService {
     }
 
     /**
-     * 获取数据库中所有sku记录
+     * 获取数据库中所有sku记录(包含sku属性)
      * @return
      */
     public List<StockKeepingUnit> queryAllStockKeepingUnits() {
@@ -59,36 +59,21 @@ public class SkuAndStorageService {
     }
 
     /**
-     * 按照sku主键获取sku
+     * 按照sku主键获取sku(包含sku属性)
      * @param id
      * @return
      */
     public StockKeepingUnit getStockKeepingUnitById(int id) {
         play.Logger.info("------SkuAndStorageService getStockKeepingUnitById begin exe-----------" + id);
-        return generalDao.get(StockKeepingUnit.class, id);
-    }
-
-    /**
-     * 通过产品（商品）id获取sku列表
-     * @param productId
-     * @return
-     */
-    public List<StockKeepingUnit> querySKUByProductId(int productId) {
-        play.Logger.info("------SkuAndStorageService querySKUByProductId begin exe-----------" + productId);
-
-        String jpql = "select o from StockKeepingUnit o where 1=1 and o.productId=:productId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("productId", productId);
-        List<StockKeepingUnit> skus = generalDao.query(jpql, Optional.<Page<StockKeepingUnit>>empty(), queryParams);
-
-        for (StockKeepingUnit sku : skus) {
+        StockKeepingUnit sku = generalDao.get(StockKeepingUnit.class, id);
+        if(sku != null) {
             loadSkuProperty(sku);
         }
-        return skus;
+        return sku;
     }
 
     /**
-     * 通过sku条码获取sku记录
+     * 通过sku条码获取sku记录(包含sku属性)
      * @param barCode
      * @return
      */
@@ -104,7 +89,29 @@ public class SkuAndStorageService {
         if(list != null && list.size() > 0) {
             stockKeepingUnit = list.get(0);
         }
+        if(stockKeepingUnit != null) {
+            loadSkuProperty(stockKeepingUnit);
+        }
         return stockKeepingUnit;
+    }
+
+    /**
+     * 通过产品（商品）id获取sku列表(包含sku属性)
+     * @param productId
+     * @return
+     */
+    public List<StockKeepingUnit> querySkuListByProductId(int productId) {
+        play.Logger.info("------SkuAndStorageService querySKUByProductId begin exe-----------" + productId);
+
+        String jpql = "select o from StockKeepingUnit o where 1=1 and o.productId=:productId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+        List<StockKeepingUnit> skus = generalDao.query(jpql, Optional.<Page<StockKeepingUnit>>empty(), queryParams);
+
+        for (StockKeepingUnit sku : skus) {
+            loadSkuProperty(sku);
+        }
+        return skus;
     }
 
     /**

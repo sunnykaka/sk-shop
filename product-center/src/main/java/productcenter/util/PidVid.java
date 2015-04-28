@@ -55,7 +55,9 @@ public class PidVid {
         return pidvid.isEmpty();
     }
 
-    //被json工具读取
+    /**
+     * 被json工具读取
+     */
     public List<Long> getPidvid() {
         return pidvid;
     }

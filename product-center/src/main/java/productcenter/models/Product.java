@@ -54,6 +54,11 @@ public class Product implements EntityClass<Integer>, OperableData {
     private String enName;
 
     /**
+     * 新品或热销,默认(既不是新品也不是热销)
+     */
+    private ProductTagType tagType;
+
+    /**
      * 库存策略(0表示普通模式, 1表示付款成功后扣减模式), 默认为 0
      * NormalStrategy.普通策略, 创建即扣减库存, 取消则回加库存; PayStrategy.付款策略, 付款成功后才会扣减
      */
@@ -67,13 +72,7 @@ public class Product implements EntityClass<Integer>, OperableData {
     /**
      * 该商品是否上架：是否上架(0表示未上架, 1表示上架)
      */
-    private Boolean online = false;
-
-
-    /**
-     * 新品或热销,默认(既不是新品也不是热销)
-     */
-    private ProductTagType tagType = ProductTagType.DEFAULT;
+    private Boolean online;
 
     /**
      * 上架时间
@@ -93,7 +92,7 @@ public class Product implements EntityClass<Integer>, OperableData {
     /**
      * 是否删除(0表示未删除, 1表示已删除)
      */
-    private Boolean deleted = false;
+    private Boolean isDelete;
 
     /**
      * 创建时间
@@ -131,13 +130,37 @@ public class Product implements EntityClass<Integer>, OperableData {
      * @param skuId
      * @return
      */
-    public StockKeepingUnit getStockKeepingUnit(long skuId) {
+    public StockKeepingUnit getStockKeepingUnit(int skuId) {
         for (StockKeepingUnit stockKeepingUnit : stockKeepingUnits) {
             if (stockKeepingUnit.getId() == skuId) {
                 return stockKeepingUnit;
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", productCode='" + productCode + '\'' +
+                ", categoryId=" + categoryId +
+                ", customerId=" + customerId +
+                ", brandId=" + brandId +
+                ", name='" + name + '\'' +
+                ", enName='" + enName + '\'' +
+                ", tagType=" + tagType +
+                ", storeStrategy=" + storeStrategy +
+                ", description='" + description + '\'' +
+                ", online=" + online +
+                ", onlineTime=" + onlineTime +
+                ", onLineTimeLong=" + onLineTimeLong +
+                ", offlineTime=" + offlineTime +
+                ", isDelete=" + isDelete +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", stockKeepingUnits=" + stockKeepingUnits +
+                '}';
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -286,12 +309,12 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     @Column(name = "isDelete")
     @Basic
-    public Boolean getDeleted() {
-        return deleted;
+    public Boolean getIsDelete() {
+        return isDelete;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
     @Column(name = "createTime")
