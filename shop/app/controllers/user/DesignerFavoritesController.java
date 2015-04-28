@@ -2,13 +2,14 @@ package controllers.user;
 
 import common.utils.JsonResult;
 import common.utils.page.Page;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.models.Designer;
 import usercenter.models.DesignerCollect;
 import usercenter.services.DesignerCollectService;
+import usercenter.services.DesignerService;
 import views.html.user.designerFavorites;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public class DesignerFavoritesController extends Controller {
 
     @Autowired
     private DesignerCollectService designerCollectService;
+
+    @Autowired
+    private DesignerService designerService;
 
     /**
      * 收藏商品列表
@@ -64,6 +68,11 @@ public class DesignerFavoritesController extends Controller {
 
         Form<DesignerCollect> DesignerCollectForm = Form.form(DesignerCollect.class).bindFromRequest();
         DesignerCollect designerCollect = DesignerCollectForm.get();
+
+        Designer designer = designerService.getById(designerCollect.getDesignerId());
+        if(null == designer){
+            return ok(new JsonResult(false, "该设计师不存在").toNode());
+        }
 
         DesignerCollect oldDesignerCollect = designerCollectService.getByDesignerId(designerCollect.getDesignerId(),test_userId);
         if(null != oldDesignerCollect){

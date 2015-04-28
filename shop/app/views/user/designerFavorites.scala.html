@@ -35,11 +35,13 @@
             <table>
                 <tr>
                     <td>设计师ID</td>
+                    <td>设计师名</td>
                     <td></td>
                 </tr>
                 @for(dc <- page.getResult){
                     <tr>
                         <td>@dc.getDesignerId</td>
+                        <td>@dc.getDesigner.getName</td>
                         <td>
                             <form action="@controllers.user.routes.DesignerFavoritesController.del(dc.getDesignerId)" method="post">
                                 <button type="submit">删除</button>

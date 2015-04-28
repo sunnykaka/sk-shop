@@ -115,7 +115,8 @@ public class DesignerCollect implements EntityClass<Integer>,TableTimeData {
         this.updateDate = updateDate;
     }
 
-    @Transient
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "designerId",referencedColumnName="id", insertable = false, updatable = false)
     public Designer getDesigner() {
         return designer;
     }
