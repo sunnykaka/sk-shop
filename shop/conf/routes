@@ -22,3 +22,12 @@ POST        /my/favorites/product/add         @controllers.user.ProductFavorites
 GET         /my/favorites/designer            @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
 POST        /my/favorites/designer/del        @controllers.user.DesignerFavoritesController.del(designer:Int)
 POST        /my/favorites/designer/add        @controllers.user.DesignerFavoritesController.add()
+# my address
+GET         /my/address                       @controllers.user.AddressController.index()
+GET         /my/address/province              @controllers.user.AddressController.queryProvince()
+GET         /my/address/city                  @controllers.user.AddressController.queryCity(code)
+GET         /my/address/area                  @controllers.user.AddressController.queryArea(code)
+POST        /my/address/add                   @controllers.user.AddressController.add()
+POST        /my/address/update                @controllers.user.AddressController.update()
+POST        /my/address/del                   @controllers.user.AddressController.del()
+POST        /my/address/defaultAddress        @controllers.user.AddressController.defaultAddress()

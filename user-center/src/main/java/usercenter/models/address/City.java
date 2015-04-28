@@ -1,39 +1,37 @@
-package common.models;
-
+package usercenter.models.address;
 
 import common.models.utils.EntityClass;
 
 import javax.persistence.*;
 
 /**
- * User: liubin
- * Date: 14-3-28
+ * 城市信息
+ *
+ * @author Athens(刘杰)
  */
-@Table(name = "t_city")
 @Entity
-public class City implements EntityClass<String> {
+@Table(name = "city")
+public class City implements EntityClass<Integer> {
 
-    private String id;
+    private Integer id;
 
     private String name;
 
     private String provinceId;
 
-    private Province province;
-
-
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    public String getId() {
+    @Override
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    @Override
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Column(name = "name")
-    @Basic
     public String getName() {
         return name;
     }
@@ -42,8 +40,7 @@ public class City implements EntityClass<String> {
         this.name = name;
     }
 
-    @Column(name = "province_id")
-    @Basic
+    @Column(name = "provinceId")
     public String getProvinceId() {
         return provinceId;
     }
@@ -51,15 +48,4 @@ public class City implements EntityClass<String> {
     public void setProvinceId(String provinceId) {
         this.provinceId = provinceId;
     }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="province_id", insertable = false, updatable = false)
-    public Province getProvince() {
-        return province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
-    }
-
 }

@@ -1,36 +1,35 @@
-package common.models;
-
+package usercenter.models.address;
 
 import common.models.utils.EntityClass;
 
 import javax.persistence.*;
 
 /**
- * User: liubin
- * Date: 14-3-28
+ * 省市信息
+ *
+ * @author Athens(刘杰)
  */
-@Table(name = "t_province")
 @Entity
-public class Province implements EntityClass<String> {
+@Table(name = "province")
+public class Province implements EntityClass<Integer> {
 
-    private String id;
+    private Integer id;
 
     private String name;
 
-
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    public String getId() {
+    @Override
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    @Override
+    public void setId(Integer id) {
         this.id = id;
     }
 
-
     @Column(name = "name")
-    @Basic
     public String getName() {
         return name;
     }
