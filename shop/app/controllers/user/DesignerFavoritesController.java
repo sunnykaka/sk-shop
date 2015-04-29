@@ -8,6 +8,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import usercenter.models.Designer;
 import usercenter.models.DesignerCollect;
+import usercenter.models.DesignerPicture;
 import usercenter.services.DesignerCollectService;
 import usercenter.services.DesignerService;
 import views.html.user.designerFavorites;
@@ -44,6 +45,13 @@ public class DesignerFavoritesController extends Controller {
 
         Page<DesignerCollect> page = new Page(pageNo,pageSize);
         List<DesignerCollect> pageProductCollcet = designerCollectService.getDesignerCollectList(Optional.of(page), test_userId);
+        for(DesignerCollect designerCollect:pageProductCollcet){
+            Designer designer = designerService.getDesignerById(designerCollect.getDesignerId());
+            DesignerPicture designerPicture = designerService.getDesignerPicByDesignerById(designerCollect.getDesignerId());
+            designerCollect.setDesignerName(designer.getName());
+            designerCollect.setDesignerPic(designerPicture.getPictureUrl());
+        }
+
         page.setResult(pageProductCollcet);
 
         return ok(designerFavorites.render(page));
@@ -69,7 +77,7 @@ public class DesignerFavoritesController extends Controller {
         Form<DesignerCollect> DesignerCollectForm = Form.form(DesignerCollect.class).bindFromRequest();
         DesignerCollect designerCollect = DesignerCollectForm.get();
 
-        Designer designer = designerService.getById(designerCollect.getDesignerId());
+        Designer designer = designerService.getDesignerById(designerCollect.getDesignerId());
         if(null == designer){
             return ok(new JsonResult(false, "该设计师不存在").toNode());
         }

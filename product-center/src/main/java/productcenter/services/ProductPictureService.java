@@ -81,11 +81,11 @@ public class ProductPictureService {
         jpql += " order by o.name";
 
         List<ProductPicture> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
-        ProductPicture productPicture = null;
         if(list != null && list.size() > 0) {
-            productPicture = list.get(0);
+            return list.get(0);
+        }else{
+            return new ProductPicture(ProductPicture.PRODUCT_DEFAULT_PIC);
         }
-        return productPicture;
     }
 
     public ProductPicture getMinorProductPictureByProductId(int productId) {

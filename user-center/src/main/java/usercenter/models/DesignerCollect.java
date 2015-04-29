@@ -21,8 +21,6 @@ public class DesignerCollect implements EntityClass<Integer>,TableTimeData {
 
     private int designerId;
 
-    private Designer designer;
-
     /** 软删 */
     private boolean deleted;
 
@@ -31,6 +29,10 @@ public class DesignerCollect implements EntityClass<Integer>,TableTimeData {
     private DateTime createDate;
 
     private DateTime updateDate;
+
+    private String designerPic;
+
+    private String designerName;
 
     public DesignerCollect(){
         this.collectTime = DateUtils.current();
@@ -115,13 +117,21 @@ public class DesignerCollect implements EntityClass<Integer>,TableTimeData {
         this.updateDate = updateDate;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "designerId",referencedColumnName="id", insertable = false, updatable = false)
-    public Designer getDesigner() {
-        return designer;
+    @Transient
+    public String getDesignerPic() {
+        return designerPic;
     }
 
-    public void setDesigner(Designer designer) {
-        this.designer = designer;
+    public void setDesignerPic(String designerPic) {
+        this.designerPic = designerPic;
+    }
+
+    @Transient
+    public String getDesignerName() {
+        return designerName;
+    }
+
+    public void setDesignerName(String designerName) {
+        this.designerName = designerName;
     }
 }

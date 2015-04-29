@@ -171,7 +171,6 @@ public class UserService {
 
     }
 
-
     private User authenticate(String passport, String password) {
 
         User user = null;
