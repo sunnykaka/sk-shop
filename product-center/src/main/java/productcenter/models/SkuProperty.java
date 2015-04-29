@@ -1,8 +1,5 @@
 package productcenter.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 /**
  * sku 属性
  * 比如颜色红色，尺寸XL
@@ -15,7 +12,7 @@ public class SkuProperty {
     /**
      * SKU主键  ID
      */
-    private long skuId;
+    private int skuId;
 
     /**
      * 属性  id
@@ -31,7 +28,7 @@ public class SkuProperty {
         return skuId;
     }
 
-    public void setSkuId(long skuId) {
+    public void setSkuId(int skuId) {
         this.skuId = skuId;
     }
 
