@@ -10,25 +10,21 @@ import java.util.Map;
  */
 public class JsonResult {
 
-    private boolean result;
+    private Boolean result;
 
     private Object data;
 
     private String message;
 
-    public JsonResult(boolean result) {
+    public JsonResult(Boolean result) {
         this(result, null, null);
     }
 
-    public JsonResult(boolean result, String message) {
-        this(result, null, message);
+    public JsonResult(Boolean result, String message) {
+        this(result, message, null);
     }
 
-    public JsonResult(boolean result, Object data) {
-        this(result, data, null);
-    }
-
-    public JsonResult(boolean result, Object data, String message) {
+    public JsonResult(Boolean result, String message, Object data) {
         this.result = result;
         this.data = data;
         this.message = message;
@@ -41,6 +37,25 @@ public class JsonResult {
         map.put("message", message);
 
         return JsonUtils.object2Node(map);
+    }
+
+    public static JsonResult fromJson(String json) {
+        Map map = JsonUtils.json2Object(json, Map.class);
+        JsonResult jsonResult = new JsonResult((Boolean)map.get("result"), (String)map.get("message"), map.get("data"));
+        return jsonResult;
+    }
+
+
+    public Boolean getResult() {
+        return result;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
 }

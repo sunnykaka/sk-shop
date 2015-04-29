@@ -7,7 +7,6 @@
         <title>@Messages("index.title")</title>
     </head>
     <body>
-        @Messages("index.welcome") ,
-        @if(user != null) { @user.getUserName } else { 游客 }
+        my order, username: @user.getUserName
     </body>
 </html>

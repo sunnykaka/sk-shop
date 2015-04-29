@@ -1,0 +1,93 @@
+/* CSS Reset test */
+html,body,h1,h2,h3,h4,h5,h6,p,br,form,input,button,textarea,select,ul,ol,li,dl,dt,dd,pre{margin:0;padding:0;}
+html,body{font:normal normal 12px/1.5em 'Microsoft Yahei',SimSun,Tahoma,Arial;color:#4a4a4a;background:#fff;}
+body {min-width: 1200px;color: #4a4947;}
+html{_background-attachment:fixed;}
+a{text-decoration:none;color:#4a4a4a;}
+a:hover{text-decoration:underline;}
+textarea,select,input,button,label{vertical-align:middle}
+ol,ul,li{list-style-type:none;}
+table{border-collapse:collapse;border-spacing:0;}
+img{border:0;}
+button::-moz-focus-inner{border:none;padding:0;}
+h4{font-size:12px;}
+:focus{outline:none;}
+.clear{border:0;clear:both;display:block;float:none;font-size:0;margin:0;padding:0;overflow:hidden;visibility:hidden;width:0;height:0}
+.clearfix:after{content:".";clear:both;display:block;height:0;overflow:hidden;visibility:hidden;}
+.width1200{width:1200px;margin:0 auto;}
+.left{float:left}
+.right{float:right;}
+.both{clear:both;}
+.form-text{width:280px;padding-left: 8px;border:1px solid #ccc;height: 32px;line-height: 32px;}
+.form-text-error {border-color: #FF2D54;}
+.form-input-tip{  position: absolute;  background-color: #f5f5f5;  padding: 4px 0;  color: #999;}
+/*top*/
+.top{background: #f3f7f6;height:40px;width: 100%;}
+.top .left h1{font-size:12px;line-height: 40px;font-weight: normal;}
+.top .right{margin-top: 10px;}
+.top .right .btn{padding:8px 10px;margin-right:15px;}
+/*end top*/
+/*header*/
+.header{height:200px;width: 100%;border-bottom: 1px solid #c6c6c6;}
+.header .nav{margin-left:83px;}
+.header li{float:left;height:70px;margin-top:128px;margin-right:111px;}
+.header li a{float:left;width: 100%;height: 100%;font-size:16px;line-height: 70px;padding:0 20px;text-align: center;
+    text-decoration: none;
+}
+.header li .current,.header li a:hover{border-bottom:2px solid #FF2D54;}
+.header .last{margin-right: 0;}
+.header .logo{height: 200px;margin-top:0;margin-right:55px;width: 290px;background: url("../images/logo.png") no-repeat;}
+.header .logo a{padding: 0;width: 290px;text-indent: -9999px;}
+.header .logo a:hover{border-bottom: none;}
+/*end header*/
+/*login*/
+.login-inner{width:630px;margin:50px auto;height: 460px;background:#f5f5f5;border-radius: 10px;padding: 50px 0 30px 0;}
+.login-inner h2{height:30px;text-align: center;font-weight: normal;font-size: 25px;padding-bottom:20px;}
+.login-inner .other-login,.reg-box-inner .other-login{width:302px;margin: 0 auto;}
+.login-inner .other-login a,.reg-box-inner .other-login a{float:left;width:54px;height: 60px;background: url("../images/other-login.png") no-repeat;
+    text-indent: -9999px;
+    margin-right: 70px;
+}
+.login-inner .other-login .last,.reg-box-inner .other-login .last{margin-right: 0;}
+.login-inner .other-login .weibo,.reg-box-inner .other-login .weibo{background-position: 0 -71px;}
+.login-inner .other-login .qq,.reg-box-inner .other-login .qq{background-position: 0 -143px;}
+.login-inner .other-login a:hover,.reg-box-inner .other-login a:hover{background-position: -59px 0;}
+.login-inner .other-login .weibo:hover,.reg-box-inner .other-login .weibo:hover{background-position: -59px -71px;;}
+.login-inner .other-login .qq:hover,.reg-box-inner .other-login .qq:hover{background-position: -59px -143px;}
+.login-inner .other-login p,.reg-box-inner .other-login p{padding:20px 0 0 70px;font-size: 14px;}
+.login-inner .line{text-align:center;padding:25px 0;}
+.login-inner .line strong,.reg-box-inner .line strong{font-size: 18px;font-weight: normal;}
+.login-inner .login-form,.reg-box-inner .reg-first{width:290px;margin: 0 auto;}
+.login-inner .text{width:250px;padding-left: 38px;border:1px solid #ccc;height: 32px;line-height: 32px;}
+.login-inner .login-input,.login-inner .login-PW{position: relative;}
+.login-inner .ico{position: absolute;width: 17px;height: 17px;background: url(../images/login-icon.png) no-repeat;}
+.login-inner .ico1{left: 12px;top: 10px;}
+.login-inner .ico2{background-position:0 -40px;left: 12px;top: 10px;}
+.login-inner .login-input label,.login-inner .login-PW label{position:absolute;left: 40px;top:7px;color:#a1a1a1;}
+.login-inner .errormsg,.reg-box-inner .errormsg{height: 18px;padding: 4px 0 4px 34px;line-height: 20px;
+    color: #FF2D54;display: block;
+}
+.login-inner .login-btn,.reg-box-inner .reg-btn{width: 290px;height: 34px;background: #000;text-align: center;color:#fff;border: none;
+    font-weight: 700;cursor: pointer;
+}
+.login-inner .login-form .login-remenber{width:280px;margin-top: 18px;text-align: right;}
+.login-form .login-remenber label{float:left;}
+.login-inner .not-reg{margin-top:32px;margin-left:480px;font-size: 12px;}
+.login-inner .not-reg a,.reg-box-inner .not-user a{color:#FF2D54;}
+/*end login*/
+/*reg*/
+.reg-box-inner{width:630px;margin:50px auto;height: 460px;background:#f5f5f5;border-radius: 10px;padding: 50px 0 30px 0;}
+.reg-box-inner h2{height:30px;text-align: center;font-weight: normal;font-size: 25px;padding-bottom:20px;}
+.reg-box-inner .reg-form div{position: relative;width: 290px;margin: 0 auto;}
+.reg-box-inner .reg-form .phone-code-input{width: 150px;}
+.reg-box-inner .reg-form label{position: absolute;color: #a1a1a1;top: 8px;left: 8px;}
+.reg-box-inner .reg-form .get-code-btn{background:#F3F3F3;height:34px;width:110px;text-align: center;
+    border: 1px solid #ccc;margin-left: 15px;color: #FF2D54;cursor: pointer;
+}
+.reg-box-inner .errormsg {padding-left:8px;}
+.reg-box-inner .protocol{padding: 20px 0; text-align: center;}
+.reg-box-inner .protocol a{color: #FF2D54;}
+.reg-box-inner .line{text-align: center;}
+.reg-box-inner .other-login p{padding-bottom: 20px;}
+.reg-box-inner .not-user{margin-top:2px;margin-left:517px;font-size: 12px;}
+/*end reg*/

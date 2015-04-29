@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>用户登陆</title>
+    <link rel="stylesheet" href="css/base.css"/>
+</head>
+<body>
+<!--top-->
+<div class="top">
+    <div class="top-inner width1200">
+        <div class="left"><h1>全球首家独立设计师首发平台</h1></div>
+        <div class="right">
+            <div class="login"><a class="login btn" href="login.html">登陆</a> <a class="signIn btn"
+                                                                                href="reg.html">注册</a></div>
+        </div>
+    </div>
+</div>
+<!--end top-->
+<!--header-->
+<div class="header">
+    <div class="header-inner width1200">
+        <ul class="nav clearfix">
+            <li>
+                <a class="current" href="index.html">首页</a>
+            </li>
+            <li>
+                <a href="preview">预告</a>
+            </li>
+            <li class="logo">
+                <a title="尚客" href="index.html">fashiongeeker/尚客</a>
+            </li>
+            <li>
+                <a href="designer">设计师</a>
+            </li>
+            <li class="last">
+                <a href="about-us.html">关于我们</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--end header-->
+<!--login-->
+<div class="login width1200">
+    <div class="login-inner">
+        <h2>用户登陆</h2>
+
+        <div class="other-login clearfix">
+            <a class="weixin" href="weixin-login.html" title="微信登陆">微信登陆</a>
+            <a class="weibo" href="weibo-login.html" title="微博登陆">微博登陆</a>
+            <a class="qq last" href="qq-login.html" title="qq登陆">qq登陆</a>
+
+            <p class="both">使用以上社交网络账号登陆</p>
+        </div>
+        <p class="line">--------------------------<strong>或</strong>--------------------------</p>
+
+        <form class="login-form" id="login-form">
+            <div class="login-input">
+                <span class="ico ico1"></span>
+                <label for="username">手机号/昵称</label>
+                <input type="text" id="username" name="passport" autocomplete="off" class="text"/>
+                <span class="errormsg" id="errormsg-username"></span>
+            </div>
+            <div class="login-PW">
+                <span class="ico ico2"></span>
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" class="text"/>
+                <span class="errormsg" id="errormsg-password"></span>
+            </div>
+            <div><button type="submit"  id="login-btn" class="login-btn">登陆</button></div>
+            <div class="login-remenber">
+                <label for="remenberMe"><input type="checkbox" name="remenberMe" id="remenberMe" value="true" checked="true"/>记住我</label>
+                <a class="forgetPW" href="forgetPW">忘记密码？</a>
+            </div>
+        </form>
+        <p class="not-reg">还没有账号？<a href="reg.html">注册</a></p>
+    </div>
+</div>
+</div>
+<!--end login-->
+
+<script src="js/jquery-1.11.2.min.js"></script>
+<script src="js/FormValidate.js"></script>
+<script src="js/login-reg.js"></script>
+<script>
+    FG.user.login();
+</script>
+</body>
+</html>
