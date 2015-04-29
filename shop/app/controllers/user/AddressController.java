@@ -47,7 +47,7 @@ public class AddressController extends Controller {
     public Result queryProvince(){
 
         try {
-            return ok(new JsonResult(true, linkageService.getAllProvince()).toNode());
+            return ok(new JsonResult(true, null, linkageService.getAllProvince()).toNode());
         } catch (Exception e) {
             return ok(new JsonResult(false).toNode());
         }
@@ -61,7 +61,7 @@ public class AddressController extends Controller {
     public Result queryCity(String code){
 
         try {
-            return ok(new JsonResult(true, linkageService.getCityByProvinceCode(code)).toNode());
+            return ok(new JsonResult(true, null, linkageService.getCityByProvinceCode(code)).toNode());
         } catch (Exception e) {
             return ok(new JsonResult(false).toNode());
         }
@@ -73,7 +73,7 @@ public class AddressController extends Controller {
     public Result queryArea(String code){
 
         try {
-            return ok(new JsonResult(true, linkageService.getAreaByCityCode(code)).toNode());
+            return ok(new JsonResult(true, null, linkageService.getAreaByCityCode(code)).toNode());
         } catch (Exception e) {
             return ok(new JsonResult(false).toNode());
         }
