@@ -5,7 +5,7 @@ import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import productcenter.models.Html;
+import productcenter.models.ProductDesc;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 @Service
 @Transactional(readOnly = true)
-public class ProductDesService {
+public class ProductDescService {
 
     @Autowired
     GeneralDao generalDao;
@@ -28,19 +28,19 @@ public class ProductDesService {
      * 获取所有商品html描述信息
      * @return
      */
-    public List<Html> queryAllHtmlDes() {
+    public List<ProductDesc> queryAllHtmlDesc() {
         play.Logger.info("------ProductDesService queryAllHtml begin exe-----------");
 
-        String jpql = "select o from Html o where 1=1";
+        String jpql = "select o from ProductDesc o where 1=1";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " order by o.name";
-        return generalDao.query(jpql, Optional.<Page<Html>>empty(), queryParams);
+        return generalDao.query(jpql, Optional.<Page<ProductDesc>>empty(), queryParams);
     }
 
-    public List<Html> queryHtmlDesByProductId(int productId) {
+    public List<ProductDesc> queryHtmlDescByProductId(int productId) {
         play.Logger.info("------ProductDesService queryByProductId begin exe-----------" + productId);
 
-        String jpql = "select o from Html o where 1=1 and o.productId=:productId";
+        String jpql = "select o from ProductDesc o where 1=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
         jpql += " order by o.name";

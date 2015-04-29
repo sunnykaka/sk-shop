@@ -4,13 +4,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 商品的超文本描述
+ * 商品的描述，可以用超文本进行描述
  * User: lidujun
  * Date: 2015-04-27
  */
 @Table(name = "Html")
 @Entity
-public class Html implements Serializable {
+public class ProductDesc implements Serializable {
 
     /**
      * 产品id

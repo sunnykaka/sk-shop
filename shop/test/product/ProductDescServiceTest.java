@@ -4,8 +4,8 @@ package product;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
-import productcenter.models.Html;
-import productcenter.services.ProductDesService;
+import productcenter.models.ProductDesc;
+import productcenter.services.ProductDescService;
 import utils.Global;
 
 import java.util.List;
@@ -15,25 +15,25 @@ import java.util.List;
  * User: lidujun
  * Date: 2015-04-02
  */
-public class ProductDesServiceTest extends WithApplication {
+public class ProductDescServiceTest extends WithApplication {
 
-    private ProductDesService productDesService;
+    private ProductDescService productDesService;
 
     @Before
     public void setUp() {
         super.startPlay();
-        productDesService = Global.ctx.getBean(ProductDesService.class);
+        productDesService = Global.ctx.getBean(ProductDescService.class);
     }
 
     @Test
-    public void queryAllHtmlDes() {
-        List<Html> list = productDesService.queryAllHtmlDes();
+    public void queryAllHtmlDesc() {
+        List<ProductDesc> list = productDesService.queryAllHtmlDesc();
         System.out.println("-----------------------------: " + list.size() + "\n" + list);
     }
 
     @Test
-    public void queryHtmlDesByProductId() {
-        List<Html>  list = productDesService.queryHtmlDesByProductId(2159);
+    public void queryHtmlDescByProductId() {
+        List<ProductDesc>  list = productDesService.queryHtmlDescByProductId(2159);
         System.out.println("-----------------------------: " + list.size() + "\n" + list);
     }
 }

@@ -11,6 +11,20 @@ import org.joda.time.format.DateTimeFormatter;
  * Time: 下午2:36
  */
 public class DateUtils {
+    /**
+     * 简单的日期格式：yyyyMMdd，用于支付 add by lidujun
+     */
+    public static String SIMPLE_DATE_FORMAT_STR = "yyyyMMdd";
+
+    /**
+     * 简单的时间格式：yyyyMMddHHmmss，用于支付 add by lidujun
+     */
+    public static String SIMPLE_DATE_TIME_FORMAT_STR = "yyyyMMddHHmmss";
+
+    /**
+     * 通用的时间格式：yyyy-MM-dd HH:mm:ss，用于支付 add by lidujun
+     */
+    public static String DATE_TIME_FORMAT_STR = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 获取当前系统时间(原始格式)
@@ -36,6 +50,16 @@ public class DateUtils {
         return print(dateTime, "yyyy-MM-dd HH:mm:ss");
     }
 
+    /**
+     * 通用的日期格式类 add by lidujun
+     * @param dateTime
+     * @param pattern 时间格式
+     * @return
+     */
+    public static String printDateTime(DateTime dateTime, String pattern) {
+        return print(dateTime, pattern);
+    }
+
     public static String printDate(DateTime dateTime) {
         return print(dateTime, "yyyy-MM-dd");
     }
@@ -55,6 +79,5 @@ public class DateUtils {
         DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
         return formatter.print(dateTime);
     }
-
 
 }

@@ -28,7 +28,7 @@ public class ProductService {
     GeneralDao generalDao;
 
     /**
-     * 获取所有没有被删除的产品
+     * 获取所有产品，不包括已经删除的产品
      * @return
      */
     public List<Product> queryAllProducts() {

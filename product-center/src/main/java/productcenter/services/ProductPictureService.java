@@ -78,7 +78,6 @@ public class ProductPictureService {
         String jpql = "select o from ProductPicture o where 1=1 and o.mainPic=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
-        jpql += " order by o.name";
 
         List<ProductPicture> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         ProductPicture productPicture = null;
@@ -94,7 +93,6 @@ public class ProductPictureService {
         String jpql = "select o from ProductPicture o where 1=1 and o.minorPic=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
-        jpql += " order by o.name";
 
         List<ProductPicture> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         ProductPicture productPicture = null;
