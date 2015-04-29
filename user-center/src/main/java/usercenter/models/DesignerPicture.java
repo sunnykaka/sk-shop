@@ -13,6 +13,9 @@ import javax.persistence.*;
 @Table(name = "designer_picture")
 public class DesignerPicture implements EntityClass<Integer> {
 
+    /** 默认图片地址 */
+    public static final String DESIGNER_DEFAULT_PIC = "";
+
     private Integer id;
 
     private int designerId;
@@ -28,6 +31,12 @@ public class DesignerPicture implements EntityClass<Integer> {
     private boolean mainPic; //是否主图
 
     private boolean minorPic;//是否副图
+
+    public DesignerPicture(){}
+
+    public DesignerPicture(String pictureUrl){
+        this.pictureUrl = pictureUrl;
+    }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id

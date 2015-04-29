@@ -134,14 +134,31 @@ public class UserService {
         if(user == null) {
             throw new AppBusinessException("用户名或密码错误");
         }
-        if(!user.isActive() || user.isDelete() || user.isHasForbidden()) {
+        return doLogin(user);
+
+    }
+
+    @Transactional
+    public User loginByCookie(Integer userId) {
+
+        User user = generalDao.get(User.class, userId);
+        if(user == null) {
+            Logger.error(String.format("用cookie登录时,根据userId[%d]没有找到user", userId));
+            return null;
+        }
+        return doLogin(user);
+
+    }
+
+    private User doLogin(User user) {
+        if(!user.isActive() || user.isDeleted() || user.isHasForbidden()) {
             throw new AppBusinessException("抱歉,该用户已被禁止登录");
         }
         user.setLoginCount(user.getLoginCount() + 1);
         user.setLoginTime(DateUtils.current());
         return generalDao.merge(user);
-
     }
+
 
     @Transactional(readOnly = true)
     public User findByUsername(String username) {
@@ -170,7 +187,6 @@ public class UserService {
         return query.getSingleResult();
 
     }
-
 
     private User authenticate(String passport, String password) {
 

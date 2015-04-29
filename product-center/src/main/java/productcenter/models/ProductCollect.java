@@ -2,6 +2,7 @@ package productcenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.TableTimeData;
+import common.utils.Money;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -34,6 +35,14 @@ public class ProductCollect implements EntityClass<Integer>,TableTimeData {
     private Integer skuId;
 
     private Integer quantity;
+
+    private String productName;
+
+    private String productPic;
+
+    private String designerPic;
+
+    private int designerId;
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -126,4 +135,39 @@ public class ProductCollect implements EntityClass<Integer>,TableTimeData {
         this.updateDate = updateDate;
     }
 
+    @Transient
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    @Transient
+    public String getProductPic() {
+        return productPic;
+    }
+
+    public void setProductPic(String productPic) {
+        this.productPic = productPic;
+    }
+
+    @Transient
+    public String getDesignerPic() {
+        return designerPic;
+    }
+
+    public void setDesignerPic(String designerPic) {
+        this.designerPic = designerPic;
+    }
+
+    @Transient
+    public int getDesignerId() {
+        return designerId;
+    }
+
+    public void setDesignerId(int designerId) {
+        this.designerId = designerId;
+    }
 }

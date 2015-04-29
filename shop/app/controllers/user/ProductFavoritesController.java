@@ -7,8 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import productcenter.models.Product;
 import productcenter.models.ProductCollect;
+import productcenter.models.ProductPicture;
 import productcenter.services.ProductCollectService;
+import productcenter.services.ProductPictureService;
+import productcenter.services.ProductService;
+import usercenter.models.DesignerPicture;
+import usercenter.services.DesignerService;
 import views.html.user.productFavorites;
 
 import java.util.List;
@@ -31,6 +37,15 @@ public class ProductFavoritesController extends Controller {
     @Autowired
     private ProductCollectService productCollectService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ProductPictureService productPictureService;
+
+    @Autowired
+    private DesignerService designerService;
+
     /**
      * 收藏商品列表
      *
@@ -39,8 +54,21 @@ public class ProductFavoritesController extends Controller {
     public Result index(int pageNo, int pageSize) {
 
         Page<ProductCollect> page = new Page(pageNo,pageSize);
-        List<ProductCollect> pageProductCollcet = productCollectService.getProductCollectList(Optional.of(page),test_userId);
-        page.setResult(pageProductCollcet);
+        List<ProductCollect> pageProductCollcets = productCollectService.getProductCollectList(Optional.of(page),test_userId);
+
+        for(ProductCollect pc:pageProductCollcets){
+            Product product = productService.getProductById(pc.getProductId());
+            ProductPicture pp = productPictureService.getMainProductPictureByProductId(pc.getProductId());
+            DesignerPicture dp = designerService.getDesignerPicByDesignerById(product.getCustomerId());
+
+            pc.setProductName(product.getName());
+            pc.setProductPic(pp.getPictureUrl());
+            pc.setDesignerId(product.getCustomerId());
+            pc.setDesignerPic(dp.getPictureUrl());
+
+        }
+
+        page.setResult(pageProductCollcets);
 
         return ok(productFavorites.render(page));
 

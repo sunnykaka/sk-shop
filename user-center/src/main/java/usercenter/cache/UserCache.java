@@ -48,13 +48,13 @@ public class UserCache {
     }
 
 
-    public static void setUserRequestTime(Integer userId, long requestTime) {
-        Cache.set(RedisUtils.buildKey("session", String.valueOf(userId)), requestTime);
-    }
-
-    public static Long getLastUserRequestTime(Integer userId) {
-        return (Long)Cache.get(RedisUtils.buildKey("session", String.valueOf(userId)));
-    }
+//    public static void setUserRequestTime(Integer userId, long requestTime) {
+//        Cache.set(RedisUtils.buildKey("session", String.valueOf(userId)), requestTime);
+//    }
+//
+//    public static Long getLastUserRequestTime(Integer userId) {
+//        return (Long)Cache.get(RedisUtils.buildKey("session", String.valueOf(userId)));
+//    }
 
 
 

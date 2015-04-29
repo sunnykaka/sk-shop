@@ -1,0 +1,70 @@
+@(userData:usercenter.models.UserData)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.data")</title>
+    </head>
+    <body>
+
+        @userData.getUser.getUserName<br>
+        @userData.getName<br>
+        @userData.getUser.getPhone<br>
+        @if(userData.getSex == 0){
+            保密<br/>
+        }
+        @if(userData.getSex == 1){
+            男<br/>
+        }
+        @if(userData.getSex == 2){
+            女<br/>
+        }
+        @userData.getBirthday<br/>
+
+        @userData.getProvince  @userData.getCity  @userData.getArea  <br/>
+        @userData.getLocation<br/>
+
+
+        <div>
+
+            <form action="@controllers.user.routes.MyDataController.update()" method="post">
+                <input type="hidden" name="id" value="@userData.getId">
+                姓名：<input type="text" name="name" placeholder="姓名">
+                    <input type="checkbox" name="sex" value="1">男
+                    <input type="checkbox" name="sex" value="2">女
+                    <input type="checkbox" name="sex" value="0">保密
+                    <select name="birthdayY">
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                    </select>
+                    <select name="birthdayM">
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                    </select>
+                    <select name="birthdayD">
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                    </select>
+
+                    <select name="province">
+                        <option value="广东省">广东省</option>
+                        <option value="广西省">广西省</option>
+                    </select>
+                    <select name="city">
+                        <option value="深圳市">深圳市</option>
+                        <option value="测试市">测试市</option>
+                    </select>
+                    <select name="area">
+                        <option value="南山区">南山区</option>
+                        <option value="测试区">测试区</option>
+                    </select>
+                <input type="text" name="location" placeholder="具体地址">
+                <button type="submit">提交</button>
+
+            </form>
+
+        </div>
+
+    </body>
+</html>

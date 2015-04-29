@@ -33,6 +33,9 @@ POST        /my/address/add                   @controllers.user.AddressControlle
 POST        /my/address/update                @controllers.user.AddressController.update()
 POST        /my/address/del                   @controllers.user.AddressController.del()
 POST        /my/address/defaultAddress        @controllers.user.AddressController.defaultAddress()
+# my data
+GET         /my/data                          @controllers.user.MyDataController.index()
+POST        /my/data/update                   @controllers.user.MyDataController.update()
 
 
 # Map static resources from the /public folder to the /assets URL path
