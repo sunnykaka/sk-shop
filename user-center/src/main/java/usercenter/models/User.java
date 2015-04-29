@@ -68,7 +68,7 @@ public class User implements EntityClass<Integer> {
     private int loginCount;
 
     //是否已删除
-    private boolean isDelete;
+    private boolean deleted;
 
     //是否为禁用
     private boolean hasForbidden;
@@ -184,13 +184,13 @@ public class User implements EntityClass<Integer> {
         this.loginCount = loginCount;
     }
 
-    @Column(name = "isDelete")
-    public boolean isDelete() {
-        return isDelete;
+    @Column(name = "deleted")
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setDelete(boolean isDelete) {
-        this.isDelete = isDelete;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Column(name = "hasForbidden")

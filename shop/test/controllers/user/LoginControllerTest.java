@@ -1,7 +1,7 @@
 package controllers.user;
 
+import common.utils.DateUtils;
 import common.utils.JsonResult;
-import common.utils.JsonUtils;
 import usercenter.utils.SessionUtils;
 import common.utils.test.BaseTest;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -129,10 +129,12 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         assertThat(jsonResult.getMessage(), is(nullValue()));
 
         assertThat(flash(result).isEmpty(), is(true));
-        String userId = session(result).get(SessionUtils.SESSION_USER_ID);
+        String userId = session(result).get(SessionUtils.SESSION_CREDENTIALS);
         assertThat(userId, notNullValue());
 
-        request = new FakeRequest(GET, controllers.routes.Application.index().url()).withSession(SessionUtils.SESSION_USER_ID, userId);
+        request = new FakeRequest(GET, controllers.routes.Application.index().url()).
+                withSession(SessionUtils.SESSION_CREDENTIALS, userId).
+                withSession(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
         result = route(request);
         assertThat(status(result), is(OK));
         assertThat(contentAsString(result).contains(username), is(true));
@@ -151,15 +153,16 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         assertThat(jsonResult.getMessage(), is(nullValue()));
 
         assertThat(flash(result).isEmpty(), is(true));
-        userId = session(result).get(SessionUtils.SESSION_USER_ID);
+        userId = session(result).get(SessionUtils.SESSION_CREDENTIALS);
         assertThat(userId, notNullValue());
 
-        request = new FakeRequest(GET, controllers.routes.Application.index().url()).withSession(SessionUtils.SESSION_USER_ID, userId);
+        request = new FakeRequest(GET, controllers.routes.Application.index().url()).
+                withSession(SessionUtils.SESSION_CREDENTIALS, userId).
+                withSession(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
+
         result = route(request);
         assertThat(status(result), is(OK));
         assertThat(contentAsString(result).contains(username), is(true));
-
-
 
     }
 

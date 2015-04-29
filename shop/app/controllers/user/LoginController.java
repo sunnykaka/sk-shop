@@ -65,9 +65,7 @@ public class LoginController extends Controller {
         if(!loginForm.hasErrors()) {
             try {
                 User user = userService.login(loginForm.get());
-
                 SessionUtils.setCurrentUser(user, "true".equalsIgnoreCase(loginForm.get().getRememberMe()));
-
                 return ok(new JsonResult(true, null, controllers.routes.Application.myOrder().url()).toNode());
 //                return redirect(controllers.routes.Application.myOrder());
 
