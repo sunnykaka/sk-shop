@@ -1,6 +1,7 @@
 package usercenter.models;
 
 import common.models.utils.EntityClass;
+import common.models.utils.TableTimeData;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -17,7 +18,7 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "userdata")
-public class UserData implements EntityClass<Integer>{
+public class UserData implements EntityClass<Integer>,TableTimeData {
 
     private static final long serialVersionUID = 7993724590252729908L;
 
@@ -31,37 +32,41 @@ public class UserData implements EntityClass<Integer>{
 
     private int sex;
 
-    private String phoneNumber;
-
-    private int familyNumber;
-
-    private int hasMarried;
-
     private String birthday;
 
-    private boolean isDelete;
+    /**
+     * 省份，比如浙江
+     */
+    private String province;
+
+    private String city;
+
+    private String area;
+
+    /**
+     * 具体位置，到门牌号
+     */
+    private String location;
 
     private DateTime createDate;
 
     private DateTime updateDate;
 
+    /** 生日拆分  年 */
+    private String birthdayY;
+
+    /** 生日拆分  月 */
+    private String birthdayM;
+
+    /** 生日拆分  日 */
+    private String birthdayD;
+
     private static Map<Integer, String> userSex = new HashMap<>();
-    private static Map<Integer, String> userHasMarried = new HashMap<>();
-    private static Map<Integer, String> userFamilyNumber = new HashMap<>();
 
     static {
         userSex.put(0, "保密");
         userSex.put(1, "男");
         userSex.put(2, "女");
-
-        userHasMarried.put(0, "保密");
-        userHasMarried.put(1, "未婚");
-        userHasMarried.put(2, "已婚");
-
-        userFamilyNumber.put(0, "保密");
-        userFamilyNumber.put(1, "1-2人");
-        userFamilyNumber.put(2, "2-4人");
-        userFamilyNumber.put(3, "4人以上");
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -86,7 +91,7 @@ public class UserData implements EntityClass<Integer>{
     }
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @JoinColumn(name = "userId",referencedColumnName = "id",insertable = false, updatable = false)
     public User getUser() {
         return user;
     }
@@ -113,33 +118,6 @@ public class UserData implements EntityClass<Integer>{
         this.sex = sex;
     }
 
-    @Column(name = "phoneNumber")
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    @Column(name = "familyNumber")
-    public int getFamilyNumber() {
-        return familyNumber;
-    }
-
-    public void setFamilyNumber(int familyNumber) {
-        this.familyNumber = familyNumber;
-    }
-
-    @Column(name = "hasMarried")
-    public int getHasMarried() {
-        return hasMarried;
-    }
-
-    public void setHasMarried(int hasMarried) {
-        this.hasMarried = hasMarried;
-    }
-
     @Column(name = "birthday")
     public String getBirthday() {
         return birthday;
@@ -149,13 +127,40 @@ public class UserData implements EntityClass<Integer>{
         this.birthday = birthday;
     }
 
-    @Column(name = "isDelete")
-    public boolean isDelete() {
-        return isDelete;
+    @Column(name = "province")
+    public String getProvince() {
+        return province;
     }
 
-    public void setDelete(boolean isDelete) {
-        this.isDelete = isDelete;
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    @Column(name = "city")
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Column(name = "area")
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    @Column(name = "location")
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Column(name = "createDate")
@@ -176,5 +181,51 @@ public class UserData implements EntityClass<Integer>{
 
     public void setUpdateDate(DateTime updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Transient
+    public String getBirthdayY() {
+        return birthdayY;
+    }
+
+    public void setBirthdayY(String birthdayY) {
+        this.birthdayY = birthdayY;
+    }
+
+    @Transient
+    public String getBirthdayM() {
+        return birthdayM;
+    }
+
+    public void setBirthdayM(String birthdayM) {
+        this.birthdayM = birthdayM;
+    }
+
+    @Transient
+    public String getBirthdayD() {
+        return birthdayD;
+    }
+
+    public void setBirthdayD(String birthdayD) {
+        this.birthdayD = birthdayD;
+    }
+
+    public void mergerBirthday(){
+
+        this.birthday = this.birthdayY + "-" + this.birthdayM + "-" + this.birthdayD;
+
+    }
+
+    public void splitBirthday(){
+        String[] birthday = this.birthday.split("-");
+        if (birthday.length > 0) {
+            this.birthdayY = birthday[0];
+        }
+        if (birthday.length > 1) {
+            this.birthdayM = birthday[1];
+        }
+        if (birthday.length > 2) {
+            this.birthdayD = birthday[2];
+        }
     }
 }

@@ -18,6 +18,9 @@ import javax.persistence.*;
 @Entity
 public class ProductPicture implements EntityClass<Integer> {
 
+    /** 默认图片 */
+    public static final String PRODUCT_DEFAULT_PIC = "";
+
     /**
      * 图片主键id
      */
@@ -67,6 +70,12 @@ public class ProductPicture implements EntityClass<Integer> {
      * 数量
      */
     private int number;
+
+    public ProductPicture(){}
+
+    public ProductPicture(String pictureUrl){
+        this.pictureUrl = pictureUrl;
+    }
 
     @Override
     public String toString() {
