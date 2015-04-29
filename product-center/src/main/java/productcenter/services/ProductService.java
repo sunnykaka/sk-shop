@@ -2,125 +2,147 @@ package productcenter.services;
 
 import common.services.GeneralDao;
 import common.utils.page.Page;
-import productcenter.models.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import productcenter.constants.ProductTagType;
+import productcenter.constants.StoreStrategy;
+import productcenter.models.Product;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 /**
- * 产品（商品）Service
+ * 产品Service
  * User: lidujun
- * Date: 2015-04-01
+ * Date: 2015-04-23
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ProductService {
+
     @Autowired
-    private GeneralDao generalDao;
+    GeneralDao generalDao;
 
     /**
-     * 保存产品（商品）
+     * 获取所有没有被删除的产品
+     * @return
      */
-    public void save(Product product){
-        play.Logger.info("--------ProductService save begin exe-----------" + product);
-        generalDao.persist(product);
+    public List<Product> queryAllProducts() {
+        play.Logger.info("--------ProductService queryAllProducts begin exe-----------");
+
+        String jpql = "select o from Product o where 1=1 and o.isDelete=:isDelete";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
+        jpql += " order by o.name";
+        return generalDao.query(jpql, Optional.<Page<Product>>empty(), queryParams);
     }
 
     /**
-     * 假删除产品（商品）
+     * 通过产品主键id获取产品
+     * @param id
+     * @return
      */
-    public void falseDelete(Integer productId){
-        play.Logger.info("--------ProductService falseDelete begin exe-----------" + productId);
-        Product product = generalDao.get(Product.class, productId);
-        product.setIsDelete(false);
-        this.update(product);
+    public Product getProductById(int id) {
+        play.Logger.info("--------ProductService getProductById begin exe-----------" + id);
+        return generalDao.get(Product.class, id);
+    }
+
+
+    /**
+     * 通过产品code获取产品
+     * @param productCode
+     * @return
+     */
+    public Product getProductByProductCode(String productCode) {
+        play.Logger.info("--------ProductService getProductByCode begin exe-----------" + productCode);
+
+        String jpql = "select o from Product o where 1=1 and productCode=:productCode";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productCode", productCode);
+
+        List<Product> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        Product product = null;
+        if(list != null && list.size() > 0) {
+            product = list.get(0);
+        }
+        return product;
     }
 
     /**
-     * 更新产品（商品）
+     * 按照条件获取产品（商品）分页列表，默认是未上架(返回的列表数据在page中也保存了一份，在实际使用中可以只使用page对象即可)，不包括已经删除的产品
+     * 可以按照name和enName进行模糊查询
+     * 可以传入categoryId、客户（设计师）customerId、品牌brandId、库存策略StoreStrategy、该商品是否上架online、产品标签ProductTagType
      */
-    public void update(Product product){
-        play.Logger.info("--------ProductService update begin exe-----------" + product);
-        generalDao.merge(product);
-    }
-
-    /**
-     * 通过主键获取产品（商品）
-     */
-    @Transactional(readOnly = true)
-    public Optional<Product> getProductById(Integer productId){
-        play.Logger.info("--------ProductContentService getProductById begin exe-----------" + productId);
-        return Optional.ofNullable(generalDao.get(Product.class, productId));
-    }
-
-    /**
-     * 获取产品（商品）列表
-     */
-    @Transactional(readOnly = true)
-    public List<Product> getProductList(Optional<Page<Product>> page, Product param){
+    public List<Product> queryProductPageListWithPage(Optional<Page<Product>> page, Product param){
         play.Logger.info("--------ProductService getOrderList begin exe-----------" + page + "\n" + param);
 
-        String jpql = "select o from Product o where 1=1 ";
+        String jpql = "select o from Product o where 1=1 and o.isDelete=:isDelete";
         Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
 
-         if(param != null) {
-             String name = param.getName();
-             if(!StringUtils.isEmpty(name)) {
-                 jpql += " and o.name like :name ";
-                 queryParams.put("name", "%" + name + "%");
-             }
+        if(param != null) {
+            //名称
+            String name = param.getName();
+            if(StringUtils.isNotEmpty(name)) {
+                jpql += " and o.name like :name ";
+                queryParams.put("name", "%" + name + "%");
+            }
 
-             Integer desigerId = param.getDesigerId();
-             if(desigerId != null && desigerId != 0) {
-                 jpql += " and o.desigerId = :desigerId ";
-                 queryParams.put("desigerId", desigerId);
-             }
+            //英文名称
+            String enName = param.getEnName();
+            if(StringUtils.isNotEmpty(enName)) {
+                jpql += " and o.enName like :enName ";
+                queryParams.put("enName", "%" + enName + "%");
+            }
 
-             String supplierSpuCode = param.getSupplierSpuCode();
-             if(!StringUtils.isEmpty(supplierSpuCode)) {
-                 jpql += " and o.supplierSpuCode = :supplierSpuCode ";
-                 queryParams.put("supplierSpuCode", supplierSpuCode);
-             }
+            //后台目录
+            Integer categoryId = param.getCategoryId();
+            if(categoryId != null && categoryId != 0) {
+                jpql += " and o.categoryId = :categoryId ";
+                queryParams.put("categoryId", categoryId);
+            }
 
-             String spuCode = param.getSpuCode();
-             if(!StringUtils.isEmpty(spuCode)) {
-                 jpql += " and o.spuCode = :spuCode ";
-                 queryParams.put("spuCode", spuCode);
-             }
+            //客户（设计师）id
+            Integer customerId = param.getCustomerId();
+            if(customerId != null && customerId != 0) {
+                jpql += " and o.customerId = :customerId ";
+                queryParams.put("customerId", customerId);
+            }
 
-             Integer categoryId = param.getCategoryId();
-             if(categoryId != null && categoryId != 0) {
-                 jpql += " and o.categoryId = :categoryId ";
-                 queryParams.put("categoryId", categoryId);
-             }
+            //品牌
+            Integer brandId = param.getBrandId();
+            if(brandId != null && brandId != 0) {
+                jpql += " and o.brandId = :brandId ";
+                queryParams.put("brandId", brandId);
+            }
 
-             String address = param.getAddress();
-             if(!StringUtils.isEmpty(address)) {
-                 jpql += " and o.address like :address ";
-                 queryParams.put("address", "%" +address + "%");
-             }
+            //库存策略
+            StoreStrategy storeStrategy = param.getStoreStrategy();
+            if(storeStrategy != null) {
+                jpql += " and o.storeStrategy = :storeStrategy ";
+                queryParams.put("storeStrategy", storeStrategy);
+            }
 
-             Boolean online = param.getOnline();
-             if(online != null) {
-                 jpql += " and o.online = :online ";
-                 queryParams.put("online", online);
-             }
+            //该商品是否上架
+            Boolean online = param.isOnline();
+            if(online != null) {
+                jpql += " and o.online = :online ";
+                queryParams.put("online", online);
+            }
 
-             Boolean isDelete = param.getIsDelete();
-             if(isDelete != null) {
-                 jpql += " and o.isDelete = :isDelete ";
-                 queryParams.put("isDelete", isDelete);
-             }
-         }
+            //产品标签
+            ProductTagType tagType = param.getTagType();
+            if(tagType != null) {
+                jpql += " and o.tagType = :tagType ";
+                queryParams.put("tagType", tagType);
+            }
+
+        }
         jpql += " order by o.name";
         return generalDao.query(jpql, page, queryParams);
     }
-
 }

@@ -1,0 +1,54 @@
+@(page:common.utils.page.Page[productcenter.models.ProductCollect])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.favorites.product")</title>
+    </head>
+    <body>
+
+        <div>
+            <form action="@controllers.user.routes.ProductFavoritesController.add()" method="post">
+                <table>
+                    <tr><td>商品ID</td><td><input type="text" name="productId" value=""></td></tr>
+                    <tr><td>商品SKU</td><td><input type="text" name="productName" value=""></td></tr>
+                    <tr><td>商品数量</td><td><input type="text" name="unitPrice" value=""></td></tr>
+                    <tr><button type="submit">收藏</button></tr>
+                </table>
+            </form>
+        </div>
+
+        <hr>
+
+        当前第几页 @page.getPageNo() <br/>
+        总共有几页 @page.getTotalPage <br/>
+        共有多少条数据 @page.getTotalCount <br/>
+
+        @if(page.getPageNo > 1){
+            <a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo()-1,page.getPageSize)">上一页</a>
+        }
+
+        @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
+            <a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo()+1,page.getPageSize)">下一页</a>
+        }
+
+        <hr>
+            <table>
+                <tr>
+                    <td>商品ID</td>
+                    <td></td>
+                </tr>
+                @for(pc <- page.getResult){
+                    <tr>
+                        <td>@pc.getProductId</td>
+                        <td>
+                            <form action="@controllers.user.routes.ProductFavoritesController.del(pc.getProductId)" method="post">
+                                <button type="submit">删除</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+    </body>
+</html>

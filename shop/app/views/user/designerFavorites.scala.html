@@ -1,0 +1,54 @@
+@(page:common.utils.page.Page[usercenter.models.DesignerCollect])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.favorites.designer")</title>
+    </head>
+    <body>
+
+        <div>
+            <form action="@controllers.user.routes.DesignerFavoritesController.add()" method="post">
+                <table>
+                    <tr><td>设计师ID</td><td><input type="text" name="designerId" value=""></td></tr>
+                    <tr><button type="submit">收藏</button></tr>
+                </table>
+            </form>
+        </div>
+
+        <hr>
+
+        当前第几页 @page.getPageNo() <br/>
+        总共有几页 @page.getTotalPage <br/>
+        共有多少条数据 @page.getTotalCount <br/>
+
+        @if(page.getPageNo > 1){
+            <a href="@controllers.user.routes.DesignerFavoritesController.index(page.getPageNo()-1,page.getPageSize)">上一页</a>
+        }
+
+        @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
+            <a href="@controllers.user.routes.DesignerFavoritesController.index(page.getPageNo()+1,page.getPageSize)">下一页</a>
+        }
+
+        <hr>
+            <table>
+                <tr>
+                    <td>设计师ID</td>
+                    <td>设计师名</td>
+                    <td></td>
+                </tr>
+                @for(dc <- page.getResult){
+                    <tr>
+                        <td>@dc.getDesignerId</td>
+                        <td>@dc.getDesigner.getName</td>
+                        <td>
+                            <form action="@controllers.user.routes.DesignerFavoritesController.del(dc.getDesignerId)" method="post">
+                                <button type="submit">删除</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+    </body>
+</html>

@@ -2,3 +2,7 @@ error.minLength=字段长度不够
 
 index.title=欢迎
 index.welcome=你好
+
+title.my.address=我的送货地址管理
+title.my.favorites.product=我收藏的宝贝
+title.my.favorites.designer=我关注的设计师

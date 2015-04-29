@@ -2,11 +2,11 @@ package productcenter.services;
 
 import common.services.GeneralDao;
 import common.utils.page.Page;
-import productcenter.constants.PropertyType;
-import productcenter.models.ProductProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import productcenter.constants.PropertyType;
+import productcenter.models.ProductProperty;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,75 +14,69 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * 产品（商品）关联属性 Service
+ * 产品Service
  * User: lidujun
- * Date: 2015-04-01
+ * Date: 2015-04-23
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ProductPropertyService {
+
     @Autowired
-    private GeneralDao generalDao;
+    GeneralDao generalDao;
 
     /**
-     * 保存产品（商品）关联属性
+     * 获取所有产品所有属性
+     * @return
      */
-    public void save(ProductProperty property){
-        play.Logger.info("--------ProductPropertyService save begin exe-----------" + property);
-        generalDao.persist(property);
+    public List<ProductProperty> queryAllProductProperty() {
+        return generalDao.findAll(ProductProperty.class);
     }
 
     /**
-     * 删除产品（商品）关联属性
+     * 通过主键获取属性
+     * @param id
+     * @return
      */
-    public void realDelete(Integer propertyId){
-        play.Logger.info("--------ProductPropertyService realDelete begin exe-----------" + propertyId);
-        generalDao.removeById(ProductProperty.class, propertyId);
+    public ProductProperty getProductPropertyById(int id) {
+        play.Logger.info("------ProductPropertyService ProductProperty begin exe-----------" + id);
+        return generalDao.get(ProductProperty.class, id);
     }
 
     /**
-     * 更新产品（商品）关联属性
+     * 通过产品id获取产品对应的所有属性
+     * @param productId
+     * @return
      */
-    public void update(ProductProperty property){
-        play.Logger.info("--------ProductPropertyService update begin exe-----------" + property);
-        generalDao.merge(property);
-    }
+    public List<ProductProperty> queryByProductId(int productId) {
+        play.Logger.info("------ProductPropertyService queryByProductId begin exe-----------" + productId);
 
-    /**
-     * 通过主键获取产品（商品）关联属性
-     */
-    @Transactional(readOnly = true)
-    public Optional<ProductProperty> getProductPropertyById(Integer propertyId){
-        play.Logger.info("--------ProductPropertyService getProductPropertyById begin exe-----------" + propertyId);
-        return Optional.ofNullable(generalDao.get(ProductProperty.class, propertyId));
-    }
-
-    /**
-     * 获取产品（商品）关联属性列表
-     */
-    @Transactional(readOnly = true)
-    public List<ProductProperty> getProductPropertyList(Optional<Page<ProductProperty>> page, ProductProperty param){
-        play.Logger.info("--------ProductPropertyService getProductPropertyList begin exe-----------" + page + "\n" + param);
-
-        String jpql = "select o from ProductProperty o where 1=1 ";
+        String jpql = "select o from ProductProperty o where 1=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+        return generalDao.query(jpql, Optional.<Page<ProductProperty>>empty(), queryParams);
+    }
 
-         if(param != null) {
-             Integer productId = param.getProductId();
-             if(productId != null && productId != 0) {
-                 jpql += " and o.productId = :productId ";
-                 queryParams.put("productId", productId);
-             }
+    /**
+     * 通过产品id和属性类型获取对应产品的所有对应属性
+     * @param productId
+     * @param propertyType
+     * @return
+     */
+    public ProductProperty queryProductPropertyByPropertyType(int productId, PropertyType propertyType) {
+        play.Logger.info("------ProductPropertyService ProductProperty begin exe-----------" + productId);
 
-             PropertyType type = param.getType();
-             if(type != null) {
-                 jpql += " and o.type = :type ";
-                 queryParams.put("type", type);
-             }
-         }
+        String jpql = "select o from ProductProperty o where 1=1 and o.productId=:productId and o.propertyType=:propertyType";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+        queryParams.put("propertyType", propertyType);
 
-        jpql += " order by o.id ";
-        return generalDao.query(jpql, page, queryParams);
+        List<ProductProperty> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        ProductProperty productProperty = null;
+        if(list != null && list.size() > 0) {
+            productProperty = list.get(0);
+        }
+        return productProperty;
     }
 
 }

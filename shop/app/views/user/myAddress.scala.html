@@ -1,0 +1,62 @@
+@(addressList:List[usercenter.models.address.Address])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.address")</title>
+    </head>
+    <body>
+
+        <div>
+
+            <form action="@controllers.user.routes.AddressController.add()" method="post">
+                姓名：<input type="text" name="name" placeholder="姓名">
+                    <select name="province">
+                        <option value="广东省">广东省</option>
+                        <option value="广西省">广西省</option>
+                    </select>
+                    <select name="city">
+                        <option value="深圳市">深圳市</option>
+                        <option value="测试市">测试市</option>
+                    </select>
+                    <select name="area">
+                        <option value="南山区">南山区</option>
+                        <option value="测试区">测试区</option>
+                    </select>
+                <input type="text" name="location" placeholder="具体地址">
+                手机：<input type="text" name="mobile" placeholder="手机">
+                邮编：<input type="text" name="zipCode" placeholder="邮编">
+                <button type="submit">提交</button>
+
+            </form>
+
+        </div>
+
+        <hr>
+
+        <div>
+        @for(address <- addressList){
+            <div>
+                @address.getName 收     @if(address.isDefaultAddress){默认地址} <br/>
+                @address.getProvince    @address.getCity    @address.getArea<br/>
+
+                @address.getLocation<br/>
+                @address.getMobile<br/>
+                <form action="@controllers.user.routes.AddressController.del()" method="post">
+                    <input type="hidden" name="id" value="@address.getId">
+                    <button type="submit">删除</button>
+                </form>
+                <form action="@controllers.user.routes.AddressController.defaultAddress()" method="post">
+                    <input type="hidden" name="id" value="@address.getId">
+                    <button type="submit">设置默认地址</button>
+                </form>
+            </div>
+
+            <hr>
+        }
+        </div>
+
+
+    </body>
+</html>

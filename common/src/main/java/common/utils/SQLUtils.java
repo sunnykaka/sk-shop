@@ -11,6 +11,13 @@ import java.util.regex.Pattern;
  */
 public class SQLUtils {
 
+    /** 数据库软删 */
+    public static boolean SQL_DELETE_TRUE = true;
+
+    /** 数据库没软删 */
+    public static boolean SQL_DELETE_FALSE = false;
+
+
     /**
      * hql语句如果用了fetch,删除查询总条数的fetch语句,否则会报错
      * @param countQL

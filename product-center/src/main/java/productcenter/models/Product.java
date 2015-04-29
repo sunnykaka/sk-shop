@@ -2,76 +2,97 @@ package productcenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
-import common.utils.Money;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import productcenter.constants.ProductTagType;
+import productcenter.constants.StoreStrategy;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 产品（商品）
- * Created by lidujun on 2015-04-01.
+ * 商品对象，商品是一个抽象的对象，真正对应物理商品的是SKU
+ * User: lidujun
+ * Date: 2015-04-24
  */
-@Table(name = "product")
+@Table(name = "Product")
 @Entity
 public class Product implements EntityClass<Integer>, OperableData {
-
     /**
-     * 库自增ID
+     * 主键
      */
     private Integer id;
 
     /**
-     * 产品（商品）名称
-     */
-    private String name;
-
-    /**
-     * 设计师id
-     */
-    private Integer desigerId;
-
-    /**
-     * 提供的产品编码
-     */
-    private String supplierSpuCode;
-
-    /**
      * 产品编码
      */
-    private String spuCode;
+    private String productCode;
 
     /**
-     * 后台类目id
+     * 所在的后台类目
      */
     private Integer categoryId;
 
     /**
-     * 地址
+     * 客户（设计师）id
      */
-    private String address;
+    private Integer customerId;
 
     /**
-     * 描述
+     * 版本id
+     */
+    private Integer brandId;
+
+    /**
+     * 产品名称
+     */
+    private String name;
+
+    /**
+     * 英文名称
+     */
+    private String enName;
+
+    /**
+     * 新品或热销,默认(既不是新品也不是热销)
+     */
+    private ProductTagType tagType;
+
+    /**
+     * 库存策略(0表示普通模式, 1表示付款成功后扣减模式), 默认为 0
+     * NormalStrategy.普通策略, 创建即扣减库存, 取消则回加库存; PayStrategy.付款策略, 付款成功后才会扣减
+     */
+    private StoreStrategy storeStrategy;
+
+    /**
+     * 推荐理由
      */
     private String description;
 
     /**
-     * 上线标志
+     * 该商品是否上架：是否上架(0表示未上架, 1表示上架)
      */
     private Boolean online;
 
     /**
-     * 删除标志
+     * 上架时间
      */
-    private Boolean isDelete;
+    private DateTime onlineTime;
 
     /**
-     * 只用用于通过sku查询的查询条件
+     * 上架时间的long型表示，搜索引擎读取
      */
-    private String searchSku;
+    private Long onLineTimeLong;
+
+    /**
+     * 下架时间
+     */
+    private DateTime offlineTime;
+
+    /**
+     * 是否删除(0表示未删除, 1表示已删除)
+     */
+    private Boolean isDelete;
 
     /**
      * 创建时间
@@ -79,41 +100,67 @@ public class Product implements EntityClass<Integer>, OperableData {
     private DateTime createTime;
 
     /**
-     * 更新时间
+     * 更新时间可用于搜索引擎重dump数据
      */
     private DateTime updateTime;
 
     /**
      * 最后操作人
-     */
+
     private Integer operatorId;
+     */
+
+    /**
+     * 一个商品对应一个或者多个SKU对象,一个SKU对应一个物理单品
+     */
+    private List<StockKeepingUnit> stockKeepingUnits;
+
+    @Transient
+    public List<StockKeepingUnit> getStockKeepingUnits() {
+        return stockKeepingUnits;
+    }
+
+    public void setStockKeepingUnits(List<StockKeepingUnit> stockKeepingUnits) {
+        this.stockKeepingUnits = stockKeepingUnits;
+    }
+
+    /**
+     * 筛选某个SKU
+     *
+     * @param skuId
+     * @return
+     */
+    public StockKeepingUnit getStockKeepingUnit(int skuId) {
+        for (StockKeepingUnit stockKeepingUnit : stockKeepingUnits) {
+            if (stockKeepingUnit.getId() == skuId) {
+                return stockKeepingUnit;
+            }
+        }
+        return null;
+    }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", desigerId=" + desigerId +
-                ", supplierSpuCode='" + supplierSpuCode + '\'' +
-                ", spuCode='" + spuCode + '\'' +
+                ", productCode='" + productCode + '\'' +
                 ", categoryId=" + categoryId +
-                ", address='" + address + '\'' +
+                ", customerId=" + customerId +
+                ", brandId=" + brandId +
+                ", name='" + name + '\'' +
+                ", enName='" + enName + '\'' +
+                ", tagType=" + tagType +
+                ", storeStrategy=" + storeStrategy +
                 ", description='" + description + '\'' +
                 ", online=" + online +
+                ", onlineTime=" + onlineTime +
+                ", onLineTimeLong=" + onLineTimeLong +
+                ", offlineTime=" + offlineTime +
                 ", isDelete=" + isDelete +
-                ", searchSku='" + searchSku + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", operatorId=" + operatorId +
+                ", stockKeepingUnits=" + stockKeepingUnits +
                 '}';
-    }
-
-    public String getSearchSku() {
-        return searchSku;
-    }
-
-    public void setSearchSku(String searchSku) {
-        this.searchSku = searchSku;
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -123,9 +170,48 @@ public class Product implements EntityClass<Integer>, OperableData {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Column(name = "productCode")
+    @Basic
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    @Column(name = "categoryId")
+    @Basic
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    @Column(name = "customerId")
+    @Basic
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    @Column(name = "brandId")
+    @Basic
+    public Integer getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Integer brandId) {
+        this.brandId = brandId;
     }
 
     @Column(name = "name")
@@ -138,54 +224,14 @@ public class Product implements EntityClass<Integer>, OperableData {
         this.name = name;
     }
 
-    @Column(name = "desiger_id")
+    @Column(name = "enName")
     @Basic
-    public Integer getDesigerId() {
-        return desigerId;
+    public String getEnName() {
+        return enName;
     }
 
-    public void setDesigerId(Integer desigerId) {
-        this.desigerId = desigerId;
-    }
-
-    @Column(name = "supplier_spu_code")
-    @Basic
-    public String getSupplierSpuCode() {
-        return supplierSpuCode;
-    }
-
-    public void setSupplierSpuCode(String supplierSpuCode) {
-        this.supplierSpuCode = supplierSpuCode;
-    }
-
-    @Column(name = "spu_code")
-    @Basic
-    public String getSpuCode() {
-        return spuCode;
-    }
-
-    public void setSpuCode(String spuCode) {
-        this.spuCode = spuCode;
-    }
-
-    @Column(name = "category_id")
-    @Basic
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @Column(name = "address")
-    @Basic
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEnName(String enName) {
+        this.enName = enName;
     }
 
     @Column(name = "description")
@@ -198,9 +244,19 @@ public class Product implements EntityClass<Integer>, OperableData {
         this.description = description;
     }
 
+    @Column(name = "storeStrategy")
+    @Enumerated(EnumType.STRING)
+    public StoreStrategy getStoreStrategy() {
+        return storeStrategy;
+    }
+
+    public void setStoreStrategy(StoreStrategy storeStrategy) {
+        this.storeStrategy = storeStrategy;
+    }
+
     @Column(name = "online")
     @Basic
-    public Boolean getOnline() {
+    public Boolean isOnline() {
         return online;
     }
 
@@ -208,7 +264,50 @@ public class Product implements EntityClass<Integer>, OperableData {
         this.online = online;
     }
 
-    @Column(name = "is_delete")
+    @Column(name = "tagType")
+    @Enumerated(EnumType.STRING)
+    public ProductTagType getTagType() {
+        return tagType;
+    }
+
+    public void setTagType(ProductTagType tagType) {
+        this.tagType = tagType;
+    }
+
+    @Column(name = "onlineTime")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    public DateTime getOnlineTime() {
+        return onlineTime;
+    }
+
+    public void setOnlineTime(DateTime onlineTime) {
+        this.onlineTime = onlineTime;
+        if (this.onlineTime != null) {
+            this.onLineTimeLong = this.onlineTime.getMillis();
+        }
+    }
+
+    @Column(name = "onLineTimeLong")
+    @Basic
+    public Long getOnLineTimeLong() {
+        return onLineTimeLong;
+    }
+
+    public void setOnLineTimeLong(Long onLineTimeLong) {
+        this.onLineTimeLong = onLineTimeLong;
+    }
+
+    @Column(name = "offlineTime")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    public DateTime getOfflineTime() {
+        return offlineTime;
+    }
+
+    public void setOfflineTime(DateTime offlineTime) {
+        this.offlineTime = offlineTime;
+    }
+
+    @Column(name = "isDelete")
     @Basic
     public Boolean getIsDelete() {
         return isDelete;
@@ -218,7 +317,7 @@ public class Product implements EntityClass<Integer>, OperableData {
         this.isDelete = isDelete;
     }
 
-    @Column(name = "create_time")
+    @Column(name = "createTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Override
     public DateTime getCreateTime() {
@@ -230,9 +329,8 @@ public class Product implements EntityClass<Integer>, OperableData {
         this.createTime = createTime;
     }
 
-    @Column(name = "update_time")
+    @Column(name = "updateTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Override
     public DateTime getUpdateTime() {
         return updateTime;
     }
@@ -241,17 +339,4 @@ public class Product implements EntityClass<Integer>, OperableData {
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
     }
-
-    @Column(name = "operator_id")
-    @Basic
-    @Override
-    public Integer getOperatorId() {
-        return operatorId;
-    }
-
-    @Override
-    public void setOperatorId(Integer operatorId) {
-        this.operatorId = operatorId;
-    }
-
 }

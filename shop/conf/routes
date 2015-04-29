@@ -3,20 +3,37 @@
 # ~~~~
 
 # Home page
-GET         /                           @controllers.Application.index
+GET         /                                 @controllers.Application.index
 
 
 # user
-GET         /register                   @controllers.user.LoginController.registerPage
-POST        /register                   @controllers.user.LoginController.register
-GET         /login                      @controllers.user.LoginController.loginPage
-POST        /login                      @controllers.user.LoginController.login
-POST        /user/phone/get_code        @controllers.user.LoginController.requestPhoneCode(phone)
-GET         /user/phone/exist           @controllers.user.LoginController.isPhoneExist(phone)
-GET         /user/username/exist        @controllers.user.LoginController.isUsernameExist(username)
-GET         /user/order                 @controllers.Application.myOrder
+GET         /register                         @controllers.user.LoginController.registerPage
+POST        /register                         @controllers.user.LoginController.register
+GET         /login                            @controllers.user.LoginController.loginPage
+POST        /login                            @controllers.user.LoginController.login
+POST        /user/phone/get_code              @controllers.user.LoginController.requestPhoneCode(phone)
+GET         /user/phone/exist                 @controllers.user.LoginController.isPhoneExist(phone)
+GET         /user/username/exist              @controllers.user.LoginController.isUsernameExist(username)
+GET         /user/order                       @controllers.Application.myOrder
+
+
+# my favorites
+GET         /my/favorites/product             @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+POST        /my/favorites/product/del         @controllers.user.ProductFavoritesController.del(productId:Int)
+POST        /my/favorites/product/add         @controllers.user.ProductFavoritesController.add()
+GET         /my/favorites/designer            @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+POST        /my/favorites/designer/del        @controllers.user.DesignerFavoritesController.del(designer:Int)
+POST        /my/favorites/designer/add        @controllers.user.DesignerFavoritesController.add()
+# my address
+GET         /my/address                       @controllers.user.AddressController.index()
+GET         /my/address/province              @controllers.user.AddressController.queryProvince()
+GET         /my/address/city                  @controllers.user.AddressController.queryCity(code)
+GET         /my/address/area                  @controllers.user.AddressController.queryArea(code)
+POST        /my/address/add                   @controllers.user.AddressController.add()
+POST        /my/address/update                @controllers.user.AddressController.update()
+POST        /my/address/del                   @controllers.user.AddressController.del()
+POST        /my/address/defaultAddress        @controllers.user.AddressController.defaultAddress()
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file               controllers.Assets.at(path="/public", file)
-
-
+GET         /assets/*file                     controllers.Assets.at(path="/public", file)
