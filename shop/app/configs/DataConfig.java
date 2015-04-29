@@ -21,6 +21,8 @@ import java.beans.PropertyVetoException;
 import java.util.HashMap;
 
 import play.Logger;
+import utils.secure.Secured;
+import utils.secure.SecuredAction;
 
 @Configuration
 @EnableTransactionManagement
@@ -85,6 +87,11 @@ public class DataConfig {
             throw new AppBusinessException("启动加载数据库连接配置失败");
         }
 
+    }
+
+    @Bean
+    public Secured secured() {
+        return new Secured();
     }
 
 }

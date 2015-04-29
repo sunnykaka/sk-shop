@@ -14,4 +14,9 @@ POST        /login                      @controllers.user.LoginController.login
 POST        /user/phone/get_code        @controllers.user.LoginController.requestPhoneCode(phone)
 GET         /user/phone/exist           @controllers.user.LoginController.isPhoneExist(phone)
 GET         /user/username/exist        @controllers.user.LoginController.isUsernameExist(username)
+GET         /user/order                 @controllers.Application.myOrder
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file               controllers.Assets.at(path="/public", file)
+
 

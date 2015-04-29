@@ -1,22 +1,27 @@
 package usercenter.services;
 
+import com.google.common.base.Preconditions;
 import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.PasswordHash;
-import org.apache.commons.lang3.RandomStringUtils;
+import common.utils.RegExpUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
-import play.cache.Cache;
 import usercenter.constants.AccountType;
+import usercenter.domain.PhoneVerification;
 import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
 import usercenter.models.UserData;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,12 +37,6 @@ public class UserService {
     @Autowired
     GeneralDao generalDao;
 
-    public static String VERIFICATION_CODE_KEY_PREFIX = "register_phone:";
-    public static String VERIFICATION_CODE_COUNT_KEY_PREFIX = "register_phone_count:";
-    public static int PHONE_VERIFICATION_MAX_COUNT_IN_DAY = 5;
-    public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
-    public static int VERIFICATION_CODE_LENGTH = 6;
-
 
     /**
      * 根据手机生成短信验证码
@@ -45,43 +44,7 @@ public class UserService {
      * @return
      */
     public String generatePhoneVerificationCode(String phone) {
-
-        //判断一天之内是不是发送过5次了
-        Integer count = (Integer) Cache.get(VERIFICATION_CODE_COUNT_KEY_PREFIX);
-        if (count != null && count >= PHONE_VERIFICATION_MAX_COUNT_IN_DAY) {
-            return null;
-        }
-
-        //生成验证码
-        String verificationCode = RandomStringUtils.randomNumeric(VERIFICATION_CODE_LENGTH);
-
-        String existVerificationCode = (String) Cache.get(VERIFICATION_CODE_KEY_PREFIX + phone);
-        if (existVerificationCode != null) {
-            existVerificationCode += ":" + verificationCode;
-        } else {
-            existVerificationCode = verificationCode;
-        }
-        Cache.set(VERIFICATION_CODE_KEY_PREFIX + phone, existVerificationCode, VERIFICATION_CODE_EXPIRE_TIME);
-
-        return verificationCode;
-
-    }
-
-    /**
-     * 校验短信验证码是否有效
-     * @param phone
-     * @param verificationCode
-     * @return
-     */
-    public boolean verifyPhoneVerificationCode(String phone, String verificationCode) {
-        if(verificationCode.length() != VERIFICATION_CODE_LENGTH) {
-            return false;
-        }
-        String verificationCodeStr = (String) Cache.get(VERIFICATION_CODE_KEY_PREFIX + phone);
-        if(verificationCodeStr == null) {
-            return false;
-        }
-        return verificationCodeStr.contains(verificationCode);
+        return new PhoneVerification(phone).generatePhoneVerificationCode();
     }
 
     /**
@@ -131,6 +94,9 @@ public class UserService {
         if(isPhoneExist(registerForm.getPhone(), Optional.empty())) {
             throw new AppBusinessException("手机已存在");
         }
+        if(!new PhoneVerification(registerForm.getPhone()).verifyCode(registerForm.getVerificationCode())) {
+            throw new AppBusinessException("校验码验证失败");
+        }
 
         DateTime now = DateUtils.current();
         User user = new User();
@@ -161,5 +127,71 @@ public class UserService {
     }
 
 
+    @Transactional
+    public User login(LoginForm loginForm) {
 
+        User user = authenticate(loginForm.getPassport(), loginForm.getPassword());
+        if(user == null) {
+            throw new AppBusinessException("用户名或密码错误");
+        }
+        if(!user.isActive() || user.isDelete() || user.isHasForbidden()) {
+            throw new AppBusinessException("抱歉,该用户已被禁止登录");
+        }
+        user.setLoginCount(user.getLoginCount() + 1);
+        user.setLoginTime(DateUtils.current());
+        return generalDao.merge(user);
+
+    }
+
+    @Transactional(readOnly = true)
+    public User findByUsername(String username) {
+        Preconditions.checkNotNull(username, "findByUsername中username不能为null");
+
+        CriteriaBuilder cb = generalDao.getEm().getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> user = cq.from(User.class);
+
+        cq.select(user).where(cb.equal(user.get("userName"), username));
+        TypedQuery<User> query = generalDao.getEm().createQuery(cq);
+        return query.getSingleResult();
+
+    }
+
+    @Transactional(readOnly = true)
+    public User findByPhone(String phone) {
+        Preconditions.checkNotNull(phone, "findByPhone中phone不能为null");
+
+        CriteriaBuilder cb = generalDao.getEm().getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> user = cq.from(User.class);
+
+        cq.select(user).where(cb.equal(user.get("phone"), phone));
+        TypedQuery<User> query = generalDao.getEm().createQuery(cq);
+        return query.getSingleResult();
+
+    }
+
+
+    private User authenticate(String passport, String password) {
+
+        User user = null;
+        if(RegExpUtils.isPhone(passport)) {
+            user = findByPhone(passport);
+        }
+        if(user == null) {
+            user = findByUsername(passport);
+        }
+
+        try {
+            if(user != null) {
+                if(PasswordHash.validatePassword(password, user.getPassword())) {
+                    return user;
+                }
+            }
+        } catch (GeneralSecurityException e) {
+            Logger.error("创建哈希密码的时候发生错误", e);
+        }
+
+        return null;
+    }
 }

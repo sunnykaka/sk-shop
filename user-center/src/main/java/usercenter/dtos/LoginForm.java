@@ -9,21 +9,22 @@ import javax.validation.constraints.Pattern;
  */
 public class LoginForm {
 
-    @Constraints.Required(message = "用户名不能为空")
-    @Pattern(regexp = "^[A-Za-z0-9_]{4,20}$", message = "4-20位字符，支持字母/汉字/数字/下划线组合")
-    String username;
+    @Constraints.Required(message = "用户名或手机不能为空")
+    String passport;
 
     @Constraints.Required(message = "密码不能为空")
     @Constraints.MinLength(value = 4, message = "密码长度需要为4-20位")
     @Constraints.MaxLength(value = 20, message = "密码长度需要为4-20位")
     String password;
 
-    public String getUsername() {
-        return username;
+    String rememberMe;
+
+    public String getPassport() {
+        return passport;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 
     public String getPassword() {
@@ -32,5 +33,13 @@ public class LoginForm {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRememberMe() {
+        return rememberMe;
+    }
+
+    public void setRememberMe(String rememberMe) {
+        this.rememberMe = rememberMe;
     }
 }
