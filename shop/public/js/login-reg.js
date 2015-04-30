@@ -222,8 +222,6 @@
         delayHideLabel(options.items);
     }
 
-
-
     //注册对外接口
     FG.user.register = register;
 

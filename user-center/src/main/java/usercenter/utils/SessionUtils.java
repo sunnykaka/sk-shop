@@ -1,7 +1,6 @@
 package usercenter.utils;
 
 import common.exceptions.AppException;
-import common.utils.AES;
 import common.utils.DateUtils;
 import common.utils.test.EncryptUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -12,16 +11,14 @@ import play.mvc.Http;
 import usercenter.cache.UserCache;
 import usercenter.models.User;
 
-import java.util.Base64;
-
 /**
  * Created by liubin on 15-4-27.
  */
 public class SessionUtils {
 
-    public static final String SESSION_CREDENTIALS = "sk_credentials";
-    public static final String SESSION_ORIGINAL_URL = "sk_original_url";
-    public static final String SESSION_REQUEST_TIME = "sk_request_time";
+    public static final String SESSION_CREDENTIALS = "passport";
+    public static final String SESSION_ORIGINAL_URL = "origin";
+    public static final String SESSION_REQUEST_TIME = "rtime";
     public static final int REMEMBER_ME_DAYS = 14;
     public static final String USER_KEY = "sk_user";
     public static final String COOKE_REMEMBER_ME = "sk_rm";
@@ -43,7 +40,6 @@ public class SessionUtils {
         //如果没有remember me, 或者remember的用户不等于当前用户, 则需要校验session有没有过期.
         if(userFromRememberMe == null || !userFromRememberMe.equals(userId)) {
             //校验session是否超时
-//            Long userRequestTime = UserCache.getLastUserRequestTime(userId);
             String userRequestTimeStr = session.get(SESSION_REQUEST_TIME);
             if(userRequestTimeStr == null) {
                 clear();
@@ -58,8 +54,7 @@ public class SessionUtils {
             }
         }
 
-        User user = UserCache.getUser(userId);
-//        UserCache.setUserRequestTime(userId, DateUtils.current().getMillis());
+        User user = UserCache.getUserInSession(userId);
         session.put(SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
         Http.Context.current().args.put(USER_KEY, user);
 
@@ -67,35 +62,36 @@ public class SessionUtils {
 
     }
 
-    public static void setCurrentUser(User user, boolean rememberMe) {
+    public static void setCurrentUser(User user, boolean rememberMe) throws AppException {
         //设置到cookie
         Http.Session session = Http.Context.current().session();
         Integer userId = user.getId();
         String credentials = buildCredentials(userId);
         session.put(SESSION_CREDENTIALS, credentials);
+
         if(rememberMe) {
-
             pleaseRememberMe(credentials, REMEMBER_ME_DAYS);
-
-        } else {
-            clearRememberMe();
         }
 
         session.put(SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
 
         //设置到缓存
-        UserCache.setUser(user);
-//        UserCache.setUserRequestTime(userId, DateUtils.current().getMillis());
+        UserCache.setUserInSession(user, REMEMBER_ME_DAYS * 24 * 3600);
 
     }
 
-    private static String buildCredentials(Integer userId) {
-        return String.valueOf(userId);
+    private static String buildCredentials(Integer userId) throws AppException {
+        return EncryptUtil.encrypt(String.valueOf(userId));
     }
 
-    private static Integer getUserFromCredentials(String credentials) {
+    private static Integer getUserFromCredentials(String credentials){
         if(StringUtils.isBlank(credentials)) return null;
-        return Integer.parseInt(credentials);
+        try {
+            return Integer.parseInt(EncryptUtil.decrypt(credentials));
+        } catch (AppException e) {
+            Logger.error("", e);
+        }
+        return null;
     }
 
 
@@ -112,7 +108,7 @@ public class SessionUtils {
 
     }
 
-    private static void clearRememberMe() {
+    public static void clearRememberMe() {
         Http.Context.current().response().discardCookie(COOKE_REMEMBER_ME);
     }
 
@@ -139,12 +135,15 @@ public class SessionUtils {
     }
 
 
-
-    public static void clear() {
+    private static void clear() {
         Http.Session session = Http.Context.current().session();
         session.remove(SESSION_CREDENTIALS);
         session.remove(SESSION_REQUEST_TIME);
+    }
 
+    public static void logout(User user) {
+        clearRememberMe();
+        clear();
     }
 
     public static void setOriginalUrl(String uri) {

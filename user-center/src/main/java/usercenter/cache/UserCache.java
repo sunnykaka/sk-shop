@@ -10,15 +10,15 @@ import usercenter.models.User;
  */
 public class UserCache {
 
-    public static void setUser(User user) {
+    public static void setUserInSession(User user, int expiration) {
 
-        Cache.set(RedisUtils.buildKey("users", String.valueOf(user.getId())), user);
+        Cache.set(RedisUtils.buildKey("session", "users", String.valueOf(user.getId())), user, expiration);
 
     }
 
-    public static User getUser(Integer userId) {
+    public static User getUserInSession(Integer userId) {
 
-        return (User)Cache.get(RedisUtils.buildKey("users", String.valueOf(userId)));
+        return (User)Cache.get(RedisUtils.buildKey("session", "users", String.valueOf(userId)));
 
     }
 

@@ -3,7 +3,6 @@ package controllers.user;
 import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.RegExpUtils;
-import usercenter.utils.SessionUtils;
 import common.utils.play.PlayForm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
 import usercenter.services.UserService;
+import usercenter.utils.SessionUtils;
 import views.html.user.login;
 import views.html.user.register;
 
@@ -39,7 +39,6 @@ public class LoginController extends Controller {
             try {
                 userService.register(registerForm.get(), request().remoteAddress());
                 return ok(new JsonResult(true, null, routes.LoginController.loginPage().url()).toNode());
-//                return redirect(controllers.routes.Application.myOrder());
 
             } catch (AppBusinessException e) {
                 registerForm.reject("errors", e.getMessage());
@@ -47,8 +46,6 @@ public class LoginController extends Controller {
         }
 
         return ok(new JsonResult(false, registerForm.errorsAsJson().toString()).toNode());
-//        flash("errors", registerForm.errorsAsJson().toString());
-//        return redirect(controllers.user.routes.LoginController.registerPage());
 
     }
 
@@ -64,10 +61,8 @@ public class LoginController extends Controller {
 
         if(!loginForm.hasErrors()) {
             try {
-                User user = userService.login(loginForm.get());
-                SessionUtils.setCurrentUser(user, "true".equalsIgnoreCase(loginForm.get().getRememberMe()));
+                userService.login(loginForm.get());
                 return ok(new JsonResult(true, null, controllers.routes.Application.myOrder().url()).toNode());
-//                return redirect(controllers.routes.Application.myOrder());
 
             } catch (AppBusinessException e) {
                 loginForm.reject("errors", e.getMessage());
@@ -75,10 +70,20 @@ public class LoginController extends Controller {
         }
 
         return ok(new JsonResult(false, loginForm.errorsAsJson().toString()).toNode());
-//        flash("errors", loginForm.errorsAsJson().toString());
-//        return redirect(controllers.user.routes.LoginController.loginPage());
 
     }
+
+    public Result logout() {
+
+        User user = SessionUtils.currentUser();
+        if(user != null) {
+            userService.logout(user);
+        }
+
+        return redirect(routes.LoginController.loginPage());
+
+    }
+
 
 
     public Result requestPhoneCode(String phone) {

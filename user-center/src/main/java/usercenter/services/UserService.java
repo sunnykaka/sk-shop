@@ -2,6 +2,7 @@ package usercenter.services;
 
 import com.google.common.base.Preconditions;
 import common.exceptions.AppBusinessException;
+import common.exceptions.AppException;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.PasswordHash;
@@ -17,6 +18,7 @@ import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
 import usercenter.models.UserData;
+import usercenter.utils.SessionUtils;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -129,12 +131,22 @@ public class UserService {
 
     @Transactional
     public User login(LoginForm loginForm) {
+        SessionUtils.clearRememberMe();
 
         User user = authenticate(loginForm.getPassport(), loginForm.getPassword());
         if(user == null) {
             throw new AppBusinessException("用户名或密码错误");
         }
-        return doLogin(user);
+
+        doLogin(user);
+
+        try {
+            SessionUtils.setCurrentUser(user, "true".equalsIgnoreCase(loginForm.getRememberMe()));
+            return user;
+        } catch (AppException e) {
+            Logger.error("", e);
+            throw new AppBusinessException("服务器发生错误, 登录失败");
+        }
 
     }
 
@@ -146,18 +158,37 @@ public class UserService {
             Logger.error(String.format("用cookie登录时,根据userId[%d]没有找到user", userId));
             return null;
         }
-        return doLogin(user);
+
+        doLogin(user);
+
+        try {
+            SessionUtils.setCurrentUser(user, false);
+            return user;
+        } catch (AppException e) {
+            Logger.error("", e);
+        }
+
+        return null;
 
     }
 
-    private User doLogin(User user) {
+    private void doLogin(User user) {
         if(!user.isActive() || user.isDeleted() || user.isHasForbidden()) {
             throw new AppBusinessException("抱歉,该用户已被禁止登录");
         }
         user.setLoginCount(user.getLoginCount() + 1);
         user.setLoginTime(DateUtils.current());
-        return generalDao.merge(user);
+        generalDao.persist(user);
     }
+
+    @Transactional
+    public void logout(User user) {
+        if(user == null) return;
+
+        SessionUtils.logout(user);
+
+    }
+
 
 
     @Transactional(readOnly = true)

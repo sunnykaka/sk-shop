@@ -77,6 +77,23 @@ public class GeneralDaoTest extends WithApplication implements PrepareTestObject
             return null;
         });
 
+        //测试persist能够修改持久态对象
+        doInTransactionWithGeneralDao(generalDao -> {
+
+            TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
+            testObject.setStatus(OrderStatus.INVALID);
+            generalDao.persist(testObject);
+            return null;
+        });
+
+        doInTransactionWithGeneralDao(generalDao -> {
+            //校验确实是testObject2的更新起作用
+            TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
+            assert testObject.getStatus() == OrderStatus.INVALID;
+            return null;
+        });
+
+
         //测试update方法
         doInTransactionWithGeneralDao(generalDao -> {
 
