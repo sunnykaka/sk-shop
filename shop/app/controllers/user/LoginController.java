@@ -3,7 +3,6 @@ package controllers.user;
 import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.RegExpUtils;
-import common.utils.play.PlayForm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
@@ -33,7 +32,7 @@ public class LoginController extends Controller {
 
     public Result register() {
 
-        Form<RegisterForm> registerForm = PlayForm.form(RegisterForm.class).bindFromRequest();
+        Form<RegisterForm> registerForm = Form.form(RegisterForm.class).bindFromRequest();
 
         if(!registerForm.hasErrors()) {
             try {
@@ -57,7 +56,7 @@ public class LoginController extends Controller {
 
     public Result login() {
 
-        Form<LoginForm> loginForm = PlayForm.form(LoginForm.class).bindFromRequest();
+        Form<LoginForm> loginForm = Form.form(LoginForm.class).bindFromRequest();
 
         if(!loginForm.hasErrors()) {
             try {
