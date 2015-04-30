@@ -2,7 +2,7 @@ package usercenter.utils;
 
 import common.exceptions.AppException;
 import common.utils.DateUtils;
-import common.utils.test.EncryptUtil;
+import common.utils.EncryptUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import play.Logger;
