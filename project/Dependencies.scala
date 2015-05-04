@@ -50,7 +50,7 @@ object Dependencies {
 
   val productDependencies: Seq[ModuleID] = Seq()
 
-  val orderDependencies: Seq[ModuleID] = Seq()
+  val orderDependencies: Seq[ModuleID] = Seq("jdom" % "jdom" % "1.0")
 
   val adminDependencies: Seq[ModuleID] = Seq(mysqlConnector) ++ springTest ++ c3p0
 

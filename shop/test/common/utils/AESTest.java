@@ -1,6 +1,5 @@
 package common.utils;
 
-import common.utils.test.EncryptUtil;
 import org.junit.Test;
 import play.Play;
 import play.test.WithApplication;
@@ -9,7 +8,6 @@ import java.util.Base64;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static play.test.Helpers.*;
 
 
 /**

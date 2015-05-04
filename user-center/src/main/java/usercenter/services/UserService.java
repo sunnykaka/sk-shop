@@ -7,13 +7,15 @@ import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.PasswordHash;
 import common.utils.RegExpUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import play.twirl.api.Content;
 import usercenter.constants.AccountType;
-import usercenter.domain.PhoneVerification;
+import usercenter.domain.SmsSender;
 import usercenter.dtos.LoginForm;
 import usercenter.dtos.PasswordForm;
 import usercenter.dtos.PhoneCodeForm;
@@ -40,16 +42,6 @@ public class UserService {
 
     @Autowired
     GeneralDao generalDao;
-
-
-    /**
-     * 根据手机生成短信验证码
-     * @param phone
-     * @return
-     */
-    public String generatePhoneVerificationCode(String phone) {
-        return new PhoneVerification(phone).generatePhoneVerificationCode();
-    }
 
     /**
      * 获取账号
@@ -108,7 +100,7 @@ public class UserService {
         if(isPhoneExist(registerForm.getPhone(), Optional.empty())) {
             throw new AppBusinessException("手机已存在");
         }
-        if(!new PhoneVerification(registerForm.getPhone()).verifyCode(registerForm.getVerificationCode())) {
+        if(!new SmsSender(registerForm.getPhone(), SmsSender.Usage.REGISTER).verifyCode(registerForm.getVerificationCode())) {
             throw new AppBusinessException("校验码验证失败");
         }
 
@@ -138,66 +130,6 @@ public class UserService {
         generalDao.persist(userData);
 
         return user;
-    }
-
-    /**
-     * 修改密码
-     *
-     * @param user
-     * @param psw
-     * @return
-     */
-    @Transactional
-    public User updatePassword(User user,PasswordForm psw){
-
-        if(!psw.getNewPassword().equals(psw.getRePassword())){
-            throw new AppBusinessException("两次输入密码不一致");
-        }
-
-        try {
-
-            if(PasswordHash.validatePassword(psw.getPassword(),user.getPassword())){
-                throw new AppBusinessException("旧密码输入错误");
-            }
-
-            user.setPassword(PasswordHash.createHash(psw.getNewPassword()));
-            generalDao.merge(user);
-
-        } catch (GeneralSecurityException e) {
-            Logger.error("创建哈希密码的时候发生错误", e);
-            throw new AppBusinessException("用户修改密码失败");
-        }
-        return user;
-    }
-
-    /**
-     * 修改用户手机号码
-     *
-     * @param user
-     * @param phoneCode
-     * @return
-     */
-    @Transactional
-    public User updatePhone(User user,PhoneCodeForm phoneCode){
-
-        //TODO 验证、手机验证码
-
-        user.setPhone(phoneCode.getPhone());
-        return generalDao.merge(user);
-    }
-
-    /**
-     * 修改邮箱地址
-     *
-     * @param user
-     * @param email
-     * @return
-     */
-    @Transactional
-    public User updateEmail(User user,String email){
-
-        user.setEmail(email);
-        return generalDao.merge(user);
     }
 
 

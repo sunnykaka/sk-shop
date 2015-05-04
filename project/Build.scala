@@ -23,14 +23,14 @@ object ApplicationBuild extends Build {
     settings(
       libraryDependencies ++= productDependencies
     ).
-    dependsOn(common)
+    dependsOn(common).dependsOn(user)
 
   lazy val order = (project in file("order-center")).
     settings(Commons.settings: _*).
     settings(
       libraryDependencies ++= orderDependencies
     ).
-    dependsOn(common)
+    dependsOn(common).dependsOn(product)
 
 
   lazy val admin = (project in file("admin")).

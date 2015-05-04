@@ -10,7 +10,7 @@ import play.mvc.Result;
 import play.test.FakeRequest;
 import play.test.WithApplication;
 import usercenter.cache.UserCache;
-import usercenter.domain.PhoneVerification;
+import usercenter.domain.SmsSender;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,9 +50,9 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         assertThat(contentType(result), is("application/json"));
         assertThat(contentAsString(result), containsString("true"));
 
-        String verificationCode = UserCache.getPhoneVerificationCode(phone);
+        String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
         assertThat(verificationCode, notNullValue());
-        assertThat(verificationCode.length(), is(PhoneVerification.VERIFICATION_CODE_LENGTH));
+        assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
 
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
@@ -84,9 +84,9 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         assertThat(contentType(result), is("application/json"));
         assertThat(contentAsString(result), containsString("true"));
 
-        String verificationCode = UserCache.getPhoneVerificationCode(phone);
+        String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
         assertThat(verificationCode, notNullValue());
-        assertThat(verificationCode.length(), is(PhoneVerification.VERIFICATION_CODE_LENGTH));
+        assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
 
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
@@ -206,9 +206,9 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         assertThat(contentType(result), is("application/json"));
         assertThat(contentAsString(result), containsString("true"));
 
-        String verificationCode = UserCache.getPhoneVerificationCode(phone);
+        String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
         assertThat(verificationCode, notNullValue());
-        assertThat(verificationCode.length(), is(PhoneVerification.VERIFICATION_CODE_LENGTH));
+        assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
 
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
