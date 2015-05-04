@@ -197,6 +197,27 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
 
     }
 
+    @Test
+    public void testRequestPhoneCodeSixTimesError() throws Exception {
+        String phone = "1" + RandomStringUtils.randomNumeric(10);
+        for (int i=0; i<5; i++) {
+            FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
+            Result result = route(request);
+            assertThat(status(result), is(OK));
+            assertThat(contentType(result), is("application/json"));
+            assertThat(contentAsString(result), containsString("true"));
+
+        }
+        FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
+
+        Result result = route(request);
+        assertThat(status(result), is(OK));
+        assertThat(contentType(result), is("application/json"));
+        assertThat(contentAsString(result), containsString("false"));
+        assertThat(contentAsString(result), containsString("验证码发送失败"));
+
+    }
+
 
     private void registerUser(String phone, String username, String password) {
         FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());

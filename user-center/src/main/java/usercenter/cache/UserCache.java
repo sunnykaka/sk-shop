@@ -26,7 +26,9 @@ public class UserCache {
 
     public static int getMessageSendTimesInDay(String phone, SmsSender.Usage usage) {
 
-        String count = (String)Cache.get(RedisUtils.buildKey("message_send_times", phone, usage.toString(), toadyInString()));
+        String count = RedisUtils.withJedisClient(jedis ->
+            jedis.get(RedisUtils.buildKey("message_send_times", phone, usage.toString(), toadyInString()))
+        );
         if(count == null) {
             return 0;
         } else {
