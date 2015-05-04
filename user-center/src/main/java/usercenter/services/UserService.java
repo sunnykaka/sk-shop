@@ -7,13 +7,15 @@ import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.PasswordHash;
 import common.utils.RegExpUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import play.twirl.api.Content;
 import usercenter.constants.AccountType;
-import usercenter.domain.PhoneVerification;
+import usercenter.domain.SmsSender;
 import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
@@ -39,15 +41,6 @@ public class UserService {
     @Autowired
     GeneralDao generalDao;
 
-
-    /**
-     * 根据手机生成短信验证码
-     * @param phone
-     * @return
-     */
-    public String generatePhoneVerificationCode(String phone) {
-        return new PhoneVerification(phone).generatePhoneVerificationCode();
-    }
 
     /**
      * 判断用户名是否存在
@@ -96,7 +89,7 @@ public class UserService {
         if(isPhoneExist(registerForm.getPhone(), Optional.empty())) {
             throw new AppBusinessException("手机已存在");
         }
-        if(!new PhoneVerification(registerForm.getPhone()).verifyCode(registerForm.getVerificationCode())) {
+        if(!new SmsSender(registerForm.getPhone(), SmsSender.Usage.REGISTER).verifyCode(registerForm.getVerificationCode())) {
             throw new AppBusinessException("校验码验证失败");
         }
 

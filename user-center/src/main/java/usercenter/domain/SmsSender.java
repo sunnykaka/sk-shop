@@ -1,27 +1,33 @@
 package usercenter.domain;
 
+import common.services.SmsService;
+import common.utils.play.BaseGlobal;
 import org.apache.commons.lang3.RandomStringUtils;
+import play.twirl.api.Content;
 import usercenter.cache.UserCache;
 
 /**
  * Created by liubin on 15-4-27.
  */
-public class PhoneVerification {
+public class SmsSender {
 
-    public static int PHONE_VERIFICATION_MAX_COUNT_IN_DAY = 5;
+    public static int SEND_MESSAGE_MAX_TIMES_IN_DAY = 5;
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 
 
     private String phone;
+    private Usage usage;
 
-    public PhoneVerification(String phone) {
+    public SmsSender(String phone, Usage usage) {
         this.phone = phone;
+        this.usage = usage;
     }
 
     public String getPhone() {
         return phone;
     }
+
 
     /**
      * 根据手机生成短信验证码
@@ -29,24 +35,38 @@ public class PhoneVerification {
      */
     public String generatePhoneVerificationCode() {
         //判断一天之内是不是发送过5次了
-        int count = UserCache.getPhoneRegisterTimeCount(phone);
-        if (count >= PHONE_VERIFICATION_MAX_COUNT_IN_DAY) {
+        int count = UserCache.getMessageSendTimesInDay(phone, usage);
+        if (count >= SEND_MESSAGE_MAX_TIMES_IN_DAY) {
             return null;
         }
 
         //生成验证码
-        String verificationCode = RandomStringUtils.randomNumeric(VERIFICATION_CODE_LENGTH);
+        String verificationCode = generateCode();
 
-        String existVerificationCode = UserCache.getPhoneVerificationCode(phone);
+        String existVerificationCode = UserCache.getPhoneVerificationCode(phone, usage);
         if (existVerificationCode != null) {
             existVerificationCode += ":" + verificationCode;
         } else {
             existVerificationCode = verificationCode;
         }
-        UserCache.setPhoneVerificationCode(phone, existVerificationCode, VERIFICATION_CODE_EXPIRE_TIME);
+        UserCache.setPhoneVerificationCode(phone, usage, existVerificationCode, VERIFICATION_CODE_EXPIRE_TIME);
 
         return verificationCode;
 
+    }
+
+    public boolean sendMessage(Content message) {
+
+        boolean success = BaseGlobal.ctx.getBean(SmsService.class).sendMessage(phone, message.body());
+        if(success) {
+            UserCache.setMessageSendTimesInDay(phone, usage);
+        }
+
+        return success;
+    }
+
+    private String generateCode() {
+        return RandomStringUtils.randomNumeric(VERIFICATION_CODE_LENGTH);
     }
 
     /**
@@ -58,12 +78,16 @@ public class PhoneVerification {
         if(verificationCode.length() != VERIFICATION_CODE_LENGTH) {
             return false;
         }
-        String verificationCodeInCache = UserCache.getPhoneVerificationCode(phone);
+        String verificationCodeInCache = UserCache.getPhoneVerificationCode(phone, usage);
         if(verificationCodeInCache == null) {
             return false;
         }
         return verificationCodeInCache.contains(verificationCode);
     }
 
+
+    public static enum Usage {
+        REGISTER, BIND
+    }
 
 }

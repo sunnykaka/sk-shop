@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.domain.SmsSender;
 import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
@@ -61,7 +62,11 @@ public class LoginController extends Controller {
         if(!loginForm.hasErrors()) {
             try {
                 userService.login(loginForm.get());
-                return ok(new JsonResult(true, null, controllers.routes.Application.myOrder().url()).toNode());
+                String originalUrl = SessionUtils.getOriginalUrl();
+                if(StringUtils.isBlank(originalUrl)) {
+                    originalUrl = controllers.routes.Application.myOrder().url();
+                }
+                return ok(new JsonResult(true, null, originalUrl).toNode());
 
             } catch (AppBusinessException e) {
                 loginForm.reject("errors", e.getMessage());
@@ -89,14 +94,17 @@ public class LoginController extends Controller {
         if(!RegExpUtils.isPhone(phone)) {
             return ok(new JsonResult(false, "手机号不能为空").toNode());
         }
-        String code = userService.generatePhoneVerificationCode(phone);
-        if(StringUtils.isBlank(code)) {
-            return ok(new JsonResult(false, "验证码发送失败").toNode());
-        } else {
-            //TODO 发送短信,记录发送次数
-            play.Logger.debug(String.format("手机%s验证码%s", phone, code));
-            return ok(new JsonResult(true).toNode());
+        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
+        String code = smsSender.generatePhoneVerificationCode();
+        if(!StringUtils.isBlank(code)) {
+            if(smsSender.sendMessage(views.html.template.sms.userRegisterCode.render(code))) {
+                play.Logger.debug(String.format("手机%s验证码%s", phone, code));
+                return ok(new JsonResult(true).toNode());
+            }
         }
+
+        return ok(new JsonResult(false, "验证码发送失败").toNode());
+
     }
 
     public Result isPhoneExist(String phone) {

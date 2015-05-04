@@ -36,19 +36,27 @@ public class DefaultSecuredActionResponses extends Controller implements Secured
         Http.Request req = ctx.request();
         Result result;
 
-        if ( req.accepts("text/html")) {
+        SessionUtils.setOriginalUrl(ctx.request().uri());
 
-            SessionUtils.setOriginalUrl(ctx.request().uri());
-            result = redirect(routes.LoginController.loginPage());
+        if (isAjaxRequest(req)) {
 
-        } else if ( req.accepts("application/json")) {
-
-            result = unauthorized(new JsonResult(false, "Credentials required").toNode());
+            result = ok(new JsonResult(false, "Credentials required").toNode());
 
         } else {
-            result = unauthorized("Credentials required");
+
+            result = redirect(routes.LoginController.loginPage());
+
         }
         return F.Promise.pure(result);
+    }
+
+    private boolean isAjaxRequest(Http.Request request) {
+        String requestType = request.getHeader("X-Requested-With");
+        if (requestType != null && requestType.equalsIgnoreCase("XMLHttpRequest")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

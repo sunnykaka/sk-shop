@@ -1,8 +1,10 @@
 package usercenter.cache;
 
+import common.utils.DateUtils;
 import common.utils.RedisUtils;
 import play.Play;
 import play.cache.Cache;
+import usercenter.domain.SmsSender;
 import usercenter.models.User;
 
 /**
@@ -22,9 +24,9 @@ public class UserCache {
 
     }
 
-    public static int getPhoneRegisterTimeCount(String phone) {
+    public static int getMessageSendTimesInDay(String phone, SmsSender.Usage usage) {
 
-        String count = (String)Cache.get(RedisUtils.buildKey("register_phone_count", phone));
+        String count = (String)Cache.get(RedisUtils.buildKey("message_send_times", phone, usage.toString(), toadyInString()));
         if(count == null) {
             return 0;
         } else {
@@ -33,18 +35,25 @@ public class UserCache {
 
     }
 
-    public static void setPhoneRegisterTimeCount(String phone, int count, int expiration) {
+    public static void setMessageSendTimesInDay(String phone, SmsSender.Usage usage) {
 
-        Cache.set(RedisUtils.buildKey("register_phone_count", phone), count, expiration);
+        RedisUtils.withJedisClient(jedis -> {
+            jedis.incr(RedisUtils.buildKey("message_send_times", phone, usage.toString(), toadyInString()));
+            return null;
+        });
 
     }
 
-    public static String getPhoneVerificationCode(String phone) {
-        return (String)Cache.get(RedisUtils.buildKey("register_phone", phone));
+    public static String getPhoneVerificationCode(String phone, SmsSender.Usage usage) {
+        return (String)Cache.get(RedisUtils.buildKey("register_phone", phone, usage.toString()));
     }
 
-    public static void setPhoneVerificationCode(String phone, String value, int expiration) {
-        Cache.set(RedisUtils.buildKey("register_phone", phone), value, expiration);
+    public static void setPhoneVerificationCode(String phone, SmsSender.Usage usage, String value, int expiration) {
+        Cache.set(RedisUtils.buildKey("register_phone", phone, usage.toString()), value, expiration);
+    }
+
+    private static String toadyInString() {
+        return DateUtils.print(DateUtils.current(), "yyyyMMdd");
     }
 
 
