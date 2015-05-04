@@ -176,6 +176,66 @@ public class UserService {
 
     }
 
+    /**
+     * 修改密码
+     *
+     * @param user
+     * @param psw
+     * @return
+     */
+    @Transactional
+    public User updatePassword(User user,PasswordForm psw){
+
+        if(!psw.getNewPassword().equals(psw.getRePassword())) {
+            throw new AppBusinessException("两次输入密码不一致");
+        }
+
+        try {
+
+            if(PasswordHash.validatePassword(psw.getPassword(),user.getPassword())){
+                throw new AppBusinessException("旧密码输入错误");
+            }
+
+            user.setPassword(PasswordHash.createHash(psw.getNewPassword()));
+            generalDao.merge(user);
+
+        } catch (GeneralSecurityException e) {
+            Logger.error("创建哈希密码的时候发生错误", e);
+            throw new AppBusinessException("用户修改密码失败");
+        }
+        return user;
+    }
+
+    /**
+     * 修改用户手机号码
+     *
+     * @param user
+     * @param phoneCode
+     * @return
+     */
+    @Transactional
+    public User updatePhone(User user,PhoneCodeForm phoneCode){
+
+        //TODO 验证、手机验证码
+
+        user.setPhone(phoneCode.getPhone());
+        return generalDao.merge(user);
+    }
+
+    /**
+     * 修改邮箱地址
+     *
+     * @param user
+     * @param email
+     * @return
+     */
+    @Transactional
+    public User updateEmail(User user,String email){
+
+        user.setEmail(email);
+        return generalDao.merge(user);
+    }
+
     private void doLogin(User user) {
         if(!user.isActive() || user.isDeleted() || user.isHasForbidden()) {
             throw new AppBusinessException("抱歉,该用户已被禁止登录");
