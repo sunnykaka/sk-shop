@@ -15,6 +15,8 @@ import play.Logger;
 import usercenter.constants.AccountType;
 import usercenter.domain.PhoneVerification;
 import usercenter.dtos.LoginForm;
+import usercenter.dtos.PasswordForm;
+import usercenter.dtos.PhoneCodeForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
 import usercenter.models.UserData;
@@ -47,6 +49,16 @@ public class UserService {
      */
     public String generatePhoneVerificationCode(String phone) {
         return new PhoneVerification(phone).generatePhoneVerificationCode();
+    }
+
+    /**
+     * 获取账号
+     *
+     * @param id
+     * @return
+     */
+    public User getById(int id){
+        return generalDao.get(User.class,id);
     }
 
     /**
@@ -126,6 +138,66 @@ public class UserService {
         generalDao.persist(userData);
 
         return user;
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param user
+     * @param psw
+     * @return
+     */
+    @Transactional
+    public User updatePassword(User user,PasswordForm psw){
+
+        if(!psw.getNewPassword().equals(psw.getRePassword())){
+            throw new AppBusinessException("两次输入密码不一致");
+        }
+
+        try {
+
+            if(PasswordHash.validatePassword(psw.getPassword(),user.getPassword())){
+                throw new AppBusinessException("旧密码输入错误");
+            }
+
+            user.setPassword(PasswordHash.createHash(psw.getNewPassword()));
+            generalDao.merge(user);
+
+        } catch (GeneralSecurityException e) {
+            Logger.error("创建哈希密码的时候发生错误", e);
+            throw new AppBusinessException("用户修改密码失败");
+        }
+        return user;
+    }
+
+    /**
+     * 修改用户手机号码
+     *
+     * @param user
+     * @param phoneCode
+     * @return
+     */
+    @Transactional
+    public User updatePhone(User user,PhoneCodeForm phoneCode){
+
+        //TODO 验证、手机验证码
+
+        user.setPhone(phoneCode.getPhone());
+        return generalDao.merge(user);
+    }
+
+    /**
+     * 修改邮箱地址
+     *
+     * @param user
+     * @param email
+     * @return
+     */
+    @Transactional
+    public User updateEmail(User user,String email){
+
+        user.setEmail(email);
+        return generalDao.merge(user);
     }
 
 
@@ -216,6 +288,22 @@ public class UserService {
         cq.select(user).where(cb.equal(user.get("phone"), phone));
         TypedQuery<User> query = generalDao.getEm().createQuery(cq);
         return query.getSingleResult();
+
+    }
+
+    @Transactional(readOnly = true)
+    public User findByEmail(String email) {
+        String jpql = "select u from User u where 1=1 and u.deleted=false ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and u.email = :email ";
+        queryParams.put("email", email);
+
+        List<User> valueList = generalDao.query(jpql, Optional.empty(), queryParams);
+        if (valueList != null && valueList.size() > 0) {
+            return valueList.get(0);
+        }
+
+        return null;
 
     }
 

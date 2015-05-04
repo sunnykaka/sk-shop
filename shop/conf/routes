@@ -37,6 +37,26 @@ POST        /my/address/defaultAddress        @controllers.user.AddressControlle
 # my data
 GET         /my/data                          @controllers.user.MyDataController.index()
 POST        /my/data/update                   @controllers.user.MyDataController.update()
+# security
+GET         /my/security/psw/index            @controllers.user.MySecurityController.changePasswordIndex()
+POST        /my/security/psw/new              @controllers.user.MySecurityController.changePasswordNew()
+GET         /my/security/psw/do               @controllers.user.MySecurityController.changePasswordDo()
+POST        /my/security/psw/end              @controllers.user.MySecurityController.changePasswordEnd()
+GET         /my/security/psw/ok               @controllers.user.MySecurityController.changePasswordOk()
+
+
+GET         /my/security/phone/index          @controllers.user.MySecurityController.changePhoneIndex()
+POST        /my/security/phone/new            @controllers.user.MySecurityController.changePhoneNew()
+GET         /my/security/phone/do             @controllers.user.MySecurityController.changePhoneDo()
+POST        /my/security/phone/end            @controllers.user.MySecurityController.changePhoneEnd()
+GET         /my/security/phone/ok             @controllers.user.MySecurityController.changePhoneOk()
+
+GET         /my/security/email/index          @controllers.user.MySecurityController.changeEmailIndex()
+POST        /my/security/email/new            @controllers.user.MySecurityController.changeEmailNew()
+GET         /my/security/email/do             @controllers.user.MySecurityController.changeEmailDo()
+POST        /my/security/email/end            @controllers.user.MySecurityController.changeEmailEnd()
+GET         /my/security/email/ok             @controllers.user.MySecurityController.changeEmailOk(userId:Int)
+
 
 
 # Map static resources from the /public folder to the /assets URL path

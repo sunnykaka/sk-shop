@@ -1,0 +1,23 @@
+@(user:usercenter.models.User)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.data")</title>
+    </head>
+    <body>
+
+        <div>
+            <form action="@controllers.user.routes.MySecurityController.changePhoneNew()" method="post">
+                手机：@user.getPhone<br/>
+
+                验证码：<input type="text" name="verificationCode" value=""/>
+
+                <button type="submit">提交</button>
+            </form>
+
+        </div>
+
+    </body>
+</html>

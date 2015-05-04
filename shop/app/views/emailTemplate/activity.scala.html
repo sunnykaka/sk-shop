@@ -1,0 +1,10 @@
+@(user: usercenter.models.User)
+
+
+<div>
+    @Messages("index.welcome") ,
+    @if(user != null) { @user.getUserName } else { 游客 }
+    <hr/>
+    <a href="@controllers.user.routes.MySecurityController.changeEmailOk(user.getId)">@controllers.user.routes.MySecurityController.changeEmailOk(user.getId)</a>
+</div>
+
