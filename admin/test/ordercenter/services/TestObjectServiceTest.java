@@ -4,9 +4,7 @@ import base.PrepareTestObject;
 import common.utils.DateUtils;
 import common.utils.Money;
 import common.utils.page.Page;
-import ordercenter.constants.OrderItemStatus;
-import ordercenter.constants.OrderStatus;
-import ordercenter.constants.PlatformType;
+import ordercenter.constants.*;
 import ordercenter.dtos.TestObjectSearcher;
 import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
@@ -42,7 +40,7 @@ public class TestObjectServiceTest implements PrepareTestObject{
             Integer testObjectId = doInTransaction(em -> {
                 testObject1.setOrderNo(orderNo);
                 testObject1.setPlatformType(PlatformType.WEB);
-                testObject1.setStatus(OrderStatus.WAIT_PROCESS);
+                testObject1.setStatus(TestObjectStatus.WAIT_PROCESS);
                 testObject1.setCreateTime(DateUtils.current());
                 testObject1.setUpdateTime(DateUtils.current());
 
@@ -69,7 +67,7 @@ public class TestObjectServiceTest implements PrepareTestObject{
                 TestObjectItem testObjectItem = new TestObjectItem();
                 testObjectItem.setTestObjectId(testObject1.getId());
                 testObjectItem.setPrice(Money.valueOf(20));
-                testObjectItem.setStatus(OrderItemStatus.NOT_SIGNED);
+                testObjectItem.setStatus(TestObjectItemStatus.NOT_SIGNED);
                 testObjectItem.setProductId(Integer.parseInt(RandomStringUtils.randomNumeric(8)));
                 testObjectItem.setProductSku(RandomStringUtils.randomAlphabetic(8));
 
@@ -111,7 +109,7 @@ public class TestObjectServiceTest implements PrepareTestObject{
             prepareTestObjects(50, 3);
 
             //测试分页方法
-            List<TestObject> testObjects = testObjectService.findByKey(of(new Page<>(1, Page.DEFAULT_PAGE_SIZE)), empty(), of(OrderStatus.WAIT_PROCESS), empty(), empty());
+            List<TestObject> testObjects = testObjectService.findByKey(of(new Page<>(1, Page.DEFAULT_PAGE_SIZE)), empty(), of(TestObjectStatus.WAIT_PROCESS), empty(), empty());
             assert testObjects.size() == Page.DEFAULT_PAGE_SIZE;
             testObjects = testObjectService.findByKey(of(new Page<>(2, 20)), empty(), empty(), empty(), empty());
             assert testObjects.size() == 20;
@@ -161,8 +159,8 @@ public class TestObjectServiceTest implements PrepareTestObject{
     private void runTestFindByComplicateMethodJpql(BiFunction<Optional<Page<TestObject>>, TestObjectSearcher, List<TestObject>> method) {
 
         TestObjectSearcher testObjectSearcher = new TestObjectSearcher();
-        testObjectSearcher.status = OrderStatus.WAIT_PROCESS;
-        testObjectSearcher.orderItemStatus = OrderItemStatus.NOT_SIGNED;
+        testObjectSearcher.status = TestObjectStatus.WAIT_PROCESS;
+        testObjectSearcher.testObjectItemStatus = TestObjectItemStatus.NOT_SIGNED;
 
         List<TestObject> testObjects = method.apply(of(new Page<>(1, Page.DEFAULT_PAGE_SIZE)), testObjectSearcher);
         assert testObjects.size() == Page.DEFAULT_PAGE_SIZE;
@@ -174,7 +172,7 @@ public class TestObjectServiceTest implements PrepareTestObject{
         assert page.getResult().size() == testObjects.size();
         assert page.getTotalCount() == 50;
 
-        testObjectSearcher.orderItemStatus = OrderItemStatus.SIGNED;
+        testObjectSearcher.testObjectItemStatus = TestObjectItemStatus.SIGNED;
         page = new Page<>(1, Page.DEFAULT_PAGE_SIZE);
         testObjects = method.apply(of(page), testObjectSearcher);
         assert testObjects.size() == 0;

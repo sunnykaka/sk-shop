@@ -3,9 +3,8 @@ package ordercenter.models;
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
 import common.utils.Money;
-import ordercenter.constants.OrderStatus;
-import ordercenter.constants.OrderType;
 import ordercenter.constants.PlatformType;
+import ordercenter.constants.TestObjectStatus;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import play.data.validation.Constraints.MinLength;
@@ -30,7 +29,7 @@ public class TestObject implements EntityClass<Integer>, OperableData {
     /**
      * 状态
      */
-    private OrderStatus status;
+    private TestObjectStatus status;
 
 
     /**
@@ -89,11 +88,11 @@ public class TestObject implements EntityClass<Integer>, OperableData {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    public OrderStatus getStatus() {
+    public TestObjectStatus getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(TestObjectStatus status) {
         this.status = status;
     }
 

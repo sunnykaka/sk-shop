@@ -3,9 +3,9 @@ package base;
 import common.utils.DateUtils;
 import common.utils.Money;
 import common.utils.test.BaseTest;
-import ordercenter.constants.OrderItemStatus;
-import ordercenter.constants.OrderStatus;
 import ordercenter.constants.PlatformType;
+import ordercenter.constants.TestObjectItemStatus;
+import ordercenter.constants.TestObjectStatus;
 import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,7 +43,7 @@ public interface PrepareTestObject extends BaseTest {
         TestObject testObject = new TestObject();
         testObject.setBuyerId("买家" + RandomStringUtils.randomNumeric(8));
         testObject.setPlatformType(PlatformType.WEB);
-        testObject.setStatus(OrderStatus.WAIT_PROCESS);
+        testObject.setStatus(TestObjectStatus.WAIT_PROCESS);
         testObject.setCreateTime(DateUtils.current());
         testObject.setUpdateTime(DateUtils.current());
         testObject.setBuyTime(DateUtils.current());
@@ -56,7 +56,7 @@ public interface PrepareTestObject extends BaseTest {
             TestObjectItem testObjectItem = new TestObjectItem();
             testObjectItem.setTestObjectId(testObject.getId());
             testObjectItem.setPrice(Money.valueOf(20));
-            testObjectItem.setStatus(OrderItemStatus.NOT_SIGNED);
+            testObjectItem.setStatus(TestObjectItemStatus.NOT_SIGNED);
             testObjectItem.setProductId(Integer.parseInt(RandomStringUtils.randomNumeric(8)));
             testObjectItem.setProductSku(RandomStringUtils.randomAlphabetic(8));
 

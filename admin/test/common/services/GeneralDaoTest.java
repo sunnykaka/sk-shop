@@ -1,8 +1,8 @@
 package common.services;
 
 import base.PrepareTestObject;
-import ordercenter.constants.OrderStatus;
 import ordercenter.constants.PlatformType;
+import ordercenter.constants.TestObjectStatus;
 import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -32,7 +32,7 @@ public class GeneralDaoTest extends WithApplication implements PrepareTestObject
             TestObject testObject = new TestObject();
             testObject.setOrderNo(RandomStringUtils.randomAlphanumeric(8));
             testObject.setPlatformType(PlatformType.WEB);
-            testObject.setStatus(OrderStatus.WAIT_PROCESS);
+            testObject.setStatus(TestObjectStatus.WAIT_PROCESS);
 
             generalDao.persist(testObject);
             generalDao.flush();
@@ -43,7 +43,7 @@ public class GeneralDaoTest extends WithApplication implements PrepareTestObject
             assert testObject.getId() > 0;
 
             //此时更新无用,因为对象已没有被session管理(显式detach)
-            testObject.setStatus(OrderStatus.INVALID);
+            testObject.setStatus(TestObjectStatus.INVALID);
 
             return testObject;
         });
@@ -52,20 +52,20 @@ public class GeneralDaoTest extends WithApplication implements PrepareTestObject
 
             //校验之前的更新确实没起作用
             TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
-            assert testObject.getStatus() == OrderStatus.WAIT_PROCESS;
+            assert testObject.getStatus() == TestObjectStatus.WAIT_PROCESS;
             return null;
         });
 
         doInTransactionWithGeneralDao(generalDao -> {
 
             //merge,会根据testObject1的id从数据库load出testObject2对象,再把testObject1的属性拷给testObject2
-            testObject1.setStatus(OrderStatus.INVALID);
+            testObject1.setStatus(TestObjectStatus.INVALID);
             TestObject testObject2 = generalDao.merge(testObject1);
             assert testObject2.getStatus() == testObject1.getStatus();
 
             //对order1的更新无用,对testObject2的更新有用.因为testObject1没有被session管理
-            testObject1.setStatus(OrderStatus.PRINTED);
-            testObject2.setStatus(OrderStatus.INVOICED);
+            testObject1.setStatus(TestObjectStatus.PRINTED);
+            testObject2.setStatus(TestObjectStatus.INVOICED);
 
             return null;
         });
@@ -73,15 +73,15 @@ public class GeneralDaoTest extends WithApplication implements PrepareTestObject
         doInTransactionWithGeneralDao(generalDao -> {
             //校验确实是testObject2的更新起作用
             TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
-            assert testObject.getStatus() == OrderStatus.INVOICED;
+            assert testObject.getStatus() == TestObjectStatus.INVOICED;
             return null;
         });
 
         //测试update方法
         doInTransactionWithGeneralDao(generalDao -> {
 
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("status", OrderStatus.SIGNED);
+            Map<String, Object> params = new HashMap<>();
+            params.put("status", TestObjectStatus.SIGNED);
             params.put("id", testObject1.getId());
 
 
@@ -94,7 +94,7 @@ public class GeneralDaoTest extends WithApplication implements PrepareTestObject
         doInTransactionWithGeneralDao(generalDao -> {
 
             TestObject order = generalDao.get(TestObject.class, testObject1.getId());
-            assert order.getStatus() == OrderStatus.SIGNED;
+            assert order.getStatus() == TestObjectStatus.SIGNED;
             return null;
         });
 

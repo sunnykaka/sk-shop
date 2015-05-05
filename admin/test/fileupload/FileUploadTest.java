@@ -14,7 +14,7 @@ import java.util.Optional;
  * @auth amos
  * 15-4-9.
  */
-public class FileUploadTest extends WithApplication implements PrepareOrderData {
+public class FileUploadTest extends WithApplication {
 
     @Test
     public void testCreateMutiDirectory(){
