@@ -265,7 +265,12 @@ public class UserService {
 
         cq.select(user).where(cb.equal(user.get("userName"), username));
         TypedQuery<User> query = generalDao.getEm().createQuery(cq);
-        return query.getSingleResult();
+        List<User> results = query.getResultList();
+        if(results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0);
+        }
 
     }
 
@@ -279,7 +284,12 @@ public class UserService {
 
         cq.select(user).where(cb.equal(user.get("phone"), phone));
         TypedQuery<User> query = generalDao.getEm().createQuery(cq);
-        return query.getSingleResult();
+        List<User> results = query.getResultList();
+        if(results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0);
+        }
 
     }
 
