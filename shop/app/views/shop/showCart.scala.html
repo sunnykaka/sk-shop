@@ -1,0 +1,290 @@
+@(flag:Boolean, cart:ordercenter.models.Cart, errorInfo:String)
+
+@main(){
+    <link rel="stylesheet" href="@routes.Assets.at("css/base.css")" />
+
+    <script type="text/javascript" src="@routes.Assets.at("js/jquery.min.js")"></script>
+
+    <script type="text/javascript">
+    $(function(){
+
+        var FG = window.FG || {};
+
+        // 提示信息
+        FG.tip = function (ele, id, msg, x, y, timer) {
+            var _timer = 1200;
+            var _x = 0;
+            var _y = 0;
+            if (typeof x === "number") {
+                _x = x;
+            }
+            if (typeof y === "number") {
+                _y = y;
+            }
+            if (typeof timer === "number") {
+                _timer = timer;
+            }
+            var getId = $("#" + id),
+                    Left = ele.offset().left + parseInt(_y),
+                    Top = ele.offset().top + parseInt(_x),
+                    Css = {
+                        position: "absolute",
+                        left: Left,
+                        top: Top,
+                        display: "none"
+                    };
+
+            if (getId.length > 0) {
+                getId.hide();
+            } else {
+                getId = $("<div>" + msg + "</div>")
+                        .attr("id", id)
+                        .addClass("com_tip");
+                $("body").append(getId);
+            }
+            getId.css(Css).stop().fadeIn(600);
+
+            window.setTimeout(function () {
+                getId.fadeOut(400, function () {
+                    getId.remove();
+                });
+            }, _timer);
+        };
+
+
+        $('#all').click(function(){
+            if(this.checked){
+                $('.product-list :checkbox').attr('checked',true);
+            }else{
+                $('.product-list :checkbox').attr('checked',false);
+            }
+        });
+
+
+
+        $('.product-list :checkbox').click(function(){
+           var chknum = $('.product-list :checkbox').size();
+            var chk = 0;
+
+            $('.product-list :checkbox').each(function(){
+               if($(this).is(':checked')){
+                   chk++;
+               }
+            });
+            if(chknum == chk){
+                $('#all').attr('checked',true);
+            }else{
+                $('#all').attr('checked',false);
+            }
+
+        });
+
+
+        var cartPage = $('.mycart');
+
+        // 更新数量
+        function updateNumber(ele) {
+            var numberInput = ele.parent('.amount').find('.text-number'),
+                    val = parseInt(numberInput.val(), 0),
+                    limit = parseInt(numberInput.attr('limit'), 0),
+                    price = parseInt(numberInput.attr('data-price'), 0);
+
+            // 同步更改到数据库
+            function sync() {
+                var url = $('#updateItemUrl').val();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        cartId: $('#cartId').val(),
+                        skuId: ele.parent('.amount').attr('data-skuId'),
+                        number: val
+                    },
+                    async: false,
+                    dataType: 'JSON',
+                    success: function (result) {
+                        if (result.success) {
+                            updatePrice(result.data);
+                        }
+                    }
+                });
+            }
+
+            function setTotalPrice(val) {
+                val = val.toFixed(2);
+                $('.total-price').text('¥' + val);
+            }
+
+            return {
+                add: function () {
+                    val += 1;
+
+                    if (val > limit) {
+                        val = limit;
+                        FG.tip(numberInput, 'limit-tip', '超出此商品能购买的最大数量', 30);
+                    }
+
+                    numberInput.val(val);
+
+                    setTotalPrice(val * price);
+                    sync();
+
+                },
+                remove: function () {
+                    val -= 1;
+
+                    if (val < 1) {
+                        val = 1;
+                    }
+
+                    numberInput.val(val);
+                    setTotalPrice(val * price);
+                    sync();
+                },
+                checkValue: function () {
+
+                    if (!/^[1-9]*\d*$/g.test(val)) {
+                        val = 1;
+                    }
+
+                    if (val < 1) {
+                        val = 1;
+                    }
+
+                    if (val > limit) {
+                        val = limit;
+                        FG.tip(numberInput, 'limit-tip', '超出此商品能购买的最大数量', 30);
+                    }
+
+                    numberInput.val(val);
+                    setTotalPrice(val * price);
+                    sync();
+                }
+            };
+
+        }
+
+        // 增加数量事件
+        cartPage.on('click', '.btn-add', function () {
+            updateNumber($(this)).add();
+        });
+
+        // 减小数量事件
+        cartPage.on('click', '.btn-sub', function () {
+            updateNumber($(this)).remove();
+        });
+
+        // 手动输入数量验证
+        cartPage.on('blur', '.text-number', function () {
+            updateNumber($(this)).checkValue();
+        });
+   });
+
+
+   //添加购物车：
+   /*
+    POST        /cart/getSkuStorage  skuId:Int    获取当前库存信息，包括了最大购买量和当前库存
+    POST        /cart/addSkuToCartNotReplace   skuId:Int, number:Int  同一个sku数量累加，不替换
+    POST        /cart/addSkuToCartReplace      skuId:Int, number:Int  同一个sku数量不累加，直接替换
+    */
+   //展示购物车：GET         /cart/showCart
+   //删除购物车项  /cart/deleteCartItem?cartId=&skuId=
+</script>
+} {
+    //此需要删除
+    @cart
+
+<div class="mycart width1200">
+    <div class="mycart-inner">
+        <div class="mycart-step">
+            <div class="step-bg"></div>
+            <ul class="clearfix">
+                <li class="current">我的购物车</li>
+                <li>提交订单</li>
+                <li class="last">选择支付方式</li>
+            </ul>
+        </div>
+            <!-- mycart-list -->
+        <div class="mycart-list">
+            <h3>购物车</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th><label for="all"><input type="checkbox" id="all"> 全选 </label></th>
+                        <th class="col1"></th>
+                        <th>商品信息</th>
+                        <th>细节</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th class="action">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="product-list">
+                @for(cartItem <- cart.getCartItemList) {
+                    <tr>
+                        <td>
+                            <input type="checkbox"  value="@cartItem.getId" />
+                        </td>
+                        <td>
+                            <img src="images/test-product.jpg" alt=""/>
+                        </td>
+                        <td>
+                            <div class="pro-info">
+                                <p class="pro-name">@cartItem.getProductName</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                            @if(cartItem.getSku != null && cartItem.getSku.getSkuProperties != null) {
+                                @for(property <- cartItem.getSku.getSkuProperties) {
+                                    <p>@property.getPropertyName ： @property.getPropertyValue</p>
+                                }
+                            }
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <p class="actual-price">￥@cartItem.getCurUnitPrice</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="amount" >
+                                <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
+                                <input type="text" size="3" maxlength="3" class="text-number" limit="10" value="@cartItem.getNumber" data-price="@cartItem.getCurUnitPrice">
+                                <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
+                            </div>
+                        </td>
+                        <td>
+                            ￥@cartItem.getBuyTotalMoney
+                        </td>
+                        <td>
+                            <a href="#参数1:@cartItem.getCartId 参数2:@cartItem.getSkuId" class="del" title="删除">X</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6"></td>
+                        <td>商品总计：</td>
+                        <td class="total-price">￥@cart.getTotalMoney</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"></td>
+                        <td colspan="2">
+                            <span class="btn toOrder">去结算</span>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div><!-- end mycart-list -->
+
+        <!-- mycart empty-->
+        <div class="mycart-empty">
+            <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
+        </div>
+            <!-- end mycart empty-->
+    </div>
+</div>
+}
