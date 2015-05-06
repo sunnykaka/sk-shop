@@ -1,6 +1,5 @@
 package ordercenter.dtos;
 
-import ordercenter.constants.OrderItemStatus;
 import ordercenter.constants.TestObjectItemStatus;
 import ordercenter.constants.TestObjectStatus;
 import org.joda.time.DateTime;

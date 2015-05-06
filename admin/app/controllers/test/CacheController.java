@@ -1,8 +1,6 @@
 package controllers.test;
 
 
-import ordercenter.services.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.cache.Cache;
 import play.mvc.Controller;
@@ -10,9 +8,6 @@ import play.mvc.Result;
 
 @org.springframework.stereotype.Controller
 public class CacheController extends Controller {
-
-    @Autowired
-    private OrderService orderService;
 
 
     public Result getCache(String key) {

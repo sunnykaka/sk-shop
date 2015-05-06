@@ -1,6 +1,5 @@
 package fileupload;
 
-import base.PrepareOrderData;
 import common.utils.file.FileContentType;
 import common.utils.file.FileUpload;
 import common.utils.file.LocalFileUpload;

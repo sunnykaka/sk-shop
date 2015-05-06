@@ -75,7 +75,12 @@ GET         /recover/pswOk                     @controllers.user.RecoverControll
 # image code
 GET         /image/code                        @controllers.user.ImageController.randomImageCode()
 GET         /image/checkCode                   @controllers.user.ImageController.checkImageCode(imageCode)
-
+#cart lidujun
+POST        /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
+POST        /cart/addSkuToCartNotReplace        @controllers.shop.CartController.addSkuToCartNotReplace(skuId:Int, number:Int)
+POST        /cart/addSkuToCartReplace           @controllers.shop.CartController.addSkuToCartReplace(skuId:Int, number:Int)
+GET         /cart/showCart                      @controllers.shop.CartController.showCart()
+POST        /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                      controllers.Assets.at(path="/public", file)
