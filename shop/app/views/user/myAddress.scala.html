@@ -39,11 +39,11 @@
 
             @address.getLocation<br/>
             @address.getMobile<br/>
-        <form action="@controllers.user.routes.AddressController.del()" method="post">
+        <form action="@controllers.user.routes.AddressController.del(address.getId)" method="post">
             <input type="hidden" name="id" value="@address.getId">
             <button type="submit">删除</button>
         </form>
-        <form action="@controllers.user.routes.AddressController.defaultAddress()" method="post">
+        <form action="@controllers.user.routes.AddressController.defaultAddress(address.getId)" method="post">
             <input type="hidden" name="id" value="@address.getId">
             <button type="submit">设置默认地址</button>
         </form>

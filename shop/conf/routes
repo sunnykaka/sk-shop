@@ -33,8 +33,8 @@ GET         /my/address/city                    @controllers.user.AddressControl
 GET         /my/address/area                    @controllers.user.AddressController.queryArea(code)
 POST        /my/address/add                     @controllers.user.AddressController.add()
 POST        /my/address/update                  @controllers.user.AddressController.update()
-POST        /my/address/del                     @controllers.user.AddressController.del()
-POST        /my/address/defaultAddress          @controllers.user.AddressController.defaultAddress()
+POST        /my/address/del                     @controllers.user.AddressController.del(addressId:Int)
+POST        /my/address/defaultAddress          @controllers.user.AddressController.defaultAddress(addressId:Int)
 # my data
 GET         /my/data                            @controllers.user.MyDataController.index()
 POST        /my/data/update                     @controllers.user.MyDataController.update()

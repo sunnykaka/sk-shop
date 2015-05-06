@@ -84,22 +84,19 @@ public class AddressService {
     /**
      * 修改默认设置
      *
-     * @param addressId
+     * @param address
      * @param userId
      */
-    public boolean updateDefaultAddress(int addressId,int userId){
+    public boolean updateDefaultAddress(Address address,int userId){
 
         Address oldAddress = queryDefaultAddress(userId);
 
-        if(addressId != oldAddress.getId()){
-            Address address = getAddress(addressId,userId);
-            if(null != address){
-                address.setDefaultAddress(Address.DEFAULT_ADDRESS_TRUE);
-                oldAddress.setDefaultAddress(Address.DEFAULT_ADDRESS_FALSE);
-                updateAddress(address);
-                updateAddress(oldAddress);
-                return true;
-            }
+        if(null != address){
+            address.setDefaultAddress(Address.DEFAULT_ADDRESS_TRUE);
+            oldAddress.setDefaultAddress(Address.DEFAULT_ADDRESS_FALSE);
+            updateAddress(address);
+            updateAddress(oldAddress);
+            return true;
         }
 
         return false;
