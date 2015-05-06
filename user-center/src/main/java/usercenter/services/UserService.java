@@ -16,10 +16,7 @@ import play.Logger;
 import play.twirl.api.Content;
 import usercenter.constants.AccountType;
 import usercenter.domain.SmsSender;
-import usercenter.dtos.LoginForm;
-import usercenter.dtos.ChangePswForm;
-import usercenter.dtos.PhoneCodeForm;
-import usercenter.dtos.RegisterForm;
+import usercenter.dtos.*;
 import usercenter.models.User;
 import usercenter.models.UserData;
 import usercenter.utils.SessionUtils;
@@ -177,7 +174,32 @@ public class UserService {
     }
 
     /**
-     * 修改密码
+     * 直接修改密码
+     * @param user
+     * @param psw
+     * @return
+     */
+    @Transactional
+    public User updatePassword(User user,PswForm psw){
+
+        if(!psw.getNewPassword().equals(psw.getRePassword())) {
+            throw new AppBusinessException("两次输入密码不一致");
+        }
+
+        try {
+
+            user.setPassword(PasswordHash.createHash(psw.getNewPassword()));
+            generalDao.merge(user);
+
+        } catch (GeneralSecurityException e) {
+            Logger.error("创建哈希密码的时候发生错误", e);
+            throw new AppBusinessException("用户修改密码失败");
+        }
+        return user;
+    }
+
+    /**
+     * 原密码修改密码
      *
      * @param user
      * @param psw

@@ -10,12 +10,15 @@ import play.mvc.Http;
 import play.mvc.Result;
 import usercenter.cache.RecoverCache;
 import usercenter.cache.SecurityCache;
+import usercenter.domain.SmsSender;
 import usercenter.dtos.CodeForm;
+import usercenter.dtos.PhoneCodeForm;
 import usercenter.dtos.PswForm;
 import usercenter.dtos.RecoverCodeForm;
 import usercenter.models.User;
 import usercenter.services.UserService;
 import views.html.user.recoverIndex;
+import views.html.user.recoverOk;
 import views.html.user.recoverPsw;
 import views.html.user.recoverSMS;
 
@@ -73,6 +76,8 @@ public class RecoverController extends Controller {
             }
         }
 
+        //String errorPhone = recoverForm.error("phone").message();
+
         return ok(new JsonResult(false, recoverForm.errorsAsJson().toString()).toNode());
 
     }
@@ -83,25 +88,7 @@ public class RecoverController extends Controller {
      * @return
      */
     public Result recoverSMSHtml(){
-
-        String phone = flash("phone");
-
-//        String phoneToken = SecurityCache.getToken(RecoverCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-//        if(StringUtils.isEmpty(phoneToken) || !user.getPhone().equals(phoneToken)){
-//            play.Logger.info("未经过验证页面，直接跳转");
-//            return redirect(routes.MySecurityController.changePhoneIndex().url());
-//        }
-
-        return ok(recoverSMS.render());
-    }
-
-    /**
-     * 下发短信
-     *
-     * @return
-     */
-    public Result recoverSendSMS(){
-        return ok();
+        return ok(recoverSMS.render(flash()));
     }
 
     /**
@@ -110,21 +97,25 @@ public class RecoverController extends Controller {
      * @return
      */
     public Result recoverCheckSMS(){
-        Form<CodeForm> codeForm = Form.form(CodeForm.class).bindFromRequest();
-        if(!codeForm.hasErrors()) {
+        Form<PhoneCodeForm> phoneCodeForm = Form.form(PhoneCodeForm.class).bindFromRequest();
+        if(!phoneCodeForm.hasErrors()) {
             try {
-                CodeForm code = codeForm.get();
+                PhoneCodeForm phoneCode = phoneCodeForm.get();
 
-                //页面关联token
-                //SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
+                if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
+                    throw new AppBusinessException("校验码验证失败");
+                }
+
+                flash("phoneCode",phoneCode.getPhone());
+                RecoverCache.setToken(RecoverCache.SECURITY_TOKEN_PHONE_KEY,phoneCode.getPhone(),phoneCode.getPhone());
                 return ok(new JsonResult(true, null, routes.RecoverController.recoverPswHtml().url()).toNode());
 
             } catch (AppBusinessException e) {
-                codeForm.reject("errors", e.getMessage());
+                phoneCodeForm.reject("errors", e.getMessage());
             }
         }
 
-        return ok(new JsonResult(false, codeForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, phoneCodeForm.errorsAsJson().toString()).toNode());
     }
 
     /**
@@ -133,7 +124,8 @@ public class RecoverController extends Controller {
      * @return
      */
     public Result recoverPswHtml(){
-        return ok(recoverPsw.render());
+
+        return ok(recoverPsw.render(flash()));
     }
 
     /**
@@ -147,8 +139,22 @@ public class RecoverController extends Controller {
             try {
                 PswForm psw = pswForm.get();
 
-                //页面关联token
-                //SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
+                String phone = RecoverCache.getToken(RecoverCache.SECURITY_TOKEN_PHONE_KEY,psw.getPhone());
+                if(StringUtils.isEmpty(psw.getPhone())){
+                    throw new AppBusinessException("校验用户失败，请重新走流程");
+                }
+                if(!psw.getPhone().equals(phone)){
+                    throw new AppBusinessException("校验用户失败，请重新走流程");
+                }
+
+                User user = userService.findByPhone(psw.getPhone());
+                if(null == user){
+                    throw new AppBusinessException("校验用户失败，请重新走流程");
+                }
+
+                userService.updatePassword(user,psw);
+
+                RecoverCache.removeToken(RecoverCache.SECURITY_TOKEN_PHONE_KEY, psw.getPhone());
                 return ok(new JsonResult(true, null, routes.RecoverController.recoverPswOk().url()).toNode());
 
             } catch (AppBusinessException e) {
@@ -160,7 +166,7 @@ public class RecoverController extends Controller {
     }
 
     public Result recoverPswOk(){
-        return ok();
+        return ok(recoverOk.render());
     }
 
 

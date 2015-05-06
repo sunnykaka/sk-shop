@@ -7,6 +7,8 @@ import play.data.validation.Constraints;
  */
 public class PswForm {
 
+    private String phone;
+
     @Constraints.Required(message = "新密码不能为空")
     @Constraints.MinLength(value = 4, message = "新密码长度需要为4-20位")
     @Constraints.MaxLength(value = 20, message = "新密码长度需要为4-20位")
@@ -16,6 +18,14 @@ public class PswForm {
     @Constraints.MinLength(value = 4, message = "验证密码长度需要为4-20位")
     @Constraints.MaxLength(value = 20, message = "验证密码长度需要为4-20位")
     private String rePassword;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getNewPassword() {
         return newPassword;

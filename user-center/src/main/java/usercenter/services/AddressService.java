@@ -37,6 +37,8 @@ public class AddressService {
         jpql += " and a.userId = :userId ";
         queryParams.put("userId", userId);
 
+        jpql += " order by a.defaultAddress desc ";
+
         return generalDAO.query(jpql, Optional.empty(), queryParams);
     }
 
