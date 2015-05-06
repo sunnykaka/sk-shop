@@ -20,10 +20,10 @@ import java.util.List;
 @org.springframework.stereotype.Controller
 public class AddressController extends Controller {
 
-    /** 最多只有添加5条数据 */
-    public static final int DEFAULT_ADDRESS_SIZE = 5;
+    /** 最多只有添加数据 */
+    public static final int DEFAULT_ADDRESS_SIZE = 4;
 
-    public static int test_userId = 1;
+    public static int test_userId = 14329;
 
     @Autowired
     private AddressService addressService;
@@ -36,6 +36,14 @@ public class AddressController extends Controller {
        List<Address> addressList = addressService.queryAllAddress(test_userId);
 
        return ok(myAddress.render(addressList));
+
+    }
+
+    public Result list() {
+
+        List<Address> addressList = addressService.queryAllAddress(test_userId);
+
+        return ok(new JsonResult(false,null,addressList).toNode());
 
     }
 
@@ -91,7 +99,7 @@ public class AddressController extends Controller {
 
         int addressCount = addressService.getMyAddressCount(test_userId);
         if(addressCount >= DEFAULT_ADDRESS_SIZE){
-            return ok(new JsonResult(false, "最多只能添加5个送货地址").toNode());
+            return ok(new JsonResult(false, "最多只能添加"+ DEFAULT_ADDRESS_SIZE +"个送货地址").toNode());
         }
 
         if(addressCount == 0){

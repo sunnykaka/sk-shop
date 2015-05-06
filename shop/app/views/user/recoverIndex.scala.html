@@ -1,0 +1,30 @@
+@()
+
+@main() {
+    <script src="@routes.Assets.at("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.at("js/login-reg.js")"></script>
+} {
+
+    <!--reg-box-->
+    <div class="reg-box width1200">
+        <div class="reg-box-inner">
+            <h2>忘记密码</h2>
+            <form class="reg-form" action="@controllers.user.routes.RecoverController.recoverCheckPhone()" method="post">
+                <div class="item-row reg-phone">
+                    <label for="phoneNum">请输入手机号号码</label>
+                    <input type="text" id="phoneNum" name="phone" class="form-text phoneNum"/>
+                    <span class="errormsg" id="errormsg-phoneNum"></span>
+                </div>
+                <div class="item-row phone-code">
+                    <label for="phone-code">验证码</label>
+                    <input type="text" id="phone-code" name="imageCode" class="form-text phone-code-input"/>
+                    <img class="get-code-btn" src="@controllers.user.routes.ImageController.randomImageCode()" />
+                    <span class="errormsg" id="errormsg-phone-code"></span>
+                </div>
+                <div><button type="submit"  id="reg-btn" class="reg-btn">提交</button></div>
+            </form>
+        </div>
+    </div>
+    <!--end reg-box-->
+
+}

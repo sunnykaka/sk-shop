@@ -1,0 +1,34 @@
+@()
+
+@main() {
+    <script src="@routes.Assets.at("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.at("js/login-reg.js")"></script>
+    <script type="text/javascript">
+        FG.user.register();
+    </script>
+} {
+
+    <!--reg-box-->
+    <div class="reg-box width1200">
+        <div class="reg-box-inner">
+            <h2>用户注册</h2>
+            <form class="reg-form" id="reg-form" >
+                <div class="item-row reg-phone">
+                    <label for="phoneNum">请输入手机号号码</label>
+                    <input type="text" id="phoneNum" name="phone" class="form-text phoneNum"/>
+                    <span class="errormsg" id="errormsg-phoneNum"></span>
+                </div>
+                <div class="item-row phone-code">
+                    <label for="phone-code">短信验证码</label>
+                    <input type="text" id="phone-code" name="verificationCode" class="form-text phone-code-input"/>
+                    <button class="get-code-btn" id="get-code-btn">获取验证码</button>
+                    <span class="errormsg" id="errormsg-phone-code"></span>
+                </div>
+                <div><button type="submit"  id="reg-btn" class="reg-btn">提交</button></div>
+            </form>
+        </div>
+    </div>
+    <!--end reg-box-->
+
+
+}

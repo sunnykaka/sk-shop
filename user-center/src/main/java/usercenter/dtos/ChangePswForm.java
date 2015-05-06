@@ -5,7 +5,7 @@ import play.data.validation.Constraints;
 /**
  * Created by zhb on 15-4-30.
  */
-public class PasswordForm {
+public class ChangePswForm {
 
     @Constraints.Required(message = "密码不能为空")
     @Constraints.MinLength(value = 4, message = "密码长度需要为4-20位")
