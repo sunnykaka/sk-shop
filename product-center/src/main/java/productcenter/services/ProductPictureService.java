@@ -87,6 +87,23 @@ public class ProductPictureService {
         }
     }
 
+
+    public ProductPicture getMainProductPictureByProductIdSKuId(int productId, int skuId) {
+        play.Logger.info("------ProductPictureService getMainProductPictureByProductIdSKuId begin exe-----------" + productId + " : " + skuId);
+
+        String jpql = "select o from ProductPicture o where 1=1 and o.mainPic=1 and o.productId=:productId and o.skuId=:skuId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+        queryParams.put("skuId", skuId);
+
+        List<ProductPicture> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        if(list != null && list.size() > 0) {
+            return list.get(0);
+        }else{
+            return new ProductPicture(ProductPicture.PRODUCT_DEFAULT_PIC);
+        }
+    }
+
     public ProductPicture getMinorProductPictureByProductId(int productId) {
         play.Logger.info("------ProductPictureService getMinorProductPictureByProductId begin exe-----------" + productId);
 

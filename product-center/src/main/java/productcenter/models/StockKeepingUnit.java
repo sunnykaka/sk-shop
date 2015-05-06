@@ -61,19 +61,9 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
     private SKUState skuState = SKUState.REMOVED;
 
     /**
-     * 库存数量，查询sku的时候如果提供仓库则可读出库存数量
-     */
-    private Integer stockQuantity;
-
-    /**
      * SKU 属性列表
      */
     private List<SkuProperty> skuProperties;
-
-    /**
-     * 本sku的顾客购买上限，防止恶意下单
-     */
-    private Integer tradeMaxNumber;
 
     /**
      * 创建时间
@@ -104,9 +94,7 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
                 ", marketPrice=" + marketPrice +
                 ", skuPropertiesInDb='" + skuPropertiesInDb + '\'' +
                 ", skuState=" + skuState +
-                ", stockQuantity=" + stockQuantity +
                 ", skuProperties=" + skuProperties +
-                ", tradeMaxNumber=" + tradeMaxNumber +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
@@ -195,30 +183,12 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
     }
 
     @Transient
-    public Integer getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(Integer stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
-
-    @Transient
     public List<SkuProperty> getSkuProperties() {
         return skuProperties;
     }
 
     public void setSkuProperties(List<SkuProperty> skuProperties) {
         this.skuProperties = skuProperties;
-    }
-
-    @Transient
-    public Integer getTradeMaxNumber() {
-        return tradeMaxNumber;
-    }
-
-    public void setTradeMaxNumber(Integer tradeMaxNumber) {
-        this.tradeMaxNumber = tradeMaxNumber;
     }
 
     @Column(name = "createTime")

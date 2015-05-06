@@ -6,11 +6,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import productcenter.models.Product;
 import productcenter.models.SkuProperty;
 import productcenter.models.SkuStorage;
 import productcenter.models.StockKeepingUnit;
 import productcenter.util.PropertyValueUtil;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.*;
 
 /**
@@ -24,6 +27,9 @@ public class SkuAndStorageService {
 
     @Autowired
     GeneralDao generalDao;
+
+    @Autowired
+    ProductService productService;
 
     /**
      * 将sku数据库中的字符串pidvid列表转换为Sku属性的List
@@ -96,6 +102,33 @@ public class SkuAndStorageService {
     }
 
     /**
+     * 判断是否可以添加sku
+     * @param skuId
+     * @return
+     */
+    public boolean isSkuUsable(int skuId) {
+        boolean flag = false;
+        //sku所属商品是否下架
+        StockKeepingUnit sku = this.getStockKeepingUnitById(skuId);
+        if (sku != null && sku.canBuy()) {
+            Product product = productService.getProductById(sku.getProductId());
+            if (!product.getIsDelete() && product.isOnline()) {
+                flag = true;
+            }
+        }
+        //sku是否有库存
+        if (flag) {
+            SkuStorage skuStorage = this.getSkuStorage(skuId);
+            if (skuStorage != null) {
+                flag = skuStorage.getStockQuantity() > 0;
+            } else {
+                flag = false;
+            }
+        }
+        return flag;
+    }
+
+    /**
      * 通过产品（商品）id获取sku列表(包含sku属性)
      * @param productId
      * @return
@@ -112,6 +145,34 @@ public class SkuAndStorageService {
             loadSkuProperty(sku);
         }
         return skus;
+    }
+
+    /**
+     * 增加sku库存数
+     * @param skuId
+     * @param number
+     * @return
+     */
+    public boolean addSkuStock(int skuId, int number) {
+        play.Logger.info("------SkuAndStorageService addSkuStock begin exe-----------" + skuId + ":" + number);
+        EntityManager em = generalDao.getEm();
+        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity + ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
+        int count = query.executeUpdate();
+        return count == 1;
+    }
+
+    /**
+     * 减去sku库存数
+     * @param skuId
+     * @param number
+     * @return
+     */
+    public boolean minusSkuStock(int skuId, int number) {
+        play.Logger.info("------SkuAndStorageService minusSkuStock begin exe-----------" + skuId + ":" + number);
+        EntityManager em = generalDao.getEm();
+        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity - ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
+        int count = query.executeUpdate();
+        return count == 1;
     }
 
     /**
