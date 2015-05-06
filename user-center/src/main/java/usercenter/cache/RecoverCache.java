@@ -6,15 +6,15 @@ import play.cache.Cache;
 /**
  * Created by zhb on 15-4-30.
  */
-public class SecurityCache {
+public class RecoverCache {
 
-    public static int SECURITY_TOKEN_EXPIRE_TIME = 60 * 60 * 24;
+    public static int SECURITY_TOKEN_EXPIRE_TIME = 60 * 60 * 10;
 
-    public static final String SECURITY_TOKEN_EMAIL_ACTIVITY_KEY = "activity";
-
-    public static final String SECURITY_TOKEN_EMAIL_CHANGE_KEY = "change";
+    public static final String SECURITY_TOKEN_CODE_KEY = "code";
 
     public static final String SECURITY_TOKEN_PHONE_KEY = "phone";
+
+    public static final String SECURITY_TOKEN_OK_KEY = "ok";
 
     /**
      * 添加

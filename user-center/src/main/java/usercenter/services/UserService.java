@@ -17,7 +17,7 @@ import play.twirl.api.Content;
 import usercenter.constants.AccountType;
 import usercenter.domain.SmsSender;
 import usercenter.dtos.LoginForm;
-import usercenter.dtos.PasswordForm;
+import usercenter.dtos.ChangePswForm;
 import usercenter.dtos.PhoneCodeForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
@@ -184,7 +184,7 @@ public class UserService {
      * @return
      */
     @Transactional
-    public User updatePassword(User user,PasswordForm psw){
+    public User updatePassword(User user,ChangePswForm psw){
 
         if(!psw.getNewPassword().equals(psw.getRePassword())) {
             throw new AppBusinessException("两次输入密码不一致");
