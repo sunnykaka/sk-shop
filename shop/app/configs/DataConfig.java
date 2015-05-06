@@ -45,6 +45,7 @@ public class DataConfig {
             put("hibernate.order_inserts", "true");
             put("hibernate.max_fetch_depth", "2");
             put("hibernate.current_session_context_class", "org.springframework.orm.hibernate4.SpringSessionContext");
+            put("hibernate.connection.zeroDateTimeBehavior", "convertToNull");
         }});
         entityManagerFactory.afterPropertiesSet();
         return entityManagerFactory.getObject();
