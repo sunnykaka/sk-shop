@@ -20,7 +20,7 @@ h4{font-size:12px;}
 .both{clear:both;}
 .form-text{width:280px;padding-left: 8px;border:1px solid #ccc;height: 32px;line-height: 32px;}
 .form-text-error {border-color: #FF2D54;}
-.form-input-tip{  position: absolute;  background-color: #f5f5f5;  padding: 4px 0;  color: #999;}
+.form-input-tip{  position: absolute;  background-color: #f5f5f5;  padding: 4px 0;  color: #999;width: 290px;}
 /*top*/
 .top{background: #f3f7f6;height:40px;width: 100%;}
 .top .left h1{font-size:12px;line-height: 40px;font-weight: normal;}
@@ -65,7 +65,9 @@ h4{font-size:12px;}
 .login-inner .ico1{left: 12px;top: 10px;}
 .login-inner .ico2{background-position:0 -40px;left: 12px;top: 10px;}
 .login-inner .login-input label,.login-inner .login-PW label{position:absolute;left: 40px;top:7px;color:#a1a1a1;}
-.login-inner .errormsg,.reg-box-inner .errormsg{height: 18px;padding: 4px 0 4px 34px;line-height: 20px;
+.login-inner .errormsg,.reg-box-inner .errormsg,
+.forget-pw-fir-form .errormsg,
+.forget-pw-sec-form .errormsg,.forget-pw-thr-form .errormsg{height: 18px;padding: 4px 0 4px 34px;line-height: 20px;
     color: #FF2D54;display: block;
 }
 .login-inner .login-btn,.reg-box-inner .reg-btn{width: 290px;height: 34px;background: #000;text-align: center;color:#fff;border: none;
@@ -79,10 +81,15 @@ h4{font-size:12px;}
 /*reg*/
 .reg-box-inner{width:630px;margin:50px auto;height: 460px;background:#f5f5f5;border-radius: 10px;padding: 50px 0 30px 0;}
 .reg-box-inner h2{height:30px;text-align: center;font-weight: normal;font-size: 25px;padding-bottom:20px;}
-.reg-box-inner .reg-form div{position: relative;width: 290px;margin: 0 auto;}
+.reg-box-inner .reg-form div,.forget-pw-fir-form div,.item-row{position: relative;width: 290px;margin: 0 auto;}
 .reg-box-inner .reg-form .phone-code-input{width: 150px;}
-.reg-box-inner .reg-form label{position: absolute;color: #a1a1a1;top: 8px;left: 8px;}
-.reg-box-inner .reg-form .get-code-btn{background:#F3F3F3;height:34px;width:110px;text-align: center;
+.reg-box-inner .reg-form label,.forget-pw-fir-form label,.forget-pw-sec-form label,.forget-pw-thr-form label{
+    position: absolute;color: #a1a1a1;top: 8px;left: 8px;
+}
+.reg-box-inner .reg-form .get-code-btn,
+.forget-pw-fir-form .next-btn,
+.forget-pw-sec-form .next-btn,
+.forget-pw-sec-form .get-code-btn,.forget-pw-thr-form .next-btn,.forget-pw-fou-inner .next-btn{background:#F3F3F3;height:34px;width:110px;text-align: center;
     border: 1px solid #ccc;margin-left: 15px;color: #FF2D54;cursor: pointer;
 }
 .reg-box-inner .errormsg {padding-left:8px;}
@@ -94,22 +101,28 @@ h4{font-size:12px;}
 /*end reg*/
 
 /*order-submit*/
-.order-step{width:600px;height: 100px;margin:35px auto 0; overflow: hidden}
+.order-step,.mycart-step,.pay-step{width:600px;height: 100px;margin:35px auto 0;}
 .order-step .step-bg{height:20px;width: 541px;background: url("../images/step-bg.gif") no-repeat;margin: 0 auto; }
-.order-step ul{margin-top: 15px;}
-.order-step li{float:left;height: 30px;line-height: 30px;font-size: 15px;margin-right: 200px;color:#FF2D54;}
-.order-step .current{margin-right: 170px;}
-.order-step .last{width:90px;margin-right: 0;color:#000;}
-.order-submit h3{font-size: 15px;font-weight: normal;margin-bottom: 20px;}
+.order-step ul,.mycart-step ul,.pay-step ul{margin-top: 15px;width: 630px;}
+.order-step li,.mycart-step li,.pay-step li{float:left;height: 30px;line-height: 30px;font-size: 15px;margin-right: 200px;color:#FF2D54;}
+/*.order-step .current,.mycart-step .current{margin-right: 170px;}*/
+.order-step .last,.mycart-step .last,.pay-step .last{width:90px;margin-right: 0;color:#000;}
+.order-submit h3,.mycart-list h3{font-size: 15px;font-weight: normal;margin-bottom: 20px;}
 .order-submit .select-address,.order-submit .confirm-product{margin-bottom: 30px;}
 .order-submit .select-address ul{width:1214px;}
-.order-submit .select-address li{float: left;padding: 20px;width: 249px;border:1px solid #cccccc;margin-right: 10px;}
-.order-submit .select-address .current{position:relative;border:1px solid #FF2D54;}
+.order-submit .select-address li{float: left;padding: 20px;width: 249px;border:1px solid #cccccc;margin-right: 10px;
+}
+.order-submit .select-address .current,.order-submit .select-address .highLight{position:relative;border:1px solid #FF2D54;}
+.order-submit .select-address .default{display: none;cursor: pointer;}
+.order-submit .select-address .current .default,.order-submit .select-address .highLight .default{display: block;}
 .order-submit .select-address .add{height: 121px;position: relative;cursor: pointer;}
 /*.order-submit .select-address .last{margin-right:0;}*/
-.order-submit .select-address .current-ico{position: absolute;width: 31px;height: 30px;
+/*.order-submit .select-address  .current-ico{display: none;}*/
+.order-submit .select-address .current .current-ico,.order-submit .select-address .highLight .current-ico{
+    position: absolute;width: 31px;height: 30px;
     background: url("../images/default-ico.gif") no-repeat;right: 0;bottom: 0;
 }
+
 .select-address .add .add-ico,.select-address .add p{position: absolute;}
 .select-address .add .add-ico{width: 51px;height: 51px;background: url("../images/address-addd-ico.gif") no-repeat;
     left: 50%;top: 50%;margin:-25px 0 0 -25px;
@@ -122,11 +135,12 @@ h4{font-size:12px;}
 .select-address .edit-address .btn{cursor: pointer;}
 .select-address .edit-address .edit{margin-right: 20px;}
 
-.confirm-product table{width: 100%;text-align: center;vertical-align: middle;}
-.confirm-product th{padding-bottom: 10px;}
-.confirm-product tr{border-bottom: 1px solid #e5e5e5;}
+.confirm-product table,.mycart-list table{width: 100%;text-align: center;vertical-align: middle;}
+.confirm-product th,.mycart-list th{padding-bottom: 10px;}
+.confirm-product tr,.mycart-list tr{border-bottom: 1px solid #e5e5e5;}
 .confirm-product td{}
-.confirm-product .actual-price{color: #FF2D54;}
+.confirm-product table .col1,.mycart-list table .col1{width: 100px;}
+.confirm-product .actual-price,.mycart-inner .actual-price{color: #FF2D54;}
 .total{margin-bottom: 20px;width: 100%;overflow: hidden;}
 .total-info{float:left;width: 747px;padding-left: 30px;}
 .total-info h3{color: #FF2D54;}
@@ -137,7 +151,104 @@ h4{font-size:12px;}
 .total table .last {border-top:1px solid  #e5e5e5;}
 .total .actual-pay-money{color: #FF2D54;font-size: 15px;}
 .order-btn{text-align: right;}
-.order-btn .order-submit-btn{float: right;width:410px;height: 80px;text-align: center;line-height: 80px;
+.order-btn .order-submit-btn,.mycart-inner .toOrder,.pay-inner .pay-money-btn{float: right;width:410px;height: 80px;text-align: center;line-height: 80px;
     background: #000;font-size: 14px;color: #fff;cursor: pointer;
 }
 /*end order-submit*/
+
+/*mycart*/
+.mycart-empty{margin-top: 50px;display: none;}
+.mycart-step li{color:#000;}
+.mycart-step .current{color: #FF2D54;}
+.mycart-step .step-bg{height:20px;width: 541px;background: url("../images/step-bg-mycart.gif") no-repeat;margin: 0 auto;}
+.mycart-inner .mycart-empty p{height: 52px;width: 200px; line-height: 52px;padding-left: 70px;text-align: center;
+    background: url("../images/cart-ico.gif") no-repeat; margin: 0 auto;
+}
+.mycart-inner .mycart-empty a{color: #FF2D54;}
+.mycart-inner .amount{line-height:24px;height:30px;position:relative;padding-left:87px;}
+.mycart-inner .amount .btn-sub,.mycart-inner .amount .btn-add,.mycart-inner .amount .text-number{width:14px;height:22px;line-height:22px;
+    border:1px solid #e6e6e6;text-align:center;background-color:#fff;}
+.mycart-inner .amount .btn-sub span,.mycart-inner .amount .btn-add span{display:block;width:14px;height:22px;}
+.mycart-inner .amount .btn-sub,.mycart-inner .amount .btn-add{cursor:pointer;position:absolute;top:0;}
+.mycart-inner .amount .btn-sub{left:72px}
+.mycart-inner .amount .btn-add{left:117px}
+.mycart-inner .amount .btn-add:hover,.mycart-inner .amount .btn-sub:hover{width:28px;height:33px;top:-6px;}
+.mycart-inner .amount .btn-add:hover span,.mycart-inner .amount .btn-sub:hover span{width:28px;height:33px;line-height:33px;font-size:20px;font-family:"Microsoft Yahei",STHeiti;}
+.mycart-inner .amount .btn-sub:hover{left:62px}
+.mycart-inner .amount .btn-add:hover{left:112px}
+.mycart-inner .amount .text-number{float:left;width:30px;border-width:1px 0}
+.mycart-inner .amount a:hover{text-decoration:none}
+.mycart-inner .amount .btn-sub{border-width:1px;}
+.mycart-inner .amount .text-number{width:30px}
+.mycart-inner .action {width: 100px;}
+.mycart-inner tfoot tr{height:100px; border-bottom: none;}
+.mycart-inner .action-number{width: 200px;}
+.mycart-inner .total-price{color: #FF2D54;}
+.mycart-inner .toOrder{width: 200px;}
+/*end mycart*/
+
+/*pay*/
+.pay-inner{margin-bottom: 100px;}
+.pay-step li{color: #FF2D54;}
+.pay-step .step-bg{height:20px;width: 541px;background: url("../images/step-bg-pay.gif") no-repeat;margin: 0 auto;}
+.pay-step .last{color: #FF2D54;}
+.pay-inner .pay-info{margin-left: 148px;margin-top: 30px;margin-bottom: 20px;}
+.pay-inner .pay-info h3{height: 32px;line-height: 32px;font-size: 16px;padding-left: 40px;
+    background: url("../images/pay-title-ico.gif") no-repeat left center;margin-bottom: 10px;
+}
+.pay-inner p{font-size: 14px;line-height: 32px;text-indent: 34px; color: #4a4947;}
+.pay-inner .pay-list{margin-left:100px;border:1px solid #cccccc;padding: 38px 90px 80px;}
+.pay-inner .pay-list h3{font-weight: normal;border-bottom: 1px solid #cccccc;padding-bottom: 8px;}
+.pay-inner .pay-list h4{font-weight: normal;}
+.pay-inner .pay-list .total-money{color: #FF2D54;}
+.pay-inner .list{padding:10px 0;}
+.pay-inner .list li{position:relative;float:left;width:138px;height:42px;margin-right:32px;padding:10px 0 10px 40px;cursor:pointer;}
+.pay-inner .list li i{position:absolute;margin:14px 0 0 -22px;width:12px;height:12px;background:url("../images/form-radio.png") no-repeat 0 0;}
+.pay-inner .list .current i{background-position:0 -20px;}
+.pay-inner .list img{border:1px solid #ddd;}
+.pay-inner .default-pay li{float:left;width:120px;height:40px;}
+.pay-inner .default-pay .more-payBank{width:180px;line-height:40px;cursor:default;padding-left: 0}
+.pay-inner .default-pay .more-payBank a{color:#FF2D54;}
+.pay-inner .more-list{display: none;}
+.pay-inner .pay-money-btn{float: left;width: 150px;height: 40px;line-height: 40px;margin-left:20px;}
+/*end pay*/
+
+/*forget-pw*/
+.forget-pw-fir-inner h3,.forget-pw-sec-inner h3,.forget-pw-thr-inner h3,.forget-pw-fou-inner h3{margin:30px 0 40px 30px;}
+.forget-pw-fir-inner .forget-pw-step{}
+.forget-pw-fir-inner .forget-pw-step .step-bg,
+.forget-pw-sec-inner .step-bg,
+.forget-pw-thr-inner .step-bg,.forget-pw-fou-inner .step-bg{width: 620px;height: 20px;margin: 0 auto;
+    background: url("../images/forget-pw-stepbg.gif") no-repeat;
+}
+.forget-pw-sec-inner .step-bg{
+    background-position: 0 -20px;
+}
+.forget-pw-thr-inner .step-bg{
+    background-position: 0 -40px;
+}
+.forget-pw-fou-inner .step-bg{
+    background-position: 0 -60px;
+}
+.forget-pw-fir-inner .forget-pw-step ul,.forget-pw-sec-inner ul,
+.forget-pw-thr-inner ul,.forget-pw-fou-inner ul{width: 668px;margin: 10px auto 60px;height: 30px;line-height: 30px;}
+.forget-pw-fir-inner .forget-pw-step li,.forget-pw-sec-inner .forget-pw-step li,
+.forget-pw-thr-inner .forget-pw-step li,.forget-pw-fou-inner .forget-pw-step li{float: left;margin-right: 150px;font-size: 14px;}
+.forget-pw-fir-inner .forget-pw-step .highLight,.forget-pw-sec-inner .highLight,.forget-pw-thr-inner .highLight,.forget-pw-fou-inner .highLight{color: #FF2D54;}
+.forget-pw-fir-inner .forget-pw-step .last,.forget-pw-sec-inner .forget-pw-step .last,
+.forget-pw-thr-inner .forget-pw-step .last,.forget-pw-fou-inner .forget-pw-step .last{margin-right: 0;}
+.forget-pw-fir-form,.forget-pw-sec-form{width: 620px;margin: 0 auto;}
+.forget-pw-fir-form .username-input{}
+.forget-pw-fir-form .vcode{width: 140px;}
+.forget-pw-fir-form .code{width: 110px;height: 34px;margin-left: 30px;vertical-align: middle;cursor: pointer;}
+.forget-pw-fir-form .next-btn,.forget-pw-sec-form .next-btn,.forget-pw-thr-form .next-btn,.forget-pw-fou-inner .next-btn
+{width:290px;background: #000000;border: none;color: #fff;margin-left: 0;}
+.forget-pw-fir-form .errormsg{padding-left: 0;}
+.forget-pw-fou-inner .next-btn{display: block;line-height: 34px;}
+.forget-pw-sec-form p,.forget-pw-fou-inner p{text-align: center;height: 34px;line-height: 34px;margin-bottom: 30px;}
+.forget-pw-sec-form .phoneCode{width: 150px;}
+/* end forget-pw*/
+
+/* 提示信息 */
+.com_tip{ border: 1px solid #FF2D54; padding: 2px 6px; line-height: 18px; background: #fef6f1; font-size: 12px; z-index: 9999 }
+.com_tip a{color:#FF2D54;}

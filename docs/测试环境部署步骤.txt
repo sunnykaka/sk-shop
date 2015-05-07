@@ -1,0 +1,16 @@
+环境准备:
+JDK 1.8+
+scala 2.11.6+
+sbt 0.13.7+
+
+1. checkout源代码
+2. 编译并且打包代码.进入%sk_shop%目录,运行sbt ";clean ;project shop ;dist"
+3. %sk_shop%/shop/target/universal/shop-1.0.0-SNAPSHOT.zip是打包好的文件.假设解压缩到/home/admin/shop目录
+4. 运行项目, /home/admin/shop/bin/shop为运行脚本, 可以用下面命令启动:
+   /home/admin/shop/bin/shop -Dhttp.port=9000 -Dconfig.file=/home/admin/shop/conf/env/test.conf -Dlogger.file=/home/admin/shop/conf/env/test_logger.xml
+   (参数说明:
+    1) -Dhttp.port=9000 在9000端口运行, 默认即9000
+    2) -Dconfig.file=/home/admin/shop/conf/env/test.conf 指定配置文件路径,test.conf为测试环境配置文件, prod.conf为生产环境配置文件
+    3) -Dlogger.file=/home/admin/shop/conf/env/test_logger.xml 指定日志文件路径,test_logger.xml为测试环境配置文件, prod_logger.xml为生产环境配置文件
+        项目日志文件输出路径为~/web/logs
+   )

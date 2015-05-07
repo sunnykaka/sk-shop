@@ -8,7 +8,8 @@ object ApplicationBuild extends Build {
   lazy val common = (project in file("common")).
     settings(Commons.settings: _*).
     settings(
-      libraryDependencies ++= commonDependencies
+      libraryDependencies ++= commonDependencies,
+      unmanagedBase := baseDirectory.value / "lib"
     )
 
   lazy val user = (project in file("user-center")).

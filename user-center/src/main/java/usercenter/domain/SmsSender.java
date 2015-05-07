@@ -1,7 +1,6 @@
 package usercenter.domain;
 
-import common.services.SmsService;
-import common.utils.play.BaseGlobal;
+import common.utils.SmsUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import play.twirl.api.Content;
 import usercenter.cache.UserCache;
@@ -57,7 +56,7 @@ public class SmsSender {
 
     public boolean sendMessage(Content message) {
 
-        boolean success = BaseGlobal.ctx.getBean(SmsService.class).sendMessage(phone, message.body());
+        boolean success = SmsUtils.sendSms(phone, message.body());
         if(success) {
             UserCache.setMessageSendTimesInDay(phone, usage);
         }

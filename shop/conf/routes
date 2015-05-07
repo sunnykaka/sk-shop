@@ -3,78 +3,80 @@
 # ~~~~
 
 # Home page
-GET         /                                  @controllers.Application.index
+GET         /                                   @controllers.Application.index
 
 
 # user
-GET         /register                          @controllers.user.LoginController.registerPage
-POST        /register                          @controllers.user.LoginController.register
-GET         /login                             @controllers.user.LoginController.loginPage
-POST        /login                             @controllers.user.LoginController.login
-GET         /logout                            @controllers.user.LoginController.logout
-POST        /user/phone/get_code               @controllers.user.LoginController.requestPhoneCode(phone)
-GET         /user/phone/exist                  @controllers.user.LoginController.isPhoneExist(phone)
-GET         /user/username/exist               @controllers.user.LoginController.isUsernameExist(username)
-GET         /user/order                        @controllers.Application.myOrder
+GET         /register                           @controllers.user.LoginController.registerPage
+POST        /register                           @controllers.user.LoginController.register
+GET         /login                              @controllers.user.LoginController.loginPage
+POST        /login                              @controllers.user.LoginController.login
+GET         /logout                             @controllers.user.LoginController.logout
+POST        /user/phone/get_code                @controllers.user.LoginController.requestPhoneCode(phone)
+GET         /user/phone/exist                   @controllers.user.LoginController.isPhoneExist(phone)
+GET         /user/username/exist                @controllers.user.LoginController.isUsernameExist(username)
+GET         /user/order                         @controllers.Application.myOrder
 
 
 # my favorites
-GET         /my/favorites/product              @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
-POST        /my/favorites/product/del          @controllers.user.ProductFavoritesController.del(productId:Int)
-POST        /my/favorites/product/add          @controllers.user.ProductFavoritesController.add()
-GET         /my/favorites/designer             @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
-POST        /my/favorites/designer/del         @controllers.user.DesignerFavoritesController.del(designer:Int)
-POST        /my/favorites/designer/add         @controllers.user.DesignerFavoritesController.add()
+GET         /my/favorites/product               @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+POST        /my/favorites/product/del           @controllers.user.ProductFavoritesController.del(productId:Int)
+POST        /my/favorites/product/add           @controllers.user.ProductFavoritesController.add()
+GET         /my/favorites/designer              @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+POST        /my/favorites/designer/del          @controllers.user.DesignerFavoritesController.del(designer:Int)
+POST        /my/favorites/designer/add          @controllers.user.DesignerFavoritesController.add()
 # my address
-GET         /my/address                        @controllers.user.AddressController.index()
-GET         /my/address/list                   @controllers.user.AddressController.list()
-GET         /my/address/province               @controllers.user.AddressController.queryProvince()
-GET         /my/address/city                   @controllers.user.AddressController.queryCity(code)
-GET         /my/address/area                   @controllers.user.AddressController.queryArea(code)
-POST        /my/address/add                    @controllers.user.AddressController.add()
-POST        /my/address/update                 @controllers.user.AddressController.update()
-POST        /my/address/del                    @controllers.user.AddressController.del()
-POST        /my/address/defaultAddress         @controllers.user.AddressController.defaultAddress()
+GET         /my/address                         @controllers.user.AddressController.index()
+GET         /my/address/list                    @controllers.user.AddressController.list()
+GET         /my/address/province                @controllers.user.AddressController.queryProvince()
+GET         /my/address/city                    @controllers.user.AddressController.queryCity(code)
+GET         /my/address/area                    @controllers.user.AddressController.queryArea(code)
+POST        /my/address/add                     @controllers.user.AddressController.add()
+POST        /my/address/update                  @controllers.user.AddressController.update()
+POST        /my/address/del                     @controllers.user.AddressController.del(addressId:Int)
+POST        /my/address/defaultAddress          @controllers.user.AddressController.defaultAddress(addressId:Int)
 # my data
-GET         /my/data                           @controllers.user.MyDataController.index()
-POST        /my/data/update                    @controllers.user.MyDataController.update()
+GET         /my/data                            @controllers.user.MyDataController.index()
+POST        /my/data/update                     @controllers.user.MyDataController.update()
 # security
 #     修改密码
-GET         /my/security/psw/index             @controllers.user.MySecurityController.changePasswordIndex()
-POST        /my/security/psw/new               @controllers.user.MySecurityController.changePasswordNew()
-GET         /my/security/psw/do                @controllers.user.MySecurityController.changePasswordDo()
-POST        /my/security/psw/end               @controllers.user.MySecurityController.changePasswordEnd()
-GET         /my/security/psw/ok                @controllers.user.MySecurityController.changePasswordOk()
+GET         /my/security/psw/index              @controllers.user.MySecurityController.changePasswordIndex()
+POST        /my/security/psw/new                @controllers.user.MySecurityController.changePasswordNew()
+GET         /my/security/psw/do                 @controllers.user.MySecurityController.changePasswordDo()
+POST        /my/security/psw/end                @controllers.user.MySecurityController.changePasswordEnd()
+GET         /my/security/psw/ok                 @controllers.user.MySecurityController.changePasswordOk()
 #     修改手机
-GET         /my/security/phone/index           @controllers.user.MySecurityController.changePhoneIndex()
-POST        /my/security/phone/new             @controllers.user.MySecurityController.changePhoneNew()
-GET         /my/security/phone/do              @controllers.user.MySecurityController.changePhoneDo()
-POST        /my/security/phone/end             @controllers.user.MySecurityController.changePhoneEnd()
-GET         /my/security/phone/ok              @controllers.user.MySecurityController.changePhoneOk()
+GET         /my/security/phone/index            @controllers.user.MySecurityController.changePhoneIndex()
+POST        /my/security/phone/new              @controllers.user.MySecurityController.changePhoneNew()
+GET         /my/security/phone/do               @controllers.user.MySecurityController.changePhoneDo()
+POST        /my/security/phone/end              @controllers.user.MySecurityController.changePhoneEnd()
+GET         /my/security/phone/ok               @controllers.user.MySecurityController.changePhoneOk()
 #     修改邮箱
-GET         /my/security/email/index           @controllers.user.MySecurityController.changeEmailIndex()
-POST        /my/security/email/new             @controllers.user.MySecurityController.changeEmailNew()
-GET         /my/security/email/do              @controllers.user.MySecurityController.changeEmailDo()
-POST        /my/security/email/end             @controllers.user.MySecurityController.changeEmailEnd()
-GET         /my/security/email/ok              @controllers.user.MySecurityController.changeEmailOk(userId:Int)
+GET         /my/security/email/index            @controllers.user.MySecurityController.changeEmailIndex()
+POST        /my/security/email/new              @controllers.user.MySecurityController.changeEmailNew()
+GET         /my/security/email/do               @controllers.user.MySecurityController.changeEmailDo()
+POST        /my/security/email/end              @controllers.user.MySecurityController.changeEmailEnd()
+GET         /my/security/email/ok               @controllers.user.MySecurityController.changeEmailOk(userId:Int)
 #     新增邮箱--可能没有用处
-GET         /my/security/newEmail/index        @controllers.user.MySecurityController.newEmailIndex()
-POST        /my/security/newEmail/new          @controllers.user.MySecurityController.newEmailNew()
-GET         /my/security/newEmail/do           @controllers.user.MySecurityController.newEmailDo()
-POST        /my/security/newEmail/end          @controllers.user.MySecurityController.newEmailEnd()
-GET         /my/security/newEmail/ok           @controllers.user.MySecurityController.newEmailOk(userId:Int)
+GET         /my/security/newEmail/index         @controllers.user.MySecurityController.newEmailIndex()
+POST        /my/security/newEmail/new           @controllers.user.MySecurityController.newEmailNew()
+GET         /my/security/newEmail/do            @controllers.user.MySecurityController.newEmailDo()
+POST        /my/security/newEmail/end           @controllers.user.MySecurityController.newEmailEnd()
+GET         /my/security/newEmail/ok            @controllers.user.MySecurityController.newEmailOk(userId:Int)
 # recover
-GET         /recover/index                     @controllers.user.RecoverController.recoverIndex()
-POST        /recover/checkPhone                @controllers.user.RecoverController.recoverCheckPhone()
-GET         /recover/sms                       @controllers.user.RecoverController.recoverSMSHtml()
-POST        /recover/sendSms                   @controllers.user.RecoverController.recoverSendSMS()
-GET         /recover/checkSms                  @controllers.user.RecoverController.recoverCheckSMS()
-GET         /recover/psw                       @controllers.user.RecoverController.recoverPswHtml()
-GET         /recover/pswDo                     @controllers.user.RecoverController.recoverPswDo()
-GET         /recover/pswOk                     @controllers.user.RecoverController.recoverPswOk()
+GET         /recover/index                      @controllers.user.RecoverController.recoverIndex()
+POST        /recover/checkPhone                 @controllers.user.RecoverController.recoverCheckPhone()
+GET         /recover/sms                        @controllers.user.RecoverController.recoverSMSHtml()
+POST        /recover/checkSms                   @controllers.user.RecoverController.recoverCheckSMS()
+GET         /recover/psw                        @controllers.user.RecoverController.recoverPswHtml()
+POST        /recover/pswDo                      @controllers.user.RecoverController.recoverPswDo()
+GET         /recover/pswOk                      @controllers.user.RecoverController.recoverPswOk()
 # image code
-GET         /image/code                        @controllers.user.ImageController.randomImageCode()
-GET         /image/checkCode                   @controllers.user.ImageController.checkImageCode(imageCode)
+GET         /image/code                         @controllers.user.ImageController.randomImageCode()
+GET         /image/checkCode                    @controllers.user.ImageController.checkImageCode(imageCode)
+# 下发手机短信
+POST        /user/phone/sendSMS                 @controllers.user.SendSMSController.sendSMS(phone)
+
 #cart lidujun
 POST        /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
 POST        /cart/addSkuToCartNotReplace        @controllers.shop.CartController.addSkuToCartNotReplace(skuId:Int, number:Int)
@@ -83,4 +85,4 @@ GET         /cart/showCart                      @controllers.shop.CartController
 POST        /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                      controllers.Assets.at(path="/public", file)
+GET         /assets/*file                       controllers.Assets.at(path="/public", file)

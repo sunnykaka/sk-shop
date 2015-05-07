@@ -1,34 +1,42 @@
-@()
+@(flash: java.util.Map[String, String])
 
 @main() {
     <script src="@routes.Assets.at("js/FormValidate.js")"></script>
-    <script src="@routes.Assets.at("js/login-reg.js")"></script>
-    <script type="text/javascript">
-        FG.user.register();
+    <script src="@routes.Assets.at("js/forget-pw.js")"></script>
+    <script>
+        FG.user.forgetSecPw();
     </script>
 } {
 
-    <!--reg-box-->
-    <div class="reg-box width1200">
-        <div class="reg-box-inner">
-            <h2>用户注册</h2>
-            <form class="reg-form" id="reg-form" >
-                <div class="item-row reg-phone">
-                    <label for="phoneNum">请输入手机号号码</label>
-                    <input type="text" id="phoneNum" name="phone" class="form-text phoneNum"/>
-                    <span class="errormsg" id="errormsg-phoneNum"></span>
+    @if(flash.get("phone")){
+        <div class="forget-pw-sec width1200">
+            <div class="forget-pw-sec-inner">
+                <h3>找回密码</h3>
+                <div class="forget-pw-step">
+                    <div class="step-bg"></div>
+                    <ul class="clearfix">
+                        <li class="highLight">填写账号</li>
+                        <li class="highLight">验证身份</li>
+                        <li>重置密码</li>
+                        <li class="last">成功</li>
+                    </ul>
                 </div>
-                <div class="item-row phone-code">
-                    <label for="phone-code">短信验证码</label>
-                    <input type="text" id="phone-code" name="verificationCode" class="form-text phone-code-input"/>
-                    <button class="get-code-btn" id="get-code-btn">获取验证码</button>
-                    <span class="errormsg" id="errormsg-phone-code"></span>
-                </div>
-                <div><button type="submit"  id="reg-btn" class="reg-btn">提交</button></div>
-            </form>
+                <form class="forget-pw-sec-form" id="forget-pw-sec-form">
+                    <input type="hidden" id="phoneNumber" value="@flash.get("phone")"/>
+                    <p>尚客已向你的手机号码 <span class="userPhone"></span>发送了验证码短信，请及时查看</p>
+                    <div class="item-row vcode-input">
+                        <label for="phoneCode">短信验证码</label>
+                        <input type="phoneCode" id="phoneCode" name="imageCode" class="form-text phoneCode"/>
+                        <button class="get-code-btn" id="get-code-btn">获取验证码</button>
+                        <span class="errormsg" id="errormsg-phoneCode"></span>
+                    </div>
+                    <div class="item-row"><button type="submit"  id="next-btn" class="next-btn">下一步</button></div>
+                </form>
+            </div>
         </div>
-    </div>
-    <!--end reg-box-->
-
+    }else{
+        跳转验证失败，不能手动跳本页面<br/>
+        <a href="@controllers.user.routes.RecoverController.recoverIndex()" >返回忘记密码首页</a>
+    }
 
 }
