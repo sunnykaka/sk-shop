@@ -289,7 +289,7 @@ public class Order implements EntityClass<Integer> {
 
     @Column(name = "isDelete")
     @Basic
-    public boolean isDelete() {
+    public boolean getIsDelete() {
         return isDelete;
     }
 
