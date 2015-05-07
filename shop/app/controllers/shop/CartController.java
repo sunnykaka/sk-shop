@@ -4,18 +4,23 @@ import common.utils.JsonResult;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.models.SkuStorage;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
+import usercenter.models.address.Address;
+import usercenter.services.AddressService;
 import views.html.shop.showCart;
+import views.html.shop.chooseAddress;
+
 
 import java.util.List;
 
 import static play.Logger.error;
-
 
 /**
  * 购物车Controller
@@ -29,6 +34,9 @@ public class CartController extends Controller {
     @Autowired
     SkuAndStorageService skuAndStorageService;
 
+    @Autowired
+    AddressService addressService;
+
     /**
      * 获取库存信息，用于前端数据验证(最大购买数限制)
      * @param skuId
@@ -39,7 +47,7 @@ public class CartController extends Controller {
             SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
             return ok(new JsonResult(true,"sku当前库存信息", skuStorage).toNode());
         } catch (final Exception e) {
-            error("获取sku当前库存信息出现异常:", e);
+            Logger.error("获取sku当前库存信息出现异常:", e);
             return ok(new JsonResult(false,"获取sku当前库存信息出现异常").toNode());
         }
     }
@@ -147,8 +155,29 @@ public class CartController extends Controller {
                 return ok(new JsonResult(false,"用户还没有登陆，请先登陆！").toNode());
             }
         } catch (final Exception e) {
-            error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
+            Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
             return ok(new JsonResult(false,"加入购物车时服务器发生异常").toNode());
+        }
+    }
+
+    /**
+     * 展示购物车公用代码
+     * @param checkErrMsg
+     * @return
+     */
+    private Result showCartOperator(String checkErrMsg) {
+        try {
+            //测试
+            User curUser = new User();
+            curUser.setId(14311);
+            //测试
+
+            //User curUser = SessionUtils.currentUser();
+            Cart cart = cartService.getCartByUserId(curUser.getId());
+            return ok(showCart.render(true, cart, checkErrMsg));
+        } catch (final Exception e) {
+            Logger.error("展示购物车时出现异常:", e);
+            return ok(showCart.render(false, null, "展示购物车时服务器发生异常！"));
         }
     }
 
@@ -162,19 +191,7 @@ public class CartController extends Controller {
      */
     //@SecuredAction
     public Result showCart(){
-        try {
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
-
-            //User curUser = SessionUtils.currentUser();
-            Cart cart = cartService.getCartByUserId(curUser.getId());
-            return ok(showCart.render(true, cart, null));
-        } catch (final Exception e) {
-            error("展示购物车时出现异常:", e);
-            return ok(showCart.render(false, null, "展示购物车时服务器发生异常！"));
-        }
+        return showCartOperator(null);
     }
 
     /**
@@ -189,8 +206,82 @@ public class CartController extends Controller {
             Cart cart = cartService.getCart(cartId);
             return ok(new JsonResult(true,"删除购物车成功").toNode());
         } catch (Exception e) {
-            error("删除购物车失败:", e);
+            Logger.error("删除购物车失败:", e);
             return ok(new JsonResult(false,"删除购物车失败").toNode());
+        }
+    }
+
+    /**
+     * 检查对某个sku的购买量，和库存进行对比
+     * 返回错误信息列表
+     *
+     * @param cartItemList
+     */
+    private String checkCartItem(List<CartItem> cartItemList) {
+        String errorMsg = null;
+        for (CartItem cartItem : cartItemList) {
+            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(cartItem.getSkuId());
+            if(skuStorage != null) {
+                if(skuStorage.getStockQuantity() < cartItem.getNumber()) {
+                    errorMsg = cartItem.getProductName() + "库存只有" + skuStorage.getStockQuantity() + "个";
+                }
+            } else {
+                errorMsg = "系统中找不到商品对应库存记录！";
+            }
+        }
+        return errorMsg;
+    }
+
+    /**
+     * 去结算，从购物车到订单页面
+     */
+    public Result cartToOrder() {
+        try {
+            //测试
+            User curUser = new User();
+            curUser.setId(14311);
+            //测试
+
+            //User curUser = SessionUtils.currentUser();
+            Cart cart = cartService.getCartByUserId(curUser.getId());
+            if (cart == null) {
+                Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
+                return redirect(controllers.shop.routes.CartController.showCart());
+            }
+            List<CartItem> cartItemList = cart.getCartItemList();
+            if (cartItemList.size() == 0) {
+                Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
+                return redirect(controllers.shop.routes.CartController.showCart());
+            }
+            String checkErrMsg = this.checkCartItem(cartItemList);
+            if (!StringUtils.isEmpty(checkErrMsg)) {  //Result showCartOperator(String checkErrMsg)
+                return showCartOperator(checkErrMsg);
+            }
+            return redirect(controllers.shop.routes.CartController.chooseAddress());
+        } catch (final Exception e) {
+            Logger.error("进入结算界面发生未知异常:", e);
+            return showCartOperator("进入结算界面发生未知异常，请联系商城客服人员");
+        }
+    }
+
+    /**
+     * 选择送货地址
+     * @return
+     */
+    public Result chooseAddress() {
+        try {
+            //测试
+            User curUser = new User();
+            curUser.setId(14311);
+            //测试
+
+            //User curUser = SessionUtils.currentUser();
+            List<Address> addressList = addressService.queryAllAddress(curUser.getId());
+            Cart cart = cartService.getCartByUserId(curUser.getId());
+            return ok(chooseAddress.render(true, addressList, cart, null));
+        } catch (final Exception e) {
+            error("系统发生异常：", e);
+            return ok(chooseAddress.render(false, null, null, "系统发生异常，请联系商城客服人员，谢谢！"));
         }
     }
 

@@ -1,5 +1,7 @@
 package ordercenter.constants;
 
+import common.models.utils.ViewEnum;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,10 +10,10 @@ import java.util.List;
  * User: lidujun
  * Date: 2015-04-30
  */
-public enum OrderState {
+public enum OrderState implements ViewEnum {
 
     /** 已创建 */
-    Create("创建订单, 等待付款", "", "【客户】提交订单","待支付"),
+    Create("创建订单, 等待客户付款", "", "【客户】提交订单","待支付"),
 
     /** 付款完成(若订单是货到付款, 此一步将省略) */
     Pay("已付款, 等待发货", "", "【客户】付款完成, 等待【客服】确认","待发货"),
@@ -184,6 +186,16 @@ public enum OrderState {
      */
     public static List<OrderState> userState() {
         return Arrays.asList(Create, Pay, Confirm, Print, Verify, Send, Success, Back, Close, Cancel);
+    }
+
+    @Override
+    public String getName() {
+        return toString();
+    }
+
+    @Override
+    public String getValue() {
+        return this.userVisible;
     }
 
 }

@@ -40,6 +40,9 @@ public class CartService {
     @Autowired
     private PropertyAndValueService propertyAndValueService;
 
+    //@Autowired
+    //private CmsService skCmsService;
+
     /**
      * 向购物车中加入Sku商品
      *
@@ -209,6 +212,8 @@ public class CartService {
                     cartItem.setProductName(product.getName());
 
                     //图片暂时不考虑
+
+
 
                     //后续再改 首发和非首发还没有做 //ldj
                     //根据判断是否是首发，当前价格要现算

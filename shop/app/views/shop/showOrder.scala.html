@@ -1,0 +1,170 @@
+@(flag:Boolean, addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, errorMsg:String)
+
+@main(){
+<link rel="stylesheet" href="@routes.Assets.at("css/base.css")" />
+<script type="text/javascript" src="@routes.Assets.at("js/jquery.min.js")"></script>
+
+<script type="text/javascript">
+$(function(){
+    $('.select-address li').hover(function(){
+        $(this).addClass('highLight');
+    },function(){
+        $(this).removeClass('highLight');
+    })
+});
+
+
+//添加购物车：
+/*
+ POST        /cart/getSkuStorage  skuId:Int    获取当前库存信息，包括了最大购买量和当前库存
+ */
+//展示购物车：GET         /cart/showCart
+//删除购物车项  /cart/deleteCartItem?cartId=&skuId=
+</script>
+} {
+//此需要删除
+    @addressList
+    @cart
+
+<div class="order-submit width1200">
+    <div class="order-inner">
+        <div class="order-step">
+            <div class="step-bg"></div>
+            <ul class="clearfix">
+                <li>我的购物车</li>
+                <li class="current">提交订单</li>
+                <li class="last">选择支付方式</li>
+            </ul>
+        </div>
+
+        @if(flag) {
+        <div class="select-address">
+            <h3>选择收货地址</h3>
+            <ul class="clearfix">
+            @if(addressList == null || addressList.size() == 0) {
+                //地址为空
+            } else {
+                @for((address, index) <- addressList.zipWithIndex) {
+                <li class="current">
+                    <div class="receiver"><strong>@address.getName<span class="space"></span>收</strong>
+                        <span class="default">
+                            @if(index == 0) {
+                                默认地址
+                            } else {
+
+                            }
+                        </span>
+                    </div>
+                    <div class="details-address">
+                        <p><span class="provice">@address.getProvince</span><span class="space"></span><span class="city">@address.getCity</span>
+                            <span class="space"></span><span class="area">@address.getArea</span>
+                        </p>
+                        <P class="location">@address.getLocation</P>
+                        <p class="phone">@address.getMobile</p>
+                    </div>
+                    <div class="edit-address">
+                        <!--浩斌那边要做的-->
+                        <span class="edit btn">修改</span>
+                        <span class="delete btn">删除</span>
+                    </div>
+                    <span class="current-ico"></span>
+                </li>
+                }
+            }
+                <li class="add">
+                    <div class="add-ico"></div>
+                    <p>新增收货地址</p>
+                </li>
+            </ul>
+        </div>
+        <div class="confirm-product">
+            <h3>确认商品信息</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col1"></th>
+                        <th>商品信息</th>
+                        <th>细节</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
+                    //没有购物车项目
+                } else {
+                    @for(cartItem <- cart.getCartItemList) {
+                        <tr>
+                            <td>
+                                <img src="images/test-product.jpg" alt=""/>
+                            </td>
+                            <td>
+                                <div class="pro-info">
+                                    <p class="pro-name">@cartItem.getProductName</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                @if(cartItem.getSku != null && cartItem.getSku.getSkuProperties != null) {
+                                    @for(property <- cartItem.getSku.getSkuProperties) {
+                                        <p>@property.getPropertyName ： @property.getPropertyValue</p>
+                                    }
+                                }
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <p class="actual-price">￥@cartItem.getCurUnitPrice</p>
+                                </div>
+                            </td>
+                            <td>
+                            1
+                            </td>
+                            <td>
+                            ￥@cartItem.getTotalPrice
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="total clearfix">
+            <div class="total-info">
+                <img src="images/total-left-ico.gif" alt=""/>
+                <h3>全场免邮！全场免关税！</h3>
+                <p>尚客不收取关税，如果您购买的商品被海关抽捡，请自行将关税缴纳给物流公司。</p>
+            </div>
+            @if(cart != null) {
+            <table>
+                <tr>
+                    <td>商品总计：</td>
+                    <td>￥@cart.getTotalMoney</td>
+                </tr>
+                <tr>
+                    <td>运费：</td>
+                    <td>￥00.00</td>
+                </tr>
+                <tr>
+                    <td>关税：</td>
+                    <td>￥00.00</td>
+                </tr>
+                <tr class="last">
+                    <td>应付金额：</td>
+                    <td class="actual-pay-money">￥@cart.getTotalMoney</td>
+                </tr>
+            </table>
+            } else {
+                //购物车对象获取不到时
+            }
+        </div>
+        <div class="order-btn">
+            <span class="order-submit-btn">提交订单</span>
+        </div>
+        } else {
+            @errorMsg
+        }
+    </div>
+</div>
+}

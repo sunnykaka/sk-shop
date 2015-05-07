@@ -83,6 +83,7 @@ POST        /cart/addSkuToCartNotReplace        @controllers.shop.CartController
 POST        /cart/addSkuToCartReplace           @controllers.shop.CartController.addSkuToCartReplace(skuId:Int, number:Int)
 GET         /cart/showCart                      @controllers.shop.CartController.showCart()
 POST        /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
+POST        /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                       controllers.Assets.at(path="/public", file)

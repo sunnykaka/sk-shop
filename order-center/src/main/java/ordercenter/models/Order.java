@@ -204,6 +204,7 @@ public class Order implements EntityClass<Integer> {
      */
     private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
+    @Transient
     public List<OrderItem> getOrderItemList() {
         return orderItemList;
     }

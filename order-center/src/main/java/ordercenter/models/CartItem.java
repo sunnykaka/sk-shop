@@ -1,8 +1,6 @@
 package ordercenter.models;
 
 import common.models.utils.EntityClass;
-import common.utils.Money;
-import productcenter.models.StockKeepingUnit;
 
 import javax.persistence.*;
 
@@ -14,10 +12,10 @@ import javax.persistence.*;
  */
 @Table(name = "CartItem")
 @Entity
-public class CartItem implements EntityClass<Integer> {
+public class CartItem extends TradeItem implements EntityClass<Integer> {
 
     /**
-     * 主键
+     * 主键id
      */
     private Integer id;
 
@@ -25,16 +23,6 @@ public class CartItem implements EntityClass<Integer> {
      * 购物车id
      */
     private int cartId;
-
-    /**
-     * 商品skuId
-     */
-    protected int skuId;
-
-    /**
-     * 购买数量
-     */
-    protected int number;
 
     /**
      * 是否被选中
@@ -46,67 +34,15 @@ public class CartItem implements EntityClass<Integer> {
      */
     private boolean isDelete = false;
 
-
-    /**
-     * 产品名称，展示时使用
-     */
-    private String productName;
-
-    /**
-     * 购买价格，展示时使用
-     */
-    private Money curUnitPrice;
-
-    /**
-     * 单品sku
-     */
-    private StockKeepingUnit sku;
-
-    @Transient
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    @Transient
-    public Money getCurUnitPrice() {
-        return curUnitPrice;
-    }
-
-
-    public void setCurUnitPrice(Money curUnitPrice) {
-        this.curUnitPrice = curUnitPrice;
-    }
-
-    @Transient
-    public StockKeepingUnit getSku() {
-        return sku;
-    }
-
-    public void setSku(StockKeepingUnit sku) {
-        this.sku = sku;
-    }
-
-    /**
-     * 获取购物车项总价
-     * @return
-     */
-    @Transient
-    public Money getBuyTotalMoney() {
-        return curUnitPrice.multiply(number);
-    }
-
     @Override
     public String toString() {
         return "CartItem{" +
                 "id=" + id +
                 ", cartId=" + cartId +
+                ", skuId=" + skuId +
                 ", selected=" + selected +
                 ", isDelete=" + isDelete +
-                '}';
+                "} " + super.toString();
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -134,20 +70,24 @@ public class CartItem implements EntityClass<Integer> {
 
     @Column(name = "skuId")
     @Basic
+    @Override
     public int getSkuId() {
         return skuId;
     }
 
+    @Override
     public void setSkuId(int skuId) {
         this.skuId = skuId;
     }
 
     @Column(name = "number")
     @Basic
+    @Override
     public int getNumber() {
         return number;
     }
 
+    @Override
     public void setNumber(int number) {
         this.number = number;
     }
