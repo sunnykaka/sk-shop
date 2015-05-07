@@ -24,6 +24,27 @@ public class SkuProperty {
      */
     private int valueId;
 
+    /**
+     * 属性名称
+     */
+    private String propertyName;
+
+    /**
+     *  属性值
+     */
+    private String propertyValue;
+
+    @Override
+    public String toString() {
+        return "SkuProperty{" +
+                "skuId=" + skuId +
+                ", propertyId=" + propertyId +
+                ", valueId=" + valueId +
+                ", propertyName='" + propertyName + '\'' +
+                ", propertyValue='" + propertyValue + '\'' +
+                '}';
+    }
+
     public long getSkuId() {
         return skuId;
     }
@@ -46,5 +67,21 @@ public class SkuProperty {
 
     public void setValueId(int valueId) {
         this.valueId = valueId;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
+    public String getPropertyValue() {
+        return propertyValue;
+    }
+
+    public void setPropertyValue(String propertyValue) {
+        this.propertyValue = propertyValue;
     }
 }

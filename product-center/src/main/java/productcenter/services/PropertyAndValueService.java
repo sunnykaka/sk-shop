@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Sku和库存Service
+ * 属性和值 Service
  * User: lidujun
  * Date: 2015-04-27
  */

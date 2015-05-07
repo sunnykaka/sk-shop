@@ -1,0 +1,41 @@
+@()
+
+@main() {
+    <script src="@routes.Assets.at("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.at("js/forget-pw.js")"></script>
+    <script>
+        FG.user.fontgetPw();
+    </script>
+} {
+
+    <!--reg-box-->
+    <div class="forget-pw-fir width1200">
+        <div class="forget-pw-fir-inner">
+            <h3>找回密码</h3>
+            <div class="forget-pw-step">
+                <div class="step-bg"></div>
+                <ul class="clearfix">
+                    <li class="highLight">填写账号</li>
+                    <li>验证身份</li>
+                    <li>重置密码</li>
+                    <li class="last">成功</li>
+                </ul>
+            </div>
+            <form class="forget-pw-fir-form" id="forget-pw-fir-form">
+                <div class="item-row username-input">
+                    <label for="username">手机号码</label>
+                    <input type="text" id="username" name="phone" autocomplete="off" class="form-text"/>
+                    <span class="errormsg" id="errormsg-username"></span>
+                </div>
+                <div class="item-row vcode-input">
+                    <label for="vcode">验证码</label>
+                    <input type="vcode" id="vcode" name="imageCode" class="form-text vcode"/><img src="@controllers.user.routes.ImageController.randomImageCode()" alt="" class="code"/>
+                    <span class="errormsg" id="errormsg-vcode"></span>
+                </div>
+                <div><button type="submit"  id="next-btn" class="next-btn">下一步</button></div>
+            </form>
+        </div>
+    </div>
+    <!--end reg-box-->
+
+}

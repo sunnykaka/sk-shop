@@ -1,15 +1,21 @@
 package controllers.user;
 
+import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.SQLUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.dtos.AddressForm;
+import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
 import usercenter.services.LinkageService;
+import usercenter.utils.SessionUtils;
+import utils.secure.SecuredAction;
 import views.html.user.myAddress;
 
 import java.util.List;
@@ -20,10 +26,8 @@ import java.util.List;
 @org.springframework.stereotype.Controller
 public class AddressController extends Controller {
 
-    /** 最多只有添加5条数据 */
-    public static final int DEFAULT_ADDRESS_SIZE = 5;
-
-    public static int test_userId = 1;
+    /** 最多只有添加数据 */
+    public static final int DEFAULT_ADDRESS_SIZE = 4;
 
     @Autowired
     private AddressService addressService;
@@ -31,11 +35,25 @@ public class AddressController extends Controller {
     @Autowired
     private LinkageService linkageService;
 
+    @SecuredAction
     public Result index() {
 
-       List<Address> addressList = addressService.queryAllAddress(test_userId);
+       User user = SessionUtils.currentUser();
+
+       List<Address> addressList = addressService.queryAllAddress(user.getId());
 
        return ok(myAddress.render(addressList));
+
+    }
+
+    @SecuredAction
+    public Result list() {
+
+        User user = SessionUtils.currentUser();
+
+        List<Address> addressList = addressService.queryAllAddress(user.getId());
+
+        return ok(new JsonResult(false,null,addressList).toNode());
 
     }
 
@@ -84,27 +102,48 @@ public class AddressController extends Controller {
      *
      * @return
      */
+    @SecuredAction
     public Result add(){
 
-        Form<Address> addressForm = Form.form(Address.class).bindFromRequest();
-        Address address = addressForm.get();
+        User user = SessionUtils.currentUser();
 
-        int addressCount = addressService.getMyAddressCount(test_userId);
-        if(addressCount >= DEFAULT_ADDRESS_SIZE){
-            return ok(new JsonResult(false, "最多只能添加5个送货地址").toNode());
+        Form<AddressForm> addressForm = Form.form(AddressForm.class).bindFromRequest();
+
+        if(!addressForm.hasErrors()) {
+            try {
+                AddressForm addressF = addressForm.get();
+
+                int addressCount = addressService.getMyAddressCount(user.getId());
+                if(addressCount >= DEFAULT_ADDRESS_SIZE){
+                    return ok(new JsonResult(false, "最多只能添加"+ DEFAULT_ADDRESS_SIZE +"个送货地址").toNode());
+                }
+
+                Address address = new Address();
+
+                if(addressCount == 0){
+                    address.setDefaultAddress(Address.DEFAULT_ADDRESS_TRUE);
+                }
+
+                address.setUserId(user.getId());
+                address.setName(StringEscapeUtils.escapeHtml4(addressF.getName().trim()));
+                address.setLocation(StringEscapeUtils.escapeHtml4(addressF.getLocation().trim()));
+                address.setProvince(StringEscapeUtils.escapeHtml4(addressF.getProvince().trim()));
+                address.setCity(StringEscapeUtils.escapeHtml4(addressF.getCity().trim()));
+                address.setArea(StringEscapeUtils.escapeHtml4(addressF.getArea().trim()));
+                address.setMobile(addressF.getMobile());
+                address.setZipCode(addressF.getZipCode());
+
+                addressService.createAddress(address);
+
+                return ok(new JsonResult(true, "添加送货地址成功").toNode());
+
+            } catch (AppBusinessException e) {
+                addressForm.reject("errors", e.getMessage());
+            }
         }
 
-        if(addressCount == 0){
-            address.setDefaultAddress(Address.DEFAULT_ADDRESS_TRUE);
-        }
+        return ok(new JsonResult(false, addressForm.errorsAsJson().toString()).toNode());
 
-        address.setUserId(test_userId);
-        address.setName(StringEscapeUtils.escapeHtml4(address.getName().trim()));
-        address.setLocation(StringEscapeUtils.escapeHtml4(address.getLocation().trim()));
-
-        addressService.createAddress(address);
-
-        return ok(new JsonResult(true, "添加送货地址成功").toNode());
     }
 
     /**
@@ -112,26 +151,45 @@ public class AddressController extends Controller {
      *
      * @return
      */
+    @SecuredAction
     public Result update(){
 
-        Form<Address> addressForm = Form.form(Address.class).bindFromRequest();
-        Address address = addressForm.get();
+        User user = SessionUtils.currentUser();
 
-        if(null == address.getId() || address.getId() == 0){
-            return ok(new JsonResult(false, "修改送货地址失败").toNode());
+        Form<AddressForm> addressForm = Form.form(AddressForm.class).bindFromRequest();
+
+        if(!addressForm.hasErrors()) {
+            try {
+                AddressForm addressF = addressForm.get();
+
+                if(null == addressF.getId() || addressF.getId() == 0){
+                    return ok(new JsonResult(false, "修改送货地址失败").toNode());
+                }
+
+                Address oldAddress = addressService.getAddress(addressF.getId(),user.getId());
+                if(null == oldAddress){
+                    return ok(new JsonResult(false, "修改送货地址失败").toNode());
+                }
+
+                oldAddress.setUserId(user.getId());
+                oldAddress.setName(StringEscapeUtils.escapeHtml4(addressF.getName().trim()));
+                oldAddress.setLocation(StringEscapeUtils.escapeHtml4(addressF.getLocation().trim()));
+                oldAddress.setProvince(StringEscapeUtils.escapeHtml4(addressF.getProvince().trim()));
+                oldAddress.setCity(StringEscapeUtils.escapeHtml4(addressF.getCity().trim()));
+                oldAddress.setArea(StringEscapeUtils.escapeHtml4(addressF.getArea().trim()));
+                oldAddress.setMobile(addressF.getMobile());
+                oldAddress.setZipCode(addressF.getZipCode());
+
+                addressService.updateAddress(oldAddress);
+
+                return ok(new JsonResult(true, "修改送货地址成功").toNode());
+
+            } catch (AppBusinessException e) {
+                addressForm.reject("errors", e.getMessage());
+            }
         }
 
-        Address oldAddress = addressService.getAddress(address.getId(),test_userId);
-        if(null == oldAddress){
-            return ok(new JsonResult(false, "修改送货地址失败").toNode());
-        }
-
-        address.setUserId(test_userId);
-        address.setName(StringEscapeUtils.escapeHtml4(address.getName().trim()));
-        address.setLocation(StringEscapeUtils.escapeHtml4(address.getLocation().trim()));
-        addressService.updateAddress(address);
-
-        return ok(new JsonResult(true, "修改送货地址成功").toNode());
+        return ok(new JsonResult(false, addressForm.errorsAsJson().toString()).toNode());
     }
 
     /**
@@ -139,21 +197,18 @@ public class AddressController extends Controller {
      *
      * @return
      */
-    public Result del(){
+    @SecuredAction
+    public Result del(int addressId){
 
-        Form<Address> addressForm = Form.form(Address.class).bindFromRequest();
-        Address address = addressForm.get();
-        if(null == address.getId() || address.getId() == 0){
+        User user = SessionUtils.currentUser();
+        Address address = addressService.getAddress(addressId, user.getId());
+
+        if(null == address){
             return ok(new JsonResult(false, "删除送货地址失败").toNode());
         }
 
-        Address oldAddress = addressService.getAddress(address.getId(), test_userId);
-        if(null == oldAddress){
-            return ok(new JsonResult(false, "删除送货地址失败").toNode());
-        }
-
-        oldAddress.setDeleted(SQLUtils.SQL_DELETE_TRUE);
-        addressService.updateAddress(oldAddress);
+        address.setDeleted(SQLUtils.SQL_DELETE_TRUE);
+        addressService.updateAddress(address);
 
         return ok(new JsonResult(true, "删除成功").toNode());
 
@@ -164,15 +219,17 @@ public class AddressController extends Controller {
      *
      * @return
      */
-    public Result defaultAddress(){
+    @SecuredAction
+    public Result defaultAddress(int addressId){
 
-        Form<Address> addressForm = Form.form(Address.class).bindFromRequest();
-        Address address = addressForm.get();
-        if(null == address.getId() || address.getId() == 0){
+        User user = SessionUtils.currentUser();
+        Address address = addressService.getAddress(addressId,user.getId());
+
+        if(null == address){
             return ok(new JsonResult(false, "设置送货地址失败").toNode());
         }
 
-        boolean result = addressService.updateDefaultAddress(address.getId(),test_userId);
+        boolean result = addressService.updateDefaultAddress(address,user.getId());
 
         return ok(new JsonResult(result).toNode());
 

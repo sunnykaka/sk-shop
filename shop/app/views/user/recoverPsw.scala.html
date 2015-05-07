@@ -1,0 +1,47 @@
+@(flash: java.util.Map[String, String])
+
+@main() {
+    <script src="@routes.Assets.at("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.at("js/forget-pw.js")"></script>
+    <script>
+        FG.user.forgetThrPw();
+    </script>
+} {
+
+    @if(flash.get("phoneCode")){
+        <div class="forget-pw-thr width1200">
+            <div class="forget-pw-thr-inner">
+                <h3>找回密码</h3>
+                <div class="forget-pw-step">
+                    <div class="step-bg"></div>
+                    <ul class="clearfix">
+                        <li class="highLight">填写账号</li>
+                        <li class="highLight">验证身份</li>
+                        <li class="highLight">重置密码</li>
+                        <li class="last">成功</li>
+                    </ul>
+                </div>
+                <form class="forget-pw-thr-form" id="forget-pw-thr-form">
+                    <input type="hidden" id="phoneNumber" name="phone" value="@flash.get("phoneCode")"/>
+                    <div class="item-row pw">
+                        <label for="pw">新密码</label>
+                        <input type="password" id="pw" name="newPassword" class="form-text pw"/>
+                        <span class="errormsg" id="errormsg-pw"></span>
+                    </div>
+                    <div class="item-row confirm-pw">
+                        <label for="confirm-pw">确认密码</label>
+                        <input type="password" id="confirm-pw" name="rePassword" class="form-text confirm-pw"/>
+                        <span class="errormsg" id="errormsg-confirm-pw"></span>
+                    </div>
+                    <div class="item-row"><button type="submit"  id="next-btn" class="next-btn">下一步</button></div>
+                </form>
+            </div>
+        </div>
+    }else{
+        跳转验证失败，不能手动跳本页面<br/>
+        <a href="@controllers.user.routes.RecoverController.recoverIndex()" >返回忘记密码首页</a>
+    }
+
+
+
+}

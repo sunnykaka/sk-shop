@@ -1,8 +1,7 @@
 package ordercenter.dtos;
 
-import ordercenter.constants.OrderItemStatus;
-import ordercenter.constants.OrderStatus;
-import ordercenter.constants.OrderType;
+import ordercenter.constants.TestObjectItemStatus;
+import ordercenter.constants.TestObjectStatus;
 import org.joda.time.DateTime;
 
 /**
@@ -12,13 +11,13 @@ public class TestObjectSearcher {
 
     public Integer orderNo;
 
-    public OrderStatus status;
+    public TestObjectStatus status;
 
     public DateTime createTimeStart;
 
     public DateTime createTimeEnd;
 
-    public OrderItemStatus orderItemStatus;
+    public TestObjectItemStatus testObjectItemStatus;
 
     public String productSku;
 

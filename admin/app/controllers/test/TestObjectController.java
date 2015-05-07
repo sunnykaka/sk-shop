@@ -8,7 +8,7 @@ import common.utils.IdUtils;
 import common.utils.JsonUtils;
 import common.utils.page.PageFactory;
 import common.utils.play.PlayForm;
-import ordercenter.constants.OrderStatus;
+import ordercenter.constants.TestObjectStatus;
 import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
 import ordercenter.services.TestObjectService;
@@ -38,7 +38,7 @@ public class TestObjectController extends Controller {
     public Result list(String status, String orderNo) {
 
         List<TestObject> testObjectList = testObjectService.findByKey(of(PageFactory.getPage(request())), ofNullable(orderNo),
-                ofNullable(status).map(OrderStatus::valueOf), empty(), empty());
+                ofNullable(status).map(TestObjectStatus::valueOf), empty(), empty());
 
         return ok(list.render(testObjectList));
     }

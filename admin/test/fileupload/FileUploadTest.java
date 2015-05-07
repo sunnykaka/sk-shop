@@ -1,6 +1,5 @@
 package fileupload;
 
-import base.PrepareOrderData;
 import common.utils.file.FileContentType;
 import common.utils.file.FileUpload;
 import common.utils.file.LocalFileUpload;
@@ -14,7 +13,7 @@ import java.util.Optional;
  * @auth amos
  * 15-4-9.
  */
-public class FileUploadTest extends WithApplication implements PrepareOrderData {
+public class FileUploadTest extends WithApplication {
 
     @Test
     public void testCreateMutiDirectory(){

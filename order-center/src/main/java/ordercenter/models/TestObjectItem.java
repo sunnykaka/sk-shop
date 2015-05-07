@@ -3,9 +3,7 @@ package ordercenter.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.models.utils.EntityClass;
 import common.utils.Money;
-import ordercenter.constants.OrderItemStatus;
-import ordercenter.constants.OrderItemType;
-import ordercenter.constants.PlatformType;
+import ordercenter.constants.TestObjectItemStatus;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -40,7 +38,7 @@ public class TestObjectItem implements EntityClass<Integer> {
     /**
      * 状态
      */
-    private OrderItemStatus status;
+    private TestObjectItemStatus status;
 
 
     /**
@@ -112,11 +110,11 @@ public class TestObjectItem implements EntityClass<Integer> {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    public OrderItemStatus getStatus() {
+    public TestObjectItemStatus getStatus() {
         return status;
     }
 
-    public void setStatus(OrderItemStatus status) {
+    public void setStatus(TestObjectItemStatus status) {
         this.status = status;
     }
 

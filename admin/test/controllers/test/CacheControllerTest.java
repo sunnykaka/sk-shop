@@ -1,10 +1,10 @@
 package controllers.test;
 
-import base.PrepareOrderData;
+import base.PrepareTestObject;
 import common.play.plugin.RedisPlugin;
 import common.utils.RedisUtils;
-import ordercenter.models.Order;
-import ordercenter.services.OrderService;
+import ordercenter.models.TestObject;
+import ordercenter.services.TestObjectService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class CacheControllerTest extends WithApplication implements PrepareOrderData {
+public class CacheControllerTest extends WithApplication implements PrepareTestObject {
 
     @Test
     @Ignore
@@ -60,17 +60,17 @@ public class CacheControllerTest extends WithApplication implements PrepareOrder
         assertThat(Cache.get(key), is(999));
 
 
-        prepareOrders(10, 3);
+        prepareTestObjects(10, 3);
 
-        OrderService orderService = Global.ctx.getBean(OrderService.class);
-        List<Order> orders = orderService.findByKey(empty(), empty(), empty(), empty(), empty());
-        assertThat(orders.size(), is(10));
-        Order order = orders.get(0);
+        TestObjectService testObjectService = Global.ctx.getBean(TestObjectService.class);
+        List<TestObject> testObjects = testObjectService.findByKey(empty(), empty(), empty(), empty(), empty());
+        assertThat(testObjects.size(), is(10));
+        TestObject testObject = testObjects.get(0);
         key = RandomStringUtils.randomAlphabetic(6);
-        Cache.set(key, order);
-        Order orderRetrieve = (Order)Cache.get(key);
+        Cache.set(key, testObject);
+        TestObject testObjectRetrieve = (TestObject)Cache.get(key);
 
-        assertThat(orderRetrieve.getId(), is(order.getId()));
+        assertThat(testObjectRetrieve.getId(), is(testObject.getId()));
 
         Jedis j = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
 

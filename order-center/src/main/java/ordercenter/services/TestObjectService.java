@@ -3,8 +3,8 @@ package ordercenter.services;
 import common.services.GeneralDao;
 import common.utils.IdUtils;
 import common.utils.page.Page;
-import ordercenter.constants.OrderStatus;
 import ordercenter.constants.PlatformType;
+import ordercenter.constants.TestObjectStatus;
 import ordercenter.dtos.TestObjectSearcher;
 import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
@@ -37,7 +37,7 @@ public class TestObjectService {
     GeneralDao generalDao;
 
     @Transactional(readOnly = true)
-    public List<TestObject> findByKey(Optional<Page<TestObject>> page, Optional<String> orderNo, Optional<OrderStatus> status,
+    public List<TestObject> findByKey(Optional<Page<TestObject>> page, Optional<String> orderNo, Optional<TestObjectStatus> status,
             Optional<DateTime> createTimeStart, Optional<DateTime> createTimeEnd) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -99,8 +99,8 @@ public class TestObjectService {
         if(testObjectSearcher.status != null) {
             predicateList.add(cb.equal(order.get("status"), testObjectSearcher.status));
         }
-        if(testObjectSearcher.orderItemStatus != null) {
-            predicateList.add(cb.equal(orderItemList.get("status"), testObjectSearcher.orderItemStatus));
+        if(testObjectSearcher.testObjectItemStatus != null) {
+            predicateList.add(cb.equal(orderItemList.get("status"), testObjectSearcher.testObjectItemStatus));
         }
         if(!StringUtils.isBlank(testObjectSearcher.productSku)) {
             predicateList.add(cb.equal(orderItemList.get("productSku"), testObjectSearcher.productSku));
@@ -153,9 +153,9 @@ public class TestObjectService {
             jpql += " and o.status = :status ";
             queryParams.put("status", testObjectSearcher.status);
         }
-        if(testObjectSearcher.orderItemStatus != null) {
-            jpql += " and oi.status = :orderItemStatus ";
-            queryParams.put("orderItemStatus", testObjectSearcher.orderItemStatus);
+        if(testObjectSearcher.testObjectItemStatus != null) {
+            jpql += " and oi.status = :testObjectItemStatus ";
+            queryParams.put("testObjectItemStatus", testObjectSearcher.testObjectItemStatus);
         }
         if(!StringUtils.isBlank(testObjectSearcher.productSku)) {
             jpql += " and oi.productSku = :productSku ";
@@ -220,9 +220,9 @@ public class TestObjectService {
             jpql += " and o.status = :status ";
             queryParams.put("status", testObjectSearcher.status);
         }
-        if(testObjectSearcher.orderItemStatus != null) {
-            jpql += " and oi.status = :orderItemStatus ";
-            queryParams.put("orderItemStatus", testObjectSearcher.orderItemStatus);
+        if(testObjectSearcher.testObjectItemStatus != null) {
+            jpql += " and oi.status = :testObjectItemStatus ";
+            queryParams.put("testObjectItemStatus", testObjectSearcher.testObjectItemStatus);
         }
         if(!StringUtils.isBlank(testObjectSearcher.productSku)) {
             jpql += " and oi.productSku = :productSku ";

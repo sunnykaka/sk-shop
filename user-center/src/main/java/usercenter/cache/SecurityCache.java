@@ -12,6 +12,8 @@ public class SecurityCache {
 
     public static final String SECURITY_TOKEN_EMAIL_ACTIVITY_KEY = "activity";
 
+    public static final String SECURITY_TOKEN_EMAIL_CHANGE_KEY = "change";
+
     public static final String SECURITY_TOKEN_PHONE_KEY = "phone";
 
     /**
