@@ -173,6 +173,23 @@ public class UserService {
 
     }
 
+    @Transactional
+    public User loginByRegister(User user) {
+
+        doLogin(user);
+
+        try {
+            SessionUtils.setCurrentUser(user, false);
+            return user;
+        } catch (AppException e) {
+            Logger.error("", e);
+        }
+
+        return null;
+
+    }
+
+
     /**
      * 直接修改密码
      * @param user

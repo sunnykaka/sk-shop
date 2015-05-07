@@ -150,7 +150,12 @@ public class SessionUtils {
         Http.Context.current().session().put(SESSION_ORIGINAL_URL, uri);
     }
 
-    public static String getOriginalUrl() {
-        return Http.Context.current().session().get(SESSION_ORIGINAL_URL);
+    public static String getOriginalUrlOrDefault(String defaultUrl) {
+        String originalUrl = Http.Context.current().session().get(SESSION_ORIGINAL_URL);
+        if(StringUtils.isBlank(originalUrl)) {
+            return defaultUrl;
+        } else {
+            return originalUrl;
+        }
     }
 }

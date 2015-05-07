@@ -37,8 +37,10 @@ public class LoginController extends Controller {
 
         if(!registerForm.hasErrors()) {
             try {
-                userService.register(registerForm.get(), request().remoteAddress());
-                return ok(new JsonResult(true, null, routes.LoginController.loginPage().url()).toNode());
+                User user = userService.register(registerForm.get(), request().remoteAddress());
+                userService.loginByRegister(user);
+                String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
+                return ok(new JsonResult(true, null, originalUrl).toNode());
 
             } catch (AppBusinessException e) {
                 registerForm.reject("errors", e.getMessage());
@@ -62,10 +64,7 @@ public class LoginController extends Controller {
         if(!loginForm.hasErrors()) {
             try {
                 userService.login(loginForm.get());
-                String originalUrl = SessionUtils.getOriginalUrl();
-                if(StringUtils.isBlank(originalUrl)) {
-                    originalUrl = controllers.routes.Application.myOrder().url();
-                }
+                String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
                 return ok(new JsonResult(true, null, originalUrl).toNode());
 
             } catch (AppBusinessException e) {
@@ -98,7 +97,6 @@ public class LoginController extends Controller {
         String code = smsSender.generatePhoneVerificationCode();
         if(!StringUtils.isBlank(code)) {
             if(smsSender.sendMessage(views.html.template.sms.userRegisterCode.render(code))) {
-                play.Logger.debug(String.format("手机%s验证码%s", phone, code));
                 return ok(new JsonResult(true).toNode());
             }
         }

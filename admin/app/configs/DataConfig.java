@@ -36,7 +36,8 @@ public class DataConfig {
         entityManagerFactory.setDataSource(dataSource());
         entityManagerFactory.setJpaPropertyMap(new HashMap<String, String>(){{
             put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
-            put("hibernate.format_sql", "false");
+            put("hibernate.format_sql", "true");
+            put("hibernate.show_sql", "false");
             put("hibernate.query.substitutions", "true 1, false 0");
             put("hibernate.default_batch_fetch_size", "50");
             put("hibernate.jdbc.batch_size", "50");
