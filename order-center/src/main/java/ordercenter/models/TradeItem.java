@@ -16,9 +16,39 @@ public class TradeItem {
     protected int skuId;
 
     /**
+     * 条形码
+     */
+    protected String barCode;
+
+    /**
+     * 商家ID
+     */
+    protected int customerId;
+
+    /**
+     * 库位ID(库存位置)
+     */
+    protected int storageId;
+
+    /**
+     * 产品id
+     */
+    protected int productId;
+
+    /**
      * 产品名称，展示时使用
      */
     protected String productName;
+
+    /**
+     *类目ID
+     */
+    protected int categoryId;
+
+    /**
+     * 图标
+     */
+    protected String mainPicture;
 
     /**
      * 单品sku
@@ -56,7 +86,7 @@ public class TradeItem {
      * 小计：获取购物车项总价（这个方法可能没用了）
      * @return
      */
-    public Money getBuyTotalMoney1() {
+    public Money calculateTotalMoney() {
         return curUnitPrice.multiply(number);
     }
 
@@ -84,12 +114,60 @@ public class TradeItem {
         this.skuId = skuId;
     }
 
+    public int getStorageId() {
+        return storageId;
+    }
+
+    public void setStorageId(int storageId) {
+        this.storageId = storageId;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
     public String getProductName() {
         return productName;
     }
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getMainPicture() {
+        return mainPicture;
+    }
+
+    public void setMainPicture(String mainPicture) {
+        this.mainPicture = mainPicture;
     }
 
     public StockKeepingUnit getSku() {

@@ -50,39 +50,9 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
     private String skuExplain;
 
     /**
-     * 主图
-     */
-    private String skuMainPicture;
-
-    /**
-     * 条形码
-     */
-    private String barCode;
-
-    /**
      * 编号
      */
     private String itemNo;
-
-    /**
-     * 库位ID(库存位置)
-     */
-    private int storageId;
-
-    /**
-     * 冗余商品ID
-     */
-    private int productId;
-
-    /**
-     *类目ID
-     */
-    private int categoryId;
-
-    /**
-     * 商家ID
-     */
-    private int customerId;
 
     /**
      * 品牌ID
@@ -216,12 +186,13 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
 
     @Column(name = "skuMainPicture")
     @Basic
-    public String getSkuMainPicture() {
-        return skuMainPicture;
+    @Override
+    public String getMainPicture() {
+        return mainPicture;
     }
 
-    public void setSkuMainPicture(String skuMainPicture) {
-        this.skuMainPicture = skuMainPicture;
+    public void setMainPicture(String mainPicture) {
+        this.mainPicture = mainPicture;
     }
 
     @Column(name = "skuName")
@@ -238,6 +209,7 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
 
     @Column(name = "barCode")
     @Basic
+    @Override
     public String getBarCode() {
         return barCode;
     }
@@ -258,10 +230,12 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
 
     @Column(name = "storageId")
     @Basic
+    @Override
     public int getStorageId() {
         return storageId;
     }
 
+    @Override
     public void setStorageId(int storageId) {
         this.storageId = storageId;
     }
@@ -278,20 +252,24 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
 
     @Column(name = "categoryId")
     @Basic
+    @Override
     public int getCategoryId() {
         return categoryId;
     }
 
+    @Override
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
     @Column(name = "customerId")
     @Basic
+    @Override
     public int getCustomerId() {
         return customerId;
     }
 
+    @Override
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }

@@ -79,7 +79,7 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Order getOrderByOrderNo(int orderNo) {
+    public Order getOrderByOrderNo(long orderNo) {
         String jpql = getSelectAllOrderSql();
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and v.orderNo = :orderNo ";

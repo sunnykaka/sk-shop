@@ -108,7 +108,7 @@ public class Order implements EntityClass<Integer> {
     /**
      * 订单总价(单位:元. 计算到分)：订单是永久存储的，所以这里保存了这次订单总价格
      */
-    private Money totalPrice = Money.valueOf(0);
+    private Money totalMoney = Money.valueOf(0);
 
     /**
      * 支付银行
@@ -367,12 +367,12 @@ public class Order implements EntityClass<Integer> {
 
     @Column(name = "totalPrice")
     @Type(type="common.utils.hibernate.MoneyType")
-    public Money getTotalPrice() {
-        return totalPrice;
+    public Money getTotalMoney() {
+        return totalMoney;
     }
 
-    public void setTotalPrice(Money totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalMoney(Money totalMoney) {
+        this.totalMoney = totalMoney;
     }
 
     @Column(name = "payBank")
