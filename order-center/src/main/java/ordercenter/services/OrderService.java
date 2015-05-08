@@ -2,6 +2,7 @@ package ordercenter.services;
 
 import common.services.GeneralDao;
 import common.utils.page.Page;
+import ordercenter.models.Logistics;
 import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +163,27 @@ public class OrderService {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("orderId", orderId);
         generalDao.update(jpql,queryParams);
+    }
+
+    //////////////////////////////订单物流-邮寄地址/////////////////////////////////////////////
+    /**
+     * 创建订单物流-邮寄地址
+     * @param logistics
+     */
+    public void createLogistics(Logistics logistics) {
+        Logger.info("--------OrderService createLogistics begin exe-----------" + logistics);
+        generalDao.persist(logistics);
+    }
+
+    /**
+     * 通过订单获取物流-邮寄地址
+     * @param logisticsId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Logistics getLogisticsById(int logisticsId) {
+        play.Logger.info("--------OrderService getLogisticsById begin exe-----------" + logisticsId);
+        return generalDao.get(Logistics.class, logisticsId);
     }
 
 }
