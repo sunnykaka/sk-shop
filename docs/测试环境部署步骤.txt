@@ -6,11 +6,32 @@ sbt 0.13.7+
 1. checkout源代码
 2. 编译并且打包代码.进入%sk_shop%目录,运行sbt ";clean ;project shop ;dist"
 3. %sk_shop%/shop/target/universal/shop-1.0.0-SNAPSHOT.zip是打包好的文件.假设解压缩到/home/admin/shop目录
-4. 运行项目, /home/admin/shop/bin/shop为运行脚本, 可以用下面命令启动:
-   /home/admin/shop/bin/shop -Dhttp.port=9000 -Dconfig.file=/home/admin/shop/conf/env/test.conf -Dlogger.file=/home/admin/shop/conf/env/test_logger.xml
+4. 运行项目, /home/admin/shop/bin/shop为运行脚本, 首先chmod +x 添加可执行权限, 然后可以用下面命令启动:
+   /home/admin/shop/bin/shop -Dhttp.port=9001 -Dconfig.file=/home/admin/shop/conf/env/test.conf -Dlogger.file=/home/admin/shop/conf/env/test_logger.xml
    (参数说明:
-    1) -Dhttp.port=9000 在9000端口运行, 默认即9000
+    1) -Dhttp.port=9001 在9001端口运行, 默认9000
     2) -Dconfig.file=/home/admin/shop/conf/env/test.conf 指定配置文件路径,test.conf为测试环境配置文件, prod.conf为生产环境配置文件
     3) -Dlogger.file=/home/admin/shop/conf/env/test_logger.xml 指定日志文件路径,test_logger.xml为测试环境配置文件, prod_logger.xml为生产环境配置文件
         项目日志文件输出路径为~/web/logs
    )
+5.配置nginx(可选)
+    将以下配置加入nginx.conf中的http{}块中
+    	proxy_buffering    off;
+    	proxy_set_header   X-Real-IP $remote_addr;
+    	proxy_set_header   X-Forwarded-Proto $scheme;
+    	proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    	proxy_set_header   Host $http_host;
+    	proxy_http_version 1.1;
+
+    	upstream my-backend {
+    		server 127.0.0.1:9001;
+    		#server 127.0.0.1:9002; #如果需要做负载均衡可以配置在这
+    	}
+
+    	server {
+    		listen       80;
+    		server_name www.fashiongeeker.me;
+    		location / {
+    			proxy_pass http://my-backend;
+    		}
+    	}
