@@ -11,6 +11,8 @@ import javax.persistence.*;
  * User: lidujun
  * Date: 2015-05-08
  */
+@Table(name = "Logistics")
+@Entity
 public class Logistics implements EntityClass<Integer> {
 
     /**
