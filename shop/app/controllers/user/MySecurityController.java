@@ -3,7 +3,7 @@ package controllers.user;
 import common.exceptions.AppBusinessException;
 import common.utils.EmailUtils;
 import common.utils.JsonResult;
-import common.utils.test.ParamUtils;
+import common.utils.ParamUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;

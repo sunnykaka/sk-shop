@@ -1,13 +1,18 @@
 package controllers.user;
 
+import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.dtos.UserDataForm;
+import usercenter.models.User;
 import usercenter.models.UserData;
 import usercenter.services.UserDataService;
+import usercenter.utils.SessionUtils;
+import utils.secure.SecuredAction;
 import views.html.user.myData;
 
 /**
@@ -18,8 +23,6 @@ import views.html.user.myData;
 @org.springframework.stereotype.Controller
 public class MyDataController extends Controller {
 
-    public static final int test_userId = 14435;
-
     @Autowired
     private UserDataService userDataService;
 
@@ -28,9 +31,12 @@ public class MyDataController extends Controller {
      *
      * @return
      */
+    @SecuredAction
     public Result index(){
 
-        UserData userData = userDataService.findByUserId(test_userId);
+        User user = SessionUtils.currentUser();
+
+        UserData userData = userDataService.findByUserId(user.getId());
         userData.splitBirthday();
 
         return ok(myData.render(userData));
@@ -42,38 +48,46 @@ public class MyDataController extends Controller {
      *
      * @return
      */
+    @SecuredAction
     public Result update(){
 
-        Form<UserData> userDataForm = Form.form(UserData.class).bindFromRequest();
-        UserData userData = userDataForm.get();
+        User user = SessionUtils.currentUser();
 
-        if( null == userData.getId()){
-            return ok(new JsonResult(false,"修改失败").toNode());
+        Form<UserDataForm> userDataForm = Form.form(UserDataForm.class).bindFromRequest();
+
+        if(!userDataForm.hasErrors()) {
+            try {
+
+                UserDataForm userDataF = userDataForm.get();
+                UserData userData = userDataService.findByUserId(user.getId());
+                if(null == userData){
+                    return ok(new JsonResult(false,"修改失败").toNode());
+                }
+
+                userData.setName(StringUtils.trim(userDataF.getName()));
+                userData.setSex(userDataF.getSex());
+                userData.setProvince(userDataF.getProvince());
+                userData.setCity(userDataF.getCity());
+                userData.setArea(userDataF.getArea());
+                userData.setLocation(StringUtils.trim(userDataF.getLocation()));
+                userData.setBirthdayY(userDataF.getBirthdayY());
+                userData.setBirthdayM(userDataF.getBirthdayM());
+                userData.setBirthdayD(userDataF.getBirthdayD());
+
+                userData.mergerBirthday();
+                userData.setBirthday(userData.getBirthday());
+
+                userDataService.updateUserDate(userData);
+                userData.splitBirthday();
+
+                return ok(new JsonResult(true,"修改成功", userData).toNode());
+
+            } catch (AppBusinessException e) {
+                userDataForm.reject("errors", e.getMessage());
+            }
         }
 
-        UserData oldUserData = userDataService.findById(userData.getId());
-        if(null == oldUserData){
-            return ok(new JsonResult(false,"修改失败").toNode());
-        }
-        if(oldUserData.getUserId() != test_userId){
-            return ok(new JsonResult(false,"修改失败").toNode());
-        }
-
-        oldUserData.setName(StringUtils.trim(userData.getName()));
-        oldUserData.setSex(userData.getSex());
-        oldUserData.setProvince(userData.getProvince());
-        oldUserData.setCity(userData.getCity());
-        oldUserData.setArea(userData.getArea());
-        oldUserData.setLocation(StringUtils.trim(userData.getLocation()));
-
-        userData.mergerBirthday();
-        oldUserData.setBirthday(userData.getBirthday());
-
-        userDataService.updateUserDate(oldUserData);
-        oldUserData.splitBirthday();
-
-        return ok(new JsonResult(true,"修改成功", oldUserData).toNode());
-
+        return ok(new JsonResult(false, userDataForm.errorsAsJson().toString()).toNode());
     }
 
 

@@ -1,0 +1,21 @@
+@()
+
+@myCenter(Messages("title.my.address")) {
+    <script src="@routes.Assets.at("js/FormValidate.js")"></script>
+} {
+
+    <div>
+
+        <form action="@controllers.user.routes.MyValuationController.add()" method="post">
+            订单项ID：<input type="text" name="orderItemId" value="1" /><br/>
+            商品ID：<input type="text" name="productId" value="1" /><br/>
+            评价：<input type="text" name="point" ><br/>
+                评论：<input type="text" name="content" >
+            <button type="submit">提交</button>
+
+        </form>
+
+    </div>
+
+
+}

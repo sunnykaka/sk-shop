@@ -2,6 +2,7 @@ package usercenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.TableTimeData;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -217,6 +218,10 @@ public class UserData implements EntityClass<Integer>,TableTimeData {
     }
 
     public void splitBirthday(){
+        if(StringUtils.isEmpty(this.birthday)){
+            return;
+        }
+
         String[] birthday = this.birthday.split("-");
         if (birthday.length > 0) {
             this.birthdayY = birthday[0];

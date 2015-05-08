@@ -125,35 +125,19 @@ public class AddressService {
     }
 
     /**
-     * 根据地址ID删除地址
-     *
-     * @param addressId
-     */
-    public void deleteAddress(int addressId){
-
-    }
-
-    /**
-     * 根据地址ID 用户ID删除地址
-     *
-     * @param addressId
-     */
-    public void deleteAddress(int addressId, int userId){
-
-    }
-
-    /**
      * 根据用户Id增加地址使用频率
      */
-    public void updateFrequencyByAddressId(int id){
-
+    public void updateFrequencyByAddressId(int addressId){
+        Address address = getAddress(addressId);
+        address.setFrequency(address.getFrequency() + 1);
+        generalDAO.merge(address);
     }
 
     /**
      * 根据地址Id获取详细信息
      */
     public Address getAddress(int addressId){
-        return null;
+        return generalDAO.get(Address.class,addressId);
     }
 
     /**

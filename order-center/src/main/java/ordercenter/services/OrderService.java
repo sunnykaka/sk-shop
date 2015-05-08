@@ -94,19 +94,51 @@ public class OrderService {
     }
 
     /**
-     * 通过用户id获取订单
+     * 查询订单列表
+     *
+     * @param page
      * @param userId
+     * @param querytType
+     * @param orderState
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Order> getOrderByUserId(int userId) {
+    public List<Order> getOrderByUserId(Optional<Page<Order>> page, int userId,int querytType,String orderState) {
         Logger.info("--------OrderService getOrderByUserId begin exe-----------" + userId);
-        String jpql = getSelectAllOrderSql();
+        String jpql = "select o from Order o join o.orderItemList oi where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
-        jpql += " and v.userId = :userId ";
+        jpql += " and o.userId = :userId ";
         queryParams.put("userId", userId);
 
-        return generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        jpql += " group by o.id ";
+
+        return generalDao.query(jpql,page,queryParams);
+    }
+
+    /**
+     * 查询订单、关联订单项
+     * @param orderId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Order getOrderById(int orderId,int userId) {
+        Logger.info("--------OrderService getCart begin exe-----------" + orderId);
+
+        String jpql = "select o from Order o join o.orderItemList oi where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and o.id = :orderId ";
+        queryParams.put("orderId", orderId);
+
+        jpql += " and o.userId = :userId ";
+        queryParams.put("userId", userId);
+
+        List<Order> orderList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+
+        Order order = null;
+        if(orderList != null || orderList.size() > 0) {
+            order= orderList.get(0);
+        }
+        return  order;
     }
 
     //////////////////////////////订单项/////////////////////////////////////////////
@@ -145,6 +177,7 @@ public class OrderService {
 
     /**
      * 通过订单项id删除订单项
+     *
      * @param id
      */
     public void deleteOrderItemById(int id) {
@@ -184,6 +217,23 @@ public class OrderService {
     public Logistics getLogisticsById(int logisticsId) {
         play.Logger.info("--------OrderService getLogisticsById begin exe-----------" + logisticsId);
         return generalDao.get(Logistics.class, logisticsId);
+    }
+
+    @Transactional(readOnly = true)
+    public Logistics getLogisticsByOrderId(int orderId) {
+        play.Logger.info("--------OrderService getLogisticsById begin exe-----------" + orderId);
+
+        String jpql = "select l from Logistics l where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and l.orderId = :orderId ";
+        queryParams.put("orderId", orderId);
+
+        List<Logistics> logisticsList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        Logistics logistics = null;
+        if(logisticsList != null || logisticsList.size() > 0) {
+            logistics = logisticsList.get(0);
+        }
+        return  logistics;
     }
 
 }

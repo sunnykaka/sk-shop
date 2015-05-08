@@ -1,5 +1,6 @@
 package ordercenter.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import common.models.utils.EntityClass;
 import common.utils.Money;
 import ordercenter.constants.OrderPayType;
@@ -199,12 +200,14 @@ public class Order implements EntityClass<Integer> {
      */
     private DateTime updateTime;
 
+    private String addressName;
+
     /**
      * 订单项（还没有做好）
      */
     private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
-    @Transient
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     public List<OrderItem> getOrderItemList() {
         return orderItemList;
     }
@@ -550,5 +553,14 @@ public class Order implements EntityClass<Integer> {
 
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Transient
+    public String getAddressName() {
+        return addressName;
+    }
+
+    public void setAddressName(String addressName) {
+        this.addressName = addressName;
     }
 }

@@ -23,7 +23,7 @@ public class Logistics implements EntityClass<Integer> {
     /**
      * 订单id
      */
-    private long orderId;
+    private int orderId;
 
     /**
      * 地址id
@@ -76,6 +76,8 @@ public class Logistics implements EntityClass<Integer> {
     //冗余地址信息，当用户删除地址的时候，地址信息还在
     //private LogisticsRedundancy logisticsRedundancy;
 
+    public Logistics(){}
+
     /**
      * 注入冗余的地址信息，物流对象保存一份当时订单的地址数据
      *
@@ -114,11 +116,11 @@ public class Logistics implements EntityClass<Integer> {
 
     @Column(name = "orderId")
     @Basic
-    public long getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 

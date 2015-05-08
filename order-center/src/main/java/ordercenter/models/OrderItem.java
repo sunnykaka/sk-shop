@@ -1,5 +1,6 @@
 package ordercenter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
 import common.utils.Money;
@@ -123,6 +124,9 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
      * 更新时间
      */
     private DateTime updateTime;
+
+    @JsonIgnore
+    private Order order;
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -334,5 +338,27 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
     @Override
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderId", insertable = false, updatable = false)
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    @Column(name = "number")
+    @Basic
+    @Override
+    public int getNumber() {
+        return number;
+    }
+
+    @Override
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

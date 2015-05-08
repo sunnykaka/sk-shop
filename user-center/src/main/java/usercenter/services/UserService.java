@@ -58,6 +58,7 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public boolean isUsernameExist(String username, Optional<Integer> userId) {
+
         String hql = "select u.id from User u where u.userName = :username";
         Map<String, Object> params = new HashMap<>();
         params.put("username", username);

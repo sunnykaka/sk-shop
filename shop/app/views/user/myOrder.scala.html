@@ -1,0 +1,36 @@
+@(page:common.utils.page.Page[ordercenter.models.Order])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.data")</title>
+    </head>
+    <body>
+
+
+        @for(order <- page.getResult){
+            <table width="50%" border="3px">
+                <tr>
+                    <td>@order.getOrderNo</td><td>@order.getAddressName</td><td>@order.getMilliDate</td>
+                </tr>
+                <tr>
+                    <div>
+                    <ul>
+                        @for(orderItem <- order.getOrderItemList){
+                            <li><img src="@orderItem.getSkuMainPicture" height="50px" width="50px"/>@orderItem.getProductName</li>
+                        }
+                    </ul>
+                        </div>
+                    <div>
+                        @order.getTotalPrice.getAmountWithBigDecimal
+                        @order.getOrderState.getValue  <a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)" >订单详情</a>
+                    </div>
+                </tr>
+            </table>
+            <br/>
+        }
+
+
+    </body>
+</html>

@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * 用户资料
+ *
  * Created by zhb on 15-4-29.
  */
 @Service
@@ -30,10 +32,6 @@ public class UserDataService {
     public UserData updateUserDate(UserData userData){
 
         return generalDao.merge(userData);
-    }
-
-    public UserData findById(int id){
-        return generalDao.get(UserData.class,id);
     }
 
     /**
