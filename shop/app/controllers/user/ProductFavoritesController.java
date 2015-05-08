@@ -14,7 +14,10 @@ import productcenter.services.ProductCollectService;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import usercenter.models.DesignerPicture;
+import usercenter.models.User;
 import usercenter.services.DesignerService;
+import usercenter.utils.SessionUtils;
+import utils.secure.SecuredAction;
 import views.html.user.productFavorites;
 
 import java.util.List;
@@ -31,8 +34,6 @@ public class ProductFavoritesController extends Controller {
 
     /** 页数, 默认显示第 1 页 */
     private static final int DEFAULT_PAGE_NO = 1;
-
-    public static int test_userId = 1;
 
     @Autowired
     private ProductCollectService productCollectService;
@@ -51,10 +52,13 @@ public class ProductFavoritesController extends Controller {
      *
      * @return
      */
+    @SecuredAction
     public Result index(int pageNo, int pageSize) {
 
+        User user = SessionUtils.currentUser();
+
         Page<ProductCollect> page = new Page(pageNo,pageSize);
-        List<ProductCollect> pageProductCollcets = productCollectService.getProductCollectList(Optional.of(page),test_userId);
+        List<ProductCollect> pageProductCollcets = productCollectService.getProductCollectList(Optional.of(page),user.getId());
 
         for(ProductCollect pc:pageProductCollcets){
             Product product = productService.getProductById(pc.getProductId());
@@ -80,9 +84,12 @@ public class ProductFavoritesController extends Controller {
      * @param productId
      * @return
      */
+    @SecuredAction
     public Result del(int productId) {
 
-        productCollectService.deleteMyProductCollect(productId,test_userId);
+        User user = SessionUtils.currentUser();
+
+        productCollectService.deleteMyProductCollect(productId,user.getId());
 
         return redirect(routes.ProductFavoritesController.index(DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE));
 
@@ -93,18 +100,21 @@ public class ProductFavoritesController extends Controller {
      *
      * @return
      */
+    @SecuredAction
     public Result add(){
+
+        User user = SessionUtils.currentUser();
 
         Form<ProductCollect> ProductCollectForm = Form.form(ProductCollect.class).bindFromRequest();
         ProductCollect productCollect = ProductCollectForm.get();
 
-        ProductCollect oldProductCollect = productCollectService.getByProductId(productCollect.getProductId(),test_userId);
+        ProductCollect oldProductCollect = productCollectService.getByProductId(productCollect.getProductId(),user.getId());
 
         if(null != oldProductCollect){
             return ok(new JsonResult(false, "已收藏该商品").toNode());
         }
 
-        productCollect.setUserId(test_userId);
+        productCollect.setUserId(user.getId());
         productCollect.setCollectTime(new DateTime());
         productCollectService.createProductCollect(productCollect);
 

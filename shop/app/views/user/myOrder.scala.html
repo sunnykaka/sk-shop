@@ -1,0 +1,47 @@
+@(page:common.utils.page.Page[ordercenter.models.Order])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.data")</title>
+    </head>
+    <body>
+
+
+        @for(order <- page.getResult){
+            <table width="50%" border="3px">
+                <tr>
+                    <td>@order.getOrderNo</td><td>@order.getAddressName</td><td>@order.getMilliDate</td>
+                </tr>
+                <tr>
+                    <div>
+                    <ul>
+                        @for(orderItem <- order.getOrderItemList){
+                            <li><img src="@orderItem.getMainPicture" height="50px" width="50px"/>@orderItem.getProductName</li>
+                        }
+                    </ul>
+                        </div>
+                    <div>
+                        @order.getTotalMoney.getAmountWithBigDecimal
+                        @order.getOrderState.getValue  <a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)" >订单详情</a>
+                    </div>
+                </tr>
+            </table>
+            <br/>
+        }
+
+        当前第几页 @page.getPageNo() <br/>
+        总共有几页 @page.getTotalPage <br/>
+        共有多少条数据 @page.getTotalCount <br/>
+
+        @if(page.getPageNo > 1){
+            <a href="@controllers.user.routes.MyOrderController.index(0,null)">上一页</a>
+        }
+
+        @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
+            <a href="@controllers.user.routes.MyOrderController.index(0,null)">下一页</a>
+        }
+
+    </body>
+</html>

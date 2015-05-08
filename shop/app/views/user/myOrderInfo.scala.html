@@ -1,0 +1,44 @@
+@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Messages("title.my.data")</title>
+    </head>
+    <body>
+
+        <div>
+            订单概况<br/>
+                订单编号:@order.getOrderNo   状态：@order.getOrderState.getValue    下单时间：@order.getMilliDate
+            <hr/>
+                收货人：@logistics.getName    联系电话：@logistics.getMobile<br/>
+                收货地址（中文）：@logistics.getProvince @logistics.getLocation<br/>
+                邮政编码：@logistics.getZipCode<br/>
+            <hr/>
+                支付方式：@order.getPayType.getValue      @order.getPayBank.toDesc    @order.getPayDate
+
+            <hr/>
+        </div>
+<hr>
+        <div>
+            商品清单<br/>
+            <ul>
+                @for(orderItem <- order.getOrderItemList){
+                    <li>
+                        <img src="@orderItem.getMainPicture" height="50px" width="50px"/>
+                        @orderItem.getProductName
+                        @orderItem.getTotalPrice.getAmountWithBigDecimal
+                        @orderItem.getCurUnitPrice.getAmountWithBigDecimal
+                        @orderItem.getNumber
+                    </li>
+                }
+            </ul>
+                商品总计：￥@order.getTotalMoney.getAmountWithBigDecimal<br/>
+                运费：￥0.00<br/>
+                关税：￥0.00<br/>
+                订单金额：￥@order.getTotalMoney.getAmountWithBigDecimal<br/>
+        </div>
+
+    </body>
+</html>

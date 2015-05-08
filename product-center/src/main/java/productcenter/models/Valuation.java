@@ -1,18 +1,21 @@
 package productcenter.models;
 
 import common.models.utils.EntityClass;
+import common.models.utils.TableTimeData;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by hujie on 15-5-7.
  */
 @Table(name = "valuation")
 @Entity
-public class Valuation implements EntityClass<Integer>{
+public class Valuation implements EntityClass<Integer>,TableTimeData {
 
     private int id;
 
@@ -42,8 +45,6 @@ public class Valuation implements EntityClass<Integer>{
 
     private DateTime replyTime;
 
-
-
     /**
      * 追加评价
      */
@@ -69,6 +70,14 @@ public class Valuation implements EntityClass<Integer>{
      * 追加回复时间
      */
     private DateTime appendReplyDate;
+
+    private static Map<Integer, String> pointName = new HashMap<>();
+
+    static {
+        pointName.put(0, "好评");
+        pointName.put(1, "中评");
+        pointName.put(2, "差评");
+    }
 
     @GeneratedValue (strategy = GenerationType.AUTO)
     @Id

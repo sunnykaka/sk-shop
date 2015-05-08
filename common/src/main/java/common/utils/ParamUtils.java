@@ -1,4 +1,4 @@
-package common.utils.test;
+package common.utils;
 
 
 import play.mvc.Http;

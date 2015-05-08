@@ -1,5 +1,6 @@
 package ordercenter.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import common.models.utils.EntityClass;
 import common.utils.Money;
 import ordercenter.constants.OrderPayType;
@@ -107,7 +108,7 @@ public class Order implements EntityClass<Integer> {
     /**
      * 订单总价(单位:元. 计算到分)：订单是永久存储的，所以这里保存了这次订单总价格
      */
-    private Money totalPrice = Money.valueOf(0);
+    private Money totalMoney = Money.valueOf(0);
 
     /**
      * 支付银行
@@ -199,12 +200,14 @@ public class Order implements EntityClass<Integer> {
      */
     private DateTime updateTime;
 
+    private String addressName;
+
     /**
      * 订单项（还没有做好）
      */
     private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
-    @Transient
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     public List<OrderItem> getOrderItemList() {
         return orderItemList;
     }
@@ -364,12 +367,12 @@ public class Order implements EntityClass<Integer> {
 
     @Column(name = "totalPrice")
     @Type(type="common.utils.hibernate.MoneyType")
-    public Money getTotalPrice() {
-        return totalPrice;
+    public Money getTotalMoney() {
+        return totalMoney;
     }
 
-    public void setTotalPrice(Money totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalMoney(Money totalMoney) {
+        this.totalMoney = totalMoney;
     }
 
     @Column(name = "payBank")
@@ -550,5 +553,14 @@ public class Order implements EntityClass<Integer> {
 
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Transient
+    public String getAddressName() {
+        return addressName;
+    }
+
+    public void setAddressName(String addressName) {
+        this.addressName = addressName;
     }
 }

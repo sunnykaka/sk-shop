@@ -1,7 +1,6 @@
 package ordercenter.models;
 
 import common.models.utils.EntityClass;
-import common.models.utils.OperableData;
 import common.utils.Money;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 @Table(name = "Cart")
 @Entity
-public class Cart implements EntityClass<Integer>, OperableData {
+public class Cart implements EntityClass<Integer> {
 
     /**
      * 主键
@@ -35,35 +34,10 @@ public class Cart implements EntityClass<Integer>, OperableData {
      */
     private String trackId = "";
 
-
-
-    //新加的
     /**
-     * 创建时间
+     * 创建时间，配合客户端的cookie过期时间可以用于清除无用数据
      */
-    private DateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private DateTime updateTime;
-
-    /**
-     * 最后操作人
-     */
-    private Integer operatorId;
-
-
-
-
-
-
-
-
-
-
-    //创建时间，配合客户端的cookie过期时间可以用于清除无用数据
-    //private Date createDate = new Date(); //ldj
+    private DateTime createDate;
 
     /**
      * 购物车的总价，在加载车的时候动态计算，不需要入库
@@ -94,21 +68,6 @@ public class Cart implements EntityClass<Integer>, OperableData {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public Cart() {
     }
 
@@ -120,16 +79,13 @@ public class Cart implements EntityClass<Integer>, OperableData {
         this.trackId = trackId;
     }
 
-
     @Override
     public String toString() {
         return "Cart{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", trackId='" + trackId + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", operatorId=" + operatorId +
+                ", createDate=" + createDate +
                 ", totalMoney=" + totalMoney +
                 ", cartItemList=" + cartItemList +
                 '}';
@@ -169,58 +125,12 @@ public class Cart implements EntityClass<Integer>, OperableData {
 
     @Column(name = "createTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Override
-    public DateTime getCreateTime() {
-        return createTime;
+    public DateTime getCreateDate() {
+        return createDate;
     }
 
-    @Override
-    public void setCreateTime(DateTime createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(DateTime createDate) {
+        this.createDate = createDate;
     }
-
-    @Column(name = "updateTime")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Override
-    public DateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    @Override
-    public void setUpdateTime(DateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Column(name = "operatorId")
-    @Basic
-    @Override
-    public Integer getOperatorId() {
-        return operatorId;
-    }
-
-    @Override
-    public void setOperatorId(Integer operatorId) {
-        this.operatorId = operatorId;
-    }
-
-
-/*
-先注释掉
-
-    public List<OrderItem> convertToOrderItemList() {
-        if (cartItemList != null) {
-            List<OrderItem> orderItemList = new ArrayList<OrderItem>(cartItemList.size());
-            for (CartItem cartItem : cartItemList) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setSkuId(cartItem.getSkuId());
-                orderItem.setNumber(cartItem.getNumber());
-                orderItemList.add(orderItem);
-            }
-            return orderItemList;
-        } else {
-            return Collections.EMPTY_LIST;
-        }
-    }
-*/
 
 }

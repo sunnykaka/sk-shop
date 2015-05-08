@@ -23,7 +23,7 @@ GET         /my/favorites/product               @controllers.user.ProductFavorit
 POST        /my/favorites/product/del           @controllers.user.ProductFavoritesController.del(productId:Int)
 POST        /my/favorites/product/add           @controllers.user.ProductFavoritesController.add()
 GET         /my/favorites/designer              @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
-POST        /my/favorites/designer/del          @controllers.user.DesignerFavoritesController.del(designer:Int)
+POST        /my/favorites/designer/del          @controllers.user.DesignerFavoritesController.del(designerId:Int)
 POST        /my/favorites/designer/add          @controllers.user.DesignerFavoritesController.add()
 # my address
 GET         /my/address                         @controllers.user.AddressController.index()
@@ -35,6 +35,10 @@ POST        /my/address/add                     @controllers.user.AddressControl
 POST        /my/address/update                  @controllers.user.AddressController.update()
 POST        /my/address/del                     @controllers.user.AddressController.del(addressId:Int)
 POST        /my/address/defaultAddress          @controllers.user.AddressController.defaultAddress(addressId:Int)
+# myValuation
+GET         /my/valuation                       @controllers.user.MyValuationController.index()
+POST        /my/valuation/add                   @controllers.user.MyValuationController.add()
+GET         /my/valuation/find                  @controllers.user.MyValuationController.findValuation(orderItemId:Long)
 # my data
 GET         /my/data                            @controllers.user.MyDataController.index()
 POST        /my/data/update                     @controllers.user.MyDataController.update()
@@ -76,6 +80,12 @@ GET         /image/code                         @controllers.user.ImageControlle
 GET         /image/checkCode                    @controllers.user.ImageController.checkImageCode(imageCode)
 # 下发手机短信
 POST        /user/phone/sendSMS                 @controllers.user.SendSMSController.sendSMS(phone)
+# 订单管理
+GET         /my/order                           @controllers.user.MyOrderController.index(queryType:Int ?= 0,orderState ?= null)
+GET         /my/order/info                      @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0)
+GET         /my/backApply                       @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
+GET         /my/back                            @controllers.user.MyOrderController.backIndex()
+GET         /my/back/info                       @controllers.user.MyOrderController.backContent()
 
 #cart lidujun
 POST        /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
