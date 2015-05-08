@@ -44,7 +44,7 @@ public class MyOrderController extends Controller {
         //User user = SessionUtils.currentUser();
 
         Page<Order> page = PageFactory.getPage(request());
-        page.setPageSize(10);
+        page.setPageSize(5);
 
         List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user_id, queryType, orderState);
         for(Order order:orderList){
@@ -60,7 +60,6 @@ public class MyOrderController extends Controller {
 
         page.setResult(orderList);
 
-
         return ok(myOrder.render(page));
 
     }
@@ -71,9 +70,9 @@ public class MyOrderController extends Controller {
      * @param orderId
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result orderContent(int orderId){
-        //User user = SessionUtils.currentUser();
+        User user = SessionUtils.currentUser();
 
         Order order = orderService.getOrderById(orderId,user_id);
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
@@ -88,9 +87,9 @@ public class MyOrderController extends Controller {
      * @param orderId
      * @return
      */
-//    @SecuredAction
+    @SecuredAction
     public Result backApply(int orderId){
-//        User user = SessionUtils.currentUser();
+        User user = SessionUtils.currentUser();
 
         return ok();
 
@@ -101,9 +100,9 @@ public class MyOrderController extends Controller {
      *
      * @return
      */
-//    @SecuredAction
+    @SecuredAction
     public Result backIndex(){
-//        User user = SessionUtils.currentUser();
+        User user = SessionUtils.currentUser();
 
         return ok();
 
@@ -114,9 +113,9 @@ public class MyOrderController extends Controller {
      *
      * @return
      */
-//    @SecuredAction
+    @SecuredAction
     public Result backContent(){
-//        User user = SessionUtils.currentUser();
+        User user = SessionUtils.currentUser();
 
         return ok();
 
