@@ -1,8 +1,8 @@
 @(flag:Boolean, addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, errorMsg:String)
 
 @main(){
-<link rel="stylesheet" href="@routes.Assets.at("css/base.css")" />
-<script type="text/javascript" src="@routes.Assets.at("js/jquery.min.js")"></script>
+<link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
+<script type="text/javascript" src="@routes.Assets.versioned("js/jquery.min.js")"></script>
 
 <script type="text/javascript">
 $(function(){
