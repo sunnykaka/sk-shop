@@ -10,12 +10,12 @@ import common.models.utils.ViewEnum;
  * User: lidujun
  * Date: 2015-04-30
  */
-public enum OrderPayType implements ViewEnum {
+public enum TradePayType implements ViewEnum {
 
     /**
      * 货到付款（现金付款）
      */
-    OnDeliveryCash("货到付款（现金付款）"),
+    OnDelivery_Cash("货到付款"),
     /**
      * POS机刷卡
      */
@@ -27,7 +27,7 @@ public enum OrderPayType implements ViewEnum {
 
     public String value;
 
-    OrderPayType(String value) {
+    TradePayType(String value) {
         this.value = value;
     }
 
