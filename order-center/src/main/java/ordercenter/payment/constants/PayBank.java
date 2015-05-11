@@ -1,11 +1,13 @@
 package ordercenter.payment.constants;
 
+import common.models.utils.ViewEnum;
+
 /**
  * 支付银行
  * User: lidujun
  * Date: 2015-04-29
  */
-public enum PayBank {
+public enum PayBank implements ViewEnum {
 
     /**
      * 如果是货到付款，则没有支付银行
@@ -102,13 +104,19 @@ public enum PayBank {
      */
     Tenpay("财付通");
 
-    private String value;
+    public String value;
 
     PayBank(String value) {
         this.value = value;
     }
 
-    public String toDesc() {
+    @Override
+    public String getName() {
+        return this.toString();
+    }
+
+    @Override
+    public String getValue() {
         return value;
     }
 
