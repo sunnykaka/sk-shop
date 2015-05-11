@@ -12,8 +12,6 @@ import productcenter.models.SkuStorage;
 import productcenter.models.StockKeepingUnit;
 import productcenter.util.PropertyValueUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.*;
 
 /**
@@ -145,34 +143,6 @@ public class SkuAndStorageService {
             loadSkuProperty(sku);
         }
         return skus;
-    }
-
-    /**
-     * 增加sku库存数
-     * @param skuId
-     * @param number
-     * @return
-     */
-    public boolean addSkuStock(int skuId, int number) {
-        play.Logger.info("------SkuAndStorageService addSkuStock begin exe-----------" + skuId + ":" + number);
-        EntityManager em = generalDao.getEm();
-        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity + ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
-        int count = query.executeUpdate();
-        return count == 1;
-    }
-
-    /**
-     * 减去sku库存数
-     * @param skuId
-     * @param number
-     * @return
-     */
-    public boolean minusSkuStock(int skuId, int number) {
-        play.Logger.info("------SkuAndStorageService minusSkuStock begin exe-----------" + skuId + ":" + number);
-        EntityManager em = generalDao.getEm();
-        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity - ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
-        int count = query.executeUpdate();
-        return count == 1;
     }
 
     /**
