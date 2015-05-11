@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+
 import usercenter.models.User;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
@@ -36,15 +37,14 @@ public class MyOrderController extends Controller {
      * 单订管理首页
      *
      * @param queryType
-     *          0所有订单、1待付款、2待发货、3待收货、4待评价
+     *          0所有订单、1待收货、2待评价
      * @param orderState
      * @return
      */
-    public Result index(int queryType,String orderState){
+    public Result index(int queryType,String orderState,int pageNo,int pageSize){
         //User user = SessionUtils.currentUser();
 
-        Page<Order> page = PageFactory.getPage(request());
-        page.setPageSize(5);
+        Page<Order> page = new Page<>(pageNo,pageSize);
 
         List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user_id, queryType, orderState);
         for(Order order:orderList){
@@ -60,7 +60,7 @@ public class MyOrderController extends Controller {
 
         page.setResult(orderList);
 
-        return ok(myOrder.render(page));
+        return ok(myOrder.render(page,queryType,orderState));
 
     }
 

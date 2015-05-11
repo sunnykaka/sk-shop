@@ -81,7 +81,7 @@ GET         /image/checkCode                    @controllers.user.ImageControlle
 # 下发手机短信
 POST        /user/phone/sendSMS                 @controllers.user.SendSMSController.sendSMS(phone)
 # 订单管理
-GET         /my/order                           @controllers.user.MyOrderController.index(queryType:Int ?= 0,orderState ?= null)
+GET         /my/order                           @controllers.user.MyOrderController.index(queryType:Int ?= 0,orderState ?= null,pageNo:Int ?= 1,pageSize:Int ?= 5)
 GET         /my/order/info                      @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0)
 GET         /my/backApply                       @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
 GET         /my/back                            @controllers.user.MyOrderController.backIndex()

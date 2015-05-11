@@ -16,6 +16,7 @@ import usercenter.dtos.ChangePswForm;
 import usercenter.dtos.PhoneCodeForm;
 import usercenter.models.User;
 import usercenter.services.UserService;
+import utils.secure.SecuredAction;
 import views.html.user.*;
 
 
@@ -37,6 +38,7 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
+    @SecuredAction
     public Result changePhoneIndex(){
 
         User user = userService.getById(test_userId);

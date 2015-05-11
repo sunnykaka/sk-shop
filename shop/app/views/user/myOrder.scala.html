@@ -1,4 +1,6 @@
-@(page:common.utils.page.Page[ordercenter.models.Order])
+@(page:common.utils.page.Page[ordercenter.models.Order],queryType:Int,orderState:String)
+
+@import ordercenter.constants.OrderState;
 
 <!DOCTYPE html>
 
@@ -25,22 +27,39 @@
                     <div>
                         @order.getTotalMoney.getAmountWithBigDecimal
                         @order.getOrderState.getValue  <a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)" >订单详情</a>
+
+                        @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
+                            <a href="#" >立即支付</a>
+                        }
+                        @if(order.getOrderState.getName.equals(OrderState.Send.getName)){
+                            <a href="#" >确认到货</a>
+                        }
+                        @if(order.getOrderState.getName.equals(OrderState.Receiving.getName) || order.getOrderState.getName.equals(OrderState.Success.getName)){
+                            <a href="#" >评价</a>
+                        }
+                        @if(order.getOrderState.getName.equals(OrderState.Create.getName) || order.getOrderState.getName.equals(OrderState.Pay.getName)){
+                            <a href="#" >取消</a>
+                        }
                     </div>
                 </tr>
             </table>
             <br/>
         }
 
-        当前第几页 @page.getPageNo() <br/>
-        总共有几页 @page.getTotalPage <br/>
+        当前第@page.getPageNo 页  <br/>
+        总共有@page.getTotalPage 页  <br/>
         共有多少条数据 @page.getTotalCount <br/>
 
         @if(page.getPageNo > 1){
-            <a href="@controllers.user.routes.MyOrderController.index(0,null)">上一页</a>
+            <a href="@controllers.user.routes.MyOrderController.index(queryType,orderState,page.getPageNo-1)">上一页</a>
+        }else{
+            上一页
         }
 
         @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
-            <a href="@controllers.user.routes.MyOrderController.index(0,null)">下一页</a>
+            <a href="@controllers.user.routes.MyOrderController.index(queryType,orderState,page.getPageNo+1)">下一页</a>
+        }else{
+            下一页
         }
 
     </body>
