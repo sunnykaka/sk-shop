@@ -1,9 +1,8 @@
 package ordercenter.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import common.models.utils.EntityClass;
 import common.utils.Money;
-import ordercenter.constants.OrderPayType;
+import ordercenter.constants.TradePayType;
 import ordercenter.constants.OrderState;
 import ordercenter.payment.constants.PayBank;
 import org.hibernate.annotations.Type;
@@ -103,7 +102,7 @@ public class Order implements EntityClass<Integer> {
     /**
      * 订单支付类型(在线支付、pos机刷卡或现金支付)
      */
-    private OrderPayType payType;
+    private TradePayType payType;
 
     /**
      * 订单总价(单位:元. 计算到分)：订单是永久存储的，所以这里保存了这次订单总价格
@@ -357,11 +356,11 @@ public class Order implements EntityClass<Integer> {
 
     @Column(name = "payType")
     @Enumerated(EnumType.STRING)
-    public OrderPayType getPayType() {
+    public TradePayType getPayType() {
         return payType;
     }
 
-    public void setPayType(OrderPayType payType) {
+    public void setPayType(TradePayType payType) {
         this.payType = payType;
     }
 
