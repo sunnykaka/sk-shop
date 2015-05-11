@@ -1,3 +1,6 @@
+import com.typesafe.sbt.digest.Import._
+import com.typesafe.sbt.gzip.Import._
+import com.typesafe.sbt.web.Import._
 import sbt._
 import Keys._
 import play.Play.autoImport._
@@ -61,8 +64,9 @@ object ApplicationBuild extends Build {
         dirs.foreach(_.mkdirs)
         Seq[File]()
       },
-      unmanagedSourceDirectories in Compile += (sourceManaged in Compile).value
+      unmanagedSourceDirectories in Compile += (sourceManaged in Compile).value,
       //      unmanagedSourceDirectories in Compile += baseDirectory.value / "target" / "scala-2.11" / "src_managed" / "main"
+      pipelineStages := Seq(digest, gzip)
     ).dependsOn(common % "test->test;compile->compile").
     dependsOn(user).dependsOn(product).dependsOn(order)
 

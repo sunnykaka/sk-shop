@@ -26,7 +26,7 @@
             <ul>
                 @for(orderItem <- order.getOrderItemList){
                     <li>
-                        <img src="@orderItem.getSkuMainPicture" height="50px" width="50px"/>
+                        <img src="@orderItem.getMainPicture" height="50px" width="50px"/>
                         @orderItem.getProductName
                         @orderItem.getTotalPrice.getAmountWithBigDecimal
                         @orderItem.getCurUnitPrice.getAmountWithBigDecimal
@@ -34,10 +34,10 @@
                     </li>
                 }
             </ul>
-                商品总计：￥@order.getTotalPrice.getAmountWithBigDecimal<br/>
+                商品总计：￥@order.getTotalMoney.getAmountWithBigDecimal<br/>
                 运费：￥0.00<br/>
                 关税：￥0.00<br/>
-                订单金额：￥@order.getTotalPrice.getAmountWithBigDecimal<br/>
+                订单金额：￥@order.getTotalMoney.getAmountWithBigDecimal<br/>
         </div>
 
     </body>
