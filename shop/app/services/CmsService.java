@@ -1,6 +1,8 @@
 package services;
 
 import common.services.GeneralDao;
+import models.CmsContent;
+import models.CmsExbitionItem;
 import models.CmsExhibition;
 import models.ExhibitionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +51,40 @@ public class CmsService {
         return result;
     }
 
+
+    /**
+     * 查询首发专场的产品ID
+     * @param exhibitionId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CmsExbitionItem> queryItemListByExbId(Integer exhibitionId) {
+        String sql = " select * from exhibition_item where exhibitionId = ?1";
+        List<CmsExbitionItem> items = generalDao.getEm().createNativeQuery(sql, CmsExbitionItem.class).setParameter(1, exhibitionId).getResultList();
+        return items;
+    }
+
+
+    /**
+     * 查询所有的内容列表
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CmsContent> allContents() {
+        return generalDao.findAll(CmsContent.class);
+    }
+
+
+    /**
+     * check一个商品是正在首发中
+     * @param prodId
+     * @return
+     */
     @Transactional(readOnly = true)
     public boolean onFirstPublish(int prodId) {
-        Map<String,Object>  map = new HashMap<>();
-        map.put("prodId",prodId);
         String sql = "select * from cms_exhibition where (beginTime  <= Now() AND endTime > Now())  and  id in ( select exhibitionId from exhibition_item where prodId = ?1)";
-        List<CmsExhibition> list  = generalDao.getEm().createNativeQuery(sql, CmsExhibition.class).setParameter(1,prodId).getResultList();
-        return  list != null && list.size()>0 ;
+        List<CmsExhibition> list = generalDao.getEm().createNativeQuery(sql, CmsExhibition.class).setParameter(1, prodId).getResultList();
+        return list != null && list.size() > 0;
     }
 
 
