@@ -87,13 +87,13 @@ GET         /my/backApply                       @controllers.user.MyOrderControl
 GET         /my/back                            @controllers.user.MyOrderController.backIndex()
 GET         /my/back/info                       @controllers.user.MyOrderController.backContent()
 
-#cart lidujun
-POST        /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
-POST        /cart/addSkuToCartNotReplace        @controllers.shop.CartController.addSkuToCartNotReplace(skuId:Int, number:Int)
-POST        /cart/addSkuToCartReplace           @controllers.shop.CartController.addSkuToCartReplace(skuId:Int, number:Int)
+#cart
+GET         /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
+GET         /cart/addSkuToCartAddNum            @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
+GET         /cart/addSkuToCartReplaceNum        @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
 GET         /cart/showCart                      @controllers.shop.CartController.showCart()
-POST        /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
-POST        /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress
+GET         /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
+GET         /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                       controllers.Assets.versioned(path="/public", file: Asset)
