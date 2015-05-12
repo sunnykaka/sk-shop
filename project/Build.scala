@@ -34,7 +34,7 @@ object ApplicationBuild extends Build {
     settings(
       libraryDependencies ++= orderDependencies
     ).
-    dependsOn(common).dependsOn(product).dependsOn(user).dependsOn(shop)
+    dependsOn(common).dependsOn(product).dependsOn(user)
 
 
   lazy val admin = (project in file("admin")).
