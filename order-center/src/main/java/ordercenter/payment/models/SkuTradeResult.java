@@ -10,8 +10,8 @@ import javax.persistence.*;
  * User: lidujun
  * Date: 2015-04-29
  */
-//@Table(name = "SkuTradeResult")
-//@Entity
+@Table(name = "SkuTradeResult")
+@Entity
 public class SkuTradeResult implements EntityClass<Integer> {
 
     /**

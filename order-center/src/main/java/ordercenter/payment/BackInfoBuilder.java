@@ -1,8 +1,8 @@
 package ordercenter.payment;
 
-import ordercenter.payment.models.TradeInfo;
+import ordercenter.models.Trade;
+import play.mvc.Http.Request;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -17,12 +17,12 @@ public interface BackInfoBuilder {
      * @param request
      * @return
      */
-    TradeInfo buildFromRequest(HttpServletRequest request);
+    Trade buildFromRequest(Request request);
 
     /**
      * 构建交易参数
      * @param request
      * @return
      */
-    Map<String, String> buildParam(HttpServletRequest request);
+    Map<String, String> buildParam(Request request);
 }

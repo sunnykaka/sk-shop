@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import productcenter.services.SkuAndStorageService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 购物车服务
+ * 订单Service
  * User: lidujun
  * Date: 2015-04-29
  */
@@ -27,6 +28,12 @@ public class OrderService {
 
     @Autowired
     GeneralDao generalDao;
+
+    @Autowired
+    private SkuAndStorageService skuService;
+
+    @Autowired
+    private TradeService tradeService;
 
     private static final ReentrantLock LOCK = new ReentrantLock();
 
@@ -46,6 +53,22 @@ public class OrderService {
     public void updateOrder(Order order) {
         Logger.info("--------OrderService updateCart begin exe-----------" + order);
         generalDao.merge(order);
+    }
+
+    /**
+     * 通过订单号更新订单支付机构信息
+     * @param orderNo
+     * @param orgName
+     */
+    public void updateOrderPayOrg(Long orderNo, String payType, String orgName) {
+        Logger.info("--------OrderService updateCart begin exe-----------" + orderNo + " : " + orgName);
+
+        String jpql = "update Order o set o.payType=:payType, o.payBank=:orgName where o.orderNo=:orderNo";
+        Map<String, Object> params = new HashMap<>();
+        params.put("payType", payType);
+        params.put("orgName", orgName);
+
+        generalDao.update(jpql, params);
     }
 
     /**
@@ -140,6 +163,30 @@ public class OrderService {
         }
         return  order;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //////////////////////////////订单项/////////////////////////////////////////////
     /**

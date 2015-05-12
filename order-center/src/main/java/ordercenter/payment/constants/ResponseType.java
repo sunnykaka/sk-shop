@@ -1,11 +1,13 @@
 package ordercenter.payment.constants;
 
+import common.models.utils.ViewEnum;
+
 /**
  * 调用回调处理类的方式
  * User: lidujun
  * Date: 2015-04-28
  */
-public enum ResponseType {
+public enum ResponseType implements ViewEnum {
     /**
      * 正常返回
      */
@@ -15,13 +17,19 @@ public enum ResponseType {
      */
     NOTIFY("Notify回来"); //notify
 
-    private String value;
+    public String value;
 
-    ResponseType(String value){
+    ResponseType(String value) {
         this.value = value;
     }
 
-    public String getValue(){
-        return this.value;
+    @Override
+    public String getName() {
+        return this.toString();
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 }

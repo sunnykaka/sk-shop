@@ -1,18 +1,12 @@
 package ordercenter.services;
 
 import common.services.GeneralDao;
-import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import play.Logger;
-import productcenter.models.*;
-import productcenter.services.ProductService;
-import productcenter.services.PropertyAndValueService;
-import productcenter.services.SkuAndStorageService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,28 +14,15 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * 购物车服务
+ * 购物Service
  * User: lidujun
  * Date: 2015-04-29
  */
 @Service
 @Transactional
 public class CartService {
-
     @Autowired
     GeneralDao generalDao;
-
-    @Autowired
-    private SkuAndStorageService skuService;
-
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private PropertyAndValueService propertyAndValueService;
-
-    //@Autowired
-    //private CmsService skCmsService;
 
     /**
      * 向购物车中加入Sku商品
@@ -143,7 +124,7 @@ public class CartService {
     public Cart getCart(int cartId) {
         play.Logger.info("--------CartService getCart begin exe-----------" + cartId);
         Cart cart = generalDao.get(Cart.class, cartId);
-        return buildCart(cart);
+        return cart;
     }
 
     @Transactional(readOnly = true)
@@ -168,7 +149,7 @@ public class CartService {
         if(itemList != null && itemList.size() > 0) {
             cart = itemList.get(0);
         }
-        return buildCart(cart);
+        return cart;
     }
 
     /**
@@ -188,57 +169,10 @@ public class CartService {
         if(itemList != null && itemList.size() > 0) {
             cart = itemList.get(0);
         }
-        return buildCart(cart);
-    }
-
-    /**
-     * 将Cart对象构建完整
-     *
-     * @param cart
-     * @return
-     */
-    private Cart buildCart(Cart cart) {
-        if (cart != null) {
-            List<CartItem> cartItems = this.queryCarItemsByCartId(cart.getId());
-            cart.setCartItemList(cartItems);
-            //合计价格
-            Money totalMoney = Money.valueOf(0);
-            for (CartItem cartItem : cartItems) {
-                StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
-                cartItem.setCurUnitPrice(Money.valueOf(0));
-                if (stockKeepingUnit != null) {
-                    cartItem.setSku(stockKeepingUnit);
-                    Product product = productService.getProductById(stockKeepingUnit.getProductId());
-                    cartItem.setProductName(product.getName());
-
-                    //图片暂时不考虑
-
-
-
-                    //后续再改 首发和非首发还没有做 //ldj
-                    //根据判断是否是首发，当前价格要现算
-                    cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice()); //ldj
-
-                    totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
-
-                    List<SkuProperty> skuPropertyList = stockKeepingUnit.getSkuProperties();
-                    if(skuPropertyList != null && skuPropertyList.size() > 0) {
-                        for(SkuProperty p : skuPropertyList) {
-                            Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
-                            p.setPropertyName(property.getName());
-                            Value value = propertyAndValueService.getValueById(p.getValueId());
-                            p.setPropertyValue(value.getValueName());
-                        }
-                    }
-                } else {
-                    Logger.warn("构建购物车时发现sku被删除" + cartItem.getSkuId());
-                    this.deleteCartItemBySkuIdAndCartId(cartItem.getSkuId(), cartItem.getCartId());
-                }
-            }
-            cart.setTotalMoney(totalMoney);
-        }
         return cart;
     }
+
+
 
     //////////////////////////////购物车项////////////////////////////////////////////////
     /**

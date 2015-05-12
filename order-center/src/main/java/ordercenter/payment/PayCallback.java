@@ -1,7 +1,7 @@
 package ordercenter.payment;
 
 import ordercenter.payment.constants.ResponseType;
-import ordercenter.payment.models.TradeInfo;
+import ordercenter.models.Trade;
 
 /**
  * 支付请求成功返回后的业务处理接口
@@ -15,7 +15,7 @@ public interface PayCallback {
      * @param type           调用类型：return || notify
      * @return                  CallBackResult，包括支付结果（true || false)，以及需要返回给调用端(Controller,页面)的参数,以及需要跳转的页面等。
      */
-    CallBackResult  initResult(TradeInfo tradeInfo, ResponseType type);
+    CallBackResult  initResult(Trade tradeInfo, ResponseType type);
 
 
     /**
@@ -25,5 +25,5 @@ public interface PayCallback {
      * @param result      可以增加额外的返回数据，设置返回值
      * @return
      */
-   boolean doAfterBack(TradeInfo tradeInfo, ResponseType type, CallBackResult result);
+   boolean doAfterBack(Trade tradeInfo, ResponseType type, CallBackResult result);
 }

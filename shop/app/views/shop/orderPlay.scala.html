@@ -1,0 +1,166 @@
+@(order:ordercenter.models.Order)
+
+@main(){
+<link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
+<script type="text/javascript" src="@routes.Assets.versioned("js/jquery.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.versioned("js/common.js")"></script>
+
+<script type="text/javascript">
+    (function ($, FG) {
+
+        var valueCollection = {};
+        // 支付方式
+        function payment() {
+            var box = $('.pay-list'),
+                payTypes = box.find('li');
+
+            valueCollection.payBank = payTypes.eq(0).attr('paybank');
+            payTypes.on('click', function () {
+                var self = $(this);
+
+                if (self.hasClass('more-payBank')) {
+                    self.empty();
+                    box.find('.more-list').slideDown(200);
+                    return;
+                }
+                payTypes.removeClass('current');
+                self.addClass('current');
+                valueCollection.payBank = self.attr('paybank');
+
+            });
+        }
+
+        payment();
+
+    }(jQuery, FG));
+</script>
+
+} {
+//此需要删除
+   @order
+
+    <div class="pay width1200">
+        <div class="pay-inner">
+            <div class="pay-step">
+                <div class="step-bg"></div>
+                <ul class="clearfix">
+                    <li>我的购物车</li>
+                    <li>提交订单</li>
+                    <li class="last">选择支付方式</li>
+                </ul>
+            </div>
+                <!-- pay-info -->
+            <div class="pay-info">
+                <h3>订单提交成功，现在只差最后一步啦！</h3>
+                <p>请在提交订单后60分钟内完成支付，否则订单自动取消！</p>
+                <p>温馨提示：不同的设计师的商品将由不同的设计师分开发货。</p>
+            </div>
+                <!-- end pay-info -->
+            <div class="pay-list">
+                <h3>支付金额：<span class="total-money">￥@order.getTotalMoney</span></h3>
+                <div class="default-pay">
+                    <ul class="list clearfix">
+                        <li paybank="Alipay" class="current">
+                            <i></i>
+                            <img src="images/bank-zfb.jpg" alt="支付宝">
+                        </li>
+                        <li paybank="Tenpay" class="">
+                            <i></i>
+                            <img src="images/bank-cft.jpg" alt="财付通">
+                        </li>
+
+                        <li class="more-payBank">
+                            <a href="javascript:void(0);">选择更多支付方式&gt;&gt;</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearfix more-list">
+                    <h4>网上银行 <span>由支付宝提供接口，确保您的资金安全</span></h4>
+                    <ul class="list clearfix">
+                        <li paybank="ICBCB2C">
+                            <i></i>
+                            <img src="images/bank-gs.jpg" alt="工商银行">
+                        </li>
+                        <li paybank="CCB">
+                            <i></i>
+                            <img src="images/bank-js.jpg" alt="建设银行">
+                        </li>
+                        <li paybank="BOCB2C">
+                            <i></i>
+                            <img src="images/bank-zg.jpg" alt="中国银行">
+                        </li>
+                        <li paybank="CMB">
+                            <i></i>
+                            <img src="images/bank-zs.jpg" alt="招商银行">
+                        </li>
+                        <li paybank="COMM">
+                            <i></i>
+                            <img src="images/bank-jt.jpg" alt="交通银行">
+                        </li>
+                        <li paybank="ABC">
+                            <i></i>
+                            <img src="images/bank-ny.jpg" alt="农业银行">
+                        </li>
+                        <li paybank="POSTGC">
+                            <i></i>
+                            <img src="images/bank-yz.jpg" alt="中国邮政储蓄">
+                        </li>
+                        <li paybank="CITIC">
+                            <i></i>
+                            <img src="images/bank-zx.jpg" alt="中信银行">
+                        </li>
+                        <li paybank="CIB">
+                            <i></i>
+                            <img src="images/bank-xy.jpg" alt="兴业银行">
+                        </li>
+                        <li paybank="SPDB">
+                            <i></i>
+                            <img src="images/bank-pf.jpg" alt="浦发银行">
+                        </li>
+                        <li paybank="CMBC">
+                            <i></i>
+                            <img src="images/bank-ns.jpg" alt="民生银行">
+                        </li>
+                        <li paybank="CEBBANK">
+                            <i></i>
+                            <img src="images/bank-gd.jpg" alt="光大银行">
+                        </li>
+                        <li paybank="NBBANK">
+                            <i></i>
+                            <img src="images/bank-nb.jpg" alt="宁波银行">
+                        </li>
+                        <li paybank="SDB">
+                            <i></i>
+                            <img src="images/bank-szfz.jpg" alt="深发展银行">
+                        </li>
+                        <li paybank="BJRCB">
+                            <i></i>
+                            <img src="images/bank-bjns.jpg" alt="北京农商银行">
+                        </li>
+                        <li paybank="SPABANK">
+                            <i></i>
+                            <img src="images/bank-pa.jpg" alt="平安银行">
+                        </li>
+                        <li paybank="GDB">
+                            <i></i>
+                            <img src="images/bank-gf.jpg" alt="广发银行">
+                        </li>
+                        <li paybank="SHBANK">
+                            <i></i>
+                            <img src="images/bank-sh.jpg" alt="上海银行">
+                        </li>
+                        <li paybank="HZCBB2C">
+                            <i></i>
+                            <img src="images/bank-hz.jpg" alt="杭州银行">
+                        </li>
+                        <li paybank="BJBANK">
+                            <i></i>
+                            <img src="images/bank-bj.jpg" alt="北京银行">
+                        </li>
+                    </ul>
+                </div>
+                <span class="pay-money-btn">立即支付</span>
+            </div>
+        </div>
+    </div>
+}

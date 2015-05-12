@@ -2,13 +2,14 @@ package ordercenter.payment.alipay;
 
 import common.utils.DateUtils;
 import common.utils.Money;
+import common.utils.ParamUtils;
+import ordercenter.models.Trade;
 import ordercenter.payment.BackInfoBuilder;
 import ordercenter.payment.constants.PayMethod;
 import ordercenter.payment.constants.PayType;
-import ordercenter.payment.models.TradeInfo;
 import play.Logger;
+import play.mvc.Http.Request;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,18 +26,18 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
      * 修改时间：2013.12.06，18.20
      * why：添加了业务方式和银行
      */
-    public TradeInfo buildFromRequest(HttpServletRequest request) {
-        String order_no = request.getParameter("out_trade_no");  //获取订单号
-        TradeInfo tradeInfo = new TradeInfo();
+    public Trade buildFromRequest(Request request) {
+        String order_no = ParamUtils.getByKey(request, "out_trade_no");  //获取订单号
+        Trade tradeInfo = new Trade();
         tradeInfo.setTradeNo(order_no);
-        Money money = Money.valueOf(request.getParameter("total_fee"));
+        Money money = Money.valueOf(ParamUtils.getByKey(request, "total_fee"));
         tradeInfo.setPayTotalFee(money);
         tradeInfo.setGmtCreateTime(DateUtils.current());
-        tradeInfo.setTradeStatus(request.getParameter("trade_status"));
-        tradeInfo.setOuterBuyerAccount(request.getParameter("buyer_email"));
-        tradeInfo.setOuterTradeNo(request.getParameter("trade_no"));
+        tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_status"));
+        tradeInfo.setOuterBuyerAccount(ParamUtils.getByKey(request, "buyer_email"));
+        tradeInfo.setOuterTradeNo(ParamUtils.getByKey(request, "trade_no"));
         tradeInfo.setOuterPlatformType(PayType.Alipay.getValue());
-        String extra_common_param = request.getParameter("extra_common_param");//阿里的支付回传参数
+        String extra_common_param = ParamUtils.getByKey(request, "extra_common_param");//阿里的支付回传参数
         String[] split = extra_common_param.split("\\|");
 
         Logger.warn("支付宝回传的 extra_common_param 参数是: " + extra_common_param);
@@ -57,19 +58,19 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
             tradeInfo.setDefaultbank(split[2]);
         //tradeInfo.setDefaultbank(request.getParameter("defaultbank"));//设置银行
 
-        String bank_seq_no = request.getParameter("bank_seq_no");
+        String bank_seq_no = ParamUtils.getByKey(request, "bank_seq_no");
         tradeInfo.setPayMethod(bank_seq_no == null ? PayMethod.directPay.toString() : PayMethod.bankPay.toString());
-        tradeInfo.setOuterBuyerId(request.getParameter("buyer_id"));
-        tradeInfo.setNotifyId(request.getParameter("notify_id"));
-        tradeInfo.setNotifyType(request.getParameter("notify_type"));
+        tradeInfo.setOuterBuyerId(ParamUtils.getByKey(request, "buyer_id"));
+        tradeInfo.setNotifyId(ParamUtils.getByKey(request, "notify_id"));
+        tradeInfo.setNotifyType(ParamUtils.getByKey(request,"notify_type"));
         return tradeInfo;
     }
 
     @Override
-    public Map<String, String> buildParam(HttpServletRequest request) {
+    public Map<String, String> buildParam(Request request) {
         //获取支付宝GET过来反馈信息
         Map<String, String> params = new HashMap<String, String>();
-        Map requestParams = request.getParameterMap();
+        Map requestParams = request.body().asFormUrlEncoded();
         for (Object oName : requestParams.keySet()) {
             String name = (String) oName;
             String[] values = (String[]) requestParams.get(name);

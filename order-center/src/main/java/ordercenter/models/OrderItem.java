@@ -98,6 +98,20 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
     @JsonIgnore
     private Order order;
 
+    /**
+     * 原先的订单状态, 只在更新 SQL 时有效, 不写入数据库
+     */
+    private OrderState mustPreviousState;
+
+    @Transient
+    public OrderState getMustPreviousState() {
+        return mustPreviousState;
+    }
+
+    public void setMustPreviousState(OrderState mustPreviousState) {
+        this.mustPreviousState = mustPreviousState;
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override

@@ -1,4 +1,4 @@
-package ordercenter.payment.models;
+package ordercenter.models;
 
 import common.models.utils.EntityClass;
 import common.utils.Money;
@@ -15,11 +15,11 @@ import java.util.Map;
 /**
  * 交易信息
  * User: lidujun
- * Date: 2015-04-29
+ * Date: 2015-05-08
  */
-//@Table(name = "Trade")
-//@Entity
-public class TradeInfo implements EntityClass<Integer> {
+@Table(name = "Trade")
+@Entity
+public class Trade implements EntityClass<Integer> {
 
     /**
      *主键 id
@@ -115,6 +115,7 @@ public class TradeInfo implements EntityClass<Integer> {
     /**
      * 交易签名是否真实
      */
+    @Transient
     public boolean verify(Map<String, String> backParams, ResponseType type) {
         if (PayType.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
             return AlipayUtil.verify(type.getValue(), backParams);
@@ -128,6 +129,7 @@ public class TradeInfo implements EntityClass<Integer> {
     /**
      * 是否成功扣款
      */
+    @Transient
     public boolean isSuccess() {
         if (PayType.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
             if ("TRADE_FINISHED".equalsIgnoreCase(tradeStatus) || "TRADE_SUCCESS".equalsIgnoreCase(tradeStatus)) {
