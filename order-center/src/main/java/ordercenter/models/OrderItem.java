@@ -8,8 +8,11 @@ import ordercenter.constants.OrderState;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import productcenter.constants.StoreStrategy;
+import productcenter.models.SkuProperty;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 订单项
@@ -97,6 +100,12 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
 
     @JsonIgnore
     private Order order;
+
+    /** 页面展示数据需求(不存数据库) */
+    private List<SkuProperty> properties = new ArrayList<>();
+
+    /** 商品的评论(不存数据库) */
+    private Valuation valuation;
 
     /**
      * 原先的订单状态, 只在更新 SQL 时有效, 不写入数据库
@@ -352,5 +361,23 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
     @Override
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    @Transient
+    public List<SkuProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<SkuProperty> properties) {
+        this.properties = properties;
+    }
+
+    @Transient
+    public Valuation getValuation() {
+        return valuation;
+    }
+
+    public void setValuation(Valuation valuation) {
+        this.valuation = valuation;
     }
 }

@@ -7,6 +7,11 @@ import ordercenter.models.CartItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import play.Logger;
+import productcenter.models.*;
+import productcenter.services.ProductService;
+import productcenter.services.PropertyAndValueService;
+import productcenter.services.SkuAndStorageService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +26,21 @@ import java.util.Optional;
 @Service
 @Transactional
 public class CartService {
+
     @Autowired
     GeneralDao generalDao;
+
+    @Autowired
+    private SkuAndStorageService skuService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private PropertyAndValueService propertyAndValueService;
+
+    //@Autowired
+    //private CmsService skCmsService;
 
     /**
      * 向购物车中加入Sku商品

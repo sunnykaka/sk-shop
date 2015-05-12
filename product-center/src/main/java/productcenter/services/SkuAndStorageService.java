@@ -6,10 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import productcenter.models.Product;
-import productcenter.models.SkuProperty;
-import productcenter.models.SkuStorage;
-import productcenter.models.StockKeepingUnit;
+import productcenter.models.*;
 import productcenter.util.PropertyValueUtil;
 
 import java.util.*;
@@ -28,6 +25,9 @@ public class SkuAndStorageService {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    private PropertyAndValueService propertyAndValueService;
 
     /**
      * 将sku数据库中的字符串pidvid列表转换为Sku属性的List
@@ -163,6 +163,25 @@ public class SkuAndStorageService {
             skuStorage = list.get(0);
         }
         return skuStorage;
+    }
+
+    /**
+     * 产生SKU属性及对应值
+     *
+     * @param skuId
+     */
+    public List<SkuProperty> getSKUPropertyValueMap(int skuId){
+
+        StockKeepingUnit SKU = getStockKeepingUnitById(skuId);
+        for(SkuProperty p :SKU.getSkuProperties()){
+            Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
+            p.setPropertyName(property.getName());
+            Value value = propertyAndValueService.getValueById(p.getValueId());
+            p.setPropertyValue(value.getValueName());
+        }
+
+        return SKU.getSkuProperties();
+
     }
 
 }

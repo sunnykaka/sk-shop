@@ -1,10 +1,11 @@
-package productcenter.services;
+package ordercenter.services;
 
 import common.services.GeneralDao;
+import ordercenter.models.OrderItem;
+import ordercenter.models.Valuation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import productcenter.models.Valuation;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,9 @@ public class ValuationService {
 
     @Autowired
     private GeneralDao generalDao;
+    
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 添加评论
@@ -33,7 +37,9 @@ public class ValuationService {
 
         generalDao.persist(valuation);
 
-        //TODO 同步订单项
+        OrderItem orderItem = orderService.getOrderItemById(valuation.getOrderItemId());
+        orderItem.setAppraise(true);//同步订单项，已评论
+        orderService.updateOrderItem(orderItem);
 
         return valuation;
 
@@ -47,7 +53,7 @@ public class ValuationService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Valuation findByOrderItemId(int userId,long orderItemId){
+    public Valuation findByOrderItemId(int userId,int orderItemId){
 
         String jpql = "select v from Valuation v where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();

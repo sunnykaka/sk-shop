@@ -1,4 +1,4 @@
-package productcenter.models;
+package ordercenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.TableTimeData;
@@ -6,7 +6,6 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
 
     private String content;
 
-    private long orderItemId;
+    private int orderItemId;
 
     private int productId;
 
@@ -120,11 +119,11 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
     }
     @Column(name = "orderItemId")
     @Basic
-    public long getOrderItemId ( ) {
+    public int getOrderItemId ( ) {
         return orderItemId;
     }
 
-    public void setOrderItemId ( long orderItemId ) {
+    public void setOrderItemId ( int orderItemId ) {
         this.orderItemId = orderItemId;
     }
     @Column(name = "productId")

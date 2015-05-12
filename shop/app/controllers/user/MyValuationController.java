@@ -2,6 +2,8 @@ package controllers.user;
 
 import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
+import ordercenter.models.Valuation;
+import ordercenter.services.ValuationService;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,6 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.dtos.ValuationForm;
-import productcenter.models.Valuation;
-import productcenter.services.ValuationService;
 import usercenter.models.User;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
@@ -24,20 +24,6 @@ public class MyValuationController extends Controller {
 
     @Autowired
     private ValuationService valuationService;
-
-    /**
-     * 我的评论首页
-     *
-     * @return
-     */
-    @SecuredAction
-    public Result index() {
-
-        User user = SessionUtils.currentUser();
-
-        return ok(myValuation.render());
-
-    }
 
     /**
      * 添加评论
@@ -81,18 +67,25 @@ public class MyValuationController extends Controller {
 
     }
 
+    /**
+     * 暂时没有用上
+     *
+     * @param orderItemId
+     * @return
+     */
     @SecuredAction
     public Result findValuation(long orderItemId) {
 
-        User user = SessionUtils.currentUser();
-
-        Valuation valuation = valuationService.findByOrderItemId(user.getId(),orderItemId);
-
-        if(null == valuation){
-            return ok(new JsonResult(false,"未评价",null).toNode());
-        }
-
-        return ok(new JsonResult(true,"已评价",valuation).toNode());
+//        User user = SessionUtils.currentUser();
+//
+//        Valuation valuation = valuationService.findByOrderItemId(user.getId(),orderItemId);
+//
+//        if(null == valuation){
+//            return ok(new JsonResult(false,"未评价",null).toNode());
+//        }
+//
+//        return ok(new JsonResult(true,"已评价",valuation).toNode());
+        return ok();
 
     }
 

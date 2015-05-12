@@ -4,6 +4,8 @@ import common.exceptions.AppBusinessException;
 import common.utils.EmailUtils;
 import common.utils.JsonResult;
 import common.utils.ParamUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
@@ -11,24 +13,27 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import usercenter.cache.SecurityCache;
+import usercenter.domain.SmsSender;
 import usercenter.dtos.CodeForm;
 import usercenter.dtos.ChangePswForm;
 import usercenter.dtos.PhoneCodeForm;
 import usercenter.models.User;
 import usercenter.services.UserService;
+import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 import views.html.user.*;
 
 
 /**
  * 安全信息管理
- *
+ * <p>
  * Created by zhb on 15-4-29.
  */
 @org.springframework.stereotype.Controller
 public class MySecurityController extends Controller {
 
-    public static final int test_userId = 14329;
+    //public static final int test_userId = 14329;
+    public static final int RANDOM_DEFAULT_SIZE = 16;
 
     @Autowired
     private UserService userService;
@@ -39,9 +44,9 @@ public class MySecurityController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result changePhoneIndex(){
+    public Result changePhoneIndex() {
 
-        User user = userService.getById(test_userId);
+        User user = SessionUtils.currentUser();
 
         return ok(changePhoneIndex.render(user));
 
@@ -52,18 +57,24 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePhoneNew(){
+    @SecuredAction
+    public Result changePhoneNew() {
+        User user = SessionUtils.currentUser();
 
         Form<CodeForm> codeForm = Form.form(CodeForm.class).bindFromRequest();
 
-        if(!codeForm.hasErrors()) {
+        if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                User user = userService.getById(test_userId);
                 //TODO 校验验证码是否正确
+                if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
+                    throw new AppBusinessException("校验码验证失败");
+                }
 
                 //页面关联token
-                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
+                String token = RandomStringUtils.randomAscii(RANDOM_DEFAULT_SIZE);
+                flash(SecurityCache.SECURITY_TOKEN_PHONE_KEY, token);
+                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), token);
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePhoneDo().url()).toNode());
 
             } catch (AppBusinessException e) {
@@ -81,16 +92,10 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePhoneDo(){
+    @SecuredAction
+    public Result changePhoneDo() {
 
-        User user = userService.getById(test_userId);
-        String phoneToken = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-        if(StringUtils.isEmpty(phoneToken) || !user.getPhone().equals(phoneToken)){
-            play.Logger.info("未经过验证页面，直接跳转");
-            return redirect(routes.MySecurityController.changePhoneIndex().url());
-        }
-
-        return ok(changePhoneNew.render(user));
+        return ok(changePhoneNew.render(flash()));
 
     }
 
@@ -99,15 +104,27 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePhoneEnd(){
+    @SecuredAction
+    public Result changePhoneEnd() {
 
-        User user = userService.getById(test_userId);
+        User user = SessionUtils.currentUser();
+
+        String tokenPage = ParamUtils.getByKey(request(),"token");
+        String token = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
 
         Form<PhoneCodeForm> phoneCodeForm = Form.form(PhoneCodeForm.class).bindFromRequest();
 
-        if(!phoneCodeForm.hasErrors()) {
+        if (!phoneCodeForm.hasErrors()) {
             try {
-                userService.updatePhone(user,phoneCodeForm.get());
+                if(StringUtils.isEmpty(tokenPage) || StringUtils.isEmpty(token)){
+                    throw new AppBusinessException("身份验证已失效，无法继续操作");
+                }
+                if(!tokenPage.equals(token)){
+                    throw new AppBusinessException("身份验证已失效，无法继续操作");
+                }
+
+                userService.updatePhone(user, phoneCodeForm.get());
+                SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePhoneOk().url()).toNode());
 
             } catch (AppBusinessException e) {
@@ -124,12 +141,10 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePhoneOk(){
+    @SecuredAction
+    public Result changePhoneOk() {
 
-        User user = userService.getById(test_userId);
-        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-
-        return ok(changePhoneDo.render(user));
+        return ok(changePhoneDo.render());
 
     }
 
@@ -138,11 +153,10 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePasswordIndex(){
+    @SecuredAction
+    public Result changePasswordIndex() {
 
-        User user = userService.getById(test_userId);
-
-        //userService.updatePassword(user,"123456");
+        User user = SessionUtils.currentUser();
 
         return ok(changePasswordIndex.render(user));
 
@@ -153,18 +167,22 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePasswordNew(){
+    @SecuredAction
+    public Result changePasswordNew() {
+        User user = SessionUtils.currentUser();
 
         Form<CodeForm> codeForm = Form.form(CodeForm.class).bindFromRequest();
 
-        if(!codeForm.hasErrors()) {
+        if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                User user = userService.getById(test_userId);
                 //TODO 校验验证码是否正确
+                if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
+                    throw new AppBusinessException("校验码验证失败");
+                }
 
                 //页面关联token
-                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
+                flash("changePassword", user.getPhone());
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePasswordDo().url()).toNode());
 
             } catch (AppBusinessException e) {
@@ -181,16 +199,10 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePasswordDo(){
+    @SecuredAction
+    public Result changePasswordDo() {
 
-        User user = userService.getById(test_userId);
-        String phoneToken = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-        if(StringUtils.isEmpty(phoneToken) || !user.getPhone().equals(phoneToken)){
-            play.Logger.info("未经过验证页面，直接跳转");
-            return redirect(routes.MySecurityController.changePasswordIndex().url());
-        }
-
-        return ok(changePasswordNew.render(user));
+        return ok(changePasswordNew.render(flash()));
 
     }
 
@@ -199,14 +211,15 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePasswordEnd(){
-        User user = userService.getById(test_userId);
+    @SecuredAction
+    public Result changePasswordEnd() {
+        User user = SessionUtils.currentUser();
 
         Form<ChangePswForm> passwordForm = Form.form(ChangePswForm.class).bindFromRequest();
 
-        if(!passwordForm.hasErrors()) {
+        if (!passwordForm.hasErrors()) {
             try {
-                userService.updatePassword(user,passwordForm.get());
+                userService.updatePassword(user, passwordForm.get());
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePasswordOk().url()).toNode());
 
             } catch (AppBusinessException e) {
@@ -222,9 +235,8 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changePasswordOk(){
-        User user = userService.getById(test_userId);
-        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
+    @SecuredAction
+    public Result changePasswordOk() {
 
         return ok(changePasswordDo.render());
     }
@@ -234,12 +246,10 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changeEmailIndex(){
+    @SecuredAction
+    public Result changeEmailIndex() {
 
-        User user = userService.getById(test_userId);
-
-        //TODO test send
-        //Email.sendEmail("zhenhaobin@163.com","测试发送邮件", index.render(user).toString());
+        User user = SessionUtils.currentUser();
 
         return ok(changeEmailIndex.render(user));
 
@@ -250,18 +260,22 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changeEmailNew(){
+    @SecuredAction
+    public Result changeEmailNew() {
+        User user = SessionUtils.currentUser();
 
         Form<CodeForm> codeForm = Form.form(CodeForm.class).bindFromRequest();
 
-        if(!codeForm.hasErrors()) {
+        if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                User user = userService.getById(test_userId);
                 //TODO 校验验证码是否正确
+                if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
+                    throw new AppBusinessException("校验码验证失败");
+                }
 
                 //页面关联token
-                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
+                flash("changeEmail", user.getPhone());
                 return ok(new JsonResult(true, null, routes.MySecurityController.changeEmailDo().url()).toNode());
 
             } catch (AppBusinessException e) {
@@ -278,16 +292,10 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changeEmailDo(){
+    @SecuredAction
+    public Result changeEmailDo() {
 
-        User user = userService.getById(test_userId);
-        String phoneToken = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-        if(StringUtils.isEmpty(phoneToken) || !user.getPhone().equals(phoneToken)){
-            play.Logger.info("未经过验证页面，直接跳转");
-            return redirect(routes.MySecurityController.changeEmailIndex().url());
-        }
-
-        return ok(changeEmailNew.render(user));
+        return ok(changeEmailNew.render(flash()));
 
     }
 
@@ -296,25 +304,26 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changeEmailEnd(){
+    @SecuredAction
+    public Result changeEmailEnd() {
 
-        User user = userService.getById(test_userId);
+        User user = SessionUtils.currentUser();
 
-        String email = ParamUtils.getByKey(request(),"email");
-        if(StringUtils.isEmpty(email)){
-            return ok(new JsonResult(false,"邮箱地址为空").toNode());
+        String email = ParamUtils.getByKey(request(), "email");
+        if (StringUtils.isEmpty(email)) {
+            return ok(new JsonResult(false, "邮箱地址为空").toNode());
         }
         email = StringUtils.trim(email);
         User emailUser = userService.findByEmail(email);
-        if(null != emailUser){
-            return ok(new JsonResult(false,"该邮箱地址已被注册").toNode());
+        if (null != emailUser) {
+            return ok(new JsonResult(false, "该邮箱地址已被注册").toNode());
         }
 
         //生成token
-        SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY,user.getEmail(),email);
-        EmailUtils.sendEmail(email, Messages.get("send.email.activity.title"),views.html.template.email.activity.render(user).toString());
+        SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY, user.getEmail(), email);
+        EmailUtils.sendEmail(email, Messages.get("send.email.activity.title"), views.html.template.email.activity.render(user).toString());
 
-        return ok(new JsonResult(true,"邮件已发送").toNode());
+        return ok(new JsonResult(true, "邮件已发送").toNode());
 
     }
 
@@ -323,147 +332,146 @@ public class MySecurityController extends Controller {
      *
      * @return
      */
-    public Result changeEmailOk(int userId){
+    public Result changeEmailOk(int userId) {
 
         User user = userService.getById(userId);
-        if(null == user){
+        if (null == user) {
             return ok(changeEmailDo.render("激活失败，请确认激活地址"));
         }
         String oldEmail = user.getEmail();
-        String newEmail = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY,oldEmail);
+        String newEmail = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY, oldEmail);
 
-        if(StringUtils.isEmpty(newEmail)){
+        if (StringUtils.isEmpty(newEmail)) {
             return ok(changeEmailDo.render("激活失败，激活地址已过期"));
         }
 
         User emailUser = userService.findByEmail(newEmail);
-        if(null != emailUser){
+        if (null != emailUser) {
             return ok(changeEmailDo.render("激活失败，该邮箱地址已被抢先激活"));
         }
-        userService.updateEmail(user,newEmail);
-        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY,oldEmail);
-        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
+        userService.updateEmail(user, newEmail);
+        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY, oldEmail);
 
         return ok(changeEmailDo.render("修改成功"));
 
     }
 
-    /**
-     * 修改邮箱首页
-     *
-     * @return
-     */
-    public Result newEmailIndex(){
-
-        User user = userService.getById(test_userId);
-
-        //TODO test send
-        //Email.sendEmail("zhenhaobin@163.com","测试发送邮件", index.render(user).toString());
-
-        return ok(newEmailIndex.render(user));
-
-    }
-
-    /**
-     * 验证、验证码
-     *
-     * @return
-     */
-    public Result newEmailNew(){
-
-        Form<CodeForm> codeForm = Form.form(CodeForm.class).bindFromRequest();
-
-        if(!codeForm.hasErrors()) {
-            try {
-                CodeForm code = codeForm.get();
-                User user = userService.getById(test_userId);
-                //TODO 校验验证码是否正确
-
-                //页面关联token
-                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
-                return ok(new JsonResult(true, null, routes.MySecurityController.newEmailDo().url()).toNode());
-
-            } catch (AppBusinessException e) {
-                codeForm.reject("errors", e.getMessage());
-            }
-        }
-
-        return ok(new JsonResult(false, codeForm.errorsAsJson().toString()).toNode());
-
-    }
-
-    /**
-     * 修改邮箱页面
-     *
-     * @return
-     */
-    public Result newEmailDo(){
-
-        User user = userService.getById(test_userId);
-        String phoneToken = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-        if(StringUtils.isEmpty(phoneToken) || !user.getPhone().equals(phoneToken)){
-            play.Logger.info("未经过验证页面，直接跳转");
-            return redirect(routes.MySecurityController.newEmailIndex().url());
-        }
-
-        return ok(newEmailNew.render(user));
-
-    }
-
-    /**
-     * 下发邮件到新邮箱
-     *
-     * @return
-     */
-    public Result newEmailEnd(){
-
-        User user = userService.getById(test_userId);
-
-        String email = ParamUtils.getByKey(request(),"email");
-        if(StringUtils.isEmpty(email)){
-            return ok(new JsonResult(false,"邮箱地址为空").toNode());
-        }
-        email = StringUtils.trim(email);
-        User emailUser = userService.findByEmail(email);
-        if(null != emailUser){
-            return ok(new JsonResult(false,"该邮箱地址已被注册").toNode());
-        }
-
-        //生成token
-        SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY,user.getEmail(),email);
-        EmailUtils.sendEmail(email, Messages.get("send.email.activity.title"),views.html.template.email.activity.render(user).toString());
-
-        return ok(new JsonResult(true,"邮件已发送").toNode());
-
-    }
-
-    /**
-     * 修改成功页面
-     *
-     * @return
-     */
-    public Result newEmailOk(int userId){
-
-        User user = userService.getById(userId);
-        if(null == user){
-            return ok(changeEmailDo.render("激活失败，请确认激活地址"));
-        }
-        String newEmail = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY,user.getEmail());
-
-        if(StringUtils.isEmpty(newEmail)){
-            return ok(changeEmailDo.render("激活失败，激活地址已过期"));
-        }
-
-        User emailUser = userService.findByEmail(newEmail);
-        if(null != emailUser){
-            return ok(changeEmailDo.render("激活失败，该邮箱地址已被抢先激活"));
-        }
-        userService.updateEmail(user,newEmail);
-        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-
-
-        return ok(newEmailDo.render("修改成功"));
-
-    }
+//    /**
+//     * 修改邮箱首页
+//     *
+//     * @return
+//     */
+//    public Result newEmailIndex(){
+//
+//        User user = userService.getById(test_userId);
+//
+//        //TODO test send
+//        //Email.sendEmail("zhenhaobin@163.com","测试发送邮件", index.render(user).toString());
+//
+//        return ok(newEmailIndex.render(user));
+//
+//    }
+//
+//    /**
+//     * 验证、验证码
+//     *
+//     * @return
+//     */
+//    public Result newEmailNew(){
+//
+//        Form<CodeForm> codeForm = Form.form(CodeForm.class).bindFromRequest();
+//
+//        if(!codeForm.hasErrors()) {
+//            try {
+//                CodeForm code = codeForm.get();
+//                User user = userService.getById(test_userId);
+//                //TODO 校验验证码是否正确
+//
+//                //页面关联token
+//                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
+//                return ok(new JsonResult(true, null, routes.MySecurityController.newEmailDo().url()).toNode());
+//
+//            } catch (AppBusinessException e) {
+//                codeForm.reject("errors", e.getMessage());
+//            }
+//        }
+//
+//        return ok(new JsonResult(false, codeForm.errorsAsJson().toString()).toNode());
+//
+//    }
+//
+//    /**
+//     * 修改邮箱页面
+//     *
+//     * @return
+//     */
+//    public Result newEmailDo(){
+//
+//        User user = userService.getById(test_userId);
+//        String phoneToken = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
+//        if(StringUtils.isEmpty(phoneToken) || !user.getPhone().equals(phoneToken)){
+//            play.Logger.info("未经过验证页面，直接跳转");
+//            return redirect(routes.MySecurityController.newEmailIndex().url());
+//        }
+//
+//        return ok(newEmailNew.render(user));
+//
+//    }
+//
+//    /**
+//     * 下发邮件到新邮箱
+//     *
+//     * @return
+//     */
+//    public Result newEmailEnd(){
+//
+//        User user = userService.getById(test_userId);
+//
+//        String email = ParamUtils.getByKey(request(),"email");
+//        if(StringUtils.isEmpty(email)){
+//            return ok(new JsonResult(false,"邮箱地址为空").toNode());
+//        }
+//        email = StringUtils.trim(email);
+//        User emailUser = userService.findByEmail(email);
+//        if(null != emailUser){
+//            return ok(new JsonResult(false,"该邮箱地址已被注册").toNode());
+//        }
+//
+//        //生成token
+//        SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY,user.getEmail(),email);
+//        EmailUtils.sendEmail(email, Messages.get("send.email.activity.title"),views.html.template.email.activity.render(user).toString());
+//
+//        return ok(new JsonResult(true,"邮件已发送").toNode());
+//
+//    }
+//
+//    /**
+//     * 修改成功页面
+//     *
+//     * @return
+//     */
+//    public Result newEmailOk(int userId){
+//
+//        User user = userService.getById(userId);
+//        if(null == user){
+//            return ok(changeEmailDo.render("激活失败，请确认激活地址"));
+//        }
+//        String newEmail = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY,user.getEmail());
+//
+//        if(StringUtils.isEmpty(newEmail)){
+//            return ok(changeEmailDo.render("激活失败，激活地址已过期"));
+//        }
+//
+//        User emailUser = userService.findByEmail(newEmail);
+//        if(null != emailUser){
+//            return ok(changeEmailDo.render("激活失败，该邮箱地址已被抢先激活"));
+//        }
+//        userService.updateEmail(user,newEmail);
+//        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
+//
+//
+//        return ok(newEmailDo.render("修改成功"));
+//
+//    }
 
 }

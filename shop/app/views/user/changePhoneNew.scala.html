@@ -1,4 +1,4 @@
-@(user:usercenter.models.User)
+@(flash: java.util.Map[String, String])
 
 <!DOCTYPE html>
 
@@ -8,16 +8,21 @@
     </head>
     <body>
 
-        <div>
-            <form action="@controllers.user.routes.MySecurityController.changePhoneEnd()" method="post">
-                新手机：<input type="text" name="phone" value=""/><br/>
+        @if(flash.get("changePhone")){
+            <div>
+                <form action="@controllers.user.routes.MySecurityController.changePhoneEnd()" method="post">
+                    新手机：<input type="text" name="phone" value=""/><br/>
 
-                验证码：<input type="text" name="verificationCode" value=""/>
+                    验证码：<input type="text" name="verificationCode" value=""/>
 
-                <button type="submit">提交</button>
-            </form>
+                    <button type="submit">提交</button>
+                </form>
 
-        </div>
+            </div>
+        }else{
+            页面已失效
+        }
+
 
     </body>
 </html>

@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import productcenter.constants.SKUState;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
     /**
      * SKU 属性列表
      */
-    private List<SkuProperty> skuProperties;
+    private List<SkuProperty> skuProperties = new ArrayList<>();
 
     /**
      * 创建时间
