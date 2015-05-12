@@ -1,66 +1,135 @@
-@(page:common.utils.page.Page[ordercenter.models.Order],queryType:Int,orderState:String)
+@(page:common.utils.page.Page[ordercenter.models.Order],queryType:Int)
 
 @import ordercenter.constants.OrderState;
+@import common.utils.DateUtils;
 
-<!DOCTYPE html>
+@myCenter(Messages("title.my.address")) {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+} {
 
-<html>
-    <head>
-        <title>@Messages("title.my.data")</title>
-    </head>
-    <body>
-
-
-        @for(order <- page.getResult){
-            <table width="50%" border="3px">
-                <tr>
-                    <td>@order.getOrderNo</td><td>@order.getAddressName</td><td>@order.getMilliDate</td>
-                </tr>
-                <tr>
-                    <div>
-                    <ul>
-                        @for(orderItem <- order.getOrderItemList){
-                            <li><img src="@orderItem.getMainPicture" height="50px" width="50px"/>@orderItem.getProductName</li>
-                        }
-                    </ul>
-                        </div>
-                    <div>
-                        @order.getTotalMoney.getAmountWithBigDecimal
-                        @order.getOrderState.getValue  <a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)" >订单详情</a>
-
-                        @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
-                            <a href="#" >立即支付</a>
-                        }
-                        @if(order.getOrderState.getName.equals(OrderState.Send.getName)){
-                            <a href="#" >确认到货</a>
-                        }
-                        @if(order.getOrderState.getName.equals(OrderState.Receiving.getName) || order.getOrderState.getName.equals(OrderState.Success.getName)){
-                            <a href="#" >评价</a>
-                        }
-                        @if(order.getOrderState.getName.equals(OrderState.Create.getName) || order.getOrderState.getName.equals(OrderState.Pay.getName)){
-                            <a href="#" >取消</a>
-                        }
+    <!--order-manage-->
+    <div class="order-manage">
+        <div class="order-manage-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>订单管理</li>
+                </ul>
+            </div>
+            <div class="order-manage-container clearfix">
+                @left()
+                    <!-- order-list -->
+                <div class="all-order-list">
+                    <div class="order-status">
+                        <ul class="clearfix">
+                            <li @if(queryType == 0){ class="current" }><a href="@controllers.user.routes.MyOrderController.index()">所有订单</a></li>
+                            <li @if(queryType == 1){ class="current" }><a href="@controllers.user.routes.MyOrderController.index(1)">待收货</a></li>
+                            <li @if(queryType == 2){ class="current" }><a href="@controllers.user.routes.MyOrderController.index(2)">待评价</a></li>
+                        </ul>
                     </div>
-                </tr>
-            </table>
-            <br/>
-        }
+                    @if(page.getResult.size() > 0){
+                        <div class="order-list">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">商品</th>
+                                        <th colspan="">订单金额</th>
+                                        <th colspan="">订单状态</th>
+                                        <th colspan="">操作</th>
+                                    </tr>
+                                </thead>
+                                @for(order <- page.getResult) {
+                                    <tbody>
+                                        <tr class="space-row"><td colspan="6"></td></tr>
+                                        <tr class="order-hd">
+                                            <td class="order-hd-first">订单号：<span class="order-number">@order.getOrderNo</span></td>
+                                            <td>收货人：<span class="user">@order.getAddressName</span></td>
+                                            <td colspan="4" class="order-hd-last">下单时间：<span class="order-time">@DateUtils.printDateTime(order.getCreateTime)</span></td>
+                                        </tr>
 
-        当前第@page.getPageNo 页  <br/>
-        总共有@page.getTotalPage 页  <br/>
-        共有多少条数据 @page.getTotalCount <br/>
+                                        @for((orderItem, index) <- order.getOrderItemList.zipWithIndex){
+                                            @if(index+1 == order.getOrderItemList.size()){
+                                                <tr class="last">
+                                                }else{
+                                                <tr>
+                                                }
+                                            <td class="product-img">
+                                                <img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/>
+                                            </td>
+                                            <td class="product-name">
+                                                <p>@orderItem.getProductName</p>
+                                            </td>
+                                            <td class="product-size">
+                                            @for(keyValue <- orderItem.getProperties){
+                                                <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
+                                            }
+                                            </td>
 
-        @if(page.getPageNo > 1){
-            <a href="@controllers.user.routes.MyOrderController.index(queryType,orderState,page.getPageNo-1)">上一页</a>
-        }else{
-            上一页
-        }
+                                            @if(index == 0){
+                                                <td rowspan="@order.getOrderItemList.size()" class="product-price">
+                                                    ￥@order.getTotalMoney.getAmountWithBigDecimal
+                                                </td>
+                                                <td rowspan="@order.getOrderItemList.size()" class="order-detail">
+                                                    @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
+                                                        <p class="not-pay">@order.getOrderState.getValue</p>
+                                                    }else{
+                                                        <p>@order.getOrderState.getValue</p>
+                                                    }
+                                                    <p><a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)">订单详情</a></p>
+                                                </td>
+                                                <td rowspan="@order.getOrderItemList.size()" class="control">
+                                                    @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
+                                                        <p><a href="#" class="pay">立即付款</a></p>
+                                                    }
+                                                    @if(order.getOrderState.getName.equals(OrderState.Send.getName)){
+                                                        <p><a href="#" class="confirm">确认收货</a></p>
+                                                    }
+                                                    @*if(order.getOrderState.getName.equals(OrderState.Receiving.getName) || order.getOrderState.getName.equals(OrderState.Success.getName)){*@
+                                                        <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)" class="confirm">评价</a></p>
+                                                    @*}*@
+                                                    @if(order.getOrderState.getName.equals(OrderState.Create.getName) || order.getOrderState.getName.equals(OrderState.Pay.getName)){
+                                                        <p><a href="#" class="cancel">取消</a></p>
+                                                    }
+                                                </td>
+                                            }
+                                        </tr>
+                                        }
+                                    </tbody>
+                                }
+                            </table>
 
-        @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
-            <a href="@controllers.user.routes.MyOrderController.index(queryType,orderState,page.getPageNo+1)">下一页</a>
-        }else{
-            下一页
-        }
+                            @if(page.getTotalPage > 1){
+                                <div class="order-page">
+                                    <ul class="clearfix">
+                                        <li>第<span class="current-page">@page.getPageNo</span>/<span class="total-page">@page.getTotalPage</span>页</li>
+                                        @if(page.getPageNo > 1){
+                                            <li><a href="@controllers.user.routes.MyOrderController.index(queryType,page.getPageNo-1)">上一页</a></li>
+                                        }else{
+                                            <li>上一页</li>
+                                        }
+                                        @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
+                                            <li><a href="@controllers.user.routes.MyOrderController.index(queryType,page.getPageNo+1)">下一页</a></li>
+                                        }else{
+                                            <li>下一页</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }else{
+                        没有数据
+                    }
 
-    </body>
-</html>
+                </div>
+                    <!-- end order-list-->
+            </div>
+        </div>
+    </div>
+    <!--end order-manage-->
+
+}
+
+

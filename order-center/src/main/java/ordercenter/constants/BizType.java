@@ -1,26 +1,25 @@
-package ordercenter.payment.constants;
+package ordercenter.constants;
 
 import common.models.utils.ViewEnum;
 
 /**
- * 支付类型
+ * 业务类型
  * User: lidujun
- * Date: 2015-05-11
+ * Date: 2015-05-08
  */
-public enum PayType implements ViewEnum {
-
+public enum BizType implements ViewEnum {
     /**
-     * 支付宝
+     * 订单
      */
-    Alipay("alipay"),
+    Order("订单"),
     /**
-     * 财富通
+     * 优惠券
      */
-    TenPay("tenpay");
+    Coupon("优惠券");
 
     public String value;
 
-    PayType(String value) {
+    BizType(String value) {
         this.value = value;
     }
 

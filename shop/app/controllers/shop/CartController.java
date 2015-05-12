@@ -1,6 +1,7 @@
 package controllers.shop;
 
 import common.utils.JsonResult;
+import common.utils.Money;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
@@ -9,21 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
-import productcenter.models.SkuStorage;
+import productcenter.models.*;
+import productcenter.services.ProductPictureService;
+import productcenter.services.ProductService;
+import productcenter.services.PropertyAndValueService;
 import productcenter.services.SkuAndStorageService;
+import services.CmsService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
-import views.html.shop.showCart;
 import views.html.shop.chooseAddress;
-
+import views.html.shop.showCart;
 
 import java.util.List;
 
-import static play.Logger.error;
-
 /**
  * 购物车Controller
+ * User: lidujun
+ * Date: 2015-05-06
  */
 @org.springframework.stereotype.Controller
 public class CartController extends Controller {
@@ -32,16 +36,32 @@ public class CartController extends Controller {
     private CartService cartService;
 
     @Autowired
-    SkuAndStorageService skuAndStorageService;
+    private SkuAndStorageService skuAndStorageService;
 
     @Autowired
-    AddressService addressService;
+    private AddressService addressService;
+
+    @Autowired
+    private SkuAndStorageService skuService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ProductPictureService pictureService;
+
+    @Autowired
+    private PropertyAndValueService propertyAndValueService;
+
+    @Autowired
+    private CmsService cmsService;
 
     /**
-     * 获取库存信息，用于前端数据验证(最大购买数限制)
+     * 获取库存信息，用于前端数据验证(最大购买数限制、和库存)
      * @param skuId
      * @return
      */
+    //@SecuredAction
     public Result getSkuStorage(int skuId) {
         try {
             SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
@@ -62,7 +82,7 @@ public class CartController extends Controller {
      * @return
      */
     //@SecuredAction
-    public Result addSkuToCartNotReplace(int skuId, int number) {
+    public Result addSkuToCartAddNum(int skuId, int number) {
         return this.addSkuToCart(skuId, number,false);
     }
 
@@ -76,28 +96,8 @@ public class CartController extends Controller {
      * @return
      */
     //@SecuredAction
-    public Result addSkuToCartReplace(int skuId, int number) {
+    public Result addSkuToCartReplaceNum(int skuId, int number) {
         return this.addSkuToCart(skuId, number,true);
-    }
-
-    /**
-     * 用户购物车操作方法
-     * @param userId
-     * @param skuId
-     * @param number
-     * @param isReplace
-     * @return
-     */
-    private Cart useUserId(int userId, int skuId, int number, boolean isReplace) {
-        Cart cart = cartService.getCartByUserId(userId);
-        if(cart == null) {
-            cartService.initCartByUserId(userId, skuId, number);
-        } else {
-            cartService.addSkuToCart(cart, skuId, number,isReplace);
-        }
-        //重新加载购物车
-        cart = cartService.getCartByUserId(userId);
-        return cart;
     }
 
     /**
@@ -233,9 +233,10 @@ public class CartController extends Controller {
     }
 
     /**
-     * 去结算，从购物车到订单页面
+     * 去结算-选择送货地址
+     * @return
      */
-    public Result cartToOrder() {
+    public Result chooseAddress() {
         try {
             //测试
             User curUser = new User();
@@ -244,6 +245,7 @@ public class CartController extends Controller {
 
             //User curUser = SessionUtils.currentUser();
             Cart cart = cartService.getCartByUserId(curUser.getId());
+            String errMsg = "对不起您没有购买任何商品，不能前去支付！";
             if (cart == null) {
                 Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
                 return redirect(controllers.shop.routes.CartController.showCart());
@@ -257,7 +259,13 @@ public class CartController extends Controller {
             if (!StringUtils.isEmpty(checkErrMsg)) {  //Result showCartOperator(String checkErrMsg)
                 return showCartOperator(checkErrMsg);
             }
-            return redirect(controllers.shop.routes.CartController.chooseAddress());
+
+            List<Address> addressList = addressService.queryAllAddress(curUser.getId());
+            cart = cartService.getCartByUserId(curUser.getId());
+            return ok(chooseAddress.render(true, addressList, cart, null));
+
+
+
         } catch (final Exception e) {
             Logger.error("进入结算界面发生未知异常:", e);
             return showCartOperator("进入结算界面发生未知异常，请联系商城客服人员");
@@ -265,24 +273,74 @@ public class CartController extends Controller {
     }
 
     /**
-     * 选择送货地址
+     * 用户购物车操作方法
+     * @param userId
+     * @param skuId
+     * @param number
+     * @param isReplace
      * @return
      */
-    public Result chooseAddress() {
-        try {
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
-
-            //User curUser = SessionUtils.currentUser();
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId());
-            Cart cart = cartService.getCartByUserId(curUser.getId());
-            return ok(chooseAddress.render(true, addressList, cart, null));
-        } catch (final Exception e) {
-            error("系统发生异常：", e);
-            return ok(chooseAddress.render(false, null, null, "系统发生异常，请联系商城客服人员，谢谢！"));
+    private Cart useUserId(int userId, int skuId, int number, boolean isReplace) {
+        Cart cart = cartService.getCartByUserId(userId);
+        if(cart == null) {
+            cartService.initCartByUserId(userId, skuId, number);
+        } else {
+            cartService.addSkuToCart(cart, skuId, number,isReplace);
         }
+        //重新加载购物车
+        cart = cartService.getCartByUserId(userId);
+        return cart;
+    }
+
+    /**
+     * 将Cart对象构建完整
+     *
+     * @param cart
+     * @return
+     */
+    private Cart buildCart(Cart cart) {
+        if (cart != null) {
+            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
+            cart.setCartItemList(cartItems);
+            //合计价格
+            Money totalMoney = Money.valueOf(0);
+            for (CartItem cartItem : cartItems) {
+                StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
+                cartItem.setCurUnitPrice(Money.valueOf(0));
+                if (stockKeepingUnit != null) {
+                    cartItem.setSku(stockKeepingUnit);
+                    Product product = productService.getProductById(stockKeepingUnit.getProductId());
+                    cartItem.setProductName(product.getName());
+                    //图片
+                    ProductPicture picture = pictureService.getMainProductPictureByProductIdSKuId(stockKeepingUnit.getProductId(), stockKeepingUnit.getId());
+                    cartItem.setMainPicture(picture.getPictureUrl());
+
+                    //根据判断是否是首发，当前价格要现算
+                    boolean isFirstPublish = cmsService.onFirstPublish(cartItem.getProductId());
+                    if(isFirstPublish) {
+                        cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
+                    } else {
+                        cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
+                    }
+                    totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
+
+                    List<SkuProperty> skuPropertyList = stockKeepingUnit.getSkuProperties();
+                    if(skuPropertyList != null && skuPropertyList.size() > 0) {
+                        for(SkuProperty p : skuPropertyList) {
+                            Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
+                            p.setPropertyName(property.getName());
+                            Value value = propertyAndValueService.getValueById(p.getValueId());
+                            p.setPropertyValue(value.getValueName());
+                        }
+                    }
+                } else {
+                    Logger.warn("构建购物车时发现sku被删除" + cartItem.getSkuId());
+                    cartService.deleteCartItemBySkuIdAndCartId(cartItem.getSkuId(), cartItem.getCartId());
+                }
+            }
+            cart.setTotalMoney(totalMoney);
+        }
+        return cart;
     }
 
 }

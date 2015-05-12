@@ -2,6 +2,7 @@ package ordercenter.services;
 
 import common.services.GeneralDao;
 import common.utils.page.Page;
+import ordercenter.constants.OrderState;
 import ordercenter.models.Logistics;
 import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import productcenter.services.SkuAndStorageService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 购物车服务
+ * 订单Service
  * User: lidujun
  * Date: 2015-04-29
  */
@@ -27,6 +29,12 @@ public class OrderService {
 
     @Autowired
     GeneralDao generalDao;
+
+    @Autowired
+    private SkuAndStorageService skuService;
+
+    @Autowired
+    private TradeService tradeService;
 
     private static final ReentrantLock LOCK = new ReentrantLock();
 
@@ -46,6 +54,22 @@ public class OrderService {
     public void updateOrder(Order order) {
         Logger.info("--------OrderService updateCart begin exe-----------" + order);
         generalDao.merge(order);
+    }
+
+    /**
+     * 通过订单号更新订单支付机构信息
+     * @param orderNo
+     * @param orgName
+     */
+    public void updateOrderPayOrg(Long orderNo, String payType, String orgName) {
+        Logger.info("--------OrderService updateCart begin exe-----------" + orderNo + " : " + orgName);
+
+        String jpql = "update Order o set o.payType=:payType, o.payBank=:orgName where o.orderNo=:orderNo";
+        Map<String, Object> params = new HashMap<>();
+        params.put("payType", payType);
+        params.put("orgName", orgName);
+
+        generalDao.update(jpql, params);
     }
 
     /**
@@ -99,18 +123,33 @@ public class OrderService {
      * @param page
      * @param userId
      * @param querytType
-     * @param orderState
+     *          0所有订单、1待收货、2待评价
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Order> getOrderByUserId(Optional<Page<Order>> page, int userId,int querytType,String orderState) {
-        Logger.info("--------OrderService getOrderByUserId begin exe-----------" + userId);
+    public List<Order> getOrderByUserId(Optional<Page<Order>> page, int userId,int querytType) {
+        Logger.info("--------OrderService getOrderByUserId begin exe-----------" + userId + "&type:" + querytType);
+        OrderState[] type_1 = {OrderState.Confirm,OrderState.Print,OrderState.Verify,OrderState.Send};
+        OrderState[] type_2 = {OrderState.Receiving,OrderState.Success};
+
         String jpql = "select o from Order o join o.orderItemList oi where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and o.userId = :userId ";
         queryParams.put("userId", userId);
 
-        jpql += " group by o.id ";
+        if(querytType == 1){
+            jpql += " and o.orderState in (:type0, :type1, :type2, :type3) ";
+            for(int i=0; i<type_1.length; i++) {
+                queryParams.put("type" + i, type_1[i]);
+            }
+        }else if(querytType == 2){
+            jpql += " and o.orderState in (:type0, :type1) ";
+            for(int i=0; i<type_2.length; i++) {
+                queryParams.put("type" + i, type_2[i]);
+            }
+        }
+
+        jpql += " group by o.id order by o.id desc";
 
         return generalDao.query(jpql,page,queryParams);
     }
@@ -141,6 +180,30 @@ public class OrderService {
         return  order;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //////////////////////////////订单项/////////////////////////////////////////////
     /**
      * 创建订单项
@@ -149,6 +212,16 @@ public class OrderService {
     public void createOrderItem(OrderItem orderItem) {
         Logger.info("--------OrderService createOrderItem begin exe-----------" + orderItem);
         generalDao.persist(orderItem);
+    }
+
+    /**
+     * 根据ID查找订单项
+     *
+     * @param orderItemId
+     * @return
+     */
+    public OrderItem getOrderItemById(int orderItemId){
+        return generalDao.get(OrderItem.class,orderItemId);
     }
 
     /**

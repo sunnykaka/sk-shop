@@ -9,7 +9,7 @@ import play.data.validation.Constraints;
  */
 public class ValuationForm {
 
-    private long orderItemId;
+    private int orderItemId;
 
     private int point;
 
@@ -20,11 +20,11 @@ public class ValuationForm {
     @Constraints.MaxLength(value = 300, message = "输入超过最大300字符限制")
     private String content;
 
-    public long getOrderItemId() {
+    public int getOrderItemId() {
         return orderItemId;
     }
 
-    public void setOrderItemId(long orderItemId) {
+    public void setOrderItemId(int orderItemId) {
         this.orderItemId = orderItemId;
     }
 

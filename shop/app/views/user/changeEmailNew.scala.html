@@ -1,4 +1,4 @@
-@(user:usercenter.models.User)
+@(flash: java.util.Map[String, String])
 
 <!DOCTYPE html>
 
@@ -8,16 +8,20 @@
     </head>
     <body>
 
-        <div>
-            <form action="@controllers.user.routes.MySecurityController.changeEmailEnd()" method="post">
-                新邮箱：<input type="text" name="email" value=""/><br/>
+        @if(flash.get("changeEmail")){
+            <div>
+                <form action="@controllers.user.routes.MySecurityController.changeEmailEnd()" method="post">
+                    新邮箱：<input type="text" name="email" value=""/><br/>
 
-                <button type="button">发送验证邮件</button>
+                    <button type="button">发送验证邮件</button>
 
-                <button type="submit">提交</button>
-            </form>
+                    <button type="submit">提交</button>
+                </form>
 
-        </div>
+            </div>
+        }else{
+            页面已失效
+        }
 
     </body>
 </html>

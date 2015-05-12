@@ -1,14 +1,18 @@
 package ordercenter.payment;
 
+import common.utils.ParamUtils;
+import common.utils.play.BaseGlobal;
+import ordercenter.models.Trade;
 import ordercenter.payment.alipay.AlipayInfoBuilder;
 import ordercenter.payment.constants.ResponseType;
-import ordercenter.payment.models.TradeInfo;
 import ordercenter.payment.tenpay.TenpayInfoBuilder;
+import ordercenter.services.TradeService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import play.Logger;
+import play.mvc.Http.Request;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.persistence.EntityExistsException;
 import java.util.Map;
 
 /**
@@ -21,7 +25,7 @@ public class PayResponseHandler {
     private static final char Log_Gap = ' ';
 
     //交易信息
-    private TradeInfo tradeInfo;
+    private Trade tradeInfo;
     //送过去的交易回调处理类
     private String callBackHandlerClass;
 
@@ -30,9 +34,10 @@ public class PayResponseHandler {
     private Map<String, String> backParams;
 
 
-    public PayResponseHandler(HttpServletRequest request) {
-        String extra_common_param = request.getParameter("extra_common_param");//阿里的支付回传参数
-        String attach = request.getParameter("attach");//腾讯的回传参数
+    public PayResponseHandler(Request request) {
+
+        String extra_common_param = ParamUtils.getByKey(request, "extra_common_param");//阿里的支付回传参数
+        String attach = ParamUtils.getByKey(request, "attach");//腾讯的回传参数
 
         if (StringUtils.isNotEmpty(extra_common_param)) {
             String[] split = extra_common_param.split("\\|");
@@ -94,30 +99,32 @@ public class PayResponseHandler {
             return result;
         }
 
+        TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
         //后续要放开
-//        //查询支付宝发送过来的消息是否已经消费,如果已经消费则直接返回成功,主要针对情况是：return 和 Notify有很明显时差时，一个先回来，一另后回来。则直接处理成功。
-//        if (ApplicationContextUtils.getBean(TradeCenterUserClient.class).existTradeInfo(tradeInfo.getTradeNo(), tradeInfo.getOuterTradeNo())) {
-//            Logger.info("此笔交易已经处理,TradeNo:" + tradeInfo.getTradeNo() + " 本次通知类型为：" + type);
-//            result.setResult(true);
-//            return result;
-//        }
-//
-//        //插入交易日志，当return 和 Notify有一个先回来的时候，插入已经成功，另外一个回来的时候则会抛出DuplicateKeyException,也视为成功
-//        //此处主要针对的是return notify并发执行的问题（同时回来接收处理）
-//        try {
-//            ApplicationContextUtils.getBean(TradeRepository.class).createTradeInfo(tradeInfo);
-//            result.setResult(callBackHandler.doAfterBack(this.tradeInfo, type, result));
-//        } catch (DuplicateKeyException e) {
-//            //视为成功，不需要做任务处理。
-//            Logger.info("此笔交易遇到并发情况，return notify 同时到达, TradeNo:" + tradeInfo.getTradeNo() + ", 本次通知类型为：" + type);
-//            result.setResult(true);
-//        }
+        //查询支付宝发送过来的消息是否已经消费,如果已经消费则直接返回成功,主要针对情况是：return 和 Notify有很明显时差时，一个先回来，一另后回来。则直接处理成功。
+        if (tradeService.existTradeInfo(tradeInfo.getTradeNo(), tradeInfo.getOuterTradeNo())) {
+            Logger.info("此笔交易已经处理,TradeNo:" + tradeInfo.getTradeNo() + " 本次通知类型为：" + type);
+            result.setResult(true);
+            return result;
+        }
+
+        //插入交易日志，当return 和 Notify有一个先回来的时候，插入已经成功，另外一个回来的时候则会抛出DuplicateKeyException,也视为成功
+        //此处主要针对的是return notify并发执行的问题（同时回来接收处理）
+        try {
+            tradeService.createTrade(tradeInfo); //特意没有与doAfterBack中的内容放在一个事物中，即便后续操作发生问题，我们也要记录交易信息
+            result.setResult(callBackHandler.doAfterBack(this.tradeInfo, type, result));
+        } catch (EntityExistsException e) { //ldj 需要测试一下
+            //视为成功，不需要做任务处理。
+            Logger.info("此笔交易遇到并发情况，return notify 同时到达, TradeNo:" + tradeInfo.getTradeNo() + ", 本次通知类型为：" + type);
+            result.setResult(true);
+        }
 
         if (result.success()) {
             Logger.info(buildLogString("success-" + type.getValue(), "normal", tradeInfo.getTradeNo(), tradeInfo.getOuterTradeNo(), tradeInfo.getOuterPlatformType()));
         } else {
             Logger.error(buildLogString("fail-" + type.getValue(), "exception", tradeInfo.getTradeNo(), tradeInfo.getOuterTradeNo(), tradeInfo.getOuterPlatformType()));
         }
+
         return result;
     }
 

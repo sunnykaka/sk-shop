@@ -36,7 +36,6 @@ POST        /my/address/update                  @controllers.user.AddressControl
 POST        /my/address/del                     @controllers.user.AddressController.del(addressId:Int)
 POST        /my/address/defaultAddress          @controllers.user.AddressController.defaultAddress(addressId:Int)
 # myValuation
-GET         /my/valuation                       @controllers.user.MyValuationController.index()
 POST        /my/valuation/add                   @controllers.user.MyValuationController.add()
 GET         /my/valuation/find                  @controllers.user.MyValuationController.findValuation(orderItemId:Long)
 # my data
@@ -62,11 +61,11 @@ GET         /my/security/email/do               @controllers.user.MySecurityCont
 POST        /my/security/email/end              @controllers.user.MySecurityController.changeEmailEnd()
 GET         /my/security/email/ok               @controllers.user.MySecurityController.changeEmailOk(userId:Int)
 #     新增邮箱--可能没有用处
-GET         /my/security/newEmail/index         @controllers.user.MySecurityController.newEmailIndex()
-POST        /my/security/newEmail/new           @controllers.user.MySecurityController.newEmailNew()
-GET         /my/security/newEmail/do            @controllers.user.MySecurityController.newEmailDo()
-POST        /my/security/newEmail/end           @controllers.user.MySecurityController.newEmailEnd()
-GET         /my/security/newEmail/ok            @controllers.user.MySecurityController.newEmailOk(userId:Int)
+#GET         /my/security/newEmail/index         @controllers.user.MySecurityController.newEmailIndex()
+#POST        /my/security/newEmail/new           @controllers.user.MySecurityController.newEmailNew()
+#GET         /my/security/newEmail/do            @controllers.user.MySecurityController.newEmailDo()
+#POST        /my/security/newEmail/end           @controllers.user.MySecurityController.newEmailEnd()
+#GET         /my/security/newEmail/ok            @controllers.user.MySecurityController.newEmailOk(userId:Int)
 # recover
 GET         /recover/index                      @controllers.user.RecoverController.recoverIndex()
 POST        /recover/checkPhone                 @controllers.user.RecoverController.recoverCheckPhone()
@@ -81,19 +80,20 @@ GET         /image/checkCode                    @controllers.user.ImageControlle
 # 下发手机短信
 POST        /user/phone/sendSMS                 @controllers.user.SendSMSController.sendSMS(phone)
 # 订单管理
-GET         /my/order                           @controllers.user.MyOrderController.index(queryType:Int ?= 0,orderState ?= null,pageNo:Int ?= 1,pageSize:Int ?= 5)
+GET         /my/order                           @controllers.user.MyOrderController.index(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 5)
 GET         /my/order/info                      @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0)
 GET         /my/backApply                       @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
+GET         /my/appraise                        @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)
 GET         /my/back                            @controllers.user.MyOrderController.backIndex()
 GET         /my/back/info                       @controllers.user.MyOrderController.backContent()
 
-#cart lidujun
-POST        /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
-POST        /cart/addSkuToCartNotReplace        @controllers.shop.CartController.addSkuToCartNotReplace(skuId:Int, number:Int)
-POST        /cart/addSkuToCartReplace           @controllers.shop.CartController.addSkuToCartReplace(skuId:Int, number:Int)
+#cart
+GET         /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
+GET         /cart/addSkuToCartAddNum            @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
+GET         /cart/addSkuToCartReplaceNum        @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
 GET         /cart/showCart                      @controllers.shop.CartController.showCart()
-POST        /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
-POST        /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress
+GET         /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
+GET         /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                       controllers.Assets.versioned(path="/public", file: Asset)

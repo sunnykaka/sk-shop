@@ -1,20 +1,21 @@
 package controllers.user;
 
 import common.utils.page.Page;
-import common.utils.page.PageFactory;
-import ordercenter.constants.OrderState;
 import ordercenter.models.Logistics;
 import ordercenter.models.Order;
+import ordercenter.models.OrderItem;
 import ordercenter.services.OrderService;
+import ordercenter.services.ValuationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 import views.html.user.myOrder;
+import views.html.user.myOrderAppraise;
 import views.html.user.myOrderInfo;
 
 import java.util.List;
@@ -33,22 +34,29 @@ public class MyOrderController extends Controller {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private SkuAndStorageService skuAndStorageService;
+
+    @Autowired
+    private ValuationService valuationService;
+
     /**
      * 单订管理首页
      *
      * @param queryType
      *          0所有订单、1待收货、2待评价
-     * @param orderState
      * @return
      */
-    public Result index(int queryType,String orderState,int pageNo,int pageSize){
+    public Result index(int queryType,int pageNo,int pageSize){
         //User user = SessionUtils.currentUser();
 
         Page<Order> page = new Page<>(pageNo,pageSize);
 
-        List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user_id, queryType, orderState);
+        List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user_id, queryType);
         for(Order order:orderList){
-
+            for(OrderItem orderItem:order.getOrderItemList()){
+                orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+            }
             Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
             if(null != logistics){
                 order.setAddressName(logistics.getName());
@@ -60,7 +68,7 @@ public class MyOrderController extends Controller {
 
         page.setResult(orderList);
 
-        return ok(myOrder.render(page,queryType,orderState));
+        return ok(myOrder.render(page,queryType));
 
     }
 
@@ -76,8 +84,33 @@ public class MyOrderController extends Controller {
 
         Order order = orderService.getOrderById(orderId,user_id);
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
+        for(OrderItem orderItem:order.getOrderItemList()){
+            orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+        }
 
         return ok(myOrderInfo.render(order,logistics));
+
+    }
+
+    /**
+     * 评论首页
+     *
+     * @param orderId
+     * @return
+     */
+    @SecuredAction
+    public Result orderAppraise(int orderId){
+        User user = SessionUtils.currentUser();
+
+        Order order = orderService.getOrderById(orderId,user_id);
+        for(OrderItem orderItem:order.getOrderItemList()){
+            orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+            if(orderItem.isAppraise()){
+                orderItem.setValuation(valuationService.findByOrderItemId(user_id,orderItem.getId()));
+            }
+        }
+
+        return ok(myOrderAppraise.render(order));
 
     }
 

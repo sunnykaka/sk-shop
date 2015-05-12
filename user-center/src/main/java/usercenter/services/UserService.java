@@ -257,9 +257,14 @@ public class UserService {
     public User updatePhone(User user,PhoneCodeForm phoneCode){
 
         //TODO 验证、手机验证码
+        if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.BIND).verifyCode(phoneCode.getVerificationCode())) {
+            throw new AppBusinessException("校验码验证失败");
+        }
 
-        user.setPhone(phoneCode.getPhone());
-        return generalDao.merge(user);
+        User oldUser = getById(user.getId());
+
+        oldUser.setPhone(phoneCode.getPhone());
+        return generalDao.merge(oldUser);
     }
 
     /**

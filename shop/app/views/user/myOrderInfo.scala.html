@@ -1,44 +1,125 @@
 @(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics)
 
-<!DOCTYPE html>
+@import common.utils.DateUtils;
 
-<html>
-    <head>
-        <title>@Messages("title.my.data")</title>
-    </head>
-    <body>
-
-        <div>
-            订单概况<br/>
-                订单编号:@order.getOrderNo   状态：@order.getOrderState.getValue    下单时间：@order.getMilliDate
-            <hr/>
-                收货人：@logistics.getName    联系电话：@logistics.getMobile<br/>
-                收货地址（中文）：@logistics.getProvince @logistics.getLocation<br/>
-                邮政编码：@logistics.getZipCode<br/>
-            <hr/>
-                支付方式：@order.getPayType.getValue      @order.getPayBank.getValue    @order.getPayDate
-
-            <hr/>
+@myCenter(Messages("title.my.address")) {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+} {
+    <!--order-detail-->
+    <div class="order-detail">
+        <div class="order-detail-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li><a href="@controllers.user.routes.MyOrderController.index()" >订单管理</a></li>
+                    <li>&gt;</li>
+                    <li>订单详情</li>
+                </ul>
+            </div>
+            <div class="order-detail-container clearfix">
+                @left()
+                    <!-- order-detail -->
+                <div class="order-detail-list">
+                    <div class="order-detail-title">
+                        <h2>订单详情</h2>
+                        <div class="order-item order-profile">
+                            <h3>订单概况</h3>
+                            <div class="order-profile-content">
+                                <p><span>订单编号: <b class="order-code">@order.getOrderNo</b></span> <span>状态： <b class="order-status">@order.getOrderState.getValue</b></span>
+                                    <span>下单时间： <b class="order-time">@DateUtils.printDateTime(order.getCreateTime)</b></span></p>
+                                <div class="address">
+                                    <p class=""><span>收货人： <b class="user">@logistics.getName</b></span> <span>联系电话：<b>@logistics.getMobile</b></span></p>
+                                    <p><span>收货地址(中文)： <b class="address-detail">@logistics.getProvince @logistics.getLocation</b></span></p>
+                                    <p><span>邮政编码： <b class="post-number">@logistics.getZipCode</b></span></p>
+                                </div>
+                                <p class="pay"><span>支付方式：<b class="pay-type">@order.getPayType.getValue</b></span> <span>支付号：<b class="pay-num">@order.getPayBank.getValue</b></span></p>
+                            </div>
+                        </div>
+                        <div class="order-item order-track">
+                            <h3>订单追踪</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>处理时间</th>
+                                        <th>处理信息</th>
+                                        <th>操作人</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2015-02-26 14:02:50</td>
+                                        <td>你提交了订单，请等待系统确认</td>
+                                        <td>会员</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2015-02-26 14:02:50</td>
+                                        <td>你提交了订单，请等待系统确认</td>
+                                        <td>会员</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="order-item order-item-list">
+                            <h3>商品清单</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>商品</th>
+                                        <th>细节</th>
+                                        <th>单价</th>
+                                        <th>数量</th>
+                                        <th>金额</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for(orderItem <- order.getOrderItemList){
+                                        <tr>
+                                            <td><img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/></td>
+                                            <td><p>@orderItem.getProductName</p></td>
+                                            <td>
+                                                @for(keyValue <- orderItem.getProperties){
+                                                    <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
+                                                }
+                                            </td>
+                                            <td>￥@orderItem.getCurUnitPrice.getAmountWithBigDecimal</td>
+                                            <td>@orderItem.getNumber</td>
+                                            <td>￥@orderItem.getTotalPrice.getAmountWithBigDecimal</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                                <!-- total-->
+                            <table class="total">
+                                <tr>
+                                    <td>商品总计：</td>
+                                    <td>￥@order.getTotalMoney.getAmountWithBigDecimal</td>
+                                </tr>
+                                <tr>
+                                    <td>运费：</td>
+                                    <td>￥00.00</td>
+                                </tr>
+                                <tr>
+                                    <td>关税：</td>
+                                    <td>￥00.00</td>
+                                </tr>
+                                <tr>
+                                    <td>订单金额：</td>
+                                    <td>￥@order.getTotalMoney.getAmountWithBigDecimal</td>
+                                </tr>
+                            </table>
+                                <!-- end total-->
+                        </div>
+                    </div>
+                    <p class="back"><a href="@controllers.user.routes.MyOrderController.index()">返回</a></p>
+                </div>
+                    <!-- end order-detail-->
+            </div>
         </div>
-<hr>
-        <div>
-            商品清单<br/>
-            <ul>
-                @for(orderItem <- order.getOrderItemList){
-                    <li>
-                        <img src="@orderItem.getMainPicture" height="50px" width="50px"/>
-                        @orderItem.getProductName
-                        @orderItem.getTotalPrice.getAmountWithBigDecimal
-                        @orderItem.getCurUnitPrice.getAmountWithBigDecimal
-                        @orderItem.getNumber
-                    </li>
-                }
-            </ul>
-                商品总计：￥@order.getTotalMoney.getAmountWithBigDecimal<br/>
-                运费：￥0.00<br/>
-                关税：￥0.00<br/>
-                订单金额：￥@order.getTotalMoney.getAmountWithBigDecimal<br/>
-        </div>
+    </div>
+    <!--end order-detail-->
 
-    </body>
-</html>
+}
