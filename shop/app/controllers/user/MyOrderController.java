@@ -82,7 +82,7 @@ public class MyOrderController extends Controller {
     public Result orderContent(int orderId){
         User user = SessionUtils.currentUser();
 
-        Order order = orderService.getOrderById(orderId,user_id);
+        Order order = orderService.getOrderById(orderId);
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
         for(OrderItem orderItem:order.getOrderItemList()){
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
@@ -102,7 +102,7 @@ public class MyOrderController extends Controller {
     public Result orderAppraise(int orderId){
         User user = SessionUtils.currentUser();
 
-        Order order = orderService.getOrderById(orderId,user_id);
+        Order order = orderService.getOrderById(orderId);
         for(OrderItem orderItem:order.getOrderItemList()){
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
             if(orderItem.isAppraise()){
