@@ -44,7 +44,6 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         String password = RandomStringUtils.randomAlphabetic(10);
 
         FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
-
         Result result = route(request);
         assertThat(status(result), is(OK));
         assertThat(contentType(result), is("application/json"));

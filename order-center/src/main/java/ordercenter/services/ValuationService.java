@@ -1,6 +1,7 @@
 package ordercenter.services;
 
 import common.services.GeneralDao;
+import common.utils.page.Page;
 import ordercenter.models.OrderItem;
 import ordercenter.models.Valuation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,4 +72,23 @@ public class ValuationService {
         return null;
 
     }
+
+
+    @Transactional(readOnly = true)
+    public Optional<Page<Valuation>> findByProduct(Optional<Page<Valuation>> page, int productId, Integer point){
+
+        String jpql = "select v from Valuation v where v.productId = :productId ";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+        if(point != null) {
+            jpql += " and v.point = :point";
+            queryParams.put("point", point);
+        }
+
+        generalDao.query(jpql, page, queryParams);
+
+        return page;
+
+    }
+
 }

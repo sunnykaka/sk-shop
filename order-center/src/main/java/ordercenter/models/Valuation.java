@@ -70,7 +70,7 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
      */
     private DateTime appendReplyDate;
 
-    private static Map<Integer, String> pointName = new HashMap<>();
+    public static Map<Integer, String> pointName = new HashMap<>();
 
     static {
         pointName.put(0, "好评");
@@ -221,7 +221,7 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
         this.appendContent = appendContent;
     }
     @Column(name = "appendDate")
-    @Type (type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Basic
     public DateTime getAppendDate ( ) {
         return appendDate;
@@ -249,6 +249,7 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
         this.appendOperator = appendOperator;
     }
     @Column(name = "appendReplyDate")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Basic
     public DateTime getAppendReplyDate ( ) {
         return appendReplyDate;
