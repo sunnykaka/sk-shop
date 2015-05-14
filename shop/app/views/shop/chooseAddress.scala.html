@@ -1,4 +1,4 @@
-@(flag:Boolean, addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, errorMsg:String)
+@(addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart)
 
 @main(){
 <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
@@ -37,21 +37,22 @@ $(function(){
             </ul>
         </div>
 
-        @if(flag) {
         <div class="select-address">
             <h3>选择收货地址</h3>
             <ul class="clearfix">
             @if(addressList == null || addressList.size() == 0) {
                 //地址为空
+
+
             } else {
                 @for((address, index) <- addressList.zipWithIndex) {
                 <li class="current">
                     <div class="receiver"><strong>@address.getName<span class="space"></span>收</strong>
                         <span class="default">
-                            @if(index == 0) {
+                            @if(address.isDefaultAddress) {
                                 默认地址
                             } else {
-
+                                &nbsp;
                             }
                         </span>
                     </div>
@@ -77,6 +78,12 @@ $(function(){
                 </li>
             </ul>
         </div>
+
+        @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
+            <div class="mycart-empty">
+                <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
+            </div>
+        } else {
         <div class="confirm-product">
             <h3>确认商品信息</h3>
             <table>
@@ -91,45 +98,42 @@ $(function(){
                     </tr>
                 </thead>
                 <tbody>
-                @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
-                    //没有购物车项目
-                } else {
                     @for(cartItem <- cart.getCartItemList) {
-                        <tr>
-                            <td>
-                                <img src="images/test-product.jpg" alt=""/>
-                            </td>
-                            <td>
-                                <div class="pro-info">
-                                    <p class="pro-name">@cartItem.getProductName</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                @if(cartItem.getSku != null && cartItem.getSku.getSkuProperties != null) {
-                                    @for(property <- cartItem.getSku.getSkuProperties) {
-                                        <p>@property.getPropertyName ： @property.getPropertyValue</p>
-                                    }
+                    <tr>
+                        <td>
+                            <img src="@cartItem.getMainPicture" alt=""/><!--此拿到的只是图的url地址，可能没有值-->
+                        </td>
+                        <td>
+                            <div class="pro-info">
+                                <p class="pro-name">@cartItem.getProductName</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                            @if(cartItem.getSku != null && cartItem.getSku.getSkuProperties != null) {
+                                @for(property <- cartItem.getSku.getSkuProperties) {
+                                    <p>@property.getPropertyName ： @property.getPropertyValue</p>
                                 }
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <p class="actual-price">￥@cartItem.getCurUnitPrice</p>
-                                </div>
-                            </td>
-                            <td>
-                            1
-                            </td>
-                            <td>
-                            ￥@cartItem.getTotalPrice
-                            </td>
-                        </tr>
+                            }
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <p class="actual-price">￥@cartItem.getCurUnitPrice</p>
+                            </div>
+                        </td>
+                        <td>
+                        1
+                        </td>
+                        <td>
+                        ￥@cartItem.getTotalPrice
+                        </td>
+                    </tr>
                     }
-                }
                 </tbody>
             </table>
         </div>
+        }
         <div class="total clearfix">
             <div class="total-info">
                 <img src="images/total-left-ico.gif" alt=""/>
@@ -162,9 +166,6 @@ $(function(){
         <div class="order-btn">
             <span class="order-submit-btn">提交订单</span>
         </div>
-        } else {
-            @errorMsg
-        }
     </div>
 </div>
 }

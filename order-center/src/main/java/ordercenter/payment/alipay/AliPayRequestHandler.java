@@ -1,6 +1,5 @@
 package ordercenter.payment.alipay;
 
-import common.utils.DateUtils;
 import common.utils.Money;
 import ordercenter.payment.PayInfoWrapper;
 import ordercenter.payment.PayRequestHandler;
@@ -39,7 +38,7 @@ public class AliPayRequestHandler extends PayRequestHandler {
         String out_trade_no = payInfoWrapper.getTradeNo();
 
         //订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
-        String subject = "易居尚-购物编号-" + out_trade_no;
+        String subject = "尚客-购物编号-" + out_trade_no;
 
         //************/订单参数***************//
 
@@ -70,38 +69,6 @@ public class AliPayRequestHandler extends PayRequestHandler {
             throw new RuntimeException("不支持的支付类型");
         }
 
-        return sParaTemp;
-    }
-
-    /**
-     * 构建返回参数
-     * @param batchNo
-     * @param outerTradeNo
-     * @param price
-     * @param reason
-     * @return
-     */
-    public static Map<String, String> buildRefundParam(String batchNo, String outerTradeNo, String price, String reason) {
-        //把请求参数打包成数组
-        Map<String, String> sParaTemp = new HashMap<String, String>();
-        sParaTemp.put("seller_email", AlipayUtil.seller_email);
-        sParaTemp.put("partner", AlipayUtil.partner);
-        sParaTemp.put("seller_user_id", AlipayUtil.partner);
-        //批次号是日期加上退单号,退单号要大于2为数，小于25位数
-        sParaTemp.put("batch_no", batchNo);
-        sParaTemp.put("refund_date", DateUtils.printDateTime(DateUtils.current(), DateUtils.DATE_TIME_FORMAT_STR));
-        sParaTemp.put("batch_num", "1");
-        sParaTemp.put("detail_data", outerTradeNo + "^" + price + "^" + reason);
-        sParaTemp.put("notify_url", payProp.getProperty(DEFAULT_REDFUND_URL_KEY));
-        sParaTemp.put("service", "refund_fastpay_by_platform_pwd");
-        sParaTemp.put("_input_charset", AlipayUtil.input_charset);
-        //生成签名结果
-        String mysign = AlipayUtil.buildMysign(sParaTemp);
-
-        //签名结果与签名方式加入请求提交参数组中
-        sParaTemp.put("sign", mysign);
-        sParaTemp.put("sign_type", AlipayUtil.sign_type);
-        //构造函数，生成请求URL
         return sParaTemp;
     }
 }

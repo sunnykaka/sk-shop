@@ -83,10 +83,7 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
 //     */
 //    private int backNum;
 //
-//    /**
-//     * 原先的订单状态, 只在更新 SQL 时有效, 不写入数据库
-//     */
-//    private OrderState mustPreviousState;
+
 
     /**
      * 创建时间
@@ -119,6 +116,26 @@ public class OrderItem extends TradeItem implements EntityClass<Integer>, Operab
 
     public void setMustPreviousState(OrderState mustPreviousState) {
         this.mustPreviousState = mustPreviousState;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", orderId=" + orderId +
+                ", skuId=" + skuId +
+                ", orderState=" + orderState +
+                ", storeStrategy=" + storeStrategy +
+                ", skuExplain='" + skuExplain + '\'' +
+                ", itemNo='" + itemNo + '\'' +
+                ", brandId=" + brandId +
+                ", appraise=" + appraise +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", order=" + order +
+                ", valuation=" + valuation +
+                ", mustPreviousState=" + mustPreviousState +
+                "} " + super.toString();
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)

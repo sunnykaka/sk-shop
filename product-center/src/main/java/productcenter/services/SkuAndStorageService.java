@@ -110,7 +110,7 @@ public class SkuAndStorageService {
         StockKeepingUnit sku = this.getStockKeepingUnitById(skuId);
         if (sku != null && sku.canBuy()) {
             Product product = productService.getProductById(sku.getProductId());
-            if (!product.getIsDelete() && product.isOnline()) {
+            if ((!product.getIsDelete()) && product.isOnline()) {
                 flag = true;
             }
         }

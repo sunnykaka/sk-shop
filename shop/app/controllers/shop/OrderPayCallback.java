@@ -10,9 +10,8 @@ import ordercenter.payment.constants.ResponseType;
 import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
 import ordercenter.services.TradeSuccessService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,6 @@ import java.util.List;
  * Date: 2015-05-08
  */
 public class OrderPayCallback implements PayCallback {
-
-    private static Log logger = LogFactory.getLog(OrderPayCallback.class);
 
     public static final String PAY_SUCCESS = "/order/paySuccess";
     public static final String PAY_FAIL = "/order/payFail";
@@ -41,7 +38,7 @@ public class OrderPayCallback implements PayCallback {
 
     @Override
     public CallBackResult initResult(Trade tradeInfo, ResponseType type){
-        logger.info("「订单回调」开始初始化CallBackResult");
+        Logger.info("「订单回调」开始初始化CallBackResult");
         CallBackResult result = new CallBackResult(PAY_SUCCESS, PAY_FAIL);
 
         //ldj 后续要优化
@@ -57,13 +54,13 @@ public class OrderPayCallback implements PayCallback {
         }
         result.addData("orders", orderList);
         result.addData("total_fee", tradeInfo.getPayTotalFee());
-        logger.info("「订单回调」CallBackResult初始化Success");
+        Logger.info("「订单回调」CallBackResult初始化Success");
         return result;
     }
 
     @Override
     public boolean doAfterBack(Trade tradeInfo, ResponseType type, CallBackResult result) {
-        logger.info("「订单回调」开始更新订单状态");
+        Logger.info("「订单回调」开始更新订单状态");
         try {
             tradeSuccessService.changeOrderStateWhenPaySuccess(tradeInfo);
 
@@ -78,10 +75,9 @@ public class OrderPayCallback implements PayCallback {
                     }
                 }
             }
-
             result.addData("orders", orderList);
-        }catch (Exception e) {
-            logger.error("「订单回调」订单状态更新失败.." + e.getMessage());
+        } catch (Exception e) {
+            Logger.error("「订单回调」订单支付成功，但是更新订单状态、扣减库存、记录支付成功等数据失败，需要运营人员确认一下："  + e.getMessage(), e);
             return false;
         }
         return true;

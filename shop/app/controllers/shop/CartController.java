@@ -5,7 +5,6 @@ import common.utils.Money;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.mvc.Controller;
@@ -112,72 +111,69 @@ public class CartController extends Controller {
     //@SecuredAction
     public Result addSkuToCart(int skuId, int number, boolean isReplace){
         try {
-            //测试
+            if (number < 1) {
+                return ok(new JsonResult(false, "购买数量不能小于1！").toNode());
+            }
+
+            //sku所属商品是否下架或被移除
+            boolean flag = false;
+            StockKeepingUnit sku = skuAndStorageService.getStockKeepingUnitById(skuId);
+            if (sku != null && sku.canBuy()) {
+                Product product = productService.getProductById(sku.getProductId());
+                if ((!product.getIsDelete()) && product.isOnline()) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                return ok(new JsonResult(false, "商品已下架或被移除！","addForbid").toNode());
+            }
+
+            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
+            int maxStockNum = skuStorage.getStockQuantity();
+            if (maxStockNum <= 0) {
+                return ok(new JsonResult(false,"已经售完","addForbid").toNode());
+            }
+
+
+
+            /////////////////测试 /////////////////
             User curUser = new User();
             curUser.setId(14311);
             //测试
 
-            //User curUser = SessionUtils.currentUser();
-            if(curUser != null) {
-                if (!skuAndStorageService.isSkuUsable(skuId)) { //ldj
-                    return ok(new JsonResult(false, "商品已下架或被移除！").toNode());
-                }
-                if (number < 1) {
-                    return ok(new JsonResult(false, "购买数量不能小于1！").toNode());
-                }
+            /////////////////测试 /////////////////
 
-                Cart cart = cartService.getCartByUserId(curUser.getId());
-                int addNumber = 0;
-                if(!isReplace) {
-                    if (cart != null) {
-                        List<CartItem> cartItemList = cart.getCartItemList();
-                        for (CartItem cartItem : cartItemList) {
-                            if (cartItem.getSkuId() == skuId) {
-                                addNumber = number + cartItem.getNumber();
-                                break;
-                            }
+            //User curUser = SessionUtils.currentUser();
+            Cart cart = this.buildUserSimpleCart(curUser.getId());
+            int addNumber = number;
+            if(!isReplace) {
+                if (cart != null) {
+                    List<CartItem> cartItemList = cart.getCartItemList();
+                    cart.setCartItemList(cartItemList);
+                    for (CartItem cartItem : cartItemList) {
+                        if (cartItem.getSkuId() == skuId) {
+                            addNumber = number + cartItem.getNumber();
+                            break;
                         }
                     }
-                }else {
-                    addNumber = number;
                 }
-
-                SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
-                if (skuStorage.getStockQuantity() <= 0) {
-                    return ok(new JsonResult(false,"已经售完","SoldOut").toNode());
-                }
-                if (addNumber > skuStorage.getTradeMaxNumber()) {
-                    return ok(new JsonResult(false,"超过最大购买数量</br>购物车中已有" + (addNumber - number) + "件该商品").toNode());
-                }
-                useUserId(curUser.getId(), skuId, number, isReplace);
-                return ok(new JsonResult(true,"添加购物车成功" + (addNumber - number) + "件该商品").toNode());
-            } else {
-                return ok(new JsonResult(false,"用户还没有登陆，请先登陆！").toNode());
+            }else {
+                addNumber = number;
             }
-        } catch (final Exception e) {
+
+            if (addNumber > skuStorage.getTradeMaxNumber()) {
+                return ok(new JsonResult(false,"超过最大购买数量,购物车中已有" + (addNumber - number) + "件该商品").toNode());
+            }
+
+            if (addNumber > maxStockNum) {
+                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxStockNum + "件该商品","maxStockNum:" + maxStockNum).toNode());
+            }
+
+            createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
+            return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", "itemTotalNum:" + addNumber).toNode());
+        } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
             return ok(new JsonResult(false,"加入购物车时服务器发生异常").toNode());
-        }
-    }
-
-    /**
-     * 展示购物车公用代码
-     * @param checkErrMsg
-     * @return
-     */
-    private Result showCartOperator(String checkErrMsg) {
-        try {
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
-
-            //User curUser = SessionUtils.currentUser();
-            Cart cart = cartService.getCartByUserId(curUser.getId());
-            return ok(showCart.render(true, cart, checkErrMsg));
-        } catch (final Exception e) {
-            Logger.error("展示购物车时出现异常:", e);
-            return ok(showCart.render(false, null, "展示购物车时服务器发生异常！"));
         }
     }
 
@@ -191,7 +187,14 @@ public class CartController extends Controller {
      */
     //@SecuredAction
     public Result showCart(){
-        return showCartOperator(null);
+        //测试
+        User curUser = new User();
+        curUser.setId(14311);
+        //测试
+
+        //User curUser = SessionUtils.currentUser();
+        Cart cart = this.buildUserCart(curUser.getId());
+        return ok(showCart.render(cart));
     }
 
     /**
@@ -200,6 +203,7 @@ public class CartController extends Controller {
      * @param cartId
      * @param skuId
      */
+    //@SecuredAction
     public Result deleteCartItem(int cartId, int skuId) {
         try {
             cartService.deleteCartItemBySkuIdAndCartId(skuId, cartId);
@@ -212,64 +216,88 @@ public class CartController extends Controller {
     }
 
     /**
-     * 检查对某个sku的购买量，和库存进行对比
-     * 返回错误信息列表
-     *
-     * @param cartItemList
+     * 去结算-选择送货地址
+     * @return
      */
-    private String checkCartItem(List<CartItem> cartItemList) {
-        String errorMsg = null;
+    //@SecuredAction
+    public Result chooseAddress() {
+        //测试
+        User curUser = new User();
+        curUser.setId(14311);
+        //测试
+
+        //User curUser = SessionUtils.currentUser();
+        Cart cart = this.buildUserCart(curUser.getId());
+        String errMsg = "对不起您没有购买任何商品，不能前去支付！";
+        if (cart == null) {
+            Logger.warn("购物车对象为null的时候进入了填写订单页面:"  + curUser);
+            return ok(new JsonResult(false,errMsg).toNode());
+        }
+        List<CartItem> cartItemList = cart.getCartItemList();
+        if (cartItemList.size() == 0) {
+            Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
+            return ok(new JsonResult(false,errMsg).toNode());
+        }
+
         for (CartItem cartItem : cartItemList) {
-            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(cartItem.getSkuId());
-            if(skuStorage != null) {
-                if(skuStorage.getStockQuantity() < cartItem.getNumber()) {
-                    errorMsg = cartItem.getProductName() + "库存只有" + skuStorage.getStockQuantity() + "个";
-                }
-            } else {
-                errorMsg = "系统中找不到商品对应库存记录！";
+            if(!cartItem.isHasStock()) {
+                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已经没有库存，无法购买").toNode());
+            }
+            if(!cartItem.isOnline()) {
+                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "下架或已经被删除").toNode());
+            }
+
+            if(cartItem.getStockQuantity() < cartItem.getNumber()) {
+                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "购买数量超过了库存数，库存只有" + cartItem.getStockQuantity() + "个").toNode());
             }
         }
-        return errorMsg;
+        List<Address> addressList = addressService.queryAllAddress(curUser.getId());
+        cart = cartService.getCartByUserId(curUser.getId());
+        return ok(chooseAddress.render(addressList, cart));
     }
 
     /**
      * 去结算-选择送货地址
      * @return
      */
-    public Result chooseAddress() {
-        try {
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
+    //@SecuredAction
+    public Result directChooseAddress() {
+        //测试
+        User curUser = new User();
+        curUser.setId(14311);
+        //测试
 
-            //User curUser = SessionUtils.currentUser();
-            Cart cart = cartService.getCartByUserId(curUser.getId());
-            String errMsg = "对不起您没有购买任何商品，不能前去支付！";
-            if (cart == null) {
-                Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
-                return redirect(controllers.shop.routes.CartController.showCart());
-            }
-            List<CartItem> cartItemList = cart.getCartItemList();
-            if (cartItemList.size() == 0) {
-                Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
-                return redirect(controllers.shop.routes.CartController.showCart());
-            }
-            String checkErrMsg = this.checkCartItem(cartItemList);
-            if (!StringUtils.isEmpty(checkErrMsg)) {  //Result showCartOperator(String checkErrMsg)
-                return showCartOperator(checkErrMsg);
-            }
-
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId());
-            cart = cartService.getCartByUserId(curUser.getId());
-            return ok(chooseAddress.render(true, addressList, cart, null));
-
-
-
-        } catch (final Exception e) {
-            Logger.error("进入结算界面发生未知异常:", e);
-            return showCartOperator("进入结算界面发生未知异常，请联系商城客服人员");
+        //User curUser = SessionUtils.currentUser();
+        Cart cart = this.buildUserCart(curUser.getId());
+        String errMsg = "对不起您没有购买任何商品，不能前去支付！";
+        if (cart == null) {
+            Logger.warn("购物车对象为null的时候进入了填写订单页面:"  + curUser);
+            return ok(new JsonResult(false,errMsg).toNode());
         }
+        List<CartItem> cartItemList = cart.getCartItemList();
+        if (cartItemList.size() == 0) {
+            Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
+            return ok(new JsonResult(false,errMsg).toNode());
+        }
+
+        Cart cart = new Cart();
+        CartItem cartItem = new CartItem();
+
+        for (CartItem cartItem : cartItemList) {
+            if(!cartItem.isHasStock()) {
+                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已经没有库存，无法购买").toNode());
+            }
+            if(!cartItem.isOnline()) {
+                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "下架或已经被删除").toNode());
+            }
+
+            if(cartItem.getStockQuantity() < cartItem.getNumber()) {
+                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "购买数量超过了库存数，库存只有" + cartItem.getStockQuantity() + "个").toNode());
+            }
+        }
+        List<Address> addressList = addressService.queryAllAddress(curUser.getId());
+        cart = cartService.getCartByUserId(curUser.getId());
+        return ok(chooseAddress.render(addressList, cart));
     }
 
     /**
@@ -280,65 +308,108 @@ public class CartController extends Controller {
      * @param isReplace
      * @return
      */
-    private Cart useUserId(int userId, int skuId, int number, boolean isReplace) {
-        Cart cart = cartService.getCartByUserId(userId);
+    private void createOrUpdateUserCart(int userId, int skuId, int number, boolean isReplace) {
+        Cart cart = this.buildUserSimpleCart(userId);
         if(cart == null) {
             cartService.initCartByUserId(userId, skuId, number);
         } else {
-            cartService.addSkuToCart(cart, skuId, number,isReplace);
+            cartService.addSkuToCart(cart, skuId, number, isReplace);
         }
-        //重新加载购物车
-        cart = cartService.getCartByUserId(userId);
-        return cart;
     }
 
     /**
-     * 将Cart对象构建完整
-     *
-     * @param cart
+     * 将Cart对象构建完整，包含整个购物车界面展示需要的东东。
+     * 需要界面展示时使用
+     * @param userId
      * @return
      */
-    private Cart buildCart(Cart cart) {
+    private Cart buildUserCart(int userId) {
+        Cart cart = cartService.getCartByUserId(userId);
         if (cart != null) {
             List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
             cart.setCartItemList(cartItems);
             //合计价格
             Money totalMoney = Money.valueOf(0);
-            for (CartItem cartItem : cartItems) {
-                StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
-                cartItem.setCurUnitPrice(Money.valueOf(0));
-                if (stockKeepingUnit != null) {
-                    cartItem.setSku(stockKeepingUnit);
-                    Product product = productService.getProductById(stockKeepingUnit.getProductId());
-                    cartItem.setProductName(product.getName());
-                    //图片
-                    ProductPicture picture = pictureService.getMainProductPictureByProductIdSKuId(stockKeepingUnit.getProductId(), stockKeepingUnit.getId());
-                    cartItem.setMainPicture(picture.getPictureUrl());
+            if(cartItems != null && cartItems.size() > 0) {
+                for (CartItem cartItem : cartItems) {
 
-                    //根据判断是否是首发，当前价格要现算
-                    boolean isFirstPublish = cmsService.onFirstPublish(cartItem.getProductId());
-                    if(isFirstPublish) {
-                        cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
+                    StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
+                    cartItem.setCurUnitPrice(Money.valueOf(0));
+                    cartItem.setOnline(false);
+                    cartItem.setHasStock(false);
+                    cartItem.setStockQuantity(0);
+                    cartItem.setTradeMaxNumber(0);
+                    if (stockKeepingUnit != null) {
+                        cartItem.setSku(stockKeepingUnit);
+                        Product product = productService.getProductById(stockKeepingUnit.getProductId());
+                        cartItem.setProductId(product.getId());
+                        cartItem.setProductName(product.getName());
+                        //图片
+                        ProductPicture picture = pictureService.getMainProductPictureByProductIdSKuId(stockKeepingUnit.getProductId(), stockKeepingUnit.getId());
+                        cartItem.setMainPicture(picture.getPictureUrl());
+
+                        //设置库存信息
+                        SkuStorage skuStorage = skuAndStorageService.getSkuStorage(stockKeepingUnit.getId());
+                        if(skuStorage != null) {
+                            int maxStockNum = skuStorage.getStockQuantity();
+                            cartItem.setStockQuantity(maxStockNum);
+                            if (maxStockNum > 0) {
+                                cartItem.setHasStock(true);
+                            }
+                            cartItem.setTradeMaxNumber(skuStorage.getTradeMaxNumber());
+                        }
+
+                        //sku所属商品是否下架或被移除
+                        if (stockKeepingUnit.canBuy()) {
+                            if ((!product.getIsDelete()) && product.isOnline()) {
+                                cartItem.setOnline(true);
+                            }
+                        }
+
+                        //根据判断是否是首发，当前价格要现算
+                        boolean isFirstPublish = cmsService.onFirstPublish(cartItem.getProductId());
+                        if(isFirstPublish) {
+                            cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
+                        } else {
+                            cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
+                        }
+                        totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
+
+                        List<SkuProperty> skuPropertyList = stockKeepingUnit.getSkuProperties();
+                        if(skuPropertyList != null && skuPropertyList.size() > 0) {
+                            for(SkuProperty p : skuPropertyList) {
+                                Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
+                                p.setPropertyName(property.getName());
+                                Value value = propertyAndValueService.getValueById(p.getValueId());
+                                p.setPropertyValue(value.getValueName());
+                            }
+                        }
                     } else {
-                        cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
-                    }
-                    totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
-
-                    List<SkuProperty> skuPropertyList = stockKeepingUnit.getSkuProperties();
-                    if(skuPropertyList != null && skuPropertyList.size() > 0) {
-                        for(SkuProperty p : skuPropertyList) {
-                            Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
-                            p.setPropertyName(property.getName());
-                            Value value = propertyAndValueService.getValueById(p.getValueId());
-                            p.setPropertyValue(value.getValueName());
+                        try {
+                            Logger.warn("构建购物车时发现sku被删除，删除成不成功无所谓" + + cartItem.getSkuId() + " : " + cartItem.getCartId());
+                            cartService.deleteCartItemBySkuIdAndCartId(cartItem.getSkuId(), cartItem.getCartId());
+                        } catch (Exception e) {
+                            Logger.warn("构建购物车删除sku失败，此处删除成不成功无所谓" + cartItem.getSkuId() + " : " + cartItem.getCartId());
                         }
                     }
-                } else {
-                    Logger.warn("构建购物车时发现sku被删除" + cartItem.getSkuId());
-                    cartService.deleteCartItemBySkuIdAndCartId(cartItem.getSkuId(), cartItem.getCartId());
                 }
             }
             cart.setTotalMoney(totalMoney);
+        }
+        return cart;
+    }
+
+    /**
+     * 将Cart对象构建完整，仅只包含购物车和购物车项，其它关联对象都没有包含进来。
+     * 非界面展示时候使用
+     * @param userId
+     * @return
+     */
+    private Cart buildUserSimpleCart(int userId) {
+        Cart cart = cartService.getCartByUserId(userId);
+        if (cart != null) {
+            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
+            cart.setCartItemList(cartItems);
         }
         return cart;
     }

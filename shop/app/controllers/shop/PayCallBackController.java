@@ -6,49 +6,55 @@ import ordercenter.payment.constants.ResponseType;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.shop.paySuccess;
+import views.html.shop.payFail;
+
+import java.util.Map;
 
 /**
  * 支付通用控制器类
 * User: lidujun
-* Date: 2015-05-08
+* Date: 2015-05-12
 */
 @org.springframework.stereotype.Controller
 public class PayCallBackController extends Controller {
-
-
-    //@RequestMapping(value = "/trade/return")
-    //@RenderHeaderFooter
+    /**
+     * 支付正常返回
+     * @return
+     */
     public Result normalReturn() {
         log();
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.RETURN);
-        //model.addAllAttributes(result.getData());
+        //model.addAllAttributes();
 
         String flagStr = result.skipToNextProcess();
-        if(flagStr.equalsIgnoreCase(OrderPayCallback.PAY_SUCCESS)) {
-
-        }if(flagStr.equalsIgnoreCase(OrderPayCallback.PAY_FAIL)) {
-
+        Map<String, Object> resultMap = result.getData();
+        if(flagStr.equalsIgnoreCase(OrderPayCallback.PAY_FAIL)) {
+            return ok(payFail.render(resultMap));
+        } else {//OrderPayCallback.PAY_SUCCESS
+            return ok(paySuccess.render(resultMap));
         }
-        return null;
+    }
+
+    /**
+     * 支付有通知信息返回
+     * @return
+     */
+    public Result notifyReturn() {
+        log();
+        PayResponseHandler handler = new PayResponseHandler(request());
+        CallBackResult result = handler.handleCallback(ResponseType.NOTIFY);
+        Map<String, Object> resultMap = result.getData();
+        if(result.success()) {
+            return ok(paySuccess.render(resultMap));
+        } else {
+            return ok(payFail.render(resultMap));
+        }
     }
 
     private void log() {
         if (Logger.isInfoEnabled())
             Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
     }
-
-//    //@RequestMapping(value = "/trade/notify")
-//    public Result notify() throws IOException {
-//        log();
-//
-//        PayResponseHandler handler = new PayResponseHandler(request());
-//        CallBackResult result = handler.handleCallback(ResponseType.NOTIFY);
-//
-////        if(result.success()) {
-////            return ok(new JsonResult(false,"支付成功！").toNode());
-////        } else {
-////            return ok(new JsonResult(false,"支付失败！").toNode());
-////        }
-//    }
 }

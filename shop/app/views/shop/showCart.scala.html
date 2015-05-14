@@ -1,4 +1,4 @@
-@(flag:Boolean, cart:ordercenter.models.Cart, errorMsg:String)
+@(cart:ordercenter.models.Cart)
 
 @main(){
     <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
@@ -51,7 +51,6 @@
             }, _timer);
         };
 
-
         $('#all').click(function(){
             if(this.checked){
                 $('.product-list :checkbox').attr('checked',true);
@@ -59,8 +58,6 @@
                 $('.product-list :checkbox').attr('checked',false);
             }
         });
-
-
 
         $('.product-list :checkbox').click(function(){
            var chknum = $('.product-list :checkbox').size();
@@ -180,16 +177,31 @@
         });
    });
 
+/*
 
-   //添加购物车：
-   /*
-    POST        /cart/getSkuStorage  skuId:Int    获取当前库存信息，包括了最大购买量和当前库存
-    POST        /cart/addSkuToCartNotReplace   skuId:Int, number:Int  同一个sku数量累加，不替换
-    POST        /cart/addSkuToCartReplace      skuId:Int, number:Int  同一个sku数量不累加，直接替换
-    POST        /cart/chooseAddress 去结算（中间的选择用户地址界面）
-    */
-   //展示购物车：GET         /cart/showCart
-   //删除购物车项  /cart/deleteCartItem?cartId=&skuId=
+获取库存信息，用于前端数据验证(最大购买数限制、和库存)
+http://localhost:9000/cart/getSkuStorage?skuId=5585
+
+添加购物车-通过累加的方式增加同一个购物车项购买个数
+添加商品1：
+http://localhost:9000/cart/addSkuToCartAddNum?skuId=5579&number=2
+添加商品2：
+http://localhost:9000/cart/addSkuToCartAddNum?skuId=5587&number=2
+
+添加购物车-通过替换的方式增加同一个购物车项购买个数
+添加商品1：
+http://localhost:9000/cart/addSkuToCartReplaceNum?skuId=5579&number=10
+添加商品2：
+http://localhost:9000/cart/addSkuToCartReplaceNum?skuId=5587&number=10
+
+查看用户购物车：
+http://localhost:9000/cart/showCart
+
+选择寄送地址：
+http://localhost:9000/cart/chooseAddress
+
+ */
+
 </script>
 } {
     //此需要删除
@@ -205,92 +217,89 @@
                 <li class="last">选择支付方式</li>
             </ul>
         </div>
-        @if(flag) {
-            @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
-                    <!-- mycart empty-->
-                <div class="mycart-empty">
-                    <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
-                </div>
-                    <!-- end mycart empty-->
-                } else {
-                <!-- mycart-list -->
-                <div class="mycart-list">
-                    <h3>购物车</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th><label for="all"><input type="checkbox" id="all"> 全选 </label></th>
-                                <th class="col1"></th>
-                                <th>商品信息</th>
-                                <th>细节</th>
-                                <th>单价</th>
-                                <th>数量</th>
-                                <th>小计</th>
-                                <th class="action">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody class="product-list">
-                        @for(cartItem <- cart.getCartItemList) {
-                            <tr>
-                                <td>
-                                    <input type="checkbox"  value="@cartItem.getId" />
-                                </td>
-                                <td>
-                                    <img src="images/test-product.jpg" alt=""/>
-                                </td>
-                                <td>
-                                    <div class="pro-info">
-                                        <p class="pro-name">@cartItem.getProductName</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                    @if(cartItem.getSku != null && cartItem.getSku.getSkuProperties != null) {
-                                        @for(property <- cartItem.getSku.getSkuProperties) {
-                                            <p>@property.getPropertyName ： @property.getPropertyValue</p>
-                                        }
+
+        @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
+                <!-- mycart empty-->
+            <div class="mycart-empty">
+                <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
+            </div>
+                <!-- end mycart empty-->
+            } else {
+            <!-- mycart-list -->
+            <div class="mycart-list">
+                <h3>购物车</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th><label for="all"><input type="checkbox" id="all"> 全选 </label></th>
+                            <th class="col1"></th>
+                            <th>商品信息</th>
+                            <th>细节</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>小计</th>
+                            <th class="action">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="product-list">
+                    @for(cartItem <- cart.getCartItemList) {
+                        <tr>
+                            <td>
+                                <input type="checkbox"  value="@cartItem.getId" />
+                            </td>
+                            <td>
+                                <img src="@cartItem.getMainPicture" alt=""/><!--此拿到的只是图的url地址，可能没有值-->
+                            </td>
+                            <td>
+                                <div class="pro-info">
+                                    <p class="pro-name">@cartItem.getProductName</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                @if(cartItem.getSku != null && cartItem.getSku.getSkuProperties != null) {
+                                    @for(property <- cartItem.getSku.getSkuProperties) {
+                                        <p>@property.getPropertyName ： @property.getPropertyValue</p>
                                     }
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <p class="actual-price">￥@cartItem.getCurUnitPrice</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="amount" >
-                                        <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
-                                        <input type="text" size="3" maxlength="3" class="text-number" limit="10" value="@cartItem.getNumber" data-price="@cartItem.getCurUnitPrice">
-                                        <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
-                                    </div>
-                                </td>
-                                <td>
-                            ￥@cartItem.getTotalPrice
-                        </td>
-                                <td>
-                                    <a href="#参数1:@cartItem.getCartId 参数2:@cartItem.getSkuId" class="del" title="删除">X</a>
-                                </td>
-                            </tr>
-                        }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6"></td>
-                                <td>商品总计：</td>
-                                <td class="total-price">￥@cart.getTotalMoney</td>
-                            </tr>
-                            <tr>
-                                <td colspan="6"></td>
-                                <td colspan="2">
-                                    <span class="btn toOrder">去结算</span>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div><!-- end mycart-list -->
-            }
-        } else {
-            @errorMsg
+                                }
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <p class="actual-price">￥@cartItem.getCurUnitPrice</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="amount" >
+                                    <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
+                                    <input type="text" size="3" maxlength="3" class="text-number" limit="10" value="@cartItem.getNumber" data-price="@cartItem.getCurUnitPrice">
+                                    <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
+                                </div>
+                            </td>
+                            <td>
+                        ￥@cartItem.getTotalPrice
+                    </td>
+                            <td>
+                                <a href="#参数1:@cartItem.getCartId 参数2:@cartItem.getSkuId" class="del" title="删除">X</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6"></td>
+                            <td>商品总计：</td>
+                            <td class="total-price">￥@cart.getTotalMoney</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"></td>
+                            <td colspan="2">
+                                <span class="btn toOrder">去结算</span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div><!-- end mycart-list -->
         }
     </div>
 </div>

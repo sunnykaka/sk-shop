@@ -35,7 +35,7 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
     /**
      * 状态(0.创建, 1.付款成功), 默认是 0
      */
-    private int payFlag;
+    private Boolean payFlag;
 
     private TradeType tradeType;
 
@@ -88,11 +88,11 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
 
     @Column(name = "payFlag")
     @Basic
-    public int getPayFlag() {
+    public Boolean isPayFlag() {
         return payFlag;
     }
 
-    public void setPayFlag(int payFlag) {
+    public void setPayFlag(Boolean payFlag) {
         this.payFlag = payFlag;
     }
 
