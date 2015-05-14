@@ -256,49 +256,49 @@ public class CartController extends Controller {
         return ok(chooseAddress.render(addressList, cart));
     }
 
-    /**
-     * 去结算-选择送货地址
-     * @return
-     */
-    //@SecuredAction
-    public Result directChooseAddress() {
-        //测试
-        User curUser = new User();
-        curUser.setId(14311);
-        //测试
-
-        //User curUser = SessionUtils.currentUser();
-        Cart cart = this.buildUserCart(curUser.getId());
-        String errMsg = "对不起您没有购买任何商品，不能前去支付！";
-        if (cart == null) {
-            Logger.warn("购物车对象为null的时候进入了填写订单页面:"  + curUser);
-            return ok(new JsonResult(false,errMsg).toNode());
-        }
-        List<CartItem> cartItemList = cart.getCartItemList();
-        if (cartItemList.size() == 0) {
-            Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
-            return ok(new JsonResult(false,errMsg).toNode());
-        }
-
-        Cart cart = new Cart();
-        CartItem cartItem = new CartItem();
-
-        for (CartItem cartItem : cartItemList) {
-            if(!cartItem.isHasStock()) {
-                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已经没有库存，无法购买").toNode());
-            }
-            if(!cartItem.isOnline()) {
-                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "下架或已经被删除").toNode());
-            }
-
-            if(cartItem.getStockQuantity() < cartItem.getNumber()) {
-                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "购买数量超过了库存数，库存只有" + cartItem.getStockQuantity() + "个").toNode());
-            }
-        }
-        List<Address> addressList = addressService.queryAllAddress(curUser.getId());
-        cart = cartService.getCartByUserId(curUser.getId());
-        return ok(chooseAddress.render(addressList, cart));
-    }
+//    /**
+//     * 去结算-选择送货地址
+//     * @return
+//     */
+//    //@SecuredAction
+//    public Result directChooseAddress() {
+//        //测试
+//        User curUser = new User();
+//        curUser.setId(14311);
+//        //测试
+//
+//        //User curUser = SessionUtils.currentUser();
+//        Cart cart = this.buildUserCart(curUser.getId());
+//        String errMsg = "对不起您没有购买任何商品，不能前去支付！";
+//        if (cart == null) {
+//            Logger.warn("购物车对象为null的时候进入了填写订单页面:"  + curUser);
+//            return ok(new JsonResult(false,errMsg).toNode());
+//        }
+//        List<CartItem> cartItemList = cart.getCartItemList();
+//        if (cartItemList.size() == 0) {
+//            Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
+//            return ok(new JsonResult(false,errMsg).toNode());
+//        }
+//
+//        Cart cart = new Cart();
+//        CartItem cartItem = new CartItem();
+//
+//        for (CartItem cartItem : cartItemList) {
+//            if(!cartItem.isHasStock()) {
+//                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已经没有库存，无法购买").toNode());
+//            }
+//            if(!cartItem.isOnline()) {
+//                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "下架或已经被删除").toNode());
+//            }
+//
+//            if(cartItem.getStockQuantity() < cartItem.getNumber()) {
+//                return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "购买数量超过了库存数，库存只有" + cartItem.getStockQuantity() + "个").toNode());
+//            }
+//        }
+//        List<Address> addressList = addressService.queryAllAddress(curUser.getId());
+//        cart = cartService.getCartByUserId(curUser.getId());
+//        return ok(chooseAddress.render(addressList, cart));
+//    }
 
     /**
      * 用户购物车操作方法
