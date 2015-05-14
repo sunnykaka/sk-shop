@@ -2,17 +2,20 @@ package ordercenter.services;
 
 import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
+import common.utils.DateUtils;
 import common.utils.page.Page;
 import ordercenter.constants.CancelOrderType;
 import ordercenter.constants.OrderState;
-import ordercenter.models.Logistics;
-import ordercenter.models.Order;
-import ordercenter.models.OrderItem;
-import ordercenter.models.OrderStateHistory;
+import ordercenter.models.*;
+import ordercenter.util.OrderNumberUtil;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import productcenter.constants.StoreStrategy;
+import usercenter.models.User;
+import usercenter.models.address.Address;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +37,9 @@ public class OrderService {
 
     @Autowired
     private TradeSuccessService tradeSuccessService;
+
+    @Autowired
+    private CartService cartService;
 
     private static final ReentrantLock LOCK = new ReentrantLock();
 
@@ -179,15 +185,6 @@ public class OrderService {
         return  order;
     }
 
-    public List<OrderStateHistory> getOrderStateHistoryByOrderId(int orderId){
-        Logger.info("--------OrderService queryOrderItemsByOrderId begin exe-----------" + orderId);
-
-        String jpql = "select o from OrderStateHistory o where 1=1 and o.orderId=:orderId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("orderId", orderId);
-        return generalDao.query(jpql, Optional.<Page<OrderStateHistory>>empty(), queryParams);
-    }
-
     /**
      * 取消订单
      *
@@ -219,7 +216,7 @@ public class OrderService {
      * @param orderId
      * @param userId
      */
-    public void receivingOrder(int orderId, int userId) {
+    public void receivingOrder(int orderId, int userId) { //ldj  后续可能会改
 
         Order order = getOrderById(orderId, userId);
         if (null == order) {
@@ -238,27 +235,6 @@ public class OrderService {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //////////////////////////////订单项/////////////////////////////////////////////
@@ -325,7 +301,30 @@ public class OrderService {
         String jpql = "delete from OrderItem v where orderId=:orderId ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("orderId", orderId);
-        generalDao.update(jpql,queryParams);
+        generalDao.update(jpql, queryParams);
+    }
+
+    ///////////////////////////订单状态历史////////////////////////////////////////////////////////////
+    /**
+     * 创建订单状态历史
+     */
+    public void createOrderStateHistory(OrderStateHistory orderStateHistory) {
+        play.Logger.info("--------TradeSuccessService createOrderStateHistory begin exe-----------" + orderStateHistory);
+        generalDao.persist(orderStateHistory);
+    }
+
+    /**
+     * 通过订单id获取订单状态历史记录（订单跟踪）
+     * @param orderId
+     * @return
+     */
+    public List<OrderStateHistory> getOrderStateHistoryByOrderId(int orderId){
+        Logger.info("--------OrderService queryOrderItemsByOrderId begin exe-----------" + orderId);
+
+        String jpql = "select o from OrderStateHistory o where 1=1 and o.orderId=:orderId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("orderId", orderId);
+        return generalDao.query(jpql, Optional.<Page<OrderStateHistory>>empty(), queryParams);
     }
 
     //////////////////////////////订单物流-邮寄地址/////////////////////////////////////////////
@@ -365,5 +364,64 @@ public class OrderService {
         }
         return  logistics;
     }
+
+
+   public int submitOrderProcess(boolean isPromptlyPay, User user, Cart cart, Address address) {
+       int orderId = 0;
+       //创建订单
+       Order order = new Order();
+       order.setOrderNo(OrderNumberUtil.getOrderNo()); //生成订单号
+       order.setUserId(user.getId());
+       order.setUserName(user.getUserName());
+       order.setTotalMoney(cart.getTotalMoney());
+       order.setOrderState(OrderState.Create);
+
+       DateTime curTime = DateUtils.current();
+       order.setCreateTime(curTime);
+       order.setMilliDate(curTime.getMillis());
+       order.setIsDelete(false);
+       order.setBrush(false);
+       this.createOrder(order);
+
+       orderId = order.getId();
+
+       //创建订单项目
+       List<CartItem> cartItemList = cart.getCartItemList();
+       for(CartItem item : cartItemList) {
+           if(item.isSelected()) {
+               OrderItem orderItem = new OrderItem();
+               orderItem.setOrderId(orderId);
+               orderItem.setSkuId(item.getSkuId());
+               orderItem.setBarCode(item.getBarCode());
+               orderItem.setItemNo(item.getBarCode());
+               orderItem.setProductId(item.getProductId());
+               orderItem.setCategoryId(item.getCategoryId());
+               orderItem.setStorageId(item.getStorageId());
+               orderItem.setCustomerId(item.getCustomerId());
+               orderItem.setProductName(item.getProductName());
+               orderItem.setOrderState(order.getOrderState());
+               orderItem.setStoreStrategy(StoreStrategy.PayStrategy);
+               orderItem.setNumber(item.getNumber());
+               orderItem.setMainPicture(item.getMainPicture());
+               orderItem.setCurUnitPrice(item.getCurUnitPrice());
+               orderItem.setTotalPrice(item.getTotalPrice());
+               orderItem.setAppraise(false);
+               this.createOrderItem(orderItem);
+           }
+       }
+
+       //创建订单状态历史
+       this.createOrderStateHistory(new OrderStateHistory(order));
+
+       //创建订单物流-邮寄地址
+       Logistics logistics = new Logistics(address);
+       this.createLogistics(logistics);
+
+       //非立即购买，需要清除用户购物车项
+       if(!isPromptlyPay) {
+           cartService.deleteSelectCartItemByCartId(cart.getId());
+       }
+       return orderId;
+   }
 
 }

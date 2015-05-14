@@ -32,6 +32,9 @@ public class TradeService {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    private CartService cartService;
+
     /**
      * 创建交易记录
      * @param trade

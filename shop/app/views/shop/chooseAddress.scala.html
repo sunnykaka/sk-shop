@@ -1,4 +1,4 @@
-@(addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart)
+@(addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, isPromptlyPay:Boolean)
 
 @main(){
 <script type="text/javascript">
@@ -22,6 +22,12 @@ $(function(){
 //此需要删除
     @addressList
     @cart
+
+
+    //立即支付标志
+    //isPromptlyPay
+    //skuId
+    //number
 
 <div class="order-submit width1200">
     <div class="order-inner">

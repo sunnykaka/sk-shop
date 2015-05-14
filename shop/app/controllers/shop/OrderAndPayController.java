@@ -1,10 +1,9 @@
 package controllers.shop;
 
-import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.Money;
+import common.utils.ParamUtils;
 import ordercenter.constants.BizType;
-import ordercenter.constants.OrderState;
 import ordercenter.constants.TradePayType;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
@@ -18,9 +17,7 @@ import ordercenter.payment.constants.PayMethod;
 import ordercenter.services.CartService;
 import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
-import ordercenter.util.OrderNumberUtil;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.mvc.Controller;
@@ -60,11 +57,12 @@ public class OrderAndPayController extends Controller {
     TradeService tradeService;
 
     /**
-     * 提交订单:生成订单
+     * 提交订单-选择支付方式(生成订单)
      * @param addressId 用户选择的寄送地址
      * @return
      */
-    public Result submitOrder(int addressId) {
+    //@SecuredAction
+    public Result submitOrder(int addressId, boolean isPromptlyPay) {
         String curUserName = "";
         Cart cart = null;
         try {
@@ -77,7 +75,48 @@ public class OrderAndPayController extends Controller {
             //curUser = SessionUtils.currentUser();
             curUserName = curUser.getUserName();
 
-            cart = cartService.getCartByUserId(curUser.getId());
+            if(isPromptlyPay) {
+                String skuIdStr = ParamUtils.getByKey(request(),"skuId");
+                String numberStr = ParamUtils.getByKey(request(),"number");
+
+                int skuId = 0;
+                try {
+                    skuId = Integer.parseInt(skuIdStr);
+                } catch (Exception e) {
+                    Logger.error("提交的skuid" + skuIdStr +"无法转换成数字", e);
+                    return ok(new JsonResult(false,"在系统中找不到立即购买的商品！").toNode());
+                }
+                if(skuId <= 0) {
+                    return ok(new JsonResult(false,"在系统中找不到立即购买的商品！").toNode());
+                }
+
+                int number =0;
+                try {
+                    number = Integer.parseInt(numberStr);
+                } catch (Exception e) {
+                    Logger.error("提交的skuid" + skuIdStr +"的购买数量" + numberStr + "无法转换成数字", e);
+                    return ok(new JsonResult(false,"购买数量错误！").toNode());
+                }
+                if(number <= 0) {
+                    return ok(new JsonResult(false,"至少要购买1件商品！").toNode());
+                }
+
+                cart = new Cart();
+                CartItem cartItem = new CartItem();
+                cartItem.setSkuId(skuId);
+
+                Money totalMoney = Money.valueOf(0);
+
+                CartProcess cartProcess = new CartProcess();
+                cartProcess.setCartItemValues(cartItem, totalMoney);
+                cart.setTotalMoney(totalMoney);
+                List<CartItem> cartItemList = new ArrayList<CartItem>();
+                cartItemList.add(cartItem);
+                cart.setCartItemList(cartItemList);
+            } else {
+                cart = new CartProcess().buildUserCartOnlySelItem(curUser.getId());
+            }
+
             if (cart == null || cart.getCartItemList().size() == 0) {
                 return ok(new JsonResult(false,"出现错误：购物车为空").toNode());
             }
@@ -88,24 +127,10 @@ public class OrderAndPayController extends Controller {
                 return ok(new JsonResult(false,"您选择的订单寄送地址已经被修改，在系统中不存在！").toNode());
             }
 
-            List<CartItem> cartItems = cart.getCartItemList();
+            //生成订单相关信息
+            int orderId = orderService.submitOrderProcess(isPromptlyPay, curUser, cart, address);
 
-            Order order = new Order();
-            order.setOrderNo(OrderNumberUtil.getOrderNo()); //生成订单号
-            order.setUserId(curUser.getId());
-            order.setUserName(curUser.getUserName());
-            order.setTotalMoney(cart.getTotalMoney());
-            order.setOrderState(OrderState.Create);
-
-            DateTime curTime = DateUtils.current();
-            order.setCreateTime(curTime);
-            order.setMilliDate(curTime.getMillis());
-            order.setIsDelete(false);
-            order.setBrush(false);
-
-            //orderService.submitOrderProcess(order, cart, cartItems, address);
-
-            //order = orderService.getOrderById(order.getId());
+            Order order = orderService.getOrderById(orderId, curUser.getId());
             return ok(orderPlay.render(order));
         } catch (final Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
@@ -114,13 +139,14 @@ public class OrderAndPayController extends Controller {
     }
 
     /**
-     * 立即支付：订单支付
+     * 提交订单：订单支付
      * @param payType
      * @param payMethod
      * @param payOrg
      * @param orderNoList
      * @return
      */
+    //@SecuredAction
     public Result toPayOrder(String payType, String payMethod, String payOrg, String orderNoList) {
         //参数组织没想好
         if(payType == null || payType.trim().length() == 0) {
@@ -191,7 +217,7 @@ public class OrderAndPayController extends Controller {
                 }
                 if (verifyOrderItem(order)) {
                     Logger.warn("订单：" + order.getOrderNo() + "中商品已下架或移除");
-                    return ok(new JsonResult(false,"订单：" + order.getOrderNo() + "中商品已下架或移除").toNode());
+                    return ok(new JsonResult(false,"订单：" + order.getOrderNo() + "中商品已销完、下架或移除").toNode());
                 }
                 order.setAccountType(curUser.getAccountType());
                 order.setPayType(TradePayType.valueOf(payType));
@@ -248,4 +274,5 @@ public class OrderAndPayController extends Controller {
         }
         return flag;
     }
+
 }

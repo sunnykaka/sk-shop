@@ -61,7 +61,7 @@ public class OrderStateHistory implements EntityClass<Integer> {
      * 根据 订单 及 具体操作 创建历史记录
      */
     public OrderStateHistory(Order order) {
-        this(order, order.getUserName(), order.getOrderState().getValue(), "");
+        this(order, order.getUserName(), order.getOrderState().getLogMsg(), "");
     }
 
     /**

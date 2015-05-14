@@ -210,6 +210,17 @@ public class CartService {
     }
 
     /**
+     * 更新购物车项
+     * @param cartItemList
+     */
+    public void updateCartItemList(List<CartItem> cartItemList) {
+        for(CartItem cartItem : cartItemList) {
+            updateCartItem(cartItem);
+        }
+    }
+
+
+    /**
      * 通过购物车主键id获取购物车项，不包括已经删除的购物项
      * @param cartId
      * @return
@@ -226,14 +237,45 @@ public class CartService {
     }
 
     /**
-     * 通过cartId来删除购物车项
+     * 通过购物车主键id获取购物车项，不包括已经删除的购物项
+     * @param cartId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CartItem> queryUserSelCarItemsByCartId(int cartId) {
+        play.Logger.info("--------ProductService queryAllProducts begin exe-----------");
+
+        String jpql = "select o from CartItem o where 1=1 and o.isDelete=:isDelete and selected=:selected and o.cartId=:cartId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
+        queryParams.put("selected", true);
+        queryParams.put("cartId", cartId);
+        return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
+    }
+
+    /**
+     * 通过cartId来删除购物车项，全部清除(假删除)
      * @param cartId
      */
     public void deleteCartItemByCartId(int cartId) {
-        String jpql = "delete from CartItem v where cartId=:cartId ";
+        String jpql = "update CartItem v set v.isDelete=:isDelete where cartId=:cartId ";
         Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
         queryParams.put("cartId", cartId);
-        generalDao.update(jpql,queryParams);
+        generalDao.update(jpql, queryParams);
+    }
+
+    /**
+     * 通过cartId来删除购物车项，只删除支付时选中的购物车项(假删除)
+     * @param cartId
+     */
+    public void deleteSelectCartItemByCartId(int cartId) {
+        String jpql = "update CartItem v set v.isDelete=:isDelete where cartId=:cartId and selected=:selected ";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", false);
+        queryParams.put("cartId", cartId);
+        queryParams.put("selected", true);
+        generalDao.update(jpql, queryParams);
     }
 
     /**

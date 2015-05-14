@@ -95,11 +95,13 @@ GET         /cart/addSkuToCartAddNum            @controllers.shop.CartController
 GET         /cart/addSkuToCartReplaceNum        @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
 GET         /cart/showCart                      @controllers.shop.CartController.showCart()
 GET         /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
-GET         /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress
+GET         /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress(selcartItems:String)
 
 #订单
-#GET         /order/submitOrder                  @controllers.shop.OrderAndPayController.submitOrder(addressId:Int)
+#GET         /order/submitOrder                  @controllers.shop.OrderAndPayController.submitOrder(addressId:Int,isPromptlyPay:Boolean)
 #GET         /order/toPayOrder                   @controllers.shop.OrderAndPayController.submitOrder(payType:String, payMethod:String, payOrg:String, orderNoList:String)
+
+
 
 #product
 GET         /product/valuations                 @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
