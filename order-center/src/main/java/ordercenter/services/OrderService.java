@@ -1,16 +1,18 @@
 package ordercenter.services;
 
+import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.page.Page;
+import ordercenter.constants.CancelOrderType;
 import ordercenter.constants.OrderState;
 import ordercenter.models.Logistics;
 import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
+import ordercenter.models.OrderStateHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
-import productcenter.services.SkuAndStorageService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,10 +33,7 @@ public class OrderService {
     GeneralDao generalDao;
 
     @Autowired
-    private SkuAndStorageService skuService;
-
-    @Autowired
-    private TradeService tradeService;
+    private TradeSuccessService tradeSuccessService;
 
     private static final ReentrantLock LOCK = new ReentrantLock();
 
@@ -180,7 +179,56 @@ public class OrderService {
         return  order;
     }
 
+    /**
+     * 取消订单
+     *
+     * @param orderId
+     * @param userId
+     */
+    public void cancelOrder(int orderId, int userId, int type) { //ldj  后续可能会改
+        Order order = getOrderById(orderId, userId);
+        if (null == order) {
+            throw new AppBusinessException("取消订单失败，无法查询订单");
+        }
 
+        // TODO 取消订单
+        try {
+            tradeSuccessService.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
+            for (OrderItem oi : order.getOrderItemList()) {
+                tradeSuccessService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
+            }
+            tradeSuccessService.createOrderStateHistory(new OrderStateHistory(order, "订单已取消", CancelOrderType.getName(type)));
+        } catch (AppBusinessException a) {
+            throw new AppBusinessException("取消订单失败");
+        }
+    }
+
+
+    /**
+     * 确认收货
+     *
+     * @param orderId
+     * @param userId
+     */
+    public void receivingOrder(int orderId, int userId) {
+
+        Order order = getOrderById(orderId, userId);
+        if (null == order) {
+            throw new AppBusinessException("确认收货失败，无法查询订单");
+        }
+
+        // TODO 确认收货
+        try {
+            tradeSuccessService.updateOrderStateByStrictState(order.getId(), OrderState.Receiving, order.getOrderState());
+            for (OrderItem oi : order.getOrderItemList()) {
+                tradeSuccessService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Receiving, oi.getOrderState());
+            }
+            tradeSuccessService.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getValue()));
+        } catch (AppBusinessException a) {
+            throw new AppBusinessException("确认收货失败");
+        }
+
+    }
 
 
 
