@@ -206,6 +206,47 @@ public class Order implements EntityClass<Integer> {
      */
     private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "addressName='" + addressName + '\'' +
+                ", id=" + id +
+                ", orderNo=" + orderNo +
+                ", storageId=" + storageId +
+                ", storageName='" + storageName + '\'' +
+                ", customerId=" + customerId +
+                ", supplierName='" + supplierName + '\'' +
+                ", brush=" + brush +
+                ", isDelete=" + isDelete +
+                ", orderState=" + orderState +
+                ", mustPreviousState=" + mustPreviousState +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", accountType=" + accountType +
+                ", payType=" + payType +
+                ", totalMoney=" + totalMoney +
+                ", payBank=" + payBank +
+                ", payDate=" + payDate +
+                ", invoice=" + invoice +
+                ", invoiceType='" + invoiceType + '\'' +
+                ", invoiceTypeRewrite='" + invoiceTypeRewrite + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", companyNameRewrite='" + companyNameRewrite + '\'' +
+                ", invoiceTitle='" + invoiceTitle + '\'' +
+                ", invoiceTitleRewrite='" + invoiceTitleRewrite + '\'' +
+                ", invoiceContent='" + invoiceContent + '\'' +
+                ", invoiceContentRewrite='" + invoiceContentRewrite + '\'' +
+                ", editor='" + editor + '\'' +
+                ", timeRewrite=" + timeRewrite +
+                ", cancelDate=" + cancelDate +
+                ", endDate=" + endDate +
+                ", createTime=" + createTime +
+                ", milliDate=" + milliDate +
+                ", updateTime=" + updateTime +
+                '}';
+    }
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     public List<OrderItem> getOrderItemList() {
         return orderItemList;

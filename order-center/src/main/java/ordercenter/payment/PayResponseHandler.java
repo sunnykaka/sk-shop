@@ -81,7 +81,6 @@ public class PayResponseHandler {
             throw new IllegalStateException("实例化回调处理类时失败", e);
         }
 
-
         //MsgLogger 记录返回参数信息以及类型
         if (Logger.isInfoEnabled()) {
             Logger.info(type.getValue() + Log_Gap + backParams);

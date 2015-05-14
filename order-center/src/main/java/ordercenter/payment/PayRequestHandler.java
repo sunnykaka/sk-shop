@@ -1,12 +1,11 @@
 package ordercenter.payment;
 
-import common.utils.PropertiesUtils;
 import org.springframework.util.Assert;
+import play.Configuration;
 import play.Logger;
+import play.Play;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.Properties;
 
  /**
  *阿里支付请求处理抽象类
@@ -15,32 +14,17 @@ import java.util.Properties;
  */
 public abstract class PayRequestHandler {
 
-    private static final String PAYMENT_PROPERTIES_LOCATION = "payment.properties";
-
-
-    protected static Properties payProp = null;
-    /**
+     /**
      * 默认的reutrn url
      */
-    protected static final String DEFAULT_RETURN_URL_KEY = "return.url";
+     protected static final String DEFAULT_RETURN_URL_KEY = "returnUrl";
 
-    /**
+     /**
      *  默认的notify url
      */
-    protected static final String DEFAULT_NOTIFY_URL_KEY = "notify.url";
+     protected static final String DEFAULT_NOTIFY_URL_KEY = "notifyUrl";
 
-    protected static final String DEFAULT_REDFUND_URL_KEY = "refund.notify.url" ;
-
-    /**
-     * 初始化加载return.url和notify.url
-     */
-    static {
-        try {
-            payProp = PropertiesUtils.loadProperties(PAYMENT_PROPERTIES_LOCATION);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+     protected static Configuration cfg = Play.application().configuration();
 
      /**
       * 跳转到支付界面格式字符串
@@ -50,17 +34,16 @@ public abstract class PayRequestHandler {
     public final String forwardToPay(PayInfoWrapper payInfoWrapper) {
         Map<String, String> params = buildPayParam(payInfoWrapper);
         //返回处理的Url
-        String returnUrl =  payProp.getProperty(DEFAULT_RETURN_URL_KEY);
+        String returnUrl = cfg.getString(DEFAULT_RETURN_URL_KEY);
         //notify处理的Url
-        String notifyUrl = payProp.getProperty(DEFAULT_NOTIFY_URL_KEY);
-        Assert.notNull(returnUrl, "必须要在payment.properties中配置return url");
-        Assert.notNull(notifyUrl, "必须要在payment.properties中配置notify url");
+        String notifyUrl = cfg.getString(DEFAULT_NOTIFY_URL_KEY);
+        Assert.notNull(returnUrl, "必须要在common.conf中配置returnUrl");
+        Assert.notNull(notifyUrl, "必须要在common.conf中配置notifyUrl");
         params.put("return_url", returnUrl);
         params.put("notify_url", notifyUrl);
         //签名，并追加签名参数
         doSign(params);
         return buildPaymentString(params);
-
     }
 
      /**

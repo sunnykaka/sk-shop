@@ -82,12 +82,14 @@ POST        /user/phone/sendSMS                 @controllers.user.SendSMSControl
 # 订单管理
 GET         /my/order                           @controllers.user.MyOrderController.index(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 5)
 GET         /my/order/info                      @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0)
+POST        /my/order/cancel                    @controllers.user.MyOrderController.orderCancel(orderId:Int ?= 0,canceltype:Int ?= 0)
+POST        /my/order/receiving                 @controllers.user.MyOrderController.orderReceiving(orderId:Int ?= 0)
 GET         /my/backApply                       @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
 GET         /my/appraise                        @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)
 GET         /my/back                            @controllers.user.MyOrderController.backIndex()
 GET         /my/back/info                       @controllers.user.MyOrderController.backContent()
 
-#cart
+#购物车
 GET         /cart/getSkuStorage                 @controllers.shop.CartController.getSkuStorage(skuId:Int)
 GET         /cart/addSkuToCartAddNum            @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
 GET         /cart/addSkuToCartReplaceNum        @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
@@ -95,10 +97,13 @@ GET         /cart/showCart                      @controllers.shop.CartController
 GET         /cart/deleteCartItem                @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
 GET         /cart/chooseAddress                 @controllers.shop.CartController.chooseAddress
 
+#订单
+#GET         /order/submitOrder                  @controllers.shop.OrderAndPayController.submitOrder(addressId:Int)
+#GET         /order/toPayOrder                   @controllers.shop.OrderAndPayController.submitOrder(payType:String, payMethod:String, payOrg:String, orderNoList:String)
+
 #product
 GET         /product/valuations                 @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
 GET         /product/:id                        @controllers.product.ProductController.detail(id: Int)
-
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -3,6 +3,45 @@
 @myCenter(Messages("title.my.address")) {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
 } {
+    <div class="order-submit">
+        <div class="select-address">
+            <h3>选择收货地址</h3>
+            <ul class="clearfix">
+                @for(address <- addressList){
+                    <li @if(address.isDefaultAddress){class="current"}>
+                        <div class="receiver"><strong>@address.getName <span class="space"></span>收</strong><span class="default">@if(address.isDefaultAddress){默认地址}else{<form action="@controllers.user.routes.AddressController.defaultAddress(address.getId)" method="post">
+                            <input type="hidden" name="id" value="@address.getId">
+                            <button type="submit">设置默认地址</button>
+                        </form>}</span></div>
+                        <div class="details-address">
+                            <p><span class="provice">@address.getProvince</span><span class="space"></span><span class="city">@address.getCity</span>
+                                <span class="space"></span><span class="area">@address.getArea</span>
+                            </p>
+                            <P class="location">@address.getLocation</P>
+                            <p class="phone">@address.getMobile</p>
+                        </div>
+                        <div class="edit-address">
+                            <span class="edit btn">修改</span>
+                            <form action="@controllers.user.routes.AddressController.del(address.getId)" method="post">
+                                <input type="hidden" name="id" value="@address.getId">
+                                <button type="submit">删除</button>
+                            </form>
+                        </div>
+                        <span class="current-ico"></span>
+                    </li>
+                }
+                @if(null != addressList && addressList.size > 4){
+
+                }else{
+                    <li class="add">
+                        <div class="add-ico"></div>
+                        <p>新增收货地址</p>
+                    </li>
+                }
+
+            </ul>
+        </div>
+    </div>
 
     <div>
 
@@ -27,29 +66,6 @@
 
         </form>
 
-    </div>
-
-    <hr>
-
-    <div>
-    @for(address <- addressList){
-        <div>
-            @address.getName 收     @if(address.isDefaultAddress){默认地址} <br/>
-            @address.getProvince    @address.getCity    @address.getArea<br/>
-
-            @address.getLocation<br/>
-            @address.getMobile<br/>
-        <form action="@controllers.user.routes.AddressController.del(address.getId)" method="post">
-            <input type="hidden" name="id" value="@address.getId">
-            <button type="submit">删除</button>
-        </form>
-        <form action="@controllers.user.routes.AddressController.defaultAddress(address.getId)" method="post">
-            <input type="hidden" name="id" value="@address.getId">
-            <button type="submit">设置默认地址</button>
-        </form>
-        </div>
-
-        }
     </div>
 
 }

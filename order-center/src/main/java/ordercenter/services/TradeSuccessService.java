@@ -1,9 +1,9 @@
 package ordercenter.services;
 
+import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import ordercenter.constants.OrderState;
-import ordercenter.constants.TradeType;
 import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
 import ordercenter.models.OrderStateHistory;
@@ -45,73 +45,51 @@ public class TradeSuccessService {
     public void changeOrderStateWhenPaySuccess(Trade trade) {
         this.updateTradeOrderPaySuccessful(trade);
 
-        long orderNo = 0l;
-        try {
-            orderNo = Long.parseLong(trade.getOrderNo());
-        } catch (NumberFormatException e) {
-           // throw new OrderNoTransactionalException ( "没有此订单[" + orderNo + "]" );
-        }
-
+        long orderNo = Long.parseLong(trade.getOrderNo());
         Order order = orderService.getOrderByOrderNo(orderNo);
-        if(order == null) {
-            // throw new OrderNoTransactionalException ( "没有此订单[" + orderNo + "]" );
-        }
+
+        //记录订单状态历史信息
         this.createOrderStateHistory(new OrderStateHistory(order));
 
+        //更新订单
         OrderState oldState = order.getOrderState();
         // 订单状态只能从 创建 到 付款成功
         order.setMustPreviousState(OrderState.Create);
         order.setOrderState(OrderState.Pay);
-
-        if (updateOrderStateByStrictState(order.getId(), order.getOrderState(), order.getMustPreviousState()) != 1 ) {
-//                        throw new OrderTransactionalException ( "订单[" + orderNo + "]不能从当前状态[" + oldState.serviceDesc ( ) + "]更新为["
-//                                + order.getOrderState ( )
-//                                .serviceDesc ( ) + "](只能从[" + order.getMustPreviousState ( )
-//                                .serviceDesc ( ) + "]变更)" );
+        if (this.updateOrderStateByStrictState(order.getId(), order.getOrderState(), order.getMustPreviousState()) != 1 ) {
+           throw new AppBusinessException("订单[" + orderNo + "]不能从当前状态[" + oldState.getValue() + "]更新为["
+                    + order.getOrderState().getValue() + "](只能从[" + order.getMustPreviousState().getValue() + "]变更)");
         }
 
+        //更新订单项
         List<OrderItem> orderItemList = orderService.queryOrderItemsByOrderId(order.getId());
         if(orderItemList != null && orderItemList.size() > 0) {
-            for(OrderItem orderItem : orderItemList) {
-                this.updateOrderItemStateByStrictState(orderItem.getId(), order.getOrderState(), order.getMustPreviousState());
-                // 操作库存
-                StoreStrategyServiceFactory.getStoreStrategyServiceImpl(orderItem.getStoreStrategy())
-                        .operateStorageWhenPayOrder(this, orderItem.getSkuId(), orderItem.getNumber());
-
-
-
-
-                //统计付款成功数.
-                SkuTradeResult tradeResult = this.getSkuTradeResultBySkuId(orderItem.getSkuId());
-                if (tradeResult == null) {
-                    SkuTradeResult skuTradeResult = new SkuTradeResult();
-                    skuTradeResult.setProductId(orderItem.getProductId());
-                    skuTradeResult.setSkuId(orderItem.getSkuId());
-                    skuTradeResult.setPayNumber(orderItem.getNumber());
-                    this.createSkuTradeResult(skuTradeResult);
-                } else {
-                    // 数量累加
-                    tradeResult.appendedPayNumber(orderItem.getNumber());
-                    this.updateSkuTradeResult(tradeResult);
-                }
-
-
-
-
-            }
-        } else {
-            //没有订单项
+            Logger.error( "订单号[" + orderNo + "]的订单项为空，没有任何内容");
         }
+        for(OrderItem orderItem : orderItemList) {
+            if (this.updateOrderItemStateByStrictState(orderItem.getId(), order.getOrderState(), order.getMustPreviousState()) != 1 ) {
+                throw new AppBusinessException("订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]不能从当前状态[" + oldState.getValue() + "]更新为["
+                        + order.getOrderState().getValue() + "](只能从[" + order.getMustPreviousState().getValue() + "]变更)");
+            }
 
+            //扣减库存
+            StoreStrategyServiceFactory.getStoreStrategyServiceImpl(orderItem.getStoreStrategy())
+                    .operateStorageWhenPayOrder(this, orderItem.getSkuId(), orderItem.getNumber());
 
-
-
-
-
-
-
-
-
+            //统计付款成功数.
+            SkuTradeResult tradeResult = this.getSkuTradeResultBySkuId(orderItem.getSkuId());
+            if (tradeResult == null) {
+                SkuTradeResult skuTradeResult = new SkuTradeResult();
+                skuTradeResult.setProductId(orderItem.getProductId());
+                skuTradeResult.setSkuId(orderItem.getSkuId());
+                skuTradeResult.setPayNumber(orderItem.getNumber());
+                this.createSkuTradeResult(skuTradeResult);
+            } else {
+                // 数量累加
+                tradeResult.appendedPayNumber(orderItem.getNumber());
+                this.updateSkuTradeResult(tradeResult);
+            }
+        }
 
     }
 
@@ -151,11 +129,10 @@ public class TradeSuccessService {
     public int updateTradeOrderPaySuccessful(Trade trade) {
         Logger.info("--------TradeSuccessService updateTradeOrderPaySuccessful begin exe-----------" + trade);
 
-        String jpql = "update tradeOrder o set o.payFlag=:payFlag, o.tradeType='BuyProduct',updateTime=:updateTime ";
+        String jpql = "update tradeOrder o set o.payFlag=:payFlag,updateTime=:updateTime ";
         Map<String, Object> params = new HashMap<>();
-        params.put("payFlag", 1); //ldj
-        params.put("tradeType", TradeType.BuyProduct);
-        params.put("tradeType", DateUtils.current());
+        params.put("payFlag", true);
+        params.put("updateTime", DateUtils.current());
         jpql += " where o.tradeNo=:tradeNo";
         params.put("tradeNo", trade.getTradeNo());
 
@@ -179,10 +156,10 @@ public class TradeSuccessService {
         params.put("orderState", orderState);
         params.put("modifyDate", curTime);
 
-        if("Pay".equals(orderState.getName())) {
+        if(OrderState.Pay.equals(orderState.getName())) {
             jpql += ", o.payDate =:payDate ";
             params.put("payDate", curTime);
-        } else if("Cancel".equals(orderState.getName()) || "Close".equals(orderState.getName()) || "Success".equals(orderState.getName())) {
+        } else if(OrderState.Cancel.equals(orderState.getName()) || OrderState.Close.equals(orderState.getName()) || OrderState.Success.equals(orderState.getName())) {
             jpql += ", o.endDate =:endDate ";
             params.put("endDate", curTime);
         }

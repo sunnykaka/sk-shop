@@ -35,7 +35,7 @@ public class TenPayRequestHandler extends PayRequestHandler {
         String out_trade_no = payInfoWrapper.getTradeNo();
 
         //订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
-        String subject = "易居尚-购物编号-" + out_trade_no;
+        String subject = "尚客-购物编号-" + out_trade_no;
 
         //订单总金额，显示在支付宝收银台里的“应付总额”里 ,以分为单位
         long total_fee = payInfoWrapper.getTotalFee();

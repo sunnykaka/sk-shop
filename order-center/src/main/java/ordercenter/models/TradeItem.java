@@ -70,6 +70,17 @@ public class TradeItem {
      */
     protected Money totalPrice = Money.valueOf(0);
 
+
+    /**
+     * 库存数量
+     */
+    protected int stockQuantity;
+
+    /**
+     * 交易最大数量
+     */
+    protected int tradeMaxNumber;
+
     /**
      * 是否有库存，这个字段不保存，是在显示购物车的时候动态从数据库中查询的，这样可以实时查看是否有货
      */
@@ -90,6 +101,23 @@ public class TradeItem {
         return curUnitPrice.multiply(number);
     }
 
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public int getTradeMaxNumber() {
+        return tradeMaxNumber;
+    }
+
+    public void setTradeMaxNumber(int tradeMaxNumber) {
+        this.tradeMaxNumber = tradeMaxNumber;
+    }
+
     public boolean isHasStock() {
         return hasStock;
     }
@@ -105,6 +133,11 @@ public class TradeItem {
     public void setOnline(Boolean online) {
         this.online = online;
     }
+
+
+
+
+
 
     public int getSkuId() {
         return skuId;

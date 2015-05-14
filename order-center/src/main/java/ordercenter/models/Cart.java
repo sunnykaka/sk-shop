@@ -18,7 +18,6 @@ import java.util.List;
 @Table(name = "Cart")
 @Entity
 public class Cart implements EntityClass<Integer> {
-
     /**
      * 主键
      */
@@ -66,7 +65,6 @@ public class Cart implements EntityClass<Integer> {
     public void setCartItemList(List<CartItem> cartItemList) {
         this.cartItemList = cartItemList;
     }
-
 
     public Cart() {
     }
@@ -123,7 +121,7 @@ public class Cart implements EntityClass<Integer> {
         this.trackId = trackId;
     }
 
-    @Column(name = "createTime")
+    @Column(name = "createDate")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getCreateDate() {
         return createDate;
@@ -132,5 +130,4 @@ public class Cart implements EntityClass<Integer> {
     public void setCreateDate(DateTime createDate) {
         this.createDate = createDate;
     }
-
 }

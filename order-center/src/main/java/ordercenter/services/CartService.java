@@ -1,14 +1,13 @@
 package ordercenter.services;
 
 import common.services.GeneralDao;
+import common.utils.DateUtils;
 import common.utils.page.Page;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import play.Logger;
-import productcenter.models.*;
 import productcenter.services.ProductService;
 import productcenter.services.PropertyAndValueService;
 import productcenter.services.SkuAndStorageService;
@@ -98,6 +97,7 @@ public class CartService {
      */
     public void initCartByUserId(int userId, int skuId, int number) {
         Cart cart = new Cart(userId);
+        cart.setCreateDate(DateUtils.current());
         this.createCart(cart);
         CartItem cartItem = new CartItem();
         cartItem.setSkuId(skuId);
@@ -248,5 +248,4 @@ public class CartService {
         queryParams.put("cartId", cartId);
         generalDao.update(jpql, queryParams);
     }
-
 }
