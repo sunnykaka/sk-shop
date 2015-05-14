@@ -103,9 +103,9 @@ public class OrderAndPayController extends Controller {
             order.setIsDelete(false);
             order.setBrush(false);
 
-            orderService.submitOrderProcess(order, cart, cartItems, address);
+            //orderService.submitOrderProcess(order, cart, cartItems, address);
 
-            order = orderService.getOrderById(order.getId());
+            //order = orderService.getOrderById(order.getId());
             return ok(orderPlay.render(order));
         } catch (final Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
