@@ -179,6 +179,15 @@ public class OrderService {
         return  order;
     }
 
+    public List<OrderStateHistory> getOrderStateHistoryByOrderId(int orderId){
+        Logger.info("--------OrderService queryOrderItemsByOrderId begin exe-----------" + orderId);
+
+        String jpql = "select o from OrderStateHistory o where 1=1 and o.orderId=:orderId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("orderId", orderId);
+        return generalDao.query(jpql, Optional.<Page<OrderStateHistory>>empty(), queryParams);
+    }
+
     /**
      * 取消订单
      *
