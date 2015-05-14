@@ -33,7 +33,8 @@ public class CmsService {
      */
     @Transactional(readOnly = true)
     public Map<ExhibitionStatus, List<CmsExhibition>> queryAllExhibition() {
-        List<CmsExhibition> list = generalDao.findAll(CmsExhibition.class);
+        String sql = "select * from cms_exhibition order by positionIndex asc";
+        List<CmsExhibition> list = generalDao.getEm().createNativeQuery(sql,CmsExhibition.class).getResultList();
         Map<ExhibitionStatus, List<CmsExhibition>> result = new HashMap<>();
         List<CmsExhibition> listPrepare = new LinkedList<>();
         List<CmsExhibition> listSelling = new LinkedList<>();

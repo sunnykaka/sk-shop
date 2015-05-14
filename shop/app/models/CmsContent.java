@@ -28,7 +28,7 @@ public class CmsContent implements EntityClass<Integer> {
      */
     private String link;
 
-    private Integer  positionId;
+    private String  position;
 
     /**
      * 类型：文字，图片
@@ -80,13 +80,13 @@ public class CmsContent implements EntityClass<Integer> {
     }
 
     @Basic
-    @Column(name="positionId")
-    public Integer getPositionId() {
-        return positionId;
+    @Column(name="position")
+    public String getPosition() {
+        return position;
     }
 
-    public void setPositionId(Integer positionId) {
-        this.positionId = positionId;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     @Basic

@@ -5,7 +5,10 @@ import models.CmsExhibition;
 import models.ExhibitionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
+import play.mvc.Result;
 import services.CmsService;
+import usercenter.utils.SessionUtils;
+import views.html.index;
 
 import java.util.List;
 import java.util.Map;
@@ -21,12 +24,5 @@ public class CmsController extends Controller {
      */
     private static final String INDEX_EXHIBITION = "selling_exhibitions";
 
-    @Autowired
-    private CmsService cmsService;
 
-    public void index(){
-        Map<ExhibitionStatus, List<CmsExhibition>> exhibitions = cmsService.queryAllExhibition();
-        List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.SELLING);
-        List<CmsContent> contents = cmsService.allContents();
-    }
 }
