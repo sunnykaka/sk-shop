@@ -1,9 +1,11 @@
 package controllers.user;
 
+import common.utils.JsonResult;
 import common.utils.page.Page;
 import ordercenter.models.Logistics;
 import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
+import ordercenter.models.OrderStateHistory;
 import ordercenter.services.OrderService;
 import ordercenter.services.ValuationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ import java.util.Optional;
 
 /**
  * 我的订单管理
- *
+ * <p>
  * Created by zhb on 15-5-7.
  */
 @org.springframework.stereotype.Controller
@@ -43,24 +45,23 @@ public class MyOrderController extends Controller {
     /**
      * 单订管理首页
      *
-     * @param queryType
-     *          0所有订单、1待收货、2待评价
+     * @param queryType 0所有订单、1待收货、2待评价
      * @return
      */
-    public Result index(int queryType,int pageNo,int pageSize){
+    public Result index(int queryType, int pageNo, int pageSize) {
         //User user = SessionUtils.currentUser();
 
-        Page<Order> page = new Page<>(pageNo,pageSize);
+        Page<Order> page = new Page<>(pageNo, pageSize);
 
         List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user_id, queryType);
-        for(Order order:orderList){
-            for(OrderItem orderItem:order.getOrderItemList()){
+        for (Order order : orderList) {
+            for (OrderItem orderItem : order.getOrderItemList()) {
                 orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
             }
             Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
-            if(null != logistics){
+            if (null != logistics) {
                 order.setAddressName(logistics.getName());
-            }else{
+            } else {
                 order.setAddressName(order.getUserName());
             }
 
@@ -68,7 +69,7 @@ public class MyOrderController extends Controller {
 
         page.setResult(orderList);
 
-        return ok(myOrder.render(page,queryType));
+        return ok(myOrder.render(page, queryType));
 
     }
 
@@ -79,16 +80,51 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result orderContent(int orderId){
+    public Result orderContent(int orderId) {
         User user = SessionUtils.currentUser();
 
-        Order order = orderService.getOrderById(orderId);
+        Order order = orderService.getOrderById(orderId, user_id);
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
-        for(OrderItem orderItem:order.getOrderItemList()){
+        for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
         }
+        List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
 
-        return ok(myOrderInfo.render(order,logistics));
+
+        return ok(myOrderInfo.render(order, logistics, orderStateHistories));
+
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param orderId
+     * @param type
+     *          CancelOrderType
+     * @return
+     */
+    @SecuredAction
+    public Result orderCancel(int orderId,int type) {
+
+        orderService.cancelOrder(orderId, user_id, type);
+
+        return ok(new JsonResult(true, "取消成功").toNode());
+
+    }
+
+    /**
+     * 确认收货
+     *
+     * @param orderId
+     *
+     * @return
+     */
+    @SecuredAction
+    public Result orderReceiving(int orderId) {
+
+        orderService.receivingOrder(orderId, user_id);
+
+        return ok(new JsonResult(true, "取消成功").toNode());
 
     }
 
@@ -99,14 +135,14 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result orderAppraise(int orderId){
+    public Result orderAppraise(int orderId) {
         User user = SessionUtils.currentUser();
 
-        Order order = orderService.getOrderById(orderId);
-        for(OrderItem orderItem:order.getOrderItemList()){
+        Order order = orderService.getOrderById(orderId, user_id);
+        for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
-            if(orderItem.isAppraise()){
-                orderItem.setValuation(valuationService.findByOrderItemId(user_id,orderItem.getId()));
+            if (orderItem.isAppraise()) {
+                orderItem.setValuation(valuationService.findByOrderItemId(user_id, orderItem.getId()));
             }
         }
 
@@ -121,7 +157,7 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result backApply(int orderId){
+    public Result backApply(int orderId) {
         User user = SessionUtils.currentUser();
 
         return ok();
@@ -134,7 +170,7 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result backIndex(){
+    public Result backIndex() {
         User user = SessionUtils.currentUser();
 
         return ok();
@@ -147,7 +183,7 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result backContent(){
+    public Result backContent() {
         User user = SessionUtils.currentUser();
 
         return ok();

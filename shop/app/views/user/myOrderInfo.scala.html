@@ -1,4 +1,4 @@
-@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics)
+@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics,orderStateHistories:List[ordercenter.models.OrderStateHistory])
 
 @import common.utils.DateUtils;
 
@@ -49,16 +49,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>2015-02-26 14:02:50</td>
-                                        <td>你提交了订单，请等待系统确认</td>
-                                        <td>会员</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2015-02-26 14:02:50</td>
-                                        <td>你提交了订单，请等待系统确认</td>
-                                        <td>会员</td>
-                                    </tr>
+                                    @for(orderStateHistory <- orderStateHistories){
+                                        <tr>
+                                            <td>@DateUtils.printDateTime(orderStateHistory.getDate)</td>
+                                            <td>@orderStateHistory.getDoWhat</td>
+                                            <td>@orderStateHistory.getOperator</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>

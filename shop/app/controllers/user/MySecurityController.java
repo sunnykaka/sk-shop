@@ -182,7 +182,8 @@ public class MySecurityController extends Controller {
                 }
 
                 //页面关联token
-                flash("changePassword", user.getPhone());
+                String token = RandomStringUtils.randomAscii(RANDOM_DEFAULT_SIZE);
+                flash("changePassword", token);
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePasswordDo().url()).toNode());
 
             } catch (AppBusinessException e) {
