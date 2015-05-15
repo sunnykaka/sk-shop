@@ -14,7 +14,7 @@ public class AddressForm {
     /**
      * 收获人姓名
      */
-    @Constraints.MaxLength(value = 200, message = "输入超过最大20字符限制")
+    @Constraints.MaxLength(value = 20, message = "输入超过最大20字符限制")
     private String name;
 
     /**
@@ -30,10 +30,10 @@ public class AddressForm {
     private String city;
 
     /**
-     * 区、县
+     * 区、县  //配合前端 area修改为：districts
      */
     @Constraints.MaxLength(value = 200, message = "输入超过最大200字符限制")
-    private String area;
+    private String districts;
 
     /**
      * 具体位置，到门牌号
@@ -44,7 +44,6 @@ public class AddressForm {
     /**
      * 移动电话
      */
-    @Constraints.Required(message = "联系号码")
     @Pattern(regexp = "^[1][\\d]{10}", message = "请输入正确的手机号码")
     private String mobile;
 
@@ -85,12 +84,12 @@ public class AddressForm {
         this.city = city;
     }
 
-    public String getArea() {
-        return area;
+    public String getDistricts() {
+        return districts;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setDistricts(String districts) {
+        this.districts = districts;
     }
 
     public String getLocation() {

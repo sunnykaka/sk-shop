@@ -1,71 +1,96 @@
 @(addressList:List[usercenter.models.address.Address])
 
 @myCenter(Messages("title.my.address")) {
-    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.versioned("js/selectArea.js")"></script>
+    <script src="@routes.Assets.versioned("js/address.js")"></script>
 } {
-    <div class="order-submit">
-        <div class="select-address">
-            <h3>选择收货地址</h3>
-            <ul class="clearfix">
-                @for(address <- addressList){
-                    <li @if(address.isDefaultAddress){class="current"}>
-                        <div class="receiver"><strong>@address.getName <span class="space"></span>收</strong><span class="default">@if(address.isDefaultAddress){默认地址}else{<form action="@controllers.user.routes.AddressController.defaultAddress(address.getId)" method="post">
-                            <input type="hidden" name="id" value="@address.getId">
-                            <button type="submit">设置默认地址</button>
-                        </form>}</span></div>
-                        <div class="details-address">
-                            <p><span class="provice">@address.getProvince</span><span class="space"></span><span class="city">@address.getCity</span>
-                                <span class="space"></span><span class="area">@address.getArea</span>
-                            </p>
-                            <P class="location">@address.getLocation</P>
-                            <p class="phone">@address.getMobile</p>
-                        </div>
-                        <div class="edit-address">
-                            <span class="edit btn">修改</span>
-                            <form action="@controllers.user.routes.AddressController.del(address.getId)" method="post">
-                                <input type="hidden" name="id" value="@address.getId">
-                                <button type="submit">删除</button>
-                            </form>
-                        </div>
-                        <span class="current-ico"></span>
-                    </li>
-                }
-                @if(null != addressList && addressList.size > 4){
 
-                }else{
-                    <li class="add">
-                        <div class="add-ico"></div>
-                        <p>新增收货地址</p>
-                    </li>
-                }
-
-            </ul>
+    <div class="address-manage">
+        <div class="address-manage-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>地址管理</li>
+                </ul>
+            </div>
+            <div class="order-manage-container clearfix">
+                @left("address")
+                <div class="address-list">
+                    <h2>收货地址</h2>
+                    @if(null != addressList && addressList.size > 0){
+                        <div class="address-list-inner">
+                            <ul class="clearfix">
+                                @for(address <- addressList){
+                                    <li @if(address.isDefaultAddress){class="current"} data-id="@address.getId" >
+                                        <div class="receiver"><strong>@address.getName <span class="space"></span>收</strong><span class="default" data-id="@address.getId">@if(address.isDefaultAddress){默认地址}else{设为默认}</span></div>
+                                        <div class="details-address">
+                                            <p><span class="provice">@address.getProvince</span><span class="space"></span><span class="city">@address.getCity</span>
+                                                <span class="space"></span><span class="area">@address.getArea</span>
+                                            </p>
+                                            <P class="location">@address.getLocation</P>
+                                            <p class="phone">@address.getMobile</p>
+                                        </div>
+                                        <div class="edit-address">
+                                            <span class="edit btn" data-id="@address.getId" >修改</span>
+                                            @if(!address.isDefaultAddress){
+                                                <span class="delete btn" data-id="@address.getId" >删除</span>
+                                            }
+                                        </div>
+                                        <span class="current-ico"></span>
+                                    </li>
+                                }
+                                @if(addressList.size < 4){
+                                    <li class="add">
+                                        <div class="add-ico"></div>
+                                        <p>新增收货地址</p>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }else{
+                        <div class="address-form">
+                            <div class="address-form-inner">
+                                <h3>新增收货地址</h3>
+                                <form class="add-form">
+                                    <div class="form-item">
+                                        <label for="name"><b>*</b>收货人：</label>
+                                        <input type="text" name="name" class="text name" id="name"/>
+                                    </div>
+                                    <div class="form-item area">
+                                        <label><b>*</b>选择地区：</label>
+                                        <select name="province" class="select">
+                                        </select>
+                                        <select name="city" class="select">
+                                        </select>
+                                        <select name="districts" class="select">
+                                        </select>
+                                    </div>
+                                    <div class="form-item">
+                                        <label for="location"><b>*</b>详细地址：</label>
+                                        <input type="text" name="location" class="text location" id="location"/>
+                                    </div>
+                                    <div class="form-item">
+                                        <label for="zipCode"><b>*</b>邮政编码：</label>
+                                        <input type="text" name="zipCode" class="text zipCode" id="zipCode"/>
+                                    </div>
+                                    <div class="form-item">
+                                        <label for="mobile"><b>*</b>手机号码：</label>
+                                        <input type="text" name="mobile" class="text mobile" id="mobile"/>
+                                    </div>
+                                    <div class="form-item submit">
+                                        <input type="submit" class="add-address-btn" value="保存收货地址"/>
+                                        <div class="errormsg" id="addMsg"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div>
-
-        <form action="@controllers.user.routes.AddressController.add()" method="post">
-            姓名：<input type="text" name="name" placeholder="姓名">
-            <select name="province">
-                <option value="广东省">广东省</option>
-                <option value="广西省">广西省</option>
-            </select>
-            <select name="city">
-                <option value="深圳市">深圳市</option>
-                <option value="测试市">测试市</option>
-            </select>
-            <select name="area">
-                <option value="南山区">南山区</option>
-                <option value="测试区">测试区</option>
-            </select>
-            <input type="text" name="location" placeholder="具体地址">
-            手机：<input type="text" name="mobile" placeholder="手机">
-            邮编：<input type="text" name="zipCode" placeholder="邮编">
-            <button type="submit">提交</button>
-
-        </form>
-
     </div>
 
 }

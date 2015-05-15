@@ -27,17 +27,20 @@ public class AddressService {
      * 根据用户ID查询出这个用户的所有地址对象
      *
      * @param userId
+     * @param isDefault 是否默认排序
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Address> queryAllAddress(int userId){
+    public List<Address> queryAllAddress(int userId,boolean isDefault){
 
         String jpql = "select a from Address a where 1=1 and a.deleted=false ";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and a.userId = :userId ";
         queryParams.put("userId", userId);
 
-        jpql += " order by a.defaultAddress desc ";
+        if(isDefault){
+            jpql += " order by a.defaultAddress desc ";
+        }
 
         return generalDAO.query(jpql, Optional.empty(), queryParams);
     }
@@ -49,7 +52,7 @@ public class AddressService {
      * @return
      */
     public int getMyAddressCount(int userId){
-        List<Address> addressList = queryAllAddress(userId);
+        List<Address> addressList = queryAllAddress(userId,false);
         if(null == addressList || addressList.size() == 0){
             return 0;
         }
@@ -93,9 +96,13 @@ public class AddressService {
 
         if(null != address){
             address.setDefaultAddress(Address.DEFAULT_ADDRESS_TRUE);
-            oldAddress.setDefaultAddress(Address.DEFAULT_ADDRESS_FALSE);
+            if(null != oldAddress){
+                oldAddress.setDefaultAddress(Address.DEFAULT_ADDRESS_FALSE);
+                updateAddress(oldAddress);
+            }
+
             updateAddress(address);
-            updateAddress(oldAddress);
+
             return true;
         }
 

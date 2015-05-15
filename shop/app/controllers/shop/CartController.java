@@ -306,7 +306,7 @@ public class CartController extends Controller {
             //重新计算支付总金额
             cart.setTotalMoney(cartProcess.calculateTotalMoney(selCartItemList));
 
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId());
+            List<Address> addressList = addressService.queryAllAddress(curUser.getId(),true);
             cart = cartService.getCartByUserId(curUser.getId());
             return ok(chooseAddress.render(addressList, cart,false));
         } catch (Exception e) {
@@ -368,7 +368,7 @@ public class CartController extends Controller {
             cartItemList.add(cartItem);
             cart.setCartItemList(cartItemList);
 
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId());
+            List<Address> addressList = addressService.queryAllAddress(curUser.getId(),true);
             return ok(chooseAddress.render(addressList, cart,true));
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]立即支付出现异常:", e);

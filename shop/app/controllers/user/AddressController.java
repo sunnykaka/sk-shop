@@ -26,7 +26,9 @@ import java.util.List;
 @org.springframework.stereotype.Controller
 public class AddressController extends Controller {
 
-    /** 最多只有添加数据 */
+    /**
+     * 最多只有添加数据
+     */
     public static final int DEFAULT_ADDRESS_SIZE = 4;
 
     @Autowired
@@ -38,11 +40,11 @@ public class AddressController extends Controller {
     @SecuredAction
     public Result index() {
 
-       User user = SessionUtils.currentUser();
+        User user = SessionUtils.currentUser();
 
-       List<Address> addressList = addressService.queryAllAddress(user.getId());
+        List<Address> addressList = addressService.queryAllAddress(user.getId(),false);
 
-       return ok(myAddress.render(addressList));
+        return ok(myAddress.render(addressList));
 
     }
 
@@ -51,9 +53,9 @@ public class AddressController extends Controller {
 
         User user = SessionUtils.currentUser();
 
-        List<Address> addressList = addressService.queryAllAddress(user.getId());
+        List<Address> addressList = addressService.queryAllAddress(user.getId(),true);
 
-        return ok(new JsonResult(false,null,addressList).toNode());
+        return ok(new JsonResult(true, null, addressList).toNode());
 
     }
 
@@ -62,7 +64,7 @@ public class AddressController extends Controller {
      *
      * @return
      */
-    public Result queryProvince(){
+    public Result queryProvince() {
 
         try {
             return ok(new JsonResult(true, null, linkageService.getAllProvince()).toNode());
@@ -74,9 +76,8 @@ public class AddressController extends Controller {
 
     /**
      * 城市信息
-     *
      */
-    public Result queryCity(String code){
+    public Result queryCity(String code) {
 
         try {
             return ok(new JsonResult(true, null, linkageService.getCityByProvinceCode(code)).toNode());
@@ -88,7 +89,7 @@ public class AddressController extends Controller {
     /**
      * 区县信息
      */
-    public Result queryArea(String code){
+    public Result queryArea(String code) {
 
         try {
             return ok(new JsonResult(true, null, linkageService.getAreaByCityCode(code)).toNode());
@@ -103,33 +104,33 @@ public class AddressController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result add(){
+    public Result add() {
 
         User user = SessionUtils.currentUser();
 
         Form<AddressForm> addressForm = Form.form(AddressForm.class).bindFromRequest();
 
-        if(!addressForm.hasErrors()) {
+        if (!addressForm.hasErrors()) {
             try {
                 AddressForm addressF = addressForm.get();
 
                 int addressCount = addressService.getMyAddressCount(user.getId());
-                if(addressCount >= DEFAULT_ADDRESS_SIZE){
-                    return ok(new JsonResult(false, "最多只能添加"+ DEFAULT_ADDRESS_SIZE +"个送货地址").toNode());
+                if (addressCount >= DEFAULT_ADDRESS_SIZE) {
+                    return ok(new JsonResult(false, "最多只能添加" + DEFAULT_ADDRESS_SIZE + "个送货地址").toNode());
                 }
 
                 Address address = new Address();
 
-                if(addressCount == 0){
+                if (addressCount == 0) {
                     address.setDefaultAddress(Address.DEFAULT_ADDRESS_TRUE);
                 }
 
                 address.setUserId(user.getId());
-                address.setName(StringEscapeUtils.escapeHtml4(addressF.getName().trim()));
-                address.setLocation(StringEscapeUtils.escapeHtml4(addressF.getLocation().trim()));
-                address.setProvince(StringEscapeUtils.escapeHtml4(addressF.getProvince().trim()));
-                address.setCity(StringEscapeUtils.escapeHtml4(addressF.getCity().trim()));
-                address.setArea(StringEscapeUtils.escapeHtml4(addressF.getArea().trim()));
+                address.setName(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getName())));
+                address.setLocation(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getLocation())));
+                address.setProvince(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getProvince())));
+                address.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
+                address.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 address.setMobile(addressF.getMobile());
                 address.setZipCode(addressF.getZipCode());
 
@@ -152,31 +153,31 @@ public class AddressController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result update(){
+    public Result update() {
 
         User user = SessionUtils.currentUser();
 
         Form<AddressForm> addressForm = Form.form(AddressForm.class).bindFromRequest();
 
-        if(!addressForm.hasErrors()) {
+        if (!addressForm.hasErrors()) {
             try {
                 AddressForm addressF = addressForm.get();
 
-                if(null == addressF.getId() || addressF.getId() == 0){
+                if (null == addressF.getId() || addressF.getId() == 0) {
                     return ok(new JsonResult(false, "修改送货地址失败").toNode());
                 }
 
-                Address oldAddress = addressService.getAddress(addressF.getId(),user.getId());
-                if(null == oldAddress){
+                Address oldAddress = addressService.getAddress(addressF.getId(), user.getId());
+                if (null == oldAddress) {
                     return ok(new JsonResult(false, "修改送货地址失败").toNode());
                 }
 
                 oldAddress.setUserId(user.getId());
-                oldAddress.setName(StringEscapeUtils.escapeHtml4(addressF.getName().trim()));
-                oldAddress.setLocation(StringEscapeUtils.escapeHtml4(addressF.getLocation().trim()));
-                oldAddress.setProvince(StringEscapeUtils.escapeHtml4(addressF.getProvince().trim()));
-                oldAddress.setCity(StringEscapeUtils.escapeHtml4(addressF.getCity().trim()));
-                oldAddress.setArea(StringEscapeUtils.escapeHtml4(addressF.getArea().trim()));
+                oldAddress.setName(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getName())));
+                oldAddress.setLocation(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getLocation())));
+                oldAddress.setProvince(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getProvince())));
+                oldAddress.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
+                oldAddress.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 oldAddress.setMobile(addressF.getMobile());
                 oldAddress.setZipCode(addressF.getZipCode());
 
@@ -198,12 +199,12 @@ public class AddressController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result del(int addressId){
+    public Result del(int addressId) {
 
         User user = SessionUtils.currentUser();
         Address address = addressService.getAddress(addressId, user.getId());
 
-        if(null == address){
+        if (null == address) {
             return ok(new JsonResult(false, "删除送货地址失败").toNode());
         }
 
@@ -220,18 +221,38 @@ public class AddressController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result defaultAddress(int addressId){
+    public Result defaultAddress(int addressId) {
 
         User user = SessionUtils.currentUser();
-        Address address = addressService.getAddress(addressId,user.getId());
+        Address address = addressService.getAddress(addressId, user.getId());
 
-        if(null == address){
+        if (null == address) {
             return ok(new JsonResult(false, "设置送货地址失败").toNode());
         }
 
-        boolean result = addressService.updateDefaultAddress(address,user.getId());
+        boolean result = addressService.updateDefaultAddress(address, user.getId());
 
         return ok(new JsonResult(result).toNode());
+
+    }
+
+    /**
+     * 获取地址信息
+     *
+     * @param addressId
+     * @return
+     */
+    @SecuredAction
+    public Result getAddress(int addressId) {
+
+        User user = SessionUtils.currentUser();
+        Address address = addressService.getAddress(addressId, user.getId());
+
+        if (null == address) {
+            return ok(new JsonResult(false, "获取地址失败").toNode());
+        }
+
+        return ok(new JsonResult(true,null,address).toNode());
 
     }
 

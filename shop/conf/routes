@@ -35,6 +35,7 @@ POST        /my/address/add                     @controllers.user.AddressControl
 POST        /my/address/update                  @controllers.user.AddressController.update()
 POST        /my/address/del                     @controllers.user.AddressController.del(addressId:Int)
 POST        /my/address/defaultAddress          @controllers.user.AddressController.defaultAddress(addressId:Int)
+GET         /my/address/query                   @controllers.user.AddressController.getAddress(addressId:Int)
 # myValuation
 POST        /my/valuation/add                   @controllers.user.MyValuationController.add()
 GET         /my/valuation/find                  @controllers.user.MyValuationController.findValuation(orderItemId:Long)
