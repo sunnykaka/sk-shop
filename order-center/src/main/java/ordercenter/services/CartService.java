@@ -227,7 +227,7 @@ public class CartService {
      */
     @Transactional(readOnly = true)
     public List<CartItem> queryCarItemsByCartId(int cartId) {
-        play.Logger.info("--------ProductService queryAllProducts begin exe-----------");
+        play.Logger.info("--------CartService queryAllProducts begin exe-----------");
 
         String jpql = "select o from CartItem o where 1=1 and o.isDelete=:isDelete and o.cartId=:cartId";
         Map<String, Object> queryParams = new HashMap<>();
@@ -243,7 +243,7 @@ public class CartService {
      */
     @Transactional(readOnly = true)
     public List<CartItem> queryUserSelCarItemsByCartId(int cartId) {
-        play.Logger.info("--------ProductService queryAllProducts begin exe-----------");
+        play.Logger.info("--------CartService queryAllProducts begin exe-----------");
 
         String jpql = "select o from CartItem o where 1=1 and o.isDelete=:isDelete and selected=:selected and o.cartId=:cartId";
         Map<String, Object> queryParams = new HashMap<>();
@@ -254,27 +254,33 @@ public class CartService {
     }
 
     /**
-     * 通过cartId来删除购物车项，全部清除(假删除)
+     * 通过购物车主键id，和选中的购物车项id获取购物车项，不包括已经删除的购物项
      * @param cartId
+     * @return
      */
-    public void deleteCartItemByCartId(int cartId) {
-        String jpql = "update CartItem v set v.isDelete=:isDelete where cartId=:cartId ";
+    @Transactional(readOnly = true)
+    public List<CartItem> queryUserSelCarItemsByIds(int cartId, String cartItems) {
+        play.Logger.info("--------CartService queryUserSelCarItemsByIds begin exe-----------");
+
+        String jpql = "select o from CartItem o where 1=1 and id in(:cartItems) and o.cartId=:cartId";
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("isDelete", false);
+        queryParams.put("cartItems", cartItems);
         queryParams.put("cartId", cartId);
-        generalDao.update(jpql, queryParams);
+        return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
     }
 
     /**
      * 通过cartId来删除购物车项，只删除支付时选中的购物车项(假删除)
      * @param cartId
      */
-    public void deleteSelectCartItemByCartId(int cartId) {
-        String jpql = "update CartItem v set v.isDelete=:isDelete where cartId=:cartId and selected=:selected ";
+    public void deleteSelectCartItemBySelIds(int cartId, String selItems) {
+        play.Logger.info("--------CartService deleteSelectCartItemBySelIds begin exe-----------" + cartId + " : " + selItems);
+
+        String jpql = "update CartItem v set v.isDelete=:isDelete where v.id in(:selItems) and cartId=:cartId ";
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("isDelete", false);
+        queryParams.put("isDelete", true);
+        queryParams.put("selItems", selItems);
         queryParams.put("cartId", cartId);
-        queryParams.put("selected", true);
         generalDao.update(jpql, queryParams);
     }
 

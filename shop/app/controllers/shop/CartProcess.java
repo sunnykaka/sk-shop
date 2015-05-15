@@ -76,10 +76,10 @@ public class CartProcess {
      * @param userId
      * @return
      */
-    public Cart buildUserCartOnlySelItem(int userId) {
+    public Cart buildUserCartBySelItem(int userId, String selCartItems) {
         Cart cart = cartService.getCartByUserId(userId);
         if (cart != null) {
-            List<CartItem> cartItems = cartService.queryUserSelCarItemsByCartId(cart.getId());
+            List<CartItem> cartItems = cartService.queryUserSelCarItemsByIds(cart.getId(), selCartItems);
             cart.setCartItemList(cartItems);
             //合计价格
             Money totalMoney = Money.valueOf(0);

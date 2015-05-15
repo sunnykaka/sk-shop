@@ -5,7 +5,6 @@ import common.utils.Money;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.mvc.Controller;
@@ -240,25 +239,21 @@ public class CartController extends Controller {
      * @return
      */
     //@SecuredAction
-    public Result chooseAddress(String selcartItems) {
-        if(selcartItems == null || selcartItems.trim().length() == 0) {
-            return ok(new JsonResult(false,"需要支付的订单为空！").toNode());
+    public Result chooseAddress(String selCartItems) {
+        if(selCartItems == null || selCartItems.trim().length() == 0) {
+            return ok(new JsonResult(false,"去结算项为空！").toNode());
         }
         List<Integer>cartItemIdlist = new ArrayList<Integer>();
         try {
-            String[] split = selcartItems.split(",");
+            String[] split = selCartItems.split(",");
             for (int i = 0; i < split.length; i++) {
-                if (!NumberUtils.isNumber(split[i])) {
-                    Logger.warn("解析传递到后台的选中购物车项id发生异常:" + "购物车项id" + split[i] + "错误！");
-                    return ok(new JsonResult(false, "选中的购物项有问题，请核对一下").toNode());
-                } else {
-                    cartItemIdlist.add(Integer.valueOf(split[i]));
-                }
+                cartItemIdlist.add(Integer.valueOf(split[i]));
             }
         } catch (Exception e) {
             Logger.warn("解析传递到后台的选中购物车项id发生异常", e);
-            return ok(new JsonResult(false, "选中的购物项有问题，请核对一下").toNode());
+            return ok(new JsonResult(false, "选中的购物车商品有问题，请核对一下").toNode());
         }
+
         try {
             //测试
             User curUser = new User();
@@ -278,10 +273,8 @@ public class CartController extends Controller {
                 return ok(new JsonResult(false,errMsg).toNode());
             }
 
-            List<CartItem> allCartItemList = new ArrayList<CartItem>();
             List<CartItem> selCartItemList = new ArrayList<CartItem>();
             for (CartItem cartItem : cartItemList) {
-                allCartItemList.add(cartItem);
                 cartItem.setSelected(false);
                 if(!cartItemIdlist.contains(cartItem.getId())) {
                     continue;
@@ -296,19 +289,19 @@ public class CartController extends Controller {
                 if(cartItem.getStockQuantity() < cartItem.getNumber()) {
                     return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "购买数量超过了库存数，库存只有" + cartItem.getStockQuantity() + "个").toNode());
                 }
-                selCartItemList.add(cartItem);
                 cartItem.setSelected(true);
+                selCartItemList.add(cartItem);
             }
 
             //更新购物车是否选中
-            cartService.updateCartItemList(allCartItemList);
+            cartService.updateCartItemList(selCartItemList);
 
             //重新计算支付总金额
             cart.setTotalMoney(cartProcess.calculateTotalMoney(selCartItemList));
 
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId(),true);
+            List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
             cart = cartService.getCartByUserId(curUser.getId());
-            return ok(chooseAddress.render(addressList, cart,false));
+            return ok(chooseAddress.render(selCartItems, addressList, cart,false));
         } catch (Exception e) {
             Logger.warn("去结算-悬着邮递地址发生异常:", e);
             return ok(new JsonResult(false,"去结算发生异常，请联系商城客服人员").toNode());
@@ -359,6 +352,7 @@ public class CartController extends Controller {
             Cart cart = new Cart();
             CartItem cartItem = new CartItem();
             cartItem.setSkuId(skuId);
+            cartItem.setNumber(number);
 
             Money totalMoney = Money.valueOf(0);
             cartProcess.setCartItemValues(cartItem, totalMoney);
@@ -368,8 +362,8 @@ public class CartController extends Controller {
             cartItemList.add(cartItem);
             cart.setCartItemList(cartItemList);
 
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId(),true);
-            return ok(chooseAddress.render(addressList, cart,true));
+            List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
+            return ok(chooseAddress.render(skuId + ":" + number, addressList, cart,true));
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]立即支付出现异常:", e);
             return ok(new JsonResult(false,"立即支付失败，请联系商城客服人员！").toNode());

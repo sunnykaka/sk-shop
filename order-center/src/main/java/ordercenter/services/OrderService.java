@@ -366,7 +366,7 @@ public class OrderService {
     }
 
 
-   public int submitOrderProcess(boolean isPromptlyPay, User user, Cart cart, Address address) {
+   public int submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address) {
        int orderId = 0;
        //创建订单
        Order order = new Order();
@@ -388,26 +388,24 @@ public class OrderService {
        //创建订单项目
        List<CartItem> cartItemList = cart.getCartItemList();
        for(CartItem item : cartItemList) {
-           if(item.isSelected()) {
-               OrderItem orderItem = new OrderItem();
-               orderItem.setOrderId(orderId);
-               orderItem.setSkuId(item.getSkuId());
-               orderItem.setBarCode(item.getBarCode());
-               orderItem.setItemNo(item.getBarCode());
-               orderItem.setProductId(item.getProductId());
-               orderItem.setCategoryId(item.getCategoryId());
-               orderItem.setStorageId(item.getStorageId());
-               orderItem.setCustomerId(item.getCustomerId());
-               orderItem.setProductName(item.getProductName());
-               orderItem.setOrderState(order.getOrderState());
-               orderItem.setStoreStrategy(StoreStrategy.PayStrategy);
-               orderItem.setNumber(item.getNumber());
-               orderItem.setMainPicture(item.getMainPicture());
-               orderItem.setCurUnitPrice(item.getCurUnitPrice());
-               orderItem.setTotalPrice(item.getTotalPrice());
-               orderItem.setAppraise(false);
-               this.createOrderItem(orderItem);
-           }
+           OrderItem orderItem = new OrderItem();
+           orderItem.setOrderId(orderId);
+           orderItem.setSkuId(item.getSkuId());
+           orderItem.setBarCode(item.getBarCode());
+           orderItem.setItemNo(item.getBarCode());
+           orderItem.setProductId(item.getProductId());
+           orderItem.setCategoryId(item.getCategoryId());
+           orderItem.setStorageId(item.getStorageId());
+           orderItem.setCustomerId(item.getCustomerId());
+           orderItem.setProductName(item.getProductName());
+           orderItem.setOrderState(order.getOrderState());
+           orderItem.setStoreStrategy(StoreStrategy.PayStrategy);
+           orderItem.setNumber(item.getNumber());
+           orderItem.setMainPicture(item.getMainPicture());
+           orderItem.setCurUnitPrice(item.getCurUnitPrice());
+           orderItem.setTotalPrice(item.getTotalPrice());
+           orderItem.setAppraise(false);
+           this.createOrderItem(orderItem);
        }
 
        //创建订单状态历史
@@ -419,7 +417,7 @@ public class OrderService {
 
        //非立即购买，需要清除用户购物车项
        if(!isPromptlyPay) {
-           cartService.deleteSelectCartItemByCartId(cart.getId());
+           cartService.deleteSelectCartItemBySelIds(cart.getId(),selItems);
        }
        return orderId;
    }

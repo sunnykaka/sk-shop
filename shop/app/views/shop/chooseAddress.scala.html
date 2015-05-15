@@ -1,4 +1,4 @@
-@(addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, isPromptlyPay:Boolean)
+@(selItems:String, addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, isPromptlyPay:Boolean)
 
 @main(){
 <script type="text/javascript">
@@ -23,6 +23,8 @@ $(function(){
     @addressList
     @cart
 
+
+    //selItems要传递到后台
 
     //立即支付标志
     //isPromptlyPay
