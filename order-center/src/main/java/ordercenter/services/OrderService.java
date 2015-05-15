@@ -371,6 +371,7 @@ public class OrderService {
        //创建订单
        Order order = new Order();
        order.setOrderNo(OrderNumberUtil.getOrderNo()); //生成订单号
+       order.setAccountType(user.getAccountType());
        order.setUserId(user.getId());
        order.setUserName(user.getUserName());
        order.setTotalMoney(cart.getTotalMoney());
@@ -392,7 +393,7 @@ public class OrderService {
            orderItem.setOrderId(orderId);
            orderItem.setSkuId(item.getSkuId());
            orderItem.setBarCode(item.getBarCode());
-           orderItem.setItemNo(item.getBarCode());
+           orderItem.setItemNo(item.getId() + "");
            orderItem.setProductId(item.getProductId());
            orderItem.setCategoryId(item.getCategoryId());
            orderItem.setStorageId(item.getStorageId());
@@ -413,6 +414,7 @@ public class OrderService {
 
        //创建订单物流-邮寄地址
        Logistics logistics = new Logistics(address);
+       logistics.setOrderId(orderId);
        this.createLogistics(logistics);
 
        //非立即购买，需要清除用户购物车项

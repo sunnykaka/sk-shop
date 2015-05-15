@@ -355,7 +355,7 @@ public class CartController extends Controller {
             cartItem.setNumber(number);
 
             Money totalMoney = Money.valueOf(0);
-            cartProcess.setCartItemValues(cartItem, totalMoney);
+            totalMoney = cartProcess.setCartItemValues(cartItem);
 
             cart.setTotalMoney(totalMoney);
             List<CartItem> cartItemList = new ArrayList<CartItem>();

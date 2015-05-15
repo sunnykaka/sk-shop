@@ -21,6 +21,7 @@ import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.services.SkuAndStorageService;
+import usercenter.constants.AccountType;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
@@ -51,6 +52,9 @@ public class OrderAndPayController extends Controller {
     @Autowired
     TradeService tradeService;
 
+    @Autowired
+    CartProcess cartProcess;
+
     /**
      * 提交订单-选择支付方式(生成订单)
      * @param addressId 用户选择的寄送地址
@@ -69,7 +73,8 @@ public class OrderAndPayController extends Controller {
             //测试
             User curUser = new User();
             curUser.setId(14311);
-            addressId = 7397;
+            curUser.setUserName("ldj");
+            curUser.setAccountType(AccountType.Anonymous);
             //测试
 
             //curUser = SessionUtils.currentUser();
@@ -102,9 +107,8 @@ public class OrderAndPayController extends Controller {
                 cartItem.setNumber(number);
 
                 Money totalMoney = Money.valueOf(0);
+                totalMoney = cartProcess.setCartItemValues(cartItem);
 
-                CartProcess cartProcess = new CartProcess();
-                cartProcess.setCartItemValues(cartItem, totalMoney);
                 cart.setTotalMoney(totalMoney);
                 List<CartItem> cartItemList = new ArrayList<CartItem>();
                 cartItemList.add(cartItem);
@@ -120,7 +124,8 @@ public class OrderAndPayController extends Controller {
                     Logger.warn("解析传递到后台的选中购物车项id发生异常", e);
                     return ok(new JsonResult(false, "选中的购物车商品有问题，请核对一下").toNode());
                 }
-                cart = new CartProcess().buildUserCartBySelItem(curUser.getId(), selItems);
+                cart = cartProcess.buildUserCartBySelItem(curUser.getId(), selItems);
+                //订单总金额，显示在支付宝收银台里的“应付总额”里
             }
 
             if (cart == null || cart.getCartItemList().size() == 0) {
@@ -169,11 +174,11 @@ public class OrderAndPayController extends Controller {
         }
 
         String curUserName = "";
-        Cart cart = null;
         try {
             //测试
             User curUser = new User();
             curUser.setId(14311);
+            curUser.setUserName("ldj");
             //测试
 
             //User curUser = SessionUtils.currentUser();
@@ -217,7 +222,7 @@ public class OrderAndPayController extends Controller {
                     Logger.warn("订单支付出现异常:订单不存在:");
                     return ok(new JsonResult(false,"订单(" + orderNo + ")不存在！").toNode());
                 }
-                if (!order.getOrderState().waitPay(order.getPayType())) {
+                if (!order.getOrderState().waitPay(TradePayType.valueOf(payType))) {
                     Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")不支持付款操作！");
                     return ok(new JsonResult(false,"订单(" + orderNo + ")不支持付款操作！").toNode());
                 }

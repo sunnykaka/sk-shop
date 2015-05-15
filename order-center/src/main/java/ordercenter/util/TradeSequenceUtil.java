@@ -1,7 +1,6 @@
 package ordercenter.util;
 
 import common.utils.DateUtils;
-import usercenter.utils.SessionUtils;
 
 /**
  * 交易号码生成工具
@@ -17,7 +16,10 @@ public class TradeSequenceUtil {
      * @return
      */
     public static String getTradeNo() {
-        return SessionUtils.currentUser().getId() + String.valueOf(System.currentTimeMillis());
+       // return SessionUtils.currentUser().getId() + String.valueOf(System.currentTimeMillis());
+
+        //测试 ldj
+        return "14311" + String.valueOf(System.currentTimeMillis());
     }
 
     /**

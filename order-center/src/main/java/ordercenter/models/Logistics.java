@@ -84,6 +84,7 @@ public class Logistics implements EntityClass<Integer> {
      * @param address
      */
     public Logistics(Address address) {
+        this.setAddressId(address.getId());
         this.setEmail(address.getEmail());
         this.setLocation(address.getLocation());
         this.setProvince(address.getProvince());

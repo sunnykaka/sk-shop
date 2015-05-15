@@ -262,9 +262,8 @@ public class CartService {
     public List<CartItem> queryUserSelCarItemsByIds(int cartId, String cartItems) {
         play.Logger.info("--------CartService queryUserSelCarItemsByIds begin exe-----------");
 
-        String jpql = "select o from CartItem o where 1=1 and id in(:cartItems) and o.cartId=:cartId";
+        String jpql = "select o from CartItem o where 1=1 and o.id in(" + cartItems + ") and o.cartId=:cartId";
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("cartItems", cartItems);
         queryParams.put("cartId", cartId);
         return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
     }
@@ -276,10 +275,9 @@ public class CartService {
     public void deleteSelectCartItemBySelIds(int cartId, String selItems) {
         play.Logger.info("--------CartService deleteSelectCartItemBySelIds begin exe-----------" + cartId + " : " + selItems);
 
-        String jpql = "update CartItem v set v.isDelete=:isDelete where v.id in(:selItems) and cartId=:cartId ";
+        String jpql = "update CartItem v set v.isDelete=:isDelete where v.id in(" + selItems + ") and cartId=:cartId ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("isDelete", true);
-        queryParams.put("selItems", selItems);
         queryParams.put("cartId", cartId);
         generalDao.update(jpql, queryParams);
     }

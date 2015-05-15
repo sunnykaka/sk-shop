@@ -124,6 +124,7 @@ public class TradeService {
             tradeOrder.setTradeNo(tradeNo);
             tradeOrder.setOrderNo(order.getOrderNo());
             tradeOrder.setTradeType(TradeType.BuyProduct);
+            tradeOrder.setPayFlag(false);
             this.createTradeOrder(tradeOrder);
 
             //更新订单

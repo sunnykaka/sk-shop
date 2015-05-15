@@ -62,7 +62,7 @@ public class CartProcess {
             Money totalMoney = Money.valueOf(0);
             if(cartItems != null && cartItems.size() > 0) {
                 for (CartItem cartItem : cartItems) {
-                    this.setCartItemValues(cartItem,totalMoney);
+                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem));
                 }
             }
             cart.setTotalMoney(totalMoney);
@@ -85,7 +85,7 @@ public class CartProcess {
             Money totalMoney = Money.valueOf(0);
             if(cartItems != null && cartItems.size() > 0) {
                 for (CartItem cartItem : cartItems) {
-                    this.setCartItemValues(cartItem,totalMoney);
+                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem));
                 }
             }
             cart.setTotalMoney(totalMoney);
@@ -96,10 +96,10 @@ public class CartProcess {
     /**
      * 设置订单项的各个需要的属性值
      * @param cartItem
-     * @param totalMoney
      */
     @Transactional
-    public void setCartItemValues(CartItem cartItem, Money totalMoney) {
+    public Money setCartItemValues(CartItem cartItem) {
+        Money totalMoney = Money.valueOf(0);
         StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
         cartItem.setCurUnitPrice(Money.valueOf(0));
         cartItem.setOnline(false);
@@ -108,9 +108,16 @@ public class CartProcess {
         cartItem.setTradeMaxNumber(0);
         if (stockKeepingUnit != null) {
             cartItem.setSku(stockKeepingUnit);
+            cartItem.setBarCode(stockKeepingUnit.getBarCode());
+
             Product product = productService.getProductById(stockKeepingUnit.getProductId());
-            cartItem.setProductId(product.getId());
-            cartItem.setProductName(product.getName());
+            if(product != null) {
+                cartItem.setProductId(product.getId());
+                cartItem.setProductName(product.getName());
+                cartItem.setCategoryId(product.getCategoryId());
+                cartItem.setCustomerId(product.getCustomerId());
+            }
+
             //图片
             ProductPicture picture = pictureService.getMainProductPictureByProductIdSKuId(stockKeepingUnit.getProductId(), stockKeepingUnit.getId());
             cartItem.setMainPicture(picture.getPictureUrl());
@@ -124,11 +131,12 @@ public class CartProcess {
                     cartItem.setHasStock(true);
                 }
                 cartItem.setTradeMaxNumber(skuStorage.getTradeMaxNumber());
+                cartItem.setStorageId(skuStorage.getId());
             }
 
             //sku所属商品是否下架或被移除
             if (stockKeepingUnit.canBuy()) {
-                if ((!product.getIsDelete()) && product.isOnline()) {
+                if (product != null && (!product.getIsDelete()) && product.isOnline()) {
                     cartItem.setOnline(true);
                 }
             }
@@ -163,6 +171,7 @@ public class CartProcess {
                 Logger.warn("构建购物车删除sku失败:" + cartItem.getSkuId() + " : " + cartItem.getCartId());
             }
         }
+        return totalMoney;
     }
 
     /**

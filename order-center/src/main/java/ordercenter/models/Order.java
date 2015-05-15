@@ -375,7 +375,8 @@ public class Order implements EntityClass<Integer> {
 
 
 
-    @Transient
+    @Column(name = "userName")
+    @Basic
     public String getUserName() {
         return userName;
     }
