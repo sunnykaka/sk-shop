@@ -4,13 +4,11 @@ import common.services.GeneralDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import usercenter.dtos.DesignerView;
 import usercenter.models.Designer;
 import usercenter.models.DesignerPicture;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by zhb on 15-4-27.
@@ -21,6 +19,38 @@ public class DesignerService {
 
     @Autowired
     GeneralDao generalDAO;
+
+
+    /**
+     * 设计师列表，一次性查询上所有的设计师
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<DesignerView> getAllDesigner(){
+        String sql = "select t1.id,t1.name,t1.description,t2.pictureUrl from customer as t1 left JOIN ( select * from  designer_picture where mainPic =1) AS t2 ON  t2.designerId = t1.id";
+        List list = generalDAO.getEm().createNativeQuery(sql).getResultList();
+        List<DesignerView> result = new ArrayList<>();
+        for(Object obj : list){
+            Object[] designer = (Object[])obj;
+            DesignerView  dv = new DesignerView();
+            dv.setId((Integer) designer[0]);
+            dv.setName(designer[1].toString());
+
+            if(designer[2] != null){
+                dv.setDescription(designer[2].toString());
+            }
+            /**
+             * 防止有些设计师，没有设置主图
+             */
+            if(designer[3] != null){
+                dv.setPictureUrl(designer[3].toString());
+            }
+
+            result.add(dv);
+
+        }
+        return result;
+    }
 
     /**
      * 根据ID查询

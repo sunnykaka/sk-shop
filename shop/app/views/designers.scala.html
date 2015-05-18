@@ -1,0 +1,44 @@
+@(designerList : List[usercenter.dtos.DesignerView])
+
+@main(){
+    <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
+    <script type="text/javascript" src="@routes.Assets.versioned("js/jquery.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.versioned("js/common.js")"></script>
+
+
+
+}{
+    <div class="designer-list">
+        <div class="designer-list-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="@controllers.routes.Application.index()">首页</a></li>
+                    <li>&gt;</li>
+                    <li>设计师列表</li>
+                </ul>
+            </div>
+            <div class="top-img">
+                <img src="images/top-img.jpg" alt="" width="1200px" height="416px"/>
+            </div>
+            <div class="designer-list-title">
+                <h2>所有设计师</h2>
+                <h3>发现与你的气味相投的设计师</h3>
+            </div>
+            <div class="designer-list-con">
+                <ul class="clearfix">
+                    @for(designer <- designerList){
+                        <li>
+                            <img class="designer-img" src="@designer.getPictureUrl" alt="@designer.getDescription"/>
+                            <div>
+                                @*<img src="images/test-designer-brand.jpg" alt=""/>*@
+                                <p>设计师：@designer.getName</p>
+                            </div>
+                        </li>
+
+                    }
+                </ul>
+                <p class="more">发现更多设计师</p>
+            </div>
+        </div>
+    </div>
+}

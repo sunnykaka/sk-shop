@@ -1,0 +1,175 @@
+@(user: usercenter.models.User, sellingList: List[models.CmsExhibition], fontList: List[models.CmsContent], sliderBoxs :List[models.CmsContent])
+
+@displayExhibition(exhibition: models.CmsExhibition)={
+    <li>
+        <a href="#"></a>
+        <div class="img">
+            <a href="#"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
+            <p class="time">还剩 <span class="time-detail">@exhibition.getEndTime()</span>结束</p>
+        </div>
+        <div class="title">
+            <img src="images/brand-logo.jpg" alt="" height="60"/>
+            <p><span class="designer">@exhibition.getIntroduction</span></p>
+        </div>
+
+    </li>
+}
+
+
+@main(){
+    <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
+    <script type="text/javascript" src="@routes.Assets.versioned("js/jquery.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.versioned("js/common.js")"></script>
+
+    <script>
+    $(function(){
+        $('.empty-box li').hover(function(){
+            $(".title", this).stop().animate({top:"367px"},{queue:false,duration:100});
+        },function(){
+            $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
+        });
+    });
+</script>
+
+
+}{
+    <!--slider-box-->
+    <div class="slider-box">
+        <div class="slider-box-inner">
+            <div class="slider-box-img">
+                <ul>
+                    @for(content <- sliderBoxs){
+                        <li><a href="@content.getLink"><img src="@content.getContent" alt="@content.getTitle"/></a></li>
+                    }
+                </ul>
+                <span class="btn left-btn"></span>
+                <span class="btn right-btn"></span>
+            </div>
+            <div class="slider-box-nav">
+                <ul>
+                @for(content <- sliderBoxs){
+                    @*<li class="current">*@
+                    <li>
+                        <a href="#"><img src="@content.getContent" alt="" width="120" height="80"/></a>
+                        <div class="cover"></div>
+                    </li>
+                }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--end slider-box-->
+
+
+
+
+
+    <!--start-fashion first-->
+    <div class="start-fashion">
+        <div class="start-fashion-inne width1200">
+            <h2>全球首发　限量发售</h2>
+            <p class="info">独一无二的品味，独一无二的你。</p>
+            <ul class="clearfix">
+                @for(exhibition <- sellingList.take(4)){
+                    @displayExhibition(exhibition)
+                }
+            </ul>
+        </div>
+    </div>
+    <!--end start-fashion-->
+    <!--fashion-box-->
+    <div class="fashion-box">
+        <div class="fashion-box-inner width1200">
+            <h2>@fontList(0).getTitle</h2>
+            <p class="en-info">@fontList(0).getContent</p>
+            <p class="cn-info">@fontList(0).getLink</p>
+            @*<h2>尚</h2>*@
+            @*<p class="en-info">Fashion fades,only style remain the same. —— Coco Chanel</p>*@
+            @*<p class="cn-info">时尚易逝，唯风格永存。</p>*@
+            <ul class="clearfix">
+
+
+                @for(exhibition <- sellingList.slice(4,7)){
+                    <li>
+                        <a href="">
+                            <img src="@exhibition.getPic()" alt="" />
+                            <div class="info">
+                                <p><span class="designer">@exhibition.getIntroduction</span></p>
+                                <p class="time"><span class="time-detail">@exhibition.getEndTime</span>结束</p>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+
+            </ul>
+        </div>
+    </div>
+    <!--end fashion-box -->
+    <!--empty-box-->
+    <div class="empty-box">
+        <div class="empty-box-inner width1200">
+            <h2>@fontList(1).getTitle</h2>
+            <p class="info">@fontList(1).getContent</p>
+            <ul class="clearfix">
+
+            @for(exhibition <- sellingList.slice(7,14)){
+                @if(exhibition.getPositionIndex == 12){
+                    <li class="double">
+                }else{
+                    <li class="">
+                }
+                    <a href="">
+                        <img src="@exhibition.getPic()" alt=""/>
+                    </a>
+                    <div class="title">
+                        <p><span class="designer">@exhibition.getIntroduction()</span></p>
+                        <p class="time"><span class="time-detail">@exhibition.getEndTime</span>结束</p>
+                    </div>
+                </li>
+            }
+            </ul>
+        </div>
+    </div>
+    <!--end empty-box-->
+    <div class="footer">
+        <div class="footer-inner width1200 clearfix">
+            <dl class="about-us">
+                <dt>关于我们</dt>
+                <dd><a href="">关于尚客</a></dd>
+                <dd><a href="">联系尚客</a></dd>
+                <dd><a href="">加入尚客</a></dd>
+            </dl>
+            <dl class="help">
+                <dt>帮助中心</dt>
+                <dd><a href="#">购物流程</a></dd>
+                <dd><a href="#">发货说明</a></dd>
+                <dd><a href="#">尺码说明</a></dd>
+                <dd><a href="#">支付方式</a></dd>
+            </dl>
+            <dl class="sevice-center">
+                <dt>服务中心</dt>
+                <dd><a href="#">服务热线</a></dd>
+                <dd><a href="#">在线客服</a></dd>
+                <dd><a href="#">售后服务</a></dd>
+                <dd><a href="#">权责说明</a></dd>
+            </dl>
+            <dl class="designer-in">
+                <dt>设计师品牌入驻</dt>
+                <dd><a href="mailto:info@@yezaoshu.com">info@@yezaoshu.com</a></dd>
+                <dd><a href="#">Tel:400-9636-088</a></dd>
+                <dd class="social-ico"><a href="#" class="facebook">facebook</a> <a href="#" class="twitter">
+                    twitter</a></dd>
+            </dl>
+            <div class="code-img">
+                <img src="./images/img-code.gif" alt="关注我" width="98" height="98"/>
+                <a href="#">尚客公众微信</a>
+                <a href="#">尚客公众微博</a>
+            </div>
+
+            <p></p>
+        </div>
+        <p class="copy-right">&copy;2015 fashiongeeker.com All rights reserved 粤ICP备15014624号-2</p>
+    </div>
+
+}
