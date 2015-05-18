@@ -80,9 +80,7 @@ public class CmsService {
      */
     @Transactional(readOnly = true)
     public boolean onFirstPublish(int prodId) {
-        String sql = "select * from cms_exhibition where (beginTime  <= Now() AND endTime > Now())  and  id in ( select exhibitionId from exhibition_item where prodId = ?1)";
-        List<CmsExhibition> list = generalDao.getEm().createNativeQuery(sql, CmsExhibition.class).setParameter(1, prodId).getResultList();
-        return list != null && list.size() > 0;
+        return findExhibitionWithProdId(prodId).isPresent()
     }
 
     public Optional<CmsExhibition>  findExhibitionWithProdId(int prodId){
