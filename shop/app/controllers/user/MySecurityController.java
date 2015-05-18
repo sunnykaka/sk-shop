@@ -22,6 +22,8 @@ import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 import views.html.user.*;
 
+import java.util.regex.Pattern;
+
 
 /**
  * 安全信息管理
@@ -94,6 +96,34 @@ public class MySecurityController extends Controller {
 
     }
 
+    @SecuredAction
+    public Result checkPhone(String phone) {
+
+        phone = StringUtils.trim(phone);
+
+        if (StringUtils.isEmpty(phone)) {
+            return ok(new JsonResult(false, "手机号码不能为空").toNode());
+        }
+
+        if (!Pattern.matches("^[1][\\d]{10}", phone)) {
+            return ok(new JsonResult(false, "请输入正确的格式").toNode());
+        }
+
+        User user = SessionUtils.currentUser();
+        if (phone.equals(user.getPhone())) {
+            return ok(new JsonResult(false, "请输入与旧手机号码不一样的号码").toNode());
+        } else {
+
+            User userPhone = userService.findByPhone(phone);
+            if (null != userPhone) {
+                return ok(new JsonResult(false, "输入的号码已被注册").toNode());
+            }
+
+            return ok(new JsonResult(true, null).toNode());
+        }
+
+    }
+
 
     /**
      * 输入新手机页面
@@ -117,17 +147,17 @@ public class MySecurityController extends Controller {
 
         User user = SessionUtils.currentUser();
 
-        String tokenPage = ParamUtils.getByKey(request(),"token");
+        String tokenPage = ParamUtils.getByKey(request(), "token");
         String token = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
 
         Form<PhoneCodeForm> phoneCodeForm = Form.form(PhoneCodeForm.class).bindFromRequest();
 
         if (!phoneCodeForm.hasErrors()) {
             try {
-                if(StringUtils.isEmpty(tokenPage) || StringUtils.isEmpty(token)){
+                if (StringUtils.isEmpty(tokenPage) || StringUtils.isEmpty(token)) {
                     throw new AppBusinessException("身份验证已失效，无法继续操作");
                 }
-                if(!tokenPage.equals(token)){
+                if (!tokenPage.equals(token)) {
                     throw new AppBusinessException("身份验证已失效，无法继续操作");
                 }
 

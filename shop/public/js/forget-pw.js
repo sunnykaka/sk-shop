@@ -40,11 +40,11 @@
         reloadImageCode();
     });
 
-    var timer = null,i = 120;
+    var timer = null,i = 60;
     //短信倒计时
     function fun(obj){
         obj.attr('disabled','true');
-        obj.text(i+'秒后可重新获取');
+        obj.text(i+'秒后重获取');
         timer = setInterval(function(){show(obj)},1000);
     }
 
@@ -56,7 +56,7 @@
             i=120;
             clearInterval(timer);
         }else{
-            obj.text(i+'秒后可重新获取');
+            obj.text(i+'秒后重获取');
         }
 
     }

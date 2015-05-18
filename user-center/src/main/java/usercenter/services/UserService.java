@@ -256,9 +256,17 @@ public class UserService {
     @Transactional
     public User updatePhone(User user,PhoneCodeForm phoneCode){
 
-        //TODO 验证、手机验证码
         if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.BIND).verifyCode(phoneCode.getVerificationCode())) {
             throw new AppBusinessException("校验码验证失败");
+        }
+
+        if (phoneCode.getPhone().equals(user.getPhone())) {
+            throw new AppBusinessException("请输入与旧手机号码不一样的号码");
+        }
+
+        User userPhone = findByPhone(phoneCode.getPhone());
+        if (null != userPhone) {
+            throw new AppBusinessException("输入的号码已被注册");
         }
 
         User oldUser = getById(user.getId());

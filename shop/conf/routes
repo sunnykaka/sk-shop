@@ -7,7 +7,6 @@ GET         /                                     @controllers.Application.index
 GET         /preview                              @controllers.Application.preview
 GET         /designers                            @controllers.Application.designers
 
-
 # user
 GET         /register                             @controllers.user.LoginController.registerPage
 POST        /register                             @controllers.user.LoginController.register
@@ -46,6 +45,7 @@ GET         /my/data                              @controllers.user.MyDataContro
 POST        /my/data/update                       @controllers.user.MyDataController.update()
 # security
 GET         /my/security/index                    @controllers.user.MySecurityController.index()
+POST        /my/security/phone/check              @controllers.user.MySecurityController.checkPhone(phone)
 #     修改密码
 GET         /my/security/psw/index                @controllers.user.MySecurityController.changePasswordIndex()
 POST        /my/security/psw/new                  @controllers.user.MySecurityController.changePasswordNew()

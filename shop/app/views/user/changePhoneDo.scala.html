@@ -1,18 +1,44 @@
 @()
 
-<!DOCTYPE html>
+@myCenter(Messages("title.my.address")) {
 
-<html>
-    <head>
-        <title>@Messages("title.my.data")</title>
-    </head>
-    <body>
+} {
 
-        <div>
-
-            修改完成
-
+    <!--user-phoneValidate-->
+    <div class="phoneValidate">
+        <div class="phoneValidate-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>我的账户</li>
+                    <li>&gt;</li>
+                    <li>我的资料</li>
+                </ul>
+            </div>
+            <div class="phoneValidate-container clearfix">
+                @left("security")
+                    <!-- user-phoneValidate -->
+                <div class="phoneValidate-list thr">
+                    <h2>修改已验证手机</h2>
+                    <div class="phoneValidate-con third">
+                        <div class="step-bg"></div>
+                        <ul class="clearfix">
+                            <li class="highLight">验证身份</li>
+                            <li class="highLight">修改已验证手机</li>
+                            <li class="highLight last">完成</li>
+                        </ul>
+                    </div>
+                    <div  class="phoneValidate-thr">
+                        <p>恭喜您，修改验证手机成功。</p>
+                        <a href="#">去逛逛</a>
+                    </div>
+                </div>
+                    <!-- end phoneValidate-->
+            </div>
         </div>
-
-    </body>
-</html>
+    </div>
+    <!--end phoneValidate -->
+}
