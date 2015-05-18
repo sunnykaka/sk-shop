@@ -1,70 +1,74 @@
 @(userData:usercenter.models.UserData)
 
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>@Messages("title.my.data")</title>
-    </head>
-    <body>
-
-        @userData.getUser.getUserName<br>
-        @userData.getName<br>
-        @userData.getUser.getPhone<br>
-        @if(userData.getSex == 0){
-            保密<br/>
-        }
-        @if(userData.getSex == 1){
-            男<br/>
-        }
-        @if(userData.getSex == 2){
-            女<br/>
-        }
-        @userData.getBirthday<br/>
-
-        @userData.getProvince  @userData.getCity  @userData.getArea  <br/>
-        @userData.getLocation<br/>
-
-
-        <div>
-
-            <form action="@controllers.user.routes.MyDataController.update()" method="post">
-                <input type="hidden" name="id" value="@userData.getId">
-                姓名：<input type="text" name="name" placeholder="姓名">
-                    <input type="checkbox" name="sex" value="1">男
-                    <input type="checkbox" name="sex" value="2">女
-                    <input type="checkbox" name="sex" value="0">保密
-                    <select name="birthdayY">
-                        <option value="2015">2015</option>
-                        <option value="2014">2014</option>
-                    </select>
-                    <select name="birthdayM">
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                    </select>
-                    <select name="birthdayD">
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                    </select>
-
-                    <select name="province">
-                        <option value="广东省">广东省</option>
-                        <option value="广西省">广西省</option>
-                    </select>
-                    <select name="city">
-                        <option value="深圳市">深圳市</option>
-                        <option value="测试市">测试市</option>
-                    </select>
-                    <select name="area">
-                        <option value="南山区">南山区</option>
-                        <option value="测试区">测试区</option>
-                    </select>
-                <input type="text" name="location" placeholder="具体地址">
-                <button type="submit">提交</button>
-
-            </form>
-
+@myCenter(Messages("title.my.data")) {
+    <script src="@routes.Assets.versioned("js/date.js")"></script>
+    <script src="@routes.Assets.versioned("js/userinfo.js")"></script>
+    <script>
+        $(function(){
+            new DateSelector("myBirthday", "myBirthDay_Month", "myBirthDay_Day", '@userData.getBirthdayY', '@userData.getBirthdayM', '@userData.getBirthdayD');
+        });
+    </script>
+} {
+    <!--user-info-->
+    <div class="user-info">
+        <div class="user-info-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>我的账户</li>
+                    <li>&gt;</li>
+                    <li>我的资料</li>
+                </ul>
+            </div>
+            <div class="user-info-container clearfix">
+                @left("data")
+                    <!-- user-info-list -->
+                <div class="user-info-list">
+                    <h2>我的资料</h2>
+                    <div class="user-info-container">
+                        <form class="user-form">
+                            <div class="form-item">
+                                <label for="userName">用户名：</label>
+                                <p>@userData.getUser.getUserName</p>
+                            </div>
+                            <div class="form-item">
+                                <label for="name">姓名：</label>
+                                <input type="text" name="name" class="text" id="name" value="@userData.getName"/>
+                            </div>
+                            <div class="form-item">
+                                <label for="sex">性别：</label>
+                                <label class="item"><input type="radio" @if(userData.getSex == 0) {
+                                    checked="true"
+                                } name="sex" id="" value="0"/>保密</label>
+                                <label class="item"><input type="radio" @if(userData.getSex == 1) {
+                                    checked="true"
+                                } name="sex" id="" value="1"/>男</label>
+                                <label class="item"><input type="radio" @if(userData.getSex == 2) {
+                                    checked="true"
+                                } name="sex" id="" value="2"/>女</label>
+                            </div>
+                            <div class="form-item">
+                                <label for="birthday">生日：</label>
+                                <select id="myBirthday" class="select" name="birthdayY"></select> 年
+                                <select id="myBirthDay_Month" class="select" name="birthdayM"></select> 月
+                                <select id="myBirthDay_Day" class="select" name="birthdayD"></select> 日
+                            </div>
+                            <div class="form-item phone">
+                                <label for="phoneNumber">手机号码：</label>
+                                <p>@userData.getUser.getPhone</p><a href="#">更改</a>
+                            </div>
+                            <div class="form-item">
+                                <input type="submit" class="submit-btn" value="提交"/><span class="errormsg" id="addMsg"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                    <!-- end user-info-list-->
+            </div>
         </div>
-
-    </body>
-</html>
+    </div>
+    <!--end user-info -->
+}

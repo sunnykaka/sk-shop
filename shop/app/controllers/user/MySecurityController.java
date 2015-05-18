@@ -5,7 +5,6 @@ import common.utils.EmailUtils;
 import common.utils.JsonResult;
 import common.utils.ParamUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
@@ -37,6 +36,15 @@ public class MySecurityController extends Controller {
 
     @Autowired
     private UserService userService;
+
+    @SecuredAction
+    public Result index() {
+
+        User user = SessionUtils.currentUser();
+
+        return ok(mySecurityIndex.render(user));
+
+    }
 
     /**
      * 修改手机号码首页

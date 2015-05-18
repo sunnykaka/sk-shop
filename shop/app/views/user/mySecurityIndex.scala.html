@@ -1,0 +1,52 @@
+@(user:usercenter.models.User)
+
+@import common.utils.StringUtils;
+
+@myCenter(Messages("title.my.data")) {
+
+} {
+    <!--user-info-->
+    <div class="user-info">
+        <div class="user-info-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>我的账户</li>
+                    <li>&gt;</li>
+                    <li>我的资料</li>
+                </ul>
+            </div>
+            <div class="user-info-container clearfix">
+                @left("security")
+                    <!-- user-info-list -->
+                <div class="user-info-list">
+                    <h2>账号安全</h2>
+                    <div class="account-safe-con">
+                        <div class="item">
+                            <span class="status on"></span><p class="item-detail">登陆密码</p><p class="item-info">登陆密码能够保证您的账户安全，让你购物更放心</p>
+                            <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changePasswordIndex()" class="btn">修改</a></p>
+                        </div>
+                        <div class="item">
+                            <span class="status on"></span><p class="item-detail">验证手机</p><p class="item-info">您验证的手机：@StringUtils.getSecurityMobile(user.getPhone)</p>
+                            <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changePhoneIndex()" class="btn">修改</a></p>
+                        </div>
+                        <div class="item @if(null == user.getEmail || "".equals(user.getEmail)){off}">
+                            <span class="status"></span><p class="item-detail">验证邮箱</p><p class="item-info">您邮箱还没有验证，为了您的安全，请验证！</p>
+                            @if(null == user.getEmail || "".equals(user.getEmail)){
+                                <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changeEmailIndex()" class="btn">立即验证</a></p>
+                            }else{
+                                <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changeEmailIndex()" class="btn">修改邮箱</a></p>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                    <!-- end user-info-list-->
+            </div>
+        </div>
+    </div>
+    <!--end user-info -->
+}

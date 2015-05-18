@@ -304,7 +304,14 @@ h4{font-size:12px;}
 .select-address .receiver,.address-list .receiver{padding-bottom: 8px;border-bottom: 1px solid #ccc;text-align: left;margin-bottom: 8px;}
 .select-address .default,.address-list .default{float: right;}
 .select-address .details-address,.address-list .details-address{margin-bottom: 8px;}
-.select-address .details-address p,.address-list .details-address p{padding-bottom: 2px;}
+.select-address .details-address p,.address-list .details-address p{
+    padding-bottom: 2px;
+    white-space: nowrap;
+    width: 100%;                  /* IE6 需要定义宽度 */
+    overflow: hidden;
+    -o-text-overflow: ellipsis;    /* Opera */
+    text-overflow:    ellipsis;    /* IE, Safari (WebKit) */
+}
 .select-address .edit-address .btn,.address-list .edit-address .btn{cursor: pointer;}
 .select-address .edit-address .edit,.address-list .edit-address .edit{margin-right: 20px;}
 
@@ -428,13 +435,15 @@ h4{font-size:12px;}
 .detail{margin-bottom: 50px;}
 .detail-inner .left{width: 803px;overflow: hidden;}
 .detail-inner .bread-nav,.order-manage-inner .bread-nav,.order-detail-inner .bread-nav,.order-comment-inner .bread-nav,
-.designer-list-inner .bread-nav,.designer-brand-inner .bread-nav,.address-manage-inner .bread-nav
+.designer-list-inner .bread-nav,.designer-brand-inner .bread-nav,.address-manage-inner .bread-nav,.user-info-inner .bread-nav,.account-safe .bread-nav
 {height: 58px;line-height: 58px;}
 .detail-inner .bread-nav li,.order-manage-inner li,.order-detail-inner li,.order-comment-inner li,
-.designer-list-inner .bread-nav li,.designer-brand-inner .bread-nav li,.address-manage-inner .bread-nav li
+.designer-list-inner .bread-nav li,.designer-brand-inner .bread-nav li,.address-manage-inner .bread-nav li,.user-info-inner .bread-nav li,
+.account-safe .bread-nav li
 {float: left;margin-right: 18px;}
 .detail-inner .bread-nav a:hover,.order-manage-inner a:hover,.order-detail-inner a:hover,.order-comment-inner a:hover,
-.designer-list-inner .bread-nav a:hover,.designer-brand-inner .bread-nav a:hover,.address-manage-inner .bread-nav a:hover
+.designer-list-inner .bread-nav a:hover,.designer-brand-inner .bread-nav a:hover,.address-manage-inner .bread-nav a:hover,.user-info-inner .bread-nav a:hover,
+.account-safe .bread-nav a:hover
 {color: #FF2D54;text-decoration: none;}
 .detail-inner .info{width: auto;border: 1px solid #cccccc;text-align: center;padding:42px 60px;margin-bottom: 32px;}
 .detail-inner .info h2,.detail-inner .info h3{font-weight: normal;}
@@ -531,12 +540,15 @@ h4{font-size:12px;}
 /*end detail*/
 /*order-manage*/
 .order-manage{margin-bottom: 50px;}
-.order-manage-inner .nav-list,.address-manage-inner .nav-list{float:left;width: 140px;padding: 15px;border: 1px solid #cccccc;text-align: center;}
-.order-manage-inner .nav-list dl,.address-manage-inner dl{margin-bottom: 20px;}
-.order-manage-inner .nav-list .my-account,.address-manage-inner .my-account{margin-bottom: 0;}
-.order-manage-inner .nav-list dt,.address-manage-inner dt{padding-bottom: 12px;border-bottom: 1px solid #cccccc;font-size: 14px;font-weight: 700;  }
-.order-manage-inner .nav-list dd,.address-manage-inner dd{height: 34px; line-height: 34px;}
-.order-manage-inner .nav-list .current a,.address-manage-inner .nav-list .current a{color:#FF2D54;}
+.order-manage-inner .nav-list,.address-manage-inner .nav-list,.user-info-inner .nav-list,.account-safe-inner .nav-list
+{float:left;width: 140px;padding: 15px;border: 1px solid #cccccc;text-align: center;}
+.order-manage-inner .nav-list dl,.address-manage-inner dl,.user-info-inner dl,.account-safe-inner .dl{margin-bottom: 20px;}
+.order-manage-inner .nav-list .my-account,.address-manage-inner .my-account,.user-info-inner .my-account,.account-safe-inner .my-account{margin-bottom: 0;}
+.order-manage-inner .nav-list dt,.address-manage-inner dt,.user-info-inner dt,.account-safe-inner dt{padding-bottom: 12px;border-bottom: 1px solid #cccccc;font-size: 14px;font-weight: 700;  }
+.order-manage-inner .nav-list dd,.address-manage-inner dd,.user-info-inner dd,.account-safe-inner dd{height: 34px; line-height: 34px;}
+.order-manage-inner .nav-list .current a,.address-manage-inner .nav-list .current a,.user-info-inner .nav-list .current a,
+.account-safe-inner .nav-list .current a
+{color:#FF2D54;}
 .order-manage-inner .all-order-list,.address-manage-inner .address-form,.address-list{float: right;width: 990px;}
 .order-manage-inner .all-order-list .order-status{height:45px;border-bottom: 1px solid #cccccc; }
 .all-order-list .order-status ul{height: 43px;margin-left: 23px;}
@@ -575,8 +587,8 @@ h4{font-size:12px;}
 .order-detail-inner .nav-list dt{padding-bottom: 12px;border-bottom: 1px solid #cccccc;font-size: 14px;font-weight: 700;  }
 .order-detail-inner .nav-list dd{height: 34px; line-height: 34px;}
 .order-detail-inner .nav-list .current a{color:#FF2D54;}
-.order-detail-list{float: right;width: 988px;}
-.order-detail-list h2,.address-manage-inner h2,.address-list h2{font-weight: normal;font-size: 14px;height: 45px;line-height: 45px;border-bottom: 1px solid #ccc;}
+.order-detail-list,.user-info-list,.account-safe-list{float: right;width: 988px;}
+.order-detail-list h2,.address-manage-inner h2,.address-list h2,.user-info-list h2,.account-safe-list h2{font-weight: normal;font-size: 14px;height: 45px;line-height: 45px;border-bottom: 1px solid #ccc;}
 .order-detail-list .order-item,.address-manage-inner .address-form-inner{padding-left: 30px;margin-bottom: 20px;}
 .order-detail-list .order-item h3,.address-manage-inner h3{height: 30px;line-height: 30px;}
 .order-detail-list .order-profile-content,.order-detail-list .order-track table{padding-left: 25px;}
@@ -673,28 +685,51 @@ h4{font-size:12px;}
 /*end designer-brand */
 /*address-manage*/
 .address-form-inner h3{padding-top: 20px;}
-.address-form-inner .add-form,.dialog-2014 .update-form{margin-top: 20px;}
-.address-manage-inner .add-form b,.dialog-2014 .update-form b{color: #FF2D54;}
-.address-manage-inner .form-item,.dialog-2014 .update-form .form-item{padding: 6px 0;height: 34px;}
-.address-manage-inner .add-form label,.dialog-2014 .update-form .label{float: left;line-height: 34px;width: 100px;text-align: right;padding-right: 10px;
+.address-form-inner .add-form,.i-dialog .update-form,.i-dialog .add-form{margin-top: 20px;}
+.address-manage-inner .add-form b,.i-dialog .update-form b,.i-dialog .add-form b{color: #FF2D54;}
+.address-manage-inner .form-item,.i-dialog .update-form .form-item,.i-dialog .add-form .form-item,.user-form .form-item{padding: 6px 0;height: 34px;}
+.address-manage-inner .add-form label,.i-dialog .update-form label,.i-dialog .add-form label,.user-form label{float: left;line-height: 34px;width: 100px;text-align: right;padding-right: 10px;
     font-size:12px;}
-.address-manage-inner .text,.dialog-2014 .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
+.address-manage-inner .text,.i-dialog .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
     background: #fcfcfc;width: 290px;
 }
-.address-manage-inner .add-form .select,.dialog-2014 .update-form .select{background:#fcfcfc;padding: 7px 16px;vertical-align: middle;border: 1px solid #dbdbda;}
-.address-manage-inner .add-form .location,.dialog-2014 .update-form .location{width: 400px;}
+.address-manage-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 16px;vertical-align: middle;border: 1px solid #dbdbda;}
+.address-manage-inner .add-form .location,.i-dialog .update-form .location,.i-dialog .add-form .location{width: 380px;}
 .address-manage-inner .add-form .submit{margin-top: 10px;height: 100px;}
-.address-manage-inner .add-address-btn,.update-form .update-btn{padding: 20px 50px;background: #000;color: #fff;border: none;margin-left: 110px;
+.address-manage-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 20px 50px;background: #000;color: #fff;border: none;margin-left: 110px;
     cursor: pointer;
 }
 .address-manage-inner .add-address-btn:hover{color: #FF2D54;}
-.address-manage-inner .form-item .errormsg,.dialog-2014 .update-form .errormsg{color: #FF2D54;margin-left: 10px;}
+.address-manage-inner .form-item .errormsg,.i-dialog .update-form .errormsg,.i-dialog .add-form .errormsg{color: #FF2D54;margin-left: 10px;}
 .address-list ul{margin-top: 30px;}
 .address-list li{margin-right: 20px;margin-bottom: 20px;}
-.dialog-2014 .update-form .form-item{margin-bottom: 10px;}
-.dialog-2014 .update-form .errormsg{font-size: 12px;margin-left: 80px;padding: 2px 0;}
+.i-dialog .update-form .form-item,.i-dialog .add-form .form-item{margin-bottom: 10px;}
+.i-dialog .update-form .errormsg,.i-dialog .add-form .errormsg{font-size: 12px;margin-left: 110px;padding: 2px 0;}
 .update-form .update-btn{margin-left: 80px;}
 /*end address-manage*/
+/*user-info*/
+.user-info{margin-bottom: 50px;}
+.user-form p{line-height: 34px;height: 34px;}
+.user-form .phone p{line-height: 34px;height: 34px;width: 100px; float: left;}
+.user-form .phone a{ float: left;line-height: 34px;height: 34px;}
+.user-form .item{width: 50px;}
+.user-form .item input{  vertical-align: middle;margin: -3px 8px 0 0;}
+.user-form .submit-btn{padding:10px 20px;background: #000;border: none;color: #fff;margin-left: 110px;cursor: pointer;}
+.user-form .errormsg{color: #FF2D54;margin-left: 10px;}
+/*end user-info*/
+/*account-safe*/
+.account-safe{margin-bottom: 100px;}
+.account-safe-con .item{padding: 30px 0;border-bottom: 1px dashed #d9d9d9;height: 34px;line-height: 34px;text-align: center}
+.account-safe-con span,.account-safe-con p{float: left;}
+.account-safe-con .item span{width: 50px;}
+.account-safe-con .item .item-detail{width: 150px;font-weight: 700;}
+.account-safe-con .item .item-info{width: 500px;}
+.account-safe-con .item .btn-wrap{width: 200px;text-align: center;}
+.account-safe-con .off p{color: #ccc;}
+.account-safe-con .off .btn{padding: 7px 20px; background: #FF2D54;color: #fff;}
+.account-safe-con span{width: 21px;height: 21px;background: url("../images/account-safe.png") no-repeat 30px -21px;padding-left: 50px;}
+.account-safe-con .off span{background-position: 30px 0;}
+/*end account-safe*/
 /*footer*/
 .footer{width: 100%;background: #f1f3f5;}
 .footer-inner dl{float: left;margin-right: 120px;padding:30px 0;}
@@ -718,17 +753,3 @@ h4{font-size:12px;}
 .com_tip{ border: 1px solid #FF2D54; padding: 2px 6px; line-height: 18px; background: #fef6f1; font-size: 12px; z-index: 9999 }
 .com_tip a{color:#FF2D54;}
 
-.dialog-2014{border:1px solid #ddd;background: #fff;box-shadow: 0 0 8px #ccc;}
-.dialog-2014 .content_wrapper{padding: 0;}
-.dialog-2014 .title_wrapper{display: block;margin: 0;padding: 0;height: 36px;border-bottom: 1px solid #ddd;
-    background-color: #fafafa;}
-.dialog-2014 .title_wrapper .title{display: block;padding: 0 0 0 10px;height: 36px;
-    font: normal 14px/36px "Microsoft YaHei",STHeiti}
-.dialog-2014 .title_wrapper .warn{display: none}
-.dialog-2014 .close{position:absolute;width: 20px;height: 20px;right: 6px;top:6px;}
-.dialog-2014 .close a,
-.dialog-2014 .close a:hover{display:block;height:20px;background: url("../images/dialog-2014.png") no-repeat 0 0;}
-.dialog-2014 .info_wrapper{padding: 12px;min-height: 36px;}
-.dialog-2014 .info_wrapper .info{font: normal 14px/18px "Microsoft YaHei",STHeiti;}
-.dialog-2014 .button_wrapper{text-align: center}
-.dialog-2014 .button_wrapper a{margin-right: 10px}

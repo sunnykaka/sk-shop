@@ -2,6 +2,7 @@ package controllers.user;
 
 import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
@@ -64,23 +65,18 @@ public class MyDataController extends Controller {
                     return ok(new JsonResult(false,"修改失败").toNode());
                 }
 
-                userData.setName(StringUtils.trim(userDataF.getName()));
+                userData.setName(StringEscapeUtils.escapeHtml4(StringUtils.trim(userDataF.getName())));
                 userData.setSex(userDataF.getSex());
-                userData.setProvince(userDataF.getProvince());
-                userData.setCity(userDataF.getCity());
-                userData.setArea(userDataF.getArea());
-                userData.setLocation(StringUtils.trim(userDataF.getLocation()));
-                userData.setBirthdayY(userDataF.getBirthdayY());
-                userData.setBirthdayM(userDataF.getBirthdayM());
-                userData.setBirthdayD(userDataF.getBirthdayD());
+                userData.setBirthdayY(StringEscapeUtils.escapeHtml4(userDataF.getBirthdayY()));
+                userData.setBirthdayM(StringEscapeUtils.escapeHtml4(userDataF.getBirthdayM()));
+                userData.setBirthdayD(StringEscapeUtils.escapeHtml4(userDataF.getBirthdayD()));
 
                 userData.mergerBirthday();
                 userData.setBirthday(userData.getBirthday());
 
                 userDataService.updateUserDate(userData);
-                userData.splitBirthday();
 
-                return ok(new JsonResult(true,"修改成功", userData).toNode());
+                return ok(new JsonResult(true,"修改成功").toNode());
 
             } catch (AppBusinessException e) {
                 userDataForm.reject("errors", e.getMessage());

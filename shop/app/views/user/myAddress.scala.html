@@ -25,12 +25,12 @@
                             <ul class="clearfix">
                                 @for(address <- addressList){
                                     <li @if(address.isDefaultAddress){class="current"} data-id="@address.getId" >
-                                        <div class="receiver"><strong>@address.getName <span class="space"></span>收</strong><span class="default" data-id="@address.getId">@if(address.isDefaultAddress){默认地址}else{设为默认}</span></div>
+                                        <div class="receiver"><strong>@address.getName <span class="space"></span>收</strong><span class="default" data-id="@address.getId">@if(address.isDefaultAddress){默认地址}else{设置默认}</span></div>
                                         <div class="details-address">
                                             <p><span class="provice">@address.getProvince</span><span class="space"></span><span class="city">@address.getCity</span>
                                                 <span class="space"></span><span class="area">@address.getArea</span>
                                             </p>
-                                            <P class="location">@address.getLocation</P>
+                                            <P class="location" title="@address.getLocation">@address.getLocation</P>
                                             <p class="phone">@address.getMobile</p>
                                         </div>
                                         <div class="edit-address">

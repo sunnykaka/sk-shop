@@ -43,6 +43,7 @@ GET               /my/valuation/find                    @controllers.user.MyValu
 GET               /my/data                              @controllers.user.MyDataController.index()
 POST              /my/data/update                       @controllers.user.MyDataController.update()
 # security
+GET         /my/security/index                  @controllers.user.MySecurityController.index()
 #     修改密码
 GET               /my/security/psw/index                @controllers.user.MySecurityController.changePasswordIndex()
 POST              /my/security/psw/new                  @controllers.user.MySecurityController.changePasswordNew()
