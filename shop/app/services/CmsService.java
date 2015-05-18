@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -80,7 +79,7 @@ public class CmsService {
      */
     @Transactional(readOnly = true)
     public boolean onFirstPublish(int prodId) {
-        return findExhibitionWithProdId(prodId).isPresent()
+        return findExhibitionWithProdId(prodId).isPresent();
     }
 
     public Optional<CmsExhibition>  findExhibitionWithProdId(int prodId){
