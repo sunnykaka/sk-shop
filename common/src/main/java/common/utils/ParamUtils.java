@@ -37,6 +37,11 @@ public class ParamUtils {
      * @return
      */
     public static String getByKey(Http.Request request,String key) {
+
+        if("GET".equals(request.method())){
+            return request.getQueryString(key);
+        }
+
         String[] result = getAllByKey(request,key);
 
         if(result.length == 0){
