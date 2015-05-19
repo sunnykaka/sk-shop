@@ -1,18 +1,45 @@
 @(msg:String)
 
-<!DOCTYPE html>
+    @myCenter(Messages("title.my.address")) {
 
-<html>
-    <head>
-        <title>@Messages("title.my.data")</title>
-    </head>
-    <body>
+    } {
 
-        <div>
+        <!--user-updatePw -->
+        <div class="updatePw ">
+            <div class="phoneValidate-inner width1200">
+                <div class="bread-nav">
+                    <ul class="clearfix">
+                        <li><a href="index.html">首页</a></li>
+                        <li>&gt;</li>
+                        <li><a href="index.html">个人中心</a></li>
+                        <li>&gt;</li>
+                        <li>我的账户</li>
+                        <li>&gt;</li>
+                        <li>我的资料</li>
+                    </ul>
+                </div>
+                <div class="updatePw-container clearfix">
+                    @left("security")
+                        <!-- user-phoneValidate -->
+                    <div class="validateEmail-list thr">
+                        <h2>修改已验证手机</h2>
+                        <div class="phoneValidate-con third">
+                            <div class="step-bg"></div>
+                            <ul class="clearfix email">
+                                <li class="highLight">验证身份</li>
+                                <li class="highLight">验证邮箱</li>
+                                <li class="highLight last">完成</li>
+                            </ul>
+                        </div>
+                        <div  class="validateEmail-thr">
+                            <p>@msg</p>
+                            <a href="">去逛逛</a>
+                        </div>
 
-            @msg
-
+                    </div>
+                        <!-- end phoneValidate-->
+                </div>
+            </div>
         </div>
-
-    </body>
-</html>
+        <!--end phoneValidate -->
+    }

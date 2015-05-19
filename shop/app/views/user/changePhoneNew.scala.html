@@ -1,5 +1,6 @@
 @(flash: java.util.Map[String, String])
 
+@import usercenter.cache.SecurityCache;
 
 @myCenter(Messages("title.my.address")) {
     <script src="@routes.Assets.versioned("js/user-phoneValidate.js")"></script>
@@ -32,21 +33,26 @@
                             <li class="last">完成</li>
                         </ul>
                     </div>
-                    <form action="" class="phoneValidate-sec">
-                        <input type="hidden" id="phone" value="18927039420"/>
-                        <div class="form-item ">
-                            <label for="phoneNumber">我的手机号码：</label>
-                            <input type="phoneNum" id="phoneNumber" name="phoneNum" class="form-text phoneNum"/>
-                            <span class="errormsg" id="errormsg-phoneNum"></span>
-                        </div>
-                        <div class="form-item">
-                            <label for="phoneCode">请填写手机验证码：</label>
-                            <input type="phoneCode" id="phoneCode" name="phoneCode" class="form-text phoneCode"/>
-                            <button class="get-code-btn" id="get-code-btn">发送验证码</button>
-                            <span class="errormsg" id="errormsg-phoneCode"></span>
-                        </div>
-                        <div class="item-row"><button type="submit"  id="next-btn" class="next-btn">提交</button></div>
-                    </form>
+                    @if(flash.get(SecurityCache.SECURITY_TOKEN_PHONE_KEY)){
+                        <form action="" class="phoneValidate-sec">
+                            <input type="hidden" id="token" name="token" value="@flash.get(SecurityCache.SECURITY_TOKEN_PHONE_KEY)">
+                            <div class="form-item ">
+                                <label for="phoneNumber">我的手机号码：</label>
+                                <input type="phoneNum" id="phoneNumber" name="phoneNum" class="form-text phoneNum"/>
+                                <span class="errormsg" id="errormsg-phoneNum"></span>
+                            </div>
+                            <div class="form-item">
+                                <label for="phoneCode">请填写手机验证码：</label>
+                                <input type="phoneCode" id="phoneCode" name="phoneCode" class="form-text phoneCode"/>
+                                <button class="get-code-btn" id="get-code-btn">发送验证码</button>
+                                <span class="errormsg" id="errormsg-phoneCode"></span>
+                            </div>
+                            <div class="item-row"><button type="submit"  id="next-btn" class="next-btn">提交</button></div>
+                        </form>
+                    }else{
+                        <span>身份验证失败</span>
+                    }
+
                 </div>
                     <!-- end phoneValidate-->
             </div>

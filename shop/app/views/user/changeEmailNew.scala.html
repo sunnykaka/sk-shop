@@ -1,27 +1,56 @@
 @(flash: java.util.Map[String, String])
 
-<!DOCTYPE html>
+    @import usercenter.cache.SecurityCache;
 
-<html>
-    <head>
-        <title>@Messages("title.my.data")</title>
-    </head>
-    <body>
+    @myCenter(Messages("title.my.address")) {
+        <script src="@routes.Assets.versioned("js/user-validateEmail.js")"></script>
+    } {
 
-        @if(flash.get("changeEmail")){
-            <div>
-                <form action="@controllers.user.routes.MySecurityController.changeEmailEnd()" method="post">
-                    新邮箱：<input type="text" name="email" value=""/><br/>
-
-                    <button type="button">发送验证邮件</button>
-
-                    <button type="submit">提交</button>
-                </form>
-
+        <!--user-validateEmail-->
+        <div class="validateEmail">
+            <div class="validateEmail-inner width1200">
+                <div class="bread-nav">
+                    <ul class="clearfix">
+                        <li><a href="index.html">首页</a></li>
+                        <li>&gt;</li>
+                        <li><a href="index.html">个人中心</a></li>
+                        <li>&gt;</li>
+                        <li>我的账户</li>
+                        <li>&gt;</li>
+                        <li>我的资料</li>
+                    </ul>
+                </div>
+                <div class="validateEmail-container clearfix">
+                    @left("security")
+                        <!-- user-updatePw -->
+                    <div class="validateEmail-list sec">
+                        <h2>修改已验证手机</h2>
+                        <div class="phoneValidate-con second">
+                            <div class="step-bg"></div>
+                            <ul class="clearfix email">
+                                <li class="highLight">验证身份</li>
+                                <li class="highLight">验证邮箱</li>
+                                <li class="last">完成</li>
+                            </ul>
+                        </div>
+                        @if(flash.get(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY)){
+                            <form action="" class="validateEmail-sec">
+                                <input type="hidden" name="token" id="token" value="@flash.get(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY)"/>
+                                <div class="form-item vcode-input">
+                                    <label for="email">邮箱：</label>
+                                    <input type="text" id="email" name="email" class="form-text email"/>
+                                    <span class="errormsg" id="errormsg-phoneCode"></span>
+                                </div>
+                            </form>
+                            <p>验证邮件已发送，请立即<a href="">查看验证邮件</a>，验证邮件24小时有效，请尽快登录您的邮箱完成验证。</p>
+                            <a href="javascript:void();" class="send-email">发送email到邮箱</a>
+                        }else{
+                            <span>身份验证失败</span>
+                        }
+                    </div>
+                        <!-- end validateEmail-->
+                </div>
             </div>
-        }else{
-            页面已失效
-        }
-
-    </body>
-</html>
+        </div>
+        <!--end validateEmail-->
+    }

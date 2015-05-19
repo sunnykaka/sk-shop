@@ -1,54 +1,60 @@
 @(page:common.utils.page.Page[productcenter.models.ProductCollect])
 
-<!DOCTYPE html>
+@myCenter(Messages("title.my.address")) {
 
-<html>
-    <head>
-        <title>@Messages("title.my.favorites.product")</title>
-    </head>
-    <body>
+} {
 
-        <div>
-            <form action="@controllers.user.routes.ProductFavoritesController.add()" method="post">
-                <table>
-                    <tr><td>商品ID</td><td><input type="text" name="productId" value=""></td></tr>
-                    <tr><td>商品SKU</td><td><input type="text" name="productName" value=""></td></tr>
-                    <tr><td>商品数量</td><td><input type="text" name="unitPrice" value=""></td></tr>
-                    <tr><button type="submit">收藏</button></tr>
-                </table>
-            </form>
+    <!--user-likeProduct-->
+    <div class="likeProduct">
+        <div class="likeProduct-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>我的账户</li>
+                    <li>&gt;</li>
+                    <li>我的资料</li>
+                </ul>
+            </div>
+            <div class="likeProduct-container clearfix">
+                @left("product")
+
+                <div class="likeProduct-list first">
+                    <h2>喜欢的商品</h2>
+                    <ul class="clearfix likeProduct-box">
+                        @for(pc <- page.getResult){
+                            <li class="current">
+                                <a href="#"><img src="@pc.getProductPic" alt="@pc.getProductName"/></a>
+                                <p class="title">@pc.getProductName</p>
+                                <span class="del" data-id="@pc.getId"></span>
+                            </li>
+                        }
+                    </ul>
+
+                    @if(page.getTotalPage > 1){
+                        <div class="likeProduct-page">
+                            <ul class="clearfix">
+                                <li>第<span class="current-page">@page.getPageNo</span>/<span class="total-page">@page.getTotalPage</span>页</li>
+                                @if(page.getPageNo > 1){
+                                    <li><a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo-1)">上一页</a></li>
+                                }else{
+                                    <li>上一页</li>
+                                }
+                                @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
+                                    <li><a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo+1)">下一页</a></li>
+                                }else{
+                                    <li>下一页</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
         </div>
-
-        <hr>
-
-        当前第几页 @page.getPageNo() <br/>
-        总共有几页 @page.getTotalPage <br/>
-        共有多少条数据 @page.getTotalCount <br/>
-
-        @if(page.getPageNo > 1){
-            <a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo()-1,page.getPageSize)">上一页</a>
-        }
-
-        @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
-            <a href="@controllers.user.routes.ProductFavoritesController.index(page.getPageNo()+1,page.getPageSize)">下一页</a>
-        }
-
-        <hr>
-            <table>
-                <tr>
-                    <td>商品ID</td>
-                    <td></td>
-                </tr>
-                @for(pc <- page.getResult){
-                    <tr>
-                        <td>@pc.getProductId</td>
-                        <td>
-                            <form action="@controllers.user.routes.ProductFavoritesController.del(pc.getProductId)" method="post">
-                                <button type="submit">删除</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </table>
-    </body>
-</html>
+    </div>
+    <!--end validateEmail-->
+}

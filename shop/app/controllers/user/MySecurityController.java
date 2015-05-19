@@ -76,7 +76,7 @@ public class MySecurityController extends Controller {
         if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                //TODO 校验验证码是否正确
+
                 if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
                     throw new AppBusinessException("校验码验证失败");
                 }
@@ -88,7 +88,7 @@ public class MySecurityController extends Controller {
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePhoneDo().url()).toNode());
 
             } catch (AppBusinessException e) {
-                codeForm.reject("errors", e.getMessage());
+                codeForm.reject("verificationCode", e.getMessage());
             }
         }
 
@@ -166,7 +166,7 @@ public class MySecurityController extends Controller {
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePhoneOk().url()).toNode());
 
             } catch (AppBusinessException e) {
-                phoneCodeForm.reject("errors", e.getMessage());
+                phoneCodeForm.reject("phone", e.getMessage());
             }
         }
 
@@ -214,18 +214,18 @@ public class MySecurityController extends Controller {
         if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                //TODO 校验验证码是否正确
                 if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
                     throw new AppBusinessException("校验码验证失败");
                 }
 
                 //页面关联token
                 String token = RandomStringUtils.randomAscii(RANDOM_DEFAULT_SIZE);
-                flash("changePassword", token);
+                flash(SecurityCache.SECURITY_TOKEN_PSW_CHANGE_KEY, token);
+                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PSW_CHANGE_KEY, user.getPhone(), token);
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePasswordDo().url()).toNode());
 
             } catch (AppBusinessException e) {
-                codeForm.reject("errors", e.getMessage());
+                codeForm.reject("verificationCode", e.getMessage());
             }
         }
 
@@ -254,15 +254,27 @@ public class MySecurityController extends Controller {
     public Result changePasswordEnd() {
         User user = SessionUtils.currentUser();
 
+        String tokenPage = ParamUtils.getByKey(request(), "token");
+        String token = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PSW_CHANGE_KEY, user.getPhone());
+
         Form<ChangePswForm> passwordForm = Form.form(ChangePswForm.class).bindFromRequest();
 
         if (!passwordForm.hasErrors()) {
             try {
+
+                if (StringUtils.isEmpty(tokenPage) || StringUtils.isEmpty(token)) {
+                    throw new AppBusinessException("身份验证已失效，无法继续操作");
+                }
+                if (!tokenPage.equals(token)) {
+                    throw new AppBusinessException("身份验证已失效，无法继续操作");
+                }
+
                 userService.updatePassword(user, passwordForm.get());
+                SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PSW_CHANGE_KEY, user.getPhone());
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePasswordOk().url()).toNode());
 
             } catch (AppBusinessException e) {
-                passwordForm.reject("errors", e.getMessage());
+                passwordForm.reject("password", e.getMessage());
             }
         }
 
@@ -308,17 +320,18 @@ public class MySecurityController extends Controller {
         if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                //TODO 校验验证码是否正确
                 if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
                     throw new AppBusinessException("校验码验证失败");
                 }
 
                 //页面关联token
-                flash("changeEmail", user.getPhone());
+                String token = RandomStringUtils.randomAscii(RANDOM_DEFAULT_SIZE);
+                flash(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, token);
+                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, user.getPhone(), token);
                 return ok(new JsonResult(true, null, routes.MySecurityController.changeEmailDo().url()).toNode());
 
             } catch (AppBusinessException e) {
-                codeForm.reject("errors", e.getMessage());
+                codeForm.reject("verificationCode", e.getMessage());
             }
         }
 
@@ -348,6 +361,16 @@ public class MySecurityController extends Controller {
 
         User user = SessionUtils.currentUser();
 
+        String tokenPage = ParamUtils.getByKey(request(), "token");
+        String token = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, user.getPhone());
+
+        if (StringUtils.isEmpty(tokenPage) || StringUtils.isEmpty(token)) {
+            return ok(new JsonResult(false, "身份验证已失效，无法继续操作").toNode());
+        }
+        if (!tokenPage.equals(token)) {
+            return ok(new JsonResult(false, "身份验证已失效，无法继续操作").toNode());
+        }
+
         String email = ParamUtils.getByKey(request(), "email");
         if (StringUtils.isEmpty(email)) {
             return ok(new JsonResult(false, "邮箱地址为空").toNode());
@@ -359,7 +382,7 @@ public class MySecurityController extends Controller {
         }
 
         //生成token
-        SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY, user.getEmail(), email);
+        SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, user.getEmail(), email);
         EmailUtils.sendEmail(email, Messages.get("send.email.activity.title"), views.html.template.email.activity.render(user).toString());
 
         return ok(new JsonResult(true, "邮件已发送").toNode());
@@ -378,7 +401,7 @@ public class MySecurityController extends Controller {
             return ok(changeEmailDo.render("激活失败，请确认激活地址"));
         }
         String oldEmail = user.getEmail();
-        String newEmail = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY, oldEmail);
+        String newEmail = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, oldEmail);
 
         if (StringUtils.isEmpty(newEmail)) {
             return ok(changeEmailDo.render("激活失败，激活地址已过期"));
@@ -389,9 +412,10 @@ public class MySecurityController extends Controller {
             return ok(changeEmailDo.render("激活失败，该邮箱地址已被抢先激活"));
         }
         userService.updateEmail(user, newEmail);
-        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_EMAIL_CHANGE_KEY, oldEmail);
+        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, oldEmail);
+        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, user.getPhone());
 
-        return ok(changeEmailDo.render("修改成功"));
+        return ok(changeEmailDo.render("恭喜您，验证邮箱成功。"));
 
     }
 

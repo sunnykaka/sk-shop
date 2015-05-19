@@ -1,23 +1,71 @@
 @(user:usercenter.models.User)
 
-<!DOCTYPE html>
+@import common.utils.StringUtils;
 
-<html>
-    <head>
-        <title>@Messages("title.my.data")</title>
-    </head>
-    <body>
+@myCenter(Messages("title.my.address")) {
+    <script src="@routes.Assets.versioned("js/user-validateEmail.js")"></script>
+} {
 
-        <div>
-            <form action="@controllers.user.routes.MySecurityController.changeEmailNew()" method="post">
-                手机：@user.getPhone<br/>
-
-                验证码：<input type="text" name="verificationCode" value=""/>
-
-                <button type="submit">提交</button>
-            </form>
-
+    <!--user-validateEmail-->
+    <div class="validateEmail">
+        <div class="validateEmail-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>我的账户</li>
+                    <li>&gt;</li>
+                    <li>我的资料</li>
+                </ul>
+            </div>
+            <div class="validateEmail-container clearfix">
+                <div class="nav-list">
+                    <dl class="my-trade">
+                        <dt>我的交易</dt>
+                        <dd><a href="#">订单管理</a></dd>
+                        <dd class=""><a href="#">售后服务</a></dd>
+                        <dd class=""><a href="#">收货地址</a></dd>
+                    </dl>
+                    <dl class="my-favorites">
+                        <dt>我的收藏</dt>
+                        <dd class=""><a href="#">喜欢的商品</a></dd>
+                        <dd class=""><a href="#">关注的设计师</a></dd>
+                    </dl>
+                    <dl class="my-account">
+                        <dt>我的账户</dt>
+                        <dd class="current"><a href="#">我的资料</a></dd>
+                        <dd><a href="#">账号安全</a></dd>
+                    </dl>
+                </div>
+                    <!-- user-updatePw -->
+                <div class="validateEmail-list first">
+                    <h2>修改已验证手机</h2>
+                    <div class="phoneValidate-con">
+                        <div class="step-bg"></div>
+                        <ul class="clearfix email">
+                            <li class="highLight">验证身份</li>
+                            <li>验证邮箱</li>
+                            <li class="last">完成</li>
+                        </ul>
+                    </div>
+                    <form action="" class="validateEmail-first">
+                        <input type="hidden" id="phoneNumber" value="@user.getPhone"/>
+                        <p>已验证手机： <span class="userPhone">@StringUtils.getSecurityMobile(user.getPhone)</span></p>
+                        <div class="form-item vcode-input">
+                            <label for="phoneCode">请填写手机验证码：</label>
+                            <input type="text" id="phoneCode" name="phoneCode" class="form-text phoneCode"/>
+                            <button class="get-code-btn" id="get-code-btn">发送验证码</button>
+                            <span class="errormsg" id="errormsg-phoneCode"></span>
+                        </div>
+                        <div class="item-row"><button type="submit"  id="next-btn" class="next-btn">提交</button></div>
+                    </form>
+                </div>
+                    <!-- end validateEmail-->
+            </div>
         </div>
+    </div>
+    <!--end validateEmail-->
 
-    </body>
-</html>
+}

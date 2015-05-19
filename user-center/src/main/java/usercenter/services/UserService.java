@@ -232,12 +232,13 @@ public class UserService {
 
         try {
 
-            if(PasswordHash.validatePassword(psw.getPassword(),user.getPassword())){
+            User userNew = getById(user.getId());
+            if(PasswordHash.validatePassword(psw.getPassword(),userNew.getPassword())){
                 throw new AppBusinessException("旧密码输入错误");
             }
 
-            user.setPassword(PasswordHash.createHash(psw.getNewPassword()));
-            generalDao.merge(user);
+            userNew.setPassword(PasswordHash.createHash(psw.getNewPassword()));
+            generalDao.merge(userNew);
 
         } catch (GeneralSecurityException e) {
             Logger.error("创建哈希密码的时候发生错误", e);

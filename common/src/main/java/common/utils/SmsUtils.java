@@ -36,7 +36,7 @@ public class SmsUtils {
             }
 
             try {
-                //doSendSms(phones, content);
+                doSendSms(phones, content);
             } catch (Exception e) {
                 Logger.error("短信发送失败", e);
                 return false;
