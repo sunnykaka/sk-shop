@@ -12,11 +12,8 @@ import play.mvc.Result;
 import productcenter.models.Product;
 import productcenter.models.SkuStorage;
 import productcenter.models.StockKeepingUnit;
-import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
-import productcenter.services.PropertyAndValueService;
 import productcenter.services.SkuAndStorageService;
-import services.CmsService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
@@ -44,23 +41,10 @@ public class CartController extends Controller {
     private AddressService addressService;
 
     @Autowired
-    private SkuAndStorageService skuService;
-
-    @Autowired
     private ProductService productService;
 
     @Autowired
-    private ProductPictureService pictureService;
-
-    @Autowired
-    private PropertyAndValueService propertyAndValueService;
-
-    @Autowired
-    private CmsService cmsService;
-
-    @Autowired
     private CartProcess cartProcess;
-
 
     /**
      * 获取库存信息，用于前端数据验证(最大购买数限制、和库存)
