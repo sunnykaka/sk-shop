@@ -92,7 +92,7 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Order getOrder(int orderId) {
+    public Order getOrderById(int orderId) {
         Logger.info("--------OrderService getCart begin exe-----------" + orderId);
         return generalDao.get(Order.class, orderId);
     }

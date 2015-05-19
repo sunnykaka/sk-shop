@@ -22,9 +22,7 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
 
     @Override
     /**
-     * 修改人：Json
-     * 修改时间：2013.12.06，18.20
-     * why：添加了业务方式和银行
+     * 添加了业务方式和银行
      */
     public Trade buildFromRequest(Request request) {
         String order_no = ParamUtils.getByKey(request, "out_trade_no");  //获取订单号
@@ -44,19 +42,14 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
 
         /**
          * 修改原因：添加一个业务类型（是订单还是优惠券）
-         * 修改人：Json.zhu
-         * 修改时间：2013.12.09
          */
         if (split.length > 1)
             tradeInfo.setBizType(split[1]);  //设置业务方式，是order还是coupon
         /**
-         * 修改原因：request.getParameter("defaultbank")无法正确设置值，
-         * 修改人：Json.zhu
-         * 修改时间：2013.12.09
+         * 设置银行，修改原因：request.getParameter("defaultbank")无法正确设置值，
          */
         if (split.length > 2)
             tradeInfo.setDefaultbank(split[2]);
-        //tradeInfo.setDefaultbank(request.getParameter("defaultbank"));//设置银行
 
         String bank_seq_no = ParamUtils.getByKey(request, "bank_seq_no");
         tradeInfo.setPayMethod(bank_seq_no == null ? PayMethod.directPay.toString() : PayMethod.bankPay.toString());

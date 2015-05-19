@@ -154,11 +154,11 @@ public class OrderAndPayController extends Controller {
      * @param payType
      * @param payMethod
      * @param payOrg
-     * @param orderNoList
+     * @param orderIds
      * @return
      */
     //@SecuredAction
-    public Result toPayOrder(String payType, String payMethod, String payOrg, String orderNoList) {
+    public Result toPayOrder(String payType, String payMethod, String payOrg, String orderIds) {
         //参数组织没想好
         if(payType == null || payType.trim().length() == 0) {
             return ok(new JsonResult(false,"没有选择支付类型！").toNode());
@@ -169,7 +169,7 @@ public class OrderAndPayController extends Controller {
         if(payOrg == null || payOrg.trim().length() == 0) {
             return ok(new JsonResult(false,"没有选择支付机构！").toNode());
         }
-        if(orderNoList == null || orderNoList.trim().length() == 0) {
+        if(orderIds == null || orderIds.trim().length() == 0) {
             return ok(new JsonResult(false,"需要支付的订单为空！").toNode());
         }
 
@@ -179,19 +179,20 @@ public class OrderAndPayController extends Controller {
             User curUser = new User();
             curUser.setId(14311);
             curUser.setUserName("ldj");
+            curUser.setAccountType(AccountType.KRQ);
             //测试
 
             //User curUser = SessionUtils.currentUser();
             curUserName = curUser.getUserName();
 
-            String[] split = orderNoList.split(",");
-            Long[] list = new Long[split.length];
+            String[] split = orderIds.split(",");
+            Integer[] idList = new Integer[split.length];
             for (int i = 0; i < split.length; i++) {
                 if (!NumberUtils.isNumber(split[i])) {
                     Logger.warn("订单支付出现异常:" + "订单号" + split[i] + "错误！");
                     return ok(new JsonResult(false,"订单号" + split[i] + "错误！").toNode());
                 } else {
-                    list[i] = Long.valueOf(split[i]);
+                    idList[i] = Integer.valueOf(split[i]);
                 }
             }
 
@@ -208,20 +209,21 @@ public class OrderAndPayController extends Controller {
             if (payInfoWrapper.isBank()) {
                 bank = PayBank.valueOf(payInfoWrapper.getDefaultbank());
             } else {
-                if(payMethod.equals(PayMethod.Tenpay)) {
+                if(payMethod.equals(PayMethod.Tenpay.getName())) {
                     bank = PayBank.Tenpay;
                 }
             }
             Logger.info("///////////////////////////真正的支付机构：" + bank.getValue());
             payInfoWrapper.setDefaultbank(bank.getName());
 
-            List<Order> orderList = new ArrayList<Order>(list.length);
-            for (Long orderNo : list) {
-                Order order = orderService.getOrderByOrderNo(orderNo);
+            List<Order> orderList = new ArrayList<Order>(idList.length);
+            for (int id : idList) {
+                Order order = orderService.getOrderById(id);
                 if (order == null) {
-                    Logger.warn("订单支付出现异常:订单不存在:");
-                    return ok(new JsonResult(false,"订单(" + orderNo + ")不存在！").toNode());
+                    Logger.warn("订单支付出现异常:订单不存在，订单id：" + id);
+                    return ok(new JsonResult(false,"要支付的订单不存在！").toNode());
                 }
+                long orderNo = order.getOrderNo();
                 if (!order.getOrderState().waitPay(TradePayType.valueOf(payType))) {
                     Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")不支持付款操作！");
                     return ok(new JsonResult(false,"订单(" + orderNo + ")不支持付款操作！").toNode());
@@ -240,27 +242,32 @@ public class OrderAndPayController extends Controller {
             tradeService.submitTradeOrderProcess(payInfoWrapper, orderList);
 
             //订单总金额，显示在支付宝收银台里的“应付总额”里
-            long totalFee = this.getPayMoneyForCent(list);
+            long totalFee = this.getPayMoneyForCent(orderList);
+
+            //支付宝是元，财富同是分
+            if(payMethod.equals(PayMethod.directPay.getName())) {
+                totalFee = totalFee/100;
+            }
+
             payInfoWrapper.setTotalFee(totalFee);
 
             PayRequestHandler payService = PaymentManager.getPayRequestHandler(PayMethod.valueOf(payMethod));
             String form = payService.forwardToPay(payInfoWrapper);
             return ok(orderToPay.render(form));
         } catch (Exception e) {
-            Logger.error("用户" + curUserName + "订单支付在提交第三方支付前发生异常，其提交的订单编号如下：" + orderNoList, e);
+            Logger.error("用户" + curUserName + "订单支付在提交第三方支付前发生异常，其提交的订单编号如下：" + orderIds, e);
             return ok(new JsonResult(false,"订单支付失败，请联系商城客服人员！").toNode());
         }
     }
 
     /**
-     * 按照支付订单号列表重新计算支付总金额
-     * @param orderNoList
+     * 按照支付订单号列表重新计算支付总金额，单位分
+     * @param orderList
      * @return
      */
-    private long getPayMoneyForCent(Long[] orderNoList) {
+    private long getPayMoneyForCent(List<Order> orderList) {
         Money money = Money.valueOf(0);
-        for (long orderNo : orderNoList) {
-            Order order = orderService.getOrderByOrderNo(orderNo);
+        for (Order order : orderList) {
             money = money.add(order.getTotalMoney());
         }
         return money.getCent();

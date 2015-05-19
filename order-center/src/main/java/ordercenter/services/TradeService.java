@@ -1,9 +1,9 @@
 package ordercenter.services;
 
 import common.services.GeneralDao;
+import common.utils.DateUtils;
 import ordercenter.constants.TradeType;
 import ordercenter.models.Order;
-import ordercenter.models.OrderStateHistory;
 import ordercenter.models.Trade;
 import ordercenter.models.TradeOrder;
 import ordercenter.payment.PayInfoWrapper;
@@ -35,6 +35,9 @@ public class TradeService {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private TradeSuccessService tradeSuccessService;
+
     /**
      * 创建交易记录
      * @param trade
@@ -43,7 +46,6 @@ public class TradeService {
         Logger.info("--------TradeService createTrade begin exe-----------" + trade);
         generalDao.persist(trade);
     }
-
 
     /**
      * 通过tradeNo获取交易
@@ -122,22 +124,21 @@ public class TradeService {
             //创建交易订单信息
             TradeOrder tradeOrder = new TradeOrder();
             tradeOrder.setTradeNo(tradeNo);
+            tradeOrder.setOrderId(order.getId());
             tradeOrder.setOrderNo(order.getOrderNo());
             tradeOrder.setTradeType(TradeType.BuyProduct);
             tradeOrder.setPayFlag(false);
             this.createTradeOrder(tradeOrder);
 
             //更新订单
-            String jpql = "update Order o set o.accountType=:accountType, o.payType=:payType, o.payBank=:payBank where o.orderNo=:orderNo";
+            String jpql = "update Order o set o.accountType=:accountType, o.payType=:payType, o.payBank=:payBank, o.updateTime=:modifyDate where o.id=:orderId";
             Map<String, Object> params = new HashMap<>();
             params.put("accountType", order.getAccountType());
             params.put("payType", order.getPayType());
             params.put("payBank", order.getPayBank());
+            params.put("modifyDate", DateUtils.current());
+            params.put("orderId", order.getId());
             generalDao.update(jpql, params);
-
-            //创建状态历史
-            OrderStateHistory orderStateHistory = new OrderStateHistory(order);
-            generalDao.persist(orderStateHistory);
         }
     }
 

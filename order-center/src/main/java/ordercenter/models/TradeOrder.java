@@ -28,6 +28,11 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
     private String tradeNo;
 
     /**
+     *订单id
+     */
+    private Integer orderId;
+
+    /**
      *订单编号
      */
     private Long orderNo;
@@ -74,6 +79,16 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
 
     public void setTradeNo(String tradeNo) {
         this.tradeNo = tradeNo;
+    }
+
+    @Column(name = "orderId")
+    @Basic
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
     @Column(name = "orderNo")

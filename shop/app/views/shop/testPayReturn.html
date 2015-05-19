@@ -1,0 +1,43 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>支付跳转页面</title>
+</head>
+<body>
+    运行URL：http://localhost:63342/root/shop/views/shop/testPayByAlipay.html
+    normalReturn
+    <form id="payForm" name="payForm" action="http://localhost:9000/payOrder/normalReturn" method="post">
+        <!-- 传递给阿里支付宝 -->
+        <input type="hidden" name="seller_email" value="fd@yijushang.cn"/>
+        <input type="hidden" name="subject" value="尚客-购物编号-143111431924742308"/>
+        <input type="hidden" name="_input_charset" value="UTF-8"/>
+        <input type="hidden" name="extra_common_param" value="controllers.shop.OrderPayCallback|Order|Alipay"/>
+        <input type="hidden" name="sign" value="f6f7e0f1310edb359c9d5cf377bdb6a0"/>
+        <input type="hidden" name="body" value="尚客-购物编号-143111431924742308"/>
+        <input type="hidden" name="notify_url" value="/pay/notifyReturn"/>
+        <input type="hidden" name="payment_type" value="1"/>
+        <input type="hidden" name="out_trade_no" value="143111432002454543"/>
+        <!--<input type="hidden" name="paymethod" value="directPay"/>-->
+        <input type="hidden" name="paymethod" value="Tenpay"/>
+        <input type="hidden" name="partner" value="2088801555613602"/>
+        <input type="hidden" name="service" value="create_direct_pay_by_user"/>
+        <input type="hidden" name="total_fee" value="12000.00"/>
+        <input type="hidden" name="return_url" value="/pay/normalReturn"/>
+        <input type="hidden" name="sign_type" value="MD5"/>
+
+        <!-- 阿里支付宝返回 -->
+        <input type="hidden" name="trade_status" value="TRADE_SUCCESS"/>
+        <input type="hidden" name="trade_no" value="111111111"/>
+        <input type="hidden" name="buyer_email" value="ldj@163.com"/>
+        <input type="hidden" name="buyer_id" value="2222222222"/>
+        <input type="hidden" name="notify_id" value="44444"/>
+        <input type="hidden" name="notify_type" value="1"/>
+        <!--
+        <input type="hidden" name="outerPlatformType" value="alipay"/>
+        -->
+        <input type="hidden" name="outerPlatformType" value="tenpay"/>
+
+        <input type="submit" value="确认">
+    </form>
+</body>
+</html>

@@ -104,7 +104,11 @@ GET         /cart/promptlyPayChooseAddress        @controllers.shop.CartControll
 
 #订单
 GET         /order/submitOrder                    @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
-GET         /order/toPayOrder                     @controllers.shop.OrderAndPayController.toPayOrder(payType:String,payMethod:String,payOrg:String,orderNoList:String)
+GET         /order/toPayOrder                     @controllers.shop.OrderAndPayController.toPayOrder(payType:String,payMethod:String,payOrg:String,orderIds:String)
+
+#支付
+POST        /payOrder/normalReturn                @controllers.shop.PayCallBackController.normalReturn
+POST        /payOrder/notifyReturn                @controllers.shop.PayCallBackController.notifyReturn
 
 #product
 GET         /product/valuations                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)

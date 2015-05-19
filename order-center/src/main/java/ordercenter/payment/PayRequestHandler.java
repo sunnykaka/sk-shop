@@ -17,12 +17,12 @@ public abstract class PayRequestHandler {
      /**
      * 默认的reutrn url
      */
-     protected static final String DEFAULT_RETURN_URL_KEY = "returnUrl";
+     protected static final String DEFAULT_RETURN_URL_KEY = "payment.returnUrl";
 
      /**
      *  默认的notify url
      */
-     protected static final String DEFAULT_NOTIFY_URL_KEY = "notifyUrl";
+     protected static final String DEFAULT_NOTIFY_URL_KEY = "payment.notifyUrl";
 
      protected static Configuration cfg = Play.application().configuration();
 

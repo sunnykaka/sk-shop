@@ -11,11 +11,11 @@ public enum ResponseType implements ViewEnum {
     /**
      * 正常返回
      */
-    RETURN("正常返回"), //return
+    RETURN("return"),
     /**
      * Notify回来
      */
-    NOTIFY("Notify回来"); //notify
+    NOTIFY("notify");
 
     public String value;
 

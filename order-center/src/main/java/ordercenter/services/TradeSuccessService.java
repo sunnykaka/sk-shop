@@ -1,13 +1,9 @@
 package ordercenter.services;
 
-import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import ordercenter.constants.OrderState;
-import ordercenter.models.Order;
-import ordercenter.models.OrderItem;
-import ordercenter.models.OrderStateHistory;
-import ordercenter.models.Trade;
+import ordercenter.models.*;
 import ordercenter.payment.models.SkuTradeResult;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -43,54 +39,88 @@ public class TradeSuccessService {
     private TradeService tradeService;
 
     public void changeOrderStateWhenPaySuccess(Trade trade) {
-        this.updateTradeOrderPaySuccessful(trade);
-
-        long orderNo = Long.parseLong(trade.getOrderNo());
-        Order order = orderService.getOrderByOrderNo(orderNo);
-
-        //记录订单状态历史信息
-        this.createOrderStateHistory(new OrderStateHistory(order));
-
-        //更新订单
-        OrderState oldState = order.getOrderState();
-        // 订单状态只能从 创建 到 付款成功
-        order.setMustPreviousState(OrderState.Create);
-        order.setOrderState(OrderState.Pay);
-        if (this.updateOrderStateByStrictState(order.getId(), order.getOrderState(), order.getMustPreviousState()) != 1 ) {
-           throw new AppBusinessException("订单[" + orderNo + "]不能从当前状态[" + oldState.getValue() + "]更新为["
-                    + order.getOrderState().getValue() + "](只能从[" + order.getMustPreviousState().getValue() + "]变更)");
+        String errPrefix = "需要运营人员手动确认：第三方交易成功，但是后续操作异常,交易号为[" + trade.getTradeNo() + "]-";
+        try {
+            this.updateTradeOrderPaySuccessful(trade);
+        } catch (Exception e) {
+            Logger.error(errPrefix + "更新交易" + trade.getTradeNo() + "失败！", e);
         }
 
-        //更新订单项
-        List<OrderItem> orderItemList = orderService.queryOrderItemsByOrderId(order.getId());
-        if(orderItemList != null && orderItemList.size() > 0) {
-            Logger.error( "订单号[" + orderNo + "]的订单项为空，没有任何内容");
-        }
-        for(OrderItem orderItem : orderItemList) {
-            if (this.updateOrderItemStateByStrictState(orderItem.getId(), order.getOrderState(), order.getMustPreviousState()) != 1 ) {
-                throw new AppBusinessException("订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]不能从当前状态[" + oldState.getValue() + "]更新为["
-                        + order.getOrderState().getValue() + "](只能从[" + order.getMustPreviousState().getValue() + "]变更)");
+        List<TradeOrder> tradeOrderList = tradeService.getTradeOrdeByTradeNo(trade.getTradeNo());
+        if(tradeOrderList == null || tradeOrderList.size() == 0) {
+            Logger.error(errPrefix + "系统中找不到交易信息！");
+        } else {
+            for(TradeOrder tradeOrder : tradeOrderList) {
+                Order order = orderService.getOrderById(tradeOrder.getOrderId());
+                if(order == null || order.getId() <= 0) {
+                    Logger.error(errPrefix + "系统中找不到订单，订单id[" + tradeOrder.getOrderId() + "]");
+                } else {
+                    long orderNo = order.getOrderNo();
+
+                    //记录订单状态历史信息
+                    try {
+                        this.createOrderStateHistory(new OrderStateHistory(order));
+                    } catch (Exception e) {
+                        Logger.error(errPrefix + "订单[" + orderNo + "]订单id[" + order.getId() + "]记录订单状态历史信息发生异常：", e);
+                    }
+
+                    //更新订单
+                    OrderState oldState = order.getOrderState();
+                    // 订单状态只能从 创建 到 付款成功
+                    order.setMustPreviousState(OrderState.Create);
+                    order.setOrderState(OrderState.Pay);  //支付成功
+
+                    //更新订单状态
+                    try {
+                        this.updateOrderStateByStrictState(order.getId(), order.getOrderState(), order.getMustPreviousState());
+                    } catch (Exception e) {
+                        Logger.error(errPrefix + "订单[" + orderNo + "]订单id[" + order.getId() + "]从当前状态[" + oldState.getValue()
+                                + "]更新为[" + order.getOrderState().getValue() + "]发生异常：", e);
+                    }
+
+                    //更新订单项
+                    List<OrderItem> orderItemList = orderService.queryOrderItemsByOrderId(order.getId());
+                    if(orderItemList == null || orderItemList.size() < 0) {
+                        Logger.error(errPrefix + "第三方支付成功，返回系统后找不到支付订单的相关内容");
+                    } else {
+                        for(OrderItem orderItem : orderItemList) {
+                            try {
+                                this.updateOrderItemStateByStrictState(orderItem.getId(), order.getOrderState(), order.getMustPreviousState());
+                            } catch (Exception e) {
+                                Logger.error(errPrefix + "订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]从当前状态[" + oldState.getValue() + "]更新为["
+                                        + order.getOrderState().getValue() + "]发生异常", e);
+                            }
+
+                            //扣减库存
+                            try {
+                                StoreStrategyServiceFactory.getStoreStrategyServiceImpl(orderItem.getStoreStrategy())
+                                        .operateStorageWhenPayOrder(this, orderItem.getSkuId(), orderItem.getNumber());
+                            } catch (Exception e) {
+                                Logger.error(errPrefix + "订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]扣减库存发生异常", e);
+                            }
+
+                            //统计付款成功数
+                            try {
+                                SkuTradeResult tradeResult = this.getSkuTradeResultBySkuId(orderItem.getSkuId());
+                                if (tradeResult == null) {
+                                    SkuTradeResult skuTradeResult = new SkuTradeResult();
+                                    skuTradeResult.setProductId(orderItem.getProductId());
+                                    skuTradeResult.setSkuId(orderItem.getSkuId());
+                                    skuTradeResult.setPayNumber(orderItem.getNumber());
+                                    this.createSkuTradeResult(skuTradeResult);
+                                } else {
+                                    // 数量累加
+                                    tradeResult.appendedPayNumber(orderItem.getNumber());
+                                    this.updateSkuTradeResult(tradeResult);
+                                }
+                            } catch (Exception e) {
+                                Logger.error(errPrefix + "订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]统计付款成功数发生异常", e);
+                            }
+                        }
+                    }
+                }
             }
-
-            //扣减库存
-            StoreStrategyServiceFactory.getStoreStrategyServiceImpl(orderItem.getStoreStrategy())
-                    .operateStorageWhenPayOrder(this, orderItem.getSkuId(), orderItem.getNumber());
-
-            //统计付款成功数.
-            SkuTradeResult tradeResult = this.getSkuTradeResultBySkuId(orderItem.getSkuId());
-            if (tradeResult == null) {
-                SkuTradeResult skuTradeResult = new SkuTradeResult();
-                skuTradeResult.setProductId(orderItem.getProductId());
-                skuTradeResult.setSkuId(orderItem.getSkuId());
-                skuTradeResult.setPayNumber(orderItem.getNumber());
-                this.createSkuTradeResult(skuTradeResult);
-            } else {
-                // 数量累加
-                tradeResult.appendedPayNumber(orderItem.getNumber());
-                this.updateSkuTradeResult(tradeResult);
-            }
         }
-
     }
 
     /**
@@ -129,11 +159,10 @@ public class TradeSuccessService {
     public int updateTradeOrderPaySuccessful(Trade trade) {
         Logger.info("--------TradeSuccessService updateTradeOrderPaySuccessful begin exe-----------" + trade);
 
-        String jpql = "update tradeOrder o set o.payFlag=:payFlag,updateTime=:updateTime ";
+        String jpql = "update TradeOrder o set o.payFlag=:payFlag,o.updateTime=:updateTime where o.tradeNo=:tradeNo ";
         Map<String, Object> params = new HashMap<>();
         params.put("payFlag", true);
         params.put("updateTime", DateUtils.current());
-        jpql += " where o.tradeNo=:tradeNo";
         params.put("tradeNo", trade.getTradeNo());
 
         return generalDao.update(jpql, params);
@@ -151,25 +180,24 @@ public class TradeSuccessService {
 
         DateTime curTime = DateUtils.current();
 
-        String jpql = "update Order o set o.orderState=:orderState, o.updateTime =:modifyDate ";
+        String jpql = "update Order o set o.orderState=:orderState , o.updateTime =:modifyDate ";
         Map<String, Object> params = new HashMap<>();
         params.put("orderState", orderState);
         params.put("modifyDate", curTime);
 
-        if(OrderState.Pay.equals(orderState.getName())) {
+        if(OrderState.Pay.getName().equals(orderState.getName())) {
             jpql += ", o.payDate =:payDate ";
             params.put("payDate", curTime);
-        } else if(OrderState.Cancel.equals(orderState.getName()) || OrderState.Close.equals(orderState.getName()) || OrderState.Success.equals(orderState.getName())) {
+        } else if(OrderState.Cancel.getName().equals(orderState.getName()) || OrderState.Close.getName().equals(orderState.getName()) || OrderState.Success.getName().equals(orderState.getName())) {
             jpql += ", o.endDate =:endDate ";
             params.put("endDate", curTime);
         }
-        jpql += " where o.id=:orderId and o.orderState =:previousState";
+        jpql += " where o.id=:orderId and o.orderState =:previousState ";
         params.put("orderId", orderId);
         params.put("previousState", previousState);
 
         return generalDao.update(jpql, params);
     }
-
 
     /**
      * 创建状态历史
