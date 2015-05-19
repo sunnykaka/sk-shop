@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import productcenter.constants.ProductTagType;
 import productcenter.constants.StoreStrategy;
+import usercenter.models.Designer;
 
 import javax.persistence.*;
 import java.util.List;
@@ -37,6 +38,12 @@ public class Product implements EntityClass<Integer>, OperableData {
      * 客户（设计师）id
      */
     private Integer customerId;
+
+    /**
+     * 客户（设计师）
+     */
+    private Designer customer;
+
 
     /**
      * 版本id
@@ -282,9 +289,6 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     public void setOnlineTime(DateTime onlineTime) {
         this.onlineTime = onlineTime;
-        if (this.onlineTime != null) {
-            this.onLineTimeLong = this.onlineTime.getMillis();
-        }
     }
 
     @Column(name = "onLineTimeLong")
@@ -338,5 +342,15 @@ public class Product implements EntityClass<Integer>, OperableData {
     @Override
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customerId", insertable = false, updatable = false)
+    public Designer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Designer customer) {
+        this.customer = customer;
     }
 }
