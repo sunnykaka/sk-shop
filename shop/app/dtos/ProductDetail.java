@@ -265,23 +265,42 @@ public class ProductDetail {
             skuPropertyMap.forEach((k, v) -> {
                 SkuProperty randomSkuProperty = v.stream().findFirst().get();
                 SkuCandidate.SkuProp skuProp = new SkuCandidate.SkuProp(k, randomSkuProperty.getPropertyName(), propertyPriorityMap.getOrDefault(k, 0));
-                List<SkuCandidate.SkuValue> skuValueList =
+                Set<SkuCandidate.SkuValue> skuValueSet =
                         v.stream().
                         map(skuProperty -> new SkuCandidate.SkuValue(
                                 skuProperty.getValueId(),
                                 skuProperty.getPropertyValue(),
                                 skuProperty.getPidvid(),
                                 propertyValuePriorityMap.getOrDefault(String.format("%d,%d", k, skuProperty.getValueId()), 0))).
-                        collect(Collectors.toList());
+                        collect(Collectors.toSet());
 
-                skuCandidateList.add(new SkuCandidate(skuProp, skuValueList));
+                skuCandidateList.add(new SkuCandidate(skuProp, new ArrayList<>(skuValueSet)));
             });
 
-            //为skuCandidateList排序
+            //为skuCandidateList排序, 按priority排序
             skuCandidateList.sort((o1, o2) -> new Integer(o1.getSkuProp().getPriority()).compareTo(o2.getSkuProp().getPriority()));
             skuCandidateList.forEach(skuCandidate ->
                     skuCandidate.getSkuValueList().sort((o1, o2) -> new Integer(o1.getPriority()).compareTo(o2.getPriority()))
             );
+
+//            //为skuCandidateList排序, 先按priority排序, 如果相同按照id排序
+//            skuCandidateList.sort((o1, o2) -> {
+//                if(o1.getSkuProp().getPriority() != o2.getSkuProp().getPriority()) {
+//                    return new Integer(o1.getSkuProp().getPriority()).compareTo(o2.getSkuProp().getPriority());
+//                } else {
+//                    return o1.getSkuProp().getId().compareTo(o2.getSkuProp().getId());
+//                }
+//            });
+//            skuCandidateList.forEach(skuCandidate ->
+//                            skuCandidate.getSkuValueList().sort((o1, o2) -> {
+//                                if(o1.getPriority() != o2.getPriority()) {
+//                                    return new Integer(o1.getPriority()).compareTo(o2.getPriority());
+//                                } else {
+//                                    return o1.getId().compareTo(o2.getId());
+//                                }
+//                            })
+//            );
+
 
             productDetail.skuCandidateList = skuCandidateList;
 

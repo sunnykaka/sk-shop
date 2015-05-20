@@ -35,15 +35,6 @@ public class CategoryPropertyValue implements EntityClass<Integer>, OperableData
 
     private Value value;
 
-    private PropertyType propertyType;
-
-    /**
-     * 表示在发布商品的时候，这个属性的值是checkbox，可勾选多个，而不是一个单选下拉框
-     */
-    private boolean multiValue;
-
-    private boolean compareable;
-
     /**
      * 类目属性的排序优先级，数字越小越靠前，这个优先级目前没有作用，展示给用户界面的是前台类目属性优先级
      */
@@ -76,24 +67,6 @@ public class CategoryPropertyValue implements EntityClass<Integer>, OperableData
         this.priority = priority;
     }
 
-    @Column(name = "multiValue")
-    public boolean isMultiValue() {
-        return multiValue;
-    }
-
-    public void setMultiValue(boolean multiValue) {
-        this.multiValue = multiValue;
-    }
-
-    @Column(name = "compareable")
-    public boolean isCompareable() {
-        return compareable;
-    }
-
-    public void setCompareable(boolean compareable) {
-        this.compareable = compareable;
-    }
-
     @Column(name = "categoryId")
     public Integer getCategoryId() {
         return categoryId;
@@ -112,14 +85,6 @@ public class CategoryPropertyValue implements EntityClass<Integer>, OperableData
         this.propertyId = propertyId;
     }
 
-    @Column(name = "propertyType")
-    public PropertyType getPropertyType() {
-        return propertyType;
-    }
-
-    public void setPropertyType(PropertyType propertyType) {
-        this.propertyType = propertyType;
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId", insertable = false, updatable = false)

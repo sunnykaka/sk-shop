@@ -1,8 +1,17 @@
 @(pd: dtos.ProductDetail)
+@import dtos.SkuCandidate.SkuValue
+@import common.utils.DateUtils._
+@import common.utils.JsonUtils._
 
 @main() {
     <script src="@routes.Assets.versioned("js/jquery.scrollTo.js")"></script>
     <script type="text/javascript">
+
+    var skuMap = @Html(object2Json(pd.getSkuMap));
+
+    var defaultSku = "@Html(pd.getDefaultSku.getSkuPropertiesInDb)";
+
+
     $(function(){
         $.scrollTo('#detail',500);
         $('.comment-header li').click(function(){
@@ -106,34 +115,36 @@
                     <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
                 </div>
                 <div class="debut-info clearfix">
-                    <div class="debut-info-left">
-                        <p>首发价：<span class="start-price">￥1679.00</span></p>
-                        <p class="debut-time">2天07时26分35秒</p>
-                    </div>
-                    <div class="debut-info-right">
-                        <p><span class="market-price">售卖价:2888</span><span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
-                    </div>
+                    @if(pd.isInExhibition) {
+                        <div class="debut-info-left">
+                            <p>首发价：<span class="start-price">￥@pd.getDefaultSku.getPrice </span></p>
+                            <p class="debut-time">@printDeadlineFromNow(pd.getExhibitionEndTime)</p>
+                        </div>
+                        <div class="debut-info-right">
+                            <p><span class="market-price">售卖价:￥@pd.getDefaultSku.getMarketPrice </span>
+                                <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                        </div>
+                    } else {
+                        <div class="debut-info-left">
+                            <p>售卖价：<span class="start-price">￥@pd.getDefaultSku.getMarketPrice </span></p>
+                        </div>
+                        <div class="debut-info-right">
+                            <p><span class="market-price">首发价:￥@pd.getDefaultSku.getPrice </span>
+                                <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                        </div>
+                    }
                 </div>
                 <div class="detail-size-color">
-                    <div class="detail-size clearfix">
-                        <dl>
-                            <dt>尺　码：</dt>
-                            <dd class="disabled">XS</dd>
-                            <dd class="selected">S</dd>
-                            <dd class="disabled">M</dd>
-                            <dd class="disabled">L</dd>
-                            <dd>XL</dd>
-                            <dd class="disabled">XXL</dd>
-                        </dl>
-                    </div>
-                    <div class="detail-color clearfix">
-                        <dl>
-                            <dt>颜　色：</dt>
-                            <dd class="selected">紫色</dd>
-                            <dd>黄色</dd>
-                            <dd class="disabled">花色</dd>
-                        </dl>
-                    </div>
+                    @for(sc <- pd.getSkuCandidateList) {
+                        <div class="detail-size clearfix">
+                            <dl>
+                                <dt>@sc.getSkuProp.getValue：</dt>
+                                @for(sv <- sc.getSkuValueList) {
+                                    <dd data="@sv.getPidvid">@sv.getValue</dd>
+                                }
+                            </dl>
+                        </div>
+                    }
                 </div>
                 <div class="detail-quantity">
                     <dt>数　量：</dt>
@@ -157,3 +168,4 @@
     </div>
 
 }
+

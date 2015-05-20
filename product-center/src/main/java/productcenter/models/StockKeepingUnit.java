@@ -45,12 +45,12 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
     private String barCode;
 
     /**
-     * 售卖价格
+     * 首发价格
      */
     private Money price = Money.valueOf(0);
 
     /**
-     * 首发价格
+     * 售卖价格
      */
     private Money marketPrice = Money.valueOf(0);
 

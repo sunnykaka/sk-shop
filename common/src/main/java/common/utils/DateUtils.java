@@ -1,8 +1,11 @@
 package common.utils;
 
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 /**
  * 日期时间处理工具
@@ -78,6 +81,28 @@ public class DateUtils {
     public static String print(DateTime dateTime, String pattern) {
         DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
         return formatter.print(dateTime);
+    }
+
+    /**
+     * 打印结束时间到当前时间的信息.例如: 2天13时22分11秒
+     * @param endTime
+     * @return
+     */
+    public static String printDeadlineFromNow(DateTime endTime) {
+        DateTime now = current();
+        Period period;
+        if(endTime != null && now.isBefore(endTime)) {
+            period = new Period(now, endTime);
+        } else {
+            period = new Period(0);
+        }
+
+        PeriodFormatter periodFormatter = new PeriodFormatterBuilder().printZeroAlways().appendDays().appendSuffix("天")
+                .appendHours().appendSuffix("时").appendMinutes().appendSuffix("分")
+                .appendSeconds().appendSuffix("秒").toFormatter();
+
+        return periodFormatter.print(period);
+
     }
 
 }

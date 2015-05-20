@@ -1,5 +1,7 @@
 package base;
 
+import common.utils.DateUtils;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class PlainTest {
 //        }};
 //
 //        System.out.println(list.stream().collect(Collectors.toMap(k -> k, k -> k)));
+
+        System.out.println(DateUtils.printDeadlineFromNow(DateUtils.current().plusHours(3).plusDays(11)));
 
 
     }

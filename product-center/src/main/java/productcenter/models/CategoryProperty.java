@@ -109,6 +109,7 @@ public class CategoryProperty implements EntityClass<Integer>, OperableData {
     }
 
     @Column(name = "propertyType")
+    @Enumerated(EnumType.STRING)
     public PropertyType getPropertyType() {
         return propertyType;
     }

@@ -32,6 +32,7 @@ public class CategoryPropertyService {
         StringBuilder jpql = new StringBuilder("select cp from CategoryProperty cp where cp.categoryId = :categoryId and cp.propertyId in (");
         Map<String, Object> queryParams = new HashMap<>();
 
+        queryParams.put("categoryId", categoryId);
         for(int i=0; i<propertyIds.size(); i++) {
             String paramName = "propertyId" + i;
             jpql.append(String.format(":%s,", paramName));
@@ -57,6 +58,7 @@ public class CategoryPropertyService {
         StringBuilder jpql = new StringBuilder("select cpv from CategoryPropertyValue cpv where cpv.categoryId = :categoryId and cpv.propertyId in (");
         Map<String, Object> queryParams = new HashMap<>();
 
+        queryParams.put("categoryId", categoryId);
         for(int i=0; i<propertyIds.size(); i++) {
             String paramName = "propertyId" + i;
             jpql.append(String.format(":%s,", paramName));

@@ -49,6 +49,23 @@ public class SkuCandidate {
         public int getPriority() {
             return priority;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof SkuProp)) return false;
+
+            SkuProp skuProp = (SkuProp) o;
+
+            if (!id.equals(skuProp.id)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
+        }
     }
 
     public static class SkuValue {
@@ -82,6 +99,23 @@ public class SkuCandidate {
 
         public int getPriority() {
             return priority;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof SkuValue)) return false;
+
+            SkuValue skuValue = (SkuValue) o;
+
+            if (!id.equals(skuValue.id)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
     }
 
