@@ -14,7 +14,7 @@ public interface IStoreStrategyService {
      * @param number 购买数量
      * @param isCashOnDelivery 是否是货到付款
      */
-    void operateStorageWhenCreateOrder(TradeSuccessService service, int skuId, int number, boolean isCashOnDelivery);
+    void operateStorageWhenCreateOrder(TradeService service, int skuId, int number, boolean isCashOnDelivery);
 
     /**
      * 取消订单时的库存操作(如果是货到付款, 取消时回加库存, 不管哪种策略)
@@ -24,7 +24,7 @@ public interface IStoreStrategyService {
      * @param number 购买数量
      * @param isCashOnDelivery 是否是货到付款
      */
-    void operateStorageWhenCancelOrder(TradeSuccessService service, int skuId, int number, boolean isCashOnDelivery);
+    void operateStorageWhenCancelOrder(TradeService service, int skuId, int number, boolean isCashOnDelivery);
 
     /**
      * 订单支付成功后的库存操作
@@ -33,5 +33,5 @@ public interface IStoreStrategyService {
      * @param skuId sku编号
      * @param number 购买数量
      */
-    void operateStorageWhenPayOrder(TradeSuccessService service, int skuId, int number);
+    void operateStorageWhenPayOrder(TradeService service, int skuId, int number);
 }

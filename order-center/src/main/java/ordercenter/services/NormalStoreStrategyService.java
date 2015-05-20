@@ -7,16 +7,16 @@ package ordercenter.services;
  */
 public class NormalStoreStrategyService implements IStoreStrategyService{
     @Override
-    public void operateStorageWhenCreateOrder(TradeSuccessService service, int skuId, int number, boolean isCashOnDelivery) {
+    public void operateStorageWhenCreateOrder(TradeService service, int skuId, int number, boolean isCashOnDelivery) {
         service.minusSkuStock(skuId, number);
     }
 
     @Override
-    public void operateStorageWhenCancelOrder(TradeSuccessService service, int skuId, int number, boolean isCashOnDelivery) {
+    public void operateStorageWhenCancelOrder(TradeService service, int skuId, int number, boolean isCashOnDelivery) {
         service.addSkuStock(skuId, number);
     }
 
     @Override
-    public void operateStorageWhenPayOrder(TradeSuccessService service, int skuId, int number) {
+    public void operateStorageWhenPayOrder(TradeService service, int skuId, int number) {
     }
 }

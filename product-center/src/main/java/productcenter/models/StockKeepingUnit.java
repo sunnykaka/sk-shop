@@ -9,7 +9,6 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import productcenter.constants.SKUState;
 import productcenter.services.PropertyAndValueService;
-import productcenter.util.PropertyValueUtil;
 
 import javax.persistence.*;
 import java.util.*;
@@ -235,8 +234,6 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
             });
 
         }
-
-
         return skuProperties;
     }
 

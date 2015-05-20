@@ -144,9 +144,9 @@ public class CartProcess {
             //根据判断是否是首发，当前价格要现算
             boolean isFirstPublish = cmsService.onFirstPublish(cartItem.getProductId());
             if(isFirstPublish) {
-                cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
-            } else {
                 cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
+            } else {
+                cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
             }
 
             Money itemTotalMoney = cartItem.getCurUnitPrice().multiply(cartItem.getNumber());

@@ -36,7 +36,7 @@ public class OrderService {
     GeneralDao generalDao;
 
     @Autowired
-    private TradeSuccessService tradeSuccessService;
+    private TradeService tradeService;
 
     @Autowired
     private CartService cartService;
@@ -199,11 +199,11 @@ public class OrderService {
 
         // TODO 取消订单
         try {
-            tradeSuccessService.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
+            tradeService.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
             for (OrderItem oi : order.getOrderItemList()) {
-                tradeSuccessService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
+                tradeService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
             }
-            tradeSuccessService.createOrderStateHistory(new OrderStateHistory(order, "订单已取消", CancelOrderType.getName(type)));
+            tradeService.createOrderStateHistory(new OrderStateHistory(order, "订单已取消", CancelOrderType.getName(type)));
         } catch (AppBusinessException a) {
             throw new AppBusinessException("取消订单失败");
         }
@@ -225,11 +225,11 @@ public class OrderService {
 
         // TODO 确认收货
         try {
-            tradeSuccessService.updateOrderStateByStrictState(order.getId(), OrderState.Receiving, order.getOrderState());
+            tradeService.updateOrderStateByStrictState(order.getId(), OrderState.Receiving, order.getOrderState());
             for (OrderItem oi : order.getOrderItemList()) {
-                tradeSuccessService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Receiving, oi.getOrderState());
+                tradeService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Receiving, oi.getOrderState());
             }
-            tradeSuccessService.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getValue()));
+            tradeService.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getValue()));
         } catch (AppBusinessException a) {
             throw new AppBusinessException("确认收货失败");
         }
@@ -309,7 +309,7 @@ public class OrderService {
      * 创建订单状态历史
      */
     public void createOrderStateHistory(OrderStateHistory orderStateHistory) {
-        play.Logger.info("--------TradeSuccessService createOrderStateHistory begin exe-----------" + orderStateHistory);
+        play.Logger.info("--------TradeService createOrderStateHistory begin exe-----------" + orderStateHistory);
         generalDao.persist(orderStateHistory);
     }
 

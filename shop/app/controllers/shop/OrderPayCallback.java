@@ -6,7 +6,7 @@ import ordercenter.models.Trade;
 import ordercenter.payment.CallBackResult;
 import ordercenter.payment.PayCallback;
 import ordercenter.payment.constants.ResponseType;
-import ordercenter.services.TradeSuccessService;
+import ordercenter.services.TradeService;
 import play.Logger;
 
 
@@ -32,8 +32,8 @@ public class OrderPayCallback implements PayCallback {
     public boolean doAfterBack(Trade tradeInfo, ResponseType type, CallBackResult result) {
         Logger.info("「订单回调」开始更新订单状态");
         try {
-            TradeSuccessService tradeSuccessService = BaseGlobal.ctx.getBean(TradeSuccessService.class);
-            tradeSuccessService.changeOrderStateWhenPaySuccess(tradeInfo);
+            TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
+            tradeService.changeOrderStateWhenPaySuccess(tradeInfo);
         } catch (Exception e) {
             Logger.error("「订单回调」订单支付成功，但是更新订单状态、扣减库存、记录支付成功等数据失败，需要运营人员确认一下："  + e.getMessage(), e);
             return false;
