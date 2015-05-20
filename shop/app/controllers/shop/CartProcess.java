@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
-import productcenter.models.*;
+import productcenter.models.Product;
+import productcenter.models.ProductPicture;
+import productcenter.models.SkuStorage;
+import productcenter.models.StockKeepingUnit;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
-import productcenter.services.PropertyAndValueService;
 import productcenter.services.SkuAndStorageService;
 import services.CmsService;
 
@@ -40,9 +42,6 @@ public class CartProcess {
 
     @Autowired
     private ProductPictureService pictureService;
-
-    @Autowired
-    private PropertyAndValueService propertyAndValueService;
 
     @Autowired
     private CmsService cmsService;
