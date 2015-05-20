@@ -9,10 +9,8 @@ import productcenter.models.Property;
 import productcenter.models.PropertyValueDetail;
 import productcenter.models.Value;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * 属性和值 Service
@@ -50,6 +48,50 @@ public class PropertyAndValueService {
         play.Logger.info("------PropertyAndValueService getPropertyById begin exe-----------" + id);
         return generalDao.get(Property.class, id);
     }
+
+    /**
+     * @param ids
+     * @return
+     */
+    public List<Property> getPropertyByIdList(List<Integer> ids) {
+        if(ids.isEmpty()) return new ArrayList<>();
+
+        StringBuilder jpql = new StringBuilder("select p from Property p where p.id in (");
+        Map<String, Object> queryParams = new HashMap<>();
+
+        for(int i=0; i<ids.size(); i++) {
+            String paramName = "id" + i;
+            jpql.append(String.format(":%s,", paramName));
+            queryParams.put(paramName, ids.get(i));
+        }
+        jpql.replace(jpql.length() - 1, jpql.length(), ")");
+
+        return generalDao.query(jpql.toString(), Optional.<Page<Property>>empty(), queryParams);
+
+    }
+
+    /**
+     * @param ids
+     * @return
+     */
+    public List<Value> getValueByIdList(List<Integer> ids) {
+        if(ids.isEmpty()) return new ArrayList<>();
+
+        StringBuilder jpql = new StringBuilder("select v from Value v where v.id in (");
+        Map<String, Object> queryParams = new HashMap<>();
+
+        for(int i=0; i<ids.size(); i++) {
+            String paramName = "id" + i;
+            jpql.append(String.format(":%s,", paramName));
+            queryParams.put(paramName, ids.get(i));
+        }
+        jpql.replace(jpql.length() - 1, jpql.length(), ")");
+
+        return generalDao.query(jpql.toString(), Optional.<Page<Value>>empty(), queryParams);
+
+    }
+
+
 
 
     //////////////////////////////////值////////////////////////////////////////////////

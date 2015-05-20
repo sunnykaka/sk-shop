@@ -2,6 +2,10 @@ package base;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by liubin on 15-4-21.
  */
@@ -9,7 +13,18 @@ public class PlainTest {
 
     @Test
     public void test() {
+
         System.out.println("18682000593".matches("^[1][\\d]{10}"));
+
+//        List<String> list = new ArrayList<String>() {{
+//            add("1");
+//            add("1");
+//            add("1");
+//        }};
+//
+//        System.out.println(list.stream().collect(Collectors.toMap(k -> k, k -> k)));
+
+
     }
 
 }

@@ -3,13 +3,16 @@ package productcenter.models;
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
 import common.utils.Money;
+import common.utils.play.BaseGlobal;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import productcenter.constants.SKUState;
+import productcenter.services.PropertyAndValueService;
+import productcenter.util.PropertyValueUtil;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * SKU来自于线下零售行业，表示可以存储的最小的单元
@@ -61,6 +64,7 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
      */
     private SKUState skuState = SKUState.REMOVED;
 
+    private boolean skuPropertiesLoaded = false;
     /**
      * SKU 属性列表
      */
@@ -185,11 +189,55 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
 
     @Transient
     public List<SkuProperty> getSkuProperties() {
+        if(!skuPropertiesLoaded) {
+            skuProperties = loadSkuProperty();
+            skuPropertiesLoaded = true;
+        }
+
         return skuProperties;
     }
 
-    public void setSkuProperties(List<SkuProperty> skuProperties) {
-        this.skuProperties = skuProperties;
+    /**
+     * 将sku数据库中的字符串pidvid列表转换为Sku属性的List
+     * @return
+     */
+    private List<SkuProperty> loadSkuProperty() {
+        List<SkuProperty> skuProperties = new ArrayList<>();
+        String skuPropertiesInDb = getSkuPropertiesInDb(); //把数据库中的字符串pidvid列表转换为Sku属性的List
+        Set<Integer> propertyIdSet = new HashSet<>();
+        Set<Integer> valueIdSet = new HashSet<>();
+
+        if (StringUtils.isNotEmpty(skuPropertiesInDb)) {
+            String[] pidvid = skuPropertiesInDb.split(",");
+            for (String s : pidvid) {
+                SkuProperty skuProperty = new SkuProperty(getId(), Long.valueOf(s));
+                skuProperties.add(skuProperty);
+
+                propertyIdSet.add(skuProperty.getPropertyId());
+                valueIdSet.add(skuProperty.getValueId());
+            }
+
+            //得到property的name和value
+            PropertyAndValueService propertyAndValueService = BaseGlobal.ctx.getBean(PropertyAndValueService.class);
+            List<Property> propertyList = propertyAndValueService.getPropertyByIdList(new ArrayList<>(propertyIdSet));
+            List<Value> valueList = propertyAndValueService.getValueByIdList(new ArrayList<>(valueIdSet));
+
+            skuProperties.forEach(sku -> {
+                Optional<Property> firstProperty = propertyList.stream().filter(p -> p.getId() == sku.getPropertyId()).findFirst();
+                if(firstProperty.isPresent()) {
+                    sku.setPropertyName(firstProperty.get().getName());
+                }
+
+                Optional<Value> firstValue = valueList.stream().filter(v -> v.getId() == sku.getValueId()).findFirst();
+                if(firstValue.isPresent()) {
+                    sku.setPropertyValue(firstValue.get().getValueName());
+                }
+            });
+
+        }
+
+
+        return skuProperties;
     }
 
     @Column(name = "createTime")

@@ -43,6 +43,10 @@ FG.user = FG.user || {};
             PhoneCode: {
                 Regex: /^[\d]{6}/,
                 Text: '手机验证码不对'
+            },
+            Vcode: {
+                Regex: /^[\w]{4}/,
+                Text: '验证码不正确'
             }
         };
     };

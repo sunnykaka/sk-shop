@@ -56,7 +56,7 @@ public class MyOrderController extends Controller {
         List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user_id, queryType);
         for (Order order : orderList) {
             for (OrderItem orderItem : order.getOrderItemList()) {
-                orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+                orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
             }
             Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
             if (null != logistics) {
@@ -86,7 +86,7 @@ public class MyOrderController extends Controller {
         Order order = orderService.getOrderById(orderId, user_id);
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
         for (OrderItem orderItem : order.getOrderItemList()) {
-            orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+            orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
         }
         List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
 
@@ -140,7 +140,7 @@ public class MyOrderController extends Controller {
 
         Order order = orderService.getOrderById(orderId, user_id);
         for (OrderItem orderItem : order.getOrderItemList()) {
-            orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+            orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
             if (orderItem.isAppraise()) {
                 orderItem.setValuation(valuationService.findByOrderItemId(user_id, orderItem.getId()));
             }

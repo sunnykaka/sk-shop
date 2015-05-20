@@ -30,35 +30,11 @@ public class SkuAndStorageService {
     private PropertyAndValueService propertyAndValueService;
 
     /**
-     * 将sku数据库中的字符串pidvid列表转换为Sku属性的List
-     * @param stockKeepingUnit
-     */
-    private void loadSkuProperty(StockKeepingUnit stockKeepingUnit) {
-        List<SkuProperty> skuProperties = new ArrayList<SkuProperty>();
-        String skuPropertiesInDb = stockKeepingUnit.getSkuPropertiesInDb(); //把数据库中的字符串pidvid列表转换为Sku属性的List
-        if (StringUtils.isNotEmpty(skuPropertiesInDb)) {
-            String[] pidvid = skuPropertiesInDb.split(",");
-            for (String s : pidvid) {
-                PropertyValueUtil.PV pv = PropertyValueUtil.parseLongToPidVid(Long.valueOf(s));
-                SkuProperty skuProperty = new SkuProperty();
-                skuProperty.setSkuId(stockKeepingUnit.getId());
-                skuProperty.setPropertyId(pv.pid);
-                skuProperty.setValueId(pv.vid);
-                skuProperties.add(skuProperty);
-            }
-        }
-        stockKeepingUnit.setSkuProperties(skuProperties);
-    }
-
-    /**
      * 获取数据库中所有sku记录(包含sku属性)
      * @return
      */
     public List<StockKeepingUnit> queryAllStockKeepingUnits() {
         List<StockKeepingUnit> skus = generalDao.findAll(StockKeepingUnit.class);
-        for (StockKeepingUnit sku : skus) {
-            loadSkuProperty(sku);
-        }
         return skus;
     }
 
@@ -70,9 +46,6 @@ public class SkuAndStorageService {
     public StockKeepingUnit getStockKeepingUnitById(int id) {
         play.Logger.info("------SkuAndStorageService getStockKeepingUnitById begin exe-----------" + id);
         StockKeepingUnit sku = generalDao.get(StockKeepingUnit.class, id);
-        if(sku != null) {
-            loadSkuProperty(sku);
-        }
         return sku;
     }
 
@@ -92,9 +65,6 @@ public class SkuAndStorageService {
         StockKeepingUnit stockKeepingUnit = null;
         if(list != null && list.size() > 0) {
             stockKeepingUnit = list.get(0);
-        }
-        if(stockKeepingUnit != null) {
-            loadSkuProperty(stockKeepingUnit);
         }
         return stockKeepingUnit;
     }
@@ -139,9 +109,6 @@ public class SkuAndStorageService {
         queryParams.put("productId", productId);
         List<StockKeepingUnit> skus = generalDao.query(jpql, Optional.<Page<StockKeepingUnit>>empty(), queryParams);
 
-        for (StockKeepingUnit sku : skus) {
-            loadSkuProperty(sku);
-        }
         return skus;
     }
 
@@ -163,25 +130,6 @@ public class SkuAndStorageService {
             skuStorage = list.get(0);
         }
         return skuStorage;
-    }
-
-    /**
-     * 产生SKU属性及对应值
-     *
-     * @param skuId
-     */
-    public List<SkuProperty> getSKUPropertyValueMap(int skuId){
-
-        StockKeepingUnit SKU = getStockKeepingUnitById(skuId);
-        for(SkuProperty p :SKU.getSkuProperties()){
-            Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
-            p.setPropertyName(property.getName());
-            Value value = propertyAndValueService.getValueById(p.getValueId());
-            p.setPropertyValue(value.getValueName());
-        }
-
-        return SKU.getSkuProperties();
-
     }
 
 }

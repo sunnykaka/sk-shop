@@ -15,15 +15,19 @@ public class ProductDetailService {
     @Autowired
     private ProductService productService;
 
-    public ProductDetail showDetail(int productId) {
+    public ProductDetail showDetail(int productId, Integer skuId) {
 
         Product product = productService.getProductById(productId);
         if(product == null) return null;
 
+        ProductDetail.Builder builder = ProductDetail.Builder.newBuilder(product, skuId);
+        builder.buildProductDetail();
+        builder.buildValuation();
+        builder.buildCms();
+        builder.buildSku();
+        builder.buildDefaultSku();
 
-
-
-        return null;
+        return builder.build();
     }
 
 

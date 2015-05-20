@@ -7,6 +7,7 @@ import common.utils.page.PageFactory;
 import dtos.ProductDetail;
 import ordercenter.models.Valuation;
 import ordercenter.services.ValuationService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -25,11 +26,27 @@ public class ProductController extends Controller {
     ValuationService valuationService;
 
 
-    public Result detail(Integer productId) {
+    public Result detail(String id) {
 
-        ProductDetail productDetail = productDetailService.showDetail(productId);
+        String[] array = id.split("-");
+        Integer productId = null;
+        Integer skuId = null;
+        if(!StringUtils.isNumeric(array[0])) {
+            return badRequest();
+        } else {
+            productId = Integer.parseInt(array[0]);
+        }
+        if(array.length > 1) {
+            if(!StringUtils.isNumeric(array[1])) {
+                return badRequest();
+            } else {
+                skuId = Integer.parseInt(array[1]);
+            }
+        }
+
+        ProductDetail productDetail = productDetailService.showDetail(productId, skuId);
         if(productDetail == null) {
-            throw new AppBusinessException("您请求的产品没有找到, 请看看其他的吧");
+            throw new AppBusinessException("您请求的商品没有找到, 请看看其他的吧");
         }
 
         return ok(detail.render(productDetail));

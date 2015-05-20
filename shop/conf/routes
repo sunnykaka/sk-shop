@@ -112,7 +112,7 @@ POST        /payOrder/notifyReturn                @controllers.shop.PayCallBackC
 
 #product
 GET         /product/valuations                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
-GET         /product/:id                          @controllers.product.ProductController.detail(id: Int)
+GET         /product/:id                          @controllers.product.ProductController.detail(id)
 
 
 # Map static resources from the /public folder to the /assets URL path

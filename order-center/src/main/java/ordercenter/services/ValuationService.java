@@ -4,6 +4,7 @@ import common.services.GeneralDao;
 import common.utils.page.Page;
 import ordercenter.models.OrderItem;
 import ordercenter.models.Valuation;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,5 +91,28 @@ public class ValuationService {
         return page;
 
     }
+
+    /**
+     * 返回评价按照好评/中评/差评分组的总数
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int[] countValuationGroupByPoint(){
+
+        String jpql = "select v.point, count(v.id) from Valuation v group by v.point order by v.point";
+        List<Object[]> results = generalDao.query(jpql, Optional.empty(), new HashMap<>());
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>() {{
+            put(0, 0);
+            put(1, 0);
+            put(2, 0);
+        }};
+
+        results.forEach(array -> map.put((Integer)array[0], ((Long)array[1]).intValue()));
+
+        return ArrayUtils.toPrimitive(map.values().toArray(new Integer[map.values().size()]));
+
+    }
+
 
 }

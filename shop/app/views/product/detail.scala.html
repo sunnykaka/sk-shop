@@ -1,51 +1,159 @@
 @(pd: dtos.ProductDetail)
 
 @main() {
-    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
-    <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.scrollTo.js")"></script>
     <script type="text/javascript">
-        FG.user.register();
+    $(function(){
+        $.scrollTo('#detail',500);
+        $('.comment-header li').click(function(){
+        $(this).addClass('current').siblings('li').removeClass('current');
+        });
+
+        $('#openDetail').click(function(){
+        $('.container').slideDown(300);
+        $('.hide-detail').show();
+        });
+
+        $('#hideDetail').click(function(){
+        $(this).hide();
+        $('.container').slideUp(500);
+        });
+
+        $('.detail-size-color').find('dd').click(function(){
+        if($(this).is('.disabled')){
+        return false
+        }else{
+        $(this).addClass('selected').siblings('dd').removeClass('selected');
+        }
+        });
+
+        $('.detail-like .like').click(function(){
+        //$(this).toggleClass('current');
+        if($(this).is('.current')){
+        $(this).removeClass('current');
+        $('.like-text').text('我喜欢');
+        }else{
+        $(this).addClass('current');
+        $('.like-text').text('50000000');
+        }
+        })
+
+        $('.market-price').hover(function(){
+        $(this).addClass('current');
+        $('.info-tip').fadeIn(500);
+        },function(){
+        $(this).removeClass('current');
+        $('.info-tip').hide();
+        })
+
+    });
     </script>
 } {
 
-    <!--reg-box-->
-    <div class="reg-box width1200">
-        <div class="reg-box-inner">
-            <h2>用户注册</h2>
-            <form class="reg-form" id="reg-form" >
-                <div class="item-row reg-username">
-                    <label for="username">请输入用户名</label>
-                    <input type="text" id="username" name="username" class="form-text username" autocomplete="off"/>
-                    <span class="errormsg" id="errormsg-username"></span>
+    <div class="detail width1200" id="detail">
+        <div class="detail-inner clearfix">
+            <div class="left">
+                <div class="bread-nav">
+                    <ul class="clearfix">
+                        <li><a href="@routes.Application.index()">首页</a></li>
+                        <li>&gt;</li>
+                        <li><a href="@routes.Application.index()">设计师品牌：@pd.getProduct.getCustomer.getName</a></li>
+                        <li>&gt;</li>
+                        <li>@pd.getProduct.getName </li>
+                    </ul>
                 </div>
-                <div class="item-row reg-phone">
-                    <label for="phoneNum">请输入手机号号码</label>
-                    <input type="text" id="phoneNum" name="phone" class="form-text phoneNum"/>
-                    <span class="errormsg" id="errormsg-phoneNum"></span>
+                <div class="info">
+                    <h2>@pd.getProduct.getName </h2>
+                    <h3>设计师：@pd.getProduct.getCustomer.getName </h3>
+                    <p>@pd.getProduct.getCustomer.getDescription </p>
                 </div>
-                <div class="item-row phone-code">
-                    <label for="phone-code">短信验证码</label>
-                    <input type="text" id="phone-code" name="verificationCode" class="form-text phone-code-input"/>
-                    <button class="get-code-btn" id="get-code-btn">获取验证码</button>
-                    <span class="errormsg" id="errormsg-phone-code"></span>
+                <div class="video">
+                    <embed src="http://player.youku.com/player.php/sid/XNzQ0NDAwOTUy/v.swf" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
                 </div>
-                <div class="item-row pw">
-                    <label for="pw">密码</label>
-                    <input type="password" id="pw" name="password" class="form-text pw"/>
-                    <span class="errormsg" id="errormsg-pw"></span>
+                <div class="img-list">
+                    <div class="open-detail" id="openDetail">
+                        <p>点击查看详情 <span class="ico"></span></p>
+                    </div>
+                    <div class="container">
+                        <div class="img-con">
+                            @if(pd.getHtmlList.nonEmpty) {
+                                @Html(pd.getHtmlList.get(0).getContent)
+                            }
+                        </div>
+                        <div class="comment-con">
+                            <div class="comment-header">
+                                <ul class="clearfix">
+                                    <li class="current first">全部评价(@pd.getAllValuationCount)</li>
+                                    <li class="">好评(@pd.getGoodValuationCount)</li>
+                                    <li class="">中评(@pd.getNormalValuationCount)</li>
+                                    <li class="">差评(@pd.getBadValuationCount)</li>
+                                </ul>
+                            </div>
+                            <div class="comment-list">
+
+                            </div>
+                        </div>
+                        <div class="comment-page">
+                        </div>
+                    </div>
+                    <div class="hide-detail" id="hideDetail">
+                        <p>隐藏商品详情 <span class="ico"></span></p>
+                    </div>
                 </div>
-                <div class="item-row confirm-pw">
-                    <label for="confirm-pw">确认密码</label>
-                    <input type="password" id="confirm-pw" class="form-text confirm-pw"/>
-                    <span class="errormsg" id="errormsg-confirm-pw"></span>
+            </div>
+            <div class="right">
+                <div class="debut-img">
+                    <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
                 </div>
-                <div><button type="submit"  id="reg-btn" class="reg-btn">立即注册</button></div>
-            </form>
-            <p class="protocol">注册则表示同意<a href="help.html">《会员条款》</a></p>
-            <p class="not-user">已有账号？<a href="@controllers.user.routes.LoginController.loginPage()">登陆</a></p>
+                <div class="debut-info clearfix">
+                    <div class="debut-info-left">
+                        <p>首发价：<span class="start-price">￥1679.00</span></p>
+                        <p class="debut-time">2天07时26分35秒</p>
+                    </div>
+                    <div class="debut-info-right">
+                        <p><span class="market-price">售卖价:2888</span><span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                    </div>
+                </div>
+                <div class="detail-size-color">
+                    <div class="detail-size clearfix">
+                        <dl>
+                            <dt>尺　码：</dt>
+                            <dd class="disabled">XS</dd>
+                            <dd class="selected">S</dd>
+                            <dd class="disabled">M</dd>
+                            <dd class="disabled">L</dd>
+                            <dd>XL</dd>
+                            <dd class="disabled">XXL</dd>
+                        </dl>
+                    </div>
+                    <div class="detail-color clearfix">
+                        <dl>
+                            <dt>颜　色：</dt>
+                            <dd class="selected">紫色</dd>
+                            <dd>黄色</dd>
+                            <dd class="disabled">花色</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="detail-quantity">
+                    <dt>数　量：</dt>
+                    <dd>
+                        <div class="amount">
+                            <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
+                            <input type="text" size="3" maxlength="3" class="text-number" id="buy-number" value="1">
+                            <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
+                        </div>
+                    </dd>
+                </div>
+                <div class="detail-btn">
+                    <a href="javascript:void(0);" class="btn addToOrder">立即购买</a>
+                    <a href="javascript:void(0);" class="btn addToCart">加入购物车</a>
+                </div>
+                <div class="detail-like">
+                    <span class="like current"><i></i><span class="like-text">我喜欢</span></span>
+                </div>
+            </div>
         </div>
     </div>
-    <!--end reg-box-->
-
 
 }

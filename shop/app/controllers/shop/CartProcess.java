@@ -154,15 +154,6 @@ public class CartProcess {
 
             totalMoney = totalMoney.add(itemTotalMoney);
 
-            List<SkuProperty> skuPropertyList = stockKeepingUnit.getSkuProperties();
-            if(skuPropertyList != null && skuPropertyList.size() > 0) {
-                for(SkuProperty p : skuPropertyList) {
-                    Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
-                    p.setPropertyName(property.getName());
-                    Value value = propertyAndValueService.getValueById(p.getValueId());
-                    p.setPropertyValue(value.getValueName());
-                }
-            }
         } else {
             try {
                 Logger.warn("构建购物车时发现sku被删除:" + + cartItem.getSkuId() + " : " + cartItem.getCartId());

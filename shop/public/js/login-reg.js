@@ -38,8 +38,10 @@
         }else{
             obj.text(i+'秒后可重新获取');
         }
-
     }
+
+
+
 
     function register(){
         var regBtn = $('#reg-btn'),msgEle=$('#errormsg-confirm-pw'),getCodeBtn = $('#get-code-btn');
