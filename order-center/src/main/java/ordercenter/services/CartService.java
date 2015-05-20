@@ -288,8 +288,9 @@ public class CartService {
      * @param cartId
      */
     public void deleteCartItemBySkuIdAndCartId(int skuId, int cartId) {
-        String jpql = "delete from CartItem v where skuId=:skuId and cartId=:cartId ";
+        String jpql = "update CartItem v set v.isDelete=:isDelete where v.skuId=:skuId and v.cartId=:cartId ";
         Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("isDelete", true);
         queryParams.put("skuId", skuId);
         queryParams.put("cartId", cartId);
         generalDao.update(jpql, queryParams);
