@@ -98,7 +98,7 @@ public class PayResponseHandler {
         /////下面内容是第三方支付成功，后续的交易处理，对于客户以下内容即便出现异常，对客户而言都已经支付成功！异常记录在日志/logs/trade.log中，需要运营手动确认相关异常内容
         TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
         //查询支付宝等发送过来的消息是否已经消费,如果已经消费则直接返回成功,主要针对情况是：return 和 Notify有很明显时差时，一个先回来，一另后回来。则直接处理成功。
-        if (tradeService.existTradeInfo(tradeInfo.getTradeNo(), tradeInfo.getOuterTradeNo())) {
+        if (tradeService.existTrade(tradeInfo.getTradeNo(), tradeInfo.getOuterTradeNo())) {
             Logger.info("此笔交易已经处理,TradeNo:" + tradeInfo.getTradeNo() + " 本次通知类型为：" + type);
             result.setResult(true);
             return result;

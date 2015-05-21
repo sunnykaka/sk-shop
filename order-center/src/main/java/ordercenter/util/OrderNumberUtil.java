@@ -21,7 +21,8 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * <br/>亦可以使用 SQL 中的自定义 getOrderNo() 函数进行数据库获取.
  *
- * create by Athens(刘杰) on 2012-08-22 15:15
+ * User: lidujun
+ * Date: 2015-04-29
  */
 public class OrderNumberUtil {
 
