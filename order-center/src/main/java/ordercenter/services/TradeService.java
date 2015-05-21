@@ -6,16 +6,13 @@ import ordercenter.constants.OrderState;
 import ordercenter.constants.TradeType;
 import ordercenter.models.*;
 import ordercenter.payment.PayInfoWrapper;
-import ordercenter.payment.models.SkuTradeResult;
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+import ordercenter.models.SkuTradeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import productcenter.services.SkuAndStorageService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +28,13 @@ import java.util.Optional;
 public class TradeService {
 
     @Autowired
-    GeneralDao generalDao;
+    private GeneralDao generalDao;
 
     @Autowired
-    OrderService orderService;
+    private OrderService orderService;
 
     @Autowired
-    private CartService cartService;
+    private SkuAndStorageService skuAndStorageService;
 
     /**
      * 创建交易记录
@@ -143,8 +140,22 @@ public class TradeService {
         }
     }
 
+    /**
+     * 支付成功后修改tradeOrder
+     * @param trade
+     * @return
+     */
+    public int updateTradeOrderPaySuccessful(Trade trade) {
+        Logger.info("--------TradeSuccessService updateTradeOrderPaySuccessful begin exe-----------" + trade);
 
+        String jpql = "update TradeOrder o set o.payFlag=:payFlag,o.updateTime=:updateTime where o.tradeNo=:tradeNo ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("payFlag", true);
+        params.put("updateTime", DateUtils.current());
+        params.put("tradeNo", trade.getTradeNo());
 
+        return generalDao.update(jpql, params);
+    }
 
 
 
@@ -173,7 +184,7 @@ public class TradeService {
 
                     //记录订单状态历史信息
                     try {
-                        this.createOrderStateHistory(new OrderStateHistory(order));
+                        orderService.createOrderStateHistory(new OrderStateHistory(order));
                     } catch (Exception e) {
                         Logger.error(errPrefix + "订单[" + orderNo + "]订单id[" + order.getId() + "]记录订单状态历史信息发生异常：", e);
                     }
@@ -186,7 +197,7 @@ public class TradeService {
 
                     //更新订单状态
                     try {
-                        this.updateOrderStateByStrictState(order.getId(), order.getOrderState(), order.getMustPreviousState());
+                        orderService.updateOrderStateByStrictState(order.getId(), order.getOrderState(), order.getMustPreviousState());
                     } catch (Exception e) {
                         Logger.error(errPrefix + "订单[" + orderNo + "]订单id[" + order.getId() + "]从当前状态[" + oldState.getValue()
                                 + "]更新为[" + order.getOrderState().getValue() + "]发生异常：", e);
@@ -199,7 +210,7 @@ public class TradeService {
                     } else {
                         for(OrderItem orderItem : orderItemList) {
                             try {
-                                this.updateOrderItemStateByStrictState(orderItem.getId(), order.getOrderState(), order.getMustPreviousState());
+                                orderService.updateOrderItemStateByStrictState(orderItem.getId(), order.getOrderState(), order.getMustPreviousState());
                             } catch (Exception e) {
                                 Logger.error(errPrefix + "订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]从当前状态[" + oldState.getValue() + "]更新为["
                                         + order.getOrderState().getValue() + "]发生异常", e);
@@ -207,8 +218,7 @@ public class TradeService {
 
                             //扣减库存
                             try {
-                                StoreStrategyServiceFactory.getStoreStrategyServiceImpl(orderItem.getStoreStrategy())
-                                        .operateStorageWhenPayOrder(this, orderItem.getSkuId(), orderItem.getNumber());
+                                skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
                             } catch (Exception e) {
                                 Logger.error(errPrefix + "订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]扣减库存发生异常", e);
                             }
@@ -236,118 +246,6 @@ public class TradeService {
             }
         }
     }
-
-    /**
-     * 减去sku库存数
-     * @param skuId
-     * @param number
-     * @return
-     */
-    public boolean minusSkuStock(int skuId, int number) {
-        play.Logger.info("------SkuAndStorageService minusSkuStock begin exe-----------" + skuId + ":" + number);
-        EntityManager em = generalDao.getEm();
-        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity - ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
-        int count = query.executeUpdate();
-        return count == 1;
-    }
-
-    /**
-     * 增加sku库存数
-     * @param skuId
-     * @param number
-     * @return
-     */
-    public boolean addSkuStock(int skuId, int number) {
-        play.Logger.info("------SkuAndStorageService addSkuStock begin exe-----------" + skuId + ":" + number);
-        EntityManager em = generalDao.getEm();
-        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity + ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
-        int count = query.executeUpdate();
-        return count == 1;
-    }
-
-    /**
-     * 支付成功后修改tradeOrder
-     * @param trade
-     * @return
-     */
-    public int updateTradeOrderPaySuccessful(Trade trade) {
-        Logger.info("--------TradeSuccessService updateTradeOrderPaySuccessful begin exe-----------" + trade);
-
-        String jpql = "update TradeOrder o set o.payFlag=:payFlag,o.updateTime=:updateTime where o.tradeNo=:tradeNo ";
-        Map<String, Object> params = new HashMap<>();
-        params.put("payFlag", true);
-        params.put("updateTime", DateUtils.current());
-        params.put("tradeNo", trade.getTradeNo());
-
-        return generalDao.update(jpql, params);
-    }
-
-    /**
-     * 更新订单状态
-     * @param orderId
-     * @param orderState
-     * @param previousState
-     * @return
-     */
-    public int updateOrderStateByStrictState(int orderId, OrderState orderState, OrderState previousState) {
-        Logger.info("--------OrderService updateOrderState begin exe-----------" + orderId + " : " + orderState + " : " + previousState);
-
-        DateTime curTime = DateUtils.current();
-
-        String jpql = "update Order o set o.orderState=:orderState , o.updateTime =:modifyDate ";
-        Map<String, Object> params = new HashMap<>();
-        params.put("orderState", orderState);
-        params.put("modifyDate", curTime);
-
-        if(OrderState.Pay.getName().equals(orderState.getName())) {
-            jpql += ", o.payDate =:payDate ";
-            params.put("payDate", curTime);
-        } else if(OrderState.Cancel.getName().equals(orderState.getName()) || OrderState.Close.getName().equals(orderState.getName()) || OrderState.Success.getName().equals(orderState.getName())) {
-            jpql += ", o.endDate =:endDate ";
-            params.put("endDate", curTime);
-        }
-        jpql += " where o.id=:orderId and o.orderState =:previousState ";
-        params.put("orderId", orderId);
-        params.put("previousState", previousState);
-
-        return generalDao.update(jpql, params);
-    }
-
-    /**
-     * 创建状态历史
-     */
-    public void createOrderStateHistory(OrderStateHistory orderStateHistory) {
-        play.Logger.info("--------TradeSuccessService createOrderStateHistory begin exe-----------" + orderStateHistory);
-        generalDao.persist(orderStateHistory);
-    }
-
-    /**
-     * 更新订单项状态
-     * @param orderItemId
-     * @param orderState
-     * @param previousState
-     * @return
-     */
-    public int updateOrderItemStateByStrictState(int orderItemId, OrderState orderState, OrderState previousState) {
-        Logger.info("--------OrderService updateOrderItemStateByStrictState begin exe-----------" + orderItemId + " : " + orderState + " : " + previousState);
-
-        DateTime curTime = DateUtils.current();
-
-        String jpql = "update OrderItem o set o.orderState=:orderState, o.updateTime =:updateTime ";
-        Map<String, Object> params = new HashMap<>();
-        params.put("orderState", orderState);
-        params.put("updateTime", curTime);
-
-        jpql += " where o.id=:orderItemId ";
-        params.put("orderItemId", orderItemId);
-
-        if(previousState != null && StringUtils.isNotEmpty(previousState.getName())) {
-            jpql += " and o.orderState =:previousState ";
-            params.put("previousState", previousState);
-        }
-        return generalDao.update(jpql, params);
-    }
-
 
     ////////////////////////SkuTradeResult////////////////////////////
     /**
@@ -389,15 +287,5 @@ public class TradeService {
         }
         return skuTradeResult;
     }
-
-
-
-
-
-
-
-
-
-
 
 }

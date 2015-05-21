@@ -1,4 +1,4 @@
-package ordercenter.payment.models;
+package ordercenter.models;
 
 import common.models.utils.EntityClass;
 

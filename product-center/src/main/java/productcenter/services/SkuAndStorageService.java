@@ -2,14 +2,17 @@ package productcenter.services;
 
 import common.services.GeneralDao;
 import common.utils.page.Page;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import productcenter.models.*;
-import productcenter.util.PropertyValueUtil;
 
-import java.util.*;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Sku和库存Service
@@ -21,10 +24,10 @@ import java.util.*;
 public class SkuAndStorageService {
 
     @Autowired
-    GeneralDao generalDao;
+    private GeneralDao generalDao;
 
     @Autowired
-    ProductService productService;
+    private ProductService productService;
 
     @Autowired
     private PropertyAndValueService propertyAndValueService;
@@ -113,6 +116,23 @@ public class SkuAndStorageService {
     }
 
     /**
+     * 产生SKU属性及对应值
+     *
+     * @param skuId
+     */
+    public List<SkuProperty> getSKUPropertyValueMap(int skuId){
+        StockKeepingUnit SKU = this.getStockKeepingUnitById(skuId);
+        for(SkuProperty p :SKU.getSkuProperties()){
+            Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
+            p.setPropertyName(property.getName());
+            Value value = propertyAndValueService.getValueById(p.getValueId());
+            p.setPropertyValue(value.getValueName());
+        }
+        return SKU.getSkuProperties();
+    }
+
+    ///////////////////////////////////库存操作//////////////////////////////////////////
+    /**
      * 通过skuId获取sku对应库存
      * @param skuId
      * @return
@@ -130,6 +150,34 @@ public class SkuAndStorageService {
             skuStorage = list.get(0);
         }
         return skuStorage;
+    }
+
+    /**
+     * 减去sku库存数
+     * @param skuId
+     * @param number
+     * @return
+     */
+    public boolean minusSkuStock(int skuId, int number) {
+        play.Logger.info("------SkuAndStorageService minusSkuStock begin exe-----------" + skuId + ":" + number);
+        EntityManager em = generalDao.getEm();
+        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity - ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
+        int count = query.executeUpdate();
+        return count == 1;
+    }
+
+    /**
+     * 增加sku库存数
+     * @param skuId
+     * @param number
+     * @return
+     */
+    public boolean addSkuStock(int skuId, int number) {
+        play.Logger.info("------SkuAndStorageService addSkuStock begin exe-----------" + skuId + ":" + number);
+        EntityManager em = generalDao.getEm();
+        Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity + ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
+        int count = query.executeUpdate();
+        return count == 1;
     }
 
 }
