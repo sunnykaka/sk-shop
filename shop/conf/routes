@@ -89,9 +89,10 @@ GET         /my/order/info                        @controllers.user.MyOrderContr
 POST        /my/order/cancel                      @controllers.user.MyOrderController.orderCancel(orderId:Int ?= 0,canceltype:Int ?= 0)
 POST        /my/order/receiving                   @controllers.user.MyOrderController.orderReceiving(orderId:Int ?= 0)
 GET         /my/backApply                         @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
+POST        /my/back/submit                       @controllers.user.MyOrderController.backApplySubmit()
 GET         /my/appraise                          @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)
-GET         /my/back                              @controllers.user.MyOrderController.backIndex()
-GET         /my/back/info                         @controllers.user.MyOrderController.backContent()
+GET         /my/back                              @controllers.user.MyOrderController.backIndex(pageNo:Int ?= 1,pageSize:Int ?= 5)
+GET         /my/back/info                         @controllers.user.MyOrderController.backContent(backId:Int ?= 0)
 
 #购物车
 GET         /cart/getSkuStorage                   @controllers.shop.CartController.getSkuStorage(skuId:Int)

@@ -1,0 +1,129 @@
+@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics,orderStateHistories:List[ordercenter.models.OrderStateHistory])
+
+@import common.utils.DateUtils;
+
+@myCenter(Messages("title.my.address")) {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+} {
+    <!--refund-order-manage-->
+    <div class="order-manage">
+        <div class="order-manage-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>订单管理</li>
+                </ul>
+            </div>
+            <div class="order-manage-container clearfix">
+                @left("order")
+                    <!-- order-list -->
+                <div class="all-order-list">
+                    <div class="order-status">
+                        <h2>申请退货</h2>
+                    </div>
+                    <div class="refund-order-info">
+                        <h3>退货须知</h3>
+                        <ul>
+                            <li>1、客服人员接收相关申请后进行初步审核，并承诺收到退货后的1-2个工作日内回复审核结果，敬请耐心等待。</li>
+                            <li>2、在退货申请得到初步审核确认通过后，请在3日内将商品寄回，若7个工作日内未收到寄回商品，则视为撤销退货，不予办理。</li>
+                            <li>3、退货中心收到寄回商品，检测后符合条件的，我们将在7日内为您安排退款事宜，如遇国家法定节假日，则退款时间顺延。退款时间非退款到账时间。目前国内银行卡（支付宝为即时到账）退款到账时间为7天内（以各银行具体情况为准）。</li>
+                            <li>4、退货地址：广东省深圳市南山区科兴科技园B2栋605室；邮编：518000；收件人：张先生</li>
+                        </ul>
+                    </div>
+                    <div class="order-list refund-order-detail">
+                        <form action="@controllers.user.routes.MyOrderController.backApplySubmit()" class="refund-order-content" method="POST">
+                            <h3>选择退货商品</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><label for="all"><input type="checkbox" id="all"> 全选 </label></th>
+                                        <th class="col1"></th>
+                                        <th>商品信息</th>
+                                        <th>细节</th>
+                                        <th>单价</th>
+                                        <th class="action-number">数量</th>
+                                        <th>金额</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="product-list">
+                                    @for(orderItem <- order.getOrderItemList){
+                                        <tr>
+                                            <td class="checkbox">
+                                                <input type="checkbox" name="orderItemId" value="@orderItem.getId" />
+                                            </td>
+                                            <td>
+                                                <img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/>
+                                            </td>
+                                            <td>
+                                                <div class="pro-info">
+                                                    <p class="pro-name">@orderItem.getProductName</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @for(keyValue <- orderItem.getProperties){
+                                                        <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <p class="actual-price">￥@orderItem.getCurUnitPrice.getAmountWithBigDecimal</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="amount" >
+                                                    <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
+                                                    <input type="text" size="3" maxlength="3" name="orderItem" class="text-number" limit="@orderItem.getNumber" value="@orderItem.getId-@orderItem.getNumber" data-price="@orderItem.getCurUnitPrice.getAmountWithBigDecimal">
+                                                    <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
+                                                </div>
+                                            </td>
+                                            <td class="col6">
+                                            ￥@orderItem.getTotalPrice.getAmountWithBigDecimal
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>商品总计：</td>
+                                        <td class="total-price">￥@order.getTotalMoney.getAmountWithBigDecimal</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>运费：</td>
+                                        <td>￥00.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>关税：</td>
+                                        <td>￥00.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td class="refund-title">退货金额：</td>
+                                        <td class="refund-price">￥@order.getTotalMoney.getAmountWithBigDecimal</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                            <input type="hidden" name="orderId" value="@order.getId">
+                            <h3>退货原因</h3>
+                            <textarea name="backReason" id="backReason" cols="30" rows="10"></textarea>
+                            <div class="form-item">
+                                <input type="submit" class="submit-btn" value="提交退货申请"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                    <!-- end order-list-->
+            </div>
+        </div>
+    </div>
+    <!--end refund order-manage-->
+
+}

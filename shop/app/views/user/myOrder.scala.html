@@ -87,12 +87,13 @@
                                                     @if(order.getOrderState.getName.equals(OrderState.Send.getName)){
                                                         <p><a href="#" class="confirm">确认收货</a></p>
                                                     }
-                                                    @*if(order.getOrderState.getName.equals(OrderState.Receiving.getName) || order.getOrderState.getName.equals(OrderState.Success.getName)){*@
+                                                    @if(order.getOrderState.getName.equals(OrderState.Receiving.getName) || order.getOrderState.getName.equals(OrderState.Success.getName)){
                                                         <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)" class="confirm">评价</a></p>
-                                                    @*}*@
+                                                    }
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName) || order.getOrderState.getName.equals(OrderState.Pay.getName)){
                                                         <p><a href="#" class="cancel">取消</a></p>
                                                     }
+                                                    <p><a href="@controllers.user.routes.MyOrderController.backApply(order.getId)" class="confirm">申请退货</a></p>
                                                 </td>
                                             }
                                         </tr>

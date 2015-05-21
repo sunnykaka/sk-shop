@@ -307,7 +307,7 @@ h4{font-size:12px;}
 .select-address .details-address p,.address-list .details-address p{
     padding-bottom: 2px;
     white-space: nowrap;
-    width: 100%;                  /* IE6 ÐèÒª¶¨Òå¿í¶È */
+    width: 100%;                  /* IE6 ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     overflow: hidden;
     -o-text-overflow: ellipsis;    /* Opera */
     text-overflow:    ellipsis;    /* IE, Safari (WebKit) */
@@ -346,24 +346,21 @@ h4{font-size:12px;}
     background: url("../images/cart-ico.gif") no-repeat; margin: 0 auto;
 }
 .mycart-inner .mycart-empty a{color: #FF2D54;}
-.mycart-inner .amount,.refund-order-detail .amount{line-height:24px;height:30px;position:relative;padding-left:87px;}
-.mycart-inner .amount .btn-sub,.mycart-inner .amount .btn-add,.mycart-inner .amount .text-number,.refund-order-detail .amount .btn-sub,.refund-order-detail .amount .btn-add,
-.refund-order-detail .amount .text-number
-{width:14px;height:22px;line-height:22px;
+.mycart-inner .amount{line-height:24px;height:30px;position:relative;padding-left:87px;}
+.mycart-inner .amount .btn-sub,.mycart-inner .amount .btn-add,.mycart-inner .amount .text-number{width:14px;height:22px;line-height:22px;
     border:1px solid #e6e6e6;text-align:center;background-color:#fff;}
-.mycart-inner .amount .btn-sub span,.mycart-inner .amount .btn-add span,.refund-order-detail .amout .btn-sub span,.refund-order-detail .amount .btn-add span{display:block;width:14px;height:22px;}
-.mycart-inner .amount .btn-sub,.mycart-inner .amount .btn-add,.refund-order-detail .btn-sub,.refund-order-detail .amount .btn-add{cursor:pointer;position:absolute;top:0;}
-.mycart-inner .amount .btn-sub,.refund-order-detail .amount .btn-sub{left:72px}
-.mycart-inner .amount .btn-add,.refund-order-detail .amount .btn-add{left:117px}
-.mycart-inner .amount .btn-add:hover,.mycart-inner .amount .btn-sub:hover,.refund-order-detail .amount .btn-add:hover,.refund-order-detail .amount .btn-sub:hover{width:28px;height:33px;top:-6px;}
-.mycart-inner .amount .btn-add:hover span,.mycart-inner .amount .btn-sub:hover span,.refund-order-detail .amount .btn-add:hover span,.refund-order-detail .amount .btn-sub:hover span
-{width:28px;height:33px;line-height:33px;font-size:20px;font-family:"Microsoft Yahei",STHeiti;}
-.mycart-inner .amount .btn-sub:hover,.refund-order-detail .amount .btn-sub:hover{left:62px}
-.mycart-inner .amount .btn-add:hover,.refund-order-detail .amount .btn-add:hover{left:112px}
-.mycart-inner .amount .text-number,.refund-order-detail .amount .text-number{float:left;width:30px;border-width:1px 0}
-.mycart-inner .amount a:hover,.refund-order-detail .amount a:hover{text-decoration:none}
-.mycart-inner .amount .btn-sub,.refund-order-detail .amount .btn-sub{border-width:1px;}
-.mycart-inner .amount .text-number,.refund-order-detail .amount .text-number{width:30px}
+.mycart-inner .amount .btn-sub span,.mycart-inner .amount .btn-add span{display:block;width:14px;height:22px;}
+.mycart-inner .amount .btn-sub,.mycart-inner .amount .btn-add{cursor:pointer;position:absolute;top:0;}
+.mycart-inner .amount .btn-sub{left:72px}
+.mycart-inner .amount .btn-add{left:117px}
+.mycart-inner .amount .btn-add:hover,.mycart-inner .amount .btn-sub:hover{width:28px;height:33px;top:-6px;}
+.mycart-inner .amount .btn-add:hover span,.mycart-inner .amount .btn-sub:hover span{width:28px;height:33px;line-height:33px;font-size:20px;font-family:"Microsoft Yahei",STHeiti;}
+.mycart-inner .amount .btn-sub:hover{left:62px}
+.mycart-inner .amount .btn-add:hover{left:112px}
+.mycart-inner .amount .text-number{float:left;width:30px;border-width:1px 0}
+.mycart-inner .amount a:hover{text-decoration:none}
+.mycart-inner .amount .btn-sub{border-width:1px;}
+.mycart-inner .amount .text-number{width:30px}
 .mycart-inner .action {width: 100px;}
 .mycart-inner tfoot tr{height:100px; border-bottom: none;}
 .mycart-inner .action-number{width: 200px;}
@@ -452,7 +449,6 @@ h4{font-size:12px;}
     text-align: center;border: 1px solid #cccccc;
     margin-bottom: 20px;cursor: pointer;
 }
-.detail-inner .img-list .hide-detail{display: none;}
 .detail-inner .comment-header{width: auto;height: 48px;line-height:48px;border: 1px solid #eaeaea;background: #f8f8f8;
     margin-bottom: 30px;
 }
@@ -544,15 +540,10 @@ h4{font-size:12px;}
 .nav-list .current a {color:#FF2D54;}
 .order-manage-inner .all-order-list,.address-manage-inner .address-form,.address-list{float: right;width: 990px;}
 .order-manage-inner .all-order-list .order-status{height:45px;border-bottom: 1px solid #cccccc; }
-.order-manage-inner .all-order-list .order-status h2{font-weight: normal;font-size: 14px;height: 45px;line-height: 45px;}
 .all-order-list .order-status ul{height: 43px;margin-left: 23px;}
 .all-order-list .order-status li{float: left;height:43px;line-height:43px;margin-right: 30px;}
 .all-order-list .order-status a{float:left;padding: 0 13px;font-size: 14px;}
 .all-order-list .order-status a:hover,.all-order-list .order-status .current a{border-bottom: 2px solid #FF2D54;color: #FF2D54;}
-.order-manage-inner .all-order-list .refund-order-info{padding: 20px 0 30px 50px; border-bottom: 1px dashed #cccccc;}
-.order-manage-inner .all-order-list .refund-order-info h3{padding-bottom: 10px;}
-.order-manage-inner .all-order-list .refund-order-info ul{padding-left: 20px;}
-.order-manage-inner .all-order-list .refund-order-info li{padding-bottom: 10px;line-height: 18px;}
 .all-order-list .order-list table{width:988px;text-align: center;border-collapse: collapse;margin-bottom: 20px;}
 .all-order-list .order-list th,.all-order-list .order-list td{vertical-align: middle;}
 .all-order-list .order-list thead th{height: 44px;}
@@ -574,21 +565,9 @@ h4{font-size:12px;}
 .all-order-list .order-list p{line-height: 34px;}
 .all-order-list .order-list .not-pay{color: #FF2D54;}
 .all-order-list .order-list .pay{padding: 8px 14px;background: #FF2D54;color: #fff;}
-.all-order-list .order-list .confirm,.all-order-list .order-list .comment,.all-order-list .refund .cancel{padding: 8px 14px;background: #000;color: #fff;}
+.all-order-list .order-list .confirm,.all-order-list .order-list .comment{padding: 8px 14px;background: #000;color: #fff;}
 .all-order-list .order-page{padding-left:700px;}
-.all-order-list .order-page li{float: left;margin-right: 15px;}
-
-.all-order-list .refund .order-number{color: #FF2D54}
-.all-order-list .refund-order-detail h3,.all-order-list .refund-order-content h3{padding: 20px 0 10px 50px;}
-.all-order-list .refund-order-detail table{width: 900px;margin: 0 auto;}
-.all-order-list .refund-order-detail tbody td{border-left: none;border-right: none;}
-.all-order-list .refund-order-detail tfoot td{padding: 8px 0;}
-.all-order-list .refund-order-detail .refund-price,.all-order-list .refund-order-detail .refund-title{font-weight: 700;}
-.all-order-list .refund-order-content textarea{display:block;width: 900px;height: 200px;margin: 0 auto 30px;}
-.all-order-list .refund-order-content .submit-btn{display: block;padding: 20px 30px;background: #000;color: #fff;text-align: center;
-    margin: 0 auto;border: none;cursor: pointer;
-}
-    /*end order-manage*/
+/*end order-manage*/
 /*order-detail*/
 .order-detail{margin-bottom: 50px;}
 .order-detail-inner .nav-list{float:left;width: 140px;padding: 15px;border: 1px solid #cccccc;text-align: center;}
@@ -809,7 +788,7 @@ h4{font-size:12px;}
 .footer-inner .code-img a{display: block;margin-bottom: 4px;}
 .footer .copy-right{text-align: center;padding: 30px 0;}
 /*end footer*/
-/* ÌáÊ¾ÐÅÏ¢ */
+/* ï¿½ï¿½Ê¾ï¿½ï¿½Ï¢ */
 .com_tip{ border: 1px solid #FF2D54; padding: 2px 6px; line-height: 18px; background: #fef6f1; font-size: 12px; z-index: 9999 }
 .com_tip a{color:#FF2D54;}
 

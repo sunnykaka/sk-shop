@@ -1,0 +1,125 @@
+@(page:common.utils.page.Page[ordercenter.models.BackGoods])
+
+@import ordercenter.constants.OrderState;
+@import common.utils.DateUtils;
+
+@myCenter(Messages("title.my.address")) {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+} {
+
+    <!--refund-order-manage-->
+    <div class="order-manage">
+        <div class="order-manage-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>订单管理</li>
+                </ul>
+            </div>
+            <div class="order-manage-container clearfix">
+                @left("order")
+                    <!-- order-list -->
+                <div class="all-order-list">
+                    <div class="order-status">
+                        <h2>售后服务</h2>
+                    </div>
+                    <div class="refund-order-info">
+                        <h3>退货须知</h3>
+                        <ul>
+                            <li>1、客服人员接收相关申请后进行初步审核，并承诺收到退货后的1-2个工作日内回复审核结果，敬请耐心等待。</li>
+                            <li>2、在退货申请得到初步审核确认通过后，请在3日内将商品寄回，若7个工作日内未收到寄回商品，则视为撤销退货，不予办理。</li>
+                            <li>3、退货中心收到寄回商品，检测后符合条件的，我们将在7日内为您安排退款事宜，如遇国家法定节假日，则退款时间顺延。退款时间非退款到账时间。目前国内银行卡（支付宝为即时到账）退款到账时间为7天内（以各银行具体情况为准）。</li>
+                            <li>4、退货地址：广东省深圳市南山区科兴科技园B2栋605室；邮编：518000；收件人：张先生</li>
+                        </ul>
+                    </div>
+                    @if(page.getResult.size() > 0){
+                        <div class="order-list refund">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">商品</th>
+                                        <th colspan="">退款金额</th>
+                                        <th colspan="">售后单状态</th>
+                                        <th colspan="">操作</th>
+                                    </tr>
+                                </thead>
+                                @for(backOrder <- page.getResult) {
+                                    <tbody>
+                                        <tr class="space-row"><td colspan="6"></td></tr>
+                                        <tr class="space-row"><td colspan="6"></td></tr>
+                                        <tr class="order-hd">
+                                            <td class="order-hd-first">售后订单号：<span class="order-number">@backOrder.getOrderNo</span></td>
+                                            <td >订单号：<span class="order-number">@backOrder.getId</span></td>
+                                            <td colspan="4" class="order-hd-last">下单时间：<span class="order-time">@DateUtils.printDateTime(backOrder.getCreateTime)</span></td>
+                                        </tr>
+
+                                        @for((backOrderItem, index) <- backOrder.getBackGoodsItemList.zipWithIndex){
+                                            @if(index+1 == backOrder.getBackGoodsItemList.size()){
+                                                <tr class="last">
+                                            }else{
+                                                <tr>
+                                            }
+                                            <td class="product-img">
+                                                <img src="@backOrderItem.getOrderItem.getMainPicture" alt="" height="154px" width="90px"/>
+                                            </td>
+                                            <td class="product-name">
+                                                <p>@backOrderItem.getOrderItem.getProductName</p>
+                                            </td>
+                                            <td class="product-size">
+                                            @for(keyValue <- backOrderItem.getOrderItem.getProperties){
+                                                <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
+                                            }
+                                            </td>
+
+                                            @if(index == 0){
+                                                <td rowspan="@backOrder.getBackGoodsItemList.size()" class="product-price">
+                                                    ￥@backOrder.getBackPrice
+                                                </td>
+                                                <td rowspan="@backOrder.getBackGoodsItemList.size()" class="order-detail">
+                                                    <p>@backOrder.getBackState</p>
+                                                </td>
+                                                <td rowspan="@backOrder.getBackGoodsItemList.size()" class="control">
+                                                    <p><a href="#" class="cancel">取消</a></p>
+                                                    <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId)" class="details">查看详情</a></p>
+                                                </td>
+                                            }
+                                        </tr>
+                                        }
+                                    </tbody>
+                                }
+                            </table>
+
+                            @if(page.getTotalPage > 1){
+                                <div class="order-page">
+                                    <ul class="clearfix">
+                                        <li>第<span class="current-page">@page.getPageNo</span>/<span class="total-page">@page.getTotalPage</span>页</li>
+                                        @if(page.getPageNo > 1){
+                                            <li><a href="@controllers.user.routes.MyOrderController.backIndex(page.getPageNo-1)">上一页</a></li>
+                                        }else{
+                                            <li>上一页</li>
+                                        }
+                                        @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
+                                            <li><a href="@controllers.user.routes.MyOrderController.backIndex(page.getPageNo+1)">下一页</a></li>
+                                        }else{
+                                            <li>下一页</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    }else{
+                        没有数据
+                    }
+                </div>
+                    <!-- end order-list-->
+            </div>
+        </div>
+    </div>
+    <!--end refund order-manage-->
+
+}
+
+

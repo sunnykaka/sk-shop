@@ -1,14 +1,16 @@
 package controllers.user;
 
+import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
-import ordercenter.models.Logistics;
-import ordercenter.models.Order;
-import ordercenter.models.OrderItem;
-import ordercenter.models.OrderStateHistory;
+import ordercenter.dtos.BackApplyForm;
+import ordercenter.models.*;
+import ordercenter.services.BackGoodsService;
 import ordercenter.services.OrderService;
 import ordercenter.services.ValuationService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -16,9 +18,7 @@ import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
-import views.html.user.myOrder;
-import views.html.user.myOrderAppraise;
-import views.html.user.myOrderInfo;
+import views.html.user.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +41,9 @@ public class MyOrderController extends Controller {
 
     @Autowired
     private ValuationService valuationService;
+
+    @Autowired
+    private BackGoodsService backGoodsService;
 
     /**
      * 单订管理首页
@@ -160,8 +163,42 @@ public class MyOrderController extends Controller {
     public Result backApply(int orderId) {
         User user = SessionUtils.currentUser();
 
-        return ok();
+        Order order = orderService.getOrderById(orderId, user_id);
+        Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
+        for (OrderItem orderItem : order.getOrderItemList()) {
+            orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+        }
+        List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
 
+        return ok(myBackGoodsApply.render(order, logistics, orderStateHistories));
+
+    }
+
+    /**
+     * 申请提交退货
+     *
+     * @return
+     */
+    @SecuredAction
+    public Result backApplySubmit(){
+        User user = SessionUtils.currentUser();
+        user.setId(user_id);
+
+        //TODO 判断是否订单是否达到退货要求
+
+        Form<BackApplyForm> backApplyForm = Form.form(BackApplyForm.class).bindFromRequest();
+
+        if (!backApplyForm.hasErrors()) {
+            try {
+
+                backGoodsService.submitBackGoods(backApplyForm.get(),user);
+
+            } catch (AppBusinessException e) {
+                backApplyForm.reject("backReason", e.getMessage());
+            }
+        }
+
+        return ok(new JsonResult(false, backApplyForm.errorsAsJson().toString()).toNode());
     }
 
     /**
@@ -170,10 +207,24 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result backIndex() {
+    public Result backIndex(int pageNo, int pageSize) {
         User user = SessionUtils.currentUser();
 
-        return ok();
+        Page<BackGoods> page = new Page<>(pageNo, pageSize);
+
+        List<BackGoods> backGoodsList = backGoodsService.getMyBackGoods(Optional.of(page), user_id);
+        for(BackGoods backGoods:backGoodsList){
+
+            for(BackGoodsItem backGoodsItem:backGoods.getBackGoodsItemList()){
+                OrderItem orderItem = orderService.getOrderItemById(backGoodsItem.getOrderItemId());
+                orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+                backGoodsItem.setOrderItem(orderItem);
+            }
+
+        }
+        page.setResult(backGoodsList);
+
+        return ok(myBack.render(page));
 
     }
 
@@ -183,10 +234,18 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result backContent() {
+    public Result backContent(int backGoodsId) {
         User user = SessionUtils.currentUser();
 
-        return ok();
+        BackGoods backGoods = backGoodsService.getBackGoods(backGoodsId,user_id);
+        for(BackGoodsItem backGoodsItem:backGoods.getBackGoodsItemList()){
+            OrderItem orderItem = orderService.getOrderItemById(backGoodsItem.getOrderItemId());
+            orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+            backGoodsItem.setOrderItem(orderItem);
+        }
+        List<BackGoodsLog> backGoodsLogs = backGoodsService.getBackGoodsLog(backGoodsId);
+
+        return ok(myBackInfo.render(backGoods,backGoodsLogs));
 
     }
 

@@ -1,0 +1,119 @@
+@(backGoods:ordercenter.models.BackGoods,orderStateHistories:List[ordercenter.models.BackGoodsLog])
+
+@import common.utils.DateUtils;
+
+@myCenter(Messages("title.my.address")) {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+} {
+    <!--order-detail-->
+    <div class="order-detail">
+        <div class="order-detail-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="index.html">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="index.html">个人中心</a></li>
+                    <li>&gt;</li>
+                    <li>订单管理</li>
+                    <li>&gt;</li>
+                    <li>售后服务</li>
+                </ul>
+            </div>
+            <div class="order-detail-container clearfix">
+                @left("order")
+                    <!-- order-detail -->
+                <div class="order-detail-list refund-order-content">
+                    <div class="order-detail-title">
+                        <h2>售后详情</h2>
+                        <div class="order-item order-profile">
+                            <h3>售后订单概况</h3>
+                            <p class="refund-order-status"><span>售后单状态：<span>待审核</span></span></p>
+                            <div class="order-profile-content">
+                                <p><span>售后订单号: <b class="order-number">@backGoods.getId</b></span> <span>订单号: <b class="order-number">@backGoods.getOrderNo</b></span>
+                                    <span>申请售后时间： <b class="order-time">@DateUtils.printDateTime(backGoods.getCreateTime)</b></span></p>
+                                <div class="clearfix refund-order-reason">
+                                    <span>退货原因：</span>
+                                    <p>@backGoods.getBackReason</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-item order-track">
+                            <h3>售后单追踪</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>处理时间</th>
+                                        <th>处理信息</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for(backGoodsLog <- orderStateHistories){
+                                        <tr>
+                                            <td>@DateUtils.printDateTime(backGoodsLog.getOperaTime)</td>
+                                            <td>@backGoodsLog.getDoWhat</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="order-item order-item-list">
+                            <h3>商品清单</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>商品</th>
+                                        <th>细节</th>
+                                        <th>单价</th>
+                                        <th>数量</th>
+                                        <th>金额</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for(backGoodsItem <- backGoods.getBackGoodsItemList){
+                                        <tr>
+                                            <td><img src="@backGoodsItem.getOrderItem.getMainPicture" alt="" height="154px" width="90px"/></td>
+                                            <td><p>@backGoodsItem.getOrderItem.getProductName</p></td>
+                                            <td>
+                                                @for(keyValue <- backGoodsItem.getOrderItem.getProperties){
+                                                    <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
+                                                }
+                                            </td>
+                                            <td>￥@backGoodsItem.getUnitPriceByMoney</td>
+                                            <td>@backGoodsItem.getNumber</td>
+                                            <td>￥@backGoodsItem.getSubtotalPrice</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                                <!-- total-->
+                            <table class="total">
+                                <tr>
+                                    <td>商品总计：</td>
+                                    <td>￥@backGoods.getBackPriceByMoney</td>
+                                </tr>
+                                <tr>
+                                    <td>运费：</td>
+                                    <td>￥00.00</td>
+                                </tr>
+                                <tr>
+                                    <td>关税：</td>
+                                    <td>￥00.00</td>
+                                </tr>
+                                <tr>
+                                    <td>订单金额：</td>
+                                    <td>￥@backGoods.getBackPriceByMoney</td>
+                                </tr>
+                            </table>
+                                <!-- end total-->
+                        </div>
+                    </div>
+                    <p class="back"><a href="@controllers.user.routes.MyOrderController.backIndex()">返回</a></p>
+                </div>
+                    <!-- end order-detail-->
+            </div>
+        </div>
+    </div>
+    <!--end order-detail-->
+
+}
