@@ -189,12 +189,26 @@ public class MyOrderController extends Controller {
 
                 backGoodsService.submitBackGoods(backApplyForm.get(),user);
 
+                return ok(new JsonResult(true, "提交成功").toNode());
+
             } catch (AppBusinessException e) {
                 backApplyForm.reject("backReason", e.getMessage());
             }
         }
 
         return ok(new JsonResult(false, backApplyForm.errorsAsJson().toString()).toNode());
+    }
+
+    @SecuredAction
+    public Result backCancel(int backGoodsId){
+
+        try {
+            backGoodsService.cancelBackApply(backGoodsId,user_id);
+            return ok(new JsonResult(true, "取消成功").toNode());
+        } catch (AppBusinessException e) {
+            return ok(new JsonResult(false, e.getMessage()).toNode());
+        }
+
     }
 
     /**

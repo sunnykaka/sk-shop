@@ -94,6 +94,7 @@ POST        /my/back/submit                       @controllers.user.MyOrderContr
 GET         /my/appraise                          @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)
 GET         /my/back                              @controllers.user.MyOrderController.backIndex(pageNo:Int ?= 1,pageSize:Int ?= 5)
 GET         /my/back/info                         @controllers.user.MyOrderController.backContent(backId:Int ?= 0)
+POST        /my/back/cancel                       @controllers.user.MyOrderController.backCancel(backId:Int ?= 0)
 
 #购物车
 GET         /cart/getSkuStorage                   @controllers.shop.CartController.getSkuStorage(skuId:Int)
