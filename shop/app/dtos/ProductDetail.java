@@ -1,5 +1,6 @@
 package dtos;
 
+import common.exceptions.AppBusinessException;
 import models.CmsExhibition;
 import ordercenter.services.ValuationService;
 import org.joda.time.DateTime;
@@ -55,6 +56,7 @@ public class ProductDetail {
     //该字段用于在页面输出sku的列表,以供用户选择
     private List<SkuCandidate> skuCandidateList = new ArrayList<>();
 
+    //默认SKU
     private SkuInfo defaultSku;
 
     private ProductDetail(Product product) {
@@ -203,9 +205,6 @@ public class ProductDetail {
                             collect(Collectors.toList());
 
             productDetail.skuDetailList = skuDetailList;
-            if(skuDetailList.isEmpty()) {
-                return this;
-            }
 
             //构造skuMap
             Map<String, SkuInfo> skuMap =
@@ -283,25 +282,6 @@ public class ProductDetail {
                     skuCandidate.getSkuValueList().sort((o1, o2) -> new Integer(o1.getPriority()).compareTo(o2.getPriority()))
             );
 
-//            //为skuCandidateList排序, 先按priority排序, 如果相同按照id排序
-//            skuCandidateList.sort((o1, o2) -> {
-//                if(o1.getSkuProp().getPriority() != o2.getSkuProp().getPriority()) {
-//                    return new Integer(o1.getSkuProp().getPriority()).compareTo(o2.getSkuProp().getPriority());
-//                } else {
-//                    return o1.getSkuProp().getId().compareTo(o2.getSkuProp().getId());
-//                }
-//            });
-//            skuCandidateList.forEach(skuCandidate ->
-//                            skuCandidate.getSkuValueList().sort((o1, o2) -> {
-//                                if(o1.getPriority() != o2.getPriority()) {
-//                                    return new Integer(o1.getPriority()).compareTo(o2.getPriority());
-//                                } else {
-//                                    return o1.getId().compareTo(o2.getId());
-//                                }
-//                            })
-//            );
-
-
             productDetail.skuCandidateList = skuCandidateList;
 
             return this;
@@ -329,10 +309,10 @@ public class ProductDetail {
                     Optional<SkuInfo> min;
                     if(productDetail.isInExhibition) {
                         min = productDetail.skuMap.values().stream().
-                                min((o1, o2) -> o1.getMarketPrice().compareTo(o2.getMarketPrice()));
+                                min((o1, o2) -> o1.getPrice().compareTo(o2.getPrice()));
                     } else {
                         min = productDetail.skuMap.values().stream().
-                                min((o1, o2) -> o1.getPrice().compareTo(o2.getPrice()));
+                                min((o1, o2) -> o1.getMarketPrice().compareTo(o2.getMarketPrice()));
                     }
                     productDetail.defaultSku = min.get();
                 }
