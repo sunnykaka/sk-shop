@@ -33,7 +33,7 @@ public class OrderPayCallback implements PayCallback {
         Logger.info("「订单回调」开始更新订单状态");
         try {
             TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
-            tradeService.changeOrderStateWhenPaySuccess(tradeInfo);
+            tradeService.paySuccessAfterProccess(tradeInfo);
         } catch (Exception e) {
             Logger.error("「订单回调」订单支付成功，但是更新订单状态、扣减库存、记录支付成功等数据失败，需要运营人员确认一下："  + e.getMessage(), e);
             return false;

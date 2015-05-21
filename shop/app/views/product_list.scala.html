@@ -4,9 +4,15 @@
 
 
 @main() {
-    <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
-    <script type="text/javascript" src="@routes.Assets.versioned("js/jquery.min.js")"></script>
-    <script type="text/javascript" src="@routes.Assets.versioned("js/common.js")"></script>
+    <script>
+        $(function(){
+           $('.start-fashion li,.ready-online li,.hot-sale li').hover(function(){
+               $(".cover", this).stop().animate({top:"70%"},{queue:false,duration:50});
+           },function(){
+               $(".cover", this).stop().animate({top:"110%"},{queue:false,duration:100});
+           });
+        });
+    </script>
 
 
 } {
@@ -38,10 +44,12 @@
                     <ul class="clearfix">
                     @for(prod <- sellingList) {
                         <li>
-                            <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                                <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            </a>
                             <div class="cover">
                                 <a href="#" class="like">我喜欢</a>
-                                <a href="#" class="buy">立即购买</a>
+                                <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" class="buy">立即购买</a>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
                                     <p class="time">@prod.getCmsExhibition.getEndTime</p>
@@ -61,7 +69,9 @@
 
                     @for(prod <- previewList) {
                         <li>
-                            <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
+                                <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            </a>
                             <div class="cover">
                                 <a href="#" class="like">我喜欢</a>
                                 <div class="info">
@@ -84,10 +94,12 @@
 
                     @for(prod <- normalList) {
                         <li>
-                            <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                                <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            </a>
                             <div class="cover">
                                 <a href="#" class="like">我喜欢</a>
-                                <a href="#" class="buy">立即购买</a>
+                                <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" class="buy">立即购买</a>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
                                 </div>
