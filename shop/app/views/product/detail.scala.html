@@ -2,6 +2,7 @@
 
 @import common.utils.DateUtils._
 @import common.utils.JsonUtils._
+@import org.apache.commons.lang3.StringUtils._
 
 @main() {
     <script src="@routes.Assets.versioned("js/jquery.scrollTo.js")"></script>
@@ -78,7 +79,15 @@
                     <p>@pd.getProduct.getCustomer.getDescription </p>
                 </div>
                 <div class="video">
-                    <embed src="http://player.youku.com/player.php/sid/XNzQ0NDAwOTUy/v.swf" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+                    @if(isNotBlank(pd.getProduct.getVideo)) {
+                        <embed src="@Html(pd.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+                    } else {
+                        @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
+                            <img src="@pd.getProductPicture.getPictureUrl" width="803" height="536" />
+                        } else {
+                            <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" />
+                        }
+                    }
                 </div>
                 <div class="img-list">
                     <div class="open-detail" id="openDetail">
