@@ -4,7 +4,7 @@
     <li>
         <a href="#"></a>
         <div class="img">
-            <a href="#"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
+            <a href="@routes.Application.designerProd(exhibition.getDesignerId)"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
             <p class="time">还剩 <span class="time-detail">@exhibition.getEndTime()</span>结束</p>
         </div>
         <div class="title">
@@ -91,7 +91,7 @@
 
                 @for(exhibition <- sellingList.slice(4,7)){
                     <li>
-                        <a href="">
+                        <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
                             <img src="@exhibition.getPic()" alt="" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
@@ -119,7 +119,7 @@
                 }else{
                     <li class="">
                 }
-                    <a href="">
+                    <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
                         <img src="@exhibition.getPic()" alt=""/>
                     </a>
                     <div class="title">
@@ -130,46 +130,6 @@
             }
             </ul>
         </div>
-    </div>
-    <!--end empty-box-->
-    <div class="footer">
-        <div class="footer-inner width1200 clearfix">
-            <dl class="about-us">
-                <dt>关于我们</dt>
-                <dd><a href="">关于尚客</a></dd>
-                <dd><a href="">联系尚客</a></dd>
-                <dd><a href="">加入尚客</a></dd>
-            </dl>
-            <dl class="help">
-                <dt>帮助中心</dt>
-                <dd><a href="#">购物流程</a></dd>
-                <dd><a href="#">发货说明</a></dd>
-                <dd><a href="#">尺码说明</a></dd>
-                <dd><a href="#">支付方式</a></dd>
-            </dl>
-            <dl class="sevice-center">
-                <dt>服务中心</dt>
-                <dd><a href="#">服务热线</a></dd>
-                <dd><a href="#">在线客服</a></dd>
-                <dd><a href="#">售后服务</a></dd>
-                <dd><a href="#">权责说明</a></dd>
-            </dl>
-            <dl class="designer-in">
-                <dt>设计师品牌入驻</dt>
-                <dd><a href="mailto:info@@yezaoshu.com">info@@yezaoshu.com</a></dd>
-                <dd><a href="#">Tel:400-9636-088</a></dd>
-                <dd class="social-ico"><a href="#" class="facebook">facebook</a> <a href="#" class="twitter">
-                    twitter</a></dd>
-            </dl>
-            <div class="code-img">
-                <img src="./images/img-code.gif" alt="关注我" width="98" height="98"/>
-                <a href="#">尚客公众微信</a>
-                <a href="#">尚客公众微博</a>
-            </div>
-
-            <p></p>
-        </div>
-        <p class="copy-right">&copy;2015 fashiongeeker.com All rights reserved 粤ICP备15014624号-2</p>
     </div>
 
 }

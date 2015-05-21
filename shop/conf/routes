@@ -6,6 +6,7 @@
 GET         /                                     @controllers.Application.index
 GET         /preview                              @controllers.Application.preview
 GET         /designers                            @controllers.Application.designers
+GET         /designerProd                         @controllers.Application.designerProd(dId:Int)
 
 # user
 GET         /register                             @controllers.user.LoginController.registerPage

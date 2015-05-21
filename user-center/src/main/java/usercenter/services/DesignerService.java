@@ -22,27 +22,31 @@ public class DesignerService {
 
 
     /**
-     * 设计师列表，一次性查询上所有的设计师
+     * 设计师列表，如果ID为空，一次性查询上所有的设计师
+     *
      * @return
      */
     @Transactional(readOnly = true)
-    public List<DesignerView> getAllDesigner(){
+    public List<DesignerView> designerById(Integer id) {
         String sql = "select t1.id,t1.name,t1.description,t2.pictureUrl from customer as t1 left JOIN ( select * from  designer_picture where mainPic =1) AS t2 ON  t2.designerId = t1.id";
+        if(id != null){
+            sql += " and t1.id = " +id;
+        }
         List list = generalDAO.getEm().createNativeQuery(sql).getResultList();
         List<DesignerView> result = new ArrayList<>();
-        for(Object obj : list){
-            Object[] designer = (Object[])obj;
-            DesignerView  dv = new DesignerView();
+        for (Object obj : list) {
+            Object[] designer = (Object[]) obj;
+            DesignerView dv = new DesignerView();
             dv.setId((Integer) designer[0]);
             dv.setName(designer[1].toString());
 
-            if(designer[2] != null){
+            if (designer[2] != null) {
                 dv.setDescription(designer[2].toString());
             }
             /**
              * 防止有些设计师，没有设置主图
              */
-            if(designer[3] != null){
+            if (designer[3] != null) {
                 dv.setPictureUrl(designer[3].toString());
             }
 
@@ -59,8 +63,8 @@ public class DesignerService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Designer getDesignerById(int designerId){
-       return generalDAO.get(Designer.class,designerId);
+    public Designer getDesignerById(int designerId) {
+        return generalDAO.get(Designer.class, designerId);
     }
 
     /**
@@ -70,16 +74,16 @@ public class DesignerService {
      * @return
      */
     @Transactional(readOnly = true)
-    public DesignerPicture getDesignerPicByDesignerById(int designerId){
+    public DesignerPicture getDesignerPicByDesignerById(int designerId) {
 
         String jpql = "select dp from DesignerPicture dp where 1=1 and dp.mainPic=true and dp.designerId=:designerId";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("designerId", designerId);
 
         List<DesignerPicture> list = generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
-        if(list != null && list.size() > 0) {
+        if (list != null && list.size() > 0) {
             return list.get(0);
-        }else{
+        } else {
             return new DesignerPicture(DesignerPicture.DESIGNER_DEFAULT_PIC);
         }
     }

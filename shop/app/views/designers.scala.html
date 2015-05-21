@@ -1,13 +1,12 @@
-@(designerList : List[usercenter.dtos.DesignerView])
+@(designerList: List[usercenter.dtos.DesignerView])
 
-@main(){
+@main() {
     <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
     <script type="text/javascript" src="@routes.Assets.versioned("js/jquery.min.js")"></script>
     <script type="text/javascript" src="@routes.Assets.versioned("js/common.js")"></script>
 
 
-
-}{
+} {
     <div class="designer-list">
         <div class="designer-list-inner width1200">
             <div class="bread-nav">
@@ -26,16 +25,18 @@
             </div>
             <div class="designer-list-con">
                 <ul class="clearfix">
-                    @for(designer <- designerList){
-                        <li>
+                @for(designer <- designerList) {
+                    <li>
+                        <a href="@routes.Application.designerProd(designer.getId)">
                             <img class="designer-img" src="@designer.getPictureUrl" alt="@designer.getDescription"/>
                             <div>
                                 @*<img src="images/test-designer-brand.jpg" alt=""/>*@
-                                <p>设计师：@designer.getName</p>
+                            <p>设计师：@designer.getName</p>
                             </div>
-                        </li>
+                        </a>
+                    </li>
 
-                    }
+                }
                 </ul>
                 <p class="more">发现更多设计师</p>
             </div>

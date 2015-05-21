@@ -1,0 +1,105 @@
+@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo])
+
+
+
+
+@main() {
+    <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")" />
+    <script type="text/javascript" src="@routes.Assets.versioned("js/jquery.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.versioned("js/common.js")"></script>
+
+
+} {
+    <div class="designer-brand">
+        <div class="designer-brand-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="@controllers.routes.Application.index()">首页</a></li>
+                    <li>&gt;</li>
+                    <li><a href="@controllers.routes.Application.designers()">设计师</a></li>
+                    <li>&gt;</li>
+                    <li>Pleione</li>
+                </ul>
+            </div>
+            <div class="top-con">
+                <img src="@designer.getPictureUrl()" alt="" width="439px" height="370px"/>
+                <div class="designer-con">
+                    <div class="designer-con-title">
+                        <h2><span>@designer.getName</span> <a href="#">关注</a></h2>
+                    </div>
+                    <div class="designer-con-content">
+                    @designer.getDescription
+                    </div>
+                </div>
+            </div>
+            @if(!sellingList.isEmpty) {
+                <div class="start-fashion">
+                    <h3>正在首发</h3>
+                    <ul class="clearfix">
+                    @for(prod <- sellingList) {
+                        <li>
+                            <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            <div class="cover">
+                                <a href="#" class="like">我喜欢</a>
+                                <a href="#" class="buy">立即购买</a>
+                                <div class="info">
+                                    <p class="name">@prod.getProduct.getName</p>
+                                    <p class="time">@prod.getCmsExhibition.getEndTime</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    </ul>
+                </div>
+            }
+
+
+            @if(!previewList.isEmpty) {
+                <div class="ready-online">
+                    <h3>即将上线</h3>
+                    <ul class="clearfix">
+
+                    @for(prod <- previewList) {
+                        <li>
+                            <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            <div class="cover">
+                                <a href="#" class="like">我喜欢</a>
+                                <div class="info">
+                                    <p class="name">@prod.getProduct.getName</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                    </ul>
+                </div>
+
+            }
+
+
+            @if(!normalList.isEmpty) {
+                <div class="hot-sale">
+                    <h3>热销产品</h3>
+                    <ul class="clearfix">
+
+                    @for(prod <- normalList) {
+                        <li>
+                            <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
+                            <div class="cover">
+                                <a href="#" class="like">我喜欢</a>
+                                <a href="#" class="buy">立即购买</a>
+                                <div class="info">
+                                    <p class="name">@prod.getProduct.getName</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                    </ul>
+                </div>
+
+            }
+        </div>
+    </div>
+
+}

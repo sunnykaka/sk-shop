@@ -10,6 +10,7 @@ import productcenter.constants.ProductTagType;
 import productcenter.constants.StoreStrategy;
 import productcenter.models.Html;
 import productcenter.models.Product;
+import productcenter.models.ProductPicture;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ProductService {
 
     /**
      * 获取所有产品，不包括已经删除的产品
+     *
      * @return
      */
     public List<Product> queryAllProducts() {
@@ -44,6 +46,7 @@ public class ProductService {
 
     /**
      * 通过产品主键id获取产品
+     *
      * @param id
      * @return
      */
@@ -146,20 +149,4 @@ public class ProductService {
         jpql += " order by o.name";
         return generalDao.query(jpql, page, queryParams);
     }
-
-    /**
-     * 查询商品描述
-     * @param productId
-     * @return
-     */
-    public List<Html> queryHtmlByProductId(Integer productId) {
-
-        String jpql = "select h from Html h where h.productId=:productId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("productId", productId);
-
-        List<Html> list = generalDao.query(jpql, Optional.empty(), queryParams);
-        return list;
-    }
-
 }

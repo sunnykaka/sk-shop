@@ -3,7 +3,6 @@ package designer;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
-import services.CmsService;
 import usercenter.services.DesignerService;
 import utils.Global;
 
@@ -21,6 +20,6 @@ public class DesignerTest  extends WithApplication {
 
     @Test
     public void testFindAllDesigner(){
-        designerService.getAllDesigner();
+        designerService.designerById(null);
     }
 }
