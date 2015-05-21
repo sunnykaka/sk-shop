@@ -6,7 +6,6 @@ import ordercenter.constants.OrderState;
 import ordercenter.constants.TradeType;
 import ordercenter.models.*;
 import ordercenter.payment.PayInfoWrapper;
-import ordercenter.models.SkuTradeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,7 +75,7 @@ public class TradeService {
      * @param outerTradeNo
      * @return
      */
-    public boolean existTradeInfo(String tradeNo, String outerTradeNo) {
+    public boolean existTrade(String tradeNo, String outerTradeNo) {
         Logger.info("--------TradeService existTradeInfo begin exe-----------" + tradeNo + " : " + outerTradeNo);
         Trade trade = this.getTradeByTradeNo(tradeNo, outerTradeNo);
         return   trade != null;
@@ -157,13 +156,53 @@ public class TradeService {
         return generalDao.update(jpql, params);
     }
 
+    ////////////////////////SkuTradeResult////////////////////////////
+    /**
+     * 创建SkuTradeResult
+     * @param skuTradeResult
+     */
+    public void createSkuTradeResult(SkuTradeResult skuTradeResult) {
+        Logger.info("--------TradeService createSkuTradeResult begin exe-----------" + skuTradeResult);
+        generalDao.persist(skuTradeResult);
+    }
 
+    /**
+     * 更新SkuTradeResult
+     * @param skuTradeResult
+     */
+    public void updateSkuTradeResult(SkuTradeResult skuTradeResult) {
+        play.Logger.info("--------TradeService updateCart begin exe-----------" + skuTradeResult);
+        generalDao.merge(skuTradeResult);
+    }
 
+    /**
+     * 通过SkuId获取SkuTradeResult
+     * @param skuId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public SkuTradeResult getSkuTradeResultBySkuId(int skuId) {
+        Logger.info("--------TradeService getSkuTradeResultBySkuId begin exe-----------" + skuId);
 
+        String jpql = "select v from SkuTradeResult v where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and v.skuId = :skuId ";
+        queryParams.put("skuId", skuId);
 
+        SkuTradeResult skuTradeResult = null;
+        List<SkuTradeResult> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        if(itemList != null && itemList.size() > 0) {
+            skuTradeResult = itemList.get(0);
+        }
+        return skuTradeResult;
+    }
 
-
-    public void changeOrderStateWhenPaySuccess(Trade trade) {
+    ///////////////////////////////交易（支付）成功后续处理///////////////////////////////////////////
+    /**
+     * 支付成功后续处理
+     * @param trade
+     */
+    public void paySuccessAfterProccess(Trade trade) {
         String errPrefix = "需要运营人员手动确认：第三方交易成功，但是后续操作异常,交易号为[" + trade.getTradeNo() + "]-";
         try {
             this.updateTradeOrderPaySuccessful(trade);
@@ -246,46 +285,4 @@ public class TradeService {
             }
         }
     }
-
-    ////////////////////////SkuTradeResult////////////////////////////
-    /**
-     * 创建SkuTradeResult
-     * @param skuTradeResult
-     */
-    public void createSkuTradeResult(SkuTradeResult skuTradeResult) {
-        Logger.info("--------TradeService createSkuTradeResult begin exe-----------" + skuTradeResult);
-        generalDao.persist(skuTradeResult);
-    }
-
-    /**
-     * 更新SkuTradeResult
-     * @param skuTradeResult
-     */
-    public void updateSkuTradeResult(SkuTradeResult skuTradeResult) {
-        play.Logger.info("--------TradeService updateCart begin exe-----------" + skuTradeResult);
-        generalDao.merge(skuTradeResult);
-    }
-
-    /**
-     * 通过SkuId获取SkuTradeResult
-     * @param skuId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public SkuTradeResult getSkuTradeResultBySkuId(int skuId) {
-        Logger.info("--------TradeService getSkuTradeResultBySkuId begin exe-----------" + skuId);
-
-        String jpql = "select v from SkuTradeResult v where 1=1 ";
-        Map<String, Object> queryParams = new HashMap<>();
-        jpql += " and v.skuId = :skuId ";
-        queryParams.put("skuId", skuId);
-
-        SkuTradeResult skuTradeResult = null;
-        List<SkuTradeResult> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
-        if(itemList != null && itemList.size() > 0) {
-            skuTradeResult = itemList.get(0);
-        }
-        return skuTradeResult;
-    }
-
 }
