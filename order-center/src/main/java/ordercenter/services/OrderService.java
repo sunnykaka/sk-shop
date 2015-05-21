@@ -8,6 +8,7 @@ import ordercenter.constants.CancelOrderType;
 import ordercenter.constants.OrderState;
 import ordercenter.models.*;
 import ordercenter.util.OrderNumberUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,37 @@ public class OrderService {
         params.put("orgName", orgName);
 
         generalDao.update(jpql, params);
+    }
+
+    /**
+     * 更新订单状态
+     * @param orderId
+     * @param orderState
+     * @param previousState
+     * @return
+     */
+    public int updateOrderStateByStrictState(int orderId, OrderState orderState, OrderState previousState) {
+        Logger.info("--------OrderService updateOrderState begin exe-----------" + orderId + " : " + orderState + " : " + previousState);
+
+        DateTime curTime = DateUtils.current();
+
+        String jpql = "update Order o set o.orderState=:orderState , o.updateTime =:modifyDate ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderState", orderState);
+        params.put("modifyDate", curTime);
+
+        if(OrderState.Pay.getName().equals(orderState.getName())) {
+            jpql += ", o.payDate =:payDate ";
+            params.put("payDate", curTime);
+        } else if(OrderState.Cancel.getName().equals(orderState.getName()) || OrderState.Close.getName().equals(orderState.getName()) || OrderState.Success.getName().equals(orderState.getName())) {
+            jpql += ", o.endDate =:endDate ";
+            params.put("endDate", curTime);
+        }
+        jpql += " where o.id=:orderId and o.orderState =:previousState ";
+        params.put("orderId", orderId);
+        params.put("previousState", previousState);
+
+        return generalDao.update(jpql, params);
     }
 
     /**
@@ -199,11 +231,11 @@ public class OrderService {
 
         // TODO 取消订单
         try {
-            tradeService.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
+            this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
             for (OrderItem oi : order.getOrderItemList()) {
-                tradeService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
+                this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
             }
-            tradeService.createOrderStateHistory(new OrderStateHistory(order, "订单已取消", CancelOrderType.getName(type)));
+            this.createOrderStateHistory(new OrderStateHistory(order, "订单已取消", CancelOrderType.getName(type)));
         } catch (AppBusinessException a) {
             throw new AppBusinessException("取消订单失败");
         }
@@ -222,18 +254,16 @@ public class OrderService {
         if (null == order) {
             throw new AppBusinessException("确认收货失败，无法查询订单");
         }
-
         // TODO 确认收货
         try {
-            tradeService.updateOrderStateByStrictState(order.getId(), OrderState.Receiving, order.getOrderState());
+            this.updateOrderStateByStrictState(order.getId(), OrderState.Receiving, order.getOrderState());
             for (OrderItem oi : order.getOrderItemList()) {
-                tradeService.updateOrderItemStateByStrictState(oi.getId(), OrderState.Receiving, oi.getOrderState());
+                this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Receiving, oi.getOrderState());
             }
-            tradeService.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getValue()));
+            this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getValue()));
         } catch (AppBusinessException a) {
             throw new AppBusinessException("确认收货失败");
         }
-
     }
 
 
@@ -264,6 +294,33 @@ public class OrderService {
     public void updateOrderItem(OrderItem orderItem) {
         Logger.info("--------OrderService updateOrderItem begin exe-----------" + orderItem);
         generalDao.merge(orderItem);
+    }
+
+    /**
+     * 更新订单项状态
+     * @param orderItemId
+     * @param orderState
+     * @param previousState
+     * @return
+     */
+    public int updateOrderItemStateByStrictState(int orderItemId, OrderState orderState, OrderState previousState) {
+        Logger.info("--------OrderService updateOrderItemStateByStrictState begin exe-----------" + orderItemId + " : " + orderState + " : " + previousState);
+
+        DateTime curTime = DateUtils.current();
+
+        String jpql = "update OrderItem o set o.orderState=:orderState, o.updateTime =:updateTime ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderState", orderState);
+        params.put("updateTime", curTime);
+
+        jpql += " where o.id=:orderItemId ";
+        params.put("orderItemId", orderItemId);
+
+        if(previousState != null && StringUtils.isNotEmpty(previousState.getName())) {
+            jpql += " and o.orderState =:previousState ";
+            params.put("previousState", previousState);
+        }
+        return generalDao.update(jpql, params);
     }
 
     /**

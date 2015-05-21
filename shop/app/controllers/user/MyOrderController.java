@@ -8,12 +8,10 @@ import ordercenter.models.*;
 import ordercenter.services.BackGoodsService;
 import ordercenter.services.OrderService;
 import ordercenter.services.ValuationService;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.utils.SessionUtils;
@@ -169,9 +167,7 @@ public class MyOrderController extends Controller {
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
         }
         List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
-
         return ok(myBackGoodsApply.render(order, logistics, orderStateHistories));
-
     }
 
     /**

@@ -27,7 +27,7 @@ import java.util.Optional;
 public class CartService {
 
     @Autowired
-    GeneralDao generalDao;
+    private GeneralDao generalDao;
 
     @Autowired
     private SkuAndStorageService skuService;
@@ -37,9 +37,6 @@ public class CartService {
 
     @Autowired
     private PropertyAndValueService propertyAndValueService;
-
-    //@Autowired
-    //private CmsService skCmsService;
 
     /**
      * 向购物车中加入Sku商品
@@ -218,7 +215,6 @@ public class CartService {
             updateCartItem(cartItem);
         }
     }
-
 
     /**
      * 通过购物车主键id获取购物车项，不包括已经删除的购物项
