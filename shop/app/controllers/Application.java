@@ -135,7 +135,7 @@ public class Application extends Controller {
          * 如果设计师没有专场，那所有的商品直接展示为正常售卖
          */
         if (exhibitions == null || exhibitions.size() < 1) {
-            return ok(product.render(SessionUtils.currentUser(), designer, null, null, productList));
+            return ok(product_list.render(SessionUtils.currentUser(), designer, null, null, productList));
         }
 
         List<ProductInfo> sellProds = productList.stream().filter(prod -> {
@@ -182,7 +182,7 @@ public class Application extends Controller {
 //        List<Product> sellProds = products.stream().filter(prod -> sellProdIds.contains(prod.getId())).collect(toList());
 //        List<Product> normalProds = products.stream().filter(prod -> !sellProdIds.contains(prod.getId()) && !preProdIds.contains(prod.getId())).collect(toList());
 
-        return ok(product.render(SessionUtils.currentUser(), designer, sellProds, preProds, normalProds));
+        return ok(product_list.render(SessionUtils.currentUser(), designer, sellProds, preProds, normalProds));
     }
 
 
