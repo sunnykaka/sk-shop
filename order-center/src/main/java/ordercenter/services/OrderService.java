@@ -231,11 +231,13 @@ public class OrderService {
 
         // TODO 取消订单
         try {
-            this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
-            for (OrderItem oi : order.getOrderItemList()) {
-                this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
+            int count = this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel,order.getOrderState());
+            if(count == 1) {
+                for (OrderItem oi : order.getOrderItemList()) {
+                    this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
+                }
+                this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), CancelOrderType.getName(type)));
             }
-            this.createOrderStateHistory(new OrderStateHistory(order, "订单已取消", CancelOrderType.getName(type)));
         } catch (AppBusinessException a) {
             throw new AppBusinessException("取消订单失败");
         }
@@ -260,7 +262,7 @@ public class OrderService {
             for (OrderItem oi : order.getOrderItemList()) {
                 this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Receiving, oi.getOrderState());
             }
-            this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getValue()));
+            this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getLogMsg()));
         } catch (AppBusinessException a) {
             throw new AppBusinessException("确认收货失败");
         }

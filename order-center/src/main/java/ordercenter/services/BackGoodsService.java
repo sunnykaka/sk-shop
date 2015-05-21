@@ -2,6 +2,7 @@ package ordercenter.services;
 
 import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
+import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.dtos.BackApplyForm;
 import ordercenter.models.*;
@@ -49,7 +50,7 @@ public class BackGoodsService {
         }
 
         try{
-            Long backPrice = 0l;
+            Money backPrice = Money.valueOf(0);
 
             for(String str:orderItemStr){
 
@@ -68,12 +69,12 @@ public class BackGoodsService {
                 }
 
                 backGoodsItem.setNumber(number);
-                backGoodsItem.setUnitPrice(orderItem.getCurUnitPrice().getCent());
+                backGoodsItem.setUnitPrice(orderItem.getCurUnitPrice());
                 backGoodsItem.setOrderState(order.getOrderState());
                 backGoodsItem.setOrderItemId(orderItemId);
                 backGoodsItems.add(backGoodsItem);
 
-                backPrice += orderItem.getCurUnitPrice().getCent();
+                backPrice.add(orderItem.getCurUnitPrice().multiply(number));
 
             }
 
@@ -111,6 +112,36 @@ public class BackGoodsService {
             generalDao.persist(backGoodsItem);
         }
         BackGoodsLog backGoodsLog = new BackGoodsLog(backGoods,backGoods.getUserName(),"创建退货单,等待审核","");
+        generalDao.persist(backGoodsLog);
+
+    }
+
+    /**
+     * 取消退货
+     *
+     * @param backGoodsId
+     * @return
+     */
+    public void cancelBackApply(int backGoodsId,int userId){
+
+        BackGoods backGoods = getBackGoods(backGoodsId,userId);
+        if(null == backGoods){
+            throw new AppBusinessException("取消退货失败，没有找到退货订单");
+        }
+
+        if(backGoods.getUserId() != userId){
+            throw new AppBusinessException("取消退货失败，找不到退货订单");
+        }
+
+        if(backGoods.getBackState().checkCanNotCancelForUser()){
+            throw new AppBusinessException("取消退货失败，退货订单状态不可取消");
+        }
+
+        backGoods.setBackState(BackGoodsState.Cancel);
+        generalDao.merge(backGoods);
+
+        //创建日志
+        BackGoodsLog backGoodsLog = new BackGoodsLog(backGoods,backGoods.getUserName(),"取消退货","");
         generalDao.persist(backGoodsLog);
 
     }

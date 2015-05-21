@@ -90,7 +90,7 @@ public class BackGoods implements EntityClass<Integer>, OperableData {
     /**
      * 退货金额
      */
-    private Long backPrice = 0l;
+    private Money backPrice = Money.valueOf(0);
 
     /**
      * 上传图片的地址
@@ -297,18 +297,13 @@ public class BackGoods implements EntityClass<Integer>, OperableData {
     }
 
     @Column(name = "backPrice")
-    @Basic
-    public Long getBackPrice() {
+    @Type(type="common.utils.hibernate.MoneyType")
+    public Money getBackPrice() {
         return backPrice;
     }
 
-    public void setBackPrice(Long backPrice) {
+    public void setBackPrice(Money backPrice) {
         this.backPrice = backPrice;
-    }
-
-    @Transient
-    public String getBackPriceByMoney() {
-        return Money.valueOf(backPrice).toString();
     }
 
     @Column(name = "backState")
