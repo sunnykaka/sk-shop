@@ -29,8 +29,6 @@ public class ProductDetail {
 
     private ProductPicture productPicture;
 
-    //TODO 视频
-
     //评论总数量
     private int goodValuationCount;
 
@@ -140,8 +138,6 @@ public class ProductDetail {
          * @return
          */
         public Builder buildProductDetail() {
-
-            //TODO 读取视频
 
             //读取主图
             List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(productDetail.product.getId());

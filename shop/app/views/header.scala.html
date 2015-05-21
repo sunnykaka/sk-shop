@@ -1,12 +1,20 @@
 @()
 
+@import usercenter.utils.SessionUtils
+
 <div class="top">
     <div class="top-inner width1200">
         <div class="left"><h1>全球首家独立设计师首发平台</h1></div>
         <div class="right">
             <div class="login">
-                <a class="login btn" href="@controllers.user.routes.LoginController.loginPage()">登陆</a>
-                <a class="signIn btn" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
+                @defining(SessionUtils.currentUser()) {user =>
+                    @if(user == null) {
+                        <a class="login btn" href="@controllers.user.routes.LoginController.loginPage()">登陆</a>
+                        <a class="signIn btn" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
+                    } else {
+                        欢迎, @user.getUserName
+                    }
+                }
             </div>
         </div>
     </div>
