@@ -31,7 +31,6 @@ public class ProductService {
 
     /**
      * 获取所有产品，不包括已经删除的产品
-     *
      * @return
      */
     public List<Product> queryAllProducts() {
@@ -46,7 +45,6 @@ public class ProductService {
 
     /**
      * 通过产品主键id获取产品
-     *
      * @param id
      * @return
      */
@@ -149,4 +147,32 @@ public class ProductService {
         jpql += " order by o.name";
         return generalDao.query(jpql, page, queryParams);
     }
+
+    /**
+     * 查询商品描述
+     * @param productId
+     * @return
+     */
+    public List<Html> queryHtmlByProductId(Integer productId) {
+
+        String jpql = "select h from Html h where h.productId=:productId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+
+        List<Html> list = generalDao.query(jpql, Optional.empty(), queryParams);
+        return list;
+    }
+
+
+    /**
+     * 查询某个设计师下面所有的商品
+     * @param designerId
+     * @return
+     */
+    public List<Product> products4Designer(Integer designerId) {
+        String sql = "select * from product where isDelete = 0 and customerId = ?1";
+        return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, designerId).getResultList();
+
+    }
+
 }
