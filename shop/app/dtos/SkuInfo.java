@@ -38,10 +38,12 @@ public class SkuInfo {
 
     private int stockQuantity;
 
+    private int tradeMaxNumber;
+
     private List<String> imageList;
 
     public SkuInfo(Integer skuId, String skuCode, String barCode, Money price, Money marketPrice,
-                   String skuPropertiesInDb, int stockQuantity, List<String> imageList) {
+                   String skuPropertiesInDb, int stockQuantity, int tradeMaxNumber, List<String> imageList) {
         this.skuId = skuId;
         this.skuCode = skuCode;
         this.barCode = barCode;
@@ -49,6 +51,7 @@ public class SkuInfo {
         this.marketPrice = marketPrice;
         this.skuPropertiesInDb = skuPropertiesInDb;
         this.stockQuantity = stockQuantity;
+        this.tradeMaxNumber = tradeMaxNumber;
         this.imageList = imageList;
     }
 
@@ -82,5 +85,9 @@ public class SkuInfo {
 
     public List<String> getImageList() {
         return imageList;
+    }
+
+    public int getTradeMaxNumber() {
+        return tradeMaxNumber;
     }
 }

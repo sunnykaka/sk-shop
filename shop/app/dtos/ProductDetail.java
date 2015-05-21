@@ -218,6 +218,7 @@ public class ProductDetail {
                                     skuDetail.getSku().getMarketPrice(),
                                     skuDetail.getSku().getSkuPropertiesInDb(),
                                     skuDetail.getStockQuantity(),
+                                    skuDetail.getTradeMaxNumber(),
                                     skuDetail.getImageList())).
                             collect(Collectors.toMap(SkuInfo::getSkuPropertiesInDb, skuInfo -> skuInfo));
 

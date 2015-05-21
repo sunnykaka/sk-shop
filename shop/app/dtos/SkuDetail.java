@@ -19,7 +19,15 @@ public class SkuDetail {
 
     private StockKeepingUnit sku;
 
+    /**
+     * 库存数量
+     */
     private int stockQuantity;
+
+    /**
+     * 交易最大数量
+     */
+    private int tradeMaxNumber;
 
     private List<String> imageList;
 
@@ -37,6 +45,10 @@ public class SkuDetail {
 
     public List<String> getImageList() {
         return imageList;
+    }
+
+    public int getTradeMaxNumber() {
+        return tradeMaxNumber;
     }
 
     public static class Builder {
@@ -57,6 +69,7 @@ public class SkuDetail {
             SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuDetail.sku.getId());
             if(skuStorage != null) {
                 skuDetail.stockQuantity = skuStorage.getStockQuantity();
+                skuDetail.tradeMaxNumber = skuStorage.getTradeMaxNumber();
             }
 
             List<ProductPicture> productPictures = productPictureService.queryProductPicturesBySkuId(String.valueOf(skuDetail.sku.getId()));
