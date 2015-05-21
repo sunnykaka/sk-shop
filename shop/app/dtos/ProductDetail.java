@@ -204,6 +204,11 @@ public class ProductDetail {
                             map(sku -> SkuDetail.Builder.newBuilder(sku).buildSku().build()).
                             collect(Collectors.toList());
 
+            if(skuDetailList.isEmpty()) {
+                play.Logger.warn(String.format("商品[id=%d]无有效的sku", productDetail.product.getId()));
+                throw new AppBusinessException("您请求的商品没有找到, 请看看其他的吧");
+            }
+
             productDetail.skuDetailList = skuDetailList;
 
             //构造skuMap

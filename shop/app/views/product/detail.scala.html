@@ -11,6 +11,7 @@
 
     var defaultSku = "@Html(pd.getDefaultSku.getSkuPropertiesInDb)";
 
+    var productOnline = @pd.getProduct.isOnline
 
     $(function(){
         $.scrollTo('#detail',500);
@@ -156,10 +157,20 @@
                         </div>
                     </dd>
                 </div>
-                <div class="detail-btn">
-                    <a href="javascript:void(0);" class="btn addToOrder">立即购买</a>
-                    <a href="javascript:void(0);" class="btn addToCart">加入购物车</a>
-                </div>
+                @if(!pd.getProduct.isOnline) {
+                    <div class="detail-btn">
+                        <a href="javascript:void(0);" class="btn addToOrder">商品已下架</a>
+                    </div>
+                } else {
+                    @if(pd.getDefaultSku.getStockQuantity <= 0) {
+                        <div class="detail-btn">
+                            <a href="javascript:void(0);" class="btn addToOrder">商品已售罄</a>
+                        </div>
+                    } else {
+                        <a href="javascript:void(0);" class="btn addToOrder">立即购买</a>
+                        <a href="javascript:void(0);" class="btn addToCart">加入购物车</a>
+                    }
+                }
                 <div class="detail-like">
                     <span class="like current"><i></i><span class="like-text">我喜欢</span></span>
                 </div>
