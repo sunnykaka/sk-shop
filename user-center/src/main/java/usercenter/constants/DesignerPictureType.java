@@ -8,10 +8,10 @@ import common.models.utils.ViewEnum;
  */
 public enum DesignerPictureType implements ViewEnum {
 
-    IndexLogoSmallPic("首页设计师品牌Logo图","120*60"),
-    ListLogoBigPic("列表页设计师品牌logo图","289*60"),
-    ListMainPic("列表页设计师主图","289*460"),
-    StorePic("店铺页设计师首图","439*370");
+    IndexLogoSmallPic("Logo小图","120*60"),
+    ListLogoBigPic("Logo大图","289*60"),
+    ListMainPic("主图","289*460"),
+    StorePic("店铺首图","439*370");
 
     public String value;
 
