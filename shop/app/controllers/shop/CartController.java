@@ -294,7 +294,7 @@ public class CartController extends Controller {
     }
 
     /**
-     * 立即支付-去结算-选择送货地址
+     * 验证立即支付数据
      * @return
      */
     @SecuredAction

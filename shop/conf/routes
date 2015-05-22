@@ -104,7 +104,7 @@ GET         /cart/showCart                        @controllers.shop.CartControll
 POST        /cart/deleteCartItem                  @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
 POST        /cart/chooseAddress                   @controllers.shop.CartController.chooseAddress(selCartItems:String)
 POST        /cart/verifyPromptlyPayData           @controllers.shop.CartController.verifyPromptlyPayData(skuId:Int, number:Int)
-POST        /cart/promptlyPayChooseAddress        @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
+GET         /cart/promptlyPayChooseAddress        @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
 
 #订单
 POST        /order/submitOrder                    @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
