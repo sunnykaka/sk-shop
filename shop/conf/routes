@@ -98,16 +98,16 @@ POST        /my/back/cancel                       @controllers.user.MyOrderContr
 
 #购物车
 GET         /cart/getSkuStorage                   @controllers.shop.CartController.getSkuStorage(skuId:Int)
-GET         /cart/addSkuToCartAddNum              @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
-GET         /cart/addSkuToCartReplaceNum          @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
+POST         /cart/addSkuToCartAddNum              @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
+POST         /cart/addSkuToCartReplaceNum          @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
 GET         /cart/showCart                        @controllers.shop.CartController.showCart()
-GET         /cart/deleteCartItem                  @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
-GET         /cart/chooseAddress                   @controllers.shop.CartController.chooseAddress(selCartItems:String)
-GET         /cart/promptlyPayChooseAddress        @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
+POST         /cart/deleteCartItem                  @controllers.shop.CartController.deleteCartItem(cartId:Int, skuId:Int)
+POST         /cart/chooseAddress                   @controllers.shop.CartController.chooseAddress(selCartItems:String)
+POST         /cart/promptlyPayChooseAddress        @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
 
 #订单
-GET         /order/submitOrder                    @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
-GET         /order/toPayOrder                     @controllers.shop.OrderAndPayController.toPayOrder(payType:String,payMethod:String,payOrg:String,orderIds:String)
+POST         /order/submitOrder                    @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
+POST         /order/toPayOrder                     @controllers.shop.OrderAndPayController.toPayOrder(payType:String,payMethod:String,payOrg:String,orderIds:String)
 
 #支付
 POST        /payOrder/normalReturn                @controllers.shop.PayCallBackController.normalReturn

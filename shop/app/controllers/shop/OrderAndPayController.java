@@ -21,10 +21,11 @@ import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.services.SkuAndStorageService;
-import usercenter.constants.AccountType;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
+import usercenter.utils.SessionUtils;
+import utils.secure.SecuredAction;
 import views.html.shop.orderPlay;
 import views.html.shop.orderToPay;
 
@@ -60,24 +61,23 @@ public class OrderAndPayController extends Controller {
      * @param addressId 用户选择的寄送地址
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result submitOrder(String selItems, int addressId, boolean isPromptlyPay) {
         String curUserName = "";
         Cart cart = null;
         try {
-
             if(selItems == null || selItems.trim().length() == 0) {
                 return ok(new JsonResult(false,"去结算项为空！").toNode());
             }
 
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            curUser.setUserName("ldj");
-            curUser.setAccountType(AccountType.Anonymous);
-            //测试
+//            //测试
+//            User curUser = new User();
+//            curUser.setId(14311);
+//            curUser.setUserName("ldj");
+//            curUser.setAccountType(AccountType.Anonymous);
+//            //测试
 
-            //curUser = SessionUtils.currentUser();
+            User curUser = SessionUtils.currentUser();
             curUserName = curUser.getUserName();
 
             String[] split = null;
@@ -157,7 +157,7 @@ public class OrderAndPayController extends Controller {
      * @param orderIds
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result toPayOrder(String payType, String payMethod, String payOrg, String orderIds) {
         //参数组织没想好
         if(payType == null || payType.trim().length() == 0) {
@@ -175,14 +175,14 @@ public class OrderAndPayController extends Controller {
 
         String curUserName = "";
         try {
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            curUser.setUserName("ldj");
-            curUser.setAccountType(AccountType.KRQ);
-            //测试
+//            //测试
+//            User curUser = new User();
+//            curUser.setId(14311);
+//            curUser.setUserName("ldj");
+//            curUser.setAccountType(AccountType.KRQ);
+//            //测试
 
-            //User curUser = SessionUtils.currentUser();
+            User curUser = SessionUtils.currentUser();
             curUserName = curUser.getUserName();
 
             String[] split = orderIds.split(",");
