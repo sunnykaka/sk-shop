@@ -1,20 +1,18 @@
 package usercenter.models;
 
 import common.models.utils.EntityClass;
+import usercenter.constants.DesignerPictureType;
 
 import javax.persistence.*;
 
 /**
  * 设计师图片
  * @Author: lidujun
- * @Since: 2015-04-21
+ * @Since: 2015-05-22
  */
 @Entity
 @Table(name = "designer_picture")
 public class DesignerPicture implements EntityClass<Integer> {
-
-    /** 默认图片地址 */
-    public static final String DESIGNER_DEFAULT_PIC = "";
 
     private Integer id;
 
@@ -28,9 +26,9 @@ public class DesignerPicture implements EntityClass<Integer> {
 
     private String pictureLocalUrl;
 
-    private boolean mainPic; //是否主图
+    private DesignerPictureType picType;
 
-    private boolean minorPic;//是否副图
+    private String size;
 
     public DesignerPicture(){}
 
@@ -51,6 +49,7 @@ public class DesignerPicture implements EntityClass<Integer> {
     }
 
     @Column(name = "name")
+    @Basic
     public String getName() {
         return name;
     }
@@ -60,6 +59,7 @@ public class DesignerPicture implements EntityClass<Integer> {
     }
 
     @Column(name = "pictureUrl")
+    @Basic
     public String getPictureUrl() {
         return pictureUrl;
     }
@@ -69,6 +69,7 @@ public class DesignerPicture implements EntityClass<Integer> {
     }
 
     @Column(name = "designerId")
+    @Basic
     public int getDesignerId() {
         return designerId;
     }
@@ -77,16 +78,8 @@ public class DesignerPicture implements EntityClass<Integer> {
         this.designerId = designerId;
     }
 
-    @Column(name = "mainPic")
-    public boolean isMainPic() {
-        return mainPic;
-    }
-
-    public void setMainPic(boolean mainPic) {
-        this.mainPic = mainPic;
-    }
-
     @Column(name = "originalName")
+    @Basic
     public String getOriginalName() {
         return originalName;
     }
@@ -96,6 +89,7 @@ public class DesignerPicture implements EntityClass<Integer> {
     }
 
     @Column(name = "pictureLocalUrl")
+    @Basic
     public String getPictureLocalUrl() {
         return pictureLocalUrl;
     }
@@ -104,13 +98,23 @@ public class DesignerPicture implements EntityClass<Integer> {
         this.pictureLocalUrl = pictureLocalUrl;
     }
 
-    @Column(name = "minorPic")
-    public boolean isMinorPic() {
-        return minorPic;
+    @Column(name = "picType")
+    @Enumerated(EnumType.STRING)
+    public DesignerPictureType getPicType() {
+        return picType;
     }
 
-    public void setMinorPic(boolean minorPic) {
-        this.minorPic = minorPic;
+    public void setPicType(DesignerPictureType picType) {
+        this.picType = picType;
     }
 
+    @Column(name = "size")
+    @Basic
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
 }

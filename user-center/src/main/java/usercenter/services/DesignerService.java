@@ -4,6 +4,7 @@ import common.services.GeneralDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import usercenter.constants.DesignerPictureType;
 import usercenter.dtos.DesignerView;
 import usercenter.models.Designer;
 import usercenter.models.DesignerPicture;
@@ -84,7 +85,30 @@ public class DesignerService {
         if (list != null && list.size() > 0) {
             return list.get(0);
         } else {
-            return new DesignerPicture(DesignerPicture.DESIGNER_DEFAULT_PIC);
+            return new DesignerPicture();
         }
+    }
+
+    /**
+     * 通过图类型获取设计师主图
+     *
+     * @param picType
+     * @return
+     * create by lidujun
+     */
+    @Transactional(readOnly = true)
+    public DesignerPicture getDesignerPicByType(int designerId, DesignerPictureType picType) {
+        DesignerPicture designerPicture = null;
+
+        String jpql = "select dp from DesignerPicture dp where dp.picType=:picType and dp.designerId=:designerId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("picType", picType);
+        queryParams.put("designerId", designerId);
+
+        List<DesignerPicture> list = generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
+        if (list != null && list.size() > 0) {
+            designerPicture = list.get(0);
+        }
+        return designerPicture;
     }
 }
