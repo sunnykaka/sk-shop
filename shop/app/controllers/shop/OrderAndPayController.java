@@ -15,6 +15,7 @@ import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayMethod;
 import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
+import ordercenter.util.TradeSequenceUtil;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
@@ -152,7 +153,7 @@ public class OrderAndPayController extends Controller {
     }
 
     /**
-     * 提交订单：订单支付
+     * 提交订单-验证并生成交易记录
      * @param payType
      * @param payMethod
      * @param payOrg
@@ -160,7 +161,7 @@ public class OrderAndPayController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result toPayOrder(String payType, String payMethod, String payOrg, String orderIds) {
+    public Result submitTradeOrder(String payType, String payMethod, String payOrg, String orderIds) {
         //参数组织没想好
         if(payType == null || payType.trim().length() == 0) {
             return ok(new JsonResult(false,"没有选择支付类型！").toNode());
@@ -177,13 +178,6 @@ public class OrderAndPayController extends Controller {
 
         String curUserName = "";
         try {
-//            //测试
-//            User curUser = new User();
-//            curUser.setId(14311);
-//            curUser.setUserName("ldj");
-//            curUser.setAccountType(AccountType.KRQ);
-//            //测试
-
             User curUser = SessionUtils.currentUser();
             curUserName = curUser.getUserName();
 
@@ -198,25 +192,7 @@ public class OrderAndPayController extends Controller {
                 }
             }
 
-            PayInfoWrapper payInfoWrapper = new PayInfoWrapper();
-            //设置购买方式为order，订单
-            payInfoWrapper.setBizType(BizType.Order.getName());
-            payInfoWrapper.setCallBackClass(OrderPayCallback.class);
-            payInfoWrapper.setPayMethod(PayMethod.valueOf(payMethod));
-            payInfoWrapper.setDefaultbank(payOrg);
-
-            //默认为支付宝,主要用来更新支付方式
-            PayBank bank = PayBank.Alipay;
-            //目前设置默为阿里支付
-            if (payInfoWrapper.isBank()) {
-                bank = PayBank.valueOf(payInfoWrapper.getDefaultbank());
-            } else {
-                if(payMethod.equals(PayMethod.Tenpay.getName())) {
-                    bank = PayBank.Tenpay;
-                }
-            }
-            Logger.info("///////////////////////////真正的支付机构：" + bank.getValue());
-            payInfoWrapper.setDefaultbank(bank.getName());
+            PayBank payBank = PayBank.valueOf(payOrg);
 
             List<Order> orderList = new ArrayList<Order>(idList.length);
             for (int id : idList) {
@@ -236,30 +212,81 @@ public class OrderAndPayController extends Controller {
                 }
                 order.setAccountType(curUser.getAccountType());
                 order.setPayType(TradePayType.valueOf(payType));
-                order.setPayBank(bank);
+                order.setPayBank(payBank);
 
                 orderList.add(order);
             }
+            //交易号
+            String tradeNo = TradeSequenceUtil.getTradeNo();
             //处理交易信息
-            tradeService.submitTradeOrderProcess(payInfoWrapper, orderList);
-
-            //订单总金额，显示在支付宝收银台里的“应付总额”里
-            long totalFee = this.getPayMoneyForCent(orderList);
-
-            //支付宝是元，财富同是分
-            if(payMethod.equals(PayMethod.directPay.getName())) {
-                totalFee = totalFee/100;
-            }
-
-            payInfoWrapper.setTotalFee(totalFee);
-
-            PayRequestHandler payService = PaymentManager.getPayRequestHandler(PayMethod.valueOf(payMethod));
-            String form = payService.forwardToPay(payInfoWrapper);
-            return ok(orderToPay.render(form));
+            tradeService.submitTradeOrderProcess(tradeNo, orderList);
+            return ok(new JsonResult(true,"生成交易成功",tradeNo).toNode());
         } catch (Exception e) {
             Logger.error("用户" + curUserName + "订单支付在提交第三方支付前发生异常，其提交的订单编号如下：" + orderIds, e);
             return ok(new JsonResult(false,"订单支付失败，请联系商城客服人员！").toNode());
         }
+    }
+
+    /**
+     * 提交订单：订单支付
+     * @param payMethod
+     * @param payOrg
+     * @param orderIds
+     * @param tradeNo
+     * @return
+     */
+    @SecuredAction
+    public Result toPayOrder(String payMethod, String payOrg, String orderIds, String tradeNo) {
+        User curUser = SessionUtils.currentUser();
+        String[] split = orderIds.split(",");
+        Integer[] idList = new Integer[split.length];
+        for (int i = 0; i < split.length; i++) {
+            if (!NumberUtils.isNumber(split[i])) {
+                Logger.warn("订单支付出现异常:" + "订单号" + split[i] + "错误！");
+                return ok(new JsonResult(false,"订单号" + split[i] + "错误！").toNode());
+            } else {
+                idList[i] = Integer.valueOf(split[i]);
+            }
+        }
+        PayInfoWrapper payInfoWrapper = new PayInfoWrapper();
+        payInfoWrapper.setTradeNo(tradeNo);
+        //设置购买方式为order，订单
+        payInfoWrapper.setBizType(BizType.Order.getName());
+        payInfoWrapper.setCallBackClass(OrderPayCallback.class);
+        payInfoWrapper.setPayMethod(PayMethod.valueOf(payMethod));
+        payInfoWrapper.setDefaultbank(payOrg);
+
+        //默认为支付宝,主要用来更新支付方式
+        PayBank bank = PayBank.Alipay;
+        //目前设置默为阿里支付
+        if (payInfoWrapper.isBank()) {
+            bank = PayBank.valueOf(payInfoWrapper.getDefaultbank());
+        } else {
+            if(payMethod.equals(PayMethod.Tenpay.getName())) {
+                bank = PayBank.Tenpay;
+            }
+        }
+        Logger.info("///////////////////////////真正的支付机构：" + bank.getValue());
+        payInfoWrapper.setDefaultbank(bank.getName());
+
+        List<Order> orderList = new ArrayList<Order>(idList.length);
+        for (int id : idList) {
+            Order order = orderService.getOrderById(id);
+            orderList.add(order);
+        }
+        //订单总金额，显示在支付宝收银台里的“应付总额”里
+        long totalFee = this.getPayMoneyForCent(orderList);
+
+        //支付宝是元，财富同是分
+        if(payMethod.equals(PayMethod.directPay.getName())) {
+            totalFee = totalFee/100;
+        }
+
+        payInfoWrapper.setTotalFee(totalFee);
+
+        PayRequestHandler payService = PaymentManager.getPayRequestHandler(PayMethod.valueOf(payMethod));
+        String form = payService.forwardToPay(payInfoWrapper);
+        return ok(orderToPay.render(form));
     }
 
     /**

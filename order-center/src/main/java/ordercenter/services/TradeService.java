@@ -5,7 +5,6 @@ import common.utils.DateUtils;
 import ordercenter.constants.OrderState;
 import ordercenter.constants.TradeType;
 import ordercenter.models.*;
-import ordercenter.payment.PayInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,11 +111,10 @@ public class TradeService {
 
     /**
      * 支付交易处理方法
-     * @param payInfoWrapper
+     * @param tradeNo
      * @param orderList
      */
-    public void submitTradeOrderProcess(PayInfoWrapper payInfoWrapper, List<Order> orderList) {
-        String tradeNo = payInfoWrapper.getTradeNo();
+    public void submitTradeOrderProcess(String tradeNo, List<Order> orderList) {
         for(Order order : orderList) {
             //创建交易订单信息
             TradeOrder tradeOrder = new TradeOrder();

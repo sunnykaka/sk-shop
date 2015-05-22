@@ -2,7 +2,6 @@ package ordercenter.payment;
 
 import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayMethod;
-import ordercenter.util.TradeSequenceUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -31,7 +30,7 @@ public class PayInfoWrapper {
     /**
      * 交易流水号
      */
-    private String tradeNo = TradeSequenceUtil.getTradeNo();
+    private String tradeNo;
 
     /**
      *支付方式
@@ -93,6 +92,10 @@ public class PayInfoWrapper {
 
     public String getTradeNo() {
         return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
     }
 
     public long getTotalFee() {
