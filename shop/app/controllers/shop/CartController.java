@@ -17,6 +17,8 @@ import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
+import usercenter.utils.SessionUtils;
+import utils.secure.SecuredAction;
 import views.html.shop.chooseAddress;
 import views.html.shop.showCart;
 
@@ -51,7 +53,7 @@ public class CartController extends Controller {
      * @param skuId
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result getSkuStorage(int skuId) {
         try {
             SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
@@ -71,7 +73,7 @@ public class CartController extends Controller {
      * @param number
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result addSkuToCartAddNum(int skuId, int number) {
         return this.addSkuToCart(skuId, number,false);
     }
@@ -85,7 +87,7 @@ public class CartController extends Controller {
      * @param number
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result addSkuToCartReplaceNum(int skuId, int number) {
         return this.addSkuToCart(skuId, number,true);
     }
@@ -99,8 +101,7 @@ public class CartController extends Controller {
      * @param isReplace 是否替换同一个商品数量
      * @return
      */
-    //@SecuredAction
-    public Result addSkuToCart(int skuId, int number, boolean isReplace){
+    private Result addSkuToCart(int skuId, int number, boolean isReplace){
         try {
             if (number < 1) {
                 return ok(new JsonResult(false, "购买数量不能小于1！").toNode());
@@ -126,15 +127,15 @@ public class CartController extends Controller {
             }
 
 
+//
+//            /////////////////测试 /////////////////
+//            User curUser = new User();
+//            curUser.setId(14311);
+//            //测试
+//
+//            /////////////////测试 /////////////////
 
-            /////////////////测试 /////////////////
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
-
-            /////////////////测试 /////////////////
-
-            //User curUser = SessionUtils.currentUser();
+            User curUser = SessionUtils.currentUser();
             Cart cart = this.buildUserSimpleCart(curUser.getId());
             int addNumber = number;
             if(!isReplace) {
@@ -183,15 +184,15 @@ public class CartController extends Controller {
      *
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result showCart(){
         try {
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
+//            //测试
+//            User curUser = new User();
+//            curUser.setId(14311);
+//            //测试
 
-            //User curUser = SessionUtils.currentUser();
+            User curUser = SessionUtils.currentUser();
             Cart cart = cartProcess.buildUserCart(curUser.getId());
             return ok(showCart.render(cart));
         } catch (Exception e) {
@@ -206,7 +207,7 @@ public class CartController extends Controller {
      * @param cartId
      * @param skuId
      */
-    //@SecuredAction
+    @SecuredAction
     public Result deleteCartItem(int cartId, int skuId) {
         try {
             cartService.deleteCartItemBySkuIdAndCartId(skuId, cartId);
@@ -222,7 +223,7 @@ public class CartController extends Controller {
      * 去结算-选择送货地址
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result chooseAddress(String selCartItems) {
         if(selCartItems == null || selCartItems.trim().length() == 0) {
             return ok(new JsonResult(false,"去结算项为空！").toNode());
@@ -239,12 +240,12 @@ public class CartController extends Controller {
         }
 
         try {
-            //测试
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
+//            //测试
+//            User curUser = new User();
+//            curUser.setId(14311);
+//            //测试
 
-            //User curUser = SessionUtils.currentUser();
+            User curUser = SessionUtils.currentUser();
             Cart cart = cartProcess.buildUserCart(curUser.getId());
             String errMsg = "对不起您没有购买任何商品，不能前去支付！";
             if (cart == null) {
@@ -296,7 +297,7 @@ public class CartController extends Controller {
      * 立即支付-去结算-选择送货地址
      * @return
      */
-    //@SecuredAction
+    @SecuredAction
     public Result promptlyPayChooseAddress(int skuId, int number) {
         try {
             if (number < 1) {
@@ -322,16 +323,18 @@ public class CartController extends Controller {
                 return ok(new JsonResult(false,"已经售完","addForbid").toNode());
             }
 
-            /////////////////测试 /////////////////
-            User curUser = new User();
-            curUser.setId(14311);
-            //测试
-
-            /////////////////测试 /////////////////
-
-            //User curUser = SessionUtils.currentUser();
-
+//            /////////////////测试 /////////////////
+//            User curUser = new User();
+//            curUser.setId(14311);
+//            //测试
+//
+//            /////////////////测试 /////////////////
             //价格和sku属性
+
+
+
+
+            User curUser = SessionUtils.currentUser();
 
             Cart cart = new Cart();
             CartItem cartItem = new CartItem();
