@@ -41,9 +41,14 @@ public class BackGoodsItem implements EntityClass<Integer>, OperableData {
     private Integer orderItemId;
 
     /**
+     * 是否删除(1 表示已删除, 0 表示未删除), 默认是 0
+     */
+    private boolean deleted = false;
+
+    /**
      * 订单项退货时的单价
      */
-    private Money unitPrice = Money.valueOf(0);;
+    private Money unitPrice = Money.valueOf(0);
 
     /**
      * 记录提交退款单时订单项对应的状态(方便取消退货单时状态还原), 目前已无用处! 因此以 Cancel 做为默认值.
@@ -169,6 +174,16 @@ public class BackGoodsItem implements EntityClass<Integer>, OperableData {
     @Override
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Column(name = "isDelete")
+    @Basic
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Transient

@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 @org.springframework.stereotype.Controller
 public class MySecurityController extends Controller {
 
-    //public static final int test_userId = 14329;
     public static final int RANDOM_DEFAULT_SIZE = 16;
 
     @Autowired

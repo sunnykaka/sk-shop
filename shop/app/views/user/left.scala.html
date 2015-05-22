@@ -15,7 +15,7 @@
     </dl>
     <dl class="my-account">
         <dt>我的账户</dt>
-        <dd @if("data".equals(focus)){class="current"}><a href="@controllers.user.routes.AddressController.index()">我的资料</a></dd>
+        <dd @if("data".equals(focus)){class="current"}><a href="@controllers.user.routes.MyDataController.index()">我的资料</a></dd>
         <dd @if("security".equals(focus)){class="current"}><a href="@controllers.user.routes.MySecurityController.index()">账号安全</a></dd>
     </dl>
 </div>

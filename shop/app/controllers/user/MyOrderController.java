@@ -29,8 +29,6 @@ import java.util.Optional;
 @org.springframework.stereotype.Controller
 public class MyOrderController extends Controller {
 
-    public static final int user_id = 14303;
-
     @Autowired
     private OrderService orderService;
 
@@ -49,12 +47,13 @@ public class MyOrderController extends Controller {
      * @param queryType 0所有订单、1待收货、2待评价
      * @return
      */
+    @SecuredAction
     public Result index(int queryType, int pageNo, int pageSize) {
-        //User user = SessionUtils.currentUser();
+        User user = SessionUtils.currentUser();
 
         Page<Order> page = new Page<>(pageNo, pageSize);
 
-        List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user_id, queryType);
+        List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user.getId(), queryType);
         for (Order order : orderList) {
             for (OrderItem orderItem : order.getOrderItemList()) {
                 orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
@@ -84,7 +83,7 @@ public class MyOrderController extends Controller {
     public Result orderContent(int orderId) {
         User user = SessionUtils.currentUser();
 
-        Order order = orderService.getOrderById(orderId, user_id);
+        Order order = orderService.getOrderById(orderId, user.getId());
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
         for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
@@ -107,7 +106,8 @@ public class MyOrderController extends Controller {
     @SecuredAction
     public Result orderCancel(int orderId,int type) {
 
-        orderService.cancelOrder(orderId, user_id, type);
+        User user = SessionUtils.currentUser();
+        orderService.cancelOrder(orderId, user.getId(), type);
 
         return ok(new JsonResult(true, "取消成功").toNode());
 
@@ -122,8 +122,9 @@ public class MyOrderController extends Controller {
      */
     @SecuredAction
     public Result orderReceiving(int orderId) {
+        User user = SessionUtils.currentUser();
 
-        orderService.receivingOrder(orderId, user_id);
+        orderService.receivingOrder(orderId, user.getId());
 
         return ok(new JsonResult(true, "取消成功").toNode());
 
@@ -139,11 +140,11 @@ public class MyOrderController extends Controller {
     public Result orderAppraise(int orderId) {
         User user = SessionUtils.currentUser();
 
-        Order order = orderService.getOrderById(orderId, user_id);
+        Order order = orderService.getOrderById(orderId, user.getId());
         for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
             if (orderItem.isAppraise()) {
-                orderItem.setValuation(valuationService.findByOrderItemId(user_id, orderItem.getId()));
+                orderItem.setValuation(valuationService.findByOrderItemId(user.getId(), orderItem.getId()));
             }
         }
 
@@ -161,7 +162,7 @@ public class MyOrderController extends Controller {
     public Result backApply(int orderId) {
         User user = SessionUtils.currentUser();
 
-        Order order = orderService.getOrderById(orderId, user_id);
+        Order order = orderService.getOrderById(orderId, user.getId());
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
         for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
@@ -178,7 +179,6 @@ public class MyOrderController extends Controller {
     @SecuredAction
     public Result backApplySubmit(){
         User user = SessionUtils.currentUser();
-        user.setId(user_id);
 
         //TODO 判断是否订单是否达到退货要求
 
@@ -199,11 +199,18 @@ public class MyOrderController extends Controller {
         return ok(new JsonResult(false, backApplyForm.errorsAsJson().toString()).toNode());
     }
 
+    /**
+     * 取消退货订单
+     *
+     * @param backGoodsId
+     * @return
+     */
     @SecuredAction
     public Result backCancel(int backGoodsId){
+        User user = SessionUtils.currentUser();
 
         try {
-            backGoodsService.cancelBackApply(backGoodsId,user_id);
+            backGoodsService.cancelBackApply(backGoodsId,user.getId());
             return ok(new JsonResult(true, "取消成功").toNode());
         } catch (AppBusinessException e) {
             return ok(new JsonResult(false, e.getMessage()).toNode());
@@ -222,7 +229,7 @@ public class MyOrderController extends Controller {
 
         Page<BackGoods> page = new Page<>(pageNo, pageSize);
 
-        List<BackGoods> backGoodsList = backGoodsService.getMyBackGoods(Optional.of(page), user_id);
+        List<BackGoods> backGoodsList = backGoodsService.getMyBackGoods(Optional.of(page), user.getId());
         for(BackGoods backGoods:backGoodsList){
 
             for(BackGoodsItem backGoodsItem:backGoods.getBackGoodsItemList()){
@@ -247,7 +254,7 @@ public class MyOrderController extends Controller {
     public Result backContent(int backGoodsId) {
         User user = SessionUtils.currentUser();
 
-        BackGoods backGoods = backGoodsService.getBackGoods(backGoodsId,user_id);
+        BackGoods backGoods = backGoodsService.getBackGoods(backGoodsId,user.getId());
         for(BackGoodsItem backGoodsItem:backGoods.getBackGoodsItemList()){
             OrderItem orderItem = orderService.getOrderItemById(backGoodsItem.getOrderItemId());
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));

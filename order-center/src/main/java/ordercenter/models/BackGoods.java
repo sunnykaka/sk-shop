@@ -123,6 +123,11 @@ public class BackGoods implements EntityClass<Integer>, OperableData {
     private DateTime updateTime;
 
     /**
+     * 是否删除(1 表示已删除, 0 表示未删除), 默认是 0
+     */
+    private boolean deleted = false;
+
+    /**
      * 退货单项
      */
     private List<BackGoodsItem> backGoodsItemList = new ArrayList<BackGoodsItem>();
@@ -365,6 +370,16 @@ public class BackGoods implements EntityClass<Integer>, OperableData {
     @Override
     public DateTime getUpdateTime() {
         return updateTime;
+    }
+
+    @Column(name = "isDelete")
+    @Basic
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

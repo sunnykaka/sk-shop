@@ -1,8 +1,7 @@
 @(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics,orderStateHistories:List[ordercenter.models.OrderStateHistory])
 
-@import common.utils.DateUtils;
 
-@myCenter(Messages("title.my.address")) {
+@myCenter(Messages("title.my.order.info")) {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
 } {
     <!--refund-order-manage-->
