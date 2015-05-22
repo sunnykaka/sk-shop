@@ -43,7 +43,7 @@ public class BackGoodsItem implements EntityClass<Integer>, OperableData {
     /**
      * 订单项退货时的单价
      */
-    private Long unitPrice;
+    private Money unitPrice = Money.valueOf(0);;
 
     /**
      * 记录提交退款单时订单项对应的状态(方便取消退货单时状态还原), 目前已无用处! 因此以 Cancel 做为默认值.
@@ -118,33 +118,13 @@ public class BackGoodsItem implements EntityClass<Integer>, OperableData {
     }
 
     @Column(name = "unitPrice")
-    @Basic
-    public Long getUnitPrice() {
+    @Type(type="common.utils.hibernate.MoneyType")
+    public Money getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Long unitPrice) {
+    public void setUnitPrice(Money unitPrice) {
         this.unitPrice = unitPrice;
-    }
-
-    /**
-     * 字符串形式的单价
-     */
-    @Transient
-    public String getUnitPriceByMoney() {
-        return Money.valueOf(unitPrice).toString();
-    }
-
-    /**
-     * 字符串形式的小计(单价 乘 数量)
-     */
-    @Transient
-    public String getSubtotalPrice() {
-        return Money.valueOf(totalPrice()).toString();
-    }
-
-    public long totalPrice() {
-        return number * unitPrice;
     }
 
     @Column(name = "number")
@@ -153,10 +133,6 @@ public class BackGoodsItem implements EntityClass<Integer>, OperableData {
         return number;
     }
 
-    @Transient
-    public String getNumberByString(){
-        return Integer.toString(number);
-    }
     public void setNumber(Integer number) {
         this.number = number;
     }

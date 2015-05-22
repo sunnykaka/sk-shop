@@ -2,6 +2,7 @@
 
 @import common.utils.DateUtils._
 @import common.utils.JsonUtils._
+@import org.apache.commons.lang3.StringUtils._
 
 @main() {
     <script src="@routes.Assets.versioned("js/jquery.scrollTo.js")"></script>
@@ -11,6 +12,7 @@
 
     var defaultSku = "@Html(pd.getDefaultSku.getSkuPropertiesInDb)";
 
+    var productOnline = @pd.getProduct.isOnline
 
     $(function(){
         $.scrollTo('#detail',500);
@@ -77,7 +79,15 @@
                     <p>@pd.getProduct.getCustomer.getDescription </p>
                 </div>
                 <div class="video">
-                    <embed src="http://player.youku.com/player.php/sid/XNzQ0NDAwOTUy/v.swf" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+                    @if(isNotBlank(pd.getProduct.getVideo)) {
+                        <embed src="@Html(pd.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+                    } else {
+                        @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
+                            <img src="@pd.getProductPicture.getPictureUrl" width="803" height="536" />
+                        } else {
+                            <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" />
+                        }
+                    }
                 </div>
                 <div class="img-list">
                     <div class="open-detail" id="openDetail">
@@ -156,10 +166,20 @@
                         </div>
                     </dd>
                 </div>
-                <div class="detail-btn">
-                    <a href="javascript:void(0);" class="btn addToOrder">立即购买</a>
-                    <a href="javascript:void(0);" class="btn addToCart">加入购物车</a>
-                </div>
+                @if(!pd.getProduct.isOnline) {
+                    <div class="detail-btn">
+                        <a href="javascript:void(0);" class="btn addToOrder">商品已下架</a>
+                    </div>
+                } else {
+                    @if(pd.getDefaultSku.getStockQuantity <= 0) {
+                        <div class="detail-btn">
+                            <a href="javascript:void(0);" class="btn addToOrder">商品已售罄</a>
+                        </div>
+                    } else {
+                        <a href="javascript:void(0);" class="btn addToOrder">立即购买</a>
+                        <a href="javascript:void(0);" class="btn addToCart">加入购物车</a>
+                    }
+                }
                 <div class="detail-like">
                     <span class="like current"><i></i><span class="like-text">我喜欢</span></span>
                 </div>

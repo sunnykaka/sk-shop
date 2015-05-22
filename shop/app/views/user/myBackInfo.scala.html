@@ -20,7 +20,7 @@
                 </ul>
             </div>
             <div class="order-detail-container clearfix">
-                @left("order")
+                @left("back")
                     <!-- order-detail -->
                 <div class="order-detail-list refund-order-content">
                     <div class="order-detail-title">
@@ -79,9 +79,9 @@
                                                     <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
                                                 }
                                             </td>
-                                            <td>￥@backGoodsItem.getUnitPriceByMoney</td>
+                                            <td>￥@backGoodsItem.getUnitPrice.getAmountWithBigDecimal</td>
                                             <td>@backGoodsItem.getNumber</td>
-                                            <td>￥@backGoodsItem.getSubtotalPrice</td>
+                                            <td>￥@backGoodsItem.getUnitPrice.multiply(backGoodsItem.getNumber.intValue()).getAmountWithBigDecimal</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -90,7 +90,7 @@
                             <table class="total">
                                 <tr>
                                     <td>商品总计：</td>
-                                    <td>￥@backGoods.getBackPriceByMoney</td>
+                                    <td>￥@backGoods.getBackPrice.getAmountWithBigDecimal</td>
                                 </tr>
                                 <tr>
                                     <td>运费：</td>
@@ -102,7 +102,7 @@
                                 </tr>
                                 <tr>
                                     <td>订单金额：</td>
-                                    <td>￥@backGoods.getBackPriceByMoney</td>
+                                    <td>￥@backGoods.getBackPrice.getAmountWithBigDecimal</td>
                                 </tr>
                             </table>
                                 <!-- end total-->

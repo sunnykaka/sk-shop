@@ -29,7 +29,8 @@ public class CategoryPropertyService {
         Preconditions.checkNotNull(categoryId);
         Preconditions.checkArgument(propertyIds != null && !propertyIds.isEmpty());
 
-        StringBuilder jpql = new StringBuilder("select cp from CategoryProperty cp where cp.categoryId = :categoryId and cp.propertyId in (");
+        StringBuilder jpql = new StringBuilder("select cp from CategoryProperty cp where cp.deleted = false and " +
+                " cp.categoryId = :categoryId and cp.propertyId in (");
         Map<String, Object> queryParams = new HashMap<>();
 
         queryParams.put("categoryId", categoryId);
@@ -55,7 +56,8 @@ public class CategoryPropertyService {
         Preconditions.checkArgument(propertyIds != null && !propertyIds.isEmpty());
         Preconditions.checkArgument(valueIds != null && !valueIds.isEmpty());
 
-        StringBuilder jpql = new StringBuilder("select cpv from CategoryPropertyValue cpv where cpv.categoryId = :categoryId and cpv.propertyId in (");
+        StringBuilder jpql = new StringBuilder("select cpv from CategoryPropertyValue cpv where cpv.deleted = false and" +
+                " cpv.categoryId = :categoryId and cpv.propertyId in (");
         Map<String, Object> queryParams = new HashMap<>();
 
         queryParams.put("categoryId", categoryId);

@@ -118,6 +118,11 @@ public class Product implements EntityClass<Integer>, OperableData {
      */
 
     /**
+     * 视频链接
+     */
+    private String video;
+
+    /**
      * 一个商品对应一个或者多个SKU对象,一个SKU对应一个物理单品
      */
     private List<StockKeepingUnit> stockKeepingUnits;
@@ -352,5 +357,13 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     public void setCustomer(Designer customer) {
         this.customer = customer;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 }

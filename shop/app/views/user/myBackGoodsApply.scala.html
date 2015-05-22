@@ -18,7 +18,7 @@
                 </ul>
             </div>
             <div class="order-manage-container clearfix">
-                @left("order")
+                @left("back")
                     <!-- order-list -->
                 <div class="all-order-list">
                     <div class="order-status">
@@ -49,10 +49,10 @@
                                     </tr>
                                 </thead>
                                 <tbody class="product-list">
-                                    @for(orderItem <- order.getOrderItemList){
+                                    @for((orderItem, index) <- order.getOrderItemList.zipWithIndex){
                                         <tr>
                                             <td class="checkbox">
-                                                <input type="checkbox" name="orderItemId" value="@orderItem.getId" />
+                                                <input type="checkbox" name="orderItem[@index]" value="@orderItem.getId-@orderItem.getNumber"/>
                                             </td>
                                             <td>
                                                 <img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/>
@@ -77,7 +77,7 @@
                                             <td>
                                                 <div class="amount" >
                                                     <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
-                                                    <input type="text" size="3" maxlength="3" name="orderItem" class="text-number" limit="@orderItem.getNumber" value="@orderItem.getId-@orderItem.getNumber" data-price="@orderItem.getCurUnitPrice.getAmountWithBigDecimal">
+                                                    <input type="text" size="3" maxlength="3" class="text-number" limit="@orderItem.getNumber" value="@orderItem.getNumber" data-price="@orderItem.getCurUnitPrice.getAmountWithBigDecimal">
                                                     <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
                                                 </div>
                                             </td>

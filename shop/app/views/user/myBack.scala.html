@@ -1,6 +1,6 @@
 @(page:common.utils.page.Page[ordercenter.models.BackGoods])
 
-@import ordercenter.constants.OrderState;
+@import ordercenter.models.BackGoodsState;
 @import common.utils.DateUtils;
 
 @myCenter(Messages("title.my.address")) {
@@ -20,7 +20,7 @@
                 </ul>
             </div>
             <div class="order-manage-container clearfix">
-                @left("order")
+                @left("back")
                     <!-- order-list -->
                 <div class="all-order-list">
                     <div class="order-status">
@@ -69,20 +69,22 @@
                                                 <p>@backOrderItem.getOrderItem.getProductName</p>
                                             </td>
                                             <td class="product-size">
-                                            @for(keyValue <- backOrderItem.getOrderItem.getProperties){
-                                                <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
-                                            }
+                                                @for(keyValue <- backOrderItem.getOrderItem.getProperties){
+                                                    <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
+                                                }
                                             </td>
 
                                             @if(index == 0){
                                                 <td rowspan="@backOrder.getBackGoodsItemList.size()" class="product-price">
-                                                    ￥@backOrder.getBackPrice
+                                                    ￥@backOrder.getBackPrice.getAmountWithBigDecimal
                                                 </td>
                                                 <td rowspan="@backOrder.getBackGoodsItemList.size()" class="order-detail">
-                                                    <p>@backOrder.getBackState</p>
+                                                    <p>@backOrder.getBackState.userDesc(BackGoodsState.BackGoodsType.YetSend)</p>
                                                 </td>
                                                 <td rowspan="@backOrder.getBackGoodsItemList.size()" class="control">
-                                                    <p><a href="#" class="cancel">取消</a></p>
+                                                    <form action="@controllers.user.routes.MyOrderController.backCancel(backOrder.getId)" method="POST">
+                                                    <p><button class="cancel" type="submit">取消</button></p>
+                                                    </form>
                                                     <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId)" class="details">查看详情</a></p>
                                                 </td>
                                             }
