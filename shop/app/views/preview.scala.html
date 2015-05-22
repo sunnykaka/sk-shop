@@ -1,11 +1,13 @@
 @(user: usercenter.models.User, sellingList: List[models.CmsExhibition], fontList: List[models.CmsContent], sliderBoxs :List[models.CmsContent])
 
+@import common.utils.DateUtils
+
 @displayExhibition(exhibition: models.CmsExhibition)={
     <li>
         <a href="#"></a>
         <div class="img">
             <a href="#"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
-            <p class="time">还剩 <span class="time-detail">@exhibition.getEndTime()</span>结束</p>
+            <p class="time">还剩 <span class="time-detail"> @DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
         </div>
         <div class="title">
             <img src="images/brand-logo.jpg" alt="" height="60"/>
@@ -91,7 +93,7 @@
                             <img src="@exhibition.getPic()" alt="" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
-                                <p class="time"><span class="time-detail">@exhibition.getEndTime</span>结束</p>
+                                <p class="time"><span class="time-detail"> @DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
                             </div>
                         </a>
                     </li>
@@ -120,7 +122,7 @@
                     </a>
                     <div class="title">
                         <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                        <p class="time"><span class="time-detail">@exhibition.getEndTime</span>结束</p>
+                        <p class="time"><span class="time-detail"> @DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
                     </div>
                 </li>
             }

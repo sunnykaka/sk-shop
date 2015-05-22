@@ -1,6 +1,6 @@
 @(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo])
 
-
+@import common.utils.DateUtils
 
 
 @main() {
@@ -52,7 +52,7 @@
                                 <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" class="buy">立即购买</a>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
-                                    <p class="time">@prod.getCmsExhibition.getEndTime</p>
+                                    <p class="time">@DateUtils.printDateTime(prod.getCmsExhibition.getEndTime)</p>
                                 </div>
                             </div>
                         </li>
