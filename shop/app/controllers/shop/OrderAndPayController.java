@@ -132,7 +132,7 @@ public class OrderAndPayController extends Controller {
             }
             //生成订单相关信息
             int orderId = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
-            return ok(new JsonResult(true,"生成订单成功","orderId:" + orderId).toNode());
+            return ok(new JsonResult(true,"生成订单成功",orderId).toNode());
         } catch (Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             return ok(new JsonResult(false,"生成订单失败，请联系商城客服人员！").toNode());
