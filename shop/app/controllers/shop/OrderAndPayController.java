@@ -169,6 +169,7 @@ public class OrderAndPayController extends Controller {
         if(payMethod == null || payMethod.trim().length() == 0) {
             return ok(new JsonResult(false,"没有选择支付方式！").toNode());
         }
+
         if(payOrg == null || payOrg.trim().length() == 0) {
             return ok(new JsonResult(false,"没有选择支付机构！").toNode());
         }
@@ -180,6 +181,9 @@ public class OrderAndPayController extends Controller {
         try {
             User curUser = SessionUtils.currentUser();
             curUserName = curUser.getUserName();
+
+            //仅用于验证用
+            PayMethod.valueOf(payMethod);
 
             String[] split = orderIds.split(",");
             Integer[] idList = new Integer[split.length];
