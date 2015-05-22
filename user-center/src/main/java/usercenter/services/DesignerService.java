@@ -90,7 +90,7 @@ public class DesignerService {
     }
 
     /**
-     * 通过图类型获取设计师主图
+     * 通过图类型获取设计师图片
      *
      * @param picType
      * @return
