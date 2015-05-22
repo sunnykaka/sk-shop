@@ -80,39 +80,42 @@ public class Global extends BaseGlobal {
         }
 
         Result result;
-        if(isJsonResponse(request)) {
+        boolean jsonResponse = isJsonResponse(request);
+        if(jsonResponse) {
             //需要返回json结果
             result = Results.internalServerError(new JsonResult(false, errorMessage).toNode());
         } else {
             result = Results.internalServerError(error_500.render(errorMessage));
         }
-        return showResult(result);
+        return showResult(result, jsonResponse);
     }
 
     @Override
     public F.Promise<Result> onHandlerNotFound(Http.RequestHeader request) {
         String errorMessage = "您请求的页面没有找到，去其他地方逛逛吧";
         Result result;
-        if(isJsonResponse(request)) {
+        boolean jsonResponse = isJsonResponse(request);
+        if(jsonResponse) {
             //需要返回json结果
             result = Results.notFound(new JsonResult(false, errorMessage).toNode());
         } else {
             result = Results.notFound(error_404.render(errorMessage));
         }
-        return showResult(result);
+        return showResult(result, jsonResponse);
     }
 
     @Override
     public F.Promise<Result> onBadRequest(Http.RequestHeader request, String error) {
         String errorMessage = "您请求的参数有误";
         Result result;
-        if(isJsonResponse(request)) {
+        boolean jsonResponse = isJsonResponse(request);
+        if(jsonResponse) {
             //需要返回json结果
             result = Results.badRequest(new JsonResult(false, errorMessage).toNode());
         } else {
             result = Results.badRequest(error_400.render(errorMessage));
         }
-        return showResult(result);
+        return showResult(result, jsonResponse);
 
     }
 
@@ -120,8 +123,8 @@ public class Global extends BaseGlobal {
         return request.acceptedTypes().stream().filter(mr -> mr.toString().contains("json")).findFirst().isPresent();
     }
 
-    private F.Promise<Result> showResult(Result result) {
-        if(isDev()) {
+    private F.Promise<Result> showResult(Result result, boolean jsonResponse) {
+        if(!jsonResponse && isDev()) {
             //开发环境显示play的错误页面
             return null;
         } else {
