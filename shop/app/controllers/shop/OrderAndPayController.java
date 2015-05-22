@@ -57,7 +57,7 @@ public class OrderAndPayController extends Controller {
     CartProcess cartProcess;
 
     /**
-     * 提交订单-选择支付方式(生成订单)
+     * 提交订单-生成订单
      * @param addressId 用户选择的寄送地址
      * @return
      */
@@ -69,13 +69,6 @@ public class OrderAndPayController extends Controller {
             if(selItems == null || selItems.trim().length() == 0) {
                 return ok(new JsonResult(false,"去结算项为空！").toNode());
             }
-
-//            //测试
-//            User curUser = new User();
-//            curUser.setId(14311);
-//            curUser.setUserName("ldj");
-//            curUser.setAccountType(AccountType.Anonymous);
-//            //测试
 
             User curUser = SessionUtils.currentUser();
             curUserName = curUser.getUserName();
@@ -137,16 +130,25 @@ public class OrderAndPayController extends Controller {
             if(address == null) {
                 return ok(new JsonResult(false,"您选择的订单寄送地址已经被修改，在系统中不存在！").toNode());
             }
-
             //生成订单相关信息
             int orderId = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
-
-            Order order = orderService.getOrderById(orderId, curUser.getId());
-            return ok(orderPlay.render(order));
+            return ok(new JsonResult(true,"生成订单成功","orderId:" + orderId).toNode());
         } catch (Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             return ok(new JsonResult(false,"生成订单失败，请联系商城客服人员！").toNode());
         }
+    }
+
+    /**
+     * 提交订单-选择支付方式(生成订单)
+     * @param orderId 用户选择的寄送地址
+     * @return
+     */
+    @SecuredAction
+    public Result toOrderPlay(int orderId) {
+        User curUser = SessionUtils.currentUser();
+        Order order = orderService.getOrderById(orderId, curUser.getId());
+        return ok(orderPlay.render(order));
     }
 
     /**
