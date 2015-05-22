@@ -9,19 +9,11 @@ import common.utils.play.JodaDateFormatter;
 import common.utils.play.MoneyFormatter;
 import common.utils.play.interceptor.ActionFilterChain;
 import common.utils.play.interceptor.OpenEntityManagerInViewActionFilter;
-import controllers.user.routes;
-import org.joda.time.DateTime;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.ApplicationContext;
-import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.orm.jpa.EntityManagerFactoryUtils;
-import org.springframework.orm.jpa.EntityManagerHolder;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import play.GlobalSettings;
-import play.Application;
-
 import configs.AppConfig;
 import configs.DataConfig;
+import org.joda.time.DateTime;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import play.Application;
 import play.Logger;
 import play.data.format.Formatters;
 import play.libs.F;
@@ -29,12 +21,11 @@ import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import usercenter.utils.SessionUtils;
+import views.html.error_400;
+import views.html.error_404;
+import views.html.error_500;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.FlushModeType;
-import javax.persistence.PersistenceException;
 import java.lang.reflect.Method;
 
 public class Global extends BaseGlobal {
@@ -80,29 +71,61 @@ public class Global extends BaseGlobal {
     @Override
     public F.Promise<Result> onError(Http.RequestHeader request, Throwable t) {
 
-        if ( request.accepts("text/html")) {
-
-            //TODO 返回自定义错误页面
-            return super.onError(request, t);
-
-        } else if ( request.accepts("application/json")) {
-
-            String errorMessage;
-            if(t instanceof AppException || t instanceof AppBusinessException) {
-                //业务异常
-                errorMessage = t.getMessage();
-            } else {
-                errorMessage = "oops! 服务器开小差了, 请过会儿再来吧";
-                Logger.error("服务器发生错误", t);
-            }
-
-            Result result = Results.internalServerError(new JsonResult(false, errorMessage).toNode());
-            return F.Promise.pure(result);
-
+        String errorMessage = "oops! 服务器开小差了, 请过会儿再来吧。";
+        if(t instanceof AppException || t instanceof AppBusinessException) {
+            //业务异常
+            errorMessage = t.getMessage();
+        } else {
+            Logger.error("服务器发生错误", t);
         }
 
+        Result result;
+        if(isJsonResponse(request)) {
+            //需要返回json结果
+            result = Results.internalServerError(new JsonResult(false, errorMessage).toNode());
+        } else {
+            result = Results.internalServerError(error_500.render(errorMessage));
+        }
+        return showResult(result);
+    }
 
-        return super.onError(request, t);
+    @Override
+    public F.Promise<Result> onHandlerNotFound(Http.RequestHeader request) {
+        String errorMessage = "您请求的页面没有找到，去其他地方逛逛吧";
+        Result result;
+        if(isJsonResponse(request)) {
+            //需要返回json结果
+            result = Results.notFound(new JsonResult(false, errorMessage).toNode());
+        } else {
+            result = Results.notFound(error_404.render(errorMessage));
+        }
+        return showResult(result);
+    }
 
+    @Override
+    public F.Promise<Result> onBadRequest(Http.RequestHeader request, String error) {
+        String errorMessage = "您请求的参数有误";
+        Result result;
+        if(isJsonResponse(request)) {
+            //需要返回json结果
+            result = Results.badRequest(new JsonResult(false, errorMessage).toNode());
+        } else {
+            result = Results.badRequest(error_400.render(errorMessage));
+        }
+        return showResult(result);
+
+    }
+
+    private boolean isJsonResponse(Http.RequestHeader request) {
+        return request.acceptedTypes().stream().filter(mr -> mr.toString().contains("json")).findFirst().isPresent();
+    }
+
+    private F.Promise<Result> showResult(Result result) {
+        if(isDev()) {
+            //开发环境显示play的错误页面
+            return null;
+        } else {
+            return F.Promise.pure(result);
+        }
     }
 }
