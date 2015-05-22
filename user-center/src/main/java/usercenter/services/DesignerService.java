@@ -29,7 +29,10 @@ public class DesignerService {
      */
     @Transactional(readOnly = true)
     public List<DesignerView> designerById(Integer id) {
-        String sql = "select t1.id,t1.name,t1.description,t2.pictureUrl from customer as t1 left JOIN ( select * from  designer_picture where mainPic =1) AS t2 ON  t2.designerId = t1.id";
+        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
+                " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
+                "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
+                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id";
         if(id != null){
             sql += " and t1.id = " +id;
         }
@@ -48,7 +51,13 @@ public class DesignerService {
              * 防止有些设计师，没有设置主图
              */
             if (designer[3] != null) {
-                dv.setPictureUrl(designer[3].toString());
+                dv.setStorePic(designer[3].toString());
+            }
+            if (designer[4] != null) {
+                dv.setMainPic(designer[4].toString());
+            }
+            if (designer[5] != null) {
+                dv.setBrandPic(designer[5].toString());
             }
 
             result.add(dv);

@@ -4,16 +4,16 @@
 
 @displayExhibition(exhibition: models.CmsExhibition)={
     <li>
-        <a href="#"></a>
+        <a href ="@routes.Application.designerProd(exhibition.getDesignerId)">
         <div class="img">
             <a href="@routes.Application.designerProd(exhibition.getDesignerId)"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
             <p class="time">还剩 <span class="time-detail">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
         </div>
         <div class="title">
-            <img src="images/brand-logo.jpg" alt="" height="60"/>
+            <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
             <p><span class="designer">@exhibition.getIntroduction</span></p>
         </div>
-
+        </a>
     </li>
 }
 

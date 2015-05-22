@@ -46,6 +46,9 @@ public class CmsExhibition implements EntityClass<Integer> {
      * 设计师名字,冗余字段,避免联表查询,首页只需要查询CMS就可以
      */
     private String designerName;
+
+    private String designerLogo;
+
     /**
      * 专场的宣传图片,也就是在首页上展示的图片
      */
@@ -139,12 +142,24 @@ public class CmsExhibition implements EntityClass<Integer> {
         this.designerId = designerId;
     }
 
+    @Basic
+    @Column(name="designerName")
     public String getDesignerName() {
         return designerName;
     }
 
     public void setDesignerName(String designerName) {
         this.designerName = designerName;
+    }
+
+    @Basic
+    @Column(name="designerLogo")
+    public String getDesignerLogo() {
+        return designerLogo;
+    }
+
+    public void setDesignerLogo(String designerLogo) {
+        this.designerLogo = designerLogo;
     }
 
     @Basic
@@ -167,6 +182,8 @@ public class CmsExhibition implements EntityClass<Integer> {
         this.positionIndex = positionIndex;
     }
 
+    @Basic
+    @Column(name="positionName")
     public String getPositionName() {
         return positionName;
     }
@@ -175,6 +192,8 @@ public class CmsExhibition implements EntityClass<Integer> {
         this.positionName = positionName;
     }
 
+    @Basic
+    @Column(name="prodCount")
     public Integer getProdCount() {
         return prodCount;
     }

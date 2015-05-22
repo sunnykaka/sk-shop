@@ -11,14 +11,46 @@ public class DesignerView {
 
     private String nation;
 
-    private  String description;
+    private String description;
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    /**
+     * 设计师列表页主图
+     */
+    private String mainPic;
+
+    /**
+     * 设计师列表页品牌图
+     */
+    private String brandPic;
+
+    /**
+     * 店铺页主图
+     */
+    private String storePic;
+
+
+    public String getStorePic() {
+        return storePic;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setStorePic(String storePic) {
+        this.storePic = storePic;
+    }
+
+    public String getMainPic() {
+        return mainPic;
+    }
+
+    public void setMainPic(String mainPic) {
+        this.mainPic = mainPic;
+    }
+
+    public String getBrandPic() {
+        return brandPic;
+    }
+
+    public void setBrandPic(String brandPic) {
+        this.brandPic = brandPic;
     }
 
     public Integer getId() {
@@ -53,11 +85,6 @@ public class DesignerView {
         this.description = description;
     }
 
-    private String pictureUrl
-
-
-
-
-            ;
+    ;
 
 }

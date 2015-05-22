@@ -28,7 +28,7 @@
                 </ul>
             </div>
             <div class="top-con">
-                <img src="@designer.getPictureUrl()" alt="" width="439px" height="370px"/>
+                <img src="@designer.getStorePic" alt="" width="439px" height="370px"/>
                 <div class="designer-con">
                     <div class="designer-con-title">
                         <h2><span>@designer.getName</span> <a href="#">关注</a></h2>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            @if(!sellingList.isEmpty) {
+            @if(sellingList!= null && sellingList.size >0) {
                 <div class="start-fashion">
                     <h3>正在首发</h3>
                     <ul class="clearfix">
@@ -62,7 +62,7 @@
             }
 
 
-            @if(!previewList.isEmpty) {
+            @if(previewList != null && previewList.size >0) {
                 <div class="ready-online">
                     <h3>即将上线</h3>
                     <ul class="clearfix">
@@ -87,7 +87,7 @@
             }
 
 
-            @if(!normalList.isEmpty) {
+            @if(normalList != null && normalList.size >0 ) {
                 <div class="hot-sale">
                     <h3>热销产品</h3>
                     <ul class="clearfix">
