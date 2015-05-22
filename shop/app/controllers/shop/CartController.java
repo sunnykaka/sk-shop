@@ -298,7 +298,7 @@ public class CartController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result promptlyPayChooseAddress(int skuId, int number) {
+    public Result verifyPromptlyPayData(int skuId, int number) {
         try {
             if (number < 1) {
                 return ok(new JsonResult(false, "购买数量不能小于1！").toNode());
@@ -322,39 +322,36 @@ public class CartController extends Controller {
             if (maxStockNum <= 0) {
                 return ok(new JsonResult(false,"已经售完","addForbid").toNode());
             }
-
-//            /////////////////测试 /////////////////
-//            User curUser = new User();
-//            curUser.setId(14311);
-//            //测试
-//
-//            /////////////////测试 /////////////////
-            //价格和sku属性
-
-
-
-
-            User curUser = SessionUtils.currentUser();
-
-            Cart cart = new Cart();
-            CartItem cartItem = new CartItem();
-            cartItem.setSkuId(skuId);
-            cartItem.setNumber(number);
-
-            Money totalMoney = Money.valueOf(0);
-            totalMoney = cartProcess.setCartItemValues(cartItem);
-
-            cart.setTotalMoney(totalMoney);
-            List<CartItem> cartItemList = new ArrayList<CartItem>();
-            cartItemList.add(cartItem);
-            cart.setCartItemList(cartItemList);
-
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-            return ok(chooseAddress.render(skuId + ":" + number, addressList, cart,true));
+            return ok(new JsonResult(true).toNode());
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]立即支付出现异常:", e);
             return ok(new JsonResult(false,"立即支付失败，请联系商城客服人员！").toNode());
         }
+    }
+
+    /**
+     * 立即支付-去结算-选择送货地址
+     * @return
+     */
+    @SecuredAction
+    public Result promptlyPayChooseAddress(int skuId, int number) {
+        User curUser = SessionUtils.currentUser();
+
+        Cart cart = new Cart();
+        CartItem cartItem = new CartItem();
+        cartItem.setSkuId(skuId);
+        cartItem.setNumber(number);
+
+        Money totalMoney = Money.valueOf(0);
+        totalMoney = cartProcess.setCartItemValues(cartItem);
+
+        cart.setTotalMoney(totalMoney);
+        List<CartItem> cartItemList = new ArrayList<CartItem>();
+        cartItemList.add(cartItem);
+        cart.setCartItemList(cartItemList);
+
+        List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
+        return ok(chooseAddress.render(skuId + ":" + number, addressList, cart,true));
     }
 
     /**
