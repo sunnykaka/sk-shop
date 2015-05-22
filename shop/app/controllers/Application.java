@@ -1,5 +1,6 @@
 package controllers;
 
+import dtos.CmsPosition;
 import dtos.ProductInfo;
 import models.CmsContent;
 import models.CmsExbitionItem;
@@ -26,10 +27,8 @@ import static java.util.stream.Collectors.toList;
 @org.springframework.stereotype.Controller
 public class Application extends Controller {
 
-    /**
-     * 首页轮播图
-     */
-    private static final String SLIDER_BOX = "sliderBox";
+
+
 
 
     @Autowired
@@ -55,16 +54,24 @@ public class Application extends Controller {
         List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.SELLING);
         List<CmsContent> contents = cmsService.allContents();
         List<CmsContent> sliderBoxs = new ArrayList<>();
-        List<CmsContent> fontList = new ArrayList<>();
+
+        CmsContent font1 = null;
+        CmsContent font2 = null;
+
         for (CmsContent content : contents) {
-            if (content.getType().equals("PIC") && content.getPosition().equals("sliderBox")) {
+            if (content.getType().equals("PIC") && content.getPosition().equals(CmsPosition.SLIDER_BOX)) {
                 sliderBoxs.add(content);
             }
             if (content.getType().equals("FONT")) {
-                fontList.add(content);
+                if(content.getPosition().equals(CmsPosition.INDEX_FONT_1)){
+                    font1 = content;
+                }
+                if(content.getPosition().equals(CmsPosition.INDEX_FONT_2)){
+                    font2 = content;
+                }
             }
         }
-        return ok(index.render(SessionUtils.currentUser(), sellingList, fontList, sliderBoxs));
+        return ok(index.render(SessionUtils.currentUser(), sellingList, font1,font2, sliderBoxs));
     }
 
 
@@ -78,16 +85,25 @@ public class Application extends Controller {
         List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.PREPARE);
         List<CmsContent> contents = cmsService.allContents();
         List<CmsContent> sliderBoxs = new ArrayList<>();
-        List<CmsContent> fontList = new ArrayList<>();
+
+
+        CmsContent font1 = null;
+        CmsContent font2 = null;
+
         for (CmsContent content : contents) {
-            if (content.getType().equals("PIC") && content.getPosition().equals("sliderBox")) {
+            if (content.getType().equals("PIC") && content.getPosition().equals(CmsPosition.SLIDER_BOX)) {
                 sliderBoxs.add(content);
             }
             if (content.getType().equals("FONT")) {
-                fontList.add(content);
+                if(content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)){
+                    font1 = content;
+                }
+                if(content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)){
+                    font2 = content;
+                }
             }
         }
-        return ok(preview.render(SessionUtils.currentUser(), sellingList, fontList, sliderBoxs));
+        return ok(index.render(SessionUtils.currentUser(), sellingList, font1,font2, sliderBoxs));
     }
 
 

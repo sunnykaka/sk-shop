@@ -1,6 +1,7 @@
-@(user: usercenter.models.User, sellingList: List[models.CmsExhibition], fontList: List[models.CmsContent], sliderBoxs :List[models.CmsContent])
+@(user: usercenter.models.User, sellingList: List[models.CmsExhibition], font1:models.CmsContent,font2:models.CmsContent , sliderBoxs :List[models.CmsContent])
 
 @import common.utils.DateUtils
+@import dtos.CmsPosition
 
 @displayExhibition(exhibition: models.CmsExhibition)={
     <li>
@@ -79,9 +80,12 @@
     <!--fashion-box-->
     <div class="fashion-box">
         <div class="fashion-box-inner width1200">
-            <h2>@fontList(0).getTitle</h2>
-            <p class="en-info">@fontList(0).getContent</p>
-            <p class="cn-info">@fontList(0).getLink</p>
+            @if(font1 != null ){
+                <h2>@font1.getTitle</h2>
+                <p class="en-info">@Html(font1.getContent)</p>
+                @*<p class="cn-info">@fontMa.get(CmsPosition.INDEX_FONT_1).get.getLink</p>*@
+            }
+
             @*<h2>尚</h2>*@
             @*<p class="en-info">Fashion fades,only style remain the same. —— Coco Chanel</p>*@
             @*<p class="cn-info">时尚易逝，唯风格永存。</p>*@
@@ -108,8 +112,12 @@
     <!--empty-box-->
     <div class="empty-box">
         <div class="empty-box-inner width1200">
-            <h2>@fontList(1).getTitle</h2>
-            <p class="info">@fontList(1).getContent</p>
+
+            @if(font2 != null){
+                <h2>@font2.getTitle</h2>
+                <p class="info">@Html(font2.getContent)</p>
+            }
+
             <ul class="clearfix">
 
             @for(exhibition <- sellingList.slice(7,14)){
