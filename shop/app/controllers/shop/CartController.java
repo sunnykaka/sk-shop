@@ -23,7 +23,9 @@ import views.html.shop.chooseAddress;
 import views.html.shop.showCart;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 购物车Controller
@@ -176,8 +178,11 @@ public class CartController extends Controller {
 
             int maxCanBuyNum = skuStorage.getTradeMaxNumber();
 
+            Map<String,Integer> retMap = new HashMap<String,Integer>();
+
             if (addNumber > maxCanBuyNum) {
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品","{maxCanBuyNum:" + maxCanBuyNum  + "}").toNode());
+                retMap.put("maxCanBuyNum", maxCanBuyNum);
+                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
             }
 
             if (addNumber > maxStockNum) {
@@ -186,11 +191,14 @@ public class CartController extends Controller {
                 } else {
                     maxCanBuyNum = maxStockNum;
                 }
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品","{maxCanBuyNum:" + maxCanBuyNum  + "}").toNode());
+                retMap.put("maxCanBuyNum", maxCanBuyNum);
+                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
             }
 
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
-            return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", "{itemTotalNum:" + addNumber + "}").toNode());
+
+            retMap.put("itemTotalNum", addNumber);
+            return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", retMap).toNode());
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
             return ok(new JsonResult(false,"加入购物车时服务器发生异常").toNode());
