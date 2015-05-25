@@ -1,6 +1,7 @@
 package base;
 
 import common.utils.DateUtils;
+import common.utils.Money;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ public class PlainTest {
 
         System.out.println(DateUtils.printDeadlineFromNow(DateUtils.current().plusHours(3).plusDays(11)));
 
+        System.out.println(Money.valueOf(2.15d).toString());
 
     }
 

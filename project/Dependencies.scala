@@ -36,7 +36,7 @@ object Dependencies {
 
   val playDependencies = Seq(
     javaCore,
-    javaWs  % "test",
+    javaWs,
     cache,
     //"com.typesafe.play.plugins" %% "play-plugins-redis" % "2.3.1"
     "biz.source_code" %  "base64coder" % "2010-12-19",

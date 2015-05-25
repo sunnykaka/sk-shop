@@ -40,6 +40,35 @@
         }
     }
 
+    var winsns=(function(){
+        var o={};
+
+        function clearPrev(){//dereference
+            for(var key in o){
+                if(key.indexOf("/user")>-1){
+                    o[key].close&&o[key].close();
+                    o[key]=null;
+                    delete o[key];
+                }
+            }
+        }
+
+        return {
+            open:function(url){
+                var l,t;
+                if(o[url]&&o[url].closed===false){
+                    o[url].focus&&o[url].focus();
+                    return ;
+                }
+                clearPrev();
+                l=(screen.width-600)/2,
+                    t=(screen.height-400)/2;
+                (o[url]=window.open(url, '_blank', 'toolbar=no, directories=no, status=no, menubar=no, width=600, height=500, top='+t+', left='+l)).focus();
+            },
+            clear:clearPrev
+        }
+    })();
+
 
 
 
@@ -222,6 +251,10 @@
         });
         loginFormValidate.init();
         delayHideLabel(options.items);
+
+        $(document).on("click","[data-login-sns]",function(){
+            winsns.open($(this).attr("data-login-sns"));
+        });
     }
 
     //注册对外接口

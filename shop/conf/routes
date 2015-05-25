@@ -13,6 +13,8 @@ GET         /register                             @controllers.user.LoginControl
 POST        /register                             @controllers.user.LoginController.register
 GET         /login                                @controllers.user.LoginController.loginPage
 POST        /login                                @controllers.user.LoginController.login
+GET         /login/wx                             @controllers.user.LoginController.weixinLogin
+GET         /login/wx/callback                    @controllers.user.LoginController.weixinLoginCallback(code ?= null, state ?= null)
 GET         /logout                               @controllers.user.LoginController.logout
 POST        /user/phone/get_code                  @controllers.user.LoginController.requestPhoneCode(phone)
 GET         /user/phone/exist                     @controllers.user.LoginController.isPhoneExist(phone)

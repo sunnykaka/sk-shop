@@ -7,6 +7,7 @@ import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.PasswordHash;
 import common.utils.RegExpUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import usercenter.domain.SmsSender;
 import usercenter.dtos.*;
 import usercenter.models.User;
 import usercenter.models.UserData;
+import usercenter.models.UserOuter;
 import usercenter.utils.SessionUtils;
 
 import javax.persistence.TypedQuery;
@@ -130,6 +132,41 @@ public class UserService {
         return user;
     }
 
+    @Transactional
+    public User registerByOpenId(OpenUserInfo openUserInfo, String registerIP) {
+
+        DateTime now = DateUtils.current();
+        User user = new User();
+        user.setAccountType(openUserInfo.getAccountType());
+        user.setActive(true);
+        user.setLoginTime(now);
+        user.setLoginCount(0);
+        user.setRegisterDate(DateUtils.printDateTime(now));
+        user.setRegisterIP(registerIP);
+        user.setUserName(RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        user.setPassword("");
+        generalDao.persist(user);
+
+        UserData userData = new UserData();
+        userData.setUserId(user.getId());
+        userData.setCreateDate(now);
+        userData.setUpdateDate(now);
+        userData.setSex(openUserInfo.getGender().userSex);
+        userData.setName(openUserInfo.getNickName());
+        generalDao.persist(userData);
+
+        UserOuter userOuter = new UserOuter();
+        userOuter.setAccountType(openUserInfo.getAccountType());
+        userOuter.setCreateDate(now);
+        userOuter.setLocked(false);
+        userOuter.setOuterId(openUserInfo.getUnionId());
+        userOuter.setUserId(user.getId());
+        generalDao.persist(userOuter);
+
+        return user;
+    }
+
+
 
     @Transactional
     public User login(LoginForm loginForm) {
@@ -175,12 +212,12 @@ public class UserService {
     }
 
     @Transactional
-    public User loginByRegister(User user) {
+    public User loginByRegister(User user, boolean rememberMe) {
 
         doLogin(user);
 
         try {
-            SessionUtils.setCurrentUser(user, false);
+            SessionUtils.setCurrentUser(user, rememberMe);
             return user;
         } catch (AppException e) {
             Logger.error("", e);
@@ -385,4 +422,5 @@ public class UserService {
 
         return null;
     }
+
 }

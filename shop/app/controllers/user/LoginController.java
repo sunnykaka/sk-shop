@@ -5,10 +5,12 @@ import common.utils.JsonResult;
 import common.utils.RegExpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import usercenter.domain.SmsSender;
+import usercenter.domain.WeixinLogin;
 import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
@@ -38,7 +40,7 @@ public class LoginController extends Controller {
         if(!registerForm.hasErrors()) {
             try {
                 User user = userService.register(registerForm.get(), request().remoteAddress());
-                userService.loginByRegister(user);
+                userService.loginByRegister(user, true);
                 String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
                 return ok(new JsonResult(true, null, originalUrl).toNode());
 
@@ -113,6 +115,22 @@ public class LoginController extends Controller {
     public Result isUsernameExist(String username) {
         boolean exists = userService.isUsernameExist(username, Optional.empty());
         return ok(new JsonResult(exists, exists ? "用户名已存在" : "").toNode());
+    }
+
+    public Result weixinLogin() {
+
+        return redirect(new WeixinLogin().redirectToConnectUrl());
+    }
+
+    public Result weixinLoginCallback(String code, String state) {
+
+        Logger.debug(String.format("微信回调参数: code[%s], state[%s]", code, state));
+
+        User user = new WeixinLogin().handleCallback(code, state, request().remoteAddress());
+        userService.loginByRegister(user, true);
+        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
+
+        return redirect(originalUrl);
     }
 
 
