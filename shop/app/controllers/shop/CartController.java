@@ -174,7 +174,7 @@ public class CartController extends Controller {
             int maxCanBuyNum = skuStorage.getTradeMaxNumber();
 
             if (addNumber > maxCanBuyNum) {
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品","maxCanBuyNum:" + maxCanBuyNum).toNode());
+                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品","{maxCanBuyNum:" + maxCanBuyNum  + "}").toNode());
             }
 
             if (addNumber > maxStockNum) {
@@ -183,11 +183,11 @@ public class CartController extends Controller {
                 } else {
                     maxCanBuyNum = maxStockNum;
                 }
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品","maxCanBuyNum:" + maxCanBuyNum).toNode());
+                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品","{maxCanBuyNum:" + maxCanBuyNum  + "}").toNode());
             }
 
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
-            return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", "itemTotalNum:" + addNumber).toNode());
+            return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", "{itemTotalNum:" + addNumber + "}").toNode());
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
             return ok(new JsonResult(false,"加入购物车时服务器发生异常").toNode());
@@ -233,11 +233,11 @@ public class CartController extends Controller {
     }
 
     /**
-     * 去结算-选择送货地址
+     * 去结算-验证数据
      * @return
      */
     @SecuredAction
-    public Result chooseAddress(String selCartItems) {
+    public Result selCartItemProcess(String selCartItems) {
         if(selCartItems == null || selCartItems.trim().length() == 0) {
             return ok(new JsonResult(false,"去结算项为空！").toNode());
         }
@@ -285,20 +285,25 @@ public class CartController extends Controller {
                 cartItem.setSelected(true);
                 selCartItemList.add(cartItem);
             }
-
             //更新购物车是否选中
             cartService.updateCartItemList(selCartItemList);
-
-            //重新计算支付总金额
-            cart.setTotalMoney(cartProcess.calculateTotalMoney(selCartItemList));
-
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-            cart = cartService.getCartByUserId(curUser.getId());
-            return ok(chooseAddress.render(selCartItems, addressList, cart,false));
+            return ok(new JsonResult(true,"选中购物车项选中状态更新成功").toNode());
         } catch (Exception e) {
             Logger.warn("去结算-悬着邮递地址发生异常:", e);
             return ok(new JsonResult(false,"去结算发生异常，请联系商城客服人员").toNode());
         }
+    }
+
+    /**
+     * 去结算-选择送货地址
+     * @return
+     */
+    @SecuredAction
+    public Result chooseAddress(String selCartItems) {
+        User curUser = SessionUtils.currentUser();
+        Cart cart = cartProcess.buildUserCartBySelItem(curUser.getId(), selCartItems);
+        List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
+        return ok(chooseAddress.render(selCartItems, addressList, cart,false));
     }
 
     /**

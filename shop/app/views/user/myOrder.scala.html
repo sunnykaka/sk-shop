@@ -12,10 +12,7 @@
         <div class="order-manage-inner width1200">
             <div class="bread-nav">
                 <ul class="clearfix">
-                    <li><a href="index.html">首页</a></li>
-                    <li>&gt;</li>
-                    <li><a href="index.html">个人中心</a></li>
-                    <li>&gt;</li>
+                    @myCenterTop()
                     <li>订单管理</li>
                 </ul>
             </div>
@@ -82,7 +79,7 @@
                                                 </td>
                                                 <td rowspan="@order.getOrderItemList.size()" class="control">
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
-                                                        <p><a href="#" class="pay">立即付款</a></p>
+                                                        <p><a href="@controllers.shop.routes.OrderAndPayController.toOrderPlay(order.getId)" class="pay">立即付款</a></p>
                                                     }
                                                     @if(order.getOrderState.getName.equals(OrderState.Send.getName)){
                                                         <p><a href="#" class="confirm">确认收货</a></p>
@@ -93,7 +90,10 @@
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName) || order.getOrderState.getName.equals(OrderState.Pay.getName)){
                                                         <p><a href="#" class="cancel">取消</a></p>
                                                     }
-                                                    <p><a href="@controllers.user.routes.MyOrderController.backApply(order.getId)" class="confirm">申请退货</a></p>
+                                                    @if(order.isBackGoodsl){
+                                                        <p><a href="@controllers.user.routes.MyOrderController.backApply(order.getId)" class="confirm">申请退货</a></p>
+                                                    }
+
                                                 </td>
                                             }
                                         </tr>

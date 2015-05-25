@@ -206,6 +206,10 @@ public class Order implements EntityClass<Integer> {
      */
     private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
+    /**
+     * 是否可以退款（不入库）
+     */
+    private boolean isBackGoodsl;
 
     @Override
     public String toString() {
@@ -603,5 +607,14 @@ public class Order implements EntityClass<Integer> {
 
     public void setAddressName(String addressName) {
         this.addressName = addressName;
+    }
+
+    @Transient
+    public boolean isBackGoodsl() {
+        return isBackGoodsl;
+    }
+
+    public void setBackGoodsl(boolean isBackGoodsl) {
+        this.isBackGoodsl = isBackGoodsl;
     }
 }

@@ -172,6 +172,24 @@ public class BackGoodsService {
     /**
      * 查找我的退货订单
      *
+     * @param orderId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<BackGoods> getBackGoodsByOrderId(int orderId){
+
+        String jpql = "select o from BackGoods where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and o.orderId = :orderId ";
+        queryParams.put("orderId", orderId);
+
+        return generalDao.query(jpql, Optional.<Page<BackGoods>>empty(), queryParams);
+
+    }
+
+    /**
+     * 查找我的退货订单
+     *
      * @param backGoodsId
      * @param userId
      * @return
