@@ -281,11 +281,6 @@ public class OrderAndPayController extends Controller {
         //订单总金额，显示在支付宝收银台里的“应付总额”里
         long totalFee = this.getPayMoneyForCent(orderList);
 
-        //支付宝是元，财富同是分
-        if(payMethod.equals(PayMethod.directPay.getName())) {
-            totalFee = totalFee/100;
-        }
-
         payInfoWrapper.setTotalFee(totalFee);
 
         PayRequestHandler payService = PaymentManager.getPayRequestHandler(PayMethod.valueOf(payMethod));
