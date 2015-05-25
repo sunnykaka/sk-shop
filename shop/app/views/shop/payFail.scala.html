@@ -1,6 +1,48 @@
 @(resultMap:Map[String, Object])
 
-@main()(){
-    支付失败！
+@main(){
+<script>
+    (function ($, FG) {
+
+        var valueCollection = {};
+        // 支付方式
+        function payment() {
+            var box = $('.pay-list'),
+                    payTypes = box.find('li');
+
+            valueCollection.payBank = payTypes.eq(0).attr('paybank');
+            payTypes.on('click', function () {
+                var self = $(this);
+
+                if (self.hasClass('more-payBank')) {
+                    self.empty();
+                    box.find('.more-list').slideDown(200);
+                    return;
+                }
+                payTypes.removeClass('current');
+                self.addClass('current');
+                valueCollection.payBank = self.attr('paybank');
+
+            });
+        }
+
+        payment();
+
+    }(jQuery, FG));
+</script>
+}{
+<div class="pay-success width1200">
+    <div class="pay-success-inner">
+            <!-- pay-info -->
+        <div class="pay-success-info pay-fail">
+            <h3>对不起，您的订单支付失败！</h3>
+            <p>订单编号：<span class="pay-number">@resultMap.get("orderNo")</span></p>
+            <p>支付金额：<span class="pay-money">@resultMap.get("payTotalFee")</span></p>
+            <a href="" class="check-order">查看订单&gt;&gt;</a>
+            <a href="" class="rePay">重新支付</a>
+        </div>
+
+    </div>
+</div>
 }
 

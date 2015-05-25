@@ -17,13 +17,12 @@ import play.Logger;
  */
 public class OrderPayCallback implements PayCallback {
 
-    public static final String PAY_SUCCESS = "/order/paySuccess";
-    public static final String PAY_FAIL = "/order/payFail";
-
     @Override
     public CallBackResult initResult(Trade tradeInfo, ResponseType type){
         Logger.info("「订单回调」开始初始化CallBackResult");
-        CallBackResult result = new CallBackResult(PAY_SUCCESS, PAY_FAIL);
+        CallBackResult result = new CallBackResult();
+        result.addData("orderNo", tradeInfo.getOrderNo());
+        result.addData("payTotalFee", tradeInfo.getPayTotalFee());
         Logger.info("「订单回调」CallBackResult初始化Success");
         return result;
     }
@@ -36,7 +35,6 @@ public class OrderPayCallback implements PayCallback {
             tradeService.paySuccessAfterProccess(tradeInfo);
         } catch (Exception e) {
             Logger.error("「订单回调」订单支付成功，但是更新订单状态、扣减库存、记录支付成功等数据失败，需要运营人员确认一下："  + e.getMessage(), e);
-            return false;
         }
         return true;
     }

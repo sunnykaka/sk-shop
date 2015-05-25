@@ -65,6 +65,32 @@ public class CartController extends Controller {
     }
 
     /**
+     * 获取用户购物车中购买项当前数量
+     * @return
+     */
+    public Result getUserCartItemNum() {
+        try {
+            User curUser = SessionUtils.currentUser();
+            if(curUser == null || curUser.getId() <= 0) {
+                return ok(new JsonResult(true,"用户没有登陆", 0).toNode());
+            } else {
+                Cart cart = cartService.getCartByUserId(curUser.getId());
+                if(cart == null) {
+                    return ok(new JsonResult(true,"用户还没在系统购买过东西", 0).toNode());
+                }
+                List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
+                if(cartItems == null || cartItems.size() == 0) {
+                    return ok(new JsonResult(true,"用户当前购物车为空", 0).toNode());
+                }
+                return ok(new JsonResult(true, "用户购买了东西", cartItems.size()).toNode());
+            }
+        } catch (final Exception e) {
+            Logger.error("获取用户购物车信息出现异常:", e);
+            return ok(new JsonResult(false,"获取用户购物车信息出现异常").toNode());
+        }
+    }
+
+    /**
      * 添加购物车，用户必须已经登陆，没登陆让用户先跳转到用户登陆界面
      * 响应客户端把一个sku加入购物车
      * 一个商品加入购物车之前会检查库存，如果没库存了不允许增加
@@ -126,15 +152,6 @@ public class CartController extends Controller {
                 return ok(new JsonResult(false,"已经售完","addForbid").toNode());
             }
 
-
-//
-//            /////////////////测试 /////////////////
-//            User curUser = new User();
-//            curUser.setId(14311);
-//            //测试
-//
-//            /////////////////测试 /////////////////
-
             User curUser = SessionUtils.currentUser();
             Cart cart = this.buildUserSimpleCart(curUser.getId());
             int addNumber = number;
@@ -187,11 +204,6 @@ public class CartController extends Controller {
     @SecuredAction
     public Result showCart(){
         try {
-//            //测试
-//            User curUser = new User();
-//            curUser.setId(14311);
-//            //测试
-
             User curUser = SessionUtils.currentUser();
             Cart cart = cartProcess.buildUserCart(curUser.getId());
             return ok(showCart.render(cart));
@@ -240,11 +252,6 @@ public class CartController extends Controller {
         }
 
         try {
-//            //测试
-//            User curUser = new User();
-//            curUser.setId(14311);
-//            //测试
-
             User curUser = SessionUtils.currentUser();
             Cart cart = cartProcess.buildUserCart(curUser.getId());
             String errMsg = "对不起您没有购买任何商品，不能前去支付！";

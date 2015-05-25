@@ -98,6 +98,7 @@ POST        /my/back/cancel                       @controllers.user.MyOrderContr
 
 #购物车
 GET         /cart/getSkuStorage                   @controllers.shop.CartController.getSkuStorage(skuId:Int)
+GET         /cart/getUserCartItemNum              @controllers.shop.CartController.getUserCartItemNum()
 POST        /cart/addSkuToCartAddNum              @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
 POST        /cart/addSkuToCartReplaceNum          @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
 GET         /cart/showCart                        @controllers.shop.CartController.showCart()
@@ -113,8 +114,8 @@ GET         /order/submitTradeOrder               @controllers.shop.OrderAndPayC
 GET         /order/toPayOrder                     @controllers.shop.OrderAndPayController.toPayOrder(payMethod:String,payOrg:String,orderIds:String,tradeNo:String)
 
 #支付
-POST        /payOrder/normalReturn                @controllers.shop.PayCallBackController.normalReturn
-POST        /payOrder/notifyReturn                @controllers.shop.PayCallBackController.notifyReturn
+POST        /payOrder/normalReturn                @controllers.shop.OrderPayCallBackController.normalReturn
+POST        /payOrder/notifyReturn                @controllers.shop.OrderPayCallBackController.notifyReturn
 
 #product
 GET         /product/valuations                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)

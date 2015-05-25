@@ -17,7 +17,7 @@ import java.util.Map;
 * Date: 2015-05-12
 */
 @org.springframework.stereotype.Controller
-public class PayCallBackController extends Controller {
+public class OrderPayCallBackController extends Controller {
     /**
      * 支付正常返回
      * @return
@@ -26,14 +26,13 @@ public class PayCallBackController extends Controller {
         log();
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.RETURN);
-        //model.addAllAttributes();
 
-        String flagStr = result.skipToNextProcess();
         Map<String, Object> resultMap = result.getData();
-        if(flagStr.equalsIgnoreCase(OrderPayCallback.PAY_FAIL)) {
-            return ok(payFail.render(resultMap));
-        } else {//OrderPayCallback.PAY_SUCCESS
+
+        if(result.success()) {
             return ok(paySuccess.render(resultMap));
+        } else {
+            return ok(payFail.render(resultMap));
         }
     }
 
