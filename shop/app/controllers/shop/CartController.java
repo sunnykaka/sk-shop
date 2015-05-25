@@ -82,6 +82,7 @@ public class CartController extends Controller {
                 if(cartItems == null || cartItems.size() == 0) {
                     return ok(new JsonResult(true,"用户当前购物车为空", 0).toNode());
                 }
+                Logger.info("-------测试---------: " + cartItems + "\n" + cartItems.size());
                 return ok(new JsonResult(true, "用户购买了东西", cartItems.size()).toNode());
             }
         } catch (final Exception e) {
