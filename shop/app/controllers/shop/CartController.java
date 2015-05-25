@@ -301,10 +301,7 @@ public class CartController extends Controller {
     @SecuredAction
     public Result chooseAddress(String selCartItems) {
         User curUser = SessionUtils.currentUser();
-        Cart cart = cartService.getCartByUserId(curUser.getId());
-        List<CartItem> selCartItemList =cartService.queryUserSelCarItemsByIds(cart.getId(), selCartItems); //int cartId, String cartItems
-        //重新计算支付总金额
-        cart.setTotalMoney(cartProcess.calculateTotalMoney(selCartItemList));
+        Cart cart = cartProcess.buildUserCartBySelItem(curUser.getId(), selCartItems);
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
         return ok(chooseAddress.render(selCartItems, addressList, cart,false));
     }
