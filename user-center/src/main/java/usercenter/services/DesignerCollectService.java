@@ -1,5 +1,6 @@
 package usercenter.services;
 
+import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.SQLUtils;
 import common.utils.page.Page;
@@ -65,9 +66,12 @@ public class DesignerCollectService {
      */
     public void deleteMyDesignerCollect(int designerId,int userId){
 
-        DesignerCollect DesignerCollect = getByDesignerId(designerId, userId);
-        DesignerCollect.setDeleted(SQLUtils.SQL_DELETE_TRUE);
-        updateDesignerCollect(DesignerCollect);
+        DesignerCollect designerCollect = getByDesignerId(designerId, userId);
+        if(null == designerCollect){
+            throw new AppBusinessException("删除收藏失败");
+        }
+        designerCollect.setDeleted(SQLUtils.SQL_DELETE_TRUE);
+        updateDesignerCollect(designerCollect);
 
     }
 

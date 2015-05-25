@@ -78,27 +78,6 @@ public class DesignerService {
     }
 
     /**
-     * 获取设计师主图
-     *
-     * @param designerId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public DesignerPicture getDesignerPicByDesignerById(int designerId) {
-
-        String jpql = "select dp from DesignerPicture dp where 1=1 and dp.mainPic=true and dp.designerId=:designerId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("designerId", designerId);
-
-        List<DesignerPicture> list = generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
-        if (list != null && list.size() > 0) {
-            return list.get(0);
-        } else {
-            return new DesignerPicture();
-        }
-    }
-
-    /**
      * 通过图类型获取设计师图片
      *
      * @param picType

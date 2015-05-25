@@ -74,7 +74,7 @@ public class BackGoodsService {
                 backGoodsItem.setOrderItemId(orderItemId);
                 backGoodsItems.add(backGoodsItem);
 
-                backPrice.add(orderItem.getCurUnitPrice().multiply(number));
+                backPrice = backPrice.add(orderItem.getCurUnitPrice().multiply(number));
 
             }
 
@@ -82,6 +82,7 @@ public class BackGoodsService {
             backGoods.setUserId(user.getId());
             backGoods.setAccountType(user.getAccountType());
             backGoods.setBackReason(backApply.getBackReason());
+            backGoods.setBackReasonReal(BackGoods.BackReason.NoQualityProblem);
             backGoods.setOrderId(order.getId());
             backGoods.setOrderNo(order.getOrderNo());
             backGoods.setBackPrice(backPrice);

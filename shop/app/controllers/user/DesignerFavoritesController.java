@@ -1,11 +1,14 @@
 package controllers.user;
 
+import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.constants.DesignerPictureType;
 import usercenter.models.Designer;
 import usercenter.models.DesignerCollect;
 import usercenter.models.DesignerPicture;
@@ -24,12 +27,6 @@ import java.util.Optional;
  */
 @org.springframework.stereotype.Controller
 public class DesignerFavoritesController extends Controller {
-
-    /** 每页显示 5 条数据 */
-    public static final int DEFAULT_PAGE_SIZE = 5;
-
-    /** 页数, 默认显示第 1 页 */
-    private static final int DEFAULT_PAGE_NO = 1;
 
     @Autowired
     private DesignerCollectService designerCollectService;
@@ -51,7 +48,7 @@ public class DesignerFavoritesController extends Controller {
         List<DesignerCollect> pageProductCollcet = designerCollectService.getDesignerCollectList(Optional.of(page), user.getId());
         for(DesignerCollect designerCollect:pageProductCollcet){
             Designer designer = designerService.getDesignerById(designerCollect.getDesignerId());
-            DesignerPicture designerPicture = designerService.getDesignerPicByDesignerById(designerCollect.getDesignerId());
+            DesignerPicture designerPicture = designerService.getDesignerPicByType(designerCollect.getDesignerId(), DesignerPictureType.IndexLogoSmallPic);
             designerCollect.setDesignerName(designer.getName());
             designerCollect.setDesignerPic(designerPicture.getPictureUrl());
         }
@@ -73,31 +70,35 @@ public class DesignerFavoritesController extends Controller {
 
         User user = SessionUtils.currentUser();
 
-        designerCollectService.deleteMyDesignerCollect(designerId, user.getId());
+        try {
+            designerCollectService.deleteMyDesignerCollect(designerId, user.getId());
+        }catch (AppBusinessException e){
+            return ok(new JsonResult(false, "删除失败").toNode());
+        }
 
-        return redirect(routes.DesignerFavoritesController.index(DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE));
+        return ok(new JsonResult(true, "删除成功").toNode());
 
     }
 
     @SecuredAction
-    public Result add(){
+    public Result add(int designerId){
 
         User user = SessionUtils.currentUser();
 
-        Form<DesignerCollect> DesignerCollectForm = Form.form(DesignerCollect.class).bindFromRequest();
-        DesignerCollect designerCollect = DesignerCollectForm.get();
-
-        Designer designer = designerService.getDesignerById(designerCollect.getDesignerId());
+        Designer designer = designerService.getDesignerById(designerId);
         if(null == designer){
             return ok(new JsonResult(false, "该设计师不存在").toNode());
         }
 
-        DesignerCollect oldDesignerCollect = designerCollectService.getByDesignerId(designerCollect.getDesignerId(),user.getId());
+        DesignerCollect oldDesignerCollect = designerCollectService.getByDesignerId(designerId,user.getId());
         if(null != oldDesignerCollect){
             return ok(new JsonResult(false, "已关注该设计师").toNode());
         }
 
+        DesignerCollect designerCollect = new DesignerCollect();
+        designerCollect.setDesignerId(designerId);
         designerCollect.setUserId(user.getId());
+        designerCollect.setCollectTime(DateTime.now());
         designerCollectService.createDesignerCollect(designerCollect);
 
         return ok(new JsonResult(true,"关注成功").toNode());

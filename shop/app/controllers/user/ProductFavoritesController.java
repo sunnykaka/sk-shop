@@ -1,5 +1,6 @@
 package controllers.user;
 
+import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
 import org.joda.time.DateTime;
@@ -44,9 +45,6 @@ public class ProductFavoritesController extends Controller {
     @Autowired
     private ProductPictureService productPictureService;
 
-    @Autowired
-    private DesignerService designerService;
-
     /**
      * 收藏商品列表
      *
@@ -63,12 +61,10 @@ public class ProductFavoritesController extends Controller {
         for(ProductCollect pc:pageProductCollcets){
             Product product = productService.getProductById(pc.getProductId());
             ProductPicture pp = productPictureService.getMainProductPictureByProductId(pc.getProductId());
-            DesignerPicture dp = designerService.getDesignerPicByDesignerById(product.getCustomerId());
 
             pc.setProductName(product.getName());
             pc.setProductPic(pp.getPictureUrl());
             pc.setDesignerId(product.getCustomerId());
-            pc.setDesignerPic(dp.getPictureUrl());
 
         }
 
@@ -89,9 +85,14 @@ public class ProductFavoritesController extends Controller {
 
         User user = SessionUtils.currentUser();
 
-        productCollectService.deleteMyProductCollect(productId,user.getId());
+        try {
+            productCollectService.deleteMyProductCollect(productId,user.getId());
+        }catch (AppBusinessException e){
+            return ok(new JsonResult(false, "删除失败").toNode());
+        }
 
-        return redirect(routes.ProductFavoritesController.index(DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE));
+
+        return ok(new JsonResult(true, "删除成功").toNode());
 
     }
 
@@ -101,21 +102,26 @@ public class ProductFavoritesController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result add(){
+    public Result add(int productId){
 
         User user = SessionUtils.currentUser();
 
-        Form<ProductCollect> ProductCollectForm = Form.form(ProductCollect.class).bindFromRequest();
-        ProductCollect productCollect = ProductCollectForm.get();
+        Product product = productService.getProductById(productId);
+        if(null == product){
+            return ok(new JsonResult(false, "收藏的商品找不到").toNode());
+        }
 
-        ProductCollect oldProductCollect = productCollectService.getByProductId(productCollect.getProductId(),user.getId());
+        ProductCollect oldProductCollect = productCollectService.getByProductId(productId,user.getId());
 
         if(null != oldProductCollect){
             return ok(new JsonResult(false, "已收藏该商品").toNode());
         }
 
+        ProductCollect productCollect = new ProductCollect();
+
+        productCollect.setProductId(productId);
         productCollect.setUserId(user.getId());
-        productCollect.setCollectTime(new DateTime());
+        productCollect.setCollectTime(DateTime.now());
         productCollectService.createProductCollect(productCollect);
 
         return ok(new JsonResult(true, "收藏成功").toNode());

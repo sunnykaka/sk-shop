@@ -1,5 +1,6 @@
 package productcenter.services;
 
+import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.SQLUtils;
 import common.utils.page.Page;
@@ -65,6 +66,11 @@ public class ProductCollectService {
     public void deleteMyProductCollect(int productId,int userId){
 
         ProductCollect productCollect = getByProductId(productId, userId);
+
+        if(null == productCollect){
+            throw new AppBusinessException("删除收藏失败");
+        }
+
         productCollect.setDeleted(SQLUtils.SQL_DELETE_TRUE);
         updateProductCollect(productCollect);
 

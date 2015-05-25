@@ -23,10 +23,10 @@ GET         /user/order                           @controllers.Application.myOrd
 # my favorites
 GET         /my/favorites/product                 @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
 POST        /my/favorites/product/del             @controllers.user.ProductFavoritesController.del(productId:Int)
-POST        /my/favorites/product/add             @controllers.user.ProductFavoritesController.add()
+POST        /my/favorites/product/add             @controllers.user.ProductFavoritesController.add(productId:Int)
 GET         /my/favorites/designer                @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
 POST        /my/favorites/designer/del            @controllers.user.DesignerFavoritesController.del(designerId:Int)
-POST        /my/favorites/designer/add            @controllers.user.DesignerFavoritesController.add()
+POST        /my/favorites/designer/add            @controllers.user.DesignerFavoritesController.add(designerId:Int)
 # my address
 GET         /my/address                           @controllers.user.AddressController.index()
 GET         /my/address/list                      @controllers.user.AddressController.list()
