@@ -233,11 +233,11 @@ public class CartController extends Controller {
     }
 
     /**
-     * 去结算-选择送货地址
+     * 去结算-验证数据
      * @return
      */
     @SecuredAction
-    public Result chooseAddress(String selCartItems) {
+    public Result selCartItemProcess(String selCartItems) {
         if(selCartItems == null || selCartItems.trim().length() == 0) {
             return ok(new JsonResult(false,"去结算项为空！").toNode());
         }
@@ -285,20 +285,28 @@ public class CartController extends Controller {
                 cartItem.setSelected(true);
                 selCartItemList.add(cartItem);
             }
-
             //更新购物车是否选中
             cartService.updateCartItemList(selCartItemList);
-
-            //重新计算支付总金额
-            cart.setTotalMoney(cartProcess.calculateTotalMoney(selCartItemList));
-
-            List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-            cart = cartService.getCartByUserId(curUser.getId());
-            return ok(chooseAddress.render(selCartItems, addressList, cart,false));
+            return ok(new JsonResult(true,"选中购物车项选中状态更新成功").toNode());
         } catch (Exception e) {
             Logger.warn("去结算-悬着邮递地址发生异常:", e);
             return ok(new JsonResult(false,"去结算发生异常，请联系商城客服人员").toNode());
         }
+    }
+
+    /**
+     * 去结算-选择送货地址
+     * @return
+     */
+    @SecuredAction
+    public Result chooseAddress(String selCartItems) {
+        User curUser = SessionUtils.currentUser();
+        Cart cart = cartService.getCartByUserId(curUser.getId());
+        List<CartItem> selCartItemList =cartService.queryUserSelCarItemsByIds(cart.getId(), selCartItems); //int cartId, String cartItems
+        //重新计算支付总金额
+        cart.setTotalMoney(cartProcess.calculateTotalMoney(selCartItemList));
+        List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
+        return ok(chooseAddress.render(selCartItems, addressList, cart,false));
     }
 
     /**
