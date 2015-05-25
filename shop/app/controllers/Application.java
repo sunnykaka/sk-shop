@@ -28,9 +28,6 @@ import static java.util.stream.Collectors.toList;
 public class Application extends Controller {
 
 
-
-
-
     @Autowired
     private CmsService cmsService;
 
@@ -53,25 +50,13 @@ public class Application extends Controller {
         Map<ExhibitionStatus, List<CmsExhibition>> exhibitions = cmsService.queryAllExhibition();
         List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.SELLING);
         List<CmsContent> contents = cmsService.allContents();
-        List<CmsContent> sliderBoxs = new ArrayList<>();
 
-        CmsContent font1 = null;
-        CmsContent font2 = null;
+        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
+        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).collect(toList()).get(0);
+        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).collect(toList()).get(0);
 
-        for (CmsContent content : contents) {
-            if (content.getType().equals("PIC") && content.getPosition().equals(CmsPosition.SLIDER_BOX)) {
-                sliderBoxs.add(content);
-            }
-            if (content.getType().equals("FONT")) {
-                if(content.getPosition().equals(CmsPosition.INDEX_FONT_1)){
-                    font1 = content;
-                }
-                if(content.getPosition().equals(CmsPosition.INDEX_FONT_2)){
-                    font2 = content;
-                }
-            }
-        }
-        return ok(index.render(SessionUtils.currentUser(), sellingList, font1,font2, sliderBoxs));
+
+        return ok(index.render(SessionUtils.currentUser(), sellingList, font1, font2, sliderBoxs));
     }
 
 
@@ -84,26 +69,13 @@ public class Application extends Controller {
         Map<ExhibitionStatus, List<CmsExhibition>> exhibitions = cmsService.queryAllExhibition();
         List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.PREPARE);
         List<CmsContent> contents = cmsService.allContents();
-        List<CmsContent> sliderBoxs = new ArrayList<>();
+
+        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
+        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)).collect(toList()).get(0);
+        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)).collect(toList()).get(0);
 
 
-        CmsContent font1 = null;
-        CmsContent font2 = null;
-
-        for (CmsContent content : contents) {
-            if (content.getType().equals("PIC") && content.getPosition().equals(CmsPosition.SLIDER_BOX)) {
-                sliderBoxs.add(content);
-            }
-            if (content.getType().equals("FONT")) {
-                if(content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)){
-                    font1 = content;
-                }
-                if(content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)){
-                    font2 = content;
-                }
-            }
-        }
-        return ok(index.render(SessionUtils.currentUser(), sellingList, font1,font2, sliderBoxs));
+        return ok(index.render(SessionUtils.currentUser(), sellingList, font1, font2, sliderBoxs));
     }
 
 

@@ -8,8 +8,8 @@ import javax.persistence.*;
  * Created by amos on 15-5-12.
  */
 @Entity
-@Table(name="cms_content")
-public class CmsContent implements EntityClass<Integer> {
+@Table(name = "cms_content")
+public class CmsContent implements EntityClass<Integer>{
 
     private Integer id;
 
@@ -28,12 +28,12 @@ public class CmsContent implements EntityClass<Integer> {
      */
     private String link;
 
-    private String  position;
+    private String position;
 
     /**
-     * 类型：文字，图片
+     * 优先级
      */
-    private String type;
+    private Integer order;
 
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -50,7 +50,7 @@ public class CmsContent implements EntityClass<Integer> {
 
 
     @Basic
-    @Column(name="title")
+    @Column(name = "title")
     public String getTitle() {
         return title;
     }
@@ -60,7 +60,7 @@ public class CmsContent implements EntityClass<Integer> {
     }
 
     @Basic
-    @Column(name="content")
+    @Column(name = "content")
     public String getContent() {
         return content;
     }
@@ -70,7 +70,7 @@ public class CmsContent implements EntityClass<Integer> {
     }
 
     @Basic
-    @Column(name="link")
+    @Column(name = "link")
     public String getLink() {
         return link;
     }
@@ -80,7 +80,7 @@ public class CmsContent implements EntityClass<Integer> {
     }
 
     @Basic
-    @Column(name="position")
+    @Column(name = "position")
     public String getPosition() {
         return position;
     }
@@ -90,12 +90,12 @@ public class CmsContent implements EntityClass<Integer> {
     }
 
     @Basic
-    @Column(name="type")
-    public String getType() {
-        return type;
+    @Column(name = "order")
+    public Integer getOrder() {
+        return order;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }

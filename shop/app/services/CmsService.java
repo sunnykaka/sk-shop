@@ -51,6 +51,7 @@ public class CmsService {
 
     /**
      * 查询设计师所有的专场
+     *
      * @param dId
      * @return
      */
@@ -100,7 +101,8 @@ public class CmsService {
      */
     @Transactional(readOnly = true)
     public List<CmsContent> allContents() {
-        return generalDao.findAll(CmsContent.class);
+        String sql = "select * from cms_content order by order desc,id desc";
+        return generalDao.getEm().createNativeQuery(sql, CmsContent.class).getResultList();
     }
 
 
