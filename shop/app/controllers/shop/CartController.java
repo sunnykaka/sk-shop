@@ -82,8 +82,11 @@ public class CartController extends Controller {
                 if(cartItems == null || cartItems.size() == 0) {
                     return ok(new JsonResult(true,"用户当前购物车为空", 0).toNode());
                 }
-                Logger.info("-------测试---------: " + cartItems + "\n" + cartItems.size());
-                return ok(new JsonResult(true, "用户购买了东西", cartItems.size()).toNode());
+                int totalNum = 0;
+                for(CartItem cartItem : cartItems) {
+                    totalNum += cartItem.getNumber();
+                }
+                return ok(new JsonResult(true, "用户购买了东西", totalNum).toNode());
             }
         } catch (final Exception e) {
             Logger.error("获取用户购物车信息出现异常:", e);
