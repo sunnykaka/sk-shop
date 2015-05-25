@@ -3,6 +3,16 @@
 
 @myCenter(Messages("title.my.favorites.designer")) {
 
+    <script>
+        $(function(){
+            $('.focusDesigner-list li').hover(function(){
+                $(this).addClass('current');
+            },function(){
+                $(this).removeClass('current');
+            });
+        });
+    </script>
+
 } {
 
     <!--user-focusDesigner-->
@@ -10,12 +20,7 @@
         <div class="focusDesigner-inner width1200">
             <div class="bread-nav">
                 <ul class="clearfix">
-                    <li><a href="index.html">首页</a></li>
-                    <li>&gt;</li>
-                    <li><a href="index.html">个人中心</a></li>
-                    <li>&gt;</li>
-                    <li>我的账户</li>
-                    <li>&gt;</li>
+                    @myCenterTop()
                     <li>我的资料</li>
                 </ul>
             </div>
@@ -26,8 +31,8 @@
                     <h2>关注的设计师</h2>
                     <ul class="clearfix focusDesigner-box">
                         @for(dc <- page.getResult){
-                            <li class="current">
-                                <a href="#" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName"/></a>
+                            <li>
+                                <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName" width="235px" height="325px"/></a>
                                 <p class="title">@dc.getDesignerName</p>
                                 <span class="del" data-id="@dc.getId"></span>
                                 <a class="home" href="@dc.getDesignerId"></a>

@@ -1,6 +1,16 @@
 @(page:common.utils.page.Page[productcenter.models.ProductCollect])
 
-@myCenter(Messages("title.my.favorites.product")) {
+@myCenter(Messages("title.my.favorites.product")){
+
+    <script>
+        $(function(){
+            $('.likeProduct-list li').hover(function(){
+                $(this).addClass('current');
+            },function(){
+                $(this).removeClass('current');
+            });
+        });
+    </script>
 
 } {
 
@@ -9,12 +19,7 @@
         <div class="likeProduct-inner width1200">
             <div class="bread-nav">
                 <ul class="clearfix">
-                    <li><a href="index.html">首页</a></li>
-                    <li>&gt;</li>
-                    <li><a href="index.html">个人中心</a></li>
-                    <li>&gt;</li>
-                    <li>我的账户</li>
-                    <li>&gt;</li>
+                    @myCenterTop()
                     <li>我的资料</li>
                 </ul>
             </div>
@@ -25,8 +30,8 @@
                     <h2>喜欢的商品</h2>
                     <ul class="clearfix likeProduct-box">
                         @for(pc <- page.getResult){
-                            <li class="current">
-                                <a href="#"><img src="@pc.getProductPic" alt="@pc.getProductName"/></a>
+                            <li>
+                                <a href="@controllers.product.routes.ProductController.detail(pc.getProductId.toString)"><img src="@pc.getProductPic" alt="@pc.getProductName" width="235px" height="325px"/></a>
                                 <p class="title">@pc.getProductName</p>
                                 <span class="del" data-id="@pc.getId"></span>
                             </li>

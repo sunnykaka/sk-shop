@@ -10,10 +10,7 @@
         <div class="order-detail-inner width1200">
             <div class="bread-nav">
                 <ul class="clearfix">
-                    <li><a href="index.html">首页</a></li>
-                    <li>&gt;</li>
-                    <li><a href="index.html">个人中心</a></li>
-                    <li>&gt;</li>
+                    @myCenterTop()
                     <li><a href="@controllers.user.routes.MyOrderController.index()" >订单管理</a></li>
                     <li>&gt;</li>
                     <li>订单详情</li>
@@ -35,7 +32,10 @@
                                     <p><span>收货地址(中文)： <b class="address-detail">@logistics.getProvince @logistics.getLocation</b></span></p>
                                     <p><span>邮政编码： <b class="post-number">@logistics.getZipCode</b></span></p>
                                 </div>
-                                <p class="pay"><span>支付方式：<b class="pay-type">@order.getPayType.getValue</b></span> <span>支付号：<b class="pay-num">@order.getPayBank.getValue</b></span></p>
+                                <p class="pay">
+                                    <span>支付方式：<b class="pay-type">@if(null != order.getPayType){ @order.getPayType.getValue }else{ 未选择 }</b></span>
+                                    <span>支付号：<b class="pay-num">@if(null != order.getPayBank){ @order.getPayBank.getValue }</b></span>
+                                </p>
                             </div>
                         </div>
                         <div class="order-item order-track">

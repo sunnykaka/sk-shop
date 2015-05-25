@@ -64,10 +64,13 @@ public class MyOrderController extends Controller {
             } else {
                 order.setAddressName(order.getUserName());
             }
+            order.setBackGoodsl(orderService.isBackGoods(order));
 
         }
 
         page.setResult(orderList);
+
+
 
         return ok(myOrder.render(page, queryType));
 

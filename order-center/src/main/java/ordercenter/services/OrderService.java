@@ -10,6 +10,7 @@ import ordercenter.models.*;
 import ordercenter.util.OrderNumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,33 @@ public class OrderService {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private BackGoodsService backGoodsService;
+
     private static final ReentrantLock LOCK = new ReentrantLock();
+
+    /**
+     * 判断是否可以退货申请
+     *
+     * @param order
+     * @return
+     */
+    public boolean isBackGoods(Order order){
+        int days = Days.daysBetween(order.getCreateTime(), new DateTime(order.getMilliDate())).getDays();
+        if(order.getOrderState().getName().equals(OrderState.Receiving.getName()) && days <= 7 ){
+
+            List<BackGoods> backGoodsList = backGoodsService.getBackGoodsByOrderId(order.getId());
+
+            for(BackGoods backGoods:backGoodsList){
+                if(!backGoods.getBackState().name().equals(BackGoodsState.Cancel)){
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     /**
      * 创建购订单
