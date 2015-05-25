@@ -51,7 +51,7 @@ public class AliPayRequestHandler extends PayRequestHandler {
         sParaTemp.put("subject", subject);
         sParaTemp.put("body", subject);
         //完成分到圆的转换
-        Money money = Money.valueOf(payInfoWrapper.getTotalFee());
+        Money money = Money.valueOfCent(payInfoWrapper.getTotalFee());
         sParaTemp.put("total_fee", money.toString());
         sParaTemp.put("partner", AlipayUtil.partner);
         sParaTemp.put("seller_email", AlipayUtil.seller_email);
