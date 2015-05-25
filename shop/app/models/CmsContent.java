@@ -33,7 +33,7 @@ public class CmsContent implements EntityClass<Integer>{
     /**
      * 优先级
      */
-    private Integer order;
+    private Integer priority;
 
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,12 +90,12 @@ public class CmsContent implements EntityClass<Integer>{
     }
 
     @Basic
-    @Column(name = "order")
-    public Integer getOrder() {
-        return order;
+    @Column(name="priority")
+    public Integer getPriority() {
+        return priority;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

@@ -101,7 +101,7 @@ public class CmsService {
      */
     @Transactional(readOnly = true)
     public List<CmsContent> allContents() {
-        String sql = "select * from cms_content order by order desc,id desc";
+        String sql = "select * from cms_content order by priority desc,id desc";
         return generalDao.getEm().createNativeQuery(sql, CmsContent.class).getResultList();
     }
 
