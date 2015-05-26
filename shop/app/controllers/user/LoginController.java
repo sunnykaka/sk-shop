@@ -18,6 +18,7 @@ import usercenter.services.UserService;
 import usercenter.utils.SessionUtils;
 import views.html.user.login;
 import views.html.user.register;
+import views.html.user.openIDCallback;
 
 import java.util.Optional;
 
@@ -130,7 +131,7 @@ public class LoginController extends Controller {
         userService.loginByRegister(user, true);
         String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
 
-        return redirect(originalUrl);
+        return ok(openIDCallback.render(originalUrl));
     }
 
 

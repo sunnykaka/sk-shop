@@ -20,6 +20,12 @@ POST        /user/phone/get_code                  @controllers.user.LoginControl
 GET         /user/phone/exist                     @controllers.user.LoginController.isPhoneExist(phone)
 GET         /user/username/exist                  @controllers.user.LoginController.isUsernameExist(username)
 GET         /user/order                           @controllers.Application.myOrder
+#fake openid provider
+GET         /wx/connect/qrconnect                 @controllers.user.FakeOpenIDProviderController.wxConnect(appid ?= null, redirect_uri ?= null, response_type ?= null, scope ?= null, state ?= null)
+GET         /wx/sns/oauth2/access_token           @controllers.user.FakeOpenIDProviderController.wxGetAccessToken(appid ?= null, secret ?= null, code ?= null, grant_type ?= null)
+GET         /wx/sns/userinfo                      @controllers.user.FakeOpenIDProviderController.wxGetUserInfo(access_token ?= null, openid ?= null)
+
+
 
 
 # my favorites

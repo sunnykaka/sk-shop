@@ -73,7 +73,7 @@ public class WeixinLogin {
         }
         String stateInSession = Http.Context.current().session().get("wx_state");
         if (StringUtils.isBlank(stateInSession) || !stateInSession.equals(state)) {
-            Logger.error("微信登录回调的时候校验session中的值wx_state失败");
+            Logger.error("微信登录回调的时候校验session中的值wx_state失败, stateInSession:" + stateInSession);
             throw new AppBusinessException(errorMsg);
         }
 

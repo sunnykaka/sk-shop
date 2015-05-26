@@ -1,0 +1,12 @@
+@(url: String)
+
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <script>
+        window.opener.location.href = "@Html(url)";
+        window.close();
+    </script>
+</head>
+    <body></body>
+</html>
