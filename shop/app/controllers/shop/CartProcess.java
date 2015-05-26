@@ -156,7 +156,7 @@ public class CartProcess {
         } else {
             try {
                 Logger.warn("构建购物车时发现sku被删除:" + + cartItem.getSkuId() + " : " + cartItem.getCartId());
-                cartService.deleteCartItemBySkuIdAndCartId(cartItem.getSkuId(), cartItem.getCartId());
+                cartService.deleteCartItemById(cartItem.getId());
             } catch (Exception e) {
                 Logger.warn("构建购物车删除sku失败:" + cartItem.getSkuId() + " : " + cartItem.getCartId());
             }

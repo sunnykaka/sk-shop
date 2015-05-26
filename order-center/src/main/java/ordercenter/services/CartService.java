@@ -280,15 +280,13 @@ public class CartService {
 
     /**
      * 通过skuId和cartId组合来删除购物车项
-     * @param skuId
-     * @param cartId
+     * @param cartItemId
      */
-    public void deleteCartItemBySkuIdAndCartId(int skuId, int cartId) {
-        String jpql = "update CartItem v set v.isDelete=:isDelete where v.skuId=:skuId and v.cartId=:cartId ";
+    public void deleteCartItemById(int cartItemId) {
+        String jpql = "update CartItem v set v.isDelete=:isDelete where v.id=:cartItemId ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("isDelete", true);
-        queryParams.put("skuId", skuId);
-        queryParams.put("cartId", cartId);
+        queryParams.put("cartItemId", cartItemId);
         generalDao.update(jpql, queryParams);
     }
 }

@@ -228,14 +228,12 @@ public class CartController extends Controller {
     /**
      * 管理购物车的时候删除某个SKU商品
      *
-     * @param cartId
-     * @param skuId
+     * @param cartItemId
      */
     @SecuredAction
-    public Result deleteCartItem(int cartId, int skuId) {
+    public Result deleteCartItem(int cartItemId) {
         try {
-            cartService.deleteCartItemBySkuIdAndCartId(skuId, cartId);
-            Cart cart = cartService.getCart(cartId);
+            cartService.deleteCartItemById(cartItemId);
             return ok(new JsonResult(true,"删除购物车成功").toNode());
         } catch (Exception e) {
             Logger.error("删除购物车失败:", e);
