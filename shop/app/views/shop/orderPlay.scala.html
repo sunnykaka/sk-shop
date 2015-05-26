@@ -24,16 +24,70 @@
                 valueCollection.payBank = self.attr('paybank');
 
             });
+
+             $('#pay-money-btn').click(function(){
+             //payType:OnLine
+             //payMethod:
+    //             directPay("支付宝"),
+//    creditPay("信用卡"),
+//    bankPay("银行卡"),
+//    Tenpay("财付通");
+
+//payOrg:
+
+//orderIds:
+            var payMethod, currentPay = box.find('.current').attr('paybank');
+            switch (currentPay){
+                case  'Alipay':  payMethod = 'directPay';
+                    break;
+                case  'Tenpay':  payMethod = 'Tenpay';
+                    break;
+                default :
+                    payMethod = 'bankPay';
+            }
+             console.log($('#orderIds').val());
+             console.log(currentPay);
+             console.log(payMethod);
+
+                     $.ajax({
+                        type: "get",
+                        url: '/order/submitTradeOrder?payType=OnLine&payMethod='+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val(),
+                        async: false,
+                        dataType: 'json',
+                        cache: false,
+                        success: function (data) {
+                            if(data.result){
+                                window.location.href = '/order/toPayOrder?tradeNo='+data.data+"&payMethod="+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val();
+                            }
+                        }
+                    });
+
+
+            });
+
         }
 
+
+
+
         payment();
+
+
+
 
     }(jQuery, FG));
 </script>
 
 } {
-//此需要删除
-   @order
+
+
+
+
+
+
+    @if(order != null) {
+        <input type="hidden" id="orderIds" value="@order.getId">
+    }
 
     <div class="pay width1200">
         <div class="pay-inner">
@@ -58,11 +112,11 @@
                     <ul class="list clearfix">
                         <li paybank="Alipay" class="current">
                             <i></i>
-                            <img src="images/bank-zfb.jpg" alt="支付宝">
+                            <img src="../assets/images/bank-zfb.jpg" alt="支付宝">
                         </li>
                         <li paybank="Tenpay" class="">
                             <i></i>
-                            <img src="images/bank-cft.jpg" alt="财付通">
+                            <img src="../assets/images/bank-cft.jpg" alt="财付通">
                         </li>
 
                         <li class="more-payBank">
@@ -75,87 +129,87 @@
                     <ul class="list clearfix">
                         <li paybank="ICBCB2C">
                             <i></i>
-                            <img src="images/bank-gs.jpg" alt="工商银行">
+                            <img src="../assets/images/bank-gs.jpg" alt="工商银行">
                         </li>
                         <li paybank="CCB">
                             <i></i>
-                            <img src="images/bank-js.jpg" alt="建设银行">
+                            <img src="../assets/images/bank-js.jpg" alt="建设银行">
                         </li>
                         <li paybank="BOCB2C">
                             <i></i>
-                            <img src="images/bank-zg.jpg" alt="中国银行">
+                            <img src="../assets/images/bank-zg.jpg" alt="中国银行">
                         </li>
                         <li paybank="CMB">
                             <i></i>
-                            <img src="images/bank-zs.jpg" alt="招商银行">
+                            <img src="../assets/images/bank-zs.jpg" alt="招商银行">
                         </li>
                         <li paybank="COMM">
                             <i></i>
-                            <img src="images/bank-jt.jpg" alt="交通银行">
+                            <img src="../assets/images/bank-jt.jpg" alt="交通银行">
                         </li>
                         <li paybank="ABC">
                             <i></i>
-                            <img src="images/bank-ny.jpg" alt="农业银行">
+                            <img src="../assets/images/bank-ny.jpg" alt="农业银行">
                         </li>
                         <li paybank="POSTGC">
                             <i></i>
-                            <img src="images/bank-yz.jpg" alt="中国邮政储蓄">
+                            <img src="../assets/images/bank-yz.jpg" alt="中国邮政储蓄">
                         </li>
                         <li paybank="CITIC">
                             <i></i>
-                            <img src="images/bank-zx.jpg" alt="中信银行">
+                            <img src="../assets/images/bank-zx.jpg" alt="中信银行">
                         </li>
                         <li paybank="CIB">
                             <i></i>
-                            <img src="images/bank-xy.jpg" alt="兴业银行">
+                            <img src="../assets/images/bank-xy.jpg" alt="兴业银行">
                         </li>
                         <li paybank="SPDB">
                             <i></i>
-                            <img src="images/bank-pf.jpg" alt="浦发银行">
+                            <img src="../assets/images/bank-pf.jpg" alt="浦发银行">
                         </li>
                         <li paybank="CMBC">
                             <i></i>
-                            <img src="images/bank-ns.jpg" alt="民生银行">
+                            <img src="../assets/images/bank-ns.jpg" alt="民生银行">
                         </li>
                         <li paybank="CEBBANK">
                             <i></i>
-                            <img src="images/bank-gd.jpg" alt="光大银行">
+                            <img src="../assets/images/bank-gd.jpg" alt="光大银行">
                         </li>
                         <li paybank="NBBANK">
                             <i></i>
-                            <img src="images/bank-nb.jpg" alt="宁波银行">
+                            <img src="../assets/images/bank-nb.jpg" alt="宁波银行">
                         </li>
                         <li paybank="SDB">
                             <i></i>
-                            <img src="images/bank-szfz.jpg" alt="深发展银行">
+                            <img src="../assets/images/bank-szfz.jpg" alt="深发展银行">
                         </li>
                         <li paybank="BJRCB">
                             <i></i>
-                            <img src="images/bank-bjns.jpg" alt="北京农商银行">
+                            <img src="../assets/images/bank-bjns.jpg" alt="北京农商银行">
                         </li>
                         <li paybank="SPABANK">
                             <i></i>
-                            <img src="images/bank-pa.jpg" alt="平安银行">
+                            <img src="../assets/images/bank-pa.jpg" alt="平安银行">
                         </li>
                         <li paybank="GDB">
                             <i></i>
-                            <img src="images/bank-gf.jpg" alt="广发银行">
+                            <img src="../assets/images/bank-gf.jpg" alt="广发银行">
                         </li>
                         <li paybank="SHBANK">
                             <i></i>
-                            <img src="images/bank-sh.jpg" alt="上海银行">
+                            <img src="../assets/images/bank-sh.jpg" alt="上海银行">
                         </li>
                         <li paybank="HZCBB2C">
                             <i></i>
-                            <img src="images/bank-hz.jpg" alt="杭州银行">
+                            <img src="../assets/images/bank-hz.jpg" alt="杭州银行">
                         </li>
                         <li paybank="BJBANK">
                             <i></i>
-                            <img src="images/bank-bj.jpg" alt="北京银行">
+                            <img src="../assets/images/bank-bj.jpg" alt="北京银行">
                         </li>
                     </ul>
                 </div>
-                <span class="pay-money-btn">立即支付</span>
+                <span class="btn pay-money-btn" id="pay-money-btn">立即支付</span>
             </div>
         </div>
     </div>

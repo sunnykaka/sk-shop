@@ -8,7 +8,7 @@
         <a href ="@routes.Application.designerProd(exhibition.getDesignerId)">
         <div class="img">
             <a href="@routes.Application.designerProd(exhibition.getDesignerId)"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
-            <p class="time">还剩 <span class="time-detail">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
+            <p class="time">还剩 <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
         </div>
         <div class="title">
             <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
@@ -28,6 +28,35 @@
         },function(){
             $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
         });
+
+        console.log($('.time-detail')[0]);
+
+
+
+                setInterval(function(){
+                  $(".time-detail").each(function(){
+                    var obj = $(this);
+                    var endTime = new Date(obj.attr('value'));
+                    var nowTime = new Date();
+                    var nMS=endTime.getTime() - nowTime.getTime();
+                    var myD=Math.floor(nMS/(1000 * 60 * 60 * 24)); //天
+                    var myH=Math.floor(nMS/(1000*60*60)) % 24; //小时
+                    var myM=Math.floor(nMS/(1000*60)) % 60; //分钟
+                    var myS=Math.floor(nMS/1000) % 60; //秒
+                    var myMS=Math.floor(nMS/100) % 10; //拆分秒
+
+                    if(myD>= 0){
+                        var str = myD+"天"+myH+"小时"+myM+"分"+myS+"."+myMS+"秒";
+
+                    }else{
+                        var str = "已结束！";
+                    }
+                    obj.text(str);
+                  });
+                }, 100); //每个0.1秒执行一次
+
+
+
     });
 </script>
 
@@ -66,7 +95,7 @@
 
     <!--start-fashion first-->
     <div class="start-fashion">
-        <div class="start-fashion-inne width1200">
+        <div class="start-fashion-inner width1200">
             <h2>全球首发　限量发售</h2>
             <p class="info">独一无二的品味，独一无二的你。</p>
             <ul class="clearfix">
@@ -95,10 +124,10 @@
                 @for(exhibition <- sellingList.slice(4,7)){
                     <li>
                         <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <img src="@exhibition.getPic()" alt="" />
+                            <img src="@exhibition.getPic()" alt="" width="390" height="240"  />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
-                                <p class="time"><span class="time-detail">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
+                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
                             </div>
                         </a>
                     </li>
@@ -131,7 +160,7 @@
                     </a>
                     <div class="title">
                         <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                        <p class="time"><span class="time-detail">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
+                        <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
                     </div>
                 </li>
             }

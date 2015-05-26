@@ -24,9 +24,9 @@
                 @for(designer <- designerList) {
                     <li>
                         <a href="@routes.Application.designerProd(designer.getId)">
-                            <img class="designer-img" src="@designer.getMainPic" alt="@designer.getDescription"/>
+                            <img class="designer-img" src="@designer.getMainPic" alt="@designer.getDescription" width="289" height="460"/>
                             <div>
-                                <img src="@designer.getBrandPic" alt=""/>
+                                <img src="@designer.getBrandPic" alt="" width="289" height="60"/>
                                 <p>设计师：@designer.getName</p>
                             </div>
                         </a>

@@ -13,52 +13,8 @@
     var defaultSku = "@Html(pd.getDefaultSku.getSkuPropertiesInDb)";
 
     var productOnline = @pd.getProduct.isOnline
-
-    $(function(){
-        $.scrollTo('#detail',500);
-        $('.comment-header li').click(function(){
-        $(this).addClass('current').siblings('li').removeClass('current');
-        });
-
-        $('#openDetail').click(function(){
-        $('.container').slideDown(300);
-        $('.hide-detail').show();
-        });
-
-        $('#hideDetail').click(function(){
-        $(this).hide();
-        $('.container').slideUp(500);
-        });
-
-        $('.detail-size-color').find('dd').click(function(){
-        if($(this).is('.disabled')){
-        return false
-        }else{
-        $(this).addClass('selected').siblings('dd').removeClass('selected');
-        }
-        });
-
-        $('.detail-like .like').click(function(){
-        //$(this).toggleClass('current');
-        if($(this).is('.current')){
-        $(this).removeClass('current');
-        $('.like-text').text('我喜欢');
-        }else{
-        $(this).addClass('current');
-        $('.like-text').text('50000000');
-        }
-        })
-
-        $('.market-price').hover(function(){
-        $(this).addClass('current');
-        $('.info-tip').fadeIn(500);
-        },function(){
-        $(this).removeClass('current');
-        $('.info-tip').hide();
-        })
-
-    });
     </script>
+    <script src="@routes.Assets.versioned("js/details.js")"></script>
 } {
 
     <div class="detail width1200" id="detail">
@@ -127,39 +83,37 @@
                 <div class="debut-info clearfix">
                     @if(pd.isInExhibition) {
                         <div class="debut-info-left">
-                            <p>首发价：<span class="start-price">￥@pd.getDefaultSku.getPrice </span></p>
+                            <p>首发价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getPrice </span></p>
                             <p class="debut-time">@printDeadlineFromNow(pd.getExhibitionEndTime)</p>
                         </div>
                         <div class="debut-info-right">
-                            <p><span class="market-price">售卖价:￥@pd.getDefaultSku.getMarketPrice </span>
+                            <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice </span>
                                 <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
                         </div>
                     } else {
                         <div class="debut-info-left">
-                            <p>售卖价：<span class="start-price">￥@pd.getDefaultSku.getMarketPrice </span></p>
+                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getMarketPrice </span></p>
                         </div>
                         <div class="debut-info-right">
-                            <p><span class="market-price">首发价:￥@pd.getDefaultSku.getPrice </span>
+                            <p>首发价:￥<span class="market-price" id="market-price">@pd.getDefaultSku.getPrice </span>
                                 <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
                         </div>
                     }
                 </div>
-                <div class="detail-size-color">
+                <div class="detail-size-color" id="choose-sku">
                     @for(sc <- pd.getSkuCandidateList) {
-                        <div class="detail-size clearfix">
-                            <dl>
+                            <dl class="clearfix">
                                 <dt>@sc.getSkuProp.getValue：</dt>
                                 @for(sv <- sc.getSkuValueList) {
-                                    <dd data="@sv.getPidvid">@sv.getValue</dd>
+                                    <dd class="sku" data="@sv.getPidvid">@sv.getValue</dd>
                                 }
                             </dl>
-                        </div>
                     }
                 </div>
                 <div class="detail-quantity">
                     <dt>数　量：</dt>
                     <dd>
-                        <div class="amount">
+                        <div class="amount" id="amount">
                             <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
                             <input type="text" size="3" maxlength="3" class="text-number" id="buy-number" value="1">
                             <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
@@ -176,8 +130,10 @@
                             <a href="javascript:void(0);" class="btn addToOrder">商品已售罄</a>
                         </div>
                     } else {
-                        <a href="javascript:void(0);" class="btn addToOrder">立即购买</a>
-                        <a href="javascript:void(0);" class="btn addToCart">加入购物车</a>
+                        <div class="detail-btn">
+                        <span  class="btn addToOrder" id="addToOrder">立即购买</span>
+                        <span  class="btn addToCart" id="addToCart">加入购物车</span>
+                        </div>
                     }
                 }
                 <div class="detail-like">
@@ -186,6 +142,15 @@
             </div>
         </div>
     </div>
+
+    <!--siderbar-->
+    <ul class="sider-bar">
+        <li class="cart"><span  id="cart-quantity-btn"></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"></a></li>
+        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"></a></li>
+        <li class="go-top"><a href="javascript:void();"></a></li>
+    </ul>
+    <!--end sideebar-->
 
 }
 
