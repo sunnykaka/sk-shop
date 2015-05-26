@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.models.Product;
+import productcenter.services.ProductCollectService;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import services.CmsService;
@@ -39,6 +40,9 @@ public class Application extends Controller {
 
     @Autowired
     private ProductPictureService productPictureService;
+
+    @Autowired
+    private ProductCollectService productCollectService;
 
 
     /**
@@ -86,6 +90,7 @@ public class Application extends Controller {
      * @return
      */
     public Result designerProd(Integer dId) {
+        User user = SessionUtils.currentUser();
 
         /**
          * 1.获取设计师信息，并校验设计师是否存在
@@ -113,6 +118,8 @@ public class Application extends Controller {
             info.setProduct(prod);
             info.setMainPic(productPictureService.getMainProductPictureByProductId(prod.getId()));
             Optional<CmsExhibition> optional = cmsService.findExhibitionWithProdId(prod.getId());
+            info.setFavorites(productCollectService.isFavorites(user,prod.getId()));
+            info.setFavoritesNum(productCollectService.countProductCollect(prod.getId()));
             if (optional.isPresent()) {
                 info.setCmsExhibition(optional.get());
             }

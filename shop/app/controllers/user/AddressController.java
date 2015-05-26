@@ -136,7 +136,7 @@ public class AddressController extends Controller {
 
                 addressService.createAddress(address);
 
-                return ok(new JsonResult(true, "添加送货地址成功").toNode());
+                return ok(new JsonResult(true, "添加送货地址成功",address).toNode());
 
             } catch (AppBusinessException e) {
                 addressForm.reject("errors", e.getMessage());

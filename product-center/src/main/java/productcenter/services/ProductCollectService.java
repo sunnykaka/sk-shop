@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import productcenter.models.ProductCollect;
+import usercenter.models.User;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +115,6 @@ public class ProductCollectService {
         return null;
     }
 
-
     /**
      * 根据userId分页查询
      *
@@ -132,6 +133,21 @@ public class ProductCollectService {
         queryParams.put("userId", userId);
 
         return generalDAO.query(jpql, page, queryParams);
+    }
+
+    /**
+     * 是否收藏
+     *
+     * @param user
+     * @param productId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public boolean isFavorites(User user,int productId){
+        if(null != user && null != getByProductId(productId,user.getId())){
+            return true;
+        }
+        return false;
     }
 
     /**

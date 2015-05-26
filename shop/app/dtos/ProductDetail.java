@@ -348,11 +348,7 @@ public class ProductDetail {
         public Builder buildFavorites(){
 
             productDetail.setFavoritesNum(productCollectService.countProductCollect(productDetail.product.getId()));
-
-            User user = SessionUtils.currentUser();
-            if(null != user && null != productCollectService.getByProductId(productDetail.product.getId(),user.getId())){
-                productDetail.setFavorites(true);
-            }
+            productDetail.setFavorites(productCollectService.isFavorites(SessionUtils.currentUser(),productDetail.product.getId()));
 
             return this;
         }

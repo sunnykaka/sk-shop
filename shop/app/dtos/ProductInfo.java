@@ -15,6 +15,9 @@ public class ProductInfo {
 
     private CmsExhibition cmsExhibition;
 
+    private boolean isFavorites;
+
+    private int favoritesNum;
 
     public Product getProduct() {
         return product;
@@ -38,5 +41,21 @@ public class ProductInfo {
 
     public void setCmsExhibition(CmsExhibition cmsExhibition) {
         this.cmsExhibition = cmsExhibition;
+    }
+
+    public boolean isFavorites() {
+        return isFavorites;
+    }
+
+    public void setFavorites(boolean isFavorites) {
+        this.isFavorites = isFavorites;
+    }
+
+    public int getFavoritesNum() {
+        return favoritesNum;
+    }
+
+    public void setFavoritesNum(int favoritesNum) {
+        this.favoritesNum = favoritesNum;
     }
 }
