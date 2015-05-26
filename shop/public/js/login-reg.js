@@ -45,7 +45,7 @@
 
         function clearPrev(){//dereference
             for(var key in o){
-                if(key.indexOf("/user")>-1){
+                if(key.indexOf("/login")>-1){
                     o[key].close&&o[key].close();
                     o[key]=null;
                     delete o[key];
