@@ -229,7 +229,6 @@ $(function(){
         var addressId = $(this).attr('data-id'),item = $(this).parents('li');
         $.dialog({
             title:'提示',
-            id:'btndialog',
             content:'您确定要删除这条收货地址吗？',
             width:300,
             padding:'30px',
@@ -244,7 +243,7 @@ $(function(){
                                 dataType: 'json',
                                 success: function (data) {
                                     if (data.result) {
-                                        location.href= '/my/address';
+                                       item.remove();
                                     }
                                 }
                             });

@@ -1,14 +1,9 @@
 @(selItems:String, addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, isPromptlyPay:Boolean)
 
 @main(){
+<script src="@routes.Assets.versioned("js/submitOrder.js")"></script>
 <script type="text/javascript">
-$(function(){
-    $('.select-address li').hover(function(){
-        $(this).addClass('highLight');
-    },function(){
-        $(this).removeClass('highLight');
-    })
-});
+
 
 
 //添加购物车：
@@ -19,17 +14,7 @@ $(function(){
 //删除购物车项  /cart/deleteCartItem?cartId=&skuId=
 </script>
 } {
-//此需要删除
-    @addressList
-    @cart
 
-
-    //selItems要传递到后台
-
-    //立即支付标志
-    //isPromptlyPay
-    //skuId
-    //number
 
 <div class="order-submit width1200">
     <div class="order-inner">
@@ -51,7 +36,11 @@ $(function(){
 
             } else {
                 @for((address, index) <- addressList.zipWithIndex) {
-                <li class="current">
+                    @if(address.isDefaultAddress) {
+                        <li class="current" data-id="@address.getId">
+                    } else {
+                        <li class="" data-id="@address.getId">
+                    }
                     <div class="receiver"><strong>@address.getName<span class="space"></span>收</strong>
                         <span class="default">
                             @if(address.isDefaultAddress) {
@@ -89,6 +78,11 @@ $(function(){
                 <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
             </div>
         } else {
+
+
+            <input type="hidden" id="selItems" value="@selItems"/>
+            <input type="hidden" id="isPromptlyPay" value="@isPromptlyPay"/>
+
         <div class="confirm-product">
             <h3>确认商品信息</h3>
             <table>
@@ -169,7 +163,7 @@ $(function(){
             }
         </div>
         <div class="order-btn">
-            <span class="order-submit-btn">提交订单</span>
+            <span class="btn order-submit-btn" id="order-submit-btn">提交订单</span>
         </div>
     </div>
 </div>
