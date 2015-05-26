@@ -99,7 +99,7 @@ public class LoginController extends Controller {
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
         String code = smsSender.generatePhoneVerificationCode();
         if(!StringUtils.isBlank(code)) {
-            if(smsSender.sendMessage(views.html.template.sms.userRegisterCode.render(code))) {
+            if(smsSender.sendMessage(views.html.template.sms.userCode.render(code))) {
                 return ok(new JsonResult(true).toNode());
             }
         }
