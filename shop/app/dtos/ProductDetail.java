@@ -6,11 +6,10 @@ import ordercenter.services.ValuationService;
 import org.joda.time.DateTime;
 import productcenter.constants.SKUState;
 import productcenter.models.*;
-import productcenter.services.CategoryPropertyService;
-import productcenter.services.ProductPictureService;
-import productcenter.services.ProductService;
-import productcenter.services.SkuAndStorageService;
+import productcenter.services.*;
 import services.CmsService;
+import usercenter.models.User;
+import usercenter.utils.SessionUtils;
 import utils.Global;
 
 import java.util.*;
@@ -40,6 +39,12 @@ public class ProductDetail {
 
     //CMS相关
     private boolean isInExhibition;
+
+    //是否收藏
+    private boolean isFavorites = false;
+
+    //收藏数量
+    private int favoritesNum;
 
     private DateTime exhibitionEndTime;
 
@@ -93,6 +98,22 @@ public class ProductDetail {
         return isInExhibition;
     }
 
+    public boolean isFavorites() {
+        return isFavorites;
+    }
+
+    public void setFavorites(boolean isFavorites) {
+        this.isFavorites = isFavorites;
+    }
+
+    public int getFavoritesNum() {
+        return favoritesNum;
+    }
+
+    public void setFavoritesNum(int favoritesNum) {
+        this.favoritesNum = favoritesNum;
+    }
+
     public DateTime getExhibitionEndTime() {
         return exhibitionEndTime;
     }
@@ -124,6 +145,7 @@ public class ProductDetail {
         private CmsService cmsService = Global.ctx.getBean(CmsService.class);
         private SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
         private CategoryPropertyService categoryPropertyService = Global.ctx.getBean(CategoryPropertyService.class);
+        private ProductCollectService productCollectService = Global.ctx.getBean(ProductCollectService.class);
 
 
         public static Builder newBuilder(Product product, Integer defaultSkuId) {
@@ -318,6 +340,18 @@ public class ProductDetail {
                     }
                     productDetail.defaultSku = min.get();
                 }
+            }
+
+            return this;
+        }
+
+        public Builder buildFavorites(){
+
+            productDetail.setFavoritesNum(productCollectService.countProductCollect(productDetail.product.getId()));
+
+            User user = SessionUtils.currentUser();
+            if(null != user && null != productCollectService.getByProductId(productDetail.product.getId(),user.getId())){
+                productDetail.setFavorites(true);
             }
 
             return this;

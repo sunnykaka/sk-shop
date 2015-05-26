@@ -134,4 +134,22 @@ public class ProductCollectService {
         return generalDAO.query(jpql, page, queryParams);
     }
 
+    /**
+     * 统计收藏的商品
+     *
+     * @param productId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int countProductCollect(int productId){
+
+        String jpql = "select pc from ProductCollect pc where 1=1 and pc.deleted=false ";
+        Map<String, Object> queryParams = new HashMap<>();
+
+        jpql += " and pc.productId = :productId ";
+        queryParams.put("productId", productId);
+
+        return generalDAO.query(jpql, Optional.<Page<ProductCollect>>empty(), queryParams).size();
+    }
+
 }

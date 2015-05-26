@@ -133,4 +133,22 @@ public class DesignerCollectService {
         return generalDAO.query(jpql, page, queryParams);
     }
 
+    /**
+     * 统计收藏的设计师
+     *
+     * @param designerId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int countDesignerCollect(int designerId){
+
+        String jpql = "select dc from DesignerCollect dc where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+
+        jpql += " and dc.designerId = :designerId ";
+        queryParams.put("designerId", designerId);
+
+        return generalDAO.query(jpql, Optional.<Page<DesignerCollect>>empty(), queryParams).size();
+    }
+
 }

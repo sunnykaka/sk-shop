@@ -26,6 +26,7 @@ public class ProductDetailService {
         builder.buildCms();
         builder.buildSku();
         builder.buildDefaultSku();
+        builder.buildFavorites();
 
         return builder.build();
     }

@@ -137,7 +137,7 @@
                     }
                 }
                 <div class="detail-like">
-                    <span class="like current"><i></i><span class="like-text">我喜欢</span></span>
+                    <span class="like @if(pd.isFavorites){current}"><i></i><span class="like-text">@if(pd.isFavorites){ @pd.getFavoritesNum }else{我喜欢}</span></span>
                 </div>
             </div>
         </div>

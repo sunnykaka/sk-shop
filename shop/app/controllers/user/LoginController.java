@@ -42,7 +42,7 @@ public class LoginController extends Controller {
             try {
                 User user = userService.register(registerForm.get(), request().remoteAddress());
                 userService.loginByRegister(user, true);
-                String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
+                String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
                 return ok(new JsonResult(true, null, originalUrl).toNode());
 
             } catch (AppBusinessException e) {
@@ -67,7 +67,7 @@ public class LoginController extends Controller {
         if(!loginForm.hasErrors()) {
             try {
                 userService.login(loginForm.get());
-                String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
+                String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
                 return ok(new JsonResult(true, null, originalUrl).toNode());
 
             } catch (AppBusinessException e) {
