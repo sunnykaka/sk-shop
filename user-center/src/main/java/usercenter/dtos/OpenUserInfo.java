@@ -1,6 +1,5 @@
 package usercenter.dtos;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import usercenter.constants.AccountType;
 import usercenter.constants.Gender;
 

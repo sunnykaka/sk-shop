@@ -22,7 +22,6 @@ import play.libs.ws.*;
 import usercenter.dtos.OpenUserInfo;
 import usercenter.models.User;
 import usercenter.services.UserOuterService;
-import usercenter.services.UserService;
 
 /**
  * Created by liubin on 15-5-22.

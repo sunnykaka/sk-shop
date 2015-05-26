@@ -1,27 +1,17 @@
 package controllers.user;
 
-import common.exceptions.AppBusinessException;
-import common.utils.JsonResult;
 import common.utils.JsonUtils;
-import common.utils.RegExpUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
-import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import usercenter.domain.SmsSender;
 import usercenter.domain.WeixinLogin;
-import usercenter.dtos.LoginForm;
-import usercenter.dtos.RegisterForm;
-import usercenter.models.User;
 import usercenter.services.UserService;
-import usercenter.utils.SessionUtils;
-import views.html.user.login;
-import views.html.user.register;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @org.springframework.stereotype.Controller
@@ -126,7 +116,6 @@ public class FakeOpenIDProviderController extends Controller {
                     results.put("country", "CN");
                     results.put("headimgurl", "");
                     results.put("unionid", cachedOpenId);
-
                 }
             }
 
