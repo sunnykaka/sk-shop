@@ -197,7 +197,15 @@ public class CartController extends Controller {
 
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
 
-            retMap.put("itemTotalNum", addNumber);
+            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
+            if(cartItems == null || cartItems.size() == 0) {
+                return ok(new JsonResult(true,"用户当前购物车为空", 0).toNode());
+            }
+            int totalNum = 0;
+            for(CartItem cartItem : cartItems) {
+                totalNum += cartItem.getNumber();
+            }
+            retMap.put("itemTotalNum", totalNum);
             return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", retMap).toNode());
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
