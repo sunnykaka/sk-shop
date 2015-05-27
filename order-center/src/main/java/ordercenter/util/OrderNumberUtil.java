@@ -69,7 +69,10 @@ public class OrderNumberUtil {
     private static long getCurOrderNo() {
         LOCK.lock();
         try {
-            long curOrderNo = (long) Cache.get(OrderNumberUtil.CUR_ORDER_NO_KEY);
+            Long curOrderNo = (Long) Cache.get(OrderNumberUtil.CUR_ORDER_NO_KEY);
+            if(curOrderNo == null) {
+                curOrderNo = getCurDbOrderNo();
+            }
             Cache.set(OrderNumberUtil.CUR_ORDER_NO_KEY, curOrderNo + 1);
             return curOrderNo;
         } finally {

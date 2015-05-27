@@ -8,12 +8,10 @@ import common.utils.play.interceptor.ActionFilterChain;
 import common.utils.play.interceptor.OpenEntityManagerInViewActionFilter;
 import configs.AppConfig;
 import configs.DataConfig;
-import ordercenter.util.OrderNumberUtil;
 import org.joda.time.DateTime;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import play.Application;
 import play.Logger;
-import play.cache.Cache;
 import play.data.format.Formatters;
 import play.libs.F;
 import play.mvc.Action;
@@ -35,9 +33,6 @@ public class Global extends BaseGlobal {
 
         Formatters.register(DateTime.class, new JodaDateFormatter());
         Formatters.register(Money.class, new MoneyFormatter());
-
-        long curOrderNo = OrderNumberUtil.getCurDbOrderNo();
-        Cache.set(OrderNumberUtil.CUR_ORDER_NO_KEY, curOrderNo);
     }
 
     @Override
