@@ -28,19 +28,49 @@
         </encoder>
     </appender>
 
+    <appender name="TRADE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/web/logs/trade.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Daily rollover with compression -->
+            <fileNamePattern>trade-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
+        </encoder>
+    </appender>
+
+
     <logger name="play" level="INFO" />
     <logger name="application" level="DEBUG" />
 
     <logger name="org.hibernate.SQL" level="DEBUG" />
-    <logger name="org.hibernate.type" level="TRACE" />
+    <logger name="org.hibernate.type" level="WARN" />
 
     <!-- additivity=false ensures access log data only goes to the access log -->
     <logger name="access" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_FILE" />
     </logger>
 
+    <logger name="ordercenter.payment" level="INFO">
+        <appender-ref ref="TRADE_FILE" />
+    </logger>
+    <logger name="controllers.shop.OrderAndPayController" level="INFO">
+        <appender-ref ref="TRADE_FILE" />
+    </logger>
+    <logger name="controllers.shop.OrderPayCallback" level="INFO">
+        <appender-ref ref="TRADE_FILE" />
+    </logger>
+
+    <logger name="ordercenter.services.TradeSuccessService" level="INFO">
+        <appender-ref ref="TRADE_FILE" />
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="FILE"/>
+        <appender-ref ref="TRADE_FILE"/>
     </root>
+
 
 </configuration>
