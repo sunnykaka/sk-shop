@@ -4,6 +4,7 @@ import common.services.GeneralDao;
 import common.utils.play.BaseGlobal;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import play.cache.Cache;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -25,16 +26,10 @@ import java.util.concurrent.locks.ReentrantLock;
  * Date: 2015-04-29
  */
 public class OrderNumberUtil {
-
-    // >>>>> 以下参数需设置合理 <<<<<
+    public static final String CUR_ORDER_NO_KEY = "CUR_ORDER_NO_KEY";
 
     /** 计数的初始值 */
-    private static final int INIT_INCREMENT_NUM = 21;
-
-    /** 计数器的增长量 */
-    private static final int STEP_NUM = 13;
-
-    // >>>>>
+    private static final int INIT_INCREMENT_NUM = 1;
 
     /** 前缀, 年月日格式 */
     private static final String PREFIX_PATTERN = "yyyyMMdd";
@@ -42,79 +37,8 @@ public class OrderNumberUtil {
     /** 自增时需要用到锁. */
     private static final ReentrantLock LOCK = new ReentrantLock();
 
-    /** 自增计数器. */
-    private static AtomicInteger incrementNum = new AtomicInteger(INIT_INCREMENT_NUM);
-
-    /** 自增的最大值(亿以内) */
-    private static final int MAX_INCREMENT_NUM = 100000000;
-
     /** 机器码 */
     private static AtomicInteger machineCode = new AtomicInteger(18);
-
-    /** 赋值自增计数器(若需要每天的订单都从 0 开始, 则有必要建一个调度器, 每天凌晨将此值变更为 0) */
-    public static void setIncrementNum(int incrementNum) {
-        LOCK.lock();
-        try {
-            // 赋值也必须保证同步
-            OrderNumberUtil.incrementNum.set(incrementNum);
-        } finally {
-            LOCK.unlock();
-        }
-    }
-
-    /** 使用订单编号赋值计数器, 截取字符串的过程在此处完成! 若在别处编号规则有可能会变化 */
-    public static void setIncrementNum(String orderNo) {
-        LOCK.lock();
-        try {
-            if (StringUtils.isBlank(orderNo))
-                incrementNum.set(INIT_INCREMENT_NUM);
-            else if (orderNo.length() < PREFIX_PATTERN.length())
-                incrementNum.set(NumberUtils.toInt(orderNo));
-            else
-                // 传入订单编号赋值给 计数器, 截取后面的数字放在此处进行操作.
-                incrementNum.set(NumberUtils.toInt(orderNo.substring(PREFIX_PATTERN.length())));
-        } finally {
-            LOCK.unlock();
-        }
-    }
-
-    /** 判断自增数是否是初始值, 若是初始值, 则需要去数据库查询并重新为初始值赋值. */
-    public static boolean isInitNum() {
-        LOCK.lock();
-        try {
-            return (incrementNum.get() == INIT_INCREMENT_NUM);
-        } finally {
-            LOCK.unlock();
-        }
-    }
-
-    /**
-     * 订单号由多部分组成, 受限于 Long.MAX_VALUE, 只能有 19 位.<br/>
-     * 1. 年月日, 8 位. <br/>
-     * 2. 自增数, 最多 8 位. <br/>
-     * 3. 机器码, 2 位. <br/>
-     */
-    public static long getOrderNo() {
-        checkOrderNo();
-        return NumberUtils.toLong(getStringFromNow() + lockNum() + machineCode);
-    }
-
-    /** 生成自增数. 当达到了最大数, 则又从 初始值 开始计数. */
-    private static int lockNum() {
-        LOCK.lock();
-        try {
-            // 如果达到了最大数, 则又从 初始值 开始计数.
-            if (incrementNum.get() >= MAX_INCREMENT_NUM) {
-                incrementNum.set(INIT_INCREMENT_NUM);
-                machineCode.addAndGet(STEP_NUM);
-            }
-
-            incrementNum.addAndGet(STEP_NUM);
-        } finally {
-            LOCK.unlock();
-        }
-        return incrementNum.get();
-    }
 
     /**
      * 年月日, 异常则返回 空字符串
@@ -128,30 +52,53 @@ public class OrderNumberUtil {
     }
 
     /**
-     * 检查订单编号. 若是初始值, 则需要去数据库查询并重新为初始值赋值.
+     * 订单号由多部分组成, 受限于 Long.MAX_VALUE, 只能有 19 位.<br/>
+     * 1. 年月日, 8 位. <br/>
+     * 2. 自增数, 最多 8 位. <br/>
+     * 3. 机器码, 2 位. <br/>
      */
-    public static void checkOrderNo() {
-        // 判断此时是否是初始值, 只在初始值时将数据库最大值进行重新赋值.
-        if (OrderNumberUtil.isInitNum()) {
-            LOCK.lock();
-            try {
-                // 双重检测...
-                if (OrderNumberUtil.isInitNum()) {
-                    String sqlStr = "select orderNo from OrderTable where id = (select max(id) from OrderTable)";
-                    GeneralDao dao = BaseGlobal.ctx.getBean(GeneralDao.class);
-                    EntityManager em = dao.getEm();
-                    Query query =  em.createNativeQuery(sqlStr);
-                    Object obj = query.getSingleResult();
-                    if (obj != null && obj instanceof Long) {
-                        long maxOrderNo = (Long) obj;
-                        // 去掉前面的年月日
-                        OrderNumberUtil.setIncrementNum(String.valueOf(maxOrderNo));
-                    }
-                }
-            } finally {
-                LOCK.unlock();
-            }
+    public static long getOrderNo() {
+        long curOrderNo = getCurOrderNo();
+        return NumberUtils.toLong(getStringFromNow() + curOrderNo + machineCode);
+    }
+
+    /**
+     * 获取当前的订单号，且把加1的新值放到缓存中
+     * @return
+     */
+    private static long getCurOrderNo() {
+        LOCK.lock();
+        try {
+            long curOrderNo = (long) Cache.get(OrderNumberUtil.CUR_ORDER_NO_KEY);
+            Cache.set(OrderNumberUtil.CUR_ORDER_NO_KEY, curOrderNo + 1);
+            return curOrderNo;
+        } finally {
+            LOCK.unlock();
         }
     }
 
+    /**
+     * 获取当前数据库中的最大的订单值
+     */
+    public static long getCurDbOrderNo() {
+        long ret = 0L;
+        String sqlStr = "select orderNo from OrderTable where id = (select max(id) from OrderTable)";
+        GeneralDao dao = BaseGlobal.ctx.getBean(GeneralDao.class);
+        EntityManager em = dao.getEm();
+        Query query = em.createNativeQuery(sqlStr);
+        Object obj = query.getSingleResult();
+        if (obj != null && obj instanceof Long) {
+            long maxOrderNo = (Long) obj;
+            // 去掉前面的年月日
+            String orderNo = String.valueOf(maxOrderNo);
+            if (StringUtils.isBlank(orderNo))
+                ret = INIT_INCREMENT_NUM;
+            else if (orderNo.length() < PREFIX_PATTERN.length())
+                ret = NumberUtils.toInt(orderNo);
+            else
+                // 传入订单编号赋值给 计数器, 截取后面的数字放在此处进行操作.
+                ret =NumberUtils.toInt(orderNo.substring(PREFIX_PATTERN.length()));
+        }
+        return ret;
+    }
 }
