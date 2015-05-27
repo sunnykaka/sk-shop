@@ -722,7 +722,7 @@ h4{font-size:12px;}
 .address-manage-inner .text,.i-dialog .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
     background: #fcfcfc;width: 290px;
 }
-.address-manage-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 16px;vertical-align: middle;border: 1px solid #dbdbda;}
+.address-manage-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 13px;vertical-align: middle;border: 1px solid #dbdbda;}
 .address-manage-inner .add-form .location,.i-dialog .update-form .location,.i-dialog .add-form .location{width: 380px;}
 .address-manage-inner .add-form .submit{margin-top: 10px;height: 100px;}
 .address-manage-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 20px 50px;background: #000;color: #fff;border: none;margin-left: 110px;
