@@ -6,10 +6,14 @@ $(function(){
 
 
 
-    $('.address-list li').hover(function(){
-        $(this).addClass('highLight');
-    },function(){
-        $(this).removeClass('highLight');
+    //$('.address-list li').hover(function(){
+    //    $(this).addClass('highLight');
+    //},function(){
+    //    $(this).removeClass('highLight');
+    //});
+
+    $(".address-list").delegate("li", "hover", function(){
+        $(this).toggleClass("highLight");
     });
 
     if( $('.add-form').length>0){
@@ -193,6 +197,15 @@ $(function(){
         return true;
     }
 
+    //生成地址dom
+    function  addressDom (data){
+        return "<li  data-id='"+data.id+"'><div class='receiver'><strong>"+data.name+"<span class='space'></span>收</strong><span class='default' data-id="+data.id+">默认地址</span></div><div class='details-address'>"+
+        "<p><span class='provice'>"+data.province+"</span><span class='space'></span><span class='city'>"+data.city+"</span><span class='space'></span><span class='area'>"+data.area+"</span></p><p class='location'  title="+data.location+">"+data.location+"</p>"+
+        "<p class='phone'>"+data.mobile+"</p></div><div class='edit-address'><span class='edit btn' data-id="+data.id+">修改</span><span class='delete btn' data-id="+data.id+">删除</span></div><span class='current-ico'></span></li>";
+    }
+
+
+
     //添加地址
     function saveForm(type,formId){
         var formData = formId.serialize();
@@ -210,7 +223,16 @@ $(function(){
             dataType: 'json',
             success: function (data) {
                 if (data.result){ //成功
-                    location.href= '/my/address'
+                    if($('.address-list-inner li').size()==4){
+                        $(".address-list-inner").find(".add").hide();
+                    }
+                    $.dialog.get.addForm.hide();
+                  var form = $('.add-form');
+                    form.each(function(){
+                       $(this).get(0).reset();
+                    });
+                   $(".address-list-inner").find(".add").before(addressDom(data.data));
+
                 } else {
                     var valObj = data.message,errMsg;
                     $.each(valObj,function(key,value) {
@@ -224,8 +246,11 @@ $(function(){
 
     }
 
+
+
+
     //删除地址
-    $('.address-list .delete').click(function(e){
+    $('.address-list').delegate(' .delete','click',function(e){
         var addressId = $(this).attr('data-id'),item = $(this).parents('li');
         $.dialog({
             title:'提示',
@@ -238,15 +263,18 @@ $(function(){
                     type: 'red',
                     click: function(btn) {
                         $.ajax({
-                                type: 'POST',
-                                url:'/my/address/del?addressId='+addressId,
-                                dataType: 'json',
-                                success: function (data) {
-                                    if (data.result) {
-                                       item.remove();
+                            type: 'POST',
+                            url:'/my/address/del?addressId='+addressId,
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.result) {
+                                    item.remove();
+                                    if($('.address-list li').size() == 4){
+                                        $(".address-list-inner").find(".add").show();
                                     }
                                 }
-                            });
+                            }
+                        });
                     }
                 },
                 cancle: {
@@ -258,9 +286,11 @@ $(function(){
     });
 
 //默认地址
-    $('.address-list .default').click(function(e){
+    $('.address-list').delegate('.default','click',function(e){
 
         var that = $(this),addressId = $(this).attr('data-id'),item = $(this).parents('li');
+        var defaultId = item.siblings('.current').attr('data-id');
+
 
         if(item.hasClass('current')){
             return;
@@ -271,10 +301,12 @@ $(function(){
                 dataType: 'json',
                 success: function (data) {
                     if (data.result) {
-                        location.href= '/my/address';
-                        //item.addClass('current').siblings('li').removeClass('current');
-                        //item.addClass('current').siblings('li').find('.default').text('设置默认');
-                        //that.text('默认地址');
+                       // location.href= '/my/address';
+                        item.siblings('.current').find('.edit-address').append("<span class='delete btn' data-id="+defaultId+">删除</span>");
+                        item.addClass('current').siblings('li').find('.default').text('设置默认地址');
+                        item.find('.delete').remove();
+                        item.addClass('current').siblings('li').removeClass('current');
+                        that.text('默认地址');
                     }
                 }
             });
@@ -282,12 +314,13 @@ $(function(){
     });
 
     //list页面添加
-    $('.address-list .add').click(function(){
+    $('.address-list').delegate(' .add','click',function(){
 
         var html = createFormHtml('add');
 
         $.dialog({
             title:'添加收货地址',
+            id:'addForm',
             content:html,
             lock:true,
             width:550,
@@ -376,7 +409,7 @@ $(function(){
 
 
     //获取要修改的地址
-    $('.address-list .edit').click(function() {
+    $('.address-list').delegate(' .edit','click',function() {
         var addressId = $(this).attr('data-id');
         $.ajax({
             url: '/my/address/query',
@@ -388,22 +421,9 @@ $(function(){
             success: function (data) {
                 if (data.result) {
                     var getData = data.data,html = createFormHtml('update',getData);
-                    //new FG.Dialog({
-                    //    title: '修改地址',
-                    //    outClass: 'dialog-2014',
-                    //    border: '1px solid #ddd;',
-                    //    backgroundColor: '#ffffff',
-                    //    type: null || FG.Dialog.type.ERROR,
-                    //    height: '450px',
-                    //    width: '550px',
-                    //    info: html,
-                    //    infoStyle: {
-                    //        height: '100px'
-                    //    },
-                    //    buttons: null
-                    //});
                     $.dialog({
                         title:'修改收货地址',
+                        id:'updateForm',
                         content:html,
                         width:550,
                         height: 450
@@ -427,7 +447,7 @@ $(function(){
     //修改地址
     function updateForm(type,formId){
 
-        var formData = formId.serialize();
+        var formData = formId.serialize(),item,formId;;
         //验证表单
         if (!validateForm(type,formId)) {
             return;
@@ -441,7 +461,15 @@ $(function(){
             dataType: 'json',
             success: function (data) {
                 if (data.result){ //成功
-                    location.href= '/my/address';
+                    $.dialog.get.updateForm.hide();
+                    //更新数据
+                   item = $(".address-list li[data-id="+data.data.id+"]");
+                    item.find('.phone').text(data.data.mobile);
+                    item.find('.user').text(data.data.name);
+                    item.find('.location').text(data.data.location);
+                    item.find('.provice').text(data.data.province);
+                    item.find('.city').text(data.data.city);
+                    item.find('.area').text(data.data.area);
                 } else {
                     var valObj = data.message,errMsg;
                     $.each(valObj,function(key,value) {

@@ -340,7 +340,8 @@ h4{font-size:12px;}
 
 /*mycart*/
 .mycart{margin-bottom: 50px;}
-.mycart-empty{margin-top: 50px;display: none;}
+.mycart-empty{margin: 50px auto 0;}
+.mycart-empty a{color: #fd2049;}
 .mycart-step li{color:#000;}
 .mycart-step .current{color: #FF2D54;}
 .mycart-step .step-bg{height:20px;width: 541px;background: url("../images/step-bg-mycart.gif") no-repeat;margin: 0 auto;}
