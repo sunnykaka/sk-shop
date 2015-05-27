@@ -7,6 +7,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import play.cache.Cache;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -86,21 +87,26 @@ public class OrderNumberUtil {
     public static long getCurDbOrderNo() {
         long ret = 0L;
         String sqlStr = "select orderNo from OrderTable where id = (select max(id) from OrderTable)";
-        GeneralDao dao = BaseGlobal.ctx.getBean(GeneralDao.class);
-        EntityManager em = dao.getEm();
-        Query query = em.createNativeQuery(sqlStr);
-        Object obj = query.getSingleResult();
-        if (obj != null && obj instanceof Long) {
-            long maxOrderNo = (Long) obj;
-            // 去掉前面的年月日
-            String orderNo = String.valueOf(maxOrderNo);
-            if (StringUtils.isBlank(orderNo))
-                ret = INIT_INCREMENT_NUM;
-            else if (orderNo.length() < PREFIX_PATTERN.length())
-                ret = NumberUtils.toInt(orderNo);
-            else
-                // 传入订单编号赋值给 计数器, 截取后面的数字放在此处进行操作.
-                ret =NumberUtils.toInt(orderNo.substring(PREFIX_PATTERN.length()));
+        try {
+            GeneralDao dao = BaseGlobal.ctx.getBean(GeneralDao.class);
+            EntityManager em = dao.getEm();
+            Query query = em.createNativeQuery(sqlStr);
+            Object obj = query.getSingleResult();
+
+            if (obj != null && obj instanceof Long) {
+                long maxOrderNo = (Long) obj;
+                // 去掉前面的年月日
+                String orderNo = String.valueOf(maxOrderNo);
+                if (StringUtils.isBlank(orderNo))
+                    ret = INIT_INCREMENT_NUM;
+                else if (orderNo.length() < PREFIX_PATTERN.length())
+                    ret = NumberUtils.toInt(orderNo);
+                else
+                    // 传入订单编号赋值给 计数器, 截取后面的数字放在此处进行操作.
+                    ret =NumberUtils.toInt(orderNo.substring(PREFIX_PATTERN.length()));
+            }
+        } catch (NoResultException e) {
+            ret = INIT_INCREMENT_NUM;
         }
         return ret;
     }
