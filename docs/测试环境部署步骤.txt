@@ -11,7 +11,7 @@ sbt 0.13.7+
 
 4. 运行项目, /home/admin/shop/bin/shop为运行脚本, 首先chmod +x 添加可执行权限, 然后可以用下面命令启动:
 
-   /home/admin/shop/bin/shop -Dhttp.port=9001 -Dconfig.file=/home/admin/shop/conf/env/test.conf -Dlogger.file=/home/admin/shop/conf/env/test_logger.xml
+   /home/admin/shop/bin/shop -J-server -J-Xms2048M -J-Xmx2048M -Dhttp.port=9001 -Dconfig.file=/home/admin/shop/conf/env/test.conf -Dlogger.file=/home/admin/shop/conf/env/test_logger.xml
    (参数说明:
     1) -Dhttp.port=9001 在9001端口运行, 默认9000
     2) -Dconfig.file=/home/admin/shop/conf/env/test.conf 指定配置文件路径,test.conf为测试环境配置文件, prod.conf为生产环境配置文件
