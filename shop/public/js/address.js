@@ -45,7 +45,7 @@ $(function(){
     }
 
 // 表单item事件(blur,submit)
-    function formItemEvent(type,formId){
+    function formItemEvent(type,formId,closeBtn){
         var formItems= getFormItems(type,formId),
             form = formItems.element,
             name = formItems.name,
@@ -111,7 +111,7 @@ $(function(){
         }else{
             form.on('click', 'input[type=submit]', function (e) {
                 e.preventDefault();
-                updateForm(type, formId)
+                updateForm(type, formId,closeBtn);
             });
         }
 
@@ -420,14 +420,15 @@ $(function(){
             dataType: 'json',
             success: function (data) {
                 if (data.result) {
+
                     var getData = data.data,html = createFormHtml('update',getData);
-                    $.dialog({
+                   var obj =  $.dialog({
                         title:'修改收货地址',
-                        id:'updateForm',
                         content:html,
                         width:550,
                         height: 450
                     });
+
                     //设置省市区
                     var form = $('#modify_address_' + getData.id);
                     form.find('.area').selectArea({
@@ -436,7 +437,8 @@ $(function(){
                         districts: getData.area || null
                     });
                     //绑定 blur focus事件
-                    formItemEvent('update', form);
+                    console.log(obj.$close);
+                    formItemEvent('update', form ,obj.$close);
 
                 }
             }
@@ -445,9 +447,9 @@ $(function(){
 
 
     //修改地址
-    function updateForm(type,formId){
+    function updateForm(type,formId,closeBtn){
 
-        var formData = formId.serialize(),item,formId;;
+        var formData = formId.serialize(),item;
         //验证表单
         if (!validateForm(type,formId)) {
             return;
@@ -461,7 +463,7 @@ $(function(){
             dataType: 'json',
             success: function (data) {
                 if (data.result){ //成功
-                    $.dialog.get.updateForm.hide();
+                    closeBtn.trigger('click');
                     //更新数据
                    item = $(".address-list li[data-id="+data.data.id+"]");
                     item.find('.phone').text(data.data.mobile);
