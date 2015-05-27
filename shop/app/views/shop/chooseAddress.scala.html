@@ -60,7 +60,9 @@
                     <div class="edit-address">
                         <!--浩斌那边要做的-->
                         <span class="edit btn">修改</span>
-                        <span class="delete btn">删除</span>
+                        @if(!address.isDefaultAddress) {
+                            <span class="delete btn">删除</span>
+                        }
                     </div>
                     <span class="current-ico"></span>
                 </li>
@@ -100,7 +102,7 @@
                     @for(cartItem <- cart.getCartItemList) {
                     <tr>
                         <td>
-                            <img src="@cartItem.getMainPicture" alt=""/><!--此拿到的只是图的url地址，可能没有值-->
+                            <img src="@cartItem.getMainPicture" alt="" width="90" height="154"/><!--此拿到的只是图的url地址，可能没有值-->
                         </td>
                         <td>
                             <div class="pro-info">
@@ -135,7 +137,7 @@
         }
         <div class="total clearfix">
             <div class="total-info">
-                <img src="images/total-left-ico.gif" alt=""/>
+                <img src="../assets/images/total-left-ico.gif" alt=""/>
                 <h3>全场免邮！全场免关税！</h3>
                 <p>尚客不收取关税，如果您购买的商品被海关抽捡，请自行将关税缴纳给物流公司。</p>
             </div>
