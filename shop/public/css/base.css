@@ -340,7 +340,8 @@ h4{font-size:12px;}
 
 /*mycart*/
 .mycart{margin-bottom: 50px;}
-.mycart-empty{margin-top: 50px;display: none;}
+.mycart-empty{margin: 50px auto 0;}
+.mycart-empty a{color: #fd2049;}
 .mycart-step li{color:#000;}
 .mycart-step .current{color: #FF2D54;}
 .mycart-step .step-bg{height:20px;width: 541px;background: url("../images/step-bg-mycart.gif") no-repeat;margin: 0 auto;}
@@ -721,7 +722,7 @@ h4{font-size:12px;}
 .address-manage-inner .text,.i-dialog .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
     background: #fcfcfc;width: 290px;
 }
-.address-manage-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 16px;vertical-align: middle;border: 1px solid #dbdbda;}
+.address-manage-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 13px;vertical-align: middle;border: 1px solid #dbdbda;}
 .address-manage-inner .add-form .location,.i-dialog .update-form .location,.i-dialog .add-form .location{width: 380px;}
 .address-manage-inner .add-form .submit{margin-top: 10px;height: 100px;}
 .address-manage-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 20px 50px;background: #000;color: #fff;border: none;margin-left: 110px;
