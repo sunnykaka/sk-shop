@@ -183,7 +183,7 @@ public class AddressController extends Controller {
 
                 addressService.updateAddress(oldAddress);
 
-                return ok(new JsonResult(true, "修改送货地址成功").toNode());
+                return ok(new JsonResult(true, "修改送货地址成功",oldAddress).toNode());
 
             } catch (AppBusinessException e) {
                 addressForm.reject("errors", e.getMessage());
