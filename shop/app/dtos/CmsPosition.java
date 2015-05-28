@@ -10,6 +10,11 @@ public class CmsPosition {
      */
     public static final String SLIDER_BOX = "sliderBox";
 
+    /**
+     * 预告页轮播图
+     */
+    public static final String PREVIEW_SLIDER_BOX = "previewSliderBox";
+
     public static final String INDEX_FONT_1 = "indexFont1";
 
     public static final String INDEX_FONT_2 = "indexFont2";
@@ -17,4 +22,6 @@ public class CmsPosition {
     public static final String PREVIEW_FONT_1 = "previewFont1";
 
     public static final String PREVIEW_FONT_2 = "previewFont2";
+
+
 }

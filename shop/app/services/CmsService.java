@@ -62,6 +62,17 @@ public class CmsService {
 
 
     /**
+     * 查找某个位置，最新的专场，不管下架与否
+     * @param position
+     * @return
+     */
+    public CmsExhibition findExhibitionByPosition(Integer position){
+        String sql = " select * from cms_exhibition where positionIndex  = ?1 order by endTime desc limit 1";
+        CmsExhibition exhibition = (CmsExhibition) generalDao.getEm().createNativeQuery(sql,CmsExhibition.class).setParameter(1,position).getSingleResult();
+        return exhibition;
+    }
+
+    /**
      * 根据ID 查询首发专场
      *
      * @param id

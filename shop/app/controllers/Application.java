@@ -55,12 +55,56 @@ public class Application extends Controller {
         List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.SELLING);
         List<CmsContent> contents = cmsService.allContents();
 
+        /**
+         * check
+         */
+        checkExhibitionContent(sellingList);
+        /**
+         * 按位置排序
+         */
+        sellingList.sort(new Comparator<CmsExhibition>() {
+            @Override
+            public int compare(CmsExhibition o1, CmsExhibition o2) {
+                if(o1.getPositionIndex() < o2.getPositionIndex()){
+                    return  -1;
+                }
+
+                if(o1.getPositionIndex() == o2.getPositionIndex()){
+                    return 0;
+                }
+                return 1;
+            }
+        });
+
+
         List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
-        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).collect(toList()).get(0);
-        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).collect(toList()).get(0);
+        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).findFirst().get();
+        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).findFirst().get();
 
 
         return ok(index.render(SessionUtils.currentUser(), sellingList, font1, font2, sliderBoxs));
+    }
+
+
+    private void checkExhibitionContent(List<CmsExhibition> list){
+        /**
+         * 内容是满的
+         */
+        if(list.size() == 14){
+            return;
+        }
+        int count = 1;
+        List<Integer> missPositionIndex = new ArrayList<>(14);
+        for(CmsExhibition ex : list ){
+            if(ex.getPositionIndex() == count){
+                continue;
+            }
+            list.add(cmsService.findExhibitionByPosition(count));
+            count++;
+        }
+
+
+
     }
 
 
@@ -74,9 +118,32 @@ public class Application extends Controller {
         List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.PREPARE);
         List<CmsContent> contents = cmsService.allContents();
 
-        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
-        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)).collect(toList()).get(0);
-        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)).collect(toList()).get(0);
+        /**
+         * check
+         */
+        checkExhibitionContent(sellingList);
+
+
+        /**
+         * 按位置排序
+         */
+        sellingList.sort(new Comparator<CmsExhibition>() {
+            @Override
+            public int compare(CmsExhibition o1, CmsExhibition o2) {
+                if (o1.getPositionIndex() < o2.getPositionIndex()) {
+                    return -1;
+                }
+
+                if (o1.getPositionIndex() == o2.getPositionIndex()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
+
+        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_SLIDER_BOX)).collect(toList());
+        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)).findFirst().get();
+        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)).findFirst().get();
 
 
         return ok(index.render(SessionUtils.currentUser(), sellingList, font1, font2, sliderBoxs));
@@ -116,7 +183,7 @@ public class Application extends Controller {
         List<ProductInfo> productList = products.stream().map(prod -> {
             ProductInfo info = new ProductInfo();
             info.setProduct(prod);
-            info.setMainPic(productPictureService.getMainProductPictureByProductId(prod.getId()));
+            info.setMainPic(productPictureService.getMinorProductPictureByProductId(prod.getId()));
             Optional<CmsExhibition> optional = cmsService.findExhibitionWithProdId(prod.getId());
             info.setFavorites(productCollectService.isFavorites(user,prod.getId()));
             info.setFavoritesNum(productCollectService.countProductCollect(prod.getId()));
