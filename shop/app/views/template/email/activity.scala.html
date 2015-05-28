@@ -1,19 +1,42 @@
 @(user: usercenter.models.User)
 
 
-<div style="border: #9d9d9d">
-    @header
-    尚客　做一名时尚极客<br/>
+<div style="border: 2px solid #c6c6c6;padding: 20px 0px">
+    <div style="height:240px;width: 100%;border-bottom: 1px solid #c6c6c6;">
+        <div style="width:800px;margin:0 auto;overflow: hidden;">
+            <ul style="list-style-type:none;">
+                <li style="float:left;padding-right: 50px;margin-top: 180px;">
+                    <a href="@controllers.routes.Application.index()">首页</a>
+                </li>
+                <li style="float:left;padding-right: 50px;margin-top: 180px;">
+                    <a href="@controllers.routes.Application.preview()">预告</a>
+                </li>
+                <li style="float:left;padding-right: 50px;">
+                    <div style="height: 220px;width: 290px;background: url(@routes.Assets.versioned("images/logo.png")) no-repeat;"></div>
+                </li>
+                <li style="float:left;padding-right: 50px;margin-top: 180px;">
+                    <a href="@controllers.routes.Application.designers()">设计师</a>
+                </li>
+                <li style="float:left;margin-top: 180px;">
+                    <a href="about-us.html">关于我们</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-    欢迎加入尚客！请点击下面的链接验证邮箱（24小时内有效）：<br/>
-    http://www.fashiongeeker.com…………<br/>
-    （如果以上链接无法点击，请将上面的地址复制到你的浏览器地址栏访问尚客，以便完成验证）<br/>
+    <div style="padding: 40px 50px;">
+        尚客　做一名时尚极客<br/>
+
+        欢迎加入尚客！请点击下面的链接验证邮箱（24小时内有效）：<br/>
+        <a href="@controllers.user.routes.MySecurityController.changeEmailOk(user.getId)">@controllers.user.routes.MySecurityController.changeEmailOk(user.getId)</a><br/>
+        （如果以上链接无法点击，请将上面的地址复制到你的浏览器地址栏访问尚客，以便完成验证）<br/>
         <br/>
-    这是一封自动发送的邮件，请勿回复。<br/>
+        这是一封自动发送的邮件，请勿回复。<br/>
 
-    @Messages("index.welcome") ,
-    @if(user != null) { @user.getUserName } else { 游客 }
-    <hr/>
-    <a href="@controllers.user.routes.MySecurityController.changeEmailOk(user.getId)">@controllers.user.routes.MySecurityController.changeEmailOk(user.getId)</a>
+        <p style="padding: 5px 200px;">任何问题欢迎您致电客服：440-9636-088</p>
+        <p style="padding: 5px 100px;">&copy;2015 fashiongeeker.com All rights reserved 粤ICP备15014624号-2</p>
+
+    </div>
+
 </div>
 

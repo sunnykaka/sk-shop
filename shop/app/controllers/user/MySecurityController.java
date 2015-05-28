@@ -425,7 +425,7 @@ public class MySecurityController extends Controller {
 //     */
 //    public Result newEmailIndex(){
 //
-//        User user = userService.getById(test_userId);
+//        User user = SessionUtils.currentUser();
 //
 //        //TODO test send
 //        //Email.sendEmail("zhenhaobin@163.com","测试发送邮件", index.render(user).toString());
