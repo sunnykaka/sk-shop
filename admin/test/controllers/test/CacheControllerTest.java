@@ -5,6 +5,7 @@ import common.play.plugin.RedisPlugin;
 import common.utils.RedisUtils;
 import ordercenter.models.TestObject;
 import ordercenter.services.TestObjectService;
+import ordercenter.util.OrderNumberUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -101,7 +102,15 @@ public class CacheControllerTest extends WithApplication implements PrepareTestO
 
     }
 
-
-
+    @Test
+    public void testAutoInc() {
+      long curValue =  RedisUtils.withJedisClient(jedis -> {
+            String key = RedisUtils.buildKey(OrderNumberUtil.CUR_ORDER_NO_KEY);
+            jedis.incr(key);
+            long value = Long.valueOf(jedis.get(key));
+            return value;
+        });
+       System.out.println("----------------: " + curValue);
+    }
 
 }
