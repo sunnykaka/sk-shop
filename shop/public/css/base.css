@@ -317,9 +317,10 @@ h4{font-size:12px;}
 .select-address .edit-address .btn,.address-list .edit-address .btn{cursor: pointer;}
 .select-address .edit-address .edit,.address-list .edit-address .edit{margin-right: 20px;}
 
-.confirm-product table,.mycart-list table{width: 100%;text-align: center;vertical-align: middle;}
+.confirm-product table,.mycart-list table{width: 1199px;text-align: center;vertical-align: middle;}
 .confirm-product th,.mycart-list th{padding-bottom: 10px;}
-.confirm-product tr,.mycart-list tr{border-bottom: 1px solid #e5e5e5;}
+.confirm-product tr,.mycart-list thead,.mycart-list tbody tr{border-bottom: 1px solid #e5e5e5;}
+.mycart-list .toDelete{border:1px solid #fd2049;}
 .confirm-product td{}
 .confirm-product table .col1,.mycart-list table .col1{width: 100px;}
 .confirm-product .actual-price,.mycart-inner .actual-price{color: #FF2D54;}
@@ -582,6 +583,7 @@ h4{font-size:12px;}
 .all-order-list .order-list .hover .last td,.all-order-list .order-list .hover .product-price,
 .all-order-list .order-list .hover .order-detail,.all-order-list .order-list .hover .control{border-bottom: 1px solid #b7b7b7;}
 .all-order-list .order-list p{line-height: 34px;}
+.all-order-list .order-list span{cursor: pointer;}
 .all-order-list .order-list .not-pay{color: #FF2D54;}
 .all-order-list .order-list .pay{padding: 8px 14px;background: #FF2D54;color: #fff;}
 .all-order-list .order-list .confirm,.all-order-list .order-list .comment,.all-order-list .refund .cancel{padding: 8px 14px;background: #000;color: #fff;}
@@ -598,8 +600,10 @@ h4{font-size:12px;}
 .all-order-list .refund-order-content .submit-btn{display: block;padding: 20px 30px;background: #000;color: #fff;text-align: center;
     margin: 0 auto;border: none;cursor: pointer;
 }
-
-    /*end order-manage*/
+.cancel-order p{text-align: center;padding: 10px 0;font-weight: 700;}
+.cancel-order .check-box{text-align: left;margin-left: 180px;}
+.cancel-order .tip-msg{color: red;}
+ /*end order-manage*/
 /*order-detail*/
 .order-detail{margin-bottom: 50px;}
 .order-detail-inner .nav-list{float:left;width: 140px;padding: 15px;border: 1px solid #cccccc;text-align: center;}
@@ -734,7 +738,7 @@ h4{font-size:12px;}
 .address-list li{margin-right: 20px;margin-bottom: 20px;}
 .i-dialog .update-form .form-item,.i-dialog .add-form .form-item{margin-bottom: 10px;}
 .i-dialog .update-form .errormsg,.i-dialog .add-form .errormsg{font-size: 12px;margin-left: 110px;padding: 2px 0;}
-.update-form .update-btn{margin-left: 80px;}
+.update-form .update-btn{margin-left: 110px;}
 /*end address-manage*/
 /*user-info*/
 .user-info{margin-bottom: 50px;}

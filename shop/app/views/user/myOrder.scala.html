@@ -10,7 +10,58 @@
             $(this).addClass('hover').siblings('tbody').removeClass('hover');
         },function(){
             $(this).removeClass('hover')
-        })
+        });
+
+        var html = '<div class="cancel-order"><p>主人~这么辛苦抢来的商品，取消订单后就被别人抢走啦~能告诉我们取消订单原因吗？</p>'+
+            '<p class="check-box"><label><input type="radio" name="canceltype" value="0" />改选其他商品</label></p>'+
+             '<p class="check-box"><label><input type="radio" name="canceltype" value="1" />收货信息/商品错误</label></p>'+
+             '<p class="check-box"><label><input type="radio" name="canceltype" value="2" />优惠券使用问题</label></p>'+
+             '<p class="check-box"><label><input type="radio" name="canceltype" value="3" />支付遇到问题</label></p>'+
+             '<p class="check-box"><label><input type="radio" name="canceltype" value="4" />不想买了</label></p>'+
+             '<p class="check-box"><label><input type="radio" name="canceltype" value="5" />其他原因</label></p>'+
+             '<p class="tip-msg"></p>'+
+        '</div>';
+
+          //删除购物车
+    $('.order-list .cancel').click(function(){
+        var that = $(this),orderId = that.attr('data-id');
+
+        $.dialog({
+            title:'提示',
+            lock:true,
+            content:html,
+            width:540,
+            height:408,
+            drag:false,
+            btn: {
+                ok: {
+                    val: '确定',
+                    type: 'red',
+                    click: function(btn) {
+                    if($('input[type=radio]:checked').size() == 0){
+                        $('.tip-msg').text('请选择一个选项');
+                        return false;
+                    }
+                        $.ajax({
+                            type: 'POST',
+                            url:'/my/order/cancel?orderId='+orderId+'&cancelType='+$('input[type=radio]:checked').val(),
+                            dataType: 'json',
+                            success: function (data) {
+                                if(data.result){
+                                    that.parents('tbody').remove();
+                                }
+                            }
+                        });
+                    }
+                },
+                cancle: {
+                    val: '取消'
+                }
+            }
+        });
+    });
+
+
     </script>
 } {
 
@@ -95,7 +146,7 @@
                                                         <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)" class="confirm">评价</a></p>
                                                     }
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName) || order.getOrderState.getName.equals(OrderState.Pay.getName)){
-                                                        <p><a href="#" class="cancel">取消</a></p>
+                                                        <p><span class="cancel" data-id="@order.getId">取消</span></p>
                                                     }
                                                     @if(order.isBackGoodsl){
                                                         <p><a href="@controllers.user.routes.MyOrderController.backApply(order.getId)" class="confirm">申请退货</a></p>
