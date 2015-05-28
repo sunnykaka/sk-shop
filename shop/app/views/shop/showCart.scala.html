@@ -76,38 +76,51 @@
 
         var cartPage = $('.mycart');
 
+          function setTotalPrice() {
+                var totalPrice = 0,proTotalMoney =$('.pro-total-money') ;
+                if(proTotalMoney.size()==0){
+                    $('.total-price').text('¥' + 0.00);
+                    return;
+                }
+                proTotalMoney.each(function(){
+                    totalPrice += parseInt($(this).text(),0);
+                });
+
+               var  val = parseInt(totalPrice, 0).toFixed(2);
+                $('.total-price').text('¥' + val);
+            }
+
         // 更新数量
         function updateNumber(ele) {
             var numberInput = ele.parent('.amount').find('.text-number'),
                     val = parseInt(numberInput.val(), 0),
                     limit = parseInt(numberInput.attr('limit'), 0),
                     price = parseInt(numberInput.attr('data-price'), 0);
-            console.log(111);
             // 同步更改到数据库
             function sync() {
                 var skuId = ele.parent('.amount').attr('data-skuId');
                 $.ajax({
                     type: 'POST',
                     url: ' /cart/addSkuToCartReplaceNum?skuId='+skuId+"&number="+val,
-//                    data: {
-//                        cartId: $('#cartId').val(),
-//                        skuId: ele.parent('.amount').attr('data-skuId'),
-//                        number: val
-//                    },
                     async: false,
                     dataType: 'JSON',
                     success: function (result) {
-                        if (result.success) {
-                            updatePrice(result.data);
+                        if (result.result) {
+                         //产品单品总价
+                            updatePrice(ele,val,price);
+                            //总价
+                            setTotalPrice();
+
                         }
                     }
                 });
             }
 
-            function setTotalPrice(val) {
-                val = val.toFixed(2);
-                $('.total-price').text('¥' + val);
+            function updatePrice(ele,val,price){
+                ele.parents('tr').find('.pro-total-money').text((val*price).toFixed(2));
             }
+
+
 
             return {
                 add: function () {
@@ -116,11 +129,12 @@
                     if (val > limit) {
                         val = limit;
                         FG.tip(numberInput, 'limit-tip', '超出此商品能购买的最大数量', 30);
+                        return;
                     }
 
                     numberInput.val(val);
 
-                    setTotalPrice(val * price);
+
                     sync();
 
                 },
@@ -129,6 +143,7 @@
 
                     if (val < 1) {
                         val = 1;
+                         return;
                     }
 
                     numberInput.val(val);
@@ -148,6 +163,7 @@
                     if (val > limit) {
                         val = limit;
                         FG.tip(numberInput, 'limit-tip', '超出此商品能购买的最大数量', 30);
+                         return;
                     }
 
                     numberInput.val(val);
@@ -172,10 +188,8 @@
         cartPage.on('blur', '.text-number', function () {
             updateNumber($(this)).checkValue();
         });
-   });
 
-
-    //提交购物车
+            //提交购物车
    $('#toOrder').click(function(){
         var checkboxs = $('.product-list :checkbox'),cartItem=[];
         checkboxs.each(function(){
@@ -183,6 +197,16 @@
                   cartItem.push($(this).attr('value'));
                }
         });
+
+        if(cartItem.length<1){
+                        $.dialog({
+                        title:'提示',
+                        content:'请选择要购买的商品',
+                        width:300,
+                        padding:'30px'
+                    });
+            return;
+        }
 
            $.ajax({
             type: "post",
@@ -198,6 +222,8 @@
         });
 
    });
+
+
 
 
 
@@ -221,6 +247,11 @@
                                 success: function (data) {
                                    if(data.result){
                                         that.parents('tr').remove();
+                                        if(that.parents('tbody').find('tr').size() == 0){
+                                            $('.mycart-list').remove();
+                                            $('.mycart-inner').append("<div class='mycart-empty'><p>购物车里空空如也，赶紧去 <a href='index.html'>逛逛吧&gt;</a></p></div>");
+                                        }
+                                        setTotalPrice();
                                    }
                                 }
                             });
@@ -232,6 +263,11 @@
                 }
             });
    });
+
+
+   });
+
+
 
 
 
@@ -304,7 +340,7 @@ http://localhost:9000/cart/chooseAddress
                                         <input type="checkbox"  value="@cartItem.getId" />
                                     </td>
                                     <td>
-                                        <img src="@cartItem.getMainPicture" alt=""/><!--此拿到的只是图的url地址，可能没有值-->
+                                        <img src="@cartItem.getMainPicture" alt="" width="90" height="154"/><!--此拿到的只是图的url地址，可能没有值-->
                                     </td>
                                     <td>
                                         <div class="pro-info">
@@ -333,7 +369,7 @@ http://localhost:9000/cart/chooseAddress
                                         </div>
                                     </td>
                                     <td>
-                        ￥@cartItem.getTotalPrice
+                        ￥<span class="pro-total-money">@cartItem.getTotalPrice</span>
                     </td>
                                     <td>
                                         <span  class="btn del" title="删除" data-id="@cartItem.getId">X</span>

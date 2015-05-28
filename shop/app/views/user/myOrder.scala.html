@@ -5,6 +5,13 @@
 
 @myCenter(Messages("title.my.order")) {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script>
+        $('table tbody').hover(function(){
+            $(this).addClass('hover').siblings('tbody').removeClass('hover');
+        },function(){
+            $(this).removeClass('hover')
+        })
+    </script>
 } {
 
     <!--order-manage-->
