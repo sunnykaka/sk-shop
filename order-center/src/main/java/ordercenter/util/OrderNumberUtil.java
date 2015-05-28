@@ -53,9 +53,7 @@ public class OrderNumberUtil {
     public static long getCurCacheOrderNo() {
       return RedisUtils.withJedisClient(jedis -> {
             String key = RedisUtils.buildKey(OrderNumberUtil.CUR_ORDER_NO_KEY);
-            jedis.incr(key);
-            long value = Long.valueOf(jedis.get(key));
-            return value;
+            return jedis.incr(key);
         });
     }
 }
