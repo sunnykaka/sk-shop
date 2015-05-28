@@ -256,6 +256,7 @@ $(function(){
             title:'提示',
             content:'您确定要删除这条收货地址吗？',
             width:300,
+            lock:true,
             padding:'30px',
             btn: {
                 ok: {
@@ -307,6 +308,7 @@ $(function(){
                         item.find('.delete').remove();
                         item.addClass('current').siblings('li').removeClass('current');
                         that.text('默认地址');
+
                     }
                 }
             });
@@ -365,7 +367,7 @@ $(function(){
                     '           <input type="text" name="mobile" class="text" value="' + getData.mobile + '">' +
                     '       </div>' +
                     '       <div class="form-item submit">' +
-                    '           <input type="submit" class="update-btn" value="确认收货地址">' +
+                    '           <input type="submit" class="update-btn" value="修改地址">' +
                     '           <p class="errormsg" id="addMsg"></p>' +
                     '       </div>' +
                     '   <input type="hidden" name="id" value="' + getData.id + '" />' +
@@ -425,6 +427,7 @@ $(function(){
                    var obj =  $.dialog({
                         title:'修改收货地址',
                         content:html,
+                       lock:true,
                         width:550,
                         height: 450
                     });

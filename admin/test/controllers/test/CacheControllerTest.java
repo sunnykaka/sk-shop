@@ -106,9 +106,7 @@ public class CacheControllerTest extends WithApplication implements PrepareTestO
     public void testAutoInc() {
       long curValue =  RedisUtils.withJedisClient(jedis -> {
             String key = RedisUtils.buildKey(OrderNumberUtil.CUR_ORDER_NO_KEY);
-            jedis.incr(key);
-            long value = Long.valueOf(jedis.get(key));
-            return value;
+            return jedis.incr(key);
         });
        System.out.println("----------------: " + curValue);
     }

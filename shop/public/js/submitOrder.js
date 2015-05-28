@@ -21,6 +21,14 @@ $(function(){
             success: function (data) {
                 if(data.result){
                     window.location.href = '/order/toOrderPlay?orderId='+data.data;
+                }else{
+                    $.dialog({
+                        title:'提示',
+                        lock:true,
+                        content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>订单提交有误，请联系客服人员</p></div>',
+                        width:540,
+                        height:200
+                    });
                 }
             }
         });

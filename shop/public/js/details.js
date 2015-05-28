@@ -358,7 +358,18 @@ $(function(){
                 data:{skuId:skuId,number:number},
                 cache: false,
                 success: function (data) {
-                    $('#cart-quantity').text(data.data.itemTotalNum);
+                    if(data.result){
+                        $('#cart-quantity').text(data.data.itemTotalNum);
+                    }else{
+                        $.dialog({
+                            title:'提示',
+                            lock:true,
+                            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>超过最大能购买商品数量</p></div>',
+                            width:500,
+                            height:200
+                        });
+                    }
+
                 }
             });
         });
