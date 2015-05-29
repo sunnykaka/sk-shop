@@ -38,6 +38,11 @@ public class Designer implements EntityClass<Integer> {
      */
     private  String description;
 
+    /**
+     * 是否删除
+     */
+    private boolean isDelete;
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override
@@ -85,5 +90,14 @@ public class Designer implements EntityClass<Integer> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(name = "isDelete")
+    public boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(boolean isDelete) {
+        this.isDelete = isDelete;
     }
 }
