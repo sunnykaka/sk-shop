@@ -49,6 +49,34 @@ public class CmsService {
         return result;
     }
 
+
+    /**
+     * 根据位置，数量，还有状态查询
+     * @param positionName
+     * @param size
+     * @param status
+     * @return
+     */
+    public List<CmsExhibition> queryExhibitionByPosition(String positionName, int size, ExhibitionStatus status) {
+        StringBuilder sql = new StringBuilder(" select * from cms_exhibition where positionName = ?1 ");
+        if (status.equals(ExhibitionStatus.SELLING)) {
+            sql.append(" and (beginTime <= Now() and endTime > Now())");
+        }
+        if (status.equals(ExhibitionStatus.PREPARE)) {
+            sql.append(" and beginTime > Now() ");
+        }
+        if (status.equals(ExhibitionStatus.OVER)) {
+            sql.append(" and end > Now() ");
+        }
+
+        sql.append(" order by positionIndex desc, beginTime asc limit ?2");
+
+        return generalDao.getEm().createNativeQuery(sql.toString(), CmsExhibition.class).setParameter(1, positionName).setParameter(2, size).getResultList();
+
+
+    }
+
+
     /**
      * 查询设计师所有的专场
      *
@@ -63,12 +91,13 @@ public class CmsService {
 
     /**
      * 查找某个位置，最新的专场，不管下架与否
+     *
      * @param position
      * @return
      */
-    public CmsExhibition findExhibitionByPosition(Integer position){
+    public CmsExhibition findExhibitionByPosition(Integer position) {
         String sql = " select * from cms_exhibition where positionIndex  = ?1 order by endTime desc limit 1";
-        CmsExhibition exhibition = (CmsExhibition) generalDao.getEm().createNativeQuery(sql,CmsExhibition.class).setParameter(1,position).getSingleResult();
+        CmsExhibition exhibition = (CmsExhibition) generalDao.getEm().createNativeQuery(sql, CmsExhibition.class).setParameter(1, position).getSingleResult();
         return exhibition;
     }
 

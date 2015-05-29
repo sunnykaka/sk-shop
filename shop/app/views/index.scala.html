@@ -1,25 +1,27 @@
-@(user: usercenter.models.User, sellingList: List[models.CmsExhibition], font1:models.CmsContent,font2:models.CmsContent , sliderBoxs :List[models.CmsContent])
+@(user: usercenter.models.User, sellingMap: Map[String, List[CmsExhibition]], doubleEx: CmsExhibition, font1: models.CmsContent, font2: models.CmsContent, sliderBoxs: List[models.CmsContent])
 
 @import common.utils.DateUtils
-@import dtos.CmsPosition
+@import dtos.ExhibitionPosition
 
-@displayExhibition(exhibition: models.CmsExhibition)={
+@displayExhibition(exhibition: models.CmsExhibition) = {
     <li>
         <a href ="@routes.Application.designerProd(exhibition.getDesignerId)">
-        <div class="img">
-            <a href="@routes.Application.designerProd(exhibition.getDesignerId)"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
-            <p class="time">还剩 <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
-        </div>
-        <div class="title">
-            <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
-            <p><span class="designer">@exhibition.getIntroduction</span></p>
-        </div>
+            <div class="img">
+                <a href="@routes.Application.designerProd(exhibition.getDesignerId)"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
+                <p class="time">
+                    还剩 <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                    结束</p>
+            </div>
+            <div class="title">
+                <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
+                <p><span class="designer">@exhibition.getIntroduction</span></p>
+            </div>
         </a>
     </li>
 }
 
 
-@main(){
+@main() {
 
     <script>
     $(function(){
@@ -61,22 +63,22 @@
 </script>
 
 
-}{
+} {
     <!--slider-box-->
     <div class="slider-box">
         <div class="slider-box-inner">
             <div class="slider-box-img">
                 <ul>
-                    @for(content <- sliderBoxs){
-                        <li><a href="@content.getLink"><img src="@content.getContent" alt="@content.getTitle"/></a></li>
-                    }
+                @for(content <- sliderBoxs) {
+                    <li><a href="@content.getLink"><img src="@content.getContent" alt="@content.getTitle"/></a></li>
+                }
                 </ul>
                 <span class="btn left-btn"></span>
                 <span class="btn right-btn"></span>
             </div>
             <div class="slider-box-nav">
                 <ul>
-                @for(content <- sliderBoxs){
+                @for(content <- sliderBoxs) {
                     @*<li class="current">*@
                     <li>
                         <a href="#"><img src="@content.getContent" alt="" width="390" height="103"/></a>
@@ -90,18 +92,17 @@
     <!--end slider-box-->
 
 
-
-
-
     <!--start-fashion first-->
     <div class="start-fashion">
         <div class="start-fashion-inner width1200">
             <h2>全球首发　限量发售</h2>
             <p class="info">独一无二的品味，独一无二的你。</p>
             <ul class="clearfix">
-                @for(exhibition <- sellingList.take(4)){
+            @if(sellingMap.get(ExhibitionPosition.FLOOR_ONE) != null) {
+                @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_ONE)) {
                     @displayExhibition(exhibition)
                 }
+            }
             </ul>
         </div>
     </div>
@@ -109,31 +110,29 @@
     <!--fashion-box-->
     <div class="fashion-box">
         <div class="fashion-box-inner width1200">
-            @if(font1 != null ){
+            @if(font1 != null) {
                 <h2>@font1.getTitle</h2>
                 <p class="en-info">@Html(font1.getContent)</p>
                 @*<p class="cn-info">@fontMa.get(CmsPosition.INDEX_FONT_1).get.getLink</p>*@
             }
-
             @*<h2>尚</h2>*@
             @*<p class="en-info">Fashion fades,only style remain the same. —— Coco Chanel</p>*@
             @*<p class="cn-info">时尚易逝，唯风格永存。</p>*@
             <ul class="clearfix">
-
-
-                @for(exhibition <- sellingList.slice(4,7)){
+            @if(sellingMap.get(ExhibitionPosition.FLOOR_TWO) != null) {
+                @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_TWO)) {
                     <li>
                         <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <img src="@exhibition.getPic()" alt="" width="390" height="240"  />
+                            <img src="@exhibition.getPic()" alt="" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
-                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
+                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                    结束</p>
                             </div>
                         </a>
                     </li>
                 }
-
-
+            }
             </ul>
         </div>
     </div>
@@ -142,28 +141,59 @@
     <div class="empty-box">
         <div class="empty-box-inner width1200">
 
-            @if(font2 != null){
+            @if(font2 != null) {
                 <h2>@font2.getTitle</h2>
                 <p class="info">@Html(font2.getContent)</p>
             }
 
             <ul class="clearfix">
 
-            @for(exhibition <- sellingList.slice(7,14)){
-                @if(exhibition.getPositionIndex == 12){
-                    <li class="double">
-                }else{
-                    <li class="">
+                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
+
+                    @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(0, 4)) {
+                        <li class="">
+                            <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
+                                <img src="@exhibition.getPic()" alt=""/>
+                            </a>
+                            <div class="title">
+                                <p><span class="designer">@exhibition.getIntroduction()</span></p>
+                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                    结束</p>
+                            </div>
+                        </li>
+                    }
                 }
-                    <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                        <img src="@exhibition.getPic()" alt=""/>
-                    </a>
-                    <div class="title">
-                        <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                        <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>结束</p>
-                    </div>
-                </li>
-            }
+
+                @if(doubleEx != null) {
+                    <li class="double">
+                        <a href="@routes.Application.designerProd(doubleEx.getDesignerId)">
+                            <img src="@doubleEx.getPic()" alt=""/>
+                        </a>
+                        <div class="title">
+                            <p><span class="designer">@doubleEx.getIntroduction()</span></p>
+                            <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
+                                结束</p>
+                        </div>
+                    </li>
+                }
+
+                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null ) {
+
+                    @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(4, 6)) {
+                        <li class="">
+                            <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
+                                <img src="@exhibition.getPic()" alt=""/>
+                            </a>
+                            <div class="title">
+                                <p><span class="designer">@exhibition.getIntroduction()</span></p>
+                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                    结束</p>
+                            </div>
+                        </li>
+                    }
+                }
+
+
             </ul>
         </div>
     </div>

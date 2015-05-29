@@ -1,6 +1,7 @@
 package controllers;
 
 import dtos.CmsPosition;
+import dtos.ExhibitionPosition;
 import dtos.ProductInfo;
 import models.CmsContent;
 import models.CmsExbitionItem;
@@ -51,58 +52,50 @@ public class Application extends Controller {
      * @return
      */
     public Result index() {
-        Map<ExhibitionStatus, List<CmsExhibition>> exhibitions = cmsService.queryAllExhibition();
-        List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.SELLING);
+        List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.SELLING);
+        List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.SELLING);
+        List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.SELLING);
+        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 1, ExhibitionStatus.SELLING);
+
+        CmsExhibition doubleExhibition = null;
+
+        if (floor3Double != null && floor3.size()>0) {
+            doubleExhibition = floor3Double.get(0);
+        }
+
+        Map<String, List<CmsExhibition>> exhibtionMap = new HashMap<>();
+        exhibtionMap.put(ExhibitionPosition.FLOOR_ONE, floor1);
+        exhibtionMap.put(ExhibitionPosition.FLOOR_TWO, floor2);
+        exhibtionMap.put(ExhibitionPosition.FLOOR_THREE, floor3);
+
+
         List<CmsContent> contents = cmsService.allContents();
-
-        /**
-         * check
-         */
-        checkExhibitionContent(sellingList);
-        /**
-         * 按位置排序
-         */
-        sellingList.sort(new Comparator<CmsExhibition>() {
-            @Override
-            public int compare(CmsExhibition o1, CmsExhibition o2) {
-                if(o1.getPositionIndex() < o2.getPositionIndex()){
-                    return  -1;
-                }
-
-                if(o1.getPositionIndex() == o2.getPositionIndex()){
-                    return 0;
-                }
-                return 1;
-            }
-        });
-
 
         List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
         CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).findFirst().get();
         CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).findFirst().get();
 
 
-        return ok(index.render(SessionUtils.currentUser(), sellingList, font1, font2, sliderBoxs));
+        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs));
     }
 
 
-    private void checkExhibitionContent(List<CmsExhibition> list){
+    private void checkExhibitionContent(List<CmsExhibition> list) {
         /**
          * 内容是满的
          */
-        if(list.size() == 14){
+        if (list.size() == 14) {
             return;
         }
         int count = 1;
         List<Integer> missPositionIndex = new ArrayList<>(14);
-        for(CmsExhibition ex : list ){
-            if(ex.getPositionIndex() == count){
+        for (CmsExhibition ex : list) {
+            if (ex.getPositionIndex() == count) {
                 continue;
             }
             list.add(cmsService.findExhibitionByPosition(count));
             count++;
         }
-
 
 
     }
@@ -114,39 +107,31 @@ public class Application extends Controller {
      * @return
      */
     public Result preview() {
-        Map<ExhibitionStatus, List<CmsExhibition>> exhibitions = cmsService.queryAllExhibition();
-        List<CmsExhibition> sellingList = exhibitions.get(ExhibitionStatus.PREPARE);
+        List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.PREPARE);
+        List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.PREPARE);
+        List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.PREPARE);
+        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 1, ExhibitionStatus.PREPARE);
+
+        CmsExhibition doubleExhibition = null;
+
+        if (floor3Double != null && floor3.size()>0) {
+            doubleExhibition = floor3Double.get(0);
+        }
+
+        Map<String, List<CmsExhibition>> exhibtionMap = new HashMap<>();
+        exhibtionMap.put(ExhibitionPosition.FLOOR_ONE, floor1);
+        exhibtionMap.put(ExhibitionPosition.FLOOR_TWO, floor2);
+        exhibtionMap.put(ExhibitionPosition.FLOOR_THREE, floor3);
+
+
         List<CmsContent> contents = cmsService.allContents();
-
-        /**
-         * check
-         */
-        checkExhibitionContent(sellingList);
-
-
-        /**
-         * 按位置排序
-         */
-        sellingList.sort(new Comparator<CmsExhibition>() {
-            @Override
-            public int compare(CmsExhibition o1, CmsExhibition o2) {
-                if (o1.getPositionIndex() < o2.getPositionIndex()) {
-                    return -1;
-                }
-
-                if (o1.getPositionIndex() == o2.getPositionIndex()) {
-                    return 0;
-                }
-                return 1;
-            }
-        });
 
         List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_SLIDER_BOX)).collect(toList());
         CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)).findFirst().get();
         CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)).findFirst().get();
 
 
-        return ok(index.render(SessionUtils.currentUser(), sellingList, font1, font2, sliderBoxs));
+        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs));
     }
 
 
@@ -185,7 +170,7 @@ public class Application extends Controller {
             info.setProduct(prod);
             info.setMainPic(productPictureService.getMinorProductPictureByProductId(prod.getId()));
             Optional<CmsExhibition> optional = cmsService.findExhibitionWithProdId(prod.getId());
-            info.setFavorites(productCollectService.isFavorites(user,prod.getId()));
+            info.setFavorites(productCollectService.isFavorites(user, prod.getId()));
             info.setFavoritesNum(productCollectService.countProductCollect(prod.getId()));
             if (optional.isPresent()) {
                 info.setCmsExhibition(optional.get());
