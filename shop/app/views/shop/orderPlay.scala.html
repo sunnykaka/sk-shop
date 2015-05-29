@@ -3,7 +3,6 @@
 @main(){
 <script type="text/javascript">
     (function ($, FG) {
-
         var valueCollection = {};
         // 支付方式
         function payment() {
@@ -25,70 +24,38 @@
 
             });
 
-             $('#pay-money-btn').click(function(){
-             //payType:OnLine
-             //payMethod:
-    //             directPay("支付宝"),
-//    creditPay("信用卡"),
-//    bankPay("银行卡"),
-//    Tenpay("财付通");
+            $('#pay-money-btn').click(function(){
+                var payMethod, currentPay = box.find('.current').attr('paybank');
+                switch (currentPay){
+                    case  'Alipay':  payMethod = 'directPay';
+                        break;
+                    case  'Tenpay':  payMethod = 'Tenpay';
+                        break;
+                    default :
+                        payMethod = 'bankPay';
+                }
 
-//payOrg:
-
-//orderIds:
-            var payMethod, currentPay = box.find('.current').attr('paybank');
-            switch (currentPay){
-                case  'Alipay':  payMethod = 'directPay';
-                    break;
-                case  'Tenpay':  payMethod = 'Tenpay';
-                    break;
-                default :
-                    payMethod = 'bankPay';
-            }
-             console.log($('#orderIds').val());
-             console.log(currentPay);
-             console.log(payMethod);
-
-                     $.ajax({
-                        type: "get",
-                        url: '/order/submitTradeOrder?payType=OnLine&payMethod='+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val(),
-                        async: false,
-                        dataType: 'json',
-                        cache: false,
-                        success: function (data) {
-                            if(data.result){
-                                window.location.href = '/order/toPayOrder?tradeNo='+data.data+"&payMethod="+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val();
-                            }
+                 $.ajax({
+                    type: "get",
+                    url: '/order/submitTradeOrder?payType=OnLine&payMethod='+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val(),
+                    async: false,
+                    dataType: 'json',
+                    cache: false,
+                    success: function (data) {
+                        if(data.result){
+                            window.location.href = '/order/toPayOrder?tradeNo='+data.data+"&payMethod="+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val();
                         }
-                    });
-
-
+                    }
+                });
             });
-
         }
-
-
-
-
         payment();
-
-
-
-
     }(jQuery, FG));
 </script>
-
 } {
-
-
-
-
-
-
     @if(order != null) {
         <input type="hidden" id="orderIds" value="@order.getId">
     }
-
     <div class="pay width1200">
         <div class="pay-inner">
             <div class="pay-step">

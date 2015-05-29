@@ -9,8 +9,6 @@ import ordercenter.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import play.Logger;
-import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 
 import java.util.*;
@@ -207,7 +205,7 @@ public class BackGoodsService {
         List<BackGoods> backGoodsList = generalDao.query(jpql, Optional.empty(), queryParams);
 
         BackGoods backGoods = null;
-        if(backGoodsList != null || backGoodsList.size() > 0) {
+        if(backGoodsList != null && backGoodsList.size() > 0) {
             backGoods = backGoodsList.get(0);
         }
         return backGoods;
