@@ -32,7 +32,7 @@ public class DesignerService {
         String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
                 " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
                 "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
-                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id and t1.isDelete =0 order by id desc limit 1?";
+                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id and t1.isDelete =0 order by id desc limit ?1";
         List list = generalDAO.getEm().createNativeQuery(sql).setParameter(1,count).getResultList();
         List<DesignerView> result = new ArrayList<>();
         for (Object obj : list) {
