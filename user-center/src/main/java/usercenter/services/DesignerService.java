@@ -23,6 +23,48 @@ public class DesignerService {
 
 
     /**
+     * 查询最新入住的设计师
+     * @param count
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<DesignerView> lastCreateDesigner(int count){
+        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
+                " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
+                "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
+                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id order by id desc limit 1?";
+        List list = generalDAO.getEm().createNativeQuery(sql).setParameter(1,count).getResultList();
+        List<DesignerView> result = new ArrayList<>();
+        for (Object obj : list) {
+            Object[] designer = (Object[]) obj;
+            DesignerView dv = new DesignerView();
+            dv.setId((Integer) designer[0]);
+            dv.setName(designer[1].toString());
+
+            if (designer[2] != null) {
+                dv.setDescription(designer[2].toString());
+            }
+            /**
+             * 防止有些设计师，没有设置主图
+             */
+            if (designer[3] != null) {
+                dv.setStorePic(designer[3].toString());
+            }
+            if (designer[4] != null) {
+                dv.setMainPic(designer[4].toString());
+            }
+            if (designer[5] != null) {
+                dv.setBrandPic(designer[5].toString());
+            }
+
+            result.add(dv);
+
+        }
+        return result;
+    }
+
+
+    /**
      * 设计师列表，如果ID为空，一次性查询上所有的设计师
      *
      * @return
