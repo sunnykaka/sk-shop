@@ -107,13 +107,13 @@ POST        /my/back/cancel                       @controllers.user.MyOrderContr
 #购物车
 GET         /cart/getSkuStorage                   @controllers.shop.CartController.getSkuStorage(skuId:Int)
 GET         /cart/getUserCartItemNum              @controllers.shop.CartController.getUserCartItemNum()
-POST        /cart/addSkuToCartAddNum              @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
-POST        /cart/addSkuToCartReplaceNum          @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
+GET         /cart/addSkuToCartAddNum              @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
+GET         /cart/addSkuToCartReplaceNum          @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
 GET         /cart/showCart                        @controllers.shop.CartController.showCart()
-POST        /cart/deleteCartItem                  @controllers.shop.CartController.deleteCartItem(cartItemId:Int)
-POST        /cart/selCartItemProcess              @controllers.shop.CartController.selCartItemProcess(selCartItems:String)
+GET         /cart/deleteCartItem                  @controllers.shop.CartController.deleteCartItem(cartItemId:Int)
+GET         /cart/selCartItemProcess              @controllers.shop.CartController.selCartItemProcess(selCartItems:String)
 GET         /cart/chooseAddress                   @controllers.shop.CartController.chooseAddress(selCartItems:String)
-POST        /cart/verifyPromptlyPayData           @controllers.shop.CartController.verifyPromptlyPayData(skuId:Int, number:Int)
+GET         /cart/verifyPromptlyPayData           @controllers.shop.CartController.verifyPromptlyPayData(skuId:Int, number:Int)
 GET         /cart/promptlyPayChooseAddress        @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
 
 #订单

@@ -50,7 +50,7 @@ $(function(){
         function sync() {
             var skuId = ele.parent('.amount').attr('data-skuId');
             $.ajax({
-                type: 'POST',
+                type: 'get',
                 url: ' /cart/addSkuToCartReplaceNum?skuId='+skuId+"&number="+val,
                 async: false,
                 dataType: 'JSON',
@@ -160,7 +160,7 @@ $(function(){
         }
 
         $.ajax({
-            type: "post",
+            type: "get",
             url: '/cart/selCartItemProcess?selCartItems='+cartItem.join(','),
             async: false,
             dataType: 'json',
@@ -197,7 +197,7 @@ $(function(){
                     type: 'red',
                     click: function(btn) {
                         $.ajax({
-                            type: 'POST',
+                            type: 'get',
                             url:'/cart/deleteCartItem?cartItemId='+globalcartId,
                             dataType: 'json',
                             success: function (data) {

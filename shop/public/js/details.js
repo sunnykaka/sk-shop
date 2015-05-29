@@ -331,7 +331,7 @@ $(function(){
             var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val();
 
             $.ajax({
-                type: "post",
+                type: "get",
                 url: '/cart/verifyPromptlyPayData?skuId='+skuId+"&number="+number,
                 async: false,
                 dataType: 'json',
@@ -351,7 +351,7 @@ $(function(){
         addToCartBtn.click(function(){
             var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val();
             $.ajax({
-                type: "post",
+                type: "get",
                 url: ' /cart/addSkuToCartAddNum?skuId='+skuId+"&number="+number,
                 async: false,
                 dataType: 'json',
