@@ -16,11 +16,11 @@
                 </div>
 
                 @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
-                        <!-- mycart empty-->
+                    <!-- mycart empty-->
                     <div class="mycart-empty">
-                        <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
+                        <p>购物车里空空如也，赶紧去 <a href="@routes.Application.index()">逛逛吧></a></p>
                     </div>
-                        <!-- end mycart empty-->
+                    <!-- end mycart empty-->
                     } else {
                     <!-- mycart-list -->
                     <div class="mycart-list">
@@ -74,8 +74,8 @@
                                         </div>
                                     </td>
                                     <td>
-                        ￥<span class="pro-total-money">@cartItem.getTotalPrice</span>
-                    </td>
+                                        ￥<span class="pro-total-money">@cartItem.getTotalPrice</span>
+                                    </td>
                                     <td>
                                         <span  class="btn del" title="删除" data-id="@cartItem.getId">X</span>
                                     </td>

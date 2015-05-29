@@ -1,36 +1,6 @@
 @(resultMap:Map[String, Object])
 
-@main(){
-<script>
-    (function ($, FG) {
-
-        var valueCollection = {};
-        // 支付方式
-        function payment() {
-            var box = $('.pay-list'),
-                    payTypes = box.find('li');
-
-            valueCollection.payBank = payTypes.eq(0).attr('paybank');
-            payTypes.on('click', function () {
-                var self = $(this);
-
-                if (self.hasClass('more-payBank')) {
-                    self.empty();
-                    box.find('.more-list').slideDown(200);
-                    return;
-                }
-                payTypes.removeClass('current');
-                self.addClass('current');
-                valueCollection.payBank = self.attr('paybank');
-
-            });
-        }
-
-        payment();
-
-    }(jQuery, FG));
-</script>
-}{
+@main()(){
     <div class="pay-success width1200">
         <div class="pay-success-inner">
                 <!-- pay-info -->
@@ -38,10 +8,9 @@
                 <h3>订单支付成功，我们将尽快为您打包发货！</h3>
                 <p>订单编号：<span class="pay-number">@resultMap.get("orderNo")</span></p>
                 <p>支付金额：<span class="pay-money">@resultMap.get("payTotalFee")</span></p>
-                <a href="" class="check-order">查看订单&gt;&gt;</a>
-                <a href="" class="continueShopping">继续购物</a>
+                <a href="/my/order/info?orderId=@resultMap.get("orderId")" class="check-order">查看订单&gt;&gt;</a>
+                <a href="@routes.Application.index()" class="continueShopping">继续购物</a>
             </div>
-
         </div>
     </div>
 }

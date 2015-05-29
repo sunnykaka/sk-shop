@@ -91,7 +91,6 @@ public class TradeService {
         generalDao.persist(tradeOrder);
     }
 
-
     /**
      * 通过tradeNo获取TradeOrder列表
      * @param tradeNo 交易号

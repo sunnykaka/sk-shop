@@ -175,7 +175,7 @@ public class OrderService {
 
         List<Order> orderList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         Order order = null;
-        if(orderList != null || orderList.size() > 0) {
+        if(orderList != null && orderList.size() > 0) {
             order= orderList.get(0);
         }
         return  order;
@@ -238,7 +238,7 @@ public class OrderService {
         List<Order> orderList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
 
         Order order = null;
-        if(orderList != null || orderList.size() > 0) {
+        if(orderList != null && orderList.size() > 0) {
             order= orderList.get(0);
         }
         return  order;
@@ -445,7 +445,7 @@ public class OrderService {
 
         List<Logistics> logisticsList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         Logistics logistics = null;
-        if(logisticsList != null || logisticsList.size() > 0) {
+        if(logisticsList != null && logisticsList.size() > 0) {
             logistics = logisticsList.get(0);
         }
         return  logistics;

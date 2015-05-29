@@ -2,22 +2,8 @@
 
 @main(){
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
-<script src="@routes.Assets.versioned("js/submitOrder.js")"></script>
-
-<script type="text/javascript">
-
-
-
-//添加购物车：
-/*
- POST        /cart/getSkuStorage  skuId:Int    获取当前库存信息，包括了最大购买量和当前库存
- */
-//展示购物车：GET         /cart/showCart
-//删除购物车项  /cart/deleteCartItem?cartId=&skuId=
-</script>
+    <script src="@routes.Assets.versioned("js/submitOrder.js")"></script>
 } {
-
-
 <div class="order-submit width1200">
     <div class="order-inner">
         <div class="order-step">
@@ -32,11 +18,7 @@
         <div class="select-address">
             <h3>选择收货地址</h3>
             <ul class="clearfix">
-            @if(addressList == null || addressList.size() == 0) {
-                //地址为空
-
-
-            } else {
+            @if(addressList != null && !addressList.isEmpty) {
                 @for((address, index) <- addressList.zipWithIndex) {
                     @if(address.isDefaultAddress) {
                         <li class="current" data-id="@address.getId">
@@ -78,15 +60,12 @@
         </div>
 
         @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
-            <div class="mycart-empty">
-                <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
-            </div>
+        <div class="mycart-empty">
+            <p>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
+        </div>
         } else {
-
-
-            <input type="hidden" id="selItems" value="@selItems"/>
-            <input type="hidden" id="isPromptlyPay" value="@isPromptlyPay"/>
-
+        <input type="hidden" id="selItems" value="@selItems"/>
+        <input type="hidden" id="isPromptlyPay" value="@isPromptlyPay"/>
         <div class="confirm-product">
             <h3>确认商品信息</h3>
             <table>
