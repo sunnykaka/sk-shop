@@ -1,6 +1,7 @@
 package controllers.user;
 
 import common.exceptions.AppBusinessException;
+import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.RegExpUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +51,7 @@ public class LoginController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, registerForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(registerForm.errors())).toNode());
 
     }
 
@@ -75,7 +76,7 @@ public class LoginController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, loginForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(loginForm.errors())).toNode());
 
     }
 
@@ -129,7 +130,7 @@ public class LoginController extends Controller {
 
         User user = new WeixinLogin().handleCallback(code, state, request().remoteAddress());
         userService.loginByRegister(user, true);
-        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.myOrder().url());
+        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
 
         return ok(openIDCallback.render(originalUrl));
     }

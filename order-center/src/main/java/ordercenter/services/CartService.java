@@ -176,6 +176,7 @@ public class CartService {
     public Cart getCartByUserId(int userId) {
         String jpql = getSelectAllCartSql();
         Map<String, Object> queryParams = new HashMap<>();
+
         jpql += " and v.userId = :userId ";
         queryParams.put("userId", userId);
 

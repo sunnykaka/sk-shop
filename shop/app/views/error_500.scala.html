@@ -1,6 +1,38 @@
-@(errorMsg: String)
+@(errorMsg: String, designerViews: List[usercenter.dtos.DesignerView])
 
 @main() {
+    <script>
+    $(function(){
+        $('.empty-box li').hover(function(){
+            $(".title", this).stop().animate({top:"367px"},{queue:false,duration:100});
+        },function(){
+            $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
+        });
+    });
+    </script>
 } {
-    @errorMsg
+    <div class="not-found-404 server-error-500">
+        <div class="not-found-inner server-error-inner width1200">
+            <img src="@routes.Assets.versioned("images/500.gif")" alt="" width="360" height="150"/>
+            @if(designerViews.nonEmpty) {
+                <p>对不起，服务器出错了，但是下面有很多精品推荐！</p>
+            }
+        </div>
+
+        @if(designerViews.nonEmpty) {
+            <div class="designer-list-recom width1200">
+                <ul class="clearfix">
+                @for(dv <- designerViews) {
+                    <li>
+                        <a href=""><img class="designer-img" src="@Html(dv.getMainPic)" alt=""/></a>
+                        <div>
+                            <img src="@Html(dv.getBrandPic)" alt=""/>
+                            <p>设计师：@dv.getName</p>
+                        </div>
+                    </li>
+                }
+                </ul>
+            </div>
+        }
+    </div>
 }

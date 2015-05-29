@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 public class RegisterForm {
 
     @Constraints.Required(message = "用户名不能为空")
-    @Pattern(regexp = "^[A-Za-z0-9_]{4,10}$", message = "4-10位字符，支持字母/汉字/数字/下划线组合")
+    @Pattern(regexp = "^[A-Za-z0-9_\\-\\u4e00-\\u9fa5]+$", message = "用户名请输入4-20位，可由中文、英文或数字组成")
     String username;
 
     @Constraints.Required(message = "密码不能为空")
@@ -19,8 +19,8 @@ public class RegisterForm {
     String password;
 
     @Constraints.Required(message = "手机验证码不能为空")
-    @Constraints.MinLength(value = 6, message = "手机验证码需要为6位")
-    @Constraints.MaxLength(value = 6, message = "手机验证码需要为6位")
+    @Constraints.MinLength(value = 6, message = "手机验证码长度不符合要求")
+    @Constraints.MaxLength(value = 6, message = "手机验证码长度不符合要求")
     String verificationCode;
 
     @Constraints.Required(message = "手机不能为空")

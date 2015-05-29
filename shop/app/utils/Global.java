@@ -21,12 +21,16 @@ import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import usercenter.dtos.DesignerView;
+import usercenter.services.DesignerService;
 import views.html.error_400;
 import views.html.error_404;
 import views.html.error_500;
 
 import javax.persistence.EntityManagerFactory;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Global extends BaseGlobal {
 
@@ -85,7 +89,14 @@ public class Global extends BaseGlobal {
             //需要返回json结果
             result = Results.internalServerError(new JsonResult(false, errorMessage).toNode());
         } else {
-            result = Results.internalServerError(error_500.render(errorMessage));
+            List<DesignerView> designerViews = new ArrayList<>();
+            try {
+                designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
+            } catch (Exception e) {
+                Logger.error("", e);
+            }
+            result = Results.internalServerError(error_500.render(errorMessage, designerViews));
+
         }
         return showResult(result, jsonResponse);
     }
@@ -99,7 +110,13 @@ public class Global extends BaseGlobal {
             //需要返回json结果
             result = Results.notFound(new JsonResult(false, errorMessage).toNode());
         } else {
-            result = Results.notFound(error_404.render(errorMessage));
+            List<DesignerView> designerViews = new ArrayList<>();
+            try {
+                designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
+            } catch (Exception e) {
+                Logger.error("", e);
+            }
+            result = Results.notFound(error_404.render(errorMessage, designerViews));
         }
         return showResult(result, jsonResponse);
     }
@@ -113,7 +130,13 @@ public class Global extends BaseGlobal {
             //需要返回json结果
             result = Results.badRequest(new JsonResult(false, errorMessage).toNode());
         } else {
-            result = Results.badRequest(error_400.render(errorMessage));
+            List<DesignerView> designerViews = new ArrayList<>();
+            try {
+                designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
+            } catch (Exception e) {
+                Logger.error("", e);
+            }
+            result = Results.badRequest(error_400.render(errorMessage, designerViews));
         }
         return showResult(result, jsonResponse);
 
