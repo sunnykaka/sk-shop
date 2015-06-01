@@ -749,7 +749,7 @@ h4{font-size:12px;}
 .user-form p{line-height: 34px;height: 34px;}
 .user-form .phone p{line-height: 34px;height: 34px;width: 100px; float: left;}
 .user-form .phone a{ float: left;line-height: 34px;height: 34px;}
-.user-form .item{width: 50px;}
+.user-form .item{width: 65px;}
 .user-form .item input{  vertical-align: middle;margin: -3px 8px 0 0;}
 .user-form .submit-btn{padding:10px 20px;background: #000;border: none;color: #fff;margin-left: 110px;cursor: pointer;}
 .user-form .errormsg{color: #FF2D54;margin-left: 10px;}
