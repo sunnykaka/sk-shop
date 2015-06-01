@@ -60,7 +60,7 @@ $(function(){
     });
     //查看详情
     $('#openDetail').click(function(){
-        $('.container').slideDown(300);
+        $('.container').slideToggle();
         $('.hide-detail').show();
     });
     //隐藏详情

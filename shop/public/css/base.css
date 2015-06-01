@@ -541,6 +541,7 @@ h4{font-size:12px;}
 .detail-btn span{padding: 10px 40px;background: #000000;border:1px solid #000;color: #fff;*display: inline-block;}
 .detail-btn .addToOrder{margin-right:10px;}
 .detail-btn .addToCart{background: #fff;color: #000;}
+.detail-like{height: 30px;}
 .detail-like span{padding: 4px 12px;border: 1px solid #FF2D54;border-radius: 50px;position: relative;cursor: pointer;}
 .detail-like i{position: absolute;width: 13px;height: 13px;background: url("../images/detail/like.gif") no-repeat; top: 6px;*top:11px;}
 .detail-like .like-text{border: none;color: #FF2D54;padding-left:20px}

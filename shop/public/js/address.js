@@ -226,7 +226,9 @@ $(function(){
                     if($('.address-list-inner li').size()==4){
                         $(".address-list-inner").find(".add").hide();
                     }
-                    $.dialog.get.addForm.hide();
+                    if(!!$.dialog.get.addForm){
+                        $.dialog.get.addForm.hide();
+                    }
                   var form = $('.add-form');
                     form.each(function(){
                        $(this).get(0).reset();

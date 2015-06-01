@@ -36,7 +36,7 @@
             i=120;
             clearInterval(timer);
         }else{
-            obj.text(i+'秒后可重新获取');
+            obj.text(i+'秒后重新获取');
         }
     }
 
@@ -143,7 +143,11 @@
                             dataType: "json",
                             success: function (response) {
                                 if (response.result) {
+                                    $('#get-code-btn').attr('disabled',null);
+                                }else{
                                     callback(false, response.message);
+                                    $('#errormsg-phoneNum').text('手机已经注册');
+                                    $('#get-code-btn').attr('disabled',true);
                                 }
                             }
                         });
