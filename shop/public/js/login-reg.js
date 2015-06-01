@@ -143,11 +143,12 @@
                             dataType: "json",
                             success: function (response) {
                                 if (response.result) {
-                                    $('#get-code-btn').attr('disabled',null);
-                                }else{
                                     callback(false, response.message);
                                     $('#errormsg-phoneNum').text('手机已经注册');
                                     $('#get-code-btn').attr('disabled',true);
+
+                                }else{
+                                    $('#get-code-btn').attr('disabled',null);
                                 }
                             }
                         });
