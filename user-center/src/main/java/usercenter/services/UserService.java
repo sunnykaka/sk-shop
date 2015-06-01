@@ -323,8 +323,10 @@ public class UserService {
     @Transactional
     public User updateEmail(User user,String email){
 
-        user.setEmail(email);
-        return generalDao.merge(user);
+        User newUser = getById(user.getId());
+        newUser.setEmail(email);
+
+        return generalDao.merge(newUser);
     }
 
     private void doLogin(User user) {
