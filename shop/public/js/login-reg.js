@@ -24,7 +24,7 @@
     //短信倒计时
     function fun(obj){
         obj.attr('disabled','true');
-        obj.text(i+'秒后可重新获取');
+        obj.text(i+'秒后重新获取');
         timer = setInterval(function(){show(obj)},1000);
     }
 
@@ -196,6 +196,8 @@
                     if (response.result) {
                         window.location.href= response.data;
                     }else{
+                        regBtn.attr('disabled', false);
+                        regBtn.text('立即注册');
                         msgEle.html(response.message);
                     }
                 },

@@ -94,20 +94,21 @@ h4{font-size:12px;}
 .header .logo a:hover{border-bottom: none;}
 /*end header*/
 /*index slider-box*/
-.slider-box{margin-bottom: 50px;}
-.slider-box-inner{width:1903px;height:633px;margin: 0 auto;overflow: hidden;}
+.slider-box{margin-bottom: 70px;}
+.slider-box-inner{width: 100%;margin: 0 auto;height: 614px;position: relative;}
 .slider-box-inner .slider-box-img{position: relative;width: 100%;margin: 0 auto 10px;height: 501px;overflow:hidden}
+.slider-box-inner .slider-box-img .item{position: absolute;height: 501px;background: #fff;width: 100%;text-align: center;}
 .slider-box-inner .slider-box-img ul{position: absolute;left: 0;top: 0;width: 300%;overflow: hidden;}
 .slider-box-inner .slider-box-nav li{float: left;height: 501px;overflow: hidden;}
-.slider-box-inner .slider-box-img .btn{position: absolute;top: 50%;width:40px;height:108px;background: url("../images/slider-btn.png") no-repeat;
-    cursor: pointer;
+.slider-box-inner .sliderArrows .png_bg{position: absolute;top: 50%;margin-top:-104px;width:40px;height:108px;background: url("../images/slider-btn.png") no-repeat;
+    cursor: pointer;text-indent: -9999px;z-index: 50;
 }
-.slider-box-inner .slider-box-img .right-btn{right:0;background-position: -40px 0;}
+.slider-box-inner .sliderArrows .next{right:0;background-position: -40px 0;}
 .slider-box-inner .slider-box-nav{width: 100%;height: 113px;background:#d9d9d9;overflow: hidden;padding-top: 10px;}
-.slider-box-inner .slider-box-nav ul{width: 1220px;height: 103px;overflow: hidden;margin: 0 auto;}
-.slider-box-inner .slider-box-nav li{float: left;margin-right: 15px;position: relative;cursor: pointer;width:390px;height:103px;overflow: hidden;}
-.slider-box-nav li .cover{position: absolute;width: 100%;height: 100%;left: 0;top: 0;background: #000;opacity: .4;}
-.slider-box-nav .current .cover{top: 103px;}
+.slider-box-inner .sliderBullets ul{width: 1220px;height: 103px;overflow: hidden;margin: 0 auto;}
+.slider-box-inner .sliderBullets li{float: left;margin-right: 15px;position: relative;cursor: pointer;width:390px;height:103px;overflow: hidden;}
+.sliderBullets li .cover{position: absolute;width: 100%;height: 100%;left: 0;top: 0;background: #000;opacity: .4;}
+.sliderBullets .current .cover{top: 103px;}
 /*end index slider-box*/
 /*index start-fashion*/
 .start-fashion{margin-bottom: 40px;}
@@ -326,7 +327,7 @@ h4{font-size:12px;}
 .confirm-product .actual-price,.mycart-inner .actual-price{color: #FF2D54;}
 .total{margin-bottom: 20px;width: 100%;overflow: hidden;}
 .total-info{float:left;width: 747px;padding-left: 30px;}
-.total-info h3{color: #FF2D54;}
+.total-info h3{color: #FF2D54;overflow: hidden;}
 .total-info img{float: left;margin-top: 20px;margin-right: 22px;}
 .total-info p{overflow: hidden;color: #FF2D54;line-height: 200%;width:450px;}
 .total table{float:right;text-align: center;vertical-align: middle;width:350px;}
@@ -493,6 +494,7 @@ h4{font-size:12px;}
 .detail-inner .container .comment-page li{float:left;margin-right: 10px;}
 .detail-inner .container .comment-page a:hover{text-decoration: none;}
 .detail-inner .right{width: 373px;}
+#right-fixed{position: absolute;top: 241px;margin-left: 837px;}
 .detail-inner .debut-img{width: 373px;height: 226px;margin:58px 0 23px 0; }
 .debut-info,.detail-size-color{padding-bottom: 32px;border-bottom: 1px solid #e5e5e5;*height:1%;}
 .debut-info .debut-info-left{float: left;width:180px;}
@@ -559,7 +561,7 @@ h4{font-size:12px;}
 .all-order-list .order-status ul{height: 43px;margin-left: 23px;}
 .all-order-list .order-status li{float: left;height:43px;line-height:43px;margin-right: 30px;}
 .all-order-list .order-status a{float:left;padding: 0 13px;font-size: 14px;}
-.all-order-list .order-status a:hover,.all-order-list .order-status .current a{border-bottom: 2px solid #FF2D54;color: #FF2D54;}
+.all-order-list .order-status .current a{border-bottom: 2px solid #FF2D54;color: #FF2D54;}
 .order-manage-inner .all-order-list .refund-order-info{padding: 20px 0 30px 50px; border-bottom: 1px dashed #cccccc;}
 .order-manage-inner .all-order-list .refund-order-info h3{padding-bottom: 10px;}
 .order-manage-inner .all-order-list .refund-order-info ul{padding-left: 20px;}
@@ -717,6 +719,7 @@ h4{font-size:12px;}
 .designer-brand-inner .ready-online .info p,.designer-brand-inner .hot-sale .info p{padding-top: 20px;}
 /*end designer-brand */
 /*address-manage*/
+.address-manage{margin-bottom: 100px;}
 .address-form-inner h3{padding-top: 20px;}
 .address-form-inner .add-form,.i-dialog .update-form,.i-dialog .add-form{margin-top: 20px;}
 .address-manage-inner .add-form b,.i-dialog .update-form b,.i-dialog .add-form b{color: #FF2D54;}

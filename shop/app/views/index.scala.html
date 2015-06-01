@@ -22,69 +22,30 @@
 
 
 @main() {
-
-    <script>
-    $(function(){
-        $('.empty-box li').hover(function(){
-            $(".title", this).stop().animate({top:"367px"},{queue:false,duration:100});
-        },function(){
-            $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
-        });
-
-        console.log($('.time-detail')[0]);
-
-
-
-                setInterval(function(){
-                  $(".time-detail").each(function(){
-                    var obj = $(this);
-                    var endTime = new Date(obj.attr('value'));
-                    var nowTime = new Date();
-                    var nMS=endTime.getTime() - nowTime.getTime();
-                    var myD=Math.floor(nMS/(1000 * 60 * 60 * 24)); //天
-                    var myH=Math.floor(nMS/(1000*60*60)) % 24; //小时
-                    var myM=Math.floor(nMS/(1000*60)) % 60; //分钟
-                    var myS=Math.floor(nMS/1000) % 60; //秒
-                    var myMS=Math.floor(nMS/100) % 10; //拆分秒
-
-                    if(myD>= 0){
-                        var str = myD+"天"+myH+"小时"+myM+"分"+myS+"."+myMS+"秒";
-
-                    }else{
-                        var str = "已结束！";
-                    }
-                    obj.text(str);
-                  });
-                }, 100); //每个0.1秒执行一次
-
-
-
-    });
-</script>
-
+    <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
+    <script src="@routes.Assets.versioned("js/index.js")"></script>
 
 } {
     <!--slider-box-->
     <div class="slider-box">
         <div class="slider-box-inner">
             <div class="slider-box-img">
-                <ul>
-                @for(content <- sliderBoxs) {
-                    <li><a href="@content.getLink"><img src="@content.getContent" alt="@content.getTitle"/></a></li>
+                @for((content,index) <- sliderBoxs.zipWithIndex) {
+                <div class="item" style="z-index: @index; background-position: initial initial; background-repeat: initial initial;">
+                    <a href="@content.getLink" hidefocus="true" style="outline: none;">
+                        <img src="@content.getContent" alt="@content.getContent" height="501">
+                    </a>
+                </div>
                 }
-                </ul>
-                <span class="btn left-btn"></span>
-                <span class="btn right-btn"></span>
             </div>
-            <div class="slider-box-nav">
-                <ul>
-                @for(content <- sliderBoxs) {
-                    @*<li class="current">*@
-                    <li>
-                        <a href="#"><img src="@content.getContent" alt="" width="390" height="103"/></a>
-                        <div class="cover"></div>
-                    </li>
-                }
+            <div class="sliderBullets">
+                <ul class="clearfix">
+                    @for((content,index) <- sliderBoxs.zipWithIndex) {
+                       <li>
+                           <a href="http://www.internetke.com/#" rel="@index" class="" hidefocus="true" style="outline:none;"><img src="@content.getContent" alt="@content.getContent" width="390" height="103"/></a>
+                           <div class="cover"></div>
+                       </li>
+                    }
                 </ul>
             </div>
         </div>
