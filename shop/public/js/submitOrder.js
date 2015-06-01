@@ -10,7 +10,18 @@ $(function(){
 
     //提交订单
     $('#order-submit-btn').click(function(){
+
         var addressId = $('.select-address li.current').attr('data-id');
+        if(!addressId){
+            $.dialog({
+                title:'提示',
+                lock:true,
+                content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请添加收货地址！</p></div>',
+                width:540,
+                height:200
+            });
+        }
+
         var selItems = $('#selItems').val(),isPromptlyPay = $('#isPromptlyPay').val();
         $.ajax({
             type: "get",

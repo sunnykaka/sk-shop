@@ -3,6 +3,7 @@ package dtos;
 import common.exceptions.AppBusinessException;
 import models.CmsExhibition;
 import ordercenter.services.ValuationService;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import productcenter.constants.SKUState;
 import productcenter.models.*;
@@ -136,6 +137,8 @@ public class ProductDetail {
 
     public static class Builder {
 
+        public static final String NOT_EXIST_KEY = "";
+
         private ProductDetail productDetail;
         private Integer defaultSkuId;
 
@@ -242,7 +245,9 @@ public class ProductDetail {
                                     skuDetail.getStockQuantity(),
                                     skuDetail.getTradeMaxNumber(),
                                     skuDetail.getImageList())).
-                            collect(Collectors.toMap(SkuInfo::getSkuPropertiesInDb, skuInfo -> skuInfo));
+                            collect(Collectors.toMap(
+                                    skuInfo -> StringUtils.isBlank(skuInfo.getSkuPropertiesInDb()) ? NOT_EXIST_KEY : skuInfo.getSkuPropertiesInDb(),
+                                    skuInfo -> skuInfo));
 
             productDetail.skuMap = skuMap;
 

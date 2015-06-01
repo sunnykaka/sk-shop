@@ -27,7 +27,9 @@ public class CategoryPropertyService {
      */
     public List<CategoryProperty> findCategoryProperty(Integer categoryId, List<Integer> propertyIds) {
         Preconditions.checkNotNull(categoryId);
-        Preconditions.checkArgument(propertyIds != null && !propertyIds.isEmpty());
+        if(propertyIds == null || propertyIds.isEmpty()) {
+            return new ArrayList<>();
+        }
 
         StringBuilder jpql = new StringBuilder("select cp from CategoryProperty cp where cp.deleted = false and " +
                 " cp.categoryId = :categoryId and cp.propertyId in (");
@@ -53,8 +55,9 @@ public class CategoryPropertyService {
      */
     public List<CategoryPropertyValue> findCategoryPropertyValue(Integer categoryId, List<Integer> propertyIds, List<Integer> valueIds) {
         Preconditions.checkNotNull(categoryId);
-        Preconditions.checkArgument(propertyIds != null && !propertyIds.isEmpty());
-        Preconditions.checkArgument(valueIds != null && !valueIds.isEmpty());
+        if(propertyIds == null || propertyIds.isEmpty() || valueIds == null || valueIds.isEmpty()) {
+            return new ArrayList<>();
+        }
 
         StringBuilder jpql = new StringBuilder("select cpv from CategoryPropertyValue cpv where cpv.deleted = false and" +
                 " cpv.categoryId = :categoryId and cpv.propertyId in (");

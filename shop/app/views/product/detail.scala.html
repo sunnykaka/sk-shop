@@ -33,7 +33,7 @@
                 <div class="info">
                     <h2>@pd.getProduct.getName </h2>
                     <h3>设计师：@pd.getProduct.getCustomer.getName </h3>
-                    <p>@pd.getProduct.getCustomer.getDescription </p>
+                    <p>@pd.getProduct.getDescription </p>
                 </div>
                 <div class="video">
                     @if(isNotBlank(pd.getProduct.getVideo)) {
@@ -71,13 +71,14 @@
                         </div>
                         <div class="comment-page">
                         </div>
+                        <div class="hide-detail" id="hideDetail">
+                            <p>隐藏商品详情 <span class="ico"></span></p>
+                        </div>
                     </div>
-                    <div class="hide-detail" id="hideDetail">
-                        <p>隐藏商品详情 <span class="ico"></span></p>
-                    </div>
+
                 </div>
             </div>
-            <div class="right">
+            <div id="right-fixed" class="right" >
                 <div class="debut-img">
                     <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
                 </div>
@@ -101,16 +102,18 @@
                         </div>
                     }
                 </div>
-                <div class="detail-size-color" id="choose-sku">
+                @if(pd.getSkuCandidateList.nonEmpty) {
+                    <div class="detail-size-color" id="choose-sku">
                     @for(sc <- pd.getSkuCandidateList) {
-                            <dl class="clearfix">
-                                <dt>@sc.getSkuProp.getValue：</dt>
-                                @for(sv <- sc.getSkuValueList) {
-                                    <dd class="sku" data="@sv.getPidvid">@sv.getValue</dd>
-                                }
-                            </dl>
+                        <dl class="clearfix">
+                            <dt>@sc.getSkuProp.getValue：</dt>
+                            @for(sv <- sc.getSkuValueList) {
+                                <dd class="sku" data="@sv.getPidvid">@sv.getValue</dd>
+                            }
+                        </dl>
                     }
-                </div>
+                    </div>
+                }
                 <div class="detail-quantity">
                     <dt>数　量：</dt>
                     <dd>

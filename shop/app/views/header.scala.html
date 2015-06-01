@@ -9,7 +9,7 @@
             <div class="login">
                 @defining(SessionUtils.currentUser()) {user =>
                     @if(user == null) {
-                        <a class="login btn" href="@controllers.user.routes.LoginController.loginPage()">登陆</a>
+                        <a class="login btn" href="@controllers.user.routes.LoginController.loginPage()">登录</a>
                         <a class="signIn btn" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
                     } else {
                         欢迎, <a href="@controllers.user.routes.MyOrderController.index()" >@user.getUserName</a>      <a href="@controllers.user.routes.LoginController.logout()" >退出</a>

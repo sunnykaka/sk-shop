@@ -24,7 +24,7 @@
     //短信倒计时
     function fun(obj){
         obj.attr('disabled','true');
-        obj.text(i+'秒后可重新获取');
+        obj.text(i+'秒后重新获取');
         timer = setInterval(function(){show(obj)},1000);
     }
 
@@ -36,7 +36,7 @@
             i=120;
             clearInterval(timer);
         }else{
-            obj.text(i+'秒后可重新获取');
+            obj.text(i+'秒后重新获取');
         }
     }
 
@@ -144,6 +144,11 @@
                             success: function (response) {
                                 if (response.result) {
                                     callback(false, response.message);
+                                    $('#errormsg-phoneNum').text('手机已经注册');
+                                    $('#get-code-btn').attr('disabled',true);
+
+                                }else{
+                                    $('#get-code-btn').attr('disabled',null);
                                 }
                             }
                         });
@@ -196,6 +201,8 @@
                     if (response.result) {
                         window.location.href= response.data;
                     }else{
+                        regBtn.attr('disabled', false);
+                        regBtn.text('立即注册');
                         msgEle.html(response.message);
                     }
                 },
