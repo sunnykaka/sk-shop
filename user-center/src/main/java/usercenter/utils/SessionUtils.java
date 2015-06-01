@@ -80,6 +80,14 @@ public class SessionUtils {
 
     }
 
+    public static void updateCurrentUser(User user) {
+
+        //设置到缓存
+        UserCache.setUserInSession(user, REMEMBER_ME_DAYS * 24 * 3600);
+
+    }
+
+
     private static String buildCredentials(Integer userId) throws AppException {
         return EncryptUtil.encrypt(String.valueOf(userId));
     }

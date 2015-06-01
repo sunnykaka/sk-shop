@@ -2,6 +2,7 @@ package controllers.user;
 
 import common.exceptions.AppBusinessException;
 import common.utils.EmailUtils;
+import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.ParamUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -91,7 +92,7 @@ public class MySecurityController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, codeForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(codeForm.errors())).toNode());
 
     }
 
@@ -160,7 +161,7 @@ public class MySecurityController extends Controller {
                     throw new AppBusinessException("身份验证已失效，无法继续操作");
                 }
 
-                userService.updatePhone(user, phoneCodeForm.get());
+                SessionUtils.updateCurrentUser(userService.updatePhone(user, phoneCodeForm.get()));
                 SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePhoneOk().url()).toNode());
 
@@ -169,7 +170,7 @@ public class MySecurityController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, phoneCodeForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(phoneCodeForm.errors())).toNode());
 
     }
 
@@ -228,7 +229,7 @@ public class MySecurityController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, codeForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(codeForm.errors())).toNode());
 
     }
 
@@ -277,7 +278,7 @@ public class MySecurityController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, passwordForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(passwordForm.errors())).toNode());
     }
 
     /**
@@ -334,7 +335,7 @@ public class MySecurityController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, codeForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(codeForm.errors())).toNode());
 
     }
 
@@ -410,7 +411,7 @@ public class MySecurityController extends Controller {
         if (null != emailUser) {
             return ok(changeEmailDo.render("激活失败，该邮箱地址已被抢先激活"));
         }
-        userService.updateEmail(user, newEmail);
+        SessionUtils.updateCurrentUser(userService.updateEmail(user, newEmail));
         SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, oldEmail);
         SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, user.getPhone());
 

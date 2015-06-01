@@ -1,5 +1,7 @@
 error.minLength=字段长度不够
 
+buy.domain=http://www.fashiongeeker.net
+
 index.title=欢迎
 index.welcome=你好
 
@@ -8,7 +10,7 @@ title.my.address=我的送货地址管理
 
 title.my.security=我的安全信息
 title.my.change.phone=修改手机号码
-title.my.change.email=邦定邮件
+title.my.change.email=绑定邮件
 title.my.change.psw=修改账号密码
 
 title.my.favorites.product=我收藏的宝贝
