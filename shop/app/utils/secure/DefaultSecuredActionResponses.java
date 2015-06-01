@@ -36,7 +36,6 @@ public class DefaultSecuredActionResponses extends Controller implements Secured
         Http.Request req = ctx.request();
         Result result;
 
-        SessionUtils.setOriginalUrl(ctx.request().uri());
 
         if (isAjaxRequest(req)) {
 
@@ -44,6 +43,7 @@ public class DefaultSecuredActionResponses extends Controller implements Secured
 
         } else {
 
+            SessionUtils.setOriginalUrl(ctx.request().uri());
             result = redirect(routes.LoginController.loginPage());
 
         }

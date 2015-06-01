@@ -163,7 +163,9 @@ public class SessionUtils {
         if(StringUtils.isBlank(originalUrl)) {
             return defaultUrl;
         } else {
+            Http.Context.current().session().remove(SESSION_ORIGINAL_URL);
             return originalUrl;
         }
+
     }
 }

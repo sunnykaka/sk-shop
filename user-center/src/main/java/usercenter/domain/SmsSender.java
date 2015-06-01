@@ -81,7 +81,13 @@ public class SmsSender {
         if(verificationCodeInCache == null) {
             return false;
         }
-        return verificationCodeInCache.contains(verificationCode);
+        if(verificationCodeInCache.contains(verificationCode)) {
+            String newStr = verificationCodeInCache.replaceAll(verificationCode, "");
+            UserCache.setPhoneVerificationCode(phone, usage, newStr, VERIFICATION_CODE_EXPIRE_TIME);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
