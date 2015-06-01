@@ -36,7 +36,9 @@
                                                 <span class="delete btn" data-id="@address.getId" >删除</span>
                                             }
                                         </div>
-                                        <span class="current-ico"></span>
+
+                                            <span class="current-ico" @if(!address.isDefaultAddress){style="display: none;"}></span>
+
                                     </li>
                                 }
                                     <li class="add" @if(addressList.size >= 4){style="display: none;"}>
