@@ -101,16 +101,18 @@
                         </div>
                     }
                 </div>
-                <div class="detail-size-color" id="choose-sku">
+                @if(pd.getSkuCandidateList.nonEmpty) {
+                    <div class="detail-size-color" id="choose-sku">
                     @for(sc <- pd.getSkuCandidateList) {
-                            <dl class="clearfix">
-                                <dt>@sc.getSkuProp.getValue：</dt>
-                                @for(sv <- sc.getSkuValueList) {
-                                    <dd class="sku" data="@sv.getPidvid">@sv.getValue</dd>
-                                }
-                            </dl>
+                        <dl class="clearfix">
+                            <dt>@sc.getSkuProp.getValue：</dt>
+                            @for(sv <- sc.getSkuValueList) {
+                                <dd class="sku" data="@sv.getPidvid">@sv.getValue</dd>
+                            }
+                        </dl>
                     }
-                </div>
+                    </div>
+                }
                 <div class="detail-quantity">
                     <dt>数　量：</dt>
                     <dd>
