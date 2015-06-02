@@ -1,4 +1,4 @@
-@(designerList: List[usercenter.dtos.DesignerView])
+@(content:models.CmsContent,designerList: List[usercenter.dtos.DesignerView])
 
 @main() {
 
@@ -13,7 +13,7 @@
                 </ul>
             </div>
             <div class="top-img">
-                <img src="images/top-img.jpg" alt="" width="1200px" height="416px"/>
+                <img src="@content.getContent" alt="@content.getTitle" width="1200px" height="416px"/>
             </div>
             <div class="designer-list-title">
                 <h2>所有设计师</h2>

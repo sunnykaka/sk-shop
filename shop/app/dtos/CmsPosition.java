@@ -15,6 +15,14 @@ public class CmsPosition {
      */
     public static final String PREVIEW_SLIDER_BOX = "previewSliderBox";
 
+
+    /**
+     * 设计师列表页大图
+     */
+    public static final String DESIGNER_LIST_LOGO = "designerListLogo";
+
+
+
     public static final String INDEX_FONT_1 = "indexFont1";
 
     public static final String INDEX_FONT_2 = "indexFont2";

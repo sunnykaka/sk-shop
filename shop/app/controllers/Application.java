@@ -240,7 +240,9 @@ public class Application extends Controller {
      */
     public Result designers() {
         List<DesignerView> list = designerService.designerById(null);
-        return ok(designers.render(list));
+        List<CmsContent> contents = cmsService.allContents();
+        CmsContent content = contents.stream().filter(co -> co.getPosition().equals(CmsPosition.DESIGNER_LIST_LOGO)).findFirst().get();
+        return ok(designers.render(content,list));
     }
 
 
