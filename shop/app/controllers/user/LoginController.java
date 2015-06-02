@@ -132,7 +132,8 @@ public class LoginController extends Controller {
         userService.loginByRegister(user, true);
         String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
 
-        return ok(openIDCallback.render(originalUrl));
+        return redirect(originalUrl);
+//        return ok(openIDCallback.render(originalUrl));
     }
 
 

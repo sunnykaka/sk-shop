@@ -24,11 +24,13 @@
                 <ul class="clearfix">
                     @for(dv <- designerViews) {
                         <li>
-                            <a href=""><img class="designer-img" src="@Html(dv.getMainPic)" alt=""/></a>
-                            <div>
-                                <img src="@Html(dv.getBrandPic)" alt=""/>
-                                <p>设计师：@dv.getName</p>
-                            </div>
+                            <a href="@routes.Application.designerProd(dv.getId)">
+                                <img class="designer-img" src="@Html(dv.getMainPic)" alt=""/>
+                                <div>
+                                    <img src="@Html(dv.getBrandPic)" alt=""/>
+                                    <p>设计师：@dv.getName</p>
+                                </div>
+                            </a>
                         </li>
                     }
                 </ul>
