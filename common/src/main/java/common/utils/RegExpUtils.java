@@ -10,27 +10,32 @@ import java.util.regex.Pattern;
  */
 public class RegExpUtils {
 
-    private static Pattern PHONE_PATTERN = Pattern.compile("^[1][\\d]{10}");
+    public static final String USERNAME_REG_EXP = "^[A-Za-z0-9_\\-\\u4e00-\\u9fa5]{2,20}$";
+    private static final Pattern USERNAME_PATTERN = Pattern.compile(USERNAME_REG_EXP);
 
-    private static Pattern EMAIL_PATTERN = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+    public static final String PHONE_REG_EXP = "^[1][\\d]{10}";
+    private static final Pattern PHONE_PATTERN = Pattern.compile(PHONE_REG_EXP);
+
+    public static final String EMAIL_REG_EXP = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+    private static Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REG_EXP);
+
+
 
     public static boolean isPhone(String str) {
-        if(StringUtils.isBlank(str)) {
-            return false;
-        }
-
-        return PHONE_PATTERN.matcher(str).matches();
+        return !StringUtils.isBlank(str) && PHONE_PATTERN.matcher(str).matches();
 
     }
 
     public static boolean isEmail(String str) {
-        if(StringUtils.isBlank(str)) {
-            return false;
-        }
-
-        return EMAIL_PATTERN.matcher(str).matches();
+        return !StringUtils.isBlank(str) && EMAIL_PATTERN.matcher(str).matches();
 
     }
+
+    public static boolean isUsername(String str) {
+        return !StringUtils.isBlank(str) && USERNAME_PATTERN.matcher(str).matches();
+
+    }
+
 
     public static void main(String[] args) {
         String phone1 = "18622223333";

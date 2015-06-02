@@ -143,7 +143,16 @@ public class UserService {
         user.setLoginCount(0);
         user.setRegisterDate(DateUtils.printDateTime(now));
         user.setRegisterIP(registerIP);
-        user.setUserName(RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        String username = null;
+        if(RegExpUtils.isUsername(openUserInfo.getNickName())) {
+            //昵称满足用户名规则,直接使用
+            username = openUserInfo.getNickName();
+        }
+        while(username == null || isUsernameExist(username, Optional.<Integer>empty())) {
+            //生成随机6位数字作为用户名
+            username = RandomStringUtils.randomNumeric(6);
+        }
+        user.setUserName(username);
         user.setPassword("");
         generalDao.persist(user);
 
@@ -165,8 +174,6 @@ public class UserService {
 
         return user;
     }
-
-
 
     @Transactional
     public User login(LoginForm loginForm) {
