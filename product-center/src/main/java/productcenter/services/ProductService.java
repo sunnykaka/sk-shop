@@ -170,7 +170,7 @@ public class ProductService {
      * @return
      */
     public List<Product> products4Designer(Integer designerId) {
-        String sql = "select * from product where isDelete = 0 and customerId = ?1";
+        String sql = "select * from product where isDelete = 0 and online = 1 and customerId = ?1";
         return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, designerId).getResultList();
 
     }

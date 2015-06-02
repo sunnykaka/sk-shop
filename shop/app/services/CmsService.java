@@ -57,6 +57,7 @@ public class CmsService {
      * @param status
      * @return
      */
+    @Transactional(readOnly = true)
     public List<CmsExhibition> queryExhibitionByPosition(String positionName, int size, ExhibitionStatus status) {
         StringBuilder sql = new StringBuilder(" select * from cms_exhibition where positionName = ?1 ");
         if (status.equals(ExhibitionStatus.SELLING)) {
@@ -83,6 +84,7 @@ public class CmsService {
      * @param dId
      * @return
      */
+    @Transactional(readOnly = true)
     public List<CmsExhibition> findExhibitionByDesigner(Integer dId) {
         String sql = "select * from cms_exhibition where designerId = ?1";
         return generalDao.getEm().createNativeQuery(sql, CmsExhibition.class).setParameter(1, dId).getResultList();
@@ -95,6 +97,7 @@ public class CmsService {
      * @param position
      * @return
      */
+    @Transactional(readOnly = true)
     public CmsExhibition findExhibitionByPosition(Integer position) {
         String sql = " select * from cms_exhibition where positionIndex  = ?1 order by endTime desc limit 1";
         CmsExhibition exhibition = (CmsExhibition) generalDao.getEm().createNativeQuery(sql, CmsExhibition.class).setParameter(1, position).getSingleResult();
@@ -107,6 +110,7 @@ public class CmsService {
      * @param id
      * @return
      */
+    @Transactional(readOnly = true)
     public CmsExhibition findExhibitionByIds(Integer id) {
         String sql = "select * from cms_exhibition where id = ?1";
         return (CmsExhibition) generalDao.getEm().createNativeQuery(sql, CmsExhibition.class).setParameter(1, id).getSingleResult();
