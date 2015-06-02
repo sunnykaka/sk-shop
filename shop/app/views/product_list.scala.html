@@ -6,12 +6,31 @@
 @main() {
     <script>
         $(function(){
+
            $('.start-fashion li,.ready-online li,.hot-sale li').hover(function(){
                $(".cover", this).stop().animate({top:"70%"},{queue:false,duration:50});
            },function(){
                $(".cover", this).stop().animate({top:"110%"},{queue:false,duration:100});
            });
         });
+
+
+        $('#designerFocus').click(function(){
+            var id = $(this).attr('data-id'),that = $(this);
+            $.ajax({
+                type:'post',
+                url:'/my/favorites/designer/add?designerId='+id,
+                data:{designerId:id},
+                success:function(res){
+                    that.text('已关注');
+                    that.addClass('hasFocus');
+                }
+
+            });
+        });
+
+
+
     </script>
 
 
@@ -31,10 +50,10 @@
                 <img src="@designer.getStorePic" alt="" width="439px" height="370px"/>
                 <div class="designer-con">
                     <div class="designer-con-title">
-                        <h2><span>@designer.getName</span> <a href="#">关注</a></h2>
+                        <h2><span>@designer.getName</span> <span class="focus" id="designerFocus" data-id="@designer.getId">关注</span></h2>
                     </div>
                     <div class="designer-con-content">
-                    @designer.getDescription
+                   <p> @designer.getDescription</p>
                     </div>
                 </div>
             </div>

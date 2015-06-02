@@ -43,6 +43,11 @@ public class Designer implements EntityClass<Integer> {
      */
     private boolean isDelete;
 
+    /**
+     * 是否发布
+     */
+    private boolean isPublished;
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override
@@ -99,5 +104,14 @@ public class Designer implements EntityClass<Integer> {
 
     public void setIsDelete(boolean isDelete) {
         this.isDelete = isDelete;
+    }
+
+    @Column(name = "isPublished")
+    public boolean getIsPublished() {
+        return isPublished;
+    }
+
+    public void setIsPublished(boolean isPublished) {
+        this.isPublished = isPublished;
     }
 }

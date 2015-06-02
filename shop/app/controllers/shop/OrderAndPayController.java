@@ -119,11 +119,18 @@ public class OrderAndPayController extends Controller {
                     return ok(new JsonResult(false, "选中的购物车商品有问题，请核对一下").toNode());
                 }
                 cart = cartProcess.buildUserCartBySelItem(curUser.getId(), selItems);
-                //订单总金额，显示在支付宝收银台里的“应付总额”里
             }
 
             if (cart == null || cart.getCartItemList().size() == 0) {
                 return ok(new JsonResult(false,"出现错误：购物车为空").toNode());
+            }
+
+            //库存校验
+            for(CartItem cartItem : cart.getCartItemList()) {
+                if (!skuAndStorageService.isSkuUsable(cartItem.getSkuId())) {
+                    Logger.warn("商品：" + cartItem.getProductName() + "已售完或已下架或已移除，不能再购买");
+                    return ok(new JsonResult(false,"商品：" + cartItem.getProductName() + "已售完或已下架或已移除，不能再购买").toNode());
+                }
             }
 
             //邮寄地址
@@ -131,6 +138,7 @@ public class OrderAndPayController extends Controller {
             if(address == null) {
                 return ok(new JsonResult(false,"您选择的订单寄送地址已经被修改，在系统中不存在！").toNode());
             }
+
             //生成订单相关信息
             int orderId = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
             return ok(new JsonResult(true,"生成订单成功",orderId).toNode());
@@ -211,8 +219,8 @@ public class OrderAndPayController extends Controller {
                     return ok(new JsonResult(false,"订单(" + orderNo + ")不支持付款操作！").toNode());
                 }
                 if (verifyOrderItem(order)) {
-                    Logger.warn("订单：" + order.getOrderNo() + "中商品已下架或移除");
-                    return ok(new JsonResult(false,"订单：" + order.getOrderNo() + "中商品已销完、下架或移除").toNode());
+                    Logger.warn("订单：" + order.getOrderNo() + "已售完或已下架或已移除，不能再购买");
+                    return ok(new JsonResult(false,"订单：" + order.getOrderNo() + "中商品已售完或已下架或已移除，不能再购买").toNode());
                 }
                 order.setAccountType(curUser.getAccountType());
                 order.setPayType(TradePayType.valueOf(payType));
@@ -241,7 +249,6 @@ public class OrderAndPayController extends Controller {
      */
     @SecuredAction
     public Result toPayOrder(String payMethod, String payOrg, String orderIds, String tradeNo) {
-        User curUser = SessionUtils.currentUser();
         String[] split = orderIds.split(",");
         Integer[] idList = new Integer[split.length];
         for (int i = 0; i < split.length; i++) {
@@ -310,12 +317,9 @@ public class OrderAndPayController extends Controller {
         List<OrderItem> orderItemList = orderService.queryOrderItemsByOrderId(order.getId());
         boolean flag = false;
         for (OrderItem orderItem : orderItemList) {
-            //如果是 付款减库存 则检测SKU
-            if (orderItem.getStoreStrategy().isPayStrategy()) {
-                if (!skuAndStorageService.isSkuUsable(orderItem.getSkuId())) {
-                    flag = true;
-                    break;
-                }
+            if (!skuAndStorageService.isSkuUsable(orderItem.getSkuId())) {
+                flag = true;
+                break;
             }
         }
         return flag;
