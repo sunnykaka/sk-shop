@@ -28,7 +28,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th><label for="all"><input type="checkbox" id="all"> 全选 </label></th>
+                                    <th><label for="all"><input type="checkbox" id="all" checked="checked"> 全选 </label></th>
                                     <th class="col1"></th>
                                     <th>商品信息</th>
                                     <th>细节</th>
@@ -42,7 +42,7 @@
                             @for(cartItem <- cart.getCartItemList) {
                                 <tr>
                                     <td>
-                                        <input type="checkbox"  value="@cartItem.getId" />
+                                        <input type="checkbox" checked="checked"  value="@cartItem.getId" />
                                     </td>
                                     <td>
                                         <img src="@cartItem.getMainPicture" alt="" width="90" height="154"/><!--此拿到的只是图的url地址，可能没有值-->

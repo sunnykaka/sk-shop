@@ -118,7 +118,7 @@ public class CartProcess {
             }
 
             //图片
-            ProductPicture picture = pictureService.getMainProductPictureByProductIdSKuId(stockKeepingUnit.getProductId(), stockKeepingUnit.getId());
+            ProductPicture picture = pictureService.getMinorProductPictureByProductId(stockKeepingUnit.getProductId());
             cartItem.setMainPicture(picture.getPictureUrl());
 
             //设置库存信息
