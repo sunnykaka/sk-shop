@@ -205,7 +205,7 @@ $(function(){
                                     that.parents('tr').remove();
                                     if(that.parents('tbody').find('tr').size() == 0){
                                         $('.mycart-list').remove();
-                                        $('.mycart-inner').append("<div class='mycart-empty'><p>购物车里空空如也，赶紧去 <a href='index.html'>逛逛吧&gt;</a></p></div>");
+                                        $('.mycart-inner').append("<div class='mycart-empty'><p>购物车里空空如也，赶紧去 <a href='/'>逛逛吧&gt;</a></p></div>");
                                     }
                                     setTotalPrice();
                                 }

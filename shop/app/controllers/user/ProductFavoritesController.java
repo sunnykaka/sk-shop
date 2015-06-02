@@ -5,7 +5,6 @@ import common.utils.JsonResult;
 import common.utils.page.Page;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.models.Product;
@@ -14,9 +13,7 @@ import productcenter.models.ProductPicture;
 import productcenter.services.ProductCollectService;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
-import usercenter.models.DesignerPicture;
 import usercenter.models.User;
-import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 import views.html.user.productFavorites;
@@ -60,7 +57,7 @@ public class ProductFavoritesController extends Controller {
 
         for(ProductCollect pc:pageProductCollcets){
             Product product = productService.getProductById(pc.getProductId());
-            ProductPicture pp = productPictureService.getMainProductPictureByProductId(pc.getProductId());
+            ProductPicture pp = productPictureService.getMinorProductPictureByProductId(pc.getProductId());
 
             pc.setProductName(product.getName());
             pc.setProductPic(pp.getPictureUrl());

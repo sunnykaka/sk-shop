@@ -229,11 +229,15 @@ $(function(){
                     if(!!$.dialog.get.addForm){
                         $.dialog.get.addForm.hide();
                     }
-                  var form = $('.add-form');
-                    form.each(function(){
-                       $(this).get(0).reset();
-                    });
-                   $(".address-list-inner").find(".add").before(addressDom(data.data));
+                    if($(".address-list-inner").find(".add").size()<1){
+                        window.location.href = '/my/address';
+                    }else{
+                        var form = $('.add-form');
+                        form.each(function(){
+                            $(this).get(0).reset();
+                        });
+                        $(".address-list-inner").find(".add").before(addressDom(data.data));
+                    }
 
                 } else {
                     var valObj = data.message,errMsg;

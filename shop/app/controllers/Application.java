@@ -17,6 +17,7 @@ import productcenter.services.ProductService;
 import services.CmsService;
 import usercenter.dtos.DesignerView;
 import usercenter.models.User;
+import usercenter.services.DesignerCollectService;
 import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
@@ -44,6 +45,9 @@ public class Application extends Controller {
 
     @Autowired
     private ProductCollectService productCollectService;
+
+    @Autowired
+    private DesignerCollectService designerCollectService;
 
 
     /**
@@ -151,13 +155,13 @@ public class Application extends Controller {
         DesignerView designer = null;
         if (designers != null) {
             designer = designers.get(0);
+            designer.setFavorites(designerCollectService.isFavorites(user,dId));
         } else {
             /**
              * 如果设计师不存在，则去404
              */
             return notFound();
         }
-
 
         List<CmsExhibition> exhibitions = cmsService.findExhibitionByDesigner(dId);
         List<Product> products = productService.products4Designer(dId);

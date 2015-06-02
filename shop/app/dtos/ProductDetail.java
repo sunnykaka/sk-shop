@@ -241,7 +241,7 @@ public class ProductDetail {
                                     skuDetail.getSku().getBarCode(),
                                     skuDetail.getSku().getPrice(),
                                     skuDetail.getSku().getMarketPrice(),
-                                    skuDetail.getSku().getSkuPropertiesInDb(),
+                                    skuDetail.getSku().getSkuPropertiesInDbWithOrder(),
                                     skuDetail.getStockQuantity(),
                                     skuDetail.getTradeMaxNumber(),
                                     skuDetail.getImageList())).

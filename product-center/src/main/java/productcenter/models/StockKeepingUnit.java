@@ -12,6 +12,7 @@ import productcenter.services.PropertyAndValueService;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * SKU来自于线下零售行业，表示可以存储的最小的单元
@@ -171,6 +172,26 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
     public String getSkuPropertiesInDb() {
         return skuPropertiesInDb;
     }
+
+    /**
+     * 得到的skuProperties按照数字大小从小到大排序
+     * @return
+     */
+    @Transient
+    public String getSkuPropertiesInDbWithOrder() {
+        if(StringUtils.isBlank(skuPropertiesInDb) || !skuPropertiesInDb.contains(",")) {
+            return skuPropertiesInDb;
+        } else {
+            return String.join(",",
+                    Arrays.asList(skuPropertiesInDb.split(",")).
+                            stream().
+                            map(Long::parseLong).
+                            sorted().
+                            map(String::valueOf).
+                            collect(Collectors.toList()));
+        }
+    }
+
 
     public void setSkuPropertiesInDb(String skuPropertiesInDb) {
         this.skuPropertiesInDb = skuPropertiesInDb;

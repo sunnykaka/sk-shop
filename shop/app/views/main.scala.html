@@ -1,4 +1,4 @@
-@(title: String = Messages("index.title"))(staticFile: Html = Html(""))(content: Html)
+@(title: String = Messages("index.title"))(name: String = "")(staticFile: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
@@ -14,7 +14,7 @@
 
 @header()
 
-@navigator()
+@navigator(name)
 
 @content
 

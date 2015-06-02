@@ -48,7 +48,7 @@ public class DesignerFavoritesController extends Controller {
         List<DesignerCollect> pageProductCollcet = designerCollectService.getDesignerCollectList(Optional.of(page), user.getId());
         for(DesignerCollect designerCollect:pageProductCollcet){
             Designer designer = designerService.getDesignerById(designerCollect.getDesignerId());
-            DesignerPicture designerPicture = designerService.getDesignerPicByType(designerCollect.getDesignerId(), DesignerPictureType.IndexLogoSmallPic);
+            DesignerPicture designerPicture = designerService.getDesignerPicByType(designerCollect.getDesignerId(), DesignerPictureType.ListMainPic);
             designerCollect.setDesignerName(designer.getName());
             designerCollect.setDesignerPic(designerPicture.getPictureUrl());
         }

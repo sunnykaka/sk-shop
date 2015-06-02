@@ -12,6 +12,7 @@ import usercenter.services.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 @org.springframework.stereotype.Controller
@@ -109,7 +110,7 @@ public class FakeOpenIDProviderController extends Controller {
                     errorMsg = "openId值与预期不相等";
                 } else {
                     results.put("openid", openid);
-                    results.put("nickname", "张三_" + RandomStringUtils.randomAlphanumeric(6));
+                    results.put("nickname", generateUsername());
                     results.put("sex", 1);
                     results.put("province", "广西");
                     results.put("city", "桂林");
@@ -130,6 +131,14 @@ public class FakeOpenIDProviderController extends Controller {
 
     }
 
+    private String generateUsername() {
+        //50%几率生成过长的字符串
+        if(new Random().nextBoolean()) {
+            return RandomStringUtils.randomAlphabetic(30);
+        } else {
+            return "张三_" + RandomStringUtils.randomNumeric(6);
+        }
+    }
 
 
     private String generateCode() {
