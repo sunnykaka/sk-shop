@@ -28,6 +28,8 @@ public class DesignerView {
      */
     private String storePic;
 
+    /** 是否收藏 */
+    private boolean isFavorites;
 
     public String getStorePic() {
         return storePic;
@@ -85,6 +87,12 @@ public class DesignerView {
         this.description = description;
     }
 
-    ;
+    public boolean isFavorites() {
+        return isFavorites;
+    }
+
+    public void setFavorites(boolean isFavorites) {
+        this.isFavorites = isFavorites;
+    }
 
 }

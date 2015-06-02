@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import usercenter.models.DesignerCollect;
+import usercenter.models.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +111,21 @@ public class DesignerCollectService {
         }
 
         return null;
+    }
+
+    /**
+     * 是否收藏
+     *
+     * @param user
+     * @param designerId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public boolean isFavorites(User user,int designerId){
+        if(null != user && null != getByDesignerId(designerId, user.getId())){
+            return true;
+        }
+        return false;
     }
 
 

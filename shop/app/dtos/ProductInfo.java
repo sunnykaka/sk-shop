@@ -15,8 +15,10 @@ public class ProductInfo {
 
     private CmsExhibition cmsExhibition;
 
+    /** 是否收藏 */
     private boolean isFavorites;
 
+    /** 收藏数量 */
     private int favoritesNum;
 
     public Product getProduct() {

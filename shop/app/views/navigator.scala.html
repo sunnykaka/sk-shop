@@ -1,22 +1,22 @@
-@()
+@(name:String)
 
 <div class="header">
     <div class="header-inner width1200">
         <ul class="nav clearfix">
             <li>
-                <a class="current" href="@controllers.routes.Application.index()">首页</a>
+                <a @if("index".equals(name)){class="current"} href="@controllers.routes.Application.index()">首页</a>
             </li>
             <li>
-                <a href="@controllers.routes.Application.preview()">预告</a>
+                <a @if("preview".equals(name)){class="current"} href="@controllers.routes.Application.preview()">预告</a>
             </li>
             <li class="logo">
                 <a title="尚客" href="@controllers.routes.Application.index()">fashiongeeker/尚客</a>
             </li>
             <li>
-                <a href="@controllers.routes.Application.designers()">设计师</a>
+                <a @if("designer".equals(name)){class="current"} href="@controllers.routes.Application.designers()">设计师</a>
             </li>
             <li class="last">
-                <a href="about-us.html">关于我们</a>
+                <a @if("about".equals(name)){class="current"} href="about-us.html">关于我们</a>
             </li>
         </ul>
     </div>

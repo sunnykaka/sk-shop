@@ -3,7 +3,7 @@
 @import common.utils.DateUtils
 
 
-@main() {
+@main()() {
     <script>
         $(function(){
 
@@ -50,7 +50,7 @@
                 <img src="@designer.getStorePic" alt="" width="439px" height="370px"/>
                 <div class="designer-con">
                     <div class="designer-con-title">
-                        <h2><span>@designer.getName</span> <span class="focus" id="designerFocus" data-id="@designer.getId">关注</span></h2>
+                        <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites){hasFocus}" id="designerFocus" data-id="@designer.getId">@if(designer.isFavorites){已}关注</span></h2>
                     </div>
                     <div class="designer-con-content">
                    <p> @designer.getDescription</p>
