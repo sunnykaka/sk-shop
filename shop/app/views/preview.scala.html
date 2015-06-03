@@ -20,50 +20,40 @@
     </li>
 }
 
-@main(Messages("preview.title"))("preview"){
+@main(Messages("preview.title"))("preview") {
 
     <script>
     $(function(){
-        $('.empty-box li').hover(function(){
-            $(".title", this).stop().animate({top:"367px"},{queue:false,duration:100});
+        $('.start-fashion li').hover(function(){
+            $(".cover", this).stop().animate({top:"0"},{queue:false,duration:500});
+            $(".cover-info", this).stop().animate({top:"0"},{queue:false,duration:500});
         },function(){
-            $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
+            $(".cover", this).stop().animate({top:"650"},{queue:false,duration:300});
+            $(".cover-info", this).stop().animate({top:"650"},{queue:false,duration:300});
         });
 
-        console.log($('.time-detail')[0]);
+        $('.fashion-box li').hover(function(){
+            $(".cover", this).stop().animate({top:"0"},{queue:false,duration:260});
+            $(".cover-info", this).stop().animate({top:"0"},{queue:false,duration:260});
+        },function(){
+            $(".cover", this).stop().animate({top:"310px"},{queue:false,duration:300});
+            $(".cover-info", this).stop().animate({top:"310px"},{queue:false,duration:300});
+        });
 
-
-
-                setInterval(function(){
-                  $(".time-detail").each(function(){
-                    var obj = $(this);
-                    var endTime = new Date(obj.attr('value'));
-                    var nowTime = new Date();
-                    var nMS=endTime.getTime() - nowTime.getTime();
-                    var myD=Math.floor(nMS/(1000 * 60 * 60 * 24)); //天
-                    var myH=Math.floor(nMS/(1000*60*60)) % 24; //小时
-                    var myM=Math.floor(nMS/(1000*60)) % 60; //分钟
-                    var myS=Math.floor(nMS/1000) % 60; //秒
-                    var myMS=Math.floor(nMS/100) % 10; //拆分秒
-
-                    if(myD>= 0){
-                        var str = myD+"天"+myH+"小时"+myM+"分"+myS+"."+myMS+"秒";
-
-                    }else{
-                        var str = "已结束！";
-                    }
-                    obj.text(str);
-                  });
-                }, 100); //每个0.1秒执行一次
-
-
-
+        $('.empty-box li').hover(function(){
+            $(".cover", this).stop().animate({top:"0"},{queue:false,duration:260});
+            $(".cover-info", this).stop().animate({top:"0"},{queue:false,duration:260});
+        },function(){
+            $(".cover", this).stop().animate({top:"437"},{queue:false,duration:300});
+            $(".cover-info", this).stop().animate({top:"437"},{queue:false,duration:300});
+        });
     });
 </script>
 
 
 } {
-    <!--slider-box-->
+
+
     <div class="slider-box">
         <div class="slider-box-inner">
             <div class="slider-box-img">
@@ -91,7 +81,6 @@
     <!--end slider-box-->
 
 
-    <!--start-fashion first-->
     <div class="start-fashion">
         <div class="start-fashion-inner width1200">
             <h2>即将上线　敬请期待</h2>
@@ -99,7 +88,25 @@
             <ul class="clearfix">
             @if(sellingMap.get(ExhibitionPosition.FLOOR_ONE) != null) {
                 @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_ONE)) {
-                    @displayExhibition(exhibition)
+
+                    <li>
+                        <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
+                            <div class="img">
+                                <a href="#"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
+                            </div>
+                            <div class="title">
+                                <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
+                                <p>@exhibition.getIntroduction</p>
+                            </div>
+
+                            <div class="cover"></div>
+                            <div class="cover-info">
+                                <a href="#" class="like">我喜欢</a>
+                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                <span class="remind-btn">开售提醒</span>
+                            </div>
+                        </a>
+                    </li>
                 }
             }
             </ul>
@@ -114,20 +121,27 @@
                 <p class="en-info">@Html(font1.getContent)</p>
                 @*<p class="cn-info">@fontMa.get(CmsPosition.INDEX_FONT_1).get.getLink</p>*@
             }
-            @*<h2>尚</h2>*@
-            @*<p class="en-info">Fashion fades,only style remain the same. —— Coco Chanel</p>*@
-            @*<p class="cn-info">时尚易逝，唯风格永存。</p>*@
+
+
             <ul class="clearfix">
+
+
             @if(sellingMap.get(ExhibitionPosition.FLOOR_TWO) != null) {
                 @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_TWO)) {
+
                     <li>
                         <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <img src="@exhibition.getPic()" alt="" width="390" height="240" />
+                            <img src="@exhibition.getPic()" alt="" />
                             <div class="info">
-                                <p><span class="designer">@exhibition.getIntroduction</span></p>
-                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    结束</p>
+                                <p>@exhibition.getIntroduction</p>
                             </div>
+                            <div class="cover"></div>
+                            <div class="cover-info">
+                                <a href="#" class="like">我喜欢</a>
+                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                <span class="remind-btn">开售提醒</span>
+                            </div>
+
                         </a>
                     </li>
                 }
@@ -147,52 +161,65 @@
 
             <ul class="clearfix">
 
-                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
 
+                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(0, 4)) {
                         <li class="">
                             <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img src="@exhibition.getPic()" alt=""/>
+                                <img src="@exhibition.getPic()" alt="" width="291" height="437"/>
+                                <div class="title">
+                                    <p>@exhibition.getIntroduction()</p>
+                                    @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
+                                </div>
+                                <div class="cover"></div>
+                                <div class="cover-info">
+                                    <a href="#" class="like">我喜欢</a>
+                                    <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                    <span class="remind-btn">开售提醒</span>
+                                </div>
                             </a>
-                            <div class="title">
-                                <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    结束</p>
-                            </div>
                         </li>
                     }
                 }
 
                 @if(doubleEx != null) {
-                    <li class="double">
-                        <a href="@routes.Application.designerProd(doubleEx.getDesignerId)">
+                    <a href="@routes.Application.designerProd(doubleEx.getDesignerId)">
+                        <li class="double">
                             <img src="@doubleEx.getPic()" alt=""/>
-                        </a>
-                        <div class="title">
-                            <p><span class="designer">@doubleEx.getIntroduction()</span></p>
-                            <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
-                                结束</p>
-                        </div>
-                    </li>
+                            <div class="title">
+                                <p>@doubleEx.getIntroduction()</p>
+                                @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
+                            </div>
+                            <div class="cover"></div>
+                            <div class="cover-info">
+                                <a href="#" class="like">我喜欢</a>
+                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                <span class="remind-btn">开售提醒</span>
+                            </div>
+                        </li>
+                    </a>
+
                 }
 
-                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null ) {
-
+                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(4, 6)) {
                         <li class="">
                             <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img src="@exhibition.getPic()" alt=""/>
+                                <img src="@exhibition.getPic()" alt="" width="291" height="437"/>
+                                <div class="title">
+                                    <p>@exhibition.getIntroduction()</p>
+                                    @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
+                                </div>
+                                <div class="cover"></div>
+                                <div class="cover-info">
+                                    <a href="#" class="like">我喜欢</a>
+                                    <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                    <span class="remind-btn">开售提醒</span>
+                                </div>
                             </a>
-                            <div class="title">
-                                <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    结束</p>
-                            </div>
                         </li>
                     }
                 }
-
-
             </ul>
         </div>
     </div>

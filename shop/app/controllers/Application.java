@@ -59,11 +59,11 @@ public class Application extends Controller {
         List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.SELLING);
         List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.SELLING);
         List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.SELLING);
-        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 1, ExhibitionStatus.SELLING);
+        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE_DOUBLE, 1, ExhibitionStatus.SELLING);
 
         CmsExhibition doubleExhibition = null;
 
-        if (floor3Double != null && floor3.size()>0) {
+        if (floor3Double != null && floor3Double.size()>0) {
             doubleExhibition = floor3Double.get(0);
         }
 
@@ -115,11 +115,11 @@ public class Application extends Controller {
         List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.PREPARE);
         List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.PREPARE);
         List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.PREPARE);
-        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 1, ExhibitionStatus.PREPARE);
+        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE_DOUBLE, 1, ExhibitionStatus.PREPARE);
 
         CmsExhibition doubleExhibition = null;
 
-        if (floor3Double != null && floor3.size()>0) {
+        if (floor3Double != null && floor3Double.size()>0) {
             doubleExhibition = floor3Double.get(0);
         }
 
@@ -137,7 +137,7 @@ public class Application extends Controller {
 
         int size = sliderBoxs.size() > 3? 3 : sliderBoxs.size();
 
-        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,size)));
+        return ok(preview.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,size)));
     }
 
 
