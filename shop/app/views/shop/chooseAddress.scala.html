@@ -2,6 +2,7 @@
 
 @main()(){
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+    <script src="@routes.Assets.versioned("js/selectArea.js")"></script>
     <script src="@routes.Assets.versioned("js/submitOrder.js")"></script>
 } {
 <div class="order-submit width1200">
@@ -15,10 +16,11 @@
             </ul>
         </div>
 
-        <div class="select-address">
-            <h3>选择收货地址</h3>
-            <ul class="clearfix">
+
             @if(addressList != null && !addressList.isEmpty) {
+            <div class="select-address">
+                    <h3>选择收货地址</h3>
+                    <ul class="clearfix">
                 @for((address, index) <- addressList.zipWithIndex) {
                     @if(address.isDefaultAddress) {
                         <li class="current" data-id="@address.getId">
@@ -43,21 +45,68 @@
                     </div>
                     <div class="edit-address">
                         <!--浩斌那边要做的-->
-                        <span class="edit btn">修改</span>
+                        <span class="edit btn"  data-id="@address.getId">修改</span>
                         @if(!address.isDefaultAddress) {
-                            <span class="delete btn">删除</span>
+                            <span class="delete btn" data-id="@address.getId">删除</span>
                         }
                     </div>
                     <span class="current-ico" @if(!address.isDefaultAddress){style="display: none;"}></span>
                 </li>
                 }
+
+                <li class="add" @if(addressList != null && addressList.size >= 4){style="display: none;"}>
+                    <div class="add-ico"></div>
+                    <p>新增收货地址</p>
+                </li>
+             </ul>
+            </div>
+            } else {
+                <div class="address-form-inner select-address">
+                    <ul class="clearfix" style="display: none;">
+                        <li class="add">
+                            <div class="add-ico"></div>
+                            <p>新增收货地址</p>
+                        </li>
+                    </ul>
+
+                    <div class="address-form">
+                        <h3>新增收货地址</h3>
+                        <form class="add-form">
+                            <div class="form-item">
+                                <label for="name"><b>*</b>收货人：</label>
+                                <input type="text" name="name" class="text name" id="name"/>
+                            </div>
+                            <div class="form-item area">
+                                <label><b>*</b>选择地区：</label>
+                                <select name="province" class="select">
+                                </select>
+                                <select name="city" class="select">
+                                </select>
+                                <select name="districts" class="select">
+                                </select>
+                            </div>
+                            <div class="form-item">
+                                <label for="location"><b>*</b>详细地址：</label>
+                                <input type="text" name="location" class="text location" id="location"/>
+                            </div>
+                            <div class="form-item">
+                                <label for="zipCode"><b>*</b>邮政编码：</label>
+                                <input type="text" name="zipCode" class="text zipCode" id="zipCode"/>
+                            </div>
+                            <div class="form-item">
+                                <label for="mobile"><b>*</b>手机号码：</label>
+                                <input type="text" name="mobile" class="text mobile" id="mobile"/>
+                            </div>
+                            <div class="form-item submit">
+                                <input type="submit" class="add-address-btn" value="保存收货地址"/>
+                                <div class="errormsg" id="addMsg"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             }
-            <li class="add" @if(addressList != null && addressList.size >= 4){style="display: none;"}>
-                <div class="add-ico"></div>
-                <p>新增收货地址</p>
-            </li>
-            </ul>
-        </div>
+
+
 
         @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
         <div class="mycart-empty">

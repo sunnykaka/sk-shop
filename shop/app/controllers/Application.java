@@ -271,5 +271,11 @@ public class Application extends Controller {
 
     }
 
+    public Result about() {
+
+        return ok(about.render());
+
+    }
+
 
 }

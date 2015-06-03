@@ -8,6 +8,7 @@ GET         /preview                              @controllers.Application.previ
 GET         /designers                            @controllers.Application.designers(currPage:Int ?= 1)
 GET         /designers4more                       @controllers.Application.designers4More(currPage:Int ?= 1)
 GET         /designerProd                         @controllers.Application.designerProd(dId:Int)
+GET         /about                                @controllers.Application.about
 
 # user
 GET         /register                             @controllers.user.LoginController.registerPage
