@@ -1,6 +1,7 @@
 @(order:ordercenter.models.Order)
 
-@main()(){
+@import productcenter.models.Seo;
+@main(new Seo(Messages("title.play"),Messages("seo.description"),Messages("seo.Keywords")))() {
 <script type="text/javascript">
     (function ($, FG) {
         var valueCollection = {};

@@ -2,6 +2,7 @@
 
 @import common.utils.DateUtils
 @import dtos.ExhibitionPosition
+@import productcenter.models.Seo
 
 @displayExhibition(exhibition: models.CmsExhibition) = {
     <li>
@@ -21,7 +22,7 @@
 }
 
 
-@main()("index") {
+@main(new Seo(Messages("index.title"),Messages("seo.description"),Messages("seo.Keywords")))("index") {
     <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
     <script src="@routes.Assets.versioned("js/index.js")"></script>
 

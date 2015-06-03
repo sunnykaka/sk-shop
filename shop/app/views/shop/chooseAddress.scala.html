@@ -1,6 +1,7 @@
 @(selItems:String, addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, isPromptlyPay:Boolean)
 
-@main()(){
+@import productcenter.models.Seo;
+@main(new Seo(Messages("title.cart"),Messages("seo.description"),Messages("seo.Keywords")))() {
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script src="@routes.Assets.versioned("js/selectArea.js")"></script>
     <script src="@routes.Assets.versioned("js/submitOrder.js")"></script>

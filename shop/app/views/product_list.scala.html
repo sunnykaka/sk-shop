@@ -1,9 +1,9 @@
 @(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo])
 
 @import common.utils.DateUtils
+@import productcenter.models.Seo;
 
-
-@main()() {
+@main(new Seo(Messages("title.product.list"),Messages("seo.description"),Messages("seo.Keywords")))() {
     <script>
         $(function(){
 

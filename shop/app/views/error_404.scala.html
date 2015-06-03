@@ -1,6 +1,7 @@
 @(errorMsg: String, designerViews: List[usercenter.dtos.DesignerView])
+@import productcenter.models.Seo;
 
-@main()() {
+@main(new Seo(Messages("index.title"),Messages("seo.description"),Messages("seo.Keywords")))() {
     <script>
     $(function(){
         $('.empty-box li').hover(function(){

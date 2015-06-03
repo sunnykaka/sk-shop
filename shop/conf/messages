@@ -5,7 +5,14 @@ buy.domain=http://www.fashiongeeker.net
 index.title=欢迎
 index.welcome=你好
 
-preview.title=预告列表－－尚客
+title.preview=预告列表-尚客
+title.product.list=商品列表-尚客
+title.designers=设计师列表-尚客
+title.about=关于我们-尚客
+
+title.register=用户注册-尚客
+title.recover=找回密码-尚客
+title.login=登录-尚客
 
 title.my.data=我的资料
 title.my.address=我的送货地址管理
@@ -25,5 +32,12 @@ title.my.order.info=我的订单详情
 title.my.back=我的售后服务
 title.my.back.info=我的售后服务详情
 
+title.cart=我的购物车-尚客
+title.play=在线支付-尚客
+title.play.success=支付成功-尚客
+title.play.fail=支付失败-尚客
+
+seo.description=尚客是全球首家独立设计师首发平台，致力于打造最权威的一站式风尚购物平台，为中国消费者引荐全球顶尖的独立设计师，甄选100%设计师授权的服装、鞋包及配饰
+seo.Keywords=全球首发，独立设计师，限量发售，限时首发
 
 send.email.activity.title=重新修改绑定邮箱账号－－尚客

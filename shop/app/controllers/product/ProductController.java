@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
+import productcenter.services.SeoService;
 import services.product.ProductDetailService;
 import views.html.product.detail;
 
@@ -24,6 +25,9 @@ public class ProductController extends Controller {
 
     @Autowired
     ValuationService valuationService;
+
+    @Autowired
+    SeoService seoService;
 
 
     public Result detail(String id) {
@@ -48,6 +52,7 @@ public class ProductController extends Controller {
         if(productDetail == null) {
             throw new AppBusinessException("您请求的商品没有找到, 请看看其他的吧");
         }
+        productDetail.setSeo(seoService.getProductSeo(productDetail.getProduct()));
 
         return ok(detail.render(productDetail));
     }

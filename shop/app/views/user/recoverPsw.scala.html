@@ -1,6 +1,8 @@
 @(flash: java.util.Map[String, String])
 
-@main()() {
+@import productcenter.models.Seo;
+
+@main(new Seo(Messages("title.recover"),Messages("seo.description"),Messages("seo.Keywords")))() {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
     <script src="@routes.Assets.versioned("js/forget-pw.js")"></script>
     <script>
