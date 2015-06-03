@@ -21,7 +21,7 @@
             <div class="bread-nav">
                 <ul class="clearfix">
                     @myCenterTop()
-                    <li>我的资料</li>
+                    <li>关注的设计师</li>
                 </ul>
             </div>
             <div class="focusDesigner-container clearfix">
@@ -32,7 +32,7 @@
                     <ul class="clearfix focusDesigner-box">
                         @for(dc <- page.getResult){
                             <li>
-                                <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName" width="235px" height="325px"/></a>
+                                <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName" width="235px" height="374px"/></a>
                                 <p class="title">@dc.getDesignerName</p>
                                 <span class="del" data-id="@dc.getId"></span>
                                 <a class="home" href="@controllers.routes.Application.designerProd(dc.getDesignerId)"></a>

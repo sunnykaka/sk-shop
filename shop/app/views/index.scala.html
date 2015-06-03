@@ -31,9 +31,8 @@
         <div class="slider-box-inner">
             <div class="slider-box-img">
                 @for((content,index) <- sliderBoxs.zipWithIndex) {
-                <div class="item" style="z-index: @index; background-position: initial initial; background-repeat: initial initial;">
+                <div class="item" style="z-index: @index; background-image:url(@content.getContent); background-position: 50% 50%;">
                     <a href="@content.getLink" hidefocus="true" style="outline: none;">
-                        <img src="@content.getContent" alt="@content.getContent" height="501">
                     </a>
                 </div>
                 }

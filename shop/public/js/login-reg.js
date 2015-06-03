@@ -77,6 +77,14 @@
 
         getCodeBtn.on('click',function(evt){
             var phoneNum=$('#phoneNum').val();
+            if(phoneNum == ""){
+                $('#errormsg-phoneNum').text('手机号码不能为空');
+                return false;
+            }
+            if(!/^0?(1[34578][0-9]{9})$/.test(phoneNum)){
+                $('#errormsg-phoneNum').text('手机号码格式不正确');
+                return false;
+            }
             evt.preventDefault();
             fun(getCodeBtn);
             //根据手机号码获取验证码

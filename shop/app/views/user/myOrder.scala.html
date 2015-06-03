@@ -48,7 +48,8 @@
                             dataType: 'json',
                             success: function (data) {
                                 if(data.result){
-                                    that.parents('tbody').remove();
+                                    that.parents('tbody').find('.not-pay').text('已取消').removeClass('not-pay');
+                                     that.parents('tbody').find('.control').html('');
                                 }
                             }
                         });
@@ -112,7 +113,7 @@
                                                 <tr>
                                                 }
                                             <td class="product-img">
-                                                <img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/>
+                                                <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>
                                             </td>
                                             <td class="product-name">
                                                 <p>@orderItem.getProductName</p>
