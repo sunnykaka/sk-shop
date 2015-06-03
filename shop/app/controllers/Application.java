@@ -79,8 +79,9 @@ public class Application extends Controller {
         CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).findFirst().get();
         CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).findFirst().get();
 
+        int size = sliderBoxs.size() > 3? 3 : sliderBoxs.size();
 
-        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,3)));
+        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,size)));
     }
 
 
@@ -134,8 +135,9 @@ public class Application extends Controller {
         CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)).findFirst().get();
         CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)).findFirst().get();
 
+        int size = sliderBoxs.size() > 3? 3 : sliderBoxs.size();
 
-        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,3)));
+        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,size)));
     }
 
 
