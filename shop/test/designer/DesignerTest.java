@@ -20,6 +20,6 @@ public class DesignerTest  extends WithApplication {
 
     @Test
     public void testFindAllDesigner(){
-        designerService.designerById(null);
+        designerService.designerById(null,null);
     }
 }

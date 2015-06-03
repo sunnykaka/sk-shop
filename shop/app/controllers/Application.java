@@ -1,5 +1,7 @@
 package controllers;
 
+import common.utils.JsonResult;
+import common.utils.page.Page;
 import dtos.CmsPosition;
 import dtos.ExhibitionPosition;
 import dtos.ProductInfo;
@@ -137,7 +139,7 @@ public class Application extends Controller {
 
         int size = sliderBoxs.size() > 3? 3 : sliderBoxs.size();
 
-        return ok(preview.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,size)));
+        return ok(preview.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0, size)));
     }
 
 
@@ -153,7 +155,7 @@ public class Application extends Controller {
         /**
          * 1.获取设计师信息，并校验设计师是否存在
          */
-        List<DesignerView> designers = designerService.designerById(dId);
+        List<DesignerView> designers = designerService.designerById(dId,null);
         DesignerView designer = null;
         if (designers != null) {
             designer = designers.get(0);
@@ -244,11 +246,18 @@ public class Application extends Controller {
      *
      * @return
      */
-    public Result designers() {
-        List<DesignerView> list = designerService.designerById(null);
+    public Result designers(int currPage) {
+        Page  page = new Page(currPage,8);
+        List<DesignerView> list = designerService.designerById(null,page);
         List<CmsContent> contents = cmsService.allContents();
         CmsContent content = contents.stream().filter(co -> co.getPosition().equals(CmsPosition.DESIGNER_LIST_LOGO)).findFirst().get();
         return ok(designers.render(content,list));
+    }
+
+    public Result designers4More(int currPage) {
+        Page  page = new Page(currPage,8);
+        List<DesignerView> list = designerService.designerById(null, page);
+        return ok(new JsonResult(true,"",list).toNode());
     }
 
 

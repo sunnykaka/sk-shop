@@ -5,7 +5,8 @@
 # Home page
 GET         /                                     @controllers.Application.index
 GET         /preview                              @controllers.Application.preview
-GET         /designers                            @controllers.Application.designers
+GET         /designers                            @controllers.Application.designers(currPage:Int ?= 1)
+GET         /designers4more                       @controllers.Application.designers4More(currPage:Int ?= 1)
 GET         /designerProd                         @controllers.Application.designerProd(dId:Int)
 
 # user

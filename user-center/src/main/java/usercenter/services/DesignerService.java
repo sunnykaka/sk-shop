@@ -1,6 +1,7 @@
 package usercenter.services;
 
 import common.services.GeneralDao;
+import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,13 +71,16 @@ public class DesignerService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<DesignerView> designerById(Integer id) {
+    public List<DesignerView> designerById(Integer id,Page page) {
         String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
                 " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
                 "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
                 "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete=0 and t1.isPublished = 1 ";
         if(id != null){
             sql += " and t1.id = " +id;
+        }
+        if(page != null){
+            sql += " limit " + page.getStart() + " , " + page.getLimit();
         }
         List list = generalDAO.getEm().createNativeQuery(sql).getResultList();
         List<DesignerView> result = new ArrayList<>();
