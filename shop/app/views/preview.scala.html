@@ -22,6 +22,10 @@
 
 @main(Messages("preview.title"))("preview") {
 
+
+    <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
+    <script src="@routes.Assets.versioned("js/index.js")"></script>
+
     <script>
     $(function(){
         $('.start-fashion li').hover(function(){
@@ -57,25 +61,22 @@
     <div class="slider-box">
         <div class="slider-box-inner">
             <div class="slider-box-img">
-                <ul>
-                @for(content <- sliderBoxs) {
-                    <li><a href="@content.getLink"><img src="@content.getContent" alt="@content.getTitle"/></a></li>
-                }
-                </ul>
-                <span class="btn left-btn"></span>
-                <span class="btn right-btn"></span>
+            @for((content, index) <- sliderBoxs.zipWithIndex) {
+                <div class="item" style="z-index : @index; background-image:url(@content.getContent); background-position: 50% 50%;">
+                <a href="@content.getLink" hidefocus="true" style="outline : none ;">
+                    </a>
             </div>
-            <div class="slider-box-nav">
-                <ul>
-                @for(content <- sliderBoxs) {
-                    @*<li class="current">*@
-                    <li>
-                        <a href="#"><img src="@content.getContent" alt="" width="390" height="103"/></a>
-                        <div class="cover"></div>
-                    </li>
-                }
-                </ul>
-            </div>
+            }
+        </div>
+        <div class="sliderBullets">
+            <ul class="clearfix">
+            @for((content, index) <- sliderBoxs.zipWithIndex) {
+                <li>
+                    <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline : none ;"><img src="@content.getContent" alt="@content.getContent" width="390" height="103"/></a>
+                    <div class="cover"></div>
+                </li>
+            }
+            </ul>
         </div>
     </div>
     <!--end slider-box-->
@@ -90,22 +91,20 @@
                 @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_ONE)) {
 
                     <li>
-                        <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <div class="img">
-                                <a href="#"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
-                            </div>
-                            <div class="title">
-                                <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
-                                <p>@exhibition.getIntroduction</p>
-                            </div>
+                        <div class="img">
+                            <a href="#"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
+                        </div>
+                        <div class="title">
+                            <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
+                            <p>@exhibition.getIntroduction</p>
+                        </div>
 
-                            <div class="cover"></div>
-                            <div class="cover-info">
-                                <a href="#" class="like">我喜欢</a>
-                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                                <span class="remind-btn">开售提醒</span>
-                            </div>
-                        </a>
+                        <div class="cover"></div>
+                        <div class="cover-info">
+                            <a href="#" class="like">我喜欢</a>
+                            <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                            <span class="remind-btn">开售提醒</span>
+                        </div>
                     </li>
                 }
             }
@@ -130,19 +129,16 @@
                 @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_TWO)) {
 
                     <li>
-                        <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <img src="@exhibition.getPic()" alt="" />
-                            <div class="info">
-                                <p>@exhibition.getIntroduction</p>
-                            </div>
-                            <div class="cover"></div>
-                            <div class="cover-info">
-                                <a href="#" class="like">我喜欢</a>
-                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                                <span class="remind-btn">开售提醒</span>
-                            </div>
-
-                        </a>
+                        <img src="@exhibition.getPic()" alt="" />
+                        <div class="info">
+                            <p>@exhibition.getIntroduction</p>
+                        </div>
+                        <div class="cover"></div>
+                        <div class="cover-info">
+                            <a href="#" class="like">我喜欢</a>
+                            <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                            <span class="remind-btn">开售提醒</span>
+                        </div>
                     </li>
                 }
             }
@@ -165,29 +161,9 @@
                 @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(0, 4)) {
                         <li class="">
-                            <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img src="@exhibition.getPic()" alt="" width="291" height="437"/>
-                                <div class="title">
-                                    <p>@exhibition.getIntroduction()</p>
-                                    @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
-                                </div>
-                                <div class="cover"></div>
-                                <div class="cover-info">
-                                    <a href="#" class="like">我喜欢</a>
-                                    <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                                    <span class="remind-btn">开售提醒</span>
-                                </div>
-                            </a>
-                        </li>
-                    }
-                }
-
-                @if(doubleEx != null) {
-                    <a href="@routes.Application.designerProd(doubleEx.getDesignerId)">
-                        <li class="double">
-                            <img src="@doubleEx.getPic()" alt=""/>
+                            <img src="@exhibition.getPic()" alt="" width="291" height="437"/>
                             <div class="title">
-                                <p>@doubleEx.getIntroduction()</p>
+                                <p>@exhibition.getIntroduction()</p>
                                 @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
                             </div>
                             <div class="cover"></div>
@@ -197,26 +173,39 @@
                                 <span class="remind-btn">开售提醒</span>
                             </div>
                         </li>
-                    </a>
+                    }
+                }
 
+                @if(doubleEx != null) {
+                    <li class="double">
+                        <img src="@doubleEx.getPic()" alt=""/>
+                        <div class="title">
+                            <p>@doubleEx.getIntroduction()</p>
+                            @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
+                        </div>
+                        <div class="cover"></div>
+                        <div class="cover-info">
+                            <a href="#" class="like">我喜欢</a>
+                            <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                            <span class="remind-btn">开售提醒</span>
+                        </div>
+                    </li>
                 }
 
                 @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(4, 6)) {
                         <li class="">
-                            <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img src="@exhibition.getPic()" alt="" width="291" height="437"/>
-                                <div class="title">
-                                    <p>@exhibition.getIntroduction()</p>
-                                    @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
-                                </div>
-                                <div class="cover"></div>
-                                <div class="cover-info">
-                                    <a href="#" class="like">我喜欢</a>
-                                    <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                                    <span class="remind-btn">开售提醒</span>
-                                </div>
-                            </a>
+                            <img src="@exhibition.getPic()" alt="" width="291" height="437"/>
+                            <div class="title">
+                                <p>@exhibition.getIntroduction()</p>
+                                @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
+                            </div>
+                            <div class="cover"></div>
+                            <div class="cover-info">
+                                <a href="#" class="like">我喜欢</a>
+                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                <span class="remind-btn">开售提醒</span>
+                            </div>
                         </li>
                     }
                 }
