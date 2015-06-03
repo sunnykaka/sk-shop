@@ -201,7 +201,7 @@ $(function(){
     function  addressDom (data){
         return "<li  data-id='"+data.id+"'><div class='receiver'><strong>"+data.name+"<span class='space'></span>收</strong><span class='default' data-id="+data.id+">设置默认地址</span></div><div class='details-address'>"+
         "<p><span class='provice'>"+data.province+"</span><span class='space'></span><span class='city'>"+data.city+"</span><span class='space'></span><span class='area'>"+data.area+"</span></p><p class='location'  title="+data.location+">"+data.location+"</p>"+
-        "<p class='phone'>"+data.mobile+"</p></div><div class='edit-address'><span class='edit btn' data-id="+data.id+">修改</span><span class='delete btn' data-id="+data.id+">删除</span></div><span class='current-ico'></span></li>";
+        "<p class='phone'>"+data.mobile+"</p></div><div class='edit-address'><span class='edit btn' data-id="+data.id+">修改</span><span class='delete btn' data-id="+data.id+">删除</span></div><span class='current-ico' style='display: none'></span></li>";
     }
 
 
@@ -333,7 +333,7 @@ $(function(){
             id:'addForm',
             content:html,
             lock:true,
-            width:550,
+            width:650,
             height: 450
         });
 
@@ -436,7 +436,7 @@ $(function(){
                         title:'修改收货地址',
                         content:html,
                        lock:true,
-                        width:550,
+                        width:650,
                         height: 450
                     });
 
@@ -480,6 +480,7 @@ $(function(){
                     item.find('.phone').text(data.data.mobile);
                     item.find('.user').text(data.data.name);
                     item.find('.location').text(data.data.location);
+                    item.find('.location').attr('title',data.data.location);
                     item.find('.provice').text(data.data.province);
                     item.find('.city').text(data.data.city);
                     item.find('.area').text(data.data.area);

@@ -15,6 +15,8 @@
 
     var productOnline = @pd.getProduct.isOnline
     </script>
+    <script src="@routes.Assets.versioned("js/stickySidebar.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.fly.min.js")"></script>
     <script src="@routes.Assets.versioned("js/details.js")"></script>
 } {
 
@@ -82,6 +84,7 @@
                 <div class="debut-img">
                     <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
                 </div>
+            <div id="debut-box">
                 <div class="debut-info clearfix">
                     @if(pd.isInExhibition) {
                         <div class="debut-info-left">
@@ -126,7 +129,7 @@
                 </div>
                 @if(!pd.getProduct.isOnline) {
                     <div class="detail-btn">
-                        <a href="javascript:void(0);" class="btn addToOrder">商品已下架</a>
+                        <span class="btn soldOut">商品已下架</span>
                     </div>
                 } else {
                     @if(pd.getDefaultSku.getStockQuantity <= 0) {
@@ -146,6 +149,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <!--siderbar-->
     <ul class="sider-bar">

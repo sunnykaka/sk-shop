@@ -3,6 +3,11 @@
  */
 $(function(){
 
+
+
+
+
+
     //获取购物车 商品数量
     $.ajax({
         url:'/cart/getUserCartItemNum',
@@ -18,42 +23,14 @@ $(function(){
         window.location.href = "/cart/showCart";
     });
 
-    $.fn.smartFloat = function() {
-        var position = function(element) {
-            var top = element.position().top; //当前元素对象element距离浏览器上边缘的距离
-            var pos = element.css("position"); //当前元素距离页面document顶部的距离
-            $(window).scroll(function() { //侦听滚动时
-                var scrolls = $(this).scrollTop();
-                if (scrolls > top) { //如果滚动到页面超出了当前元素element的相对页面顶部的高度
-                    if (window.XMLHttpRequest) { //如果不是ie6
-                        element.css({ //设置css
-                            position: "fixed", //固定定位,即不再跟随滚动
-                            top: 0 //距离页面顶部为0
-                        }).addClass("shadow"); //加上阴影样式.shadow
-                    } else { //如果是ie6
-                        element.css({
-                            top: scrolls  //与页面顶部距离
-                        });
-                    }
-                }else {
-                    element.css({ //如果当前元素element未滚动到浏览器上边缘，则使用默认样式
-                        position: pos,
-                        top: top
-                    }).removeClass("shadow");//移除阴影样式.shadow
-                }
-            });
-        };
-        return $(this).each(function() {
-            position($(this));
-        });
-    };
-
-    $("#right-fixed").smartFloat();
-
-
-
-    //页面初始化滚动
-    $.scrollTo('#detail',500);
+    $('#debut-box').stickySidebar({
+        headerSelector: '.top',
+        navSelector: '.nav',
+        contentSelector: '#detail',
+        footerSelector: '.footer',
+        sidebarTopMargin: 20,
+        footerThreshold: 100
+    });
 
     $('.comment-header li').click(function(){
         $(this).addClass('current').siblings('li').removeClass('current');
@@ -62,6 +39,7 @@ $(function(){
     $('#openDetail').click(function(){
         $('.container').slideToggle();
         $('.hide-detail').show();
+
     });
     //隐藏详情
     $('#hideDetail').click(function(){
@@ -392,8 +370,8 @@ $(function(){
         });
 
         //添加购物车
-        addToCartBtn.click(function(){
-            var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val();
+        addToCartBtn.click(function(event){
+            var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val(),that= $(this);
             $.ajax({
                 type: "get",
                 url: ' /cart/addSkuToCartAddNum?skuId='+skuId+"&number="+number,
@@ -405,6 +383,8 @@ $(function(){
                     if(data.result){
                         $('#cart-quantity').text(data.data.itemTotalNum);
                     }else{
+
+
 
                         if(data.message == 'Credentials required' ){
                             $.dialog({
@@ -450,7 +430,7 @@ $(function(){
                 _num = parseInt(amountInputEle.val()) + 1;
                 if (_num > _limit) {
                     _num = _limit;
-                    FG.tip(amountInputEle, "limit_tip", "超出此商品能购买的最大数量", 30);
+                    FG.tip(amountInputEle, "limit_tip", "此商品限购"+_num+"件", 0,90);
                 }
                 amountInputEle.val(_num);
 
@@ -473,11 +453,11 @@ $(function(){
             }
             if (amountInputEle.val() > _limit) {
                 amountInputEle.val(_limit);
-                FG.tip(amountInputEle, "limit_tip", "超出此商品能购买的最大数量", 30);
+                FG.tip(amountInputEle, "limit_tip", "此商品限购"+_num+"件", 0,90);
             }
             if (amountInputEle.val() < 1 && _limit > 0) {
                 amountInputEle.val(1);
-                FG.tip(amountInputEle, "limit_tip", "商品购买数量不能小于1", 30);
+                FG.tip(amountInputEle, "limit_tip", "商品购买数量不能小于1", 0,90);
             }
             countPrice(+amountInputEle.val());
         });
