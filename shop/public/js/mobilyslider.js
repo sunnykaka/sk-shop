@@ -252,7 +252,7 @@
             };
             setTimeout(function(){
                 slider.init();
-           },3000);
+           },500);
 
         })
     }
