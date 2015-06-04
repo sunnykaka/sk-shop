@@ -3,7 +3,7 @@
 @import common.utils.DateUtils
 @import productcenter.models.Seo;
 
-@main(new Seo(Messages("title.product.list"),Messages("seo.description"),Messages("seo.Keywords")))() {
+@main(new Seo(designer.getName + Messages("title.product.list"),"尚客"+ designer.getName +"专场，全球首发，限量发售，限时抢购！",designer.getName + "," + Messages("seo.Keywords")))() {
     <script>
         $(function(){
 
@@ -13,7 +13,6 @@
                $(".cover", this).stop().animate({top:"110%"},{queue:false,duration:100});
            });
         });
-
 
         $('#designerFocus').click(function(){
             var id = $(this).attr('data-id'),that = $(this);
