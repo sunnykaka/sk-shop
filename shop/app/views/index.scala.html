@@ -32,7 +32,7 @@
         <div class="slider-box-inner">
             <div class="slider-box-img">
                 @for((content,index) <- sliderBoxs.zipWithIndex) {
-                <div class="item" style="z-index: @index; background-image:url(@content.getContent); background-position: 50% 50%;">
+                <div class="item" style="background-image:url(@content.getContent); background-position: 50% 50%;">
                     <a href="@content.getLink" hidefocus="true" style="outline: none;">
                     </a>
                 </div>
@@ -132,7 +132,7 @@
                         <div class="title">
                             <p><span class="designer">@doubleEx.getIntroduction()</span></p>
                             <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
-                                结束</p>
+                                <span class="over-text">结束</span></p>
                         </div>
                     </li>
                 }
@@ -147,7 +147,7 @@
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
                                 <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    结束</p>
+                                    <span class="over-text"> 结束</span></p>
                             </div>
                         </li>
                     }

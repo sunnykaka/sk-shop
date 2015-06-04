@@ -250,7 +250,10 @@
                     }
                 }
             };
-            slider.init()
+            setTimeout(function(){
+                slider.init();
+            },3000);
+
         })
     }
 }(jQuery));
