@@ -119,6 +119,7 @@ $(function ($) {
         // 绑定事件
         province.on('change', function () {
             loadData('city');
+            $(this).find('option[value="'+$(this).val()+'"]').attr('selected',true).siblings('option').attr('selected',null);
             districts.attr('disabled', true);
         });
 

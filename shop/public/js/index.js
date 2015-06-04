@@ -28,7 +28,7 @@ $(function(){
 
 
     setInterval(function(){
-        $(".time-detail").each(function(){
+        $(".time-detail:not(:contains(结束))").each(function(){
             var obj = $(this);
             var endTime = new Date(obj.attr('value'));
             var nowTime = new Date();
@@ -44,6 +44,7 @@ $(function(){
 
             }else{
                 var str = "已结束！";
+                $(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
             }
             obj.text(str);
         });

@@ -5,7 +5,7 @@ $(function(){
 
 
 
-
+    $.scrollTo('#detail',600);
 
 
     //获取购物车 商品数量
@@ -383,8 +383,6 @@ $(function(){
                     if(data.result){
                         $('#cart-quantity').text(data.data.itemTotalNum);
                     }else{
-
-
 
                         if(data.message == 'Credentials required' ){
                             $.dialog({
