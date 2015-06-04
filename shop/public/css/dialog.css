@@ -25,7 +25,8 @@
     white-space: nowrap;
     background-color: #fff;
     border-color: #ccc;
-    color: #333;	
+    color: #333;
+	font-family: 'Microsoft Yahei';
 }
 .i-dialog .i-wrapBtn input:hover{
 	background-color: #EBEBEB;
@@ -62,6 +63,7 @@
     background-color: #000;
     border-color: #000;
     color: #fff;
+
 }
 .i-dialog .i-wrapBtn input.red:hover{
 	background-color: #000;
@@ -165,5 +167,5 @@
 	opacity: 1;
 }
 .i-content .warning-inner{padding: 20px 0;}
-.i-content .warning{font-size: 20px;line-height: 40px;text-align: center;}
+.i-content .warning{font-size: 16px;line-height: 40px;text-align: center;}
 .i-content .warning-ico{padding:17px;margin-right:10px;background:url("../images/sprite.gif") no-repeat -728px 16px;}

@@ -6,16 +6,30 @@
     <div class="top-inner width1200">
         <div class="left"><h1>全球首家独立设计师首发平台</h1></div>
         <div class="right">
-            <div class="login">
+            <div class="logined">
                 @defining(SessionUtils.currentUser()) {user =>
                     @if(user == null) {
                         <a class="login btn" href="@controllers.user.routes.LoginController.loginPage()">登录</a>
                         <a class="signIn btn" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
                     } else {
-                        欢迎您, <a href="@controllers.user.routes.MyOrderController.index()" >@user.getUserName</a>
-                        <a href="@controllers.shop.routes.CartController.showCart()" >购物车</a>
-                        <a href="@controllers.user.routes.MyOrderController.index()" >我的订单</a>
-                        <a href="@controllers.user.routes.LoginController.logout()" >退出</a>
+                        <ul class="clearfix">
+                            <li>
+                                <span>欢迎您,</span> <a class="user-name" href="@controllers.user.routes.MyOrderController.index()" title="@user.getUserName" >@user.getUserName</a>
+                            </li>
+                            <li>
+                                <a href="@controllers.shop.routes.CartController.showCart()" >购物车</a>
+                            </li>
+                            <li>
+                                <a href="@controllers.user.routes.MyOrderController.index()" >我的订单</a>
+                            </li>
+                            <li class="last-li">
+                                <a href="@controllers.user.routes.LoginController.logout()" >退出</a>
+                            </li>
+                        </ul>
+
+
+
+
                     }
                 }
             </div>

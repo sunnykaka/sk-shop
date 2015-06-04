@@ -63,7 +63,7 @@
         <div class="slider-box-inner">
             <div class="slider-box-img">
             @for((content, index) <- sliderBoxs.zipWithIndex) {
-                <div class="item" style="z-index : @index; background-image:url(@content.getContent); background-position: 50% 50%;">
+                <div class="item" style="z-index:@{sliderBoxs.size-index}; background-image:url(@content.getContent); background-position: 50% 50%;">
                 <a href="@content.getLink" hidefocus="true" style="outline : none ;">
                     </a>
             </div>
@@ -78,6 +78,7 @@
                 </li>
             }
             </ul>
+            </div>
         </div>
     </div>
     <!--end slider-box-->

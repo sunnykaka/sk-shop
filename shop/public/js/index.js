@@ -15,7 +15,7 @@ $(function(){
         transition:'fade',
         animationSpeed:1000,
         autoplay: true,
-        autoplaySpeed:3000,
+        autoplaySpeed:6000,
         pauseOnHover:true,
         bullets:true,
         arrows:true,

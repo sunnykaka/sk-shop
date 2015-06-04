@@ -18,7 +18,7 @@
                 <div class="address-list">
                     <h2>收货地址</h2>
                     @if(null != addressList && addressList.size > 0){
-                        <div class="address-list-inner">
+                        <div class="address-list-inner address-form-inner">
                             <ul class="clearfix">
                                 @for(address <- addressList){
                                     <li @if(address.isDefaultAddress){class="current"} data-id="@address.getId" >
@@ -48,7 +48,7 @@
                             </ul>
                         </div>
                     }else{
-                    <div class="address-list-inner">
+                    <div class="address-list-inner address-form-inner">
                         <ul class="clearfix" style="display: none;">
                             <li class="add">
                                 <div class="add-ico"></div>

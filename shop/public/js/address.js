@@ -444,8 +444,9 @@ $(function(){
                     var getData = data.data,html = createFormHtml('update',getData);
                    var obj =  $.dialog({
                         title:'修改收货地址',
+                        id:'#modify_address_' + getData.id,
                         content:html,
-                       lock:true,
+                        lock:true,
                         width:650,
                         height: 450
                     });
