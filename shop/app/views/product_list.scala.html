@@ -28,6 +28,26 @@
             });
         });
 
+        //我喜欢按钮
+        $('.cover .like').click(function(){
+            var id = $(this).attr('data-id'),that = $(this);
+            if(id){
+                $.ajax({
+                type:'post',
+                url:'/my/favorites/product/add?productId='+id,
+                success:function(res){
+                    if(res.result){
+                        that.text("已收藏 "+res.message);
+                        that.removeAttr('data-id');
+                    }else{
+                        alert("收藏失败");
+                    }
+                }
+                });
+            }
+
+        });
+
 
 
     </script>
@@ -67,9 +87,9 @@
                             </a>
                             <div class="cover">
                                 @if(prod.isFavorites){
-                                    <a href="#" class="like">已收藏 @prod.getFavoritesNum</a>
+                                    <span class="like">已收藏 @prod.getFavoritesNum</span>
                                 }else{
-                                    <a href="#" class="like">我喜欢 @prod.getFavoritesNum</a>
+                                    <span class="like" data-id="@prod.getProduct.getId">我喜欢</span>
                                 }
                                 <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" class="buy">立即购买</a>
                                 <div class="info">
@@ -96,9 +116,9 @@
                             </a>
                             <div class="cover">
                                 @if(prod.isFavorites){
-                                    <a href="#" class="like">已收藏 @prod.getFavoritesNum</a>
+                                    <span class="like">已收藏 @prod.getFavoritesNum</span>
                                 }else{
-                                    <a href="#" class="like">我喜欢 @prod.getFavoritesNum</a>
+                                    <span class="like" data-id="@prod.getProduct.getId">我喜欢</span>
                                 }
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
@@ -125,9 +145,9 @@
                             </a>
                             <div class="cover">
                                 @if(prod.isFavorites){
-                                    <a href="#" class="like">已收藏 @prod.getFavoritesNum</a>
+                                    <span class="like">已收藏 @prod.getFavoritesNum</span>
                                 }else{
-                                    <a href="#" class="like">我喜欢 @prod.getFavoritesNum</a>
+                                    <span class="like" data-id="@prod.getProduct.getId">我喜欢</span>
                                 }
                                 <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" class="buy">立即购买</a>
                                 <div class="info">

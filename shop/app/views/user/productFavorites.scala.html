@@ -10,6 +10,21 @@
                 $(this).removeClass('current');
             });
         });
+
+        $('.del' ).click(function(){
+            var id = $(this).attr('data-id'),that = $(this);
+            $.ajax({
+                type:'post',
+                url:'/my/favorites/product/del?productId='+id,
+                success:function(res){
+                    if(res.result){
+                        that.parent().remove();
+                    }else{
+                        alert("删除失败");
+                    }
+                }
+            });
+        });
     </script>
 
 } {
@@ -33,7 +48,7 @@
                             <li>
                                 <a href="@controllers.product.routes.ProductController.detail(pc.getProductId.toString)"><img src="@pc.getProductPic" alt="@pc.getProductName" width="235px" height="384px"/></a>
                                 <p class="title">@pc.getProductName</p>
-                                <span class="del" data-id="@pc.getId"></span>
+                                <span class="del" data-id="@pc.getProductId"></span>
                             </li>
                         }
                     </ul>

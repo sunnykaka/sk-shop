@@ -51,12 +51,19 @@ $(function(){
     //我喜欢按钮
     $('.detail-like .like').click(function(){
         //$(this).toggleClass('current');
-        if($(this).is('.current')){
-            $(this).removeClass('current');
-            $('.like-text').text('我喜欢');
-        }else{
-            $(this).addClass('current');
-            $('.like-text').text('50000000');
+        if(!$(this).is('.current')){
+            var id = $(this).attr('data-id'),that = $(this);
+            $.ajax({
+                type:'post',
+                url:'/my/favorites/product/add?productId='+id,
+                success:function(res){
+                    if(res.result){
+                        $('.like-text').text(res.message);
+                    }else{
+                        alert("收藏失败");
+                    }
+                }
+            });
         }
     });
 

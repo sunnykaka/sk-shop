@@ -27,12 +27,6 @@ import java.util.Optional;
 @org.springframework.stereotype.Controller
 public class ProductFavoritesController extends Controller {
 
-    /** 每页显示 5 条数据 */
-    public static final int DEFAULT_PAGE_SIZE = 5;
-
-    /** 页数, 默认显示第 1 页 */
-    private static final int DEFAULT_PAGE_NO = 1;
-
     @Autowired
     private ProductCollectService productCollectService;
 
@@ -121,7 +115,9 @@ public class ProductFavoritesController extends Controller {
         productCollect.setCollectTime(DateTime.now());
         productCollectService.createProductCollect(productCollect);
 
-        return ok(new JsonResult(true, "收藏成功").toNode());
+        int count = productCollectService.countProductCollect(productId);
+
+        return ok(new JsonResult(true, String.valueOf(count)).toNode());
 
     }
 
