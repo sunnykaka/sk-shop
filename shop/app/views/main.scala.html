@@ -1,11 +1,13 @@
-@(title: String = Messages("index.title"))(name: String = "")(staticFile: Html = Html(""))(content: Html)
+@(seo:productcenter.models.Seo)(name: String = "")(staticFile: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 <head>
     <meta charset="utf-8" />
-    <title>@title</title>
-
+    <title>@seo.getTitle</title>
+    <meta name="description" content="@seo.getDescription">
+    <meta name="Keywords" content="@seo.getKeywords">
+    <link rel='shortcut icon' href='@routes.Assets.versioned("images/fashiongeeker.ico")' />
     <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")"/>
     <link rel="stylesheet" href="@routes.Assets.versioned("css/dialog.css")"/>
 </head>

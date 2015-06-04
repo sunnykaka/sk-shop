@@ -63,6 +63,8 @@ public class ProductDetail {
     //默认SKU
     private SkuInfo defaultSku;
 
+    private Seo seo;
+
     private ProductDetail(Product product) {
         this.product = product;
     }
@@ -133,6 +135,14 @@ public class ProductDetail {
 
     public SkuInfo getDefaultSku() {
         return defaultSku;
+    }
+
+    public Seo getSeo() {
+        return seo;
+    }
+
+    public void setSeo(Seo seo) {
+        this.seo = seo;
     }
 
     public static class Builder {

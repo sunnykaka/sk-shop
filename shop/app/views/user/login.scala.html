@@ -1,6 +1,8 @@
 @()
 
-@main()() {
+@import productcenter.models.Seo;
+@main(new Seo(Messages("title.login"),Messages("seo.description"),Messages("seo.Keywords")))() {
+
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
     <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
     <script type="text/javascript">
@@ -38,7 +40,7 @@
                 <div><button type="submit"  id="login-btn" class="login-btn">登陆</button></div>
                 <div class="login-remember">
                     <label for="rememberMe"><input type="checkbox" name="rememberMe" id="rememberMe" value="true" checked="true"/>记住我</label>
-                    <a class="forgetPW" href="forgetPW">忘记密码？</a>
+                    <a class="forgetPW" href="@controllers.user.routes.RecoverController.recoverIndex()">忘记密码？</a>
                 </div>
             </form>
             <p class="not-reg">还没有账号？<a href="@controllers.user.routes.LoginController.registerPage()">注册</a></p>

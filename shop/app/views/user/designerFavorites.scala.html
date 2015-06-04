@@ -10,6 +10,22 @@
             },function(){
                 $(this).removeClass('current');
             });
+
+            $('.del' ).click(function(){
+                var id = $(this).attr('data-id'),that = $(this);
+                $.ajax({
+                    type:'post',
+                    url:'/my/favorites/designer/del?designerId='+id,
+                    success:function(res){
+                        if(res.result){
+                            that.parent().remove();
+                        }else{
+                            alert("删除失败");
+                        }
+                    }
+                });
+            });
+
         });
     </script>
 
@@ -34,8 +50,7 @@
                             <li>
                                 <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName" width="235px" height="374px"/></a>
                                 <p class="title">@dc.getDesignerName</p>
-                                <span class="del" data-id="@dc.getId"></span>
-                                <a class="home" href="@controllers.routes.Application.designerProd(dc.getDesignerId)"></a>
+                                <span class="del" data-id="@dc.getDesignerId"></span>
                             </li>
                         }
 

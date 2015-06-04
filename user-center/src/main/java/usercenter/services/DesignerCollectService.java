@@ -140,7 +140,7 @@ public class DesignerCollectService {
     public List<DesignerCollect> getDesignerCollectList(Optional<Page<DesignerCollect>> page, int userId){
         play.Logger.info("--------DesignerCollectService getDesignerCollectList begin exe-----------" + page + "\n" + userId);
 
-        String jpql = "select dc from DesignerCollect dc where 1=1 ";
+        String jpql = "select dc from DesignerCollect dc where 1=1 and dc.deleted=false ";
         Map<String, Object> queryParams = new HashMap<>();
 
         jpql += " and dc.userId = :userId ";

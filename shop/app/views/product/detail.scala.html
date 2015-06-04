@@ -4,7 +4,7 @@
 @import common.utils.JsonUtils._
 @import org.apache.commons.lang3.StringUtils._
 
-@main()() {
+@main(pd.getSeo)() {
     <script src="@routes.Assets.versioned("js/jquery.scrollTo.js")"></script>
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script type="text/javascript">
@@ -144,7 +144,7 @@
                     }
                 }
                 <div class="detail-like">
-                    <span class="like @if(pd.isFavorites){current}"><i></i><span class="like-text">@if(pd.isFavorites){ @pd.getFavoritesNum }else{我喜欢}</span></span>
+                    <span class="like @if(pd.isFavorites){current}" data-id="@pd.getProduct.getId"><i></i><span class="like-text">@if(pd.isFavorites){ @pd.getFavoritesNum }else{我喜欢}</span></span>
                 </div>
             </div>
         </div>

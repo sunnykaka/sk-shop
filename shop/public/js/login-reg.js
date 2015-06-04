@@ -260,7 +260,7 @@
                     }
                 },
                 error: function () {
-                    msgEle.html('服务器错误');
+                    msgEle.html(response.message);
                 }
             });
         });

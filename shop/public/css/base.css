@@ -286,7 +286,7 @@ table td{padding: 10px 0;}
 .order-submit .select-address,.order-submit .confirm-product{margin-bottom: 30px;}
 .order-submit .select-address ul{width:1214px;}
 .order-submit .select-address li,.address-list li{
-    float: left;padding: 20px;width: 249px;border:1px solid #cccccc;margin-right: 10px;
+    float: left;padding: 20px;width: 249px;border:1px solid #cccccc;margin-right: 10px;cursor: pointer;
 }
 .order-submit .select-address .current,.order-submit .select-address .highLight,.address-list .current,.address-list .highLight
 {position:relative;border:1px solid #FF2D54;}
@@ -721,10 +721,10 @@ table td{padding: 10px 0;}
 .designer-brand-inner .start-fashion li:hover,.designer-brand-inner .ready-online li:hover,.designer-brand-inner .hot-sale li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
 .designer-brand-inner .start-fashion li .cover,.designer-brand-inner .ready-online li .cover,.designer-brand-inner .hot-sale li .cover{position: absolute;width:100%;top: 110%;}
 .designer-brand-inner .start-fashion a:hover,.designer-brand-inner .ready-online a:hover,.designer-brand-inner .hot-sale a:hover{text-decoration: none;}
-.designer-brand-inner .start-fashion .like,.designer-brand-inner .ready-online .like,.designer-brand-inner .hot-sale .like,.designer-brand-inner .start-fashion .buy{padding: 3px 20px 3px 30px;border: 1px solid #FF2D54;border-radius: 50px;margin:0 20px 0 40px;}
+.designer-brand-inner .start-fashion .like,.designer-brand-inner .ready-online .like,.designer-brand-inner .like,.designer-brand-inner  .buy{padding: 3px 20px 3px 30px;border: 1px solid #FF2D54;border-radius: 50px;margin:0 20px 0 40px;}
 /*.designer-brand-inner .start-fashion .buy,.designer-brand-inner .hot-sale .buy{padding: 4px 22px;background: #000000;color: #fff;border-radius: 50px;}*/
-.designer-brand-inner .start-fashion .like{background: #fff;}
-.designer-brand-inner .start-fashion .buy{background: #FF2D54;color: #fff;margin: 0 0 0 0;}
+.designer-brand-inner  .like{background: #fff;}
+.designer-brand-inner  .buy{background: #FF2D54;color: #fff;margin: 0 0 0 0;}
 .designer-brand-inner .start-fashion .info,.designer-brand-inner .ready-online .info,.designer-brand-inner .hot-sale .info{height: 60px;background: #000;opacity: .6;margin-top: 61px;}
 .designer-brand-inner .start-fashion .info p,.designer-brand-inner .ready-online .info p,.designer-brand-inner .hot-sale .info p{color: #fff;text-align: center;padding: 6px 0;}
 .designer-brand-inner .ready-online .like{margin-left: 96px}
@@ -732,23 +732,23 @@ table td{padding: 10px 0;}
 /*end designer-brand */
 /*address-manage*/
 .address-manage{margin-bottom: 100px;}
-.address-form-inner h3{padding-top: 20px;}
+.address-form h3{padding-top: 20px;}
 .address-form-inner .add-form,.i-dialog .update-form,.i-dialog .add-form{margin-top: 20px;}
 .address-manage-inner .add-form b,.i-dialog .update-form b,.i-dialog .add-form b{color: #FF2D54;}
-.address-manage-inner .form-item,.i-dialog .update-form .form-item,.i-dialog .add-form .form-item,.user-form .form-item{padding: 6px 0;height: 34px;}
-.address-manage-inner .add-form label,.i-dialog .update-form label,.i-dialog .add-form label,.user-form label{float: left;line-height: 34px;width: 100px;text-align: right;padding-right: 10px;
+.address-form-inner .form-item,.i-dialog .update-form .form-item,.i-dialog .add-form .form-item,.user-form .form-item{padding: 6px 0;height: 34px;}
+.address-form-inner .add-form label,.i-dialog .update-form label,.i-dialog .add-form label,.user-form label{float: left;line-height: 34px;width: 100px;text-align: right;padding-right: 10px;
     font-size:12px;}
-.address-manage-inner .text,.i-dialog .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
+.address-form-inner .text,.i-dialog .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
     background: #fcfcfc;width: 290px;
 }
-.address-manage-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 13px;vertical-align: middle;border: 1px solid #dbdbda;}
-.address-manage-inner .add-form .location,.i-dialog .update-form .location,.i-dialog .add-form .location{width: 380px;}
-.address-manage-inner .add-form .submit{margin-top: 10px;height: 100px;}
-.address-manage-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 20px 50px;background: #000;color: #fff;border: none;margin-left: 110px;
+.address-form-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 13px;vertical-align: middle;border: 1px solid #dbdbda;}
+.address-form-inner .add-form .location,.i-dialog .update-form .location,.i-dialog .add-form .location{width: 380px;}
+.address-form-inner .add-form .submit{margin-top: 10px;height: 100px;}
+.address-form-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 20px 50px;background: #000;color: #fff;border: none;margin-left: 110px;
     cursor: pointer;
 }
-.address-manage-inner .add-address-btn:hover{color: #FF2D54;}
-.address-manage-inner .form-item .errormsg,.i-dialog .update-form .errormsg,.i-dialog .add-form .errormsg{color: #FF2D54;margin-left: 10px;}
+.address-form-inner .add-address-btn:hover{color: #FF2D54;}
+.address-form-inner .form-item .errormsg,.i-dialog .update-form .errormsg,.i-dialog .add-form .errormsg{color: #FF2D54;margin-left: 10px;}
 .address-list ul{margin-top: 30px;}
 .address-list li{margin-right: 20px;margin-bottom: 20px;}
 .i-dialog .update-form .form-item,.i-dialog .add-form .form-item{margin-bottom: 10px;}
@@ -869,4 +869,15 @@ table td{padding: 10px 0;}
 .not-found-404 .designer-list-recom a{display: block;}
 .not-found-404 .designer-list-recom img{display: block;}
 
+/*about*/
+.about-us{margin-bottom: 100px;}
+.about-img{margin-bottom: 53px;}
+.about-img img{display: block;}
+.about-info{background: url('../images/about-info.jpg') no-repeat;width: 1200px;height: 788px;}
+.about-info-text{text-align: center;width: 360px;padding: 73px 0 0 168px;}
+.about-info-text h2{font-size: 30px;margin-bottom: 10px;height: 30px;font-weight: normal;}
+.about-info-text h3{font-size: 20px;margin-bottom: 20px;font-weight: normal;}
+.about-info-text p{line-height: 290%;}
+.about-info-text .line{margin-bottom: 47px;}
+/*end about*/
 .u-flyer{display: block;width: 50px;height: 50px;border-radius: 50px;position: fixed;z-index: 9999;}

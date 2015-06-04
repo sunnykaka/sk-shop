@@ -16,7 +16,7 @@
                 <a @if("designer".equals(name)){class="current"} href="@controllers.routes.Application.designers()">设计师</a>
             </li>
             <li class="last">
-                <a @if("about".equals(name)){class="current"} href="about-us.html">关于我们</a>
+                <a @if("about".equals(name)){class="current"} href="@controllers.routes.Application.about()">关于我们</a>
             </li>
         </ul>
     </div>

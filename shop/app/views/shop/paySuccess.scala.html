@@ -1,6 +1,7 @@
 @(resultMap:Map[String, Object])
 
-@main()()(){
+@import productcenter.models.Seo;
+@main(new Seo(Messages("title.play.success"),Messages("seo.description"),Messages("seo.Keywords")))()() {
     <div class="pay-success width1200">
         <div class="pay-success-inner">
                 <!-- pay-info -->

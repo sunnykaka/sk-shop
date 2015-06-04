@@ -2,6 +2,7 @@
 
 @import common.utils.DateUtils
 @import dtos.ExhibitionPosition
+@import productcenter.models.Seo
 
 @displayExhibition(exhibition: models.CmsExhibition) = {
     <li>
@@ -20,7 +21,7 @@
     </li>
 }
 
-@main(Messages("preview.title"))("preview") {
+@main(new Seo(Messages("title.preview"),Messages("seo.description"),Messages("seo.Keywords")))("preview") {
 
 
     <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
@@ -101,7 +102,7 @@
 
                         <div class="cover"></div>
                         <div class="cover-info">
-                            <a href="#" class="like">我喜欢</a>
+                            <a class="like" data-id="@exhibition.getDesignerId">我喜欢<a>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" />
                             <span class="remind-btn">开售提醒</span>
                         </div>
@@ -135,7 +136,7 @@
                         </div>
                         <div class="cover"></div>
                         <div class="cover-info">
-                            <a href="#" class="like">我喜欢</a>
+                            <a class="like" data-id="@exhibition.getDesignerId">我喜欢<a>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" />
                             <span class="remind-btn">开售提醒</span>
                         </div>
@@ -168,7 +169,7 @@
                             </div>
                             <div class="cover"></div>
                             <div class="cover-info">
-                                <a href="#" class="like">我喜欢</a>
+                                <a class="like" data-id="@exhibition.getDesignerId">我喜欢<a>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" />
                                 <span class="remind-btn">开售提醒</span>
                             </div>
@@ -202,7 +203,7 @@
                             </div>
                             <div class="cover"></div>
                             <div class="cover-info">
-                                <a href="#" class="like">我喜欢</a>
+                                <a class="like" data-id="@exhibition.getDesignerId">我喜欢<a>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" />
                                 <span class="remind-btn">开售提醒</span>
                             </div>

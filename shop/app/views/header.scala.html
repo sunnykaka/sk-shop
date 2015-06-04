@@ -12,7 +12,10 @@
                         <a class="login btn" href="@controllers.user.routes.LoginController.loginPage()">登录</a>
                         <a class="signIn btn" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
                     } else {
-                        欢迎, <a href="@controllers.user.routes.MyOrderController.index()" >@user.getUserName</a>      <a href="@controllers.user.routes.LoginController.logout()" >退出</a>
+                        欢迎您, <a href="@controllers.user.routes.MyOrderController.index()" >@user.getUserName</a>
+                        <a href="@controllers.shop.routes.CartController.showCart()" >购物车</a>
+                        <a href="@controllers.user.routes.MyOrderController.index()" >我的订单</a>
+                        <a href="@controllers.user.routes.LoginController.logout()" >退出</a>
                     }
                 }
             </div>

@@ -2,6 +2,7 @@
 
 @import common.utils.DateUtils
 @import dtos.ExhibitionPosition
+@import productcenter.models.Seo
 
 @displayExhibition(exhibition: models.CmsExhibition) = {
     <li>
@@ -21,7 +22,7 @@
 }
 
 
-@main()("index") {
+@main(new Seo(Messages("index.title"),Messages("seo.description"),Messages("seo.Keywords")))("index") {
     <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
     <script src="@routes.Assets.versioned("js/index.js")"></script>
 
@@ -31,7 +32,7 @@
         <div class="slider-box-inner">
             <div class="slider-box-img">
                 @for((content,index) <- sliderBoxs.zipWithIndex) {
-                <div class="item" style="z-index: @index; background-image:url(@content.getContent); background-position: 50% 50%;">
+                <div class="item" style="background-image:url(@content.getContent); background-position: 50% 50%;">
                     <a href="@content.getLink" hidefocus="true" style="outline: none;">
                     </a>
                 </div>
@@ -86,8 +87,7 @@
                             <img src="@exhibition.getPic()" alt="" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
-                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    结束</p>
+                                <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span><span class="over-text">结束</span></p>
                             </div>
                         </a>
                     </li>
@@ -132,7 +132,7 @@
                         <div class="title">
                             <p><span class="designer">@doubleEx.getIntroduction()</span></p>
                             <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
-                                结束</p>
+                                <span class="over-text">结束</span></p>
                         </div>
                     </li>
                 }
@@ -147,7 +147,7 @@
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
                                 <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    结束</p>
+                                    <span class="over-text"> 结束</span></p>
                             </div>
                         </li>
                     }
