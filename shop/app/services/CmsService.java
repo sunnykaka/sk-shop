@@ -1,10 +1,11 @@
 package services;
 
+import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
-import models.CmsContent;
-import models.CmsExbitionItem;
-import models.CmsExhibition;
-import models.ExhibitionStatus;
+import common.utils.DateUtils;
+import common.utils.RegExpUtils;
+import models.*;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -171,4 +172,80 @@ public class CmsService {
         return Optional.empty();
     }
 
+    @Transactional
+    public void userLikeExhibition(Integer exhibitionId, String phone, Optional<Integer> userId) {
+        if(!RegExpUtils.isPhone(phone)) {
+            throw new AppBusinessException("手机号格式不正确");
+        }
+        if(findCmsExhibitionFans(exhibitionId, phone).isPresent()) {
+            throw new AppBusinessException("您已开启提醒");
+        }
+        CmsExhibitionFans cmsExhibitionFans = new CmsExhibitionFans();
+        cmsExhibitionFans.setCreateTime(DateUtils.current());
+        cmsExhibitionFans.setExhibitionId(exhibitionId);
+        cmsExhibitionFans.setPhone(phone);
+        if(userId.isPresent()) {
+            cmsExhibitionFans.setUserId(userId.get());
+        }
+        generalDao.persist(cmsExhibitionFans);
+
+        String sql = "update cms_exhibition set baseLike = baseLike + 1 where id = ?1 ";
+        generalDao.getEm().createNativeQuery(sql).setParameter(1, exhibitionId).executeUpdate();
+
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<CmsExhibitionFans> findCmsExhibitionFans(Integer exhibitionId, String phone) {
+        String hql = "select cef from CmsExhibitionFans cef where cef.exhibitionId = :exhibitionId and cef.phone = :phone ";
+        Map<String, Object> params = new HashMap<String, Object>() {{
+           put("exhibitionId", exhibitionId);
+           put("phone", phone);
+        }};
+        List<CmsExhibitionFans> query = generalDao.query(hql, Optional.empty(), params);
+        return query.isEmpty() ? Optional.empty() : Optional.of(query.get(0));
+
+    }
+
+    /**
+     * 根据开始时间范围查找专场
+     * @param startTimeStart
+     * @param startTimeEnd
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CmsExhibition> findCmsExhibitionByStartTime(DateTime startTimeStart, DateTime startTimeEnd) {
+        String hql = "select ce from CmsExhibition ce where ce.startTime between :startTimeStart and :startTimeEnd";
+        Map<String, Object> params = new HashMap<String, Object>() {{
+            put("startTimeStart", startTimeStart);
+            put("startTimeEnd", startTimeEnd);
+        }};
+        return generalDao.query(hql, Optional.empty(), params);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CmsExhibitionFans> findUnprocessedExhibitionFans(Integer exhibitionId) {
+        String hql = "select cef from CmsExhibitionFans cef where cef.exhibitionId = :exhibitionId and cef.processed = false ";
+        Map<String, Object> params = new HashMap<String, Object>() {{
+            put("exhibitionId", exhibitionId);
+        }};
+        return generalDao.query(hql, Optional.empty(), params);
+    }
+
+
+
+
+    @Transactional
+    public void remindExhibitionStart() {
+        DateTime startTimeStart = DateUtils.current();
+        DateTime startTimeEnd = startTimeStart.plusSeconds(3600);
+
+        List<CmsExhibition> exhibitionList = findCmsExhibitionByStartTime(startTimeStart, startTimeEnd);
+        exhibitionList.forEach(exhibition -> {
+            List<CmsExhibitionFans> exhibitionFansList = findUnprocessedExhibitionFans(exhibition.getId());
+
+
+        });
+
+
+    }
 }

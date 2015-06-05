@@ -36,7 +36,7 @@ object ApplicationBuild extends Build {
     ).
     dependsOn(common).dependsOn(product).dependsOn(user)
 
-
+/*
   lazy val admin = (project in file("admin")).
     enablePlugins(play.PlayJava).
     settings(Commons.settings: _*).
@@ -52,6 +52,7 @@ object ApplicationBuild extends Build {
 //      unmanagedSourceDirectories in Compile += baseDirectory.value / "target" / "scala-2.11" / "src_managed" / "main"
     ).dependsOn(common % "test->test;compile->compile").
       dependsOn(user).dependsOn(product).dependsOn(order)
+*/
 
   lazy val shop = (project in file("shop")).
     enablePlugins(play.PlayJava).
@@ -73,5 +74,5 @@ object ApplicationBuild extends Build {
 
   lazy val root = (project in file(".")).
     settings(Commons.settings: _*).
-    aggregate(admin, shop)
+    aggregate(shop)
 }

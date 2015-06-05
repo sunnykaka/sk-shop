@@ -1,5 +1,6 @@
 package controllers;
 
+import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
 import dtos.CmsPosition;
@@ -50,7 +51,6 @@ public class Application extends Controller {
 
     @Autowired
     private DesignerCollectService designerCollectService;
-
 
     /**
      * 首页，首发专场
@@ -270,6 +270,18 @@ public class Application extends Controller {
         return ok(myOrder.render(user));
 
     }
+
+    public Result userLikeExhibition(Integer exhibitionId, String phone) {
+        User user = SessionUtils.currentUser();
+        Optional<Integer> userId = user == null ? Optional.empty() : Optional.of(user.getId());
+        try {
+            cmsService.userLikeExhibition(exhibitionId, phone, userId);
+            return ok(new JsonResult(true).toNode());
+        } catch (AppBusinessException e) {
+            return ok(new JsonResult(false, e.getMessage()).toNode());
+        }
+    }
+
 
     public Result about() {
 

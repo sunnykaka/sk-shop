@@ -69,6 +69,11 @@ public class CmsExhibition implements EntityClass<Integer> {
      */
     private Integer prodCount;
 
+    /**
+     * 关注的基础数目
+     */
+    private Integer baseLike;
+
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -200,5 +205,15 @@ public class CmsExhibition implements EntityClass<Integer> {
 
     public void setProdCount(Integer prodCount) {
         this.prodCount = prodCount;
+    }
+
+    @Basic
+    @Column(name="baseLike")
+    public Integer getBaseLike() {
+        return baseLike;
+    }
+
+    public void setBaseLike(Integer baseLike) {
+        this.baseLike = baseLike;
     }
 }

@@ -16,11 +16,15 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import play.Application;
 import play.Logger;
 import play.data.format.Formatters;
+import play.libs.Akka;
 import play.libs.F;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import scala.concurrent.duration.Duration;
+import scala.concurrent.duration.FiniteDuration;
+import scheduler.ExhibitionStartReminderTask;
 import usercenter.dtos.DesignerView;
 import usercenter.services.DesignerService;
 import views.html.error_400;
@@ -31,6 +35,7 @@ import javax.persistence.EntityManagerFactory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Global extends BaseGlobal {
 
@@ -45,7 +50,20 @@ public class Global extends BaseGlobal {
         Formatters.register(DateTime.class, new JodaDateFormatter());
         Formatters.register(Money.class, new MoneyFormatter());
 
+        runSchedulers();
     }
+
+    private void runSchedulers() {
+
+        Akka.system().scheduler().schedule(
+                Duration.create(20, TimeUnit.SECONDS),
+                Duration.create(60, TimeUnit.SECONDS),
+                ExhibitionStartReminderTask.getInstance(),
+                Akka.system().dispatcher()
+        );
+
+    }
+
 
     @Override
     public <A> A getControllerInstance(Class<A> clazz) {
