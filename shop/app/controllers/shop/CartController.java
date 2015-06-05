@@ -182,7 +182,7 @@ public class CartController extends Controller {
 
             if (addNumber > maxCanBuyNum) {
                 retMap.put("maxCanBuyNum", maxCanBuyNum);
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
+                return ok(new JsonResult(false,"超过最大能购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
             }
 
             if (addNumber > maxStockNum) {
@@ -192,7 +192,7 @@ public class CartController extends Controller {
                     maxCanBuyNum = maxStockNum;
                 }
                 retMap.put("maxCanBuyNum", maxCanBuyNum);
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多还能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
+                return ok(new JsonResult(false,"超过最大能购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
             }
 
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
