@@ -1,17 +1,26 @@
 package services;
 
 import common.exceptions.AppBusinessException;
+import common.models.Const;
+import common.services.ConstService;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.RegExpUtils;
+import common.utils.SmsUtils;
 import models.*;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import usercenter.domain.SmsSender;
+import views.html.template.sms.exhibistionStartRemind;
 
 import javax.persistence.Query;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by amos on 15-5-7.
@@ -22,6 +31,9 @@ public class CmsService {
 
     @Autowired
     private GeneralDao generalDao;
+
+    @Autowired
+    private ConstService constService;
 
 
     /**
@@ -208,16 +220,16 @@ public class CmsService {
 
     /**
      * 根据开始时间范围查找专场
-     * @param startTimeStart
-     * @param startTimeEnd
+     * @param beginTimeStart
+     * @param beginTimeEnd
      * @return
      */
     @Transactional(readOnly = true)
-    public List<CmsExhibition> findCmsExhibitionByStartTime(DateTime startTimeStart, DateTime startTimeEnd) {
-        String hql = "select ce from CmsExhibition ce where ce.startTime between :startTimeStart and :startTimeEnd";
+    public List<CmsExhibition> findCmsExhibitionByBeginTime(DateTime beginTimeStart, DateTime beginTimeEnd) {
+        String hql = "select ce from CmsExhibition ce where ce.beginTime between :beginTimeStart and :beginTimeEnd";
         Map<String, Object> params = new HashMap<String, Object>() {{
-            put("startTimeStart", startTimeStart);
-            put("startTimeEnd", startTimeEnd);
+            put("beginTimeStart", beginTimeStart);
+            put("beginTimeEnd", beginTimeEnd);
         }};
         return generalDao.query(hql, Optional.empty(), params);
     }
@@ -232,20 +244,81 @@ public class CmsService {
     }
 
 
-
-
     @Transactional
     public void remindExhibitionStart() {
-        DateTime startTimeStart = DateUtils.current();
-        DateTime startTimeEnd = startTimeStart.plusSeconds(3600);
+        DateTime beginTimeStart = DateUtils.current();
+        int aheadTime = Integer.parseInt(constService.getConstValueWithDefault(Const.AHEAD_REMIND_USER_FOR_EXHIBITION, "3600"));
+        DateTime beginTimeEnd = beginTimeStart.plusSeconds(aheadTime);
 
-        List<CmsExhibition> exhibitionList = findCmsExhibitionByStartTime(startTimeStart, startTimeEnd);
+        List<CmsExhibition> exhibitionList = findCmsExhibitionByBeginTime(beginTimeStart, beginTimeEnd);
         exhibitionList.forEach(exhibition -> {
-            List<CmsExhibitionFans> exhibitionFansList = findUnprocessedExhibitionFans(exhibition.getId());
+            String introduction = StringUtils.abbreviate(exhibition.getIntroduction(), 30);
+            int hourOfDay = exhibition.getBeginTime().getHourOfDay();
+            String message = exhibistionStartRemind.render(introduction, hourOfDay).body();
 
+            List<CmsExhibitionFans> cmsExhibitionFansList = findUnprocessedExhibitionFans(exhibition.getId());
+            if(cmsExhibitionFansList.isEmpty()) return;
+            List<String> phoneList = cmsExhibitionFansList.stream().map(CmsExhibitionFans::getPhone).collect(Collectors.toList());
+
+            if(play.Logger.isInfoEnabled()) {
+                play.Logger.info(String.format("批量发送专场提醒短信, 短信内容: %s, 发送手机号: %s", message, phoneList.toString()));
+            }
+            if(SmsUtils.sendSms(phoneList.toArray(new String[phoneList.size()]), message)) {
+                updateExhibitionFansProcessed(cmsExhibitionFansList);
+            }
 
         });
 
+    }
+
+    /**
+     * 批量修改CmsExhibitionFans的processed为true
+     * @param cmsExhibitionFansList
+     */
+    private void updateExhibitionFansProcessed(List<CmsExhibitionFans> cmsExhibitionFansList) {
+        if(cmsExhibitionFansList.isEmpty()) return;
+        Integer[] idArray = cmsExhibitionFansList.stream().map(CmsExhibitionFans::getId).collect(Collectors.toList()).toArray(new Integer[cmsExhibitionFansList.size()]);
+        int count = batchUpdateProcessed(idArray, ids -> {
+            StringBuilder hql = new StringBuilder("update CmsExhibitionFans set processed=true where id in( ");
+            Map<String, Object> params = new HashMap<>();
+            int index = 0;
+            for (Integer id : ids) {
+                String key = String.format("id%d", index++);
+                hql.append(":").append(key).append(",");
+                params.put(key, id);
+            }
+            hql.replace(hql.length() - 1, hql.length(), ")");
+            return generalDao.update(hql.toString(), params);
+        });
+
+        if(count != idArray.length) {
+            play.Logger.error(String.format("批量更新CmsExhibitionFans的processed字段的时候出错,传进来的id数量[%d],修改成功的数量[%d], id列表[%s]", idArray.length, count, Arrays.toString(idArray)));
+        }
 
     }
+
+
+    private int batchUpdateProcessed(Integer[] ids, BatchUpdateProcessedTask task) {
+        if(ids == null || ids.length == 0) return 0;
+        //一次执行sql更新的最大数量不超过20
+        int maxLength = 20;
+        if(ids.length <= maxLength) {
+            return task.run(ids);
+        }
+        int count = 0;
+        for(int i=0; i<=(ids.length / maxLength); i++) {
+            int start = i * maxLength;
+            int end = Math.min(start + maxLength, ids.length);
+            if(start == end) continue;
+            count += task.run(Arrays.copyOfRange(ids, start, end));
+        }
+        return count;
+    }
+
+    private static interface BatchUpdateProcessedTask {
+
+        int run(Integer[] ids);
+
+    }
+
 }

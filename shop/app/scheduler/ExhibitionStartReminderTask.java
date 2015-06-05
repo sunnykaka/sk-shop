@@ -21,7 +21,7 @@ public class ExhibitionStartReminderTask extends SchedulerTask {
 
         CmsService cmsService = Global.ctx.getBean(CmsService.class);
 
-//        cmsService.remindExhibitionStart();
+        cmsService.remindExhibitionStart();
 
 
     }

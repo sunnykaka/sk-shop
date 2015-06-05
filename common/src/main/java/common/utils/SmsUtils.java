@@ -22,7 +22,7 @@ public class SmsUtils {
     public static boolean sendSms(String[] phones, String content) {
         Preconditions.checkArgument(phones != null && phones.length > 0, "短信未发送, 手机号码不能为空");
         for(String phone : phones) {
-            Preconditions.checkArgument(RegExpUtils.isPhone(phone), String.format("短信未发送, 手机号码[%s]不正确", phones));
+            Preconditions.checkArgument(RegExpUtils.isPhone(phone), String.format("短信未发送, 手机号码[%s]不正确", Arrays.toString(phones)));
         }
         Preconditions.checkArgument(StringUtils.isNotBlank(content), "短信未发送, 内容不能为空");
 
@@ -38,7 +38,7 @@ public class SmsUtils {
             try {
                 doSendSms(phones, content);
             } catch (Exception e) {
-                Logger.error("短信发送失败", e);
+                Logger.error("短信发送失败, 手机号:" + Arrays.toString(phones), e);
                 return false;
             }
 
