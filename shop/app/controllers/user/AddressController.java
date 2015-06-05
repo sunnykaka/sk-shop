@@ -172,7 +172,6 @@ public class AddressController extends Controller {
                     return ok(new JsonResult(false, "修改送货地址失败").toNode());
                 }
 
-                oldAddress.setUserId(user.getId());
                 oldAddress.setName(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getName())));
                 oldAddress.setLocation(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getLocation())));
                 oldAddress.setProvince(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getProvince())));

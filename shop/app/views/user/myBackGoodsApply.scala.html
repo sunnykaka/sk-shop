@@ -51,11 +51,13 @@
                                                 <input type="checkbox" name="orderItem[@index]" value="@orderItem.getId-@orderItem.getNumber"/>
                                             </td>
                                             <td>
-                                                <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>
+                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >
+                                                    <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>
+                                                </a>
                                             </td>
                                             <td>
                                                 <div class="pro-info">
-                                                    <p class="pro-name">@orderItem.getProductName</p>
+                                                    <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >@orderItem.getProductName</a></p>
                                                 </div>
                                             </td>
                                             <td>

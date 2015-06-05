@@ -75,8 +75,14 @@
                                 <tbody>
                                     @for(orderItem <- order.getOrderItemList){
                                         <tr>
-                                            <td><img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/></td>
-                                            <td><p>@orderItem.getProductName</p></td>
+                                            <td>
+                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >
+                                                    <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <p><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >@orderItem.getProductName</a></p>
+                                            </td>
                                             <td>
                                                 @for(keyValue <- orderItem.getProperties){
                                                     <p>@keyValue.getPropertyName：@keyValue.getPropertyValue</p>
