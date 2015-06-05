@@ -7,10 +7,10 @@
     <script>
         $(function(){
 
-           $('.start-fashion li,.ready-online li,.hot-sale li').hover(function(){
-               $(".cover", this).stop().animate({top:"70%"},{queue:false,duration:50});
+           $('.brand-start-fashion li,.ready-online li,.hot-sale li').hover(function(){
+               $(".cover", this).stop().animate({top:"341"},{queue:false,duration:50});
            },function(){
-               $(".cover", this).stop().animate({top:"110%"},{queue:false,duration:100});
+               $(".cover", this).stop().animate({top:"462"},{queue:false,duration:100});
            });
         });
 
@@ -27,28 +27,6 @@
 
             });
         });
-
-        //我喜欢按钮
-        $('.cover .like').click(function(){
-            var id = $(this).attr('data-id'),that = $(this);
-            if(id){
-                $.ajax({
-                type:'post',
-                url:'/my/favorites/product/add?productId='+id,
-                success:function(res){
-                    if(res.result){
-                        that.text("已收藏 "+res.message);
-                        that.removeAttr('data-id');
-                    }else{
-                        alert("收藏失败");
-                    }
-                }
-                });
-            }
-
-        });
-
-
 
     </script>
 
@@ -77,7 +55,7 @@
                 </div>
             </div>
             @if(sellingList!= null && sellingList.size >0) {
-                <div class="start-fashion">
+                <div class="brand-start-fashion">
                     <h3>正在首发</h3>
                     <ul class="clearfix">
                     @for(prod <- sellingList) {
@@ -86,15 +64,8 @@
                                 <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
                             </a>
                             <div class="cover">
-                                @if(prod.isFavorites){
-                                    <span class="like">已收藏 @prod.getFavoritesNum</span>
-                                }else{
-                                    <span class="like" data-id="@prod.getProduct.getId">我喜欢</span>
-                                }
-                                <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" class="buy">立即购买</a>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
-                                    <p class="time">@DateUtils.printDateTime(prod.getCmsExhibition.getEndTime)</p>
                                 </div>
                             </div>
                         </li>
@@ -115,11 +86,6 @@
                                 <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
                             </a>
                             <div class="cover">
-                                @if(prod.isFavorites){
-                                    <span class="like">已收藏 @prod.getFavoritesNum</span>
-                                }else{
-                                    <span class="like" data-id="@prod.getProduct.getId">我喜欢</span>
-                                }
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
                                 </div>
@@ -144,12 +110,6 @@
                                 <img src="@prod.getMainPic.getPictureUrl" alt="" width="283" height="462"/>
                             </a>
                             <div class="cover">
-                                @if(prod.isFavorites){
-                                    <span class="like">已收藏 @prod.getFavoritesNum</span>
-                                }else{
-                                    <span class="like" data-id="@prod.getProduct.getId">我喜欢</span>
-                                }
-                                <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" class="buy">立即购买</a>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
                                 </div>

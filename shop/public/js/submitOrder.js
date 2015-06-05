@@ -456,6 +456,8 @@ $(function(){
             success: function (data) {
                 if (data.result){ //成功
                     closeBtn.trigger('click');
+                    //防止多次提交
+                    $(formId).off('click');
                     //更新数据
                     item = $(".select-address li[data-id="+data.data.id+"]");
                     item.find('.phone').text(data.data.mobile);

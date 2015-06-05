@@ -61,26 +61,29 @@
 } {
 
 
+    <!--slider-box-->
     <div class="slider-box">
         <div class="slider-box-inner">
             <div class="slider-box-img">
-            @for((content, index) <- sliderBoxs.zipWithIndex) {
-                <div class="item" style="z-index:@{sliderBoxs.size-index}; background-image:url(@content.getContent); background-position: 50% 50%;"/>
-                <a href="@content.getLink" hidefocus="true" style="outline : none ;">
+            @for((content,index) <- sliderBoxs.zipWithIndex) {
+
+                <div class="item" style="z-index:@{sliderBoxs.size-index};background-image:url(@content.getContent); background-position: 50% 50%;">
+                <a href="@content.getLink" hidefocus="true" style="outline: none;">
                     </a>
             </div>
             }
         </div>
         <div class="sliderBullets">
             <ul class="clearfix">
-            @for((content, index) <- sliderBoxs.zipWithIndex) {
+            @for((content,index) <- sliderBoxs.zipWithIndex) {
                 <li>
-                    <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline : none ;"><img src="@content.getContent" alt="@content.getContent" width="390" height="103"/></a>
+                    <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;"><img class="lazy"   data-original="@content.getContent" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getContent" width="390" height="103"/></a>
                     <div class="cover"></div>
                 </li>
             }
             </ul>
         </div>
+    </div>
     </div>
     <!--end slider-box-->
 
@@ -95,10 +98,10 @@
 
                     <li>
                         <div class="img">
-                            <a href="#"><img src="@exhibition.getPic" alt="" width="590" height="275"/></a>
+                            <a href="#"><img  class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="590" height="275"/></a>
                         </div>
                         <div class="title">
-                            <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
+                            <img  class="lazy"  data-original="@exhibition.getDesignerLogo" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getDesignerLogo" height="60"/>
                             <p>@exhibition.getIntroduction</p>
                         </div>
 
@@ -107,6 +110,9 @@
                             <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                             <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
+                            <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
+                            <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                            <span class="remind-btn">开售提醒</span>
                         </div>
                     </li>
                 }
@@ -121,18 +127,15 @@
             @if(font1 != null) {
                 <h2>@font1.getTitle</h2>
                 <p class="en-info">@Html(font1.getContent)</p>
-                @*<p class="cn-info">@fontMa.get(CmsPosition.INDEX_FONT_1).get.getLink</p>*@
             }
 
-
             <ul class="clearfix">
-
 
             @if(sellingMap.get(ExhibitionPosition.FLOOR_TWO) != null) {
                 @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_TWO, null)) {
 
                     <li>
-                        <img src="@exhibition.getPic" alt="" />
+                        <img  class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="390" height="240" />
                         <div class="info">
                             <p>@exhibition.getIntroduction</p>
                         </div>
@@ -141,6 +144,9 @@
                             <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                             <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
+                            <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
+                            <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                            <span class="remind-btn">开售提醒</span>
                         </div>
                     </li>
                 }
@@ -165,15 +171,19 @@
                     @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_THREE, null).slice(0, 4)) {
                         <li class="">
                             <img src="@exhibition.getPic" alt="" width="291" height="437"/>
+                            <img class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="291" height="437"/>
                             <div class="title">
                                 <p>@exhibition.getIntroduction</p>
-                                @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
+                                <p>@exhibition.getIntroduction()</p>
                             </div>
                             <div class="cover"></div>
                             <div class="cover-info">
                                 <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                                 <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
+                                <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
+                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                <span class="remind-btn">开售提醒</span>
                             </div>
                         </li>
                     }
@@ -181,10 +191,11 @@
 
                 @if(doubleEx != null) {
                     <li class="double">
+                        <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getPic()" width="594" height="437"/>
                         <img src="@doubleEx.getPic" alt=""/>
                         <div class="title">
+                            <p>@doubleEx.getIntroduction()</p>
                             <p>@doubleEx.getIntroduction</p>
-                            @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
                         </div>
                         <div class="cover"></div>
                         <div class="cover-info">
@@ -199,15 +210,20 @@
                     @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_THREE, null).slice(4, 6)) {
                         <li class="">
                             <img src="@exhibition.getPic" alt="" width="291" height="437"/>
+                            <img  alt="@exhibition.getPic()" class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" width="291" height="437"/>
                             <div class="title">
                                 <p>@exhibition.getIntroduction</p>
-                                @*<p class="time"><span class="time-detail">2天07时26分35秒</span>结束</p>*@
+
+                                <p>@exhibition.getIntroduction()</p>
                             </div>
                             <div class="cover"></div>
                             <div class="cover-info">
                                 <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                                 <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
+                                <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
+                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
+                                <span class="remind-btn">开售提醒</span>
                             </div>
                         </li>
                     }

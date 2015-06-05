@@ -46,6 +46,7 @@ $(function(){
 
 // 表单item事件(blur,submit)
     function formItemEvent(type,formId,closeBtn){
+
         var formItems= getFormItems(type,formId),
             form = formItems.element,
             name = formItems.name,
@@ -109,8 +110,10 @@ $(function(){
                 saveForm(type, formId)
             });
         }else{
+            console.log(333333);
             form.on('click', 'input[type=submit]', function (e) {
                 e.preventDefault();
+                e.cancelBubble = true;
                 updateForm(type, formId,closeBtn);
             });
         }
@@ -459,7 +462,6 @@ $(function(){
                         districts: getData.area || null
                     });
                     //绑定 blur focus事件
-                    console.log(obj.$close);
                     formItemEvent('update', form ,obj.$close);
 
                 }
@@ -486,6 +488,8 @@ $(function(){
             success: function (data) {
                 if (data.result){ //成功
                     closeBtn.trigger('click');
+                    //防止多次提交
+                    $(formId).off('click');
                     //更新数据
                    item = $(".address-list li[data-id="+data.data.id+"]");
                     item.find('.phone').text(data.data.mobile);
@@ -495,6 +499,7 @@ $(function(){
                     item.find('.provice').text(data.data.province);
                     item.find('.city').text(data.data.city);
                     item.find('.area').text(data.data.area);
+
                 } else {
                     var valObj = data.message,errMsg;
                     $.each(valObj,function(key,value) {

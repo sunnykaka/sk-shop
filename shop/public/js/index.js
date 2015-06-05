@@ -8,6 +8,7 @@ $(function(){
         $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
     });
 
+
     //轮播
     $('.slider-box-inner').mobilyslider({
         content:'.slider-box-img',
@@ -30,9 +31,10 @@ $(function(){
     setInterval(function(){
         $(".time-detail:not(:contains(结束))").each(function(){
             var obj = $(this);
-            var endTime = new Date(obj.attr('value'));
-            var nowTime = new Date();
-            var nMS=endTime.getTime() - nowTime.getTime();
+            //var endTime = new Date(obj.attr('value'));
+            var nowTime = new Date(), utc = nowTime.getUTCFullYear()+"/"+(nowTime.getUTCMonth()+1)+"/"+nowTime.getUTCDate()+" "+nowTime.getUTCHours()+":"+nowTime.getUTCMinutes()+":"+nowTime.getUTCSeconds();
+            var nMS = +new Date(obj.attr('value').replace(/-/g,'/')) - (+new Date(utc)+28800000);
+            //var nMS = +new Date(obj.attr('value').replace(/-/g,'/')) - nowTime.getTime();
             var myD=Math.floor(nMS/(1000 * 60 * 60 * 24)); //天
             var myH=Math.floor(nMS/(1000*60*60)) % 24; //小时
             var myM=Math.floor(nMS/(1000*60)) % 60; //分钟
@@ -44,7 +46,8 @@ $(function(){
 
             }else{
                 var str = "已结束！";
-                $(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
+                //$(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
+                $('.time').html('').text(str);
             }
             obj.text(str);
         });

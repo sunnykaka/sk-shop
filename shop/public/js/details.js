@@ -18,20 +18,17 @@ $(function(){
         }
     });
 
+    //重置
+    if($("#buy-number").size()>0){
+        $("#buy-number").val(1);
+    }
+
     //点击购物车，进入购物车页面
     $('#cart-quantity-btn').click(function(){
         window.location.href = "/cart/showCart";
     });
     //固定跟随侧栏
-    $('#debut-box').stickySidebar({
-        headerSelector: '.top',
-        navSelector: '.nav',
-        contentSelector: '#detail',
-        footerSelector: '.footer',
-        placeholdHeight:310,
-        sidebarTopMargin: 20,
-        footerThreshold: 100
-    });
+
 
     //判断窗口宽度
     $(window).on('resize load',function(){
@@ -40,8 +37,19 @@ $(function(){
         }else{
             $('#cart').fadeIn();
         }
-    });
 
+    });
+    $(window).on('resize load scroll',function() {
+            $('#debut-box').stickySidebar({
+                headerSelector: '.top',
+                navSelector: '.nav',
+                contentSelector: '#detail',
+                footerSelector: '.footer',
+                placeholdHeight: 310,
+                sidebarTopMargin: 20,
+                footerThreshold: 310
+            });
+    });
 
 
     $('.comment-header li').click(function(){
@@ -476,7 +484,7 @@ $(function(){
                 amountInputEle.val(1);
                 FG.tip(amountInputEle, "limit_tip", "商品购买数量不能小于1", 0,90);
             }
-            countPrice(+amountInputEle.val());
+            //countPrice(+amountInputEle.val());
         });
 
 

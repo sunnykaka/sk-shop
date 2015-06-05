@@ -8,13 +8,13 @@
     <li>
         <a href ="@routes.Application.designerProd(exhibition.getDesignerId)">
             <div class="img">
-                <a href="@routes.Application.designerProd(exhibition.getDesignerId)"><img src="@exhibition.getPic()" alt="" width="590" height="275"/></a>
+                <a href="@routes.Application.designerProd(exhibition.getDesignerId)"><img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="590" height="275"/></a>
                 <p class="time">
                     还剩 <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                    结束</p>
+                        <span class="over-text">结束</span></p>
             </div>
             <div class="title">
-                <img src="@exhibition.getDesignerLogo" alt="" height="60"/>
+                <img  class="lazy"   data-original="@exhibition.getDesignerLogo" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getDesignerLogo" height="60"/>
                 <p><span class="designer">@exhibition.getIntroduction</span></p>
             </div>
         </a>
@@ -43,7 +43,7 @@
                 <ul class="clearfix">
                     @for((content,index) <- sliderBoxs.zipWithIndex) {
                        <li>
-                           <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;"><img src="@content.getContent" alt="@content.getContent" width="390" height="103"/></a>
+                           <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;"><img class="lazy"   data-original="@content.getContent" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getContent" width="390" height="103"/></a>
                            <div class="cover"></div>
                        </li>
                     }
@@ -75,17 +75,14 @@
             @if(font1 != null) {
                 <h2>@font1.getTitle</h2>
                 <p class="en-info">@Html(font1.getContent)</p>
-                @*<p class="cn-info">@fontMa.get(CmsPosition.INDEX_FONT_1).get.getLink</p>*@
+
             }
-            @*<h2>尚</h2>*@
-            @*<p class="en-info">Fashion fades,only style remain the same. —— Coco Chanel</p>*@
-            @*<p class="cn-info">时尚易逝，唯风格永存。</p>*@
             <ul class="clearfix">
             @if(sellingMap.get(ExhibitionPosition.FLOOR_TWO) != null) {
                 @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_TWO)) {
                     <li>
                         <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <img src="@exhibition.getPic()" alt="" width="390" height="240" />
+                            <img class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
                                 <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span><span class="over-text">结束</span></p>
@@ -114,12 +111,12 @@
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(0, 4)) {
                         <li class="">
                             <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img src="@exhibition.getPic()" alt=""/>
+                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getPic()"/>
                             </a>
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
                                 <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    结束</p>
+                                    <span class="over-text">结束</span></p>
                             </div>
                         </li>
                     }
@@ -128,7 +125,7 @@
                 @if(doubleEx != null) {
                     <li class="double">
                         <a href="@routes.Application.designerProd(doubleEx.getDesignerId)">
-                            <img src="@doubleEx.getPic()" alt=""/>
+                            <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getPic()" width="594" height="437"/>
                         </a>
                         <div class="title">
                             <p><span class="designer">@doubleEx.getIntroduction()</span></p>
@@ -143,7 +140,7 @@
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(4, 6)) {
                         <li class="">
                             <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img src="@exhibition.getPic()" alt=""/>
+                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="291" height="437"/>
                             </a>
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
