@@ -81,6 +81,10 @@ table td{padding: 10px 0;}
 .top .right{margin-top: 10px;}
 .top .right .btn{padding:8px 10px;margin-right:15px;}
 .space{padding: 0 4px;}
+.top .logined li{float: left;margin-right: 10px;}
+.top .logined a,.top .logined span{float: left;}
+.top .logined .user-name{width: 50px;text-align: center;overflow: hidden;white-space: nowrap;-o-text-overflow: ellipsis;text-overflow: ellipsis;}
+.top .logined a:hover{color: #fd2049;}
 /*end top*/
 /*header*/
 .header{height:200px;width: 100%;border-bottom: 1px solid #c6c6c6;}
@@ -499,7 +503,7 @@ table td{padding: 10px 0;}
 .detail-inner .container .comment-page a:hover{text-decoration: none;}
 .detail-inner .right{width: 373px;}
 /*#right-fixed{position: absolute;top: 241px;margin-left: 837px;}*/
-.sticky { float: none; position: fixed; top: 20px; z-index: 6; left: auto;}
+
 .detail-inner .debut-img{width: 373px;height: 226px;margin:58px 0 23px 0; }
 .debut-info,.detail-size-color{padding-bottom: 32px;border-bottom: 1px solid #e5e5e5;*height:1%;}
 .debut-info .debut-info-left{float: left;width:180px;}
@@ -849,7 +853,7 @@ table td{padding: 10px 0;}
 /*end footer*/
 .sider-bar{
     position: fixed;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
-    bottom: 100px;left: 50%;margin-left: 620px;
+    bottom: 291px;left: 50%;margin-left: 620px;display: none;
 }
 .sider-bar li{width: 62px;height: 63px;border-bottom: 1px solid #ccc;background: url("../images/sider-bar.gif") no-repeat;}
 .sider-bar .cart{position: relative;}
@@ -870,7 +874,7 @@ table td{padding: 10px 0;}
 .not-found-404 .designer-list-recom img{display: block;}
 
 /*about*/
-.about-us{margin-bottom: 100px;}
+.about-us{margin-bottom: 40px;}
 .about-img{margin-bottom: 53px;}
 .about-img img{display: block;}
 .about-info{background: url('../images/about-info.jpg') no-repeat;width: 1200px;height: 788px;}
@@ -881,3 +885,6 @@ table td{padding: 10px 0;}
 .about-info-text .line{margin-bottom: 47px;}
 /*end about*/
 .u-flyer{display: block;width: 50px;height: 50px;border-radius: 50px;position: fixed;z-index: 9999;}
+
+
+.sticky { float: none; position: fixed; top: 20px; z-index: 6; left: auto;}

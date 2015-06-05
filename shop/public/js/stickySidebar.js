@@ -8,6 +8,7 @@
             contentSelector: '#content',
             footerSelector: 'footer',
             sidebarTopMargin: 20,
+            placeholdHeight:0,
             footerThreshold: 40
         }, options);
 
@@ -30,11 +31,11 @@
             // calculate
             if ((contentHeight > sidebarHeight) && (viewportHeight > sidebarHeight)) {
 
-                if (scroll_top < (breakingPoint1+310)) {
+                if (scroll_top < (breakingPoint1+config.placeholdHeight)) {
 
                     sidebarSelector.removeClass('sticky');
 
-                } else if ((scroll_top >= breakingPoint1) && (scroll_top < (breakingPoint2+310))) {
+                } else if ((scroll_top >= breakingPoint1) && (scroll_top < (breakingPoint2+config.placeholdHeight))) {
 
                     sidebarSelector.addClass('sticky').css('top', config.sidebarTopMargin);
 

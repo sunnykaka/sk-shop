@@ -22,15 +22,27 @@ $(function(){
     $('#cart-quantity-btn').click(function(){
         window.location.href = "/cart/showCart";
     });
-
+    //固定跟随侧栏
     $('#debut-box').stickySidebar({
         headerSelector: '.top',
         navSelector: '.nav',
         contentSelector: '#detail',
         footerSelector: '.footer',
+        placeholdHeight:310,
         sidebarTopMargin: 20,
         footerThreshold: 100
     });
+
+    //判断窗口宽度
+    $(window).on('resize load',function(){
+        if($(window).width()<=1250){
+            $('#cart').fadeOut();
+        }else{
+            $('#cart').fadeIn();
+        }
+    });
+
+
 
     $('.comment-header li').click(function(){
         $(this).addClass('current').siblings('li').removeClass('current');

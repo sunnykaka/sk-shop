@@ -2,61 +2,79 @@
 
 @import productcenter.models.Seo;
 @main(new Seo(Messages("title.play"),Messages("seo.description"),Messages("seo.Keywords")))() {
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
 <script type="text/javascript">
-    (function ($, FG) {
-        var valueCollection = {};
-        // 支付方式
-        function payment() {
-            var box = $('.pay-list'),
-                payTypes = box.find('li');
 
-            valueCollection.payBank = payTypes.eq(0).attr('paybank');
-            payTypes.on('click', function () {
-                var self = $(this);
+$(function(){
 
-                if (self.hasClass('more-payBank')) {
-                    self.empty();
-                    box.find('.more-list').slideDown(200);
-                    return;
-                }
-                payTypes.removeClass('current');
-                self.addClass('current');
-                valueCollection.payBank = self.attr('paybank');
+    $('.pay-list li').on('click',function(){
+        if($(this).hasClass('more-payBank')){$('.more-list').slideDown(200);return;}
+        $('.pay-list li').removeClass('current');
+        $(this).addClass('current');
+    });
 
-            });
 
-            $('#pay-money-btn').click(function(){
-                var payMethod, currentPay = box.find('.current').attr('paybank');
-                switch (currentPay){
-                    case  'Alipay':  payMethod = 'directPay';
-                        break;
-                    case  'Tenpay':  payMethod = 'Tenpay';
-                        break;
-                    default :
-                        payMethod = 'bankPay';
-                }
+$('#pay-money-btn').on('click',function(){
 
-                 $.ajax({
-                    type: "get",
-                    url: '/order/submitTradeOrder?payType=OnLine&payMethod='+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val(),
-                    async: false,
-                    dataType: 'json',
-                    cache: false,
-                    success: function (data) {
-                        if(data.result){
-                            window.location.href = '/order/toPayOrder?tradeNo='+data.data+"&payMethod="+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val();
-                        }
-                    }
-                });
-            });
+    return;
+
+     var box = $('.pay-list');
+     var payMethod, currentPay = box.find('.current').attr('paybank');
+
+        switch (currentPay){
+            case  'Alipay':  payMethod = 'directPay';
+                break;
+            case  'Tenpay':  payMethod = 'Tenpay';
+                break;
+            default :
+                payMethod = 'bankPay';
         }
-        payment();
-    }(jQuery, FG));
+
+         $.ajax({
+            type: "get",
+            url: '/order/submitTradeOrder?payType=OnLine&payMethod='+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val(),
+            async: false,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                if(data.result){
+                 $('#tradeNo').val(data.data);
+                 $('#payMethod').val(payMethod);
+                 $('#payOrg').val(currentPay);
+                 $('#pay-form').submit();
+                         $.dialog({
+                            title:'提示',
+                            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请在第三方支付页面完成付款<br/><span style="padding-left: 44px;">付款完成前请不要关闭此窗口</span></p></div>',
+                            width:518,
+                            height:260,
+                            lock:true,
+                            padding:'20',
+                            btn: {
+                                ok: {
+                                    val: '我已付款成功',
+                                    type: 'red',
+                                    click: function(btn) {
+                                        window.location.href = "/my/order/info?orderId="+$('#orderIds').val()
+                                    }
+                                },
+                                cancle: {
+                                    val: '付款遇到问题，重新支付',
+                                     click: function(btn) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        });
+
+                }
+            }
+        });
+    });
+
+});
+
 </script>
 } {
-    @if(order != null) {
-        <input type="hidden" id="orderIds" value="@order.getId">
-    }
     <div class="pay width1200">
         <div class="pay-inner">
             <div class="pay-step">
@@ -177,8 +195,16 @@
                         </li>
                     </ul>
                 </div>
-                <span class="btn pay-money-btn" id="pay-money-btn">立即支付</span>
+                <span class="btn pay-money-btn" id="pay-money-btn" href="#" target="_blank">立即支付</span>
             </div>
+            <form action="/order/toPayOrder" target="_blank" id="pay-form" method="get">
+                <input type="hidden" id="tradeNo" name="tradeNo" value="" />
+                <input type="hidden" id="payMethod" name="payMethod" value="" />
+                <input type="hidden" id="payOrg" name="payOrg" value="" />
+                @if(order != null) {
+                    <input type="hidden" id="orderIds" name="orderIds" value="@order.getId">
+                    }
+            </form>
         </div>
     </div>
 }
