@@ -275,9 +275,8 @@ public class UserService {
         }
 
         try {
-
             User userNew = getById(user.getId());
-            if(PasswordHash.validatePassword(psw.getPassword(),userNew.getPassword())){
+            if(!PasswordHash.validatePassword(psw.getPassword(),userNew.getPassword())){
                 throw new AppBusinessException("旧密码输入错误");
             }
 
