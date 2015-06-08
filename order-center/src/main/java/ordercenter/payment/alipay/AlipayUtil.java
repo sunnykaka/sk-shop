@@ -15,16 +15,15 @@ import java.util.*;
  * Date: 2015-04-29
  */
 public class AlipayUtil {
-
     //↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // 合作身份者ID，以2088开头由16位纯数字组成的字符串,ejs partner id
-    public static String partner = "2088801555613602";
+    public static String partner = "2088911795766502";
 
     // 交易安全检验码，由数字和字母组成的32位字符串
-    public static String key = "cf92qjldwsnp9cxrsspzzuj01zjd2jq1";
+    public static String key = "vwth44xc7kdb4bn4pir9dzrb6ph5xomu";
 
     // 签约支付宝账号或卖家收款支付宝帐户
-    public static String seller_email = "fd@yijushang.cn";
+    public static String seller_email = "pay@yezaoshu.com";
 
     // 字符编码格式 目前支持 gbk 或 utf-8
     public static String input_charset = "UTF-8";
