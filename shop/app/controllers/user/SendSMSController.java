@@ -21,7 +21,9 @@ public class SendSMSController extends Controller {
         }
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.BIND);
         String code = smsSender.generatePhoneVerificationCode();
-        if(!StringUtils.isBlank(code)) {
+        if(StringUtils.isBlank(code)) {
+            return ok(new JsonResult(false, "发送失败,发送次数超过上限").toNode());
+        } else {
             if(smsSender.sendMessage(views.html.template.sms.userCode.render(code))) {
                 play.Logger.debug(String.format("手机%s验证码%s", phone, code));
                 return ok(new JsonResult(true).toNode());

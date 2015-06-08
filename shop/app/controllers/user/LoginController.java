@@ -99,7 +99,9 @@ public class LoginController extends Controller {
         }
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
         String code = smsSender.generatePhoneVerificationCode();
-        if(!StringUtils.isBlank(code)) {
+        if(StringUtils.isBlank(code)) {
+            return ok(new JsonResult(false, "发送失败,发送次数超过上限").toNode());
+        } else {
             if(smsSender.sendMessage(views.html.template.sms.userCode.render(code))) {
                 return ok(new JsonResult(true).toNode());
             }
