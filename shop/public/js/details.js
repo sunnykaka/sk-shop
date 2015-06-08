@@ -423,9 +423,10 @@ $(function(){
                             $.dialog({
                                 title:'提示',
                                 lock:true,
-                                content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>超过最大能购买商品数量</p></div>',
+                                content:'<p class="warning-inner" style="text-align: center;font-size: 16px;padding: 30px 40px 0 40px;">'+data.message+'</p>',
                                 width:500,
-                                height:200
+                                height:200,
+                                padding:"20"
                             });
                         }
 
@@ -478,7 +479,7 @@ $(function(){
             }
             if (amountInputEle.val() > _limit) {
                 amountInputEle.val(_limit);
-                FG.tip(amountInputEle, "limit_tip", "此商品限购"+_num+"件", 0,90);
+                FG.tip(amountInputEle, "limit_tip", "此商品限购"+_limit+"件", 0,90);
             }
             if (amountInputEle.val() < 1 && _limit > 0) {
                 amountInputEle.val(1);

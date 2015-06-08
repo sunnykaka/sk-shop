@@ -28,9 +28,9 @@ $(function(){
             name.siblings('.errormsg').remove();
             name.parents('.form-item').append('<span class="errormsg">用户名长度不得大于20个字</span>');
             return false;
-        }else if(/^[A-Za-z\\u4e00-\\u9fa5]+$/.test(name.val())){
+        }else if(!/^[A-Za-z\\u4e00-\\u9fa5]{2,20}$/.test(name.val())){
             name.siblings('.errormsg').remove();
-            name.parents('.form-item').append('<span class="errormsg">用户名长度不得大于20个字</span>');
+            name.parents('.form-item').append('<span class="errormsg">用户名格式不正确</span>');
             return false;
         }
 

@@ -180,7 +180,7 @@ $(function(){
         $.dialog({
             title:'提示',
             lock:true,
-            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>您确定要删除这条数据吗？</p></div>',
+            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除该商品吗？</p></div>',
             width:540,
             height:248,
             drag:false,

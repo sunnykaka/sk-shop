@@ -46,7 +46,6 @@ $(function(){
     getCodeBtn.on('click',function(evt){
         var phoneNum=$('#phoneNumber').val();
         evt.preventDefault();
-
         //根据手机号码获取验证码
        if(ValidatePhone($('#phoneNumber'))){
            fun(getCodeBtn);
@@ -59,7 +58,14 @@ $(function(){
                },
                dataType: "json",
                success: function (response) {
-
+                    if(!response.result){
+                        //验证码发送错误
+                        if($('.phoneValidate-first').size()>0){
+                          $('.phoneValidate-first').find('#errormsg-phoneCode').text(response.message);
+                        }else{
+                             $('.phoneValidate-sec').find('#errormsg-phoneNum').text(response.message);
+                        }
+                    }
                }
            });
        }
@@ -81,6 +87,9 @@ $(function(){
                success: function (data) {
                     if(!data.result){
                         $('#errormsg-phoneNum').text(data.message);
+                        $('#get-code-btn').attr('disabled',true);
+                    }else{
+                         $('#get-code-btn').attr('disabled',null);
                     }
                }
            });
@@ -109,12 +118,7 @@ $(function(){
                         if(data.result){
                             location.href = data.data;
                         }else{
-                            var valObj = data.message,errMsg;
-                            $.each(valObj,function(key,value) {
-                                errMsg = value[0];
-                            });
-
-                            $('.phoneValidate-sec').find('#errormsg-phoneNum').text(errMsg);
+                            $('.phoneValidate-sec').find('#errormsg-phoneCode').text(data.message);
                         }
                     }
                 });
@@ -144,12 +148,7 @@ $(function(){
                     if(data.result){
                         location.href = data.data;
                     }else{
-                        var valObj = data.message,errMsg;
-                        $.each(valObj,function(key,value) {
-                            errMsg = value[0];
-                        });
-
-                        $('.phoneValidate-first').find('#errormsg-phoneCode').text(errMsg);
+                        $('.phoneValidate-first').find('#errormsg-phoneCode').text(data.message);
                     }
                 }
             });

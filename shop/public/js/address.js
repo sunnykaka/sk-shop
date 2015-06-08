@@ -5,13 +5,6 @@
 $(function(){
 
 
-
-    //$('.address-list li').hover(function(){
-    //    $(this).addClass('highLight');
-    //},function(){
-    //    $(this).removeClass('highLight');
-    //});
-
     $(".address-list").delegate("li", "hover", function(){
         $(this).toggleClass("highLight");
     });
@@ -203,11 +196,11 @@ $(function(){
     //生成地址dom
     function  addressDom (data,value){
         if(value){
-            return "<li  data-id='"+data.id+"' class='highLight'><div class='receiver'><strong>"+data.name+"<span class='space'></span>收</strong><span class='default' data-id="+data.id+">默认地址</span></div><div class='details-address'>"+
+            return "<li  data-id='"+data.id+"' class='highLight'><div class='receiver'><strong><span class='user'>"+data.name+"</span><span class='space'></span>收</strong><span class='default' data-id="+data.id+">默认地址</span></div><div class='details-address'>"+
                 "<p><span class='provice'>"+data.province+"</span><span class='space'></span><span class='city'>"+data.city+"</span><span class='space'></span><span class='area'>"+data.area+"</span></p><p class='location'  title="+data.location+">"+data.location+"</p>"+
                 "<p class='phone'>"+data.mobile+"</p></div><div class='edit-address'><span class='edit btn' data-id="+data.id+">修改</span></div><span class='current-ico'></span></li>";
         }else{
-            return "<li  data-id='"+data.id+"'><div class='receiver'><strong>"+data.name+"<span class='space'></span>收</strong><span class='default' data-id="+data.id+">设置默认地址</span></div><div class='details-address'>"+
+            return "<li  data-id='"+data.id+"'><div class='receiver'><strong><span class='user'>"+data.name+"</span><span class='space'></span>收</strong><span class='default' data-id="+data.id+">设置默认地址</span></div><div class='details-address'>"+
                 "<p><span class='provice'>"+data.province+"</span><span class='space'></span><span class='city'>"+data.city+"</span><span class='space'></span><span class='area'>"+data.area+"</span></p><p class='location'  title="+data.location+">"+data.location+"</p>"+
                 "<p class='phone'>"+data.mobile+"</p></div><div class='edit-address'><span class='edit btn' data-id="+data.id+">修改</span><span class='delete btn' data-id="+data.id+">删除</span></div><span class='current-ico' style='display: none'></span></li>";
         }
@@ -370,9 +363,9 @@ $(function(){
                     '       </div>' +
                     '       <div class="area form-item">' +
                     '           <label><b>*</b>选择地区：</label>' +
-                    '           <select name="province" class="select"></select>' +
-                    '           <select name="city" class="select"></select>' +
-                    '           <select name="districts" class="select"></select>' +
+                    '           <div class="select_border"><div class="container"><select name="province" class="select"></select></div></div>' +
+                    '           <div class="select_border"><div class="container"><select name="city" class="select"></select></div></div>' +
+                    '           <div class="select_border"><div class="container"><select name="districts" class="select"></select></div></div>' +
                     '       </div>' +
                     '       <div class="form-item">' +
                     '           <label><b>*</b>街道地址：</label>' +
@@ -402,9 +395,9 @@ $(function(){
                 '       </div>' +
                 '       <div class="area form-item">' +
                 '           <label><b>*</b>选择地区：</label>' +
-                '           <select name="province" class="select"></select>' +
-                '           <select name="city" class="select"></select>' +
-                '           <select name="districts" class="select"></select>' +
+                '           <div class="select_border"><div class="container"><select name="province" class="select"></select></div></div>' +
+                '           <div class="select_border"><div class="container"><select name="city" class="select"></select></div></div>' +
+                '           <div class="select_border"><div class="container"><select name="districts" class="select"></select></div></div>' +
                 '       </div>' +
                 '       <div class="form-item">' +
                 '           <label><b>*</b>街道地址：</label>' +

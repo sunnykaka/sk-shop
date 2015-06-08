@@ -79,7 +79,7 @@ table td{padding: 10px 0;}
 .top{background: #f3f7f6;height:40px;width: 100%;}
 .top .left h1{font-size:12px;line-height: 40px;font-weight: normal;}
 .top .right{margin-top: 10px;}
-.top .right .btn{margin-right:15px;}
+.top .right .button{margin-right:15px;}
 .space{padding: 0 4px;}
 .top .logined li{float: left;margin-right: 10px;}
 .top .logined a,.top .logined span{float: left;}
@@ -312,8 +312,9 @@ table td{padding: 10px 0;}
     left: 50%;top: 50%;margin:-25px 0 0 -25px;
 }
 .select-address .add p,.address-list .add p{  top: 113px;left: 107px;}
-.select-address .receiver,.address-list .receiver{padding-bottom: 8px;border-bottom: 1px solid #ccc;text-align: left;margin-bottom: 8px;}
-.select-address .default,.address-list .default{float: right;}
+.select-address .receiver,.address-list .receiver{height:18px;width:100%;padding-bottom: 8px;border-bottom: 1px solid #ccc;text-align: left;margin-bottom: 8px;overflow: hidden;}
+.select-address .receiver-name,.address-list .receiver .receiver-name{float: left;height: 27px;line-height: 27px;overflow: hidden;}
+.select-address .default,.address-list .default{float: right;line-height: 27px;}
 .select-address .details-address,.address-list .details-address{margin-bottom: 8px;}
 .select-address .details-address p,.address-list .details-address p{
     padding-bottom: 2px;
@@ -329,7 +330,7 @@ table td{padding: 10px 0;}
 .confirm-product table,.mycart-list table{width: 1199px;text-align: center;vertical-align: middle;}
 .confirm-product th,.mycart-list th{padding-bottom: 10px;}
 .confirm-product tr,.mycart-list thead,.mycart-list tbody tr{border-bottom: 1px solid #e5e5e5;}
-.mycart-list .toDelete{border:1px solid #fd2049;}
+.mycart-list .toDelete{/*border:1px solid #fd2049;*/}
 .confirm-product td{}
 .confirm-product table .col1,.mycart-list table .col1{width: 100px;}
 .confirm-product .actual-price,.mycart-inner .actual-price{color: #FF2D54;}
@@ -745,11 +746,14 @@ table td{padding: 10px 0;}
 .address-form-inner .text,.i-dialog .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
     background: #fcfcfc;width: 290px;
 }
-.address-form-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{background:#fcfcfc;padding: 7px 13px;vertical-align: middle;border: 1px solid #dbdbda;}
+/*.address-form-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{height:18px;background:#fcfcfc;padding: 7px 13px;vertical-align: middle;border: 1px solid #dbdbda;}*/
+ .address-form-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{border:1px solid #ccc;font-family: "Microsoft Yahei";line-height:22px;color:#000;margin:-1px;padding:4px 3px;font-size:13px;width:atuo;*width:auto;}
+.i-dialog .add-form .select_border, .address-form-inner .add-form .select_border,.i-dialog .update-form .select_border,.user-form .select_border{float: left;margin:5px 8px 0 0;*background:#fff;*border:1px solid #ccc;*padding:4px;width:auto;}
+.i-dialog .add-form .container,.address-form-inner .add-form .container,.i-dialog .update-form .container,.user-form .container{*border:0;*position:relative;*width:auto;*height:18px;*overflow:hidden;*background:#fff;}
 .address-form-inner .add-form .location,.i-dialog .update-form .location,.i-dialog .add-form .location{width: 380px;}
 .address-form-inner .add-form .submit{margin-top: 10px;height: 100px;}
-.address-form-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 20px 50px;background: #000;color: #fff;border: none;margin-left: 110px;
-    cursor: pointer;
+.address-form-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 10px 20px;background: #000;color: #fff;border: 1px solid #000;margin-left: 110px;
+    cursor: pointer;font-family: "Microsoft Yahei";
 }
 .address-form-inner .add-address-btn:hover{color: #FF2D54;}
 .address-form-inner .form-item .errormsg,.i-dialog .update-form .errormsg,.i-dialog .add-form .errormsg{color: #FF2D54;margin-left: 10px;}
@@ -799,9 +803,9 @@ table td{padding: 10px 0;}
 .phoneValidate-list .form-item,.updatePw-list .form-item,.validateEmail-list .form-item{padding-left: 90px;}
 .phoneValidate-list form .form-text,.updatePw-list form .form-text,.validateEmail-list form .form-text{width: 70px;}
 .phoneValidate-list .get-code-btn,.updatePw-list .get-code-btn,.validateEmail-list .get-code-btn{background:#000;height:34px;width:90px;text-align: center;
-    border: 1px solid #ccc;margin-left: 10px;color: #fff;cursor: pointer;}
+    border: none;margin-left: 10px;color: #fff;cursor: pointer;}
 .phoneValidate-list .next-btn,.updatePw-list .next-btn,.validateEmail-list .next-btn{background:#000;height:34px;width:90px;text-align: center;
-    border: 1px solid #ccc;margin-left: 143px;color: #fff;cursor: pointer}
+    border: none;margin-left: 143px;color: #fff;cursor: pointer}
 .phoneValidate-list .errormsg,.updatePw-list .errormsg{padding-left: 108px;}
 .validateEmail-list .errormsg{padding-left: 120px;}
 .phoneValidate-list .phoneValidate-sec,.updatePw-list .updatePw-sec,.validateEmail-list .validateEmail-sec{margin-top: 30px;}
@@ -814,7 +818,7 @@ table td{padding: 10px 0;}
 .phoneValidate-list .phoneValidate-thr a,.updatePw-list .updatePw-thr a,.validateEmail-list .send-email,.validateEmail-list .validateEmail-thr a{padding: 8px 15px;background: #000000;color: #fff;margin-left: 465px;}
 .phoneValidate-list .phoneValidate-thr a:hover,.updatePw-list .updatePw-thr a:hover,.validateEmail-list .send-email:hover,.validateEmail-list .validateEmail-thr a:hover{color: #FF2D54;text-decoration: none;}
 .validateEmail-list p{text-align: center;padding: 20px 0;}
-.validateEmail-list .send-email{margin-left: 440px;}
+.validateEmail-list .send-email{margin-left: 440px;display: block;width: 100px;text-align: center;}
 /*end user-phoneValidate*/
 /*likeProduct*/
 .likeProduct,.focusDesigner{margin-bottom: 100px;}
