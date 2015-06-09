@@ -903,4 +903,5 @@ table td{padding: 10px 0;}
 .sticky { float: none; position: fixed; top: 20px; z-index: 6; left: auto;}
 
 .failure{padding: 50px 0;}
+.failure p{text-align: center;}
 .failure a{color:#FF2D54;}
