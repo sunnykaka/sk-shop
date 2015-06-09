@@ -50,12 +50,15 @@ public class AliPayRequestHandler extends PayRequestHandler {
         sParaTemp.put("out_trade_no", out_trade_no);
         sParaTemp.put("subject", subject);
         sParaTemp.put("body", subject);
+
+        sParaTemp.put("currency","USD");
+
         //完成分到圆的转换
         Money money = Money.valueOfCent(payInfoWrapper.getTotalFee());
         sParaTemp.put("total_fee", money.toString());
         sParaTemp.put("partner", AlipayUtil.partner);
         sParaTemp.put("seller_email", AlipayUtil.seller_email);
-        sParaTemp.put("service", "create_direct_pay_by_user");
+        sParaTemp.put("service", "create_forex_trade");
         sParaTemp.put("_input_charset", AlipayUtil.input_charset);
         //回调class
         sParaTemp.put("extra_common_param",payInfoWrapper.getCallBackClass()+"|"+payInfoWrapper.getBizType()+"|"+payInfoWrapper.getDefaultbank());
