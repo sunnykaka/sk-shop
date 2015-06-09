@@ -1,6 +1,7 @@
 package controllers.user;
 
 import common.exceptions.AppBusinessException;
+import common.utils.FormUtils;
 import common.utils.JsonResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,7 @@ public class RecoverController extends Controller {
 
         //String errorPhone = recoverForm.error("phone").message();
 
-        return ok(new JsonResult(false, recoverForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(recoverForm.errors())).toNode());
 
     }
 
@@ -115,7 +116,7 @@ public class RecoverController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, phoneCodeForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(phoneCodeForm.errors())).toNode());
     }
 
     /**
@@ -162,7 +163,7 @@ public class RecoverController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, pswForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(pswForm.errors())).toNode());
     }
 
     public Result recoverPswOk(){
