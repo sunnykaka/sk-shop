@@ -45,7 +45,9 @@
                             <div class="item-row"><button type="submit"  id="next-btn" class="next-btn">提交</button></div>
                         </form>
                     }else{
-                        <span>身份验证失败</span>
+                        <div class="failure">
+                            <p>身份验证失败，<a href="@controllers.user.routes.MySecurityController.changePhoneIndex()">重新验证</a></p>
+                        </div>
                     }
 
                 </div>
