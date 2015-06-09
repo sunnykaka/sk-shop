@@ -165,7 +165,8 @@ table td{padding: 10px 0;}
     overflow: hidden;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
 .fashion-box-inner li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
 .fashion-box-inner .info{height: 70px;background: #fff;width: 390px;}
-.fashion-box-inner .info p{text-align: center;padding: 23px 0;}
+.fashion-box-inner .info p{text-align: center;padding: 8px 0;}
+.fashion-box-inner .preview-info p{padding: 23px 0;}
 .fashion-box-inner .designer{margin: 0 8px;}
 .fashion-box-inner .time{padding-top: 4px;}
 .fashion-box-inner .time-detail{margin-right: 8px;padding-left: 22px;background: url("../images/fashion-ico.png") no-repeat 0 0;}
@@ -200,7 +201,8 @@ table td{padding: 10px 0;}
 .empty-box-inner .double{width: 590px;height: 437px;overflow: hidden}
 .empty-box-inner img{display: block;}
 .empty-box-inner .title{position: absolute;top: 437px;background: #fff;width: 291px;padding: 10px 0;height: 50px;opacity: .7;filter:alpha(opacity=70);   }
-.empty-box-inner .title p{padding: 23px 0;}
+.empty-box-inner .title p{padding: 8px 0;}
+.empty-box-innner .preview-info p{padding: 23px 0}
 .empty-box-inner .double .title{width: 594px;}
 .empty-box-inner .title p{text-align: center;color: #000;padding-bottom: 5px;}
 .empty-box-inner .time-detail{margin-right: 8px;padding-left: 22px;background: url("../images/fashion-ico.png") no-repeat 0 0;}
