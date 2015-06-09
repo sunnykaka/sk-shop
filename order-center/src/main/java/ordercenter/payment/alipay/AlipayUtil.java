@@ -31,10 +31,9 @@ public class AlipayUtil {
     // 签名方式 不需修改
     public static String sign_type = "MD5";
 
-    public static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do?";
+    public static final String ALIPAY_GATEWAY_NEW = "https://www.alipay.com/cooperate/gateway.do?";
 
-    private static final String HTTPS_VERIFY_URL = "https://mapi.alipay.com/gateway.do?service=notify_verify&";
-
+    private static final String HTTPS_VERIFY_URL = "https://www.alipay.com/cooperate/gateway.do?service=create_forex_trade&";
 
     public static boolean verify(String reqType, Map<String, String> params) {
         Map<String, String> sParaNew = paraFilter(params);
