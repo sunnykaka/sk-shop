@@ -60,32 +60,20 @@
 
 } {
 
-
-    <!--slider-box-->
-    <div class="slider-box">
-        <div class="slider-box-inner">
-            <div class="slider-box-img">
-            @for((content,index) <- sliderBoxs.zipWithIndex) {
-
-                <div class="item" style="z-index:@{sliderBoxs.size-index};background-image:url(@content.getContent); background-position: 50% 50%;">
-                <a href="@content.getLink" hidefocus="true" style="outline: none;">
-                    </a>
+    <div class="preview-img width1200">
+        <div class="preview-img-inner">
+             <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="@controllers.routes.Application.index()">首页</a></li>
+                    <li>&gt;</li>
+                    <li>首页预告</li>
+                </ul>
             </div>
-            }
-        </div>
-        <div class="sliderBullets">
-            <ul class="clearfix">
-            @for((content,index) <- sliderBoxs.zipWithIndex) {
-                <li>
-                    <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;"><img class="lazy"   data-original="@content.getContent" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getContent" width="390" height="103"/></a>
-                    <div class="cover"></div>
-                </li>
-            }
-            </ul>
+            <div class="img">
+                <img src="@routes.Assets.versioned("images/preview-img.jpg")" alt="" width="1200" height="416">
+            </div>
         </div>
     </div>
-    </div>
-    <!--end slider-box-->
 
 
     <div class="start-fashion">
