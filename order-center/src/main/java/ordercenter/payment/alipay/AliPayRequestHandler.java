@@ -4,7 +4,9 @@ import common.utils.Money;
 import ordercenter.payment.PayInfoWrapper;
 import ordercenter.payment.PayRequestHandler;
 import ordercenter.payment.constants.PayMethod;
+import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,15 @@ import java.util.Map;
  */
 public class AliPayRequestHandler extends PayRequestHandler {
 
-    public static final int PAYMENT_TYPE_BUY_PRODUCT = 1;    //商品购买
+    /**
+     * 汇率文件保存位置
+     */
+    private final String RATES_FILES_KEY = "payment.ratesFile";
+
+    /**
+     *  支付类型为：商品购买
+     */
+    private final int PAYMENT_TYPE_BUY_PRODUCT = 1;
 
     @Override
     protected String getPaymentURL() {
@@ -33,6 +43,28 @@ public class AliPayRequestHandler extends PayRequestHandler {
 
     @Override
     protected Map<String, String> buildPayParam(PayInfoWrapper payInfoWrapper) {
+        String ratesFilePath = cfg.getString(RATES_FILES_KEY);
+        Assert.notNull(ratesFilePath, "必须要在common.conf中配置ratesFile");
+
+        //下载汇率
+        try {
+            AlipayUtil.downloadRates(ratesFilePath);
+        } catch (Exception e) {
+            throw new RuntimeException("下载汇率文件出错");
+        }
+
+        //读取当前人民币对应美元汇率值
+        double rate = 0;
+        try {
+            rate = AlipayUtil.parseRates(ratesFilePath, "USD");
+        } catch (Exception e) {
+            throw new RuntimeException("读取当前人民币对应美元汇率值出错");
+        }
+
+        if(rate == 0) {
+            throw new RuntimeException("读取当前人民币对应美元汇率值出错，汇率不可能为0");
+        }
+
         //************订单参数***************//
         //请与贵网站订单系统中的唯一订单号匹配
         String out_trade_no = payInfoWrapper.getTradeNo();
@@ -53,9 +85,14 @@ public class AliPayRequestHandler extends PayRequestHandler {
 
         sParaTemp.put("currency","USD");
 
-        //完成分到圆的转换
+        //完成分到元的转换
         Money money = Money.valueOfCent(payInfoWrapper.getTotalFee());
-        sParaTemp.put("total_fee", money.toString());
+        String yuan = money.toString();
+        System.out.println("-----我们系统中人民币-------: " + yuan);
+        BigDecimal cnyB = BigDecimal.valueOf(Double.parseDouble(yuan));
+        BigDecimal usdB = cnyB.divide(new BigDecimal(rate),2, BigDecimal.ROUND_HALF_UP);
+
+        sParaTemp.put("total_fee", usdB.toString());
         sParaTemp.put("partner", AlipayUtil.partner);
         sParaTemp.put("seller_email", AlipayUtil.seller_email);
         sParaTemp.put("service", "create_forex_trade");
@@ -71,7 +108,6 @@ public class AliPayRequestHandler extends PayRequestHandler {
         } else {
             throw new RuntimeException("不支持的支付类型");
         }
-
         return sParaTemp;
     }
 }

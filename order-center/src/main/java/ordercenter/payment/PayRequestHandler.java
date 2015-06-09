@@ -8,12 +8,11 @@ import play.Play;
 import java.util.Map;
 
  /**
- *阿里支付请求处理抽象类
+ *支付请求处理抽象类
  * User: lidujun
  * Date: 2015-04-29
  */
 public abstract class PayRequestHandler {
-
      /**
      * 默认的reutrn url
      */

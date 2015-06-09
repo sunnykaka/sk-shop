@@ -1,5 +1,7 @@
 package ordercenter.payment.alipay;
 
+import common.utils.FileUtils;
+import common.utils.Md5EncryptUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.BufferedReader;
@@ -7,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -34,6 +37,76 @@ public class AlipayUtil {
     public static final String ALIPAY_GATEWAY_NEW = "https://www.alipay.com/cooperate/gateway.do?";
 
     private static final String HTTPS_VERIFY_URL = "https://www.alipay.com/cooperate/gateway.do?service=create_forex_trade&";
+
+    /**
+     * 将map中的key-value拼接成字符串
+     * @param params
+     * @param privateKey
+     * @return
+     */
+    private static String getRatesParamContent(Map params, String privateKey) {
+        List keys = new ArrayList(params.keySet());
+        Collections.sort(keys);
+        String prestr = "";
+        for (int i = 0; i < keys.size(); i++) {
+            String key = (String) keys.get(i);
+            String value = (String) params.get(key);
+
+            if (i == keys.size() - 1) {
+                prestr = prestr + key + "=" + value;
+            } else {
+                prestr = prestr + key + "=" + value + "&";
+            }
+        }
+        return prestr + privateKey;
+    }
+
+    /**
+     * 下载汇率文件
+     * @param localFilePath
+     */
+    public static void downloadRates(String localFilePath) throws Exception {
+        Map params = new HashMap();
+        params.put("service", "forex_rate_file");
+        params.put("partner", partner);
+        params.put("_input_charset", input_charset);
+
+        String sign = Md5EncryptUtils.md5(getRatesParamContent(params, key));
+
+        String parameter = ALIPAY_GATEWAY_NEW;
+        List keys = new ArrayList(params.keySet());
+        for (int i = 0; i < keys.size(); i++) {
+            try {
+                parameter = parameter + keys.get(i) + "="
+                        + URLEncoder.encode((String) params.get(keys.get(i)), input_charset) + "&";
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        parameter = parameter + "sign=" + sign + "&sign_type=" + sign_type;
+        FileUtils.downloadRemotFile(parameter, localFilePath);
+    }
+
+
+    /**
+     * 解析汇率文件，并返回需要的汇率值
+     * @param localFilePath
+     */
+    public static double parseRates(String localFilePath, String rateTypeName) throws Exception {
+        double rate = 0;
+        Map<Integer,String> fileLineMap = FileUtils.readTxtFileByLine(localFilePath, input_charset);
+        Set<Integer> keySet = fileLineMap.keySet();
+        for(Integer key : keySet) {
+            String lineStr = fileLineMap.get(key);
+            if(lineStr != null) {
+                String[] tmpArr = lineStr.split("\\|");
+                if(tmpArr != null && tmpArr[2].equalsIgnoreCase(rateTypeName)) {
+                    rate = Double.parseDouble(tmpArr[3]);
+                }
+            }
+        }
+        return rate;
+    }
 
     public static boolean verify(String reqType, Map<String, String> params) {
         Map<String, String> sParaNew = paraFilter(params);
