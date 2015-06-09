@@ -111,6 +111,7 @@ $(function(){
                     url: '/my/security/phone/end',
                     data: {
                         verificationCode: validateCode,
+                        token:$('#token').val(),
                         phone:phone
                     },
                     dataType: "json",

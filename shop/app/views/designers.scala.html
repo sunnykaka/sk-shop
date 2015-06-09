@@ -2,7 +2,39 @@
 
 @import productcenter.models.Seo;
 @main(new Seo(Messages("title.designers"),Messages("seo.description"),Messages("seo.Keywords")))("designer") {
+ <script src="@routes.Assets.versioned("js/tpl.js")"></script>
+ <script type="text/template" id="demo">
+    <# 
+        for(var i=0; i<data.length; i++) { 
+            echo( 
+                '<li class="add"><a href="/designerProd?dId='+data[i].id+'"><img class="designer-img lazy" data-original="'+data[i].mainPic+'" src="'+data[i].mainPic+'" alt="'+data[i].description+'" width="289" height="460" style="display: block;"><div><img src="'+data[i].brandPic+'" alt="" width="289" height="60"><p>设计师：'+data[i].name+'</p></div></a></li>'
+             );
+        }
+    #>
 
+ </script>
+<script type='text/javascript'>
+
+$('#more').click(function(){
+    $(this).attr('disabled',true);
+    var id = $(this).attr('data-id'),that = $(this);
+    $.ajax({
+        url:'/designers4more?currPage='+id,
+        success:function(response){
+             $(this).attr('disabled',null);
+            var html =  tpl('#demo', response);
+            if(response.data.length<8){
+                $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(300);
+                that.fadeOut();
+            }else{
+               $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(); 
+               that.attr('data-id',parseInt(id)+1);
+            }
+            $(this).attr('disabled',null);
+        }
+    });
+});
+</script>
 } {
     <div class="designer-list">
         <div class="designer-list-inner width1200">
@@ -36,7 +68,7 @@
                 }
                 </ul>
                 @if(designerList.size == 8){
-                    <p class="more">发现更多设计师</p>
+                    <p class="more" id="more" data-id="2">发现更多设计师</p>
                 }
             </div>
         </div>

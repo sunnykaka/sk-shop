@@ -29,7 +29,7 @@ $(function(){
 
 
     setInterval(function(){
-        $(".time-detail:not(:contains(结束))").each(function(){
+        $(".time-detail:not(:contains(已结束))").each(function(){
             var obj = $(this);
             //var endTime = new Date(obj.attr('value'));
             var nowTime = new Date(), utc = nowTime.getUTCFullYear()+"/"+(nowTime.getUTCMonth()+1)+"/"+nowTime.getUTCDate()+" "+nowTime.getUTCHours()+":"+nowTime.getUTCMinutes()+":"+nowTime.getUTCSeconds();
@@ -42,12 +42,12 @@ $(function(){
             var myMS=Math.floor(nMS/100) % 10; //拆分秒
 
             if(myD>= 0){
-                var str = myD+"天"+myH+"小时"+myM+"分"+myS+"."+myMS+"秒";
+                var str = myD+"天"+myH+"小时"+myM+"分"+myS+"秒";
 
             }else{
                 var str = "已结束！";
                 //$(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
-                $('.time').html('').text(str);
+                obj.parent('.time').html('').text(str);
             }
             obj.text(str);
         });

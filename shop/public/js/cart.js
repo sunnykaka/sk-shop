@@ -60,6 +60,9 @@ $(function(){
                         updatePrice(ele,val,price);
                         //总价
                         setTotalPrice();
+                        ele.attr('disabled',null);
+                        ele.attr('disabled',null);
+                        $('#toOrder').attr('disabled',null);
 
                     }
                 }
@@ -70,21 +73,17 @@ $(function(){
             ele.parents('tr').find('.pro-total-money').text((val*price).toFixed(2));
         }
 
-
-
         return {
             add: function () {
                 val += 1;
 
                 if (val > limit) {
                     val = limit;
-                    FG.tip(numberInput, 'limit-tip', '超出此商品能购买的最大数量', 30);
+                    FG.tip(numberInput, 'limit-tip', "此商品限购"+val+"件", 30);
+                    numberInput.val(val);
                     return;
                 }
-
                 numberInput.val(val);
-
-
                 sync();
 
             },
@@ -112,8 +111,10 @@ $(function(){
 
                 if (val > limit) {
                     val = limit;
-                    FG.tip(numberInput, 'limit-tip', '超出此商品能购买的最大数量', 30);
-                    return;
+                    FG.tip(numberInput, 'limit-tip', "此商品限购"+val+"件", 30);
+                    numberInput.val(val);
+                    setTotalPrice(val * price);
+                    sync();
                 }
 
                 numberInput.val(val);
@@ -126,16 +127,21 @@ $(function(){
 
     // 增加数量事件
     cartPage.on('click', '.btn-add', function () {
+        $(this).attr('disabled',true);
+        $('#toOrder').attr('disabled',true);
         updateNumber($(this)).add();
     });
 
     // 减小数量事件
     cartPage.on('click', '.btn-sub', function () {
+        $(this).attr('disabled',true);
+        $('#toOrder').attr('disabled',true);
         updateNumber($(this)).remove();
     });
 
     // 手动输入数量验证
     cartPage.on('blur', '.text-number', function () {
+        $('#toOrder').attr('disabled',true);
         updateNumber($(this)).checkValue();
     });
 

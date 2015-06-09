@@ -71,7 +71,9 @@ $(function(){
                },
                dataType: "json",
                success: function (response) {
-
+                if(!response.result){
+                    $('.phoneValidate-first').find('#errormsg-phoneCode').text(data.message);
+                }
                }
            });
        }
@@ -138,12 +140,8 @@ $(function(){
                 if(data.result){
                     location.href = data.data;
                 }else{
-                    var valObj = data.message,errMsg;
-                    $.each(valObj,function(key,value) {
-                        errMsg = value[0];
-                    });
 
-                    $('.updatePw-sec').find('#errormsg-confirmPw').text(errMsg);
+                    $('.updatePw-sec').find('#errormsg-confirmPw').text(data.message);
                 }
             }
         });
@@ -170,12 +168,7 @@ $(function(){
                     if(data.result){
                         location.href = data.data;
                     }else{
-                        var valObj = data.message,errMsg;
-                        $.each(valObj,function(key,value) {
-                            errMsg = value[0];
-                        });
-
-                        $('.updatePw-first').find('#errormsg-phoneCode').text(errMsg);
+                        $('.phoneValidate-first').find('#errormsg-phoneCode').text(data.message);
                     }
                 }
             });
