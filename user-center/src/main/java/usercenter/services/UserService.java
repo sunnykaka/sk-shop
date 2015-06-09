@@ -249,9 +249,9 @@ public class UserService {
         }
 
         try {
-
-            user.setPassword(PasswordHash.createHash(psw.getNewPassword()));
-            generalDao.merge(user);
+            User userNew = getById(user.getId());
+            userNew.setPassword(PasswordHash.createHash(psw.getNewPassword()));
+            generalDao.merge(userNew);
 
         } catch (GeneralSecurityException e) {
             Logger.error("创建哈希密码的时候发生错误", e);
