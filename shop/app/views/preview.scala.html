@@ -108,11 +108,9 @@
                         <div class="cover"></div>
                         <div class="cover-info">
                             <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
-                            <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
+                            <input type="text" class="phone-number" placeholder="请输入手机号码"  @phone.map(x => s"value=$x").getOrElse("") />
+                            <span class='btn-cover'></span>
                             <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
-                            <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
-                            <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                            <span class="remind-btn">开售提醒</span>
                         </div>
                     </li>
                 }
@@ -143,10 +141,8 @@
                         <div class="cover-info">
                             <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
+                            <span class="btn-cover"></span>
                             <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
-                            <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
-                            <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                            <span class="remind-btn">开售提醒</span>
                         </div>
                     </li>
                 }
@@ -173,17 +169,14 @@
                             <img src="@exhibition.getPic" alt="" width="291" height="437"/>
                             <img class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="291" height="437"/>
                             <div class="title">
-                                <p>@exhibition.getIntroduction</p>
                                 <p>@exhibition.getIntroduction()</p>
                             </div>
                             <div class="cover"></div>
                             <div class="cover-info">
                                 <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
+                                 <span class="btn-cover"></span>
                                 <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
-                                <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
-                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                                <span class="remind-btn">开售提醒</span>
                             </div>
                         </li>
                     }
@@ -195,12 +188,12 @@
                         <img src="@doubleEx.getPic" alt=""/>
                         <div class="title">
                             <p>@doubleEx.getIntroduction()</p>
-                            <p>@doubleEx.getIntroduction</p>
                         </div>
                         <div class="cover"></div>
                         <div class="cover-info">
                             <a href="#" class="like">@doubleEx.getBaseLike</a>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
+                             <span class="btn-cover"></span>
                             <span class="remind-btn" exhibition-id="@doubleEx.getId">开售提醒</span>
                         </div>
                     </li>
@@ -220,10 +213,8 @@
                             <div class="cover-info">
                                 <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
+                                 <span class="btn-cover"></span>
                                 <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
-                                <a class="like" data-id="@exhibition.getDesignerId">我喜欢</a>
-                                <input type="text" class="phone-number" placeholder="请输入手机号码" />
-                                <span class="remind-btn">开售提醒</span>
                             </div>
                         </li>
                     }

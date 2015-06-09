@@ -43,15 +43,21 @@
 
                 <div class="likeProduct-list first">
                     <h2>喜欢的商品</h2>
-                    <ul class="clearfix likeProduct-box">
-                        @for(pc <- page.getResult){
-                            <li>
-                                <a href="@controllers.product.routes.ProductController.detail(pc.getProductId.toString)"><img src="@pc.getProductPic" alt="@pc.getProductName" width="235px" height="384px"/></a>
-                                <p class="title">@pc.getProductName</p>
-                                <span class="del" data-id="@pc.getProductId"></span>
-                            </li>
-                        }
-                    </ul>
+                    @if(page.getResult.size() > 0){
+                        <ul class="clearfix likeProduct-box">
+                            @for(pc <- page.getResult){
+                                <li>
+                                    <a href="@controllers.product.routes.ProductController.detail(pc.getProductId.toString)"><img src="@pc.getProductPic" alt="@pc.getProductName" width="235px" height="384px"/></a>
+                                    <p class="title">@pc.getProductName</p>
+                                    <span class="del" data-id="@pc.getProductId"></span>
+                                </li>
+                            }
+                        </ul>
+                    }else{
+                        <div class="order-empty">
+                            <p>您还没有喜欢的商品，赶紧去 <a href="/">逛逛吧</a></p>
+                        </div>
+                    }
 
                     @if(page.getTotalPage > 1){
                         <div class="likeProduct-page">

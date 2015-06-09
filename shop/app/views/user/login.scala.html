@@ -7,6 +7,7 @@
     <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
     <script type="text/javascript">
         FG.user.login();
+        $('#username').focus();
     </script>
 } {
 
@@ -34,7 +35,7 @@
                 <div class="login-PW">
                     <span class="ico ico2"></span>
                     <label for="password">密码</label>
-                    <input type="password" id="password" name="password" class="text"/>
+                    <input type="password" id="password" name="password" autocomplete="off" class="text"/>
                     <span class="errormsg" id="errormsg-password"></span>
                 </div>
                 <div><button type="submit"  id="login-btn" class="login-btn">登录</button></div>

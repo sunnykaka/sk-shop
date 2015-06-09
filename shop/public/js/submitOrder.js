@@ -269,10 +269,11 @@ $(function(){
         var addressId = $(this).attr('data-id'),item = $(this).parents('li'),that = $(this);
         $.dialog({
             title:'提示',
-            content:'您确定要删除这条收货地址吗？',
-            width:300,
+            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除这个收货地址？</p></div>',
+            width:540,
+            height:248,
             lock:true,
-            padding:'30px',
+            drag:false,
             btn: {
                 ok: {
                     val: '确定',

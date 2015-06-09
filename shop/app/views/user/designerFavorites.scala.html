@@ -45,16 +45,22 @@
 
                 <div class="focusDesigner-list first">
                     <h2>关注的设计师</h2>
-                    <ul class="clearfix focusDesigner-box">
-                        @for(dc <- page.getResult){
-                            <li>
-                                <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName" width="235px" height="374px"/></a>
-                                <p class="title">@dc.getDesignerName</p>
-                                <span class="del" data-id="@dc.getDesignerId"></span>
-                            </li>
-                        }
+                    @if(page.getResult.size() > 0){
+                        <ul class="clearfix focusDesigner-box">
+                            @for(dc <- page.getResult){
+                                <li>
+                                    <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName" width="235px" height="374px"/></a>
+                                    <p class="title">@dc.getDesignerName</p>
+                                    <span class="del" data-id="@dc.getDesignerId"></span>
+                                </li>
+                            }
 
-                    </ul>
+                        </ul>
+                    }else{
+                        <div class="order-empty">
+                            <p>您还没有关注的设计师，赶紧去 <a href="/">逛逛吧</a></p>
+                        </div>
+                    }
 
                     @if(page.getTotalPage > 1){
                         <div class="focusDesigner-page">
