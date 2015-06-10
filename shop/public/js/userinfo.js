@@ -23,6 +23,7 @@ $(function(){
 
         e.preventDefault();
         var form = $(this).parents('form');
+        form.find('#addMsg').text('');
         var name = form.find('input[name=name]');
         if(name.val() && name.val().length>20){
             name.siblings('.errormsg').remove();
@@ -30,12 +31,9 @@ $(function(){
             return false;
         }else if(!/^[A-Za-z\u4e00-\u9fa5]{2,20}$/.test(name.val())){
             name.siblings('.errormsg').remove();
-            name.parents('.form-item').append('<span class="errormsg">用户名格式不正确</span>');
+            name.parents('.form-item').append('<span class="errormsg">用户名格式不正确,必须是中文与字母组合</span>');
             return false;
         }
-
-
-
 
         $.ajax({
             type: "POST",
