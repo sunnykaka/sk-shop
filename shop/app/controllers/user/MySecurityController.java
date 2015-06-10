@@ -91,41 +91,41 @@ public class MySecurityController extends Controller {
 
     }
 
-    /**
-     * 设置密码首页
-     *
-     * @return
-     */
-    @SecuredAction
-    public Result newPasswordIndex() {
-
-        return ok(newPassword.render(new HashMap<String,java.util.List<play.data.validation.ValidationError>>()));
-    }
-
-    /**
-     * 设置新密码
-     *
-     * @return
-     */
-    @SecuredAction
-    public Result newPasswordDo() {
-        User user = SessionUtils.currentUser();
-
-        Form<PswForm> passwordForm = Form.form(PswForm.class).bindFromRequest();
-
-        if (!passwordForm.hasErrors()) {
-            try {
-
-                userService.updatePassword(user, passwordForm.get());
-                return ok(newPasswordDo.render());
-
-            } catch (AppBusinessException e) {
-                passwordForm.reject("rePassword", e.getMessage());
-            }
-        }
-
-        return ok(newPassword.render(passwordForm.errors()));
-    }
+//    /**
+//     * 设置密码首页
+//     *
+//     * @return
+//     */
+//    @SecuredAction
+//    public Result newPasswordIndex() {
+//
+//        return ok(newPassword.render(new HashMap<String,java.util.List<play.data.validation.ValidationError>>()));
+//    }
+//
+//    /**
+//     * 设置新密码
+//     *
+//     * @return
+//     */
+//    @SecuredAction
+//    public Result newPasswordDo() {
+//        User user = SessionUtils.currentUser();
+//
+//        Form<PswForm> passwordForm = Form.form(PswForm.class).bindFromRequest();
+//
+//        if (!passwordForm.hasErrors()) {
+//            try {
+//
+//                userService.updatePassword(user, passwordForm.get());
+//                return ok(newPasswordDo.render());
+//
+//            } catch (AppBusinessException e) {
+//                passwordForm.reject("rePassword", e.getMessage());
+//            }
+//        }
+//
+//        return ok(newPassword.render(passwordForm.errors()));
+//    }
 
     /**
      * 修改手机号码首页

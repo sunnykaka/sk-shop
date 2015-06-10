@@ -59,8 +59,8 @@ POST        /my/data/update                       @controllers.user.MyDataContro
 GET         /my/security/index                    @controllers.user.MySecurityController.index()
 POST        /my/security/phone/check              @controllers.user.MySecurityController.checkPhone(phone)
 #     设置密码
-GET         /my/security/psw/setting              @controllers.user.MySecurityController.newPasswordIndex()
-POST        /my/security/psw/setting              @controllers.user.MySecurityController.newPasswordDo()
+#GET         /my/security/psw/setting              @controllers.user.MySecurityController.newPasswordIndex()
+#POST        /my/security/psw/setting              @controllers.user.MySecurityController.newPasswordDo()
 #     修改密码
 GET         /my/security/psw/index                @controllers.user.MySecurityController.changePasswordIndex()
 POST        /my/security/psw/new                  @controllers.user.MySecurityController.changePasswordNew()
