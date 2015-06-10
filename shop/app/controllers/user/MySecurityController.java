@@ -17,6 +17,7 @@ import usercenter.domain.SmsSender;
 import usercenter.dtos.CodeForm;
 import usercenter.dtos.ChangePswForm;
 import usercenter.dtos.PhoneCodeForm;
+import usercenter.dtos.PswForm;
 import usercenter.models.User;
 import usercenter.services.UserService;
 import usercenter.utils.SessionUtils;
@@ -44,6 +45,8 @@ public class MySecurityController extends Controller {
     public Result index() {
 
         User user = SessionUtils.currentUser();
+        User newUser = userService.getById(user.getId());
+        user.setPassword(newUser.getPassword());
 
         return ok(mySecurityIndex.render(user));
 
@@ -86,6 +89,42 @@ public class MySecurityController extends Controller {
 
         return ok(bindPhoneIndex.render(ParamUtils.getByKey(request(),"phone"),phoneCodeForm.errors()));
 
+    }
+
+    /**
+     * 设置密码首页
+     *
+     * @return
+     */
+    @SecuredAction
+    public Result newPasswordIndex() {
+
+        return ok(newPassword.render(new HashMap<String,java.util.List<play.data.validation.ValidationError>>()));
+    }
+
+    /**
+     * 设置新密码
+     *
+     * @return
+     */
+    @SecuredAction
+    public Result newPasswordDo() {
+        User user = SessionUtils.currentUser();
+
+        Form<PswForm> passwordForm = Form.form(PswForm.class).bindFromRequest();
+
+        if (!passwordForm.hasErrors()) {
+            try {
+
+                userService.updatePassword(user, passwordForm.get());
+                return ok(newPasswordDo.render());
+
+            } catch (AppBusinessException e) {
+                passwordForm.reject("rePassword", e.getMessage());
+            }
+        }
+
+        return ok(newPassword.render(passwordForm.errors()));
     }
 
     /**

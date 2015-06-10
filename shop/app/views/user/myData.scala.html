@@ -56,7 +56,7 @@
                                 @if(null == userData.getUser.getPhone || "".equals(userData.getUser.getPhone)){
                                     <p>您使用第三方登录，尚未绑定手机&nbsp;&nbsp;&nbsp;&nbsp;<a href="@controllers.user.routes.MySecurityController.bindPhoneIndex()">绑定</a></p>
                                 }else{
-                                    <p>@userData.getUser.getPhone</p><a href="@controllers.user.routes.MySecurityController.changePhoneIndex()">更改</a>
+                                    <p>@userData.getUser.getPhone&nbsp;&nbsp;&nbsp;&nbsp;<a href="@controllers.user.routes.MySecurityController.changePhoneIndex()">更改</a></p>
                                 }
                             </div>
                             <div class="form-item">

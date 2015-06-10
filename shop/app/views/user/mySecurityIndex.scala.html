@@ -20,9 +20,15 @@
                 <div class="user-info-list">
                     <h2>账号安全</h2>
                     <div class="account-safe-con">
-                        <div class="item">
-                            <span class="status on"></span><p class="item-detail">登陆密码</p><p class="item-info">登陆密码能够保证您的账户安全，让你购物更放心</p>
-                            <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changePasswordIndex()" class="btn">修改</a></p>
+                        <div class="item @if(null == user.getPassword || "".equals(user.getPassword)){off}" >
+                            @if(null == user.getPassword || "".equals(user.getPassword)){
+                                <span class="status"></span><p class="item-detail">登陆密码</p><p class="item-info">登陆密码能够保证您的账户安全，让你购物更放心</p>
+                                <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.newPasswordIndex()" class="btn">设置</a></p>
+                            }else{
+                                <span class="status on"></span><p class="item-detail">登陆密码</p><p class="item-info">登陆密码能够保证您的账户安全，让你购物更放心</p>
+                                <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changePasswordIndex()" class="btn">修改</a></p>
+                            }
+
                         </div>
                         <div class="item @if(null == user.getPhone || "".equals(user.getPhone)){off}">
                             @if(null == user.getPhone || "".equals(user.getPhone)){
