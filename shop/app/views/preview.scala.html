@@ -1,4 +1,4 @@
-@(user: usercenter.models.User, sellingMap: Map[String, List[CmsExhibition]], doubleEx: CmsExhibition, font1: models.CmsContent, font2: models.CmsContent, sliderBoxs: List[models.CmsContent])
+@(user: usercenter.models.User, sellingMap: Map[String, List[CmsExhibition]], doubleEx: CmsExhibition, font1: models.CmsContent, font2: models.CmsContent, logImg: models.CmsContent)
 
 @import common.utils.DateUtils
 @import dtos.ExhibitionPosition
@@ -70,7 +70,7 @@
                 </ul>
             </div>
             <div class="img">
-                <img src="@routes.Assets.versioned("images/preview-img.jpg")" alt="" width="1200" height="416">
+                <img src="@logImg.getContent" alt="@logImg.getTitle" width="1200" height="416">
             </div>
         </div>
     </div>

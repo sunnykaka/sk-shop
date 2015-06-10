@@ -133,13 +133,13 @@ public class Application extends Controller {
 
         List<CmsContent> contents = cmsService.allContents();
 
-        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_SLIDER_BOX)).collect(toList());
+        CmsContent logImg = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_SLIDER_BOX)).findFirst().get();
         CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)).findFirst().get();
         CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)).findFirst().get();
 
-        int size = sliderBoxs.size() > 3? 3 : sliderBoxs.size();
+//        int size = sliderBoxs.size() > 1? 1 : sliderBoxs.size();
 
-        return ok(preview.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0, size)));
+        return ok(preview.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, logImg));
     }
 
 
