@@ -23,7 +23,7 @@ public class OrderPayCallBackController extends Controller {
      * @return
      */
     public Result normalReturn() {
-        log();
+        Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.RETURN);
 
@@ -41,7 +41,7 @@ public class OrderPayCallBackController extends Controller {
      * @return
      */
     public Result notifyReturn() {
-        log();
+        Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.NOTIFY);
         Map<String, Object> resultMap = result.getData();
@@ -50,10 +50,5 @@ public class OrderPayCallBackController extends Controller {
         } else {
             return ok(payFail.render(resultMap));
         }
-    }
-
-    private void log() {
-        if (Logger.isInfoEnabled())
-            Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
     }
 }

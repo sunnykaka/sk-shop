@@ -126,8 +126,8 @@ GET         /order/submitTradeOrder               @controllers.shop.OrderAndPayC
 GET         /order/toPayOrder                     @controllers.shop.OrderAndPayController.toPayOrder(payMethod:String,payOrg:String,orderIds:String,tradeNo:String)
 
 #支付
-POST        /payOrder/normalReturn                @controllers.shop.OrderPayCallBackController.normalReturn
-POST        /payOrder/notifyReturn                @controllers.shop.OrderPayCallBackController.notifyReturn
+GET         /payOrder/normalReturn                @controllers.shop.OrderPayCallBackController.normalReturn
+GET         /payOrder/notifyReturn                @controllers.shop.OrderPayCallBackController.notifyReturn
 
 #product
 GET         /product/valuations                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
