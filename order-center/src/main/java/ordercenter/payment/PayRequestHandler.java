@@ -14,6 +14,11 @@ import java.util.Map;
  */
 public abstract class PayRequestHandler {
      /**
+      * 读取play配置文件
+      */
+     protected static Configuration cfg = Play.application().configuration();
+
+     /**
      * 默认的reutrn url
      */
      protected static final String DEFAULT_RETURN_URL_KEY = "payment.returnUrl";
@@ -23,26 +28,24 @@ public abstract class PayRequestHandler {
      */
      protected static final String DEFAULT_NOTIFY_URL_KEY = "payment.notifyUrl";
 
-     protected static Configuration cfg = Play.application().configuration();
-
      /**
       * 跳转到支付界面格式字符串
       * @param payInfoWrapper
       * @return
       */
     public final String forwardToPay(PayInfoWrapper payInfoWrapper) {
-        Map<String, String> params = buildPayParam(payInfoWrapper);
+        Map<String, String> payParams = buildPayParam(payInfoWrapper);
         //返回处理的Url
         String returnUrl = cfg.getString(DEFAULT_RETURN_URL_KEY);
+        Assert.notNull(returnUrl, "必须要在common.conf中配置returnUrl");
         //notify处理的Url
         String notifyUrl = cfg.getString(DEFAULT_NOTIFY_URL_KEY);
-        Assert.notNull(returnUrl, "必须要在common.conf中配置returnUrl");
         Assert.notNull(notifyUrl, "必须要在common.conf中配置notifyUrl");
-        params.put("return_url", returnUrl);
-        params.put("notify_url", notifyUrl);
+        payParams.put("return_url", returnUrl);
+        payParams.put("notify_url", notifyUrl);
         //签名，并追加签名参数
-        doSign(params);
-        return buildPaymentString(params);
+        doSign(payParams);
+        return buildPaymentString(payParams);
     }
 
      /**

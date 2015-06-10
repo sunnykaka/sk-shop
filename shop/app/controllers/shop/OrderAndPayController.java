@@ -191,7 +191,7 @@ public class OrderAndPayController extends Controller {
             curUserName = curUser.getUserName();
 
             //仅用于验证用
-            PayMethod.valueOf(payMethod);
+            PayMethod payMethodEnum = PayMethod.valueOf(payMethod);
 
             String[] split = orderIds.split(",");
             Integer[] idList = new Integer[split.length];
@@ -231,7 +231,7 @@ public class OrderAndPayController extends Controller {
             //交易号
             String tradeNo = TradeSequenceUtil.getTradeNo();
             //处理交易信息
-            tradeService.submitTradeOrderProcess(tradeNo, orderList);
+            tradeService.submitTradeOrderProcess(tradeNo, orderList, payMethodEnum);
             return ok(new JsonResult(true,"生成交易成功",tradeNo).toNode());
         } catch (Exception e) {
             Logger.error("用户" + curUserName + "订单支付在提交第三方支付前发生异常，其提交的订单编号如下：" + orderIds, e);
@@ -263,7 +263,9 @@ public class OrderAndPayController extends Controller {
         payInfoWrapper.setTradeNo(tradeNo);
         //设置购买方式为order，订单
         payInfoWrapper.setBizType(BizType.Order.getName());
-        payInfoWrapper.setCallBackClass(OrderPayCallback.class);
+
+        //payInfoWrapper.setCallBackClass(OrderPayCallbackProcess.class); //ldj
+
         payInfoWrapper.setPayMethod(PayMethod.valueOf(payMethod));
         payInfoWrapper.setDefaultbank(payOrg);
 
@@ -277,7 +279,7 @@ public class OrderAndPayController extends Controller {
                 bank = PayBank.Tenpay;
             }
         }
-        Logger.info("///////////////////////////真正的支付机构：" + bank.getValue());
+        Logger.info("--------------------真正的支付机构：" + bank.getValue());
         payInfoWrapper.setDefaultbank(bank.getName());
 
         List<Order> orderList = new ArrayList<Order>(idList.length);
@@ -324,5 +326,4 @@ public class OrderAndPayController extends Controller {
         }
         return flag;
     }
-
 }

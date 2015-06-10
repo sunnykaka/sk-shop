@@ -3,7 +3,7 @@ package ordercenter.constants;
 import common.models.utils.ViewEnum;
 
 /**
- * 订单支付类型
+ * 订单付款方式
  * <p/>
  * 支付方式的不同决定订单的生命周期
  * 如果一个订单是在线付款，我们会设置一个付款期限，如果超过这个订单就要自动取消

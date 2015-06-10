@@ -71,11 +71,7 @@
     <logger name="controllers.shop.OrderAndPayController" level="INFO">
         <appender-ref ref="TRADE_FILE" />
     </logger>
-    <logger name="controllers.shop.OrderPayCallback" level="INFO">
-        <appender-ref ref="TRADE_FILE" />
-    </logger>
-
-    <logger name="ordercenter.services.TradeSuccessService" level="INFO">
+    <logger name="ordercenter.services.OrderPayCallbackProcess" level="INFO">
         <appender-ref ref="TRADE_FILE" />
     </logger>
 
@@ -84,6 +80,5 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="TRADE_FILE"/>
     </root>
-
 
 </configuration>

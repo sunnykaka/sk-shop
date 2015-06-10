@@ -5,6 +5,7 @@ import common.utils.DateUtils;
 import ordercenter.constants.OrderState;
 import ordercenter.constants.TradeType;
 import ordercenter.models.*;
+import ordercenter.payment.constants.PayMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,15 +114,16 @@ public class TradeService {
      * @param tradeNo
      * @param orderList
      */
-    public void submitTradeOrderProcess(String tradeNo, List<Order> orderList) {
+    public void submitTradeOrderProcess(String tradeNo, List<Order> orderList, PayMethod payMethodEnum) {
         for(Order order : orderList) {
             //创建交易订单信息
             TradeOrder tradeOrder = new TradeOrder();
             tradeOrder.setTradeNo(tradeNo);
             tradeOrder.setOrderId(order.getId());
             tradeOrder.setOrderNo(order.getOrderNo());
-            tradeOrder.setTradeType(TradeType.BuyProduct);
+            tradeOrder.setPayMethod(payMethodEnum);
             tradeOrder.setPayFlag(false);
+            tradeOrder.setTradeType(TradeType.BuyProduct);
             this.createTradeOrder(tradeOrder);
 
             //更新订单

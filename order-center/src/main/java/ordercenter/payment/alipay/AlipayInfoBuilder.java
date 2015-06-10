@@ -25,16 +25,25 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
      * 添加了业务方式和银行
      */
     public Trade buildFromRequest(Request request) {
-        String order_no = ParamUtils.getByKey(request, "out_trade_no");  //获取订单号
         Trade tradeInfo = new Trade();
-        tradeInfo.setTradeNo(order_no);
+        tradeInfo.setOuterPlatformType(PayType.Alipay.getValue());
+        //尚客系统交易号
+        tradeInfo.setTradeNo(ParamUtils.getByKey(request, "out_trade_no"));
+        //支付宝系统交易号
+        tradeInfo.setOuterTradeNo(ParamUtils.getByKey(request, "trade_no"));
+        //交易状态
+        tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_status"));
+
+
+
+        //下面的参数现在有点问题
         Money money = Money.valueOf(ParamUtils.getByKey(request, "total_fee"));
         tradeInfo.setPayTotalFee(money);
         tradeInfo.setGmtCreateTime(DateUtils.current());
-        tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_status"));
+
         tradeInfo.setOuterBuyerAccount(ParamUtils.getByKey(request, "buyer_email"));
-        tradeInfo.setOuterTradeNo(ParamUtils.getByKey(request, "trade_no"));
-        tradeInfo.setOuterPlatformType(PayType.Alipay.getValue());
+
+
         String extra_common_param = ParamUtils.getByKey(request, "extra_common_param");//阿里的支付回传参数
         String[] split = extra_common_param.split("\\|");
 
@@ -51,11 +60,15 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
         if (split.length > 2)
             tradeInfo.setDefaultbank(split[2]);
 
+
         String bank_seq_no = ParamUtils.getByKey(request, "bank_seq_no");
         tradeInfo.setPayMethod(bank_seq_no == null ? PayMethod.directPay.toString() : PayMethod.bankPay.toString());
         tradeInfo.setOuterBuyerId(ParamUtils.getByKey(request, "buyer_id"));
         tradeInfo.setNotifyId(ParamUtils.getByKey(request, "notify_id"));
         tradeInfo.setNotifyType(ParamUtils.getByKey(request,"notify_type"));
+
+
+
         return tradeInfo;
     }
 
