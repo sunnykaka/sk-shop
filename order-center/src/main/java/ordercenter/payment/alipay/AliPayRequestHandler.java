@@ -41,6 +41,10 @@ public class AliPayRequestHandler extends PayRequestHandler {
 
     @Override
     protected Map<String, String> buildPayParam(PayInfoWrapper payInfoWrapper) {
+        if (!(payInfoWrapper.isAlipay() || payInfoWrapper.isBank())) {
+            throw new RuntimeException("不支持的支付类型");
+        }
+
         //设置支付参数
         Map<String, String> params = new HashMap<String, String>();
         params.put("service", "create_forex_trade");
@@ -62,22 +66,8 @@ public class AliPayRequestHandler extends PayRequestHandler {
         params.put("rmb_fee", rmbFee);
         Logger.info("------------我们系统中人民币-------: " + rmbFee);
 
-
-        //下面参数有问题 ldj
-        //境外支付没有看到下面的参数，而且境外支付也不将系统传递过去的额外参数传递回来
-        params.put("seller_email", AlipayUtil.seller_email);
-        params.put("_input_charset", AlipayUtil.input_charset);
-        params.put("payment_type", String.valueOf(PAYMENT_TYPE_BUY_PRODUCT));
-        //回调class
-        params.put("extra_common_param",payInfoWrapper.getCallBackClass()+"|"+payInfoWrapper.getBizType()+"|"+payInfoWrapper.getDefaultbank());
-
-        if (payInfoWrapper.isAlipay()) {
-            //params.put("paymethod", PayMethod.directPay.toString());
-        } else if (payInfoWrapper.isBank()) {
-            //params.put("defaultbank", payInfoWrapper.getDefaultbank());
-            //params.put("paymethod", PayMethod.bankPay.toString());
-        } else {
-            throw new RuntimeException("不支持的支付类型");
+        if(payInfoWrapper.isBank()) {
+            params.put("specified_pay_channel", "debitcard-cmb-mb2c"); //payInfoWrapper.getDefaultbank()
         }
         return params;
     }

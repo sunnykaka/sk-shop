@@ -33,9 +33,18 @@ public class AlipayUtil {
     // 签名方式 不需修改
     public static String sign_type = "MD5";
 
-    public static final String ALIPAY_GATEWAY_NEW = "https://www.alipay.com/cooperate/gateway.do?";
+//    public static final String ALIPAY_GATEWAY_NEW = "https://www.alipay.com/cooperate/gateway.do?";
+//
+//    private static final String HTTPS_VERIFY_URL = "https://www.alipay.com/cooperate/gateway.do?service=create_forex_trade&";
 
-    private static final String HTTPS_VERIFY_URL = "https://www.alipay.com/cooperate/gateway.do?service=create_forex_trade&";
+
+    public static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do?";
+
+    private static final String HTTPS_VERIFY_URL = "https://mapi.alipay.com/gateway.do?service=create_forex_trade&";
+
+
+
+
 
 
     /*

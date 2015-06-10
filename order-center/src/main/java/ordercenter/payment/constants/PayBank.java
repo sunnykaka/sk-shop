@@ -41,6 +41,7 @@ public enum PayBank implements ViewEnum {
      * 中国银行
      */
     BOCB2C("中国银行"),
+
     /**
      * 光大银行
      */
