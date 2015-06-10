@@ -76,7 +76,7 @@
         var regBtn = $('#reg-btn'),msgEle=$('#errormsg-confirm-pw'),getCodeBtn = $('#get-code-btn');
 
         getCodeBtn.on('click',function(evt){
-            var phoneNum=$('#phoneNum').val();
+            var phoneNum=$('#phoneNum').val(),that = $(this);
             if(phoneNum == ""){
                 $('#errormsg-phoneNum').text('手机号码不能为空');
                 return false;
@@ -97,7 +97,12 @@
                 },
                 dataType: "json",
                 success: function (response) {
-
+                	if(!response.result){
+                		$('#errormsg-phoneNum').text(response.message);
+                		that.attr('disabled',null);
+                		that.text('获取验证码');
+                		clearInterval(timer);
+                	}
                 }
             });
         });
@@ -231,7 +236,7 @@
                 label: true,
                 items: [
                     {
-                        id: 'username',
+                        id: 'loginUser',
                         //blankText: '手机号/邮箱/用户名',
                         allowBlank: false,
                         allowBlankText: '账号不能为空'
@@ -260,7 +265,7 @@
                     }
                 },
                 error: function () {
-                    msgEle.html(response.message);
+                    msgEle.html('服务器错误');
                 }
             });
         });

@@ -70,7 +70,7 @@ $(function(){
 
     //我喜欢按钮
     $('.detail-like .like').click(function(){
-        //$(this).toggleClass('current');
+
         if(!$(this).is('.current')){
             var id = $(this).attr('data-id'),that = $(this);
             $.ajax({
@@ -80,7 +80,9 @@ $(function(){
                     if(res.result){
                         $('.like-text').text(res.message);
                     }else{
-                        alert("收藏失败");
+                       if(res.message == 'Credentials required' ){
+                            createLoginReg();
+                       }
                     }
                 }
             });
@@ -365,6 +367,8 @@ $(function(){
 
         }
 
+
+
         //立即购买
         addToOrderBtn.click(function(){
             var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val();
@@ -381,13 +385,7 @@ $(function(){
                         window.location.href = '/cart/promptlyPayChooseAddress?skuId='+skuId+"&number="+number;
                     }else{
                         if(data.message == 'Credentials required' ){
-                            $.dialog({
-                                title:'提示',
-                                lock:true,
-                                content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请先登录</p></div>',
-                                width:500,
-                                height:200
-                            });
+                        createLoginReg();
                         }
                     }
                 }
@@ -412,13 +410,7 @@ $(function(){
                     }else{
 
                         if(data.message == 'Credentials required' ){
-                            $.dialog({
-                                title:'提示',
-                                lock:true,
-                                content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请先登录</p></div>',
-                                width:500,
-                                height:200
-                            });
+                            createLoginReg();
                         }else{
                             $.dialog({
                                 title:'提示',

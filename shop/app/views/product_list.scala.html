@@ -4,8 +4,13 @@
 @import productcenter.models.Seo;
 
 @main(new Seo(designer.getName + Messages("title.product.list"),"尚客"+ designer.getName +"专场，全球首发，限量发售，限时抢购！",designer.getName + "," + Messages("seo.Keywords")))() {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script>
         $(function(){
+
+                   
 
            $('.brand-start-fashion li,.ready-online li,.hot-sale li').hover(function(){
                $(".cover", this).stop().animate({top:"341"},{queue:false,duration:50});
@@ -21,8 +26,16 @@
                 url:'/my/favorites/designer/add?designerId='+id,
                 data:{designerId:id},
                 success:function(res){
-                    that.text('已关注');
-                    that.addClass('hasFocus');
+                    if(res.message == 'Credentials required'){
+                        createLoginReg();
+                    }else{
+                        if(res.result){
+                             that.text('已关注');
+                            that.addClass('hasFocus');  
+                        }else{
+                            FG.tip(that, "focus_tip", res.message, 3,90);
+                        }
+                    }    
                 }
 
             });

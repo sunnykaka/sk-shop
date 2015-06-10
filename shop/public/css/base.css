@@ -232,6 +232,9 @@ table td{padding: 10px 0;}
 /*login*/
 .login{margin-bottom: 50px;}
 .login-inner{width:630px;margin:50px auto;height: 460px;background:#f5f5f5;border-radius: 10px;padding: 50px 0 30px 0;}
+.idialog-login{margin: 0;position:}
+.idialog-form{position: relative;}
+.idialog-form .close-btn{position: absolute;width: 30px;height: 30px;background: url("../images/close-btn.png") no-repeat;right: 5px;top: 5px;cursor: pointer;}
 .login-inner h2{height:30px;text-align: center;font-weight: normal;font-size: 25px;padding-bottom:20px;}
 .login-inner .other-login,.reg-box-inner .other-login{width:302px;margin: 0 auto;}
 .login-inner .other-login a,.reg-box-inner .other-login a{float:left;width:54px;height: 60px;background: url("../images/other-login.png") no-repeat;
@@ -270,6 +273,7 @@ table td{padding: 10px 0;}
 /*reg*/
 .reg-box{margin-bottom: 50px;}
 .reg-box-inner{width:630px;margin:50px auto;height: 460px;background:#f5f5f5;border-radius: 10px;padding: 50px 0 30px 0;}
+.idialog-reg{margin: 0;}
 .reg-box-inner h2{height:30px;text-align: center;font-weight: normal;font-size: 25px;padding-bottom:20px;}
 .reg-box-inner .reg-form div,.forget-pw-fir-form div,.item-row{position: relative;width: 290px;margin: 0 auto;}
 .reg-box-inner .reg-form .phone-code-input{width: 150px;}
@@ -287,7 +291,8 @@ table td{padding: 10px 0;}
 .reg-box-inner .protocol a{color: #FF2D54;}
 .reg-box-inner .line{text-align: center;}
 .reg-box-inner .other-login p{padding-bottom: 20px;}
-.reg-box-inner .not-user{margin-top:2px;margin-left:517px;font-size: 12px;}
+.reg-box-inner .not-user{margin-top:2px;margin-left:489px;font-size: 12px;}
+.reg-box-inner .not-user span{color: #FF2D54;cursor:pointer;}
 /*end reg*/
 
 /*order-submit*/
@@ -755,7 +760,7 @@ table td{padding: 10px 0;}
 .address-form-inner .form-item,.i-dialog .update-form .form-item,.i-dialog .add-form .form-item,.user-form .form-item{padding: 6px 0;height: 34px;}
 .address-form-inner .add-form label,.i-dialog .update-form label,.i-dialog .add-form label,.user-form label{float: left;line-height: 34px;width: 100px;text-align: right;padding-right: 10px;
     font-size:12px;}
-.address-form-inner .text,.i-dialog .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
+.address-form-inner .text,.i-dialog .upate-form .text,.user-form .text{padding: 5px 4px;height: 22px;line-height: 22px;border: 1px solid #dbdbda;margin-right: 10px;
     background: #fcfcfc;width: 290px;
 }
 /*.address-form-inner .add-form .select,.i-dialog .update-form .select,.i-dialog .add-form .select,.user-form .select{height:18px;background:#fcfcfc;padding: 7px 13px;vertical-align: middle;border: 1px solid #dbdbda;}*/

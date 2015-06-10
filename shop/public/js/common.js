@@ -132,3 +132,124 @@ FG.tip = function (ele, id, msg, x, y, timer) {
     }})
 })(jQuery, window, document);
 $('img.lazy').lazyload({effect:'fadeIn', threshold: 300});
+
+//登录字符串
+var loginHtml = '<div class="login-inner idialog-login idialog-form"><span class="close-btn"></span>'+
+            '<h2>用户登录</h2>'+
+
+            '<div class="other-login clearfix">'+
+                '<a class="weixin" href="/login/wx" title="微信登录">微信登录</a>'+
+                '<a class="weibo" href="weibo-login.html" title="微博登录">微博登录</a>'+
+                '<a class="qq last" href="qq-login.html" title="qq登录">qq登录</a>'+
+
+                '<p class="both">使用以上社交网络账号登录</p>'+
+            '</div>'+
+            '<p class="line">--------------------------<strong>或</strong>--------------------------</p>'+
+
+            '<form class="login-form" id="login-form">'+
+                '<div class="login-input">'+
+                    '<span class="ico ico1"></span>'+
+                    '<label for="loginUser">手机号/用户名</label>'+
+                    '<input type="text" id="loginUser" name="passport" autocomplete="off" class="text"/>'+
+                    '<span class="errormsg" id="errormsg-loginUser"></span>'+
+                '</div>'+
+                '<div class="login-PW">'+
+                    '<span class="ico ico2"></span>'+
+                    '<label for="password">密码</label>'+
+                    '<input type="password" id="password" name="password" autocomplete="off" class="text"/>'+
+                    '<span class="errormsg" id="errormsg-password"></span>'+
+                '</div>'+
+                '<div><button type="submit"  id="login-btn" class="login-btn">登录</button></div>'+
+                '<div class="login-remember">'+
+                    '<label for="rememberMe"><input type="checkbox" name="rememberMe" id="rememberMe" value="true" checked="true"/>记住我</label>'+
+                    '<a class="forgetPW" target="_blank" href="/recover/index">忘记密码？</a>'+
+                '</div>'+
+            '</form>'+
+            '<p class="not-reg">还没有账号？<a href="javascript:void(0);" id="goReg">注册</a></p>'+
+        '</div>';
+//注册字符串
+var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="close-btn"></span>'+
+            '<h2>用户注册</h2>'+
+            '<form class="reg-form" id="reg-form" >'+
+                '<div class="item-row reg-username">'+
+                    '<label for="username">请输入用户名</label>'+
+                    '<input type="text" id="username" name="username" class="form-text username" autocomplete="off"/>'+
+                    '<span class="errormsg" id="errormsg-username"></span>'+
+                '</div>'+
+                '<div class="item-row reg-phone">'+
+                    '<label for="phoneNum">请输入手机号号码</label>'+
+                    '<input type="text" id="phoneNum" name="phone" class="form-text phoneNum"/>'+
+                    '<span class="errormsg" id="errormsg-phoneNum"></span>'+
+                '</div>'+
+                '<div class="item-row phone-code">'+
+                    '<label for="phone-code">短信验证码</label>'+
+                    '<input type="text" id="phone-code" name="verificationCode" class="form-text phone-code-input"/>'+
+                    '<button class="get-code-btn" id="get-code-btn">获取验证码</button>'+
+                    '<span class="errormsg" id="errormsg-phone-code"></span>'+
+                '</div>'+
+                '<div class="item-row pw">'+
+                    '<label for="pw">密码</label>'+
+                    '<input type="password" id="pw" name="password" class="form-text pw"/>'+
+                    '<span class="errormsg" id="errormsg-pw"></span>'+
+                '</div>'+
+                '<div class="item-row confirm-pw">'+
+                    '<label for="confirm-pw">确认密码</label>'+
+                    '<input type="password" id="confirm-pw" class="form-text confirm-pw"/>'+
+                    '<span class="errormsg" id="errormsg-confirm-pw"></span>'+
+                '</div>'+
+                '<div><button type="submit"  id="reg-btn" class="reg-btn">立即注册</button></div>'+
+            '</form>'+
+            '<p class="protocol">注册则表示同意<a href="help.html">《会员条款》</a></p>'+
+            '<p class="not-user">已有账号？<span id="goLogin">登录</span></p>'+
+        '</div>'
+
+   //创建登录注册弹窗组件
+   function createLoginReg(){
+        $.dialog({
+            esc:false,
+            id:"regLogin",
+            title:false,
+            lock:true,
+            content:loginHtml,
+            width:680,
+            height:570,
+            show:function(){
+               var that = this;FG.user.login();
+                $('.close-btn').click(function(){
+                    that.hide();
+                });
+                $('#loginUser').focus();
+                $('#goReg').click(function(){
+                   $.dialog.get.regLogin.$content.find('.login-inner').fadeOut(function(){
+                        if($('#reg-form').size()>0){
+                           $.dialog.get.regLogin.$content.find('.reg-box-inner').fadeIn(); 
+                       }else{ 
+                            $.dialog.get.regLogin.$content.append(regHtml).fadeIn(function(){
+                                 FG.user.register();
+                                  $('.close-btn').click(function(){
+                                        that.hide();
+                                    });
+                            });   
+                       }
+
+                    $('#goLogin').click(function(){
+                       $.dialog.get.regLogin.$content.find('.reg-box-inner').fadeOut(function(){
+                         if($('#login-form').size()>0){
+                                $.dialog.get.regLogin.$content.find('.login-inner').fadeIn(); 
+                           }else{ 
+                                 $.dialog.get.regLogin.$content.append(loginHtml).fadeIn();
+                           }  
+                       });
+                    });
+                   });
+                });
+            },
+            hide:function(){
+                $('#goLogin').off();$('#goReg').off();
+                if($('#login-form').size()>0){$('#login-form')[0].reset()};
+                if($('#reg-form').size()>0){$('#reg-form')[0].reset()};
+                $('.errormsg').text('');
+                $.dialog.get.regLogin.$content.find('.login-inner').show().siblings('.reg-box-inner').hide();
+            }
+        });
+   }
