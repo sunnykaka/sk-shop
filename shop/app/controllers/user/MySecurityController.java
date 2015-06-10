@@ -23,6 +23,7 @@ import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 import views.html.user.*;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 
@@ -45,6 +46,45 @@ public class MySecurityController extends Controller {
         User user = SessionUtils.currentUser();
 
         return ok(mySecurityIndex.render(user));
+
+    }
+
+    /**
+     * 绑定手机号码
+     *
+     * @return
+     */
+    @SecuredAction
+    public Result bindPhoneIndex() {
+
+        return ok(bindPhoneIndex.render("",new HashMap<String,java.util.List<play.data.validation.ValidationError>>()));
+
+    }
+
+    /**
+     * 处理绑定手机
+     *
+     * @return
+     */
+    @SecuredAction
+    public Result bindPhoneDo() {
+
+        User user = SessionUtils.currentUser();
+        Form<PhoneCodeForm> phoneCodeForm = Form.form(PhoneCodeForm.class).bindFromRequest();
+
+        if (!phoneCodeForm.hasErrors()) {
+            try {
+
+                SessionUtils.updateCurrentUser(userService.updatePhone(user, phoneCodeForm.get()));
+
+                return ok(bindPhoneDo.render());
+
+            } catch (AppBusinessException e) {
+                phoneCodeForm.reject("verificationCode", e.getMessage());
+            }
+        }
+
+        return ok(bindPhoneIndex.render(ParamUtils.getByKey(request(),"phone"),phoneCodeForm.errors()));
 
     }
 
@@ -419,122 +459,5 @@ public class MySecurityController extends Controller {
 
     }
 
-//    /**
-//     * 修改邮箱首页
-//     *
-//     * @return
-//     */
-//    public Result newEmailIndex(){
-//
-//        User user = SessionUtils.currentUser();
-//
-//        //TODO test send
-//        //Email.sendEmail("zhenhaobin@163.com","测试发送邮件", index.render(user).toString());
-//
-//        return ok(newEmailIndex.render(user));
-//
-//    }
-//
-//    /**
-//     * 验证、验证码
-//     *
-//     * @return
-//     */
-//    public Result newEmailNew(){
-//
-//        Form<CodeForm> codeForm = Form.form(CodeForm.class).bindFromRequest();
-//
-//        if(!codeForm.hasErrors()) {
-//            try {
-//                CodeForm code = codeForm.get();
-//                User user = userService.getById(test_userId);
-//                //TODO 校验验证码是否正确
-//
-//                //页面关联token
-//                SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone(), user.getPhone());
-//                return ok(new JsonResult(true, null, routes.MySecurityController.newEmailDo().url()).toNode());
-//
-//            } catch (AppBusinessException e) {
-//                codeForm.reject("errors", e.getMessage());
-//            }
-//        }
-//
-//        return ok(new JsonResult(false, codeForm.errorsAsJson().toString()).toNode());
-//
-//    }
-//
-//    /**
-//     * 修改邮箱页面
-//     *
-//     * @return
-//     */
-//    public Result newEmailDo(){
-//
-//        User user = userService.getById(test_userId);
-//        String phoneToken = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-//        if(StringUtils.isEmpty(phoneToken) || !user.getPhone().equals(phoneToken)){
-//            play.Logger.info("未经过验证页面，直接跳转");
-//            return redirect(routes.MySecurityController.newEmailIndex().url());
-//        }
-//
-//        return ok(newEmailNew.render(user));
-//
-//    }
-//
-//    /**
-//     * 下发邮件到新邮箱
-//     *
-//     * @return
-//     */
-//    public Result newEmailEnd(){
-//
-//        User user = userService.getById(test_userId);
-//
-//        String email = ParamUtils.getByKey(request(),"email");
-//        if(StringUtils.isEmpty(email)){
-//            return ok(new JsonResult(false,"邮箱地址为空").toNode());
-//        }
-//        email = StringUtils.trim(email);
-//        User emailUser = userService.findByEmail(email);
-//        if(null != emailUser){
-//            return ok(new JsonResult(false,"该邮箱地址已被注册").toNode());
-//        }
-//
-//        //生成token
-//        SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY,user.getEmail(),email);
-//        EmailUtils.sendEmail(email, Messages.get("send.email.activity.title"),views.html.template.email.activity.render(user).toString());
-//
-//        return ok(new JsonResult(true,"邮件已发送").toNode());
-//
-//    }
-//
-//    /**
-//     * 修改成功页面
-//     *
-//     * @return
-//     */
-//    public Result newEmailOk(int userId){
-//
-//        User user = userService.getById(userId);
-//        if(null == user){
-//            return ok(changeEmailDo.render("激活失败，请确认激活地址"));
-//        }
-//        String newEmail = SecurityCache.getToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY,user.getEmail());
-//
-//        if(StringUtils.isEmpty(newEmail)){
-//            return ok(changeEmailDo.render("激活失败，激活地址已过期"));
-//        }
-//
-//        User emailUser = userService.findByEmail(newEmail);
-//        if(null != emailUser){
-//            return ok(changeEmailDo.render("激活失败，该邮箱地址已被抢先激活"));
-//        }
-//        userService.updateEmail(user,newEmail);
-//        SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
-//
-//
-//        return ok(newEmailDo.render("修改成功"));
-//
-//    }
 
 }

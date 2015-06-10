@@ -76,12 +76,9 @@ POST        /my/security/email/new                @controllers.user.MySecurityCo
 GET         /my/security/email/do                 @controllers.user.MySecurityController.changeEmailDo()
 POST        /my/security/email/end                @controllers.user.MySecurityController.changeEmailEnd()
 GET         /my/security/email/ok                 @controllers.user.MySecurityController.changeEmailOk(userId:Int)
-#     新增邮箱--可能没有用处
-#GET         /my/security/newEmail/index         @controllers.user.MySecurityController.newEmailIndex()
-#POST        /my/security/newEmail/new           @controllers.user.MySecurityController.newEmailNew()
-#GET         /my/security/newEmail/do            @controllers.user.MySecurityController.newEmailDo()
-#POST        /my/security/newEmail/end           @controllers.user.MySecurityController.newEmailEnd()
-#GET         /my/security/newEmail/ok            @controllers.user.MySecurityController.newEmailOk(userId:Int)
+#     绑定手机
+GET         /my/security/bindPhone/index          @controllers.user.MySecurityController.bindPhoneIndex()
+POST        /my/security/bindPhone/index          @controllers.user.MySecurityController.bindPhoneDo()
 # recover
 GET         /recover/index                        @controllers.user.RecoverController.recoverIndex()
 POST        /recover/checkPhone                   @controllers.user.RecoverController.recoverCheckPhone()

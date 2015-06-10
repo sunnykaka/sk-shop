@@ -27,7 +27,7 @@
                         <div class="item @if(null == user.getPhone || "".equals(user.getPhone)){off}">
                             @if(null == user.getPhone || "".equals(user.getPhone)){
                                 <span class="status"></span><p class="item-detail">验证手机</p><p class="item-info">您使用第三方登录，尚未绑定手机</p>
-                                <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changePhoneIndex()" class="btn">绑定</a></p>
+                                <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.bindPhoneIndex()" class="btn">绑定</a></p>
                             }else{
                                 <span class="status on"></span><p class="item-detail">验证手机</p><p class="item-info">您验证的手机：@StringUtils.getSecurityMobile(user.getPhone)</p>
                                 <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changePhoneIndex()" class="btn">修改</a></p>

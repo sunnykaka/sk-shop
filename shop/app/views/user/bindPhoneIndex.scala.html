@@ -1,0 +1,50 @@
+@(phone:String,map:Map[String,java.util.List[play.data.validation.ValidationError]])
+
+@myCenter(Messages("title.my.bind.phone")) {
+    <script src="@routes.Assets.versioned("js/user-phoneValidate.js")"></script>
+} {
+
+    <!--user-phoneValidate-->
+    <div class="phoneValidate">
+        <div class="phoneValidate-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    @myCenterTop()
+                    <li>绑定手机</li>
+                </ul>
+            </div>
+            <div class="phoneValidate-container clearfix">
+                @left("security")
+                    <!-- user-phoneValidate -->
+                <div class="phoneValidate-list first">
+                    <h2>绑定手机</h2>
+                    <div class="phoneValidate-con">
+                        <div class="step-bg"></div>
+                        <ul class="clearfix">
+                            <li class="highLight">验证身份</li>
+                            <li>修改已验证手机</li>
+                            <li class="last">完成</li>
+                        </ul>
+                    </div>
+                    <form action="@controllers.user.routes.MySecurityController.bindPhoneDo()" class="phoneValidate-sec" method="POST">
+                        <div class="form-item ">
+                            <label for="phoneNumber">我的手机号码：</label>
+                            <input type="phoneNum" id="phoneNumber" name="phone" class="form-text phoneNum" value="@phone"/>
+                            <span class="errormsg" id="errormsg-phoneNum">@if(null != map.get("phone")){ @map.get("phone").get(0).message() }</span>
+                        </div>
+                        <div class="form-item">
+                            <label for="phoneCode">请填写手机验证码：</label>
+                            <input type="phoneCode" id="phoneCode" name="verificationCode" class="form-text phoneCode"/>
+                            <button class="get-code-btn" id="get-code-btn">发送验证码</button>
+                            <span class="errormsg" id="errormsg-phoneCode">@if(null != map.get("verificationCode")){ @map.get("verificationCode").get(0).message() }</span>
+                        </div>
+                        <div class="item-row"><button type="submit">提交</button></div>
+                    </form>
+                </div>
+                    <!-- end phoneValidate-->
+            </div>
+        </div>
+    </div>
+    <!--end phoneValidate -->
+
+}
