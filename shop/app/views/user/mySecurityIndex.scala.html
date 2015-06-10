@@ -42,7 +42,11 @@
                         <div class="item @if(null == user.getEmail || "".equals(user.getEmail)){off}">
                             @if(null == user.getEmail || "".equals(user.getEmail)){
                                 <span class="status"></span><p class="item-detail">验证邮箱</p><p class="item-info">您邮箱还没有验证，为了您的安全，请验证！</p>
-                                <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changeEmailIndex()" class="btn">立即验证</a></p>
+                                @if(null == user.getPhone || "".equals(user.getPhone)){
+                                    <p class="btn-wrap"><span class="btn">验证手机号码先</span></p>
+                                }else{
+                                    <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changeEmailIndex()" class="btn">立即验证</a></p>
+                                }
                             }else{
                                 <span class="status on"></span><p class="item-detail">验证邮箱</p><p class="item-info">您验证的邮箱：@user.getEmail</p>
                                 <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changeEmailIndex()" class="btn">修改邮箱</a></p>

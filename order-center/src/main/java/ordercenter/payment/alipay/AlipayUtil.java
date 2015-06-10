@@ -18,8 +18,7 @@ import java.util.*;
  * Date: 2015-04-29
  */
 public class AlipayUtil {
-    //↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // 合作身份者ID，以2088开头由16位纯数字组成的字符串,ejs partner id
+    // 合作身份者ID，以2088开头由16位纯数字组成的字符串
     public static String partner = "2088911795766502";
 
     // 交易安全检验码，由数字和字母组成的32位字符串
@@ -37,6 +36,46 @@ public class AlipayUtil {
     public static final String ALIPAY_GATEWAY_NEW = "https://www.alipay.com/cooperate/gateway.do?";
 
     private static final String HTTPS_VERIFY_URL = "https://www.alipay.com/cooperate/gateway.do?service=create_forex_trade&";
+
+
+    /*
+    service=create_forex_trade
+    partner
+    notify_url
+    return_url
+    sign
+    sign_type
+    subject
+    body
+    out_trade_no
+
+
+
+    currency
+    total_fee
+
+    rmb_fee
+
+    supplier
+
+    timeout_rule
+
+    specified_pay_chananal
+
+    seller_id
+
+    seller_name
+
+    seller_industr
+
+
+     */
+
+
+
+
+
+
 
     /**
      * 将map中的key-value拼接成字符串
@@ -213,6 +252,20 @@ public class AlipayUtil {
         }
         return prestr;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 对字符串进行MD5签名

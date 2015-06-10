@@ -1,4 +1,4 @@
-package controllers.shop;
+package ordercenter.services;
 
 
 import common.utils.play.BaseGlobal;
@@ -7,7 +7,6 @@ import ordercenter.models.TradeOrder;
 import ordercenter.payment.CallBackResult;
 import ordercenter.payment.PayCallback;
 import ordercenter.payment.constants.ResponseType;
-import ordercenter.services.TradeService;
 import play.Logger;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
  * User: lidujun
  * Date: 2015-05-08
  */
-public class OrderPayCallback implements PayCallback {
+public class OrderPayCallbackProcess implements PayCallback {
 
     @Override
     public CallBackResult initResult(Trade trade, ResponseType type){

@@ -3,6 +3,7 @@ package ordercenter.models;
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
 import ordercenter.constants.TradeType;
+import ordercenter.payment.constants.PayMethod;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -38,10 +39,18 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
     private Long orderNo;
 
     /**
+     * 支付方式
+     */
+    private PayMethod payMethod;
+
+    /**
      * 状态(0.创建, 1.付款成功), 默认是 0
      */
     private Boolean payFlag;
 
+    /**
+     * 交易类型
+     */
     private TradeType tradeType;
 
     /**
@@ -99,6 +108,16 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
 
     public void setOrderNo(Long orderNo) {
         this.orderNo = orderNo;
+    }
+
+    @Column(name = "payMethod")
+    @Basic
+    public PayMethod getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(PayMethod payMethod) {
+        this.payMethod = payMethod;
     }
 
     @Column(name = "payFlag")

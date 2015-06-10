@@ -53,5 +53,4 @@ public class PaymentManager {
     public static void addPayService(PayMethod payMethod,Class<? extends PayRequestHandler> payService){
         payServiceMap.put(payMethod,payService);
     }
-
 }
