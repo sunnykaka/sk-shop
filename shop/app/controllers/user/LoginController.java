@@ -87,7 +87,7 @@ public class LoginController extends Controller {
             userService.logout(user);
         }
 
-        return ok(new JsonResult(true, "用户退出成功").toNode());
+        return redirect(routes.LoginController.loginPage());
 
     }
 

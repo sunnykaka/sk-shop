@@ -18,7 +18,7 @@ GET         /login                                @controllers.user.LoginControl
 POST        /login                                @controllers.user.LoginController.login
 GET         /login/wx                             @controllers.user.LoginController.weixinLogin
 GET         /login/wx/callback                    @controllers.user.LoginController.weixinLoginCallback(code ?= null, state ?= null)
-POST        /logout                               @controllers.user.LoginController.logout
+GET         /logout                               @controllers.user.LoginController.logout
 POST        /user/phone/get_code                  @controllers.user.LoginController.requestPhoneCode(phone)
 GET         /user/phone/exist                     @controllers.user.LoginController.isPhoneExist(phone)
 GET         /user/username/exist                  @controllers.user.LoginController.isUsernameExist(username)
