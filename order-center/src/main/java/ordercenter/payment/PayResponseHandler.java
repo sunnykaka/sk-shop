@@ -59,18 +59,18 @@ public class PayResponseHandler {
         CallBackResult result = new CallBackResult();
 
         //尚客系统交易号
-        String trade_no = ParamUtils.getByKey(request, "out_trade_no");
-        if(trade_no == null || trade_no.trim().length() == 0) {
-            Logger.error("「订单回调」支付系统没有返回尚客系统交易号：" + trade.getTradeNo());
+        String tradeNoStr = ParamUtils.getByKey(request, "out_trade_no");
+        if(tradeNoStr == null || tradeNoStr.trim().length() == 0) {
+            Logger.error("「订单回调」支付系统没有返回尚客系统交易号：" + tradeNoStr);
             result.setResult(false);
             return result;
         }
 
         TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
-        List<TradeOrder> tradeOrderList = tradeService.getTradeOrdeByTradeNo(trade_no);
+        List<TradeOrder> tradeOrderList = tradeService.getTradeOrdeByTradeNo(tradeNoStr);
         PayMethod payMethod = null;
         if(tradeOrderList == null || tradeOrderList.size() == 0) {
-            Logger.error("「订单回调」系统中找不到交易信息！，此交易号号为：" + trade.getTradeNo());
+            Logger.error("「订单回调」系统中找不到交易信息！，此交易号号为：" + tradeNoStr);
             result.setResult(false);
             return result;
         } else {
@@ -85,7 +85,7 @@ public class PayResponseHandler {
             } else  if(PayMethod.Tenpay.getName().equals(payMethod.getName()) ) {
                 this.builder = new TenpayInfoBuilder();
             } else {
-                Logger.error("「订单回调」订单支付成功，但是系统中找不到此支付方式！，此交易号号为：" + trade.getTradeNo());
+                Logger.error("「订单回调」订单支付成功，但是系统中找不到此支付方式！，此交易号号为：" + tradeNoStr);
                 result.setResult(false);
                 return result;
             }
