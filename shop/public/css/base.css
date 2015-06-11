@@ -175,7 +175,7 @@ table td{padding: 10px 0;}
 .fashion-box .en-info,.fashion-box .cn-info{font-size: 14px;}
 .fashion-box .cn-info,.fashion-box .en-info{margin-bottom: 50px;  line-height: 240%;text-align: center;}
 .fashion-box img{display: block;}
-.fashion-box-inner li{float: left;margin: 0 4px 20px;position:relative;width: 390px;height:310px;cursor: pointer;
+.fashion-box-inner li{float: left;margin: 0 4px 20px;position:relative;width: 390px;height:310px;
     overflow: hidden;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
 .fashion-box-inner li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
 .fashion-box-inner .info{height: 70px;background: #fff;width: 390px;}

@@ -63,7 +63,6 @@ $(function(){
                dataType: "json",
                success: function (response) {
                     if(!response.result){
-                        $('#errormsg-phoneCode').text(response.message);
                         that.attr('disabled',null);
                         that.text('获取验证码');
                         clearInterval(timer);
@@ -71,7 +70,7 @@ $(function(){
                         if($('.phoneValidate-first').size()>0){
                           $('.phoneValidate-first').find('#errormsg-phoneCode').text(response.message);
                         }else{
-                             $('.phoneValidate-sec').find('#errormsg-phoneNum').text(response.message);
+                          $('.phoneValidate-sec').find('#errormsg-phoneNum').text(response.message);
                         }
                     }
                }
