@@ -21,24 +21,42 @@
 
         $('#designerFocus').click(function(){
             var id = $(this).attr('data-id'),that = $(this);
-            $.ajax({
-                type:'post',
-                url:'/my/favorites/designer/add?designerId='+id,
-                data:{designerId:id},
-                success:function(res){
-                    if(res.message == 'Credentials required'){
-                        createLoginReg();
-                    }else{
-                        if(res.result){
-                             that.text('已关注');
-                            that.addClass('hasFocus');  
+            if(that.hasClass('hasFocus')){//已经关注
+                $.ajax({
+                    type:'post',
+                    url:'/my/favorites/designer/del?designerId='+id,
+                    data:{designerId:id},
+                    success:function(res){
+                        if(res.message == 'Credentials required'){
+                            createLoginReg();
                         }else{
-                            FG.tip(that, "focus_tip", res.message, 3,90);
-                        }
-                    }    
-                }
+                            if(res.result){
+                                that.text('关注');
+                                that.removeClass('hasFocus');  
+                            }
+                        }    
+                    }
 
-            });
+                });
+
+            }else{
+                $.ajax({
+                    type:'post',
+                    url:'/my/favorites/designer/add?designerId='+id,
+                    data:{designerId:id},
+                    success:function(res){
+                        if(res.message == 'Credentials required'){
+                            createLoginReg();
+                        }else{
+                            if(res.result){
+                                that.text('已关注');
+                                that.addClass('hasFocus');  
+                            }
+                        }    
+                    }
+
+                });
+            }
         });
 
     </script>

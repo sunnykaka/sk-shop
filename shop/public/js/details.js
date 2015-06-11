@@ -363,8 +363,6 @@ $(function(){
 
         }
 
-
-
         //立即购买
         addToOrderBtn.click(function(){
             var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val();
