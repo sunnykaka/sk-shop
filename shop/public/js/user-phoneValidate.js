@@ -44,7 +44,11 @@ $(function(){
     var getCodeBtn = $('#get-code-btn');
 
     getCodeBtn.on('click',function(evt){
-        var phoneNum=$('#phoneNumber').val();
+      if($("#errormsg-phoneNum").size()>0){
+          if($("#errormsg-phoneNum").text() != "") return false;
+        }
+        $(this).attr('disabled',true);
+        var phoneNum=$('#phoneNumber').val(),that = $(this);
         evt.preventDefault();
         //根据手机号码获取验证码
        if(ValidatePhone($('#phoneNumber'))){
@@ -59,6 +63,10 @@ $(function(){
                dataType: "json",
                success: function (response) {
                     if(!response.result){
+                        $('#errormsg-phoneCode').text(response.message);
+                        that.attr('disabled',null);
+                        that.text('获取验证码');
+                        clearInterval(timer);
                         //验证码发送错误
                         if($('.phoneValidate-first').size()>0){
                           $('.phoneValidate-first').find('#errormsg-phoneCode').text(response.message);
@@ -85,11 +93,10 @@ $(function(){
                },
                dataType: "json",
                success: function (data) {
-                    if(!data.result){
-                        $('#errormsg-phoneNum').text(data.message);
-                        $('#get-code-btn').attr('disabled',true);
+                    if(data.result){
+                         $('#errormsg-phoneNum').text("");                
                     }else{
-                         $('#get-code-btn').attr('disabled',null);
+                        $('#errormsg-phoneNum').text(data.message);
                     }
                }
            });

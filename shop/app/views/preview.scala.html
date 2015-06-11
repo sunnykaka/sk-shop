@@ -66,7 +66,7 @@
                 <ul class="clearfix">
                     <li><a href="@controllers.routes.Application.index()">首页</a></li>
                     <li>&gt;</li>
-                    <li>首页预告</li>
+                    <li>预告</li>
                 </ul>
             </div>
             <div class="img">
@@ -95,7 +95,7 @@
 
                         <div class="cover"></div>
                         <div class="cover-info">
-                            <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
+                            <span class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</span>
                             <input type="text" class="phone-number" placeholder="请输入手机号码"  @phone.map(x => s"value=$x").getOrElse("") />
                             <span class='btn-cover'></span>
                             <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
@@ -127,7 +127,7 @@
                         </div>
                         <div class="cover"></div>
                         <div class="cover-info">
-                            <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
+                            <span class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</span>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                             <span class="btn-cover"></span>
                             <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
@@ -161,7 +161,7 @@
                             </div>
                             <div class="cover"></div>
                             <div class="cover-info">
-                                <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
+                                <span class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</span>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                                  <span class="btn-cover"></span>
                                 <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>
@@ -179,7 +179,7 @@
                         </div>
                         <div class="cover"></div>
                         <div class="cover-info">
-                            <a href="#" class="like">@doubleEx.getBaseLike</a>
+                           <span class="like">@doubleEx.getBaseLike</span>
                             <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                              <span class="btn-cover"></span>
                             <span class="remind-btn" exhibition-id="@doubleEx.getId">开售提醒</span>
@@ -199,7 +199,7 @@
                             </div>
                             <div class="cover"></div>
                             <div class="cover-info">
-                                <a href="#" class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</a>
+                                <span class="like" data-id="@exhibition.getDesignerId">@exhibition.getBaseLike</span>
                                 <input type="text" class="phone-number" placeholder="请输入手机号码" @phone.map(x => s"value=$x").getOrElse("") />
                                  <span class="btn-cover"></span>
                                 <span class="remind-btn" exhibition-id="@exhibition.getId">开售提醒</span>

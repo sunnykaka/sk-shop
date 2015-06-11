@@ -125,7 +125,7 @@
     //找回密码第二步
     function forgetSecPw(){
 
-        var getCodeBtn = $('#get-code-btn');
+        var getCodeBtn = $('#get-code-btn'),that = $(this);
 
         getCodeBtn.on('click',function(evt){
             var phoneNum=$('#phoneNum').val();
@@ -141,7 +141,12 @@
                 },
                 dataType: "json",
                 success: function (response) {
-
+                    if(!response.result){
+                        $('#errormsg-phoneCode').text(response.message);
+                        that.attr('disabled',null);
+                        that.text('获取验证码');
+                        clearInterval(timer);
+                    }
                 }
             });
         }).trigger('click');

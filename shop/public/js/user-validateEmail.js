@@ -55,7 +55,7 @@ $(function(){
     var getCodeBtn = $('#get-code-btn');
 
     getCodeBtn.on('click',function(evt){
-        var phoneNum=$('#phoneNumber').val();
+        var phoneNum=$('#phoneNumber').val(),that= $(this);
         evt.preventDefault();
 
         //根据手机号码获取验证码
@@ -71,7 +71,12 @@ $(function(){
                },
                dataType: "json",
                success: function (response) {
-
+                     if(!response.result){
+                        $('#errormsg-phoneCode').text(response.message);
+                        that.attr('disabled',null);
+                        that.text('获取验证码');
+                        clearInterval(timer);
+                    }
                }
            });
        }

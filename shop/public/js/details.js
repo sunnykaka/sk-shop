@@ -2,12 +2,7 @@
  * Created by lein on 2015/5/22.
  */
 $(function(){
-
-
-
     $.scrollTo('#detail',600);
-
-
     //获取购物车 商品数量
     $.ajax({
         url:'/cart/getUserCartItemNum',
@@ -227,7 +222,8 @@ $(function(){
         var _marketPrice = 0;
         var _num = 1;
         var _skuImgList = null;
-
+        //下架产品判断
+        if(!productOnline){amountInputEle.val(0)}
 
         //有多个sku的情况
         if (!!options.hasSkuMap) {
@@ -396,6 +392,7 @@ $(function(){
 
         //添加购物车
         addToCartBtn.click(function(event){
+            $(this).attr('disabled',true);
             var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val(),that= $(this);
             $.ajax({
                 type: "get",
@@ -405,6 +402,7 @@ $(function(){
                 data:{skuId:skuId,number:number},
                 cache: false,
                 success: function (data) {
+                    that.attr('disabled',null);
                     if(data.result){
                         $('#cart-quantity').text(data.data.itemTotalNum);
                     }else{
@@ -431,6 +429,8 @@ $(function(){
 
         //数量组件绑定事件
         amountEle.click(function (event) {
+            //下架产品判断
+            if(!productOnline){amountInputEle.val(0); return false;}
             if (_isSKU) {
                 if (!verifySku()) return false;
                 _limit = skuMap[_selectedIds.join(',')]["tradeMaxNumber"];
@@ -465,6 +465,8 @@ $(function(){
 
 
         amountInputEle.blur(function () {
+            //下架产品判断
+            if(!productOnline){amountInputEle.val(0); return false;}
             var reg = /^[0-9]+$/;
             if (!reg.test(amountInputEle.val())) {
                 amountInputEle.val(1);
@@ -499,15 +501,6 @@ $(function(){
             }
             return true;
         }
-
-
-
-
     }
-
-
-
-
-
 
 });

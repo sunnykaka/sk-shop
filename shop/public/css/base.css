@@ -5,7 +5,7 @@ body {min-width: 1200px;color: #4a4947;}
 html{_background-attachment:fixed;}
 a{text-decoration:none;color:#4a4a4a;}
 a:hover{text-decoration:underline;}
-textarea,select,input,button,label{vertical-align:middle}
+textarea,select,input,button,label{vertical-align:middle;font-family:'Microsoft Yahei',SimSun,Tahoma,Arial; }
 ol,ul,li{list-style-type:none;}
 table{border-collapse:collapse;border-spacing:0;}
 img{border:0;}
@@ -25,7 +25,18 @@ table td{padding: 10px 0;}
 .form-text{width:280px;padding-left: 8px;border:1px solid #ccc;height: 32px;line-height: 32px;}
 .form-text-error {border-color: #FF2D54;}
 .form-input-tip{  position: absolute;  background-color: #f5f5f5;  padding: 4px 0;  color: #999;width: 290px;}
-
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #fff;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #fff;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #fff;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #fff;
+}
 .e-btn {
     color: #4a4a4a;
     display: inline-block;
@@ -108,10 +119,13 @@ table td{padding: 10px 0;}
 /*.slider-box-inner .slider-box-img img{width: 100%;}*/
 /*.slider-box-inner .slider-box-img ul{position: absolute;left: 0;top: 0;width: 300%;overflow: hidden;}*/
 /*.slider-box-inner .slider-box-nav li{float: left;height: 501px;overflow: hidden;}*/
-.slider-box-inner .sliderArrows .png_bg{position: absolute;top: 50%;margin-top:-104px;width:40px;height:108px;background: url("../images/slider-btn.png") no-repeat;
+.slider-box-inner .sliderArrows .png_bg{position: absolute;top: 50%;margin-top:-104px;width:25px;height:74px;background: url("../images/arrows5.png") no-repeat;
     cursor: pointer;text-indent: -9999px;z-index: 50;
 }
-.slider-box-inner .sliderArrows .next{right:0;background-position: -40px 0;}
+.slider-box-inner .sliderArrows .prev{left: 320px;background-position: 0 -74px;}
+.slider-box-inner .sliderArrows .next{right:320px;background-position: -25px -74px;}
+.slider-box-inner .sliderArrows .prev:hover{background-position: 0 0}
+.slider-box-inner .sliderArrows .next:hover{background-position: -25px 0}
 .slider-box-inner .slider-box-nav{width: 100%;height: 113px;background:#d9d9d9;overflow: hidden;padding-top: 10px;}
 .slider-box-inner .sliderBullets ul{width: 1220px;height: 103px;overflow: hidden;margin: 0 auto;}
 .slider-box-inner .sliderBullets li{float: left;margin-right: 15px;position: relative;cursor: pointer;width:390px;height:103px;overflow: hidden;}
@@ -122,7 +136,7 @@ table td{padding: 10px 0;}
 .start-fashion{height:808px;margin-bottom: 40px;}
 .start-fashion-inner h2{font-size: 30px;font-weight: normal;margin-bottom: 10px;text-align: center;height: 40px;line-height: 40px;}
 .start-fashion-inner .info{text-align: center;margin-bottom: 30px;font-size: 14px;}
-.start-fashion-inner li{float: left;position:relative;cursor:pointer;margin: 0 4px 20px;overflow: hidden;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
+.start-fashion-inner li{float: left;position:relative;margin: 0 4px 20px;overflow: hidden;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
 .start-fashion-inner  li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
 .start-fashion-inner li a{position: absolute;width: 100%;height: 100%;left: 0;top: 0;}
 .start-fashion-inner .img{width: 590px;height: 275px;position: relative;overflow:hidden;}
@@ -139,8 +153,8 @@ table td{padding: 10px 0;}
 .start-fashion-inner li{position: relative;height: 335px;overflow: hidden;}
 .start-fashion-inner .cover{position: absolute;width: 590px;height:650px;background: #000;opacity: .3;top: 650px;left: 0;filter:alpha(opacity=30);   }
 .start-fashion-inner .cover-info{position:absolute;width: 590px;height:650px;top: 650px;left: 0;}
-.start-fashion-inner .like{padding: 4px 4px 4px 20px;background: #fff url(../images/sprite.gif) no-repeat -725px -94px;border-radius: 20px;width: 60px;height: 20px;
-    right: 30px;top: 40px;left: auto;text-align: center;color: #FF2D54;opacity: .8;filter:alpha(opacity=80);   
+.start-fashion-inner .like{ position: absolute;padding: 4px 4px 4px 20px;background: #fff url(../images/sprite.gif) no-repeat -725px -94px;border-radius: 20px;width: 60px;height: 20px;
+    right: 30px;top: 40px;left: auto;text-align: center;color: #FF2D54;opacity: .8;filter:alpha(opacity=80);  
 }
 .start-fashion-inner .like:hover{text-decoration: none;}
 .start-fashion-inner .cover-info .phone-number-wrap{height:20px;padding: 8px 4px;border: 2px solid #fff;width: 200px; position: absolute;
@@ -201,7 +215,7 @@ table td{padding: 10px 0;}
 .empty-box-inner .double{width: 590px;height: 437px;overflow: hidden}
 .empty-box-inner img{display: block;}
 .empty-box-inner .title{position: absolute;top: 437px;background: #fff;width: 291px;padding: 10px 0;height: 50px;opacity: .7;filter:alpha(opacity=70);   }
-.empty-box-inner .title p{padding: 8px 0;}
+.empty-box-inner .title p{padding: 3px 0;}
 .empty-box-innner .preview-info p{padding: 23px 0}
 .empty-box-inner .double .title{width: 594px;}
 .empty-box-inner .title p{text-align: center;color: #000;padding-bottom: 5px;}
@@ -276,6 +290,7 @@ table td{padding: 10px 0;}
 .idialog-reg{margin: 0;}
 .reg-box-inner h2{height:30px;text-align: center;font-weight: normal;font-size: 25px;padding-bottom:20px;}
 .reg-box-inner .reg-form div,.forget-pw-fir-form div,.item-row{position: relative;width: 290px;margin: 0 auto;}
+.item-row #next-btn{display: block;text-align: center;background: #000;color: #fff;height: 34px;width: 100px;margin-left: 100px;cursor: pointer;border: none;}
 .reg-box-inner .reg-form .phone-code-input{width: 150px;}
 .reg-box-inner .reg-form label,.forget-pw-fir-form label,.forget-pw-sec-form label,.forget-pw-thr-form label{
     position: absolute;color: #a1a1a1;top: 8px;left: 8px;
@@ -722,6 +737,7 @@ table td{padding: 10px 0;}
 .designer-list .designer-list-con .more{width:208px;height:36px;border: 1px solid #838383;line-height: 36px;text-align: center;
     color: #838383;background: #fff;padding: 0;margin-left: auto;margin-right: auto;cursor: pointer;
 }
+.designer-list .designer-list-con .more:hover{border-color: #000;color:#FF2D54;}
 /*end designer-list*/
 /*designer-brand*/
 .designer-brand{margin-bottom: 100px;}
@@ -798,6 +814,7 @@ table td{padding: 10px 0;}
 .account-safe-con .item .item-detail{width: 150px;font-weight: 700;}
 .account-safe-con .item .item-info{width: 500px;}
 .account-safe-con .item .btn-wrap{width: 200px;text-align: center;}
+.account-safe-con .item .btn-wrap span{line-height: 25px;cursor: pointer;margin-left:60px; }
 .account-safe-con .off p{color: #ccc;}
 .account-safe-con .off .btn{padding: 7px 20px; background: #FF2D54;color: #fff;}
 .account-safe-con span{width: 21px;height: 21px;background: url("../images/account-safe.png") no-repeat 30px -21px;padding-left: 50px;}
@@ -806,14 +823,18 @@ table td{padding: 10px 0;}
 /*user-phoneValidate*/
 .validateEmail{margin-bottom: 100px;}
 .phoneValidate,.updatePw{margin-bottom: 100px;}
-.phoneValidate-con{margin-top: 50px;}
-.phoneValidate-con  .step-bg{width: 418px;height: 20px;background: url("../images/phoneValidate.gif") no-repeat; margin:  0 auto;}
+.phoneValidate-con,.bindPhone-con{margin-top: 50px;}
+.phoneValidate-con .step-bg{width: 418px;height: 20px;background: url("../images/phoneValidate.gif") no-repeat; margin:  0 auto;}
+.bindPhone-con .step-bg{width: 255px;height: 20px;background: url("../images/bingPhone.gif") no-repeat; margin:  0 auto;}
 .phoneValidate .second .step-bg,.updatePw .second .step-bg,.validateEmail-list .second .step-bg{background-position: 0 -20px;}
 .phoneValidate .third .step-bg,.updatePw .third .step-bg,.validateEmail-list .third .step-bg{background-position: 0 -40px;}
-.phoneValidate-con ul{width: 470px;margin:10px auto 0;}
-.phoneValidate-con li{float: left;margin-right: 135px;height: 34px;line-height: 34px;font-size: 14px;}
+.phoneValidate-con ul,.bindPhone-con ul{width: 470px;margin:10px auto 0;}
+.phoneValidate-con li,.bindPhone-con li{float: left;margin-right: 135px;height: 34px;line-height: 34px;font-size: 14px;}
+.bindPhone-con ul{width: 281px;}
+.bindPhone-con li{margin-right: 0;}
+.bindPhone-con .last{margin-left: 150px;margin-right: 0;}
 .phoneValidate-con .email li{margin-right: 154px;}
-.phoneValidate-con .highLight{color: #FF2D54;}
+.phoneValidate-con .highLight,.bindPhone-con .hightLight{color: #FF2D54;}
 .phoneValidate-con .last,.phoneValidate-con .email .last{margin-right: 0;}
 .phoneValidate-list form,.updatePw-list form,.validateEmail-list form{width: 400px;margin: 0 auto;}
 .phoneValidate-list form p,.updatePw-list form p,.validateEmail-list form p{text-align: center;padding: 20px 0;}

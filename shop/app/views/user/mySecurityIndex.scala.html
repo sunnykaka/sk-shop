@@ -3,7 +3,19 @@
 @import common.utils.StringUtils;
 
 @myCenter(Messages("title.my.security")) {
-
+ <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+ <script>
+ $('#noPhone').click(function(){
+    $.dialog({
+        title:'提示',
+        lock:true,
+        content:'<div><p style="text-align: center;font-size: 16px;padding: 30px 40px 0 40px;">在验证邮箱前，请先绑定手机号</p><a href="/my/security/bindPhone/index" style="display:block;padding:10px 20px;text-align:center;background:#000;color:#fff;margin:30px auto 0;width:100px;">立即验证手机</a></div>',
+        width:500,
+        height:200,
+        padding:"20"
+    });
+ });
+ </script>
 } {
     <!--user-info-->
     <div class="user-info">
@@ -20,8 +32,8 @@
                 <div class="user-info-list">
                     <h2>账号安全</h2>
                     <div class="account-safe-con">
-                        <div class="item @if(null == user.getPassword || "".equals(user.getPassword)){off}" >
-                            @if(null == user.getPassword || "".equals(user.getPassword)){
+                        <div class="item @if(!"KRQ".equals(user.getAccountType.getName)){off}" >
+                            @if(!"KRQ".equals(user.getAccountType.getName)){
                                 <span class="status"></span><p class="item-detail">登录密码</p><p class="item-info">您是第三方登录，无需设置密码</p>
                             }else{
                                 <span class="status on"></span><p class="item-detail">登录密码</p><p class="item-info">登录密码能够保证您的账户安全，让你购物更放心</p>
@@ -41,7 +53,7 @@
                             @if(null == user.getEmail || "".equals(user.getEmail)){
                                 <span class="status"></span><p class="item-detail">验证邮箱</p><p class="item-info">您邮箱还没有验证，为了您的安全，请验证！</p>
                                 @if(null == user.getPhone || "".equals(user.getPhone)){
-                                    <p class="btn-wrap"><span class="btn">立即验证</span></p>
+                                    <p class="btn-wrap"><span class="btn" id="noPhone">立即验证</span></p>
                                 }else{
                                     <p class="btn-wrap"><a href="@controllers.user.routes.MySecurityController.changeEmailIndex()" class="btn">立即验证</a></p>
                                 }
