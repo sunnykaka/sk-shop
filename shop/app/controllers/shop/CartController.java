@@ -198,7 +198,10 @@ public class CartController extends Controller {
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
 
             if(!isReplace) {
-                List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
+                List<CartItem> cartItems = null;
+                if(cart != null) {
+                   cartItems = cartService.queryCarItemsByCartId(cart.getId());
+                }
                 if(cartItems == null || cartItems.size() == 0) {
                     return ok(new JsonResult(true,"用户当前购物车为空", 0).toNode());
                 }
