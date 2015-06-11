@@ -31,11 +31,16 @@ public class PayResponseHandler {
      */
     private TradeOrder tradeOrder;
 
-    //交易信息
-    private Trade trade; //需要手动实例化
+    /**
+     * 交易信息
+     */
+    private Trade trade;
 
     private BackInfoBuilder builder;
-    //所有返回的参数，原样封装
+
+    /**
+     * 所有返回的参数，原样封装
+     */
     private Map<String, String> backParams;
 
     public PayResponseHandler(Request request) {
@@ -103,6 +108,7 @@ public class PayResponseHandler {
                 this.trade.setPayTotalFee(tradeOrder.getPayTotalFee());
                 this.trade.setBizType(tradeOrder.getBizType().getName());
             }
+            this.trade.setPayMethod(tradeOrder.getPayMethod().getName());
         }
 
         Logger.info("支付返回参数以及类型信息: " + type.getValue() + " : " + backParams);

@@ -31,7 +31,9 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
         //交易状态
         tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_status"));
         tradeInfo.setPayRetTotalFee(ParamUtils.getByKey(request, "total_fee"));
+        tradeInfo.setPayCurrency(ParamUtils.getByKey(request, "currency"));
         tradeInfo.setGmtCreateTime(DateUtils.current());
+        tradeInfo.setTradeGmtCreateTime(DateUtils.current());
         return tradeInfo;
     }
 
