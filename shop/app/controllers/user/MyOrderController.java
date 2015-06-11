@@ -129,7 +129,7 @@ public class MyOrderController extends Controller {
 
         orderService.receivingOrder(orderId, user.getId());
 
-        return ok(new JsonResult(true, "取消成功").toNode());
+        return redirect(routes.MyOrderController.index(0,1,5));//(new JsonResult(true, "确认收货成功").toNode());
 
     }
 
