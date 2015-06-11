@@ -2,6 +2,8 @@ package ordercenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
+import common.utils.Money;
+import ordercenter.constants.BizType;
 import ordercenter.constants.TradeType;
 import ordercenter.payment.constants.PayMethod;
 import org.hibernate.annotations.Type;
@@ -52,6 +54,25 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
      * 交易类型
      */
     private TradeType tradeType;
+
+
+    /**
+     * 系统中要支付的金额
+     */
+    private Money payTotalFee;
+
+
+    /**
+     * 业务类型
+     */
+    private BizType bizType;
+
+
+    /**
+     * 支付机构
+     */
+    private String defaultPayOrg;
+
 
     /**
      * 创建时间
@@ -111,7 +132,7 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
     }
 
     @Column(name = "payMethod")
-    @Basic
+    @Enumerated(EnumType.STRING)
     public PayMethod getPayMethod() {
         return payMethod;
     }
@@ -138,6 +159,36 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
 
     public void setTradeType(TradeType tradeType) {
         this.tradeType = tradeType;
+    }
+
+    @Column(name = "payTotalFee")
+    @Type(type="common.utils.hibernate.MoneyType")
+    public Money getPayTotalFee() {
+        return payTotalFee;
+    }
+
+    public void setPayTotalFee(Money payTotalFee) {
+        this.payTotalFee = payTotalFee;
+    }
+
+    @Column(name = "bizType")
+    @Enumerated(EnumType.STRING)
+    public BizType getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(BizType bizType) {
+        this.bizType = bizType;
+    }
+
+    @Column(name = "defaultPayOrg")
+    @Basic
+    public String getDefaultPayOrg() {
+        return defaultPayOrg;
+    }
+
+    public void setDefaultPayOrg(String defaultPayOrg) {
+        this.defaultPayOrg = defaultPayOrg;
     }
 
     @Column(name = "createTime")

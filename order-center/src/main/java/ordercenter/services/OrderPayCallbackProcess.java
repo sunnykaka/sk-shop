@@ -1,6 +1,5 @@
 package ordercenter.services;
 
-
 import common.utils.play.BaseGlobal;
 import ordercenter.models.Trade;
 import ordercenter.models.TradeOrder;
@@ -10,7 +9,6 @@ import ordercenter.payment.constants.ResponseType;
 import play.Logger;
 
 import java.util.List;
-
 
 /**
  * 订单支付后回调类
@@ -27,11 +25,11 @@ public class OrderPayCallbackProcess implements PayCallback {
 
         result.addData("orderNo", 0);
         result.addData("orderId", 0);
-        TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
-        List<TradeOrder> tradeOrderList = tradeService.getTradeOrdeByTradeNo(trade.getTradeNo());
 
+        List<TradeOrder> tradeOrderList = trade.getTradeOrder();
         if(tradeOrderList == null || tradeOrderList.size() == 0) {
             Logger.error("「订单回调」订单支付成功，但是系统中找不到交易信息！，此交易号号为：" + trade.getTradeNo());
+            result.setResult(false);
         } else {
             //现在只对一个订单进行支付
             TradeOrder tradeOrder = tradeOrderList.get(0);

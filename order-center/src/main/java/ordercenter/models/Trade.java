@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -107,10 +108,24 @@ public class Trade implements EntityClass<Integer> {
     private DateTime gmtModifyTime;
 
     /**
+     * 支付商按照传递过去的币种支付的金额
+     */
+    private String payRetTotalFee;
+
+    /**
+     * 传递过去的币种
+     */
+    private String payCurrency;
+
+    /**
      * 只用于后台展示
      */
     private String orderNo;
 
+    /**
+     * 交易包含的订单
+     */
+    private List<TradeOrder> tradeOrder;
 
     /**
      * 交易签名是否真实
@@ -144,39 +159,9 @@ public class Trade implements EntityClass<Integer> {
         return false;
     }
 
-
-//    public String getPayType() {
-//        try {
-//            if (outerPlatformType.equalsIgnoreCase(defaultbank))
-//                return Enum.valueOf(PayMethod.class, payMethod).toDesc();
-//
-//            return Enum.valueOf(PayBank.class, defaultbank.substring(0, 1).toUpperCase() + defaultbank.substring(1)).toDesc();
-//        } catch (Exception e) {
-//            log.warn("转换时出错! defaultbank: " + defaultbank + ", payMethod: " + payMethod);
-//            return defaultbank;
-//        }
-//    }
-
-
-
-//    public String getTradeDate() {
-//        return DateUtils.formatDate(gmtCreateTime, DateUtils.DateFormatType.DATE_FORMAT_STR);
-//    }
-//
-//    public long getPayTotalFee() {
-//        return payTotalFee;
-//    }
-//    public String getPayTotalFeeTOString(){
-//        return Money.getMoneyString(payTotalFee);
-//    }
-//
-//    public String getPayTotal() {
-//        return Money.getMoneyString(payTotalFee);
-//    }
-
     @Override
     public String toString() {
-        return "TradeInfo{" +
+        return "Trade{" +
                 "id=" + id +
                 ", bizType='" + bizType + '\'' +
                 ", tradeNo='" + tradeNo + '\'' +
@@ -195,7 +180,27 @@ public class Trade implements EntityClass<Integer> {
                 ", gmtCreateTime=" + gmtCreateTime +
                 ", gmtModifyTime=" + gmtModifyTime +
                 ", orderNo='" + orderNo + '\'' +
+                ", payRetTotalFee='" + payRetTotalFee + '\'' +
+                ", payCurrency='" + payCurrency + '\'' +
                 '}';
+    }
+
+    @Transient
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    @Transient
+    public List<TradeOrder> getTradeOrder() {
+        return tradeOrder;
+    }
+
+    public void setTradeOrder(List<TradeOrder> tradeOrder) {
+        this.tradeOrder = tradeOrder;
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -370,13 +375,24 @@ public class Trade implements EntityClass<Integer> {
         this.gmtModifyTime = gmtModifyTime;
     }
 
-    @Transient
-    public String getOrderNo() {
-        return orderNo;
+    @Column(name = "payRetTotalFee")
+    @Basic
+    public String getPayRetTotalFee() {
+        return payRetTotalFee;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setPayRetTotalFee(String payRetTotalFee) {
+        this.payRetTotalFee = payRetTotalFee;
+    }
+
+    @Column(name = "payCurrency")
+    @Basic
+    public String getPayCurrency() {
+        return payCurrency;
+    }
+
+    public void setPayCurrency(String payCurrency) {
+        this.payCurrency = payCurrency;
     }
 }
 

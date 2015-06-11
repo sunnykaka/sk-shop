@@ -12,6 +12,8 @@ import ordercenter.services.OrderPayCallbackProcess;
 import ordercenter.services.TradeService;
 import play.Logger;
 import play.mvc.Http.Request;
+import usercenter.models.User;
+import usercenter.utils.SessionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,8 @@ import java.util.Map;
  * Date: 2015-04-29
  */
 public class PayResponseHandler {
+    private Request request;
+
     /**
      * 订单交易记录
      */
@@ -35,20 +39,39 @@ public class PayResponseHandler {
     private Map<String, String> backParams;
 
     public PayResponseHandler(Request request) {
+        this.request = request;
+    }
+
+    /**
+     * 回调业务处理
+     *
+     * 下面内容是第三方支付成功，后续的交易处理，对于客户以下内容即便出现异常，对客户而言都已经支付成功！异常记录在日志/logs/trade.log中，需要运营手动确认相关异常内容
+     * @param type 处理类型
+     * @return 处理返回结果
+     */
+    public CallBackResult handleCallback(ResponseType type) {
+        //初始化相关变量
+        CallBackResult result = new CallBackResult();
+
         //尚客系统交易号
         String trade_no = ParamUtils.getByKey(request, "out_trade_no");
         if(trade_no == null || trade_no.trim().length() == 0) {
-            Logger.error("「订单回调」支付系统没有返回尚客系统交易号");
+            Logger.error("「订单回调」支付系统没有返回尚客系统交易号：" + trade.getTradeNo());
+            result.setResult(false);
+            return result;
         }
+
         TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
         List<TradeOrder> tradeOrderList = tradeService.getTradeOrdeByTradeNo(trade_no);
-
+        PayMethod payMethod = null;
         if(tradeOrderList == null || tradeOrderList.size() == 0) {
             Logger.error("「订单回调」系统中找不到交易信息！，此交易号号为：" + trade.getTradeNo());
+            result.setResult(false);
+            return result;
         } else {
             //现在只对一个订单进行支付
             tradeOrder = tradeOrderList.get(0);
-            PayMethod payMethod = tradeOrder.getPayMethod();
+            payMethod = tradeOrder.getPayMethod();
 
             //设置支付结束后处理类对象，不同的支付方式此处的值不同
             if(PayMethod.directPay.getName().equals(payMethod.getName())
@@ -58,30 +81,31 @@ public class PayResponseHandler {
                 this.builder = new TenpayInfoBuilder();
             } else {
                 Logger.error("「订单回调」订单支付成功，但是系统中找不到此支付方式！，此交易号号为：" + trade.getTradeNo());
+                result.setResult(false);
+                return result;
             }
         }
         this.trade = this.builder.buildFromRequest(request);
         this.backParams = this.builder.buildParam(request);
-    }
 
-    /**
-     * 回调业务处理
-     *
-     * @param type 处理类型
-     * @return 处理返回结果
-     */
-    public CallBackResult handleCallback(ResponseType type) {
+        User user = SessionUtils.currentUser();
+        if(user != null) {
+            trade.setOuterBuyerId(user.getId() + "");
+            trade.setOuterBuyerAccount(user.getUserName());
+        }
+
+        trade.setTradeOrder(tradeOrderList);
+
+        if(this.tradeOrder != null && payMethod != null) {
+            if(PayMethod.directPay.getName().equals(payMethod.getName())
+                    || PayMethod.bankPay.getName().equals(payMethod.getName())) { //支付宝和银行卡(银行，目前也是通过支付宝来实现)
+                this.trade.setDefaultbank(tradeOrder.getDefaultPayOrg());
+                this.trade.setPayTotalFee(tradeOrder.getPayTotalFee());
+                this.trade.setBizType(tradeOrder.getBizType().getName());
+            }
+        }
+
         Logger.info("支付返回参数以及类型信息: " + type.getValue() + " : " + backParams);
-
-        //初始化相关变量
-        CallBackResult result = new CallBackResult();
-        System.out.println("----签名认证结果------------: " + trade.verify(backParams, type));
-
-//        if (!trade.verify(backParams, type)) {
-//            Logger.error("回调签名验证出错: " + backParams);
-//            result.setResult(false);
-//            return result;
-//        }
 
         if (!trade.isSuccess()) {
             Logger.error("交易不成功，状态为failure: " + backParams);
@@ -94,12 +118,11 @@ public class PayResponseHandler {
             callBackHandler = new OrderPayCallbackProcess();
             result = callBackHandler.initResult(this.trade, type);
         } catch (Exception e) {
-            Logger.error("实例化回调处理类时失败", e);
-            throw new IllegalStateException("实例化回调处理类时失败", e);
+            Logger.error("支付成功，但是后续操作出现问题：实例化回调处理类时失败,TradeNo:" + trade.getOuterTradeNo(), e);
+            result.setResult(true);
+            return result;
         }
 
-        //下面内容是第三方支付成功，后续的交易处理，对于客户以下内容即便出现异常，对客户而言都已经支付成功！异常记录在日志/logs/trade.log中，需要运营手动确认相关异常内容
-        TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
         //查询支付宝等发送过来的消息是否已经消费,如果已经消费则直接返回成功,主要针对情况是：return 和 Notify有很明显时差时，一个先回来，一另后回来。则直接处理成功。
         if (tradeService.existTrade(trade.getTradeNo(), trade.getOuterTradeNo())) {
             Logger.info("此笔交易已经处理,TradeNo:" + trade.getTradeNo() + " 本次通知类型为：" + type);
@@ -132,7 +155,6 @@ public class PayResponseHandler {
         } else {
             Logger.error(buildLogString("fail-" + type.getValue(), "exception", trade.getTradeNo(), trade.getOuterTradeNo(), trade.getOuterPlatformType()));
         }
-
         return result;
     }
 
