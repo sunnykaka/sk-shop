@@ -10,7 +10,9 @@ import play.mvc.Result;
 import play.test.FakeRequest;
 import play.test.WithApplication;
 import usercenter.cache.UserCache;
+import usercenter.domain.QQLogin;
 import usercenter.domain.SmsSender;
+import usercenter.domain.WeiboLogin;
 import usercenter.domain.WeixinLogin;
 import usercenter.models.User;
 import usercenter.utils.SessionUtils;
@@ -41,5 +43,31 @@ public class OpenIdLoginControllerTest extends WithApplication implements BaseTe
         assertThat(user.getId(), is(notNullValue()));
 
     }
+
+    @Test
+    @Ignore
+    public void testWeiboLoginOnline() throws Exception {
+
+        String code = "79275c8d32d99667dc2750ace0e98e50";
+        String state = RandomStringUtils.randomAlphanumeric(8);
+        User user = new WeiboLogin().handleCallback(code, state, "", "", "");
+
+        assertThat(user.getId(), is(notNullValue()));
+
+    }
+
+    @Test
+    @Ignore
+    public void testQQLoginOnline() throws Exception {
+
+        String code = "A1A11C17A4DE690A89ECAE4EC61FEEF7";
+        String state = RandomStringUtils.randomAlphanumeric(8);
+        User user = new QQLogin().handleCallback(code, state, "", "");
+
+        assertThat(user.getId(), is(notNullValue()));
+
+    }
+
+
 
 }

@@ -18,6 +18,11 @@ GET         /login                                @controllers.user.LoginControl
 POST        /login                                @controllers.user.LoginController.login
 GET         /login/wx                             @controllers.user.LoginController.weixinLogin
 GET         /login/wx/callback                    @controllers.user.LoginController.weixinLoginCallback(code ?= null, state ?= null)
+GET         /login/weibo                          @controllers.user.LoginController.weiboLogin
+GET         /login/weibo/callback                 @controllers.user.LoginController.weiboLoginCallback(code ?= null, state ?= null, error ?= null, error_code ?= null)
+GET         /login/qq                             @controllers.user.LoginController.qqLogin
+GET         /login/qq/callback                    @controllers.user.LoginController.qqLoginCallback(code ?= null, state ?= null, msg ?= null)
+
 GET         /logout                               @controllers.user.LoginController.logout
 POST        /user/phone/get_code                  @controllers.user.LoginController.requestPhoneCode(phone)
 GET         /user/phone/exist                     @controllers.user.LoginController.isPhoneExist(phone)
@@ -27,6 +32,14 @@ GET         /user/order                           @controllers.Application.myOrd
 GET         /wx/connect/qrconnect                 @controllers.user.FakeOpenIDProviderController.wxConnect(appid ?= null, redirect_uri ?= null, response_type ?= null, scope ?= null, state ?= null)
 GET         /wx/sns/oauth2/access_token           @controllers.user.FakeOpenIDProviderController.wxGetAccessToken(appid ?= null, secret ?= null, code ?= null, grant_type ?= null)
 GET         /wx/sns/userinfo                      @controllers.user.FakeOpenIDProviderController.wxGetUserInfo(access_token ?= null, openid ?= null)
+GET         /weibo/authorize                      @controllers.user.FakeOpenIDProviderController.weiboConnect(client_id ?= null, redirect_uri ?= null, response_type ?= null, state ?= null)
+POST        /weibo/oauth2/access_token            @controllers.user.FakeOpenIDProviderController.weiboGetAccessToken(client_id ?= null, client_secret ?= null, code ?= null, grant_type ?= null, redirect_uri ?= null)
+GET         /weibo/2/users/show.json              @controllers.user.FakeOpenIDProviderController.weiboGetUserInfo(access_token ?= null, uid ?= null)
+GET         /qq/oauth2.0/authorize                @controllers.user.FakeOpenIDProviderController.qqConnect(client_id ?= null, redirect_uri ?= null, response_type ?= null, state ?= null)
+GET         /qq/oauth2.0/token                    @controllers.user.FakeOpenIDProviderController.qqGetAccessToken(client_id ?= null, client_secret ?= null, code ?= null, grant_type ?= null, redirect_uri ?= null)
+GET         /qq/oauth2.0/me                       @controllers.user.FakeOpenIDProviderController.qqGetUserInfo(access_token ?= null)
+GET         /qq/user/get_user_info                @controllers.user.FakeOpenIDProviderController.qqGetUserDetailInfo(oauth_consumer_key ?= null, access_token ?= null, openid ?= null, format ?= null)
+
 
 
 

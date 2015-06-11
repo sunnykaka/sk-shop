@@ -10,7 +10,9 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.domain.QQLogin;
 import usercenter.domain.SmsSender;
+import usercenter.domain.WeiboLogin;
 import usercenter.domain.WeixinLogin;
 import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
@@ -135,8 +137,40 @@ public class LoginController extends Controller {
         String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
 
         return redirect(originalUrl);
-//        return ok(openIDCallback.render(originalUrl));
     }
+
+    public Result weiboLogin() {
+
+        return redirect(new WeiboLogin().redirectToConnectUrl());
+    }
+
+    public Result weiboLoginCallback(String code, String state, String error, String error_code) {
+
+        Logger.debug(String.format("微博回调参数: code[%s], state[%s], error[%s], error_code[%s]", code, state, error, error_code));
+
+        User user = new WeiboLogin().handleCallback(code, state, error, error_code, request().remoteAddress());
+        userService.loginByRegister(user, true);
+        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+
+        return redirect(originalUrl);
+    }
+
+    public Result qqLogin() {
+
+        return redirect(new QQLogin().redirectToConnectUrl());
+    }
+
+    public Result qqLoginCallback(String code, String state, String msg) {
+
+        Logger.debug(String.format("QQ回调参数: code[%s], state[%s], msg[%s]", code, state, msg));
+
+        User user = new QQLogin().handleCallback(code, state, msg, request().remoteAddress());
+        userService.loginByRegister(user, true);
+        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+
+        return redirect(originalUrl);
+    }
+
 
 
 

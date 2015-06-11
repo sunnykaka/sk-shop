@@ -1,16 +1,22 @@
 package controllers.user;
 
+import com.google.common.collect.Lists;
 import common.utils.JsonUtils;
+import common.utils.ParamUtils;
+import common.utils.UrlUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.domain.QQLogin;
+import usercenter.domain.WeiboLogin;
 import usercenter.domain.WeixinLogin;
 import usercenter.services.UserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -131,6 +137,238 @@ public class FakeOpenIDProviderController extends Controller {
 
     }
 
+
+    public Result weiboConnect(String client_id, String redirect_uri, String response_type, String state) {
+
+        boolean error = false;
+        if(StringUtils.isBlank(client_id) || StringUtils.isBlank(redirect_uri) || StringUtils.isBlank(response_type) ||
+                StringUtils.isBlank(state)) {
+            Logger.error(String.format("微博重定向请求参数有误, 某参数为空: client_id[%s], redirect_uri[%s], response_type[%s], scope[%s], state[%s]",
+                    client_id, redirect_uri, response_type, state));
+            error = true;
+        }
+        if(state.equals(ERROR_STATE)) {
+            error = true;
+        }
+
+        String url = new WeiboLogin().redirectUrl;
+        if(!error) {
+            url += "?state=" + state + "&code=" + generateCode();
+        } else {
+            url += "?error=" + "error_happened" + "&error_code=" + 10086;
+        }
+
+        return redirect(url);
+
+    }
+
+    public Result weiboGetAccessToken(String client_id, String client_secret, String code, String grant_type, String redirect_uri) {
+
+        String errorMsg = null;
+        Map<String, Object> results = new HashMap<>();
+
+        if(StringUtils.isBlank(client_id) || StringUtils.isBlank(client_secret) ||
+                StringUtils.isBlank(code) || StringUtils.isBlank(grant_type) || StringUtils.isBlank(redirect_uri)) {
+            errorMsg = String.format("微博获取accessToken请求参数有误, 某参数为空: appid[%s], secret[%s], code[%s], grant_type[%s], redirect_uri[%s]",
+                    client_id, client_secret, code, grant_type, redirect_uri);
+            Logger.error(errorMsg);
+
+        } else {
+
+            String accessToken = codeToAccessTokenMap.get(code);
+            if(accessToken == null) {
+                errorMsg = "根据code没有找到accessToken";
+            } else {
+                String openId = accessTokenToOpenIdMap.get(accessToken);
+                if(openId == null) {
+                    errorMsg = "根据accessToken没有找到openId";
+                } else {
+                    results.put("access_token", accessToken);
+                    results.put("expires_in", 7200);
+                    results.put("remind_in", 7200);
+                    results.put("uid", openId);
+                }
+            }
+        }
+
+        if(errorMsg != null) {
+            results.put("error_code", 10086);
+            results.put("error", errorMsg);
+        }
+
+        return ok(JsonUtils.object2Node(results));
+
+    }
+
+    public Result weiboGetUserInfo(String access_token, String uid) {
+
+        String errorMsg = null;
+        Map<String, Object> results = new HashMap<>();
+
+        if(StringUtils.isBlank(access_token) || StringUtils.isBlank(uid)){
+            errorMsg = String.format("微博获取userInfo请求参数有误, 某参数为空: access_token[%s], uid[%s]",
+                    access_token, uid);
+            Logger.error(errorMsg);
+
+        } else {
+
+            String cachedOpenId = accessTokenToOpenIdMap.get(access_token);
+            if(cachedOpenId == null) {
+                errorMsg = "根据accessToken没有找到openId";
+            } else {
+                if(!cachedOpenId.equals(uid)) {
+                    errorMsg = "openId值与预期不相等";
+                } else {
+                    results.put("id", Long.parseLong(uid));
+                    results.put("screen_name", generateUsername());
+                    results.put("gender", "f");
+                }
+            }
+
+        }
+
+        if(errorMsg != null) {
+            results.put("error_code", 10086);
+            results.put("error", errorMsg);
+        }
+
+        return ok(JsonUtils.object2Node(results));
+
+    }
+
+
+    public Result qqConnect(String client_id, String redirect_uri, String response_type, String state) {
+
+        boolean error = false;
+        if(StringUtils.isBlank(client_id) || StringUtils.isBlank(redirect_uri) || StringUtils.isBlank(response_type) ||
+                StringUtils.isBlank(state)) {
+            Logger.error(String.format("QQ重定向请求参数有误, 某参数为空: client_id[%s], redirect_uri[%s], response_type[%s], scope[%s], state[%s]",
+                    client_id, redirect_uri, response_type, state));
+            error = true;
+        }
+        if(state.equals(ERROR_STATE)) {
+            error = true;
+        }
+
+        String url = new QQLogin().redirectUrl;
+        if(!error) {
+            url += "?state=" + state + "&code=" + generateCode();
+        } else {
+            url += "?msg=" + "error_happened" + "&code=" + 10086;
+        }
+
+        return redirect(url);
+
+    }
+
+    public Result qqGetAccessToken(String client_id, String client_secret, String code, String grant_type, String redirect_uri) {
+
+        String errorMsg = null;
+        Map<String, List<String>> results = new HashMap<>();
+
+        if(StringUtils.isBlank(client_id) || StringUtils.isBlank(client_secret) ||
+                StringUtils.isBlank(code) || StringUtils.isBlank(grant_type) || StringUtils.isBlank(redirect_uri)) {
+            errorMsg = String.format("QQ获取accessToken请求参数有误, 某参数为空: appid[%s], secret[%s], code[%s], grant_type[%s], redirect_uri[%s]",
+                    client_id, client_secret, code, grant_type, redirect_uri);
+            Logger.error(errorMsg);
+
+        } else {
+
+            String accessToken = codeToAccessTokenMap.get(code);
+            if(accessToken == null) {
+                errorMsg = "根据code没有找到accessToken";
+            } else {
+                String openId = accessTokenToOpenIdMap.get(accessToken);
+                if(openId == null) {
+                    errorMsg = "根据accessToken没有找到openId";
+                } else {
+                    results.put("access_token", Lists.newArrayList(accessToken));
+                    results.put("expires_in", Lists.newArrayList(String.valueOf(7200)));
+                }
+            }
+        }
+
+        if(errorMsg != null) {
+            results.put("code", Lists.newArrayList(String.valueOf(10086)));
+            results.put("msg", Lists.newArrayList(errorMsg));
+        }
+
+        return ok(UrlUtils.buildQueryString(results));
+
+    }
+
+    public Result qqGetUserInfo(String access_token) {
+
+        String errorMsg = null;
+        String result = null;
+
+        if(StringUtils.isBlank(access_token)){
+            errorMsg = String.format("QQ获取userInfo请求参数有误, 某参数为空: access_token[%s]",
+                    access_token);
+            Logger.error(errorMsg);
+
+        } else {
+
+            String cachedOpenId = accessTokenToOpenIdMap.get(access_token);
+            if(cachedOpenId == null) {
+                errorMsg = "根据accessToken没有找到openId";
+            } else {
+                result = String.format("callback( {\"client_id\":\"%s\",\"openid\":\"%s\"} ); ", "12345678", cachedOpenId);
+            }
+
+        }
+
+        if(result == null) {
+            Map<String, List<String>> results = new HashMap<>();
+            results.put("code", Lists.newArrayList(String.valueOf(10086)));
+            results.put("msg", Lists.newArrayList(errorMsg));
+            return ok(UrlUtils.buildQueryString(results));
+        } else {
+            return ok(result);
+        }
+
+    }
+
+    public Result qqGetUserDetailInfo(String oauth_consumer_key, String access_token, String openid, String format) {
+
+        String errorMsg = null;
+        Map<String, Object> results = new HashMap<>();
+
+        if(StringUtils.isBlank(oauth_consumer_key) || StringUtils.isBlank(access_token) ||
+                StringUtils.isBlank(openid) || StringUtils.isBlank(format)){
+            errorMsg = String.format("QQ获取userInfo请求参数有误, 某参数为空: oauth_consumer_key[%s], access_token[%s], openid[%s], format[%s]",
+                    oauth_consumer_key, access_token, openid, format);
+            Logger.error(errorMsg);
+
+        } else {
+            String cachedOpenId = accessTokenToOpenIdMap.get(access_token);
+            if(cachedOpenId == null) {
+                errorMsg = "根据accessToken没有找到openId";
+            } else {
+                if(!cachedOpenId.equals(openid)) {
+                    errorMsg = "openId值与预期不相等";
+                } else {
+                    results.put("ret", 0);
+                    results.put("msg", "");
+                    results.put("nickname", generateUsername());
+                    results.put("gender", "女");
+                    results.put("figureurl_qq_1", "http://qzapp.qlogo.cn/qzapp/100330589/A3D9931DEB0A57D5E8A73BF3E4991C40/50");
+                }
+            }
+
+        }
+
+        if(errorMsg != null) {
+            results.put("ret", 10086);
+            results.put("msg", errorMsg);
+        }
+
+        return ok(JsonUtils.object2Node(results));
+
+    }
+
+
+
     private String generateUsername() {
         //50%几率生成过长的字符串
         if(new Random().nextBoolean()) {
@@ -145,7 +383,7 @@ public class FakeOpenIDProviderController extends Controller {
 
         String code = RandomStringUtils.randomAlphabetic(16);
         String accessToken =  RandomStringUtils.randomAlphabetic(32);
-        String unionId =  RandomStringUtils.randomAlphabetic(32);
+        String unionId =  RandomStringUtils.randomNumeric(8);
         codeToAccessTokenMap.put(code, accessToken);
         accessTokenToOpenIdMap.put(accessToken, unionId);
         return code;
