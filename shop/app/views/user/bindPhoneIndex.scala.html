@@ -37,7 +37,7 @@
                             <button class="get-code-btn" id="get-code-btn">发送验证码</button>
                             <span class="errormsg" id="errormsg-phoneCode">@if(null != map.get("verificationCode")){ @map.get("verificationCode").get(0).message() }</span>
                         </div>
-                        <div class="item-row"><button type="submit">提交</button></div>
+                        <div class="item-row"><button type="submit" id="next-btn">提交</button></div>
                     </form>
                 </div>
                     <!-- end phoneValidate-->

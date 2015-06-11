@@ -2,6 +2,7 @@ package ordercenter.services;
 
 import common.services.GeneralDao;
 import common.utils.DateUtils;
+import ordercenter.constants.BizType;
 import ordercenter.constants.OrderState;
 import ordercenter.constants.TradeType;
 import ordercenter.models.*;
@@ -124,6 +125,9 @@ public class TradeService {
             tradeOrder.setPayMethod(payMethodEnum);
             tradeOrder.setPayFlag(false);
             tradeOrder.setTradeType(TradeType.BuyProduct);
+            tradeOrder.setPayTotalFee(order.getTotalMoney());
+            tradeOrder.setBizType(BizType.Order);
+            tradeOrder.setDefaultPayOrg(order.getPayBank().getForexBankName());
             this.createTradeOrder(tradeOrder);
 
             //更新订单
@@ -209,7 +213,7 @@ public class TradeService {
             Logger.error(errPrefix + "更新交易" + trade.getTradeNo() + "失败！", e);
         }
 
-        List<TradeOrder> tradeOrderList = this.getTradeOrdeByTradeNo(trade.getTradeNo());
+        List<TradeOrder> tradeOrderList = trade.getTradeOrder();
         if(tradeOrderList == null || tradeOrderList.size() == 0) {
             Logger.error(errPrefix + "系统中找不到交易信息！");
         } else {

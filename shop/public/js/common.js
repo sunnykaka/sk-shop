@@ -253,3 +253,12 @@ var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="
             }
         });
    }
+
+//回到顶部
+if($('#gotoTop').size()>0){
+    $('#gotoTop').click(function(){
+         $('html,body').animate({scrollTop:0},'slow');
+    });
+}
+
+

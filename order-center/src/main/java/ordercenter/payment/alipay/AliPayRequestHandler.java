@@ -15,16 +15,6 @@ import java.util.Map;
  */
 public class AliPayRequestHandler extends PayRequestHandler {
 
-    /**
-     * 汇率文件保存位置
-     */
-    private final String RATES_FILES_KEY = "payment.ratesFile";
-
-    /**
-     *  支付类型为：商品购买
-     */
-    private final int PAYMENT_TYPE_BUY_PRODUCT = 1;
-
     @Override
     protected String getPaymentURL() {
         return  AlipayUtil.ALIPAY_GATEWAY_NEW;
@@ -50,13 +40,13 @@ public class AliPayRequestHandler extends PayRequestHandler {
         params.put("service", "create_forex_trade");
         params.put("partner", AlipayUtil.partner);
         params.put("_input_charset", AlipayUtil.input_charset);
+        params.put("sendFormat", "normal");
 
-        //请与贵网站订单系统中的唯一订单号匹配
+        //尚客系统中的交易号
         String out_trade_no = payInfoWrapper.getTradeNo();
+        params.put("out_trade_no", out_trade_no);
         //订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
         String subject = "尚客-购物编号-" + out_trade_no;
-        //尚客系统中的交易号
-        params.put("out_trade_no", out_trade_no);
         params.put("subject", subject);
         params.put("body", subject);
 
@@ -67,7 +57,7 @@ public class AliPayRequestHandler extends PayRequestHandler {
         Logger.info("------------我们系统中人民币-------: " + rmbFee);
 
         if(payInfoWrapper.isBank()) {
-            params.put("specified_pay_channel", "debitcard-cmb-mb2c"); //payInfoWrapper.getDefaultbank()
+            params.put("specified_pay_channel", payInfoWrapper.getDefaultbank());
         }
         return params;
     }

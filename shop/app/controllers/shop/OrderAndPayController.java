@@ -279,8 +279,8 @@ public class OrderAndPayController extends Controller {
                 bank = PayBank.Tenpay;
             }
         }
-        Logger.info("--------------------真正的支付机构：" + bank.getValue());
-        payInfoWrapper.setDefaultbank(bank.getName());
+        Logger.info("--------------------真正的支付机构：" + bank.getValue() + ":" + bank.getName() + ":" + bank.getForexBankName());
+        payInfoWrapper.setDefaultbank(bank.getForexBankName());
 
         List<Order> orderList = new ArrayList<Order>(idList.length);
         for (int id : idList) {
