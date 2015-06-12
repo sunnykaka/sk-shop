@@ -55,16 +55,6 @@ public class PayResponseHandler {
      * @return 处理返回结果
      */
     public CallBackResult handleCallback(ResponseType type) {
-        this.backParams = this.builder.buildParam(request);
-
-        System.out.println("----签名认证结果------------: " + trade.verify(backParams, type));
-
-//        if (!trade.verify(backParams, type)) {
-//            Logger.error("回调签名验证出错: " + backParams);
-//            result.setResult(false);
-//            return result;
-//        }
-
         //初始化相关变量
         CallBackResult result = new CallBackResult();
 
@@ -100,7 +90,18 @@ public class PayResponseHandler {
                 return result;
             }
         }
+
         this.trade = this.builder.buildFromRequest(request);
+
+        this.backParams = this.builder.buildParam(request);
+
+        System.out.println("----签名认证结果------------: " + trade.verify(this.backParams, type));
+
+//        if (!trade.verify(backParams, type)) {
+//            Logger.error("回调签名验证出错: " + backParams);
+//            result.setResult(false);
+//            return result;
+//        }
 
         User user = SessionUtils.currentUser();
         if(user != null) {

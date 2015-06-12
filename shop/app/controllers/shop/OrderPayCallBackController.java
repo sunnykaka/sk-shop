@@ -25,7 +25,7 @@ public class OrderPayCallBackController extends Controller {
      */
     @SecuredAction
     public Result normalReturn() {
-        Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
+        Logger.info("支付平台返回的数据 : " + request().queryString());
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.RETURN);
 
@@ -44,7 +44,7 @@ public class OrderPayCallBackController extends Controller {
      */
     @SecuredAction
     public Result notifyReturn() {
-        Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
+        Logger.info("支付平台返回的数据 : " + request().queryString());
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.NOTIFY);
         Map<String, Object> resultMap = result.getData();
