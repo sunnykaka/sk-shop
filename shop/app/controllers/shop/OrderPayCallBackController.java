@@ -6,6 +6,7 @@ import ordercenter.payment.constants.ResponseType;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.secure.SecuredAction;
 import views.html.shop.paySuccess;
 import views.html.shop.payFail;
 
@@ -22,6 +23,7 @@ public class OrderPayCallBackController extends Controller {
      * 支付正常返回
      * @return
      */
+    @SecuredAction
     public Result normalReturn() {
         Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
         PayResponseHandler handler = new PayResponseHandler(request());
@@ -40,6 +42,7 @@ public class OrderPayCallBackController extends Controller {
      * 支付有通知信息返回
      * @return
      */
+    @SecuredAction
     public Result notifyReturn() {
         Logger.info("支付平台返回的数据 : " + request().body().asFormUrlEncoded());
         PayResponseHandler handler = new PayResponseHandler(request());
