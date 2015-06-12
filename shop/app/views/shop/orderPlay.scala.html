@@ -14,7 +14,8 @@ $(function(){
     });
 
 
-$('#pay-money-btn').on('click',function(){
+
+$('#pay-money-btn').click(function(){
 
      var box = $('.pay-list');
      var payMethod, currentPay = box.find('.current').attr('paybank');
@@ -27,7 +28,6 @@ $('#pay-money-btn').on('click',function(){
             default :
                 payMethod = 'bankPay';
         }
-
          $.ajax({
             type: "get",
             url: '/order/submitTradeOrder?payType=OnLine&payMethod='+payMethod+"&payOrg="+currentPay+"&orderIds="+$('#orderIds').val(),
@@ -71,7 +71,7 @@ $('#pay-money-btn').on('click',function(){
                             width:518,
                             height:260,
                             lock:true,
-                            padding:'20',
+                            padding:'20'
                         });
                 }
             }
@@ -202,7 +202,7 @@ $('#pay-money-btn').on('click',function(){
                         @*</li>*@
                     @*</ul>*@
                 @*</div>*@
-                <span class="btn pay-money-btn" id="pay-money-btn" href="#" target="_blank">立即支付</span>
+                <span class="btn pay-money-btn" id="pay-money-btn">立即支付</span>
             </div>
             <form action="/order/toPayOrder" target="_blank" id="pay-form" method="get">
                 <input type="hidden" id="tradeNo" name="tradeNo" value="" />
