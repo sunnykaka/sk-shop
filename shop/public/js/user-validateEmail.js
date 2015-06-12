@@ -98,7 +98,7 @@ $(function(){
         evt.preventDefault(); var email = $('#email');
         if(ValidateEmail(email)){
             $('.errormsg').text('');
-            fun($(this),'重发送email到邮箱');
+            fun($(this),'重发送email');
             $.ajax({
                 type: 'POST',
                 async: false,
@@ -109,9 +109,17 @@ $(function(){
                 },
                 dataType: "json",
                 success: function (data) {
-                    if(!data.result){
+                    if(data.result){
 
-                        $('.validateEmail-first').find('#errormsg-email').text(data.message);
+                    }else{
+                        $.dialog({
+                            title:'提示',
+                            lock:true,
+                            content:'<p style="text-align: center;font-size: 16px;padding: 20px;">'+data.message+'</p>',
+                            width:400,
+                            height:160,
+                            padding:"20"
+                        });
                     }
                 }
             })
@@ -138,12 +146,8 @@ $(function(){
                     if(data.result){
                         location.href = data.data;
                     }else{
-                        var valObj = data.message,errMsg;
-                        $.each(valObj,function(key,value) {
-                            errMsg = value[0];
-                        });
 
-                        $('.validateEmail-first').find('#errormsg-phoneCode').text(errMsg);
+                        $('.validateEmail-first').find('#errormsg-phoneCode').text(data.message);
                     }
                 }
             });
