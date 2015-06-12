@@ -423,7 +423,7 @@ public class MySecurityController extends Controller {
     @SecuredAction
     public Result changeEmailDo() {
 
-        return ok(changeEmailNew.render(flash()));
+        return ok(changeEmailNew.render(SessionUtils.currentUser(),flash()));
 
     }
 

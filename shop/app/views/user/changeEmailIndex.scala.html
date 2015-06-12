@@ -12,19 +12,19 @@
             <div class="bread-nav">
                 <ul class="clearfix">
                     @myCenterTop()
-                    <li>绑定邮箱</li>
+                    <li>@if(null == user.getEmail || "".equals(user.getEmail)){绑定}else{修改}邮箱</li>
                 </ul>
             </div>
             <div class="validateEmail-container clearfix">
                 @left("security")
                     <!-- user-updatePw -->
                 <div class="validateEmail-list first">
-                    <h2>绑定邮箱</h2>
+                    <h2>@if(null == user.getEmail || "".equals(user.getEmail)){绑定}else{修改}邮箱</h2>
                     <div class="phoneValidate-con">
                         <div class="step-bg"></div>
                         <ul class="clearfix email">
                             <li class="highLight">验证身份</li>
-                            <li>验证邮箱</li>
+                            <li>@if(null == user.getEmail || "".equals(user.getEmail)){绑定}else{修改}邮箱</li>
                             <li class="last">完成</li>
                         </ul>
                     </div>
