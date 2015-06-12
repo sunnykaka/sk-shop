@@ -139,8 +139,8 @@ var loginHtml = '<div class="login-inner idialog-login idialog-form"><span class
 
             '<div class="other-login clearfix">'+
                 '<a class="weixin" href="/login/wx" title="微信登录">微信登录</a>'+
-                '<a class="weibo" href="weibo-login.html" title="微博登录">微博登录</a>'+
-                '<a class="qq last" href="qq-login.html" title="qq登录">qq登录</a>'+
+                '<a class="weibo" href="/login/weibo" title="微博登录">微博登录</a>'+
+                '<a class="qq last" href="/login/qq" title="qq登录">qq登录</a>'+
 
                 '<p class="both">使用以上社交网络账号登录</p>'+
             '</div>'+

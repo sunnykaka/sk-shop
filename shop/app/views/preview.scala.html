@@ -26,8 +26,8 @@
 @main(new Seo(Messages("title.preview"),Messages("seo.description"),Messages("seo.Keywords")))("preview") {
 
 
-    <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
-    <script src="@routes.Assets.versioned("js/index.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+
 
     <script>
     $(function(){
@@ -54,6 +54,56 @@
             $(".cover", this).stop().animate({top:"437"},{queue:false,duration:300});
             $(".cover-info", this).stop().animate({top:"437"},{queue:false,duration:300});
         });
+
+        //专场开始提醒
+        $('.remind-btn').click(function(){
+        var id = $(this).attr('exhibition-id'),phoneNum = $(this).siblings('input').val(),that = $(this),likeOjb = that.siblings('.like');
+        var liObj = that.parents('li');
+        var diffX = (parseInt(liObj.width())-402)/2,diffY = (parseInt(liObj.height())-182)/2;
+
+            $.ajax({
+                url:'/preview/userLike?exhibitionId='+id+'&phone='+phoneNum,
+                type:'post',
+                data:{exhibitionId:id,phone:phoneNum},
+                success:function(data){
+                    if(data.result){
+                        likeOjb.text(parseInt(likeOjb.text())+1);
+                            $.dialog({
+                                title:'提示',
+                                content:'<p style="text-align: center;font-size: 16px;padding: 20px;">成功订阅开售提醒，我们将在开售当天通知你。</p>',
+                                width:400,
+                                height:180,
+                                padding:"20",
+                                 top:parseInt(liObj.offset().top)+diffY,
+                                left:parseInt(liObj.offset().left)+diffX,
+                                btn: {
+                                    ok: {
+                                        val: '确定',
+                                        type: 'red'
+                                        }
+                                }
+                            });
+                    }else{
+                         $.dialog({
+                                title:'提示',
+                                content:'<p style="text-align: center;font-size: 16px;padding: 20px;">'+data.message+'</p>',
+                                width:400,
+                                height:180,
+                                padding:"20",
+                                top:parseInt(liObj.offset().top)+diffY,
+                                left:parseInt(liObj.offset().left)+diffX,
+                                btn: {
+                                    ok: {
+                                        val: '确定',
+                                        type: 'red'
+                                        }
+                                }
+                            });
+                    }
+                }
+            });
+        });
+
     });
 </script>
 

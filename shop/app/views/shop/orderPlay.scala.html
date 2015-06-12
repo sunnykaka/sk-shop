@@ -64,6 +64,15 @@ $('#pay-money-btn').on('click',function(){
                             }
                         });
 
+                }else{
+                         $.dialog({
+                            title:'提示',
+                            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请在第三方支付页面完成付款<br/><span style="padding-left: 44px;">'+data.message+'</span></p></div>',
+                            width:518,
+                            height:260,
+                            lock:true,
+                            padding:'20',
+                        });
                 }
             }
         });
@@ -103,96 +112,96 @@ $('#pay-money-btn').on('click',function(){
                             <img src="../assets/images/bank-cft.jpg" alt="财付通">
                         </li> -->
 
-                        <li class="more-payBank">
-                            <a href="javascript:void(0);">选择更多支付方式&gt;&gt;</a>
-                        </li>
+                        @*<li class="more-payBank">*@
+                            @*<a href="javascript:void(0);">选择更多支付方式&gt;&gt;</a>*@
+                        @*</li>*@
                     </ul>
                 </div>
-                <div class="clearfix more-list">
-                    <h4>网上银行 <span>由支付宝提供接口，确保您的资金安全</span></h4>
-                    <ul class="list clearfix">
-                        <li paybank="ICBCB2C">
-                            <i></i>
-                            <img src="../assets/images/bank-gs.jpg" alt="工商银行">
-                        </li>
-                        <li paybank="CCB">
-                            <i></i>
-                            <img src="../assets/images/bank-js.jpg" alt="建设银行">
-                        </li>
-                        <li paybank="BOCB2C">
-                            <i></i>
-                            <img src="../assets/images/bank-zg.jpg" alt="中国银行">
-                        </li>
-                        <li paybank="CMB">
-                            <i></i>
-                            <img src="../assets/images/bank-zs.jpg" alt="招商银行">
-                        </li>
-                        <li paybank="COMM">
-                            <i></i>
-                            <img src="../assets/images/bank-jt.jpg" alt="交通银行">
-                        </li>
-                        <li paybank="ABC">
-                            <i></i>
-                            <img src="../assets/images/bank-ny.jpg" alt="农业银行">
-                        </li>
-                        <li paybank="POSTGC">
-                            <i></i>
-                            <img src="../assets/images/bank-yz.jpg" alt="中国邮政储蓄">
-                        </li>
-                        <li paybank="CITIC">
-                            <i></i>
-                            <img src="../assets/images/bank-zx.jpg" alt="中信银行">
-                        </li>
-                        <li paybank="CIB">
-                            <i></i>
-                            <img src="../assets/images/bank-xy.jpg" alt="兴业银行">
-                        </li>
-                        <li paybank="SPDB">
-                            <i></i>
-                            <img src="../assets/images/bank-pf.jpg" alt="浦发银行">
-                        </li>
-                        <li paybank="CMBC">
-                            <i></i>
-                            <img src="../assets/images/bank-ns.jpg" alt="民生银行">
-                        </li>
-                        <li paybank="CEBBANK">
-                            <i></i>
-                            <img src="../assets/images/bank-gd.jpg" alt="光大银行">
-                        </li>
-                        <li paybank="NBBANK">
-                            <i></i>
-                            <img src="../assets/images/bank-nb.jpg" alt="宁波银行">
-                        </li>
-                        <li paybank="SDB">
-                            <i></i>
-                            <img src="../assets/images/bank-szfz.jpg" alt="深发展银行">
-                        </li>
-                        <li paybank="BJRCB">
-                            <i></i>
-                            <img src="../assets/images/bank-bjns.jpg" alt="北京农商银行">
-                        </li>
-                        <li paybank="SPABANK">
-                            <i></i>
-                            <img src="../assets/images/bank-pa.jpg" alt="平安银行">
-                        </li>
-                        <li paybank="GDB">
-                            <i></i>
-                            <img src="../assets/images/bank-gf.jpg" alt="广发银行">
-                        </li>
-                        <li paybank="SHBANK">
-                            <i></i>
-                            <img src="../assets/images/bank-sh.jpg" alt="上海银行">
-                        </li>
-                        <li paybank="HZCBB2C">
-                            <i></i>
-                            <img src="../assets/images/bank-hz.jpg" alt="杭州银行">
-                        </li>
-                        <li paybank="BJBANK">
-                            <i></i>
-                            <img src="../assets/images/bank-bj.jpg" alt="北京银行">
-                        </li>
-                    </ul>
-                </div>
+                @*<div class="clearfix more-list">*@
+                    @*<h4>网上银行 <span>由支付宝提供接口，确保您的资金安全</span></h4>*@
+                    @*<ul class="list clearfix">*@
+                        @*<li paybank="ICBCB2C">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-gs.jpg" alt="工商银行">*@
+                        @*</li>*@
+                        @*<li paybank="CCB">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-js.jpg" alt="建设银行">*@
+                        @*</li>*@
+                        @*<li paybank="BOCB2C">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-zg.jpg" alt="中国银行">*@
+                        @*</li>*@
+                        @*<li paybank="CMB">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-zs.jpg" alt="招商银行">*@
+                        @*</li>*@
+                        @*<li paybank="COMM">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-jt.jpg" alt="交通银行">*@
+                        @*</li>*@
+                        @*<li paybank="ABC">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-ny.jpg" alt="农业银行">*@
+                        @*</li>*@
+                        @*<li paybank="POSTGC">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-yz.jpg" alt="中国邮政储蓄">*@
+                        @*</li>*@
+                        @*<li paybank="CITIC">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-zx.jpg" alt="中信银行">*@
+                        @*</li>*@
+                        @*<li paybank="CIB">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-xy.jpg" alt="兴业银行">*@
+                        @*</li>*@
+                        @*<li paybank="SPDB">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-pf.jpg" alt="浦发银行">*@
+                        @*</li>*@
+                        @*<li paybank="CMBC">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-ns.jpg" alt="民生银行">*@
+                        @*</li>*@
+                        @*<li paybank="CEBBANK">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-gd.jpg" alt="光大银行">*@
+                        @*</li>*@
+                        @*<li paybank="NBBANK">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-nb.jpg" alt="宁波银行">*@
+                        @*</li>*@
+                        @*<li paybank="SDB">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-szfz.jpg" alt="深发展银行">*@
+                        @*</li>*@
+                        @*<li paybank="BJRCB">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-bjns.jpg" alt="北京农商银行">*@
+                        @*</li>*@
+                        @*<li paybank="SPABANK">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-pa.jpg" alt="平安银行">*@
+                        @*</li>*@
+                        @*<li paybank="GDB">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-gf.jpg" alt="广发银行">*@
+                        @*</li>*@
+                        @*<li paybank="SHBANK">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-sh.jpg" alt="上海银行">*@
+                        @*</li>*@
+                        @*<li paybank="HZCBB2C">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-hz.jpg" alt="杭州银行">*@
+                        @*</li>*@
+                        @*<li paybank="BJBANK">*@
+                            @*<i></i>*@
+                            @*<img src="../assets/images/bank-bj.jpg" alt="北京银行">*@
+                        @*</li>*@
+                    @*</ul>*@
+                @*</div>*@
                 <span class="btn pay-money-btn" id="pay-money-btn" href="#" target="_blank">立即支付</span>
             </div>
             <form action="/order/toPayOrder" target="_blank" id="pay-form" method="get">
