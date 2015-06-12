@@ -1,6 +1,7 @@
 package controllers.user;
 
 import common.exceptions.AppBusinessException;
+import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;
 import ordercenter.dtos.BackApplyForm;
@@ -183,8 +184,6 @@ public class MyOrderController extends Controller {
     public Result backApplySubmit(){
         User user = SessionUtils.currentUser();
 
-        //TODO 判断是否订单是否达到退货要求
-
         Form<BackApplyForm> backApplyForm = Form.form(BackApplyForm.class).bindFromRequest();
 
         if (!backApplyForm.hasErrors()) {
@@ -199,7 +198,7 @@ public class MyOrderController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, backApplyForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(backApplyForm.errors())).toNode());
     }
 
     /**

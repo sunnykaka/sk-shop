@@ -112,7 +112,7 @@ POST        /user/phone/sendSMS                   @controllers.user.SendSMSContr
 GET         /my/order                             @controllers.user.MyOrderController.index(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 5)
 GET         /my/order/info                        @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0)
 POST        /my/order/cancel                      @controllers.user.MyOrderController.orderCancel(orderId:Int ?= 0,canceltype:Int ?= 0)
-POST        /my/order/receiving                   @controllers.user.MyOrderController.orderReceiving(orderId:Int ?= 0)
+GET         /my/order/receiving                   @controllers.user.MyOrderController.orderReceiving(orderId:Int ?= 0)
 GET         /my/backApply                         @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
 POST        /my/back/submit                       @controllers.user.MyOrderController.backApplySubmit()
 GET         /my/appraise                          @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)

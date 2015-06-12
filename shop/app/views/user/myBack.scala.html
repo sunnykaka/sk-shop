@@ -11,6 +11,41 @@
         },function(){
             $(this).removeClass('hover')
         })
+
+
+        $ ( '.order-list .cancel' ).click ( function ( ) {
+            var that = $ ( this ), backId = that.attr ( 'data-id' ) ;
+
+            $.dialog ( {
+                title : '提示',
+                lock : true,
+                content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除取消该退货订单吗？</p></div>',
+                width : 540,
+                height : 248,
+                drag : false,
+                btn : {
+                    ok : {
+                        val : '确定',
+                        type : 'red',
+                        click : function ( btn ) {
+                            $.ajax ( {
+                                type : 'POST',
+                                url : '/my/back/cancel?backId=' + backId,
+                                dataType : 'json',
+                                success : function ( data ) {
+                                    if ( data.result ) {
+                                        window.location.href = '/my/back';
+                                    }
+                                }
+                            } ) ;
+                        }
+                    },
+                    cancle : {
+                        val : '取消'
+                    }
+                }
+            } ) ;
+        } ) ;
     </script>
 } {
 
@@ -88,9 +123,9 @@
                                                     <p>@backOrder.getBackState.userDesc(BackGoodsState.BackGoodsType.YetSend)</p>
                                                 </td>
                                                 <td rowspan="@backOrder.getBackGoodsItemList.size()" class="control">
-                                                    <form action="@controllers.user.routes.MyOrderController.backCancel(backOrder.getId)" method="POST">
-                                                    <p><button class="cancel" type="submit">取消</button></p>
-                                                    </form>
+                                                    @if(!backOrder.getBackState.checkCanNotCancelForUser()){
+                                                        <p><span class="cancel" data-id="@backOrder.getId">取消</span></p>
+                                                    }
                                                     <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId)" class="details">查看详情</a></p>
                                                 </td>
                                             }

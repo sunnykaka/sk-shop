@@ -47,6 +47,13 @@ public class BackGoodsService {
             throw new AppBusinessException("退货失败，没有选中退货商品！");
         }
 
+        List<BackGoods> backGoodsList = getBackGoodsByOrderId(order.getId());
+        for(BackGoods backGoods:backGoodsList){
+            if(!backGoods.getBackState().checkCanNotCancelForCustomerService()){
+                throw new AppBusinessException("退货失败，退货单还未走完流程，无法重新创建！");
+            }
+        }
+
         try{
             Money backPrice = Money.valueOf(0);
 
@@ -176,7 +183,7 @@ public class BackGoodsService {
     @Transactional(readOnly = true)
     public List<BackGoods> getBackGoodsByOrderId(int orderId){
 
-        String jpql = "select o from BackGoods where 1=1 ";
+        String jpql = "select o from BackGoods o where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and o.orderId = :orderId ";
         queryParams.put("orderId", orderId);

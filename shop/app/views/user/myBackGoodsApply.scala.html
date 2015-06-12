@@ -3,6 +3,30 @@
 
 @myCenter(Messages("title.my.order.info")) {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script >
+        $(".submit-btn").click(function(){
+            $.ajax ( {
+                type : 'POST',
+                url : '/my/back/submit',
+                dataType : 'json',
+                data: $('#back-order-form' ).serialize(),
+                success : function ( data ) {
+                    if ( data.result ) {
+                        window.location.href = '/my/back';
+                    }else{
+                        $.dialog ( {
+                            title : '提示',
+                            lock : true,
+                            content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>'+data.message+'</p></div>',
+                            width : 540,
+                            height : 198,
+                            drag : false
+                        } ) ;
+                    }
+                }
+            } ) ;
+        });
+    </script>
 } {
     <!--refund-order-manage-->
     <div class="order-manage">
@@ -30,7 +54,7 @@
                         </ul>
                     </div>
                     <div class="order-list refund-order-detail">
-                        <form action="@controllers.user.routes.MyOrderController.backApplySubmit()" class="refund-order-content" method="POST">
+                        <form id="back-order-form" action="@controllers.user.routes.MyOrderController.backApplySubmit()" class="refund-order-content" method="POST">
                             <h3>选择退货商品</h3>
                             <table>
                                 <thead>
@@ -113,7 +137,7 @@
                             <h3>退货原因</h3>
                             <textarea name="backReason" id="backReason" cols="30" rows="10"></textarea>
                             <div class="form-item">
-                                <input type="submit" class="submit-btn" value="提交退货申请"/>
+                                <button type="button" class="submit-btn">提交退货申请</button>
                             </div>
                         </form>
                     </div>

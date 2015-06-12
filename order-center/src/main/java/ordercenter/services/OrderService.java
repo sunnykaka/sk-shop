@@ -61,7 +61,7 @@ public class OrderService {
             List<BackGoods> backGoodsList = backGoodsService.getBackGoodsByOrderId(order.getId());
 
             for(BackGoods backGoods:backGoodsList){
-                if(!backGoods.getBackState().name().equals(BackGoodsState.Cancel)){
+                if(!backGoods.getBackState().checkCanNotCancelForUser()){
                     return false;
                 }
             }
