@@ -95,13 +95,13 @@ public class PayResponseHandler {
 
         this.backParams = this.builder.buildParam(request);
 
-        Logger.info("----签名认证结果------------: " + trade.verify(this.backParams, type));
+        Logger.info("交易号号为：" + tradeNoStr + "----签名认证结果------------:" + trade.verify(this.backParams, type));
 
-//        if (!trade.verify(backParams, type)) {
-//            Logger.error("回调签名验证出错: " + backParams);
-//            result.setResult(false);
-//            return result;
-//        }
+        if (!trade.verify(backParams, type)) {
+            Logger.error("回调签名验证出错: " + backParams);
+            result.setResult(false);
+            return result;
+        }
 
         User user = SessionUtils.currentUser();
         if(user != null) {
