@@ -5,7 +5,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 使用 getOrderNo() 生成订单编号<br/>
@@ -19,21 +18,13 @@ public class OrderNumberUtil {
     /** 前缀, 年月日格式 */
     private static final String PREFIX_PATTERN = "yyyyMMdd";
 
-    /** 自增时需要用到锁. */
-    private static final ReentrantLock LOCK = new ReentrantLock();
-
     /**
      * 订单号由多部分组成, 受限于 Long.MAX_VALUE, 只能有 19 位.<br/>
      * 1. 年月日, 8 位. <br/>
      * 2. 自增数, 最多 8 位. <br/>
      */
     public static long getOrderNo() {
-        LOCK.lock();
-        try {
-            return NumberUtils.toLong(getStringFromNow() + getCurCacheOrderNo());
-        } finally {
-            LOCK.unlock();
-        }
+        return NumberUtils.toLong(getStringFromNow() + getCurCacheOrderNo());
     }
 
     /**
