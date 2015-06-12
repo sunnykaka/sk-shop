@@ -1,10 +1,7 @@
 package controllers.user;
 
 import common.exceptions.AppBusinessException;
-import common.utils.EmailUtils;
-import common.utils.FormUtils;
-import common.utils.JsonResult;
-import common.utils.ParamUtils;
+import common.utils.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -455,6 +452,10 @@ public class MySecurityController extends Controller {
             return ok(new JsonResult(false, "邮箱地址为空").toNode());
         }
         email = StringUtils.trim(email);
+        if(!RegExpUtils.isEmail(email)){
+            return ok(new JsonResult(false, "该邮箱地址格式不正确").toNode());
+        }
+
         User emailUser = userService.findByEmail(email);
         if (null != emailUser) {
             return ok(new JsonResult(false, "该邮箱地址已被注册").toNode());
