@@ -215,8 +215,8 @@ public class OrderAndPayController extends Controller {
                 }
                 long orderNo = order.getOrderNo();
                 if (!order.getOrderState().waitPay(TradePayType.valueOf(payType))) {
-                    Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")不支持付款操作！");
-                    return ok(new JsonResult(false,"订单(" + orderNo + ")不支持付款操作！").toNode());
+                    Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")不支持付款操作，此订单已经支付或是已经被取消！");
+                    return ok(new JsonResult(false,"订单(" + orderNo + ")不支持付款操作，此订单已经支付或是已经被取消！").toNode());
                 }
                 if (verifyOrderItem(order)) {
                     Logger.warn("订单：" + order.getOrderNo() + "已售完或已下架或已移除，不能再购买");
