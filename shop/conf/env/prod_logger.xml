@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${user.home}/web/logs/application.log</file>
+        <file>/home/admin/log/sk/application.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- Daily rollover with compression -->
-            <fileNamePattern>${user.home}/web/logs/application-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/home/admin/log/sk/application-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
             <!-- keep 30 days worth of history -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -14,10 +14,10 @@
     </appender>
 
     <appender name="ACCESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${user.home}/web/logs/access.log</file>
+        <file>/home/admin/log/sk/access.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover with compression -->
-            <fileNamePattern>${user.home}/web/logs/access-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/home/admin/log/sk/access-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
             <!-- keep 1 week worth of history -->
             <maxHistory>7</maxHistory>
         </rollingPolicy>
@@ -29,10 +29,10 @@
     </appender>
 
     <appender name="TRADE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${user.home}/web/logs/trade.log</file>
+        <file>/home/admin/log/sk/trade.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- Daily rollover with compression -->
-            <fileNamePattern>${user.home}/web/logs/trade-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/home/admin/log/sk/trade-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
             <!-- keep 30 days worth of history -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
