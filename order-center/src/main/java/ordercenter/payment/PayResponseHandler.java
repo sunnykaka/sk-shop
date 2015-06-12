@@ -95,7 +95,7 @@ public class PayResponseHandler {
 
         this.backParams = this.builder.buildParam(request);
 
-        System.out.println("----签名认证结果------------: " + trade.verify(this.backParams, type));
+        Logger.info("----签名认证结果------------: " + trade.verify(this.backParams, type));
 
 //        if (!trade.verify(backParams, type)) {
 //            Logger.error("回调签名验证出错: " + backParams);

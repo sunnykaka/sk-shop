@@ -37,46 +37,6 @@ public class AlipayUtil {
 
     private static final String HTTPS_VERIFY_URL = "https://www.alipay.com/cooperate/gateway.do?service=create_forex_trade&";
 
-
-    /*
-    service=create_forex_trade
-    partner
-    notify_url
-    return_url
-    sign
-    sign_type
-    subject
-    body
-    out_trade_no
-
-
-
-    currency
-    total_fee
-
-    rmb_fee
-
-    supplier
-
-    timeout_rule
-
-    specified_pay_chananal
-
-    seller_id
-
-    seller_name
-
-    seller_industr
-
-
-     */
-
-
-
-
-
-
-
     /**
      * 将map中的key-value拼接成字符串
      * @param params
