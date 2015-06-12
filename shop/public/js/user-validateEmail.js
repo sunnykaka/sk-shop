@@ -113,6 +113,9 @@ $(function(){
                     if(data.result){
 
                     }else{
+                        sendEmailBtn.text('重发送email');
+                        sendEmailBtn.attr('disabled',null);
+                        clearInterval(timer);
                         $.dialog({
                             title:'提示',
                             lock:true,
