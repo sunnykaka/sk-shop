@@ -36,14 +36,10 @@ public class DefaultSecuredActionResponses extends Controller implements Secured
         Http.Request req = ctx.request();
         Result result;
 
-
+        SessionUtils.setOriginalUrl(ctx.request().getHeader("Referer"));
         if (isAjaxRequest(req)) {
-
             result = ok(new JsonResult(false, "Credentials required").toNode());
-
         } else {
-
-            SessionUtils.setOriginalUrl(ctx.request().uri());
             result = redirect(routes.LoginController.loginPage());
 
         }
