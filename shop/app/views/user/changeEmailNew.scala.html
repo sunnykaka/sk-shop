@@ -39,7 +39,7 @@
                                 </div>
                             </form>
                             <p>验证邮件已发送，请立即<a href="">查看验证邮件</a>，验证邮件24小时有效，请尽快登录您的邮箱完成验证。</p>
-                            <a href="javascript:void();" class="send-email">发送email到邮箱</a>
+                            <button type="submit" class="send-email"  id="send-email" style="cursor: pointer;width:150px;border: none;margin-left: 420px;">发送email到邮箱</button>
                         }else{
                             <div class="failure">
                                 <p>身份验证失败，<a href="@controllers.user.routes.MySecurityController.changeEmailIndex()">重新验证</a></p>

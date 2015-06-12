@@ -94,11 +94,12 @@ $(function(){
            return false;
        }
     });
-    $('.send-email').on('click',function(evt){
+    var sendEmailBtn = $('#send-email');
+    sendEmailBtn.on('click',function(evt){
         evt.preventDefault(); var email = $('#email');
         if(ValidateEmail(email)){
             $('.errormsg').text('');
-            fun($(this),'重发送email');
+            fun(sendEmailBtn,'重发送email');
             $.ajax({
                 type: 'POST',
                 async: false,
@@ -144,6 +145,7 @@ $(function(){
                 dataType: "json",
                 success: function (data) {
                     if(data.result){
+                        clearInterval(timer);
                         location.href = data.data;
                     }else{
 
