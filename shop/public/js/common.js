@@ -199,7 +199,7 @@ var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="
                 '</div>'+
                 '<div><button type="submit"  id="reg-btn" class="reg-btn">立即注册</button></div>'+
             '</form>'+
-            '<p class="protocol">注册则表示同意<a href="help.html">《会员条款》</a></p>'+
+            '<p class="protocol">注册则表示同意<a href="/help/memberClause" target="_blank">《会员条款》</a></p>'+
             '<p class="not-user">已有账号？<span id="goLogin">登录</span></p>'+
         '</div>'
 

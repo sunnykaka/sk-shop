@@ -43,7 +43,7 @@
                 </div>
                 <div><button type="submit"  id="reg-btn" class="reg-btn">立即注册</button></div>
             </form>
-            <p class="protocol">注册则表示同意<a href="help.html">《会员条款》</a></p>
+            <p class="protocol">注册则表示同意<a href="@controllers.help.routes.HelpCenterController.index("memberClause")" target="_blank">《会员条款》</a></p>
             <p class="not-user">已有账号？<a href="@controllers.user.routes.LoginController.loginPage()">登录</a></p>
         </div>
     </div>

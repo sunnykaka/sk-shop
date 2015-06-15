@@ -1,0 +1,18 @@
+@(focus:String)
+
+
+<div class="member-clause-left left">
+    <dl>
+        <dt>帮助中心</dt>
+        <dd @if("shopping".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("shopping")">购物流程</a></dd>
+        <dd @if("deliverInfo".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("deliverInfo")">发货说明</a></dd>
+        <dd @if("sizeInfo".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("sizeInfo")">尺码说明</a></dd>
+        <dd @if("payType".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("payType")">支付方式</a></dd>
+    </dl>
+    <dl>
+        <dt>服务中心</dt>
+        <dd @if("service".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("service")">售后服务</a></dd>
+        <dd @if("memberClause".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("memberClause")">会员条款</a></dd>
+        <dd @if("rightsInfo".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("rightsInfo")">权责说明</a></dd>
+    </dl>
+</div>
