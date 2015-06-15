@@ -1,8 +1,10 @@
 package usercenter.utils;
 
+import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.DateUtils;
 import common.utils.EncryptUtil;
+import common.utils.play.BaseGlobal;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import play.Logger;
@@ -10,6 +12,7 @@ import play.Play;
 import play.mvc.Http;
 import usercenter.cache.UserCache;
 import usercenter.models.User;
+import usercenter.services.UserService;
 
 /**
  * Created by liubin on 15-4-27.
@@ -60,6 +63,30 @@ public class SessionUtils {
 
         return user;
 
+    }
+
+    /**
+     * 得到当前用户,如果为空尝试从cookie中读取
+     * @return
+     */
+    public static User tryLoadUser() {
+        User user = SessionUtils.currentUser();
+
+        if(user == null) {
+
+            Integer userId = SessionUtils.getUserFromRememberMe();
+            if(userId != null) {
+
+                UserService userService = BaseGlobal.ctx.getBean(UserService.class);
+                try {
+                    user = userService.loginByCookie(userId);
+                } catch (AppBusinessException e) {
+                    //忽略业务异常
+                }
+            }
+        }
+
+        return user;
     }
 
     public static void setCurrentUser(User user, boolean rememberMe) throws AppException {

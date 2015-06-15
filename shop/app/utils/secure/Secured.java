@@ -31,22 +31,7 @@ public class Secured extends Action<SecuredAction> {
 
         responses = configuration.responses().newInstance();
 
-        User user = SessionUtils.currentUser();
-
-        if(user == null) {
-
-            Integer userId = SessionUtils.getUserFromRememberMe();
-            if(userId != null) {
-
-                UserService userService = Global.ctx.getBean(UserService.class);
-                try {
-                    user = userService.loginByCookie(userId);
-                } catch (AppBusinessException e) {
-                    //忽略业务异常
-                }
-
-            }
-        }
+        User user = SessionUtils.tryLoadUser();
 
         if(user == null) {
             return responses.notAuthenticatedResult(ctx);

@@ -7,7 +7,7 @@
         <div class="left"><h1>全球首家独立设计师首发平台</h1></div>
         <div class="right">
             <div class="logined">
-                @defining(SessionUtils.currentUser()) {user =>
+                @defining(SessionUtils.tryLoadUser()) {user =>
                     @if(user == null) {
                         <a class="login button" href="@controllers.user.routes.LoginController.loginPage()">登录</a>
                         <a class="signIn button" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
