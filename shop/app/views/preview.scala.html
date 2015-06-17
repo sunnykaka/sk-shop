@@ -136,7 +136,7 @@
 
                     <li>
                         <div class="img">
-                            <a href="#"><img  class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="590" height="275"/></a>
+                            <a href="#"><img  class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction()" width="590" height="275"/></a>
                         </div>
                         <div class="title">
                             <img  class="lazy"  data-original="@exhibition.getDesignerLogo" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getDesignerLogo" height="60"/>
@@ -171,7 +171,7 @@
                 @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_TWO, null)) {
 
                     <li>
-                        <img  class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="390" height="240" />
+                        <img  class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction()" width="390" height="240" />
                         <div class="info preview-info">
                             <p>@exhibition.getIntroduction</p>
                         </div>
@@ -205,7 +205,7 @@
                     @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_THREE, null).slice(0, 4)) {
                         <li class="">
                             <img src="@exhibition.getPic" alt="" width="291" height="437"/>
-                            <img class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="291" height="437"/>
+                            <img class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction()" width="291" height="437"/>
                             <div class="title preview-info">
                                 <p>@exhibition.getIntroduction()</p>
                             </div>
@@ -222,7 +222,7 @@
 
                 @if(doubleEx != null) {
                     <li class="double">
-                        <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getPic()" width="594" height="437"/>
+                        <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getIntroduction()" width="594" height="437"/>
                         <img src="@doubleEx.getPic" alt=""/>
                         <div class="title preview-info">
                             <p>@doubleEx.getIntroduction()</p>
@@ -241,7 +241,7 @@
                     @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_THREE, null).slice(4, 6)) {
                         <li class="">
                             <img src="@exhibition.getPic" alt="" width="291" height="437"/>
-                            <img  alt="@exhibition.getPic()" class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" width="291" height="437"/>
+                            <img  alt="@exhibition.getIntroduction()" class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" width="291" height="437"/>
                             <div class="title">
                                 <p>@exhibition.getIntroduction</p>
 
