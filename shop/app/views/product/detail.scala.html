@@ -16,6 +16,9 @@
     var defaultSku = "@Html(pd.getDefaultSku.getSkuPropertiesInDb)";
 
     var productOnline = @pd.getProduct.isOnline
+
+    var inExhibition = @pd.isInExhibition
+
     </script>
     <script src="@routes.Assets.versioned("js/stickySidebar.js")"></script>
     <script src="@routes.Assets.versioned("js/jquery.fly.min.js")"></script>
