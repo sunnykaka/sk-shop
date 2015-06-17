@@ -56,7 +56,7 @@ $('#more').click(function(){
                 <ul class="clearfix">
                 @for(designer <- designerList) {
                     <li>
-                        <a href="@routes.Application.designerProd(designer.getId)">
+                        <a target="_blank" href="@routes.Application.designerProd(designer.getId)">
                             <img class="designer-img lazy"  data-original="@designer.getMainPic" src="@routes.Assets.versioned("images/grey.gif")"  alt="@designer.getDescription" width="289" height="460"/>
                             <div>
                                 <img src="@designer.getBrandPic" alt="" width="289" height="60"/>
