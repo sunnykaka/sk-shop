@@ -22,6 +22,7 @@ import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import play.twirl.api.BaseScalaTemplate;
 import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
 import scheduler.ExhibitionStartReminderTask;
@@ -107,14 +108,7 @@ public class Global extends BaseGlobal {
             //需要返回json结果
             result = Results.internalServerError(new JsonResult(false, errorMessage).toNode());
         } else {
-            List<DesignerView> designerViews = new ArrayList<>();
-            try {
-                designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
-            } catch (Exception e) {
-                Logger.error("", e);
-            }
-            result = Results.internalServerError(error_500.render(errorMessage, designerViews));
-
+            result = show500();
         }
         return showResult(result, jsonResponse);
     }
@@ -128,13 +122,7 @@ public class Global extends BaseGlobal {
             //需要返回json结果
             result = Results.notFound(new JsonResult(false, errorMessage).toNode());
         } else {
-            List<DesignerView> designerViews = new ArrayList<>();
-            try {
-                designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
-            } catch (Exception e) {
-                Logger.error("", e);
-            }
-            result = Results.notFound(error_404.render(errorMessage, designerViews));
+            result = show404();
         }
         return showResult(result, jsonResponse);
     }
@@ -148,13 +136,7 @@ public class Global extends BaseGlobal {
             //需要返回json结果
             result = Results.badRequest(new JsonResult(false, errorMessage).toNode());
         } else {
-            List<DesignerView> designerViews = new ArrayList<>();
-            try {
-                designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
-            } catch (Exception e) {
-                Logger.error("", e);
-            }
-            result = Results.badRequest(error_400.render(errorMessage, designerViews));
+            result = show400();
         }
         return showResult(result, jsonResponse);
 
@@ -172,4 +154,39 @@ public class Global extends BaseGlobal {
             return F.Promise.pure(result);
         }
     }
+
+    public static Result show404() {
+        String errorMessage = "您请求的页面没有找到，去其他地方逛逛吧";
+        List<DesignerView> designerViews = new ArrayList<>();
+        try {
+            designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
+        } catch (Exception e) {
+            Logger.error("", e);
+        }
+        return Results.notFound(error_404.render(errorMessage, designerViews));
+    }
+
+    public static Result show500() {
+        String errorMessage = "oops! 服务器开小差了, 请过会儿再来吧。";
+        List<DesignerView> designerViews = new ArrayList<>();
+        try {
+            designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
+        } catch (Exception e) {
+            Logger.error("", e);
+        }
+        return Results.internalServerError(error_500.render(errorMessage, designerViews));
+    }
+
+    public static Result show400() {
+        String errorMessage = "oops! 服务器开小差了, 请过会儿再来吧。";
+        List<DesignerView> designerViews = new ArrayList<>();
+        try {
+            designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
+        } catch (Exception e) {
+            Logger.error("", e);
+        }
+        return Results.badRequest(error_400.render(errorMessage, designerViews));
+    }
+
+
 }

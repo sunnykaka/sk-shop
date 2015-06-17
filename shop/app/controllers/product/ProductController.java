@@ -13,6 +13,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.services.SeoService;
 import services.product.ProductDetailService;
+import utils.Global;
 import views.html.product.detail;
 
 import java.util.Optional;
@@ -50,7 +51,7 @@ public class ProductController extends Controller {
 
         ProductDetail productDetail = productDetailService.showDetail(productId, skuId);
         if(productDetail == null) {
-            throw new AppBusinessException("您请求的商品没有找到, 请看看其他的吧");
+            return Global.show404();
         }
         productDetail.setSeo(seoService.getProductSeo(productDetail.getProduct()));
 
