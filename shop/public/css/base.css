@@ -37,6 +37,11 @@ table td{padding: 10px 0;}
 :-ms-input-placeholder { /* Internet Explorer 10+ */
     color:    #fff;
 }
+input:-webkit-autofill {
+    background-color: #fff;
+    background-image: none;
+    color: #000;
+}
 .e-btn {
     color: #4a4a4a;
     display: inline-block;
@@ -521,7 +526,7 @@ table td{padding: 10px 0;}
 .detail-inner .comment-header .first{border-left: none;}
 /*.detail-inner .comment-header .current i{background-position: 0 0;}*/
 .detail-inner .comment-list{border-top:1px solid #eaeaea;margin-bottom: 20px;}
-.detail-inner .img-list img{margin-bottom: 20px;}
+.detail-inner .img-list img{margin-bottom: 0;display: block;}
 .detail-inner .comment-item{border-bottom:1px solid #eaeaea;border-top: none;padding: 10px 30px 20px 30px;}
 .detail-inner .comment-item .comment-content{height: 90px;overflow: hidden;margin-top:15px;}
 .detail-inner .comment-item .comment-content div{float: left;}
@@ -671,7 +676,7 @@ table td{padding: 10px 0;}
 .order-detail-list .order-profile-content .address p,.order-detail-list .order-profile-content .pay{border: none;}
 .order-detail-list .order-track table{width: 100%;text-align: center;}
 .order-detail-list .order-track table th,.order-detail-list .order-track table td{font-weight: normal;padding: 6px 0;}
-.order-detail-list .order-item-list table{width: 100%;text-align: center;margin-left:25px;}
+.order-detail-list .order-item-list table{width: 100%;text-align: center;}
 .order-detail-list .order-item-list table th,.order-detail-list .order-item-list table td{border-bottom: 1px solid #ccc;
     padding: 10px 0;
 }

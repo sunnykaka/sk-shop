@@ -94,7 +94,7 @@
                     @if(pd.isInExhibition) {
                         <div class="debut-info-left">
                             <p>首发价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getPrice </span></p>
-                            <p class="debut-time">@printDeadlineFromNow(pd.getExhibitionEndTime)</p>
+                            <p class="debut-time">还剩<span class="time-detail">@printDeadlineFromNow(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
                         </div>
                         <div class="debut-info-right">
                             <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice </span>
