@@ -345,10 +345,14 @@ $(function(){
         });
 
         var form = $('.add-form');
+        //打开时重置表单
+        form.get(0).reset();
+        form.find('.errormsg').remove();
         //绑定 blur focus事件
         formItemEvent('update', form);
 
         form.find('.area').selectArea();
+
 
     });
 

@@ -350,7 +350,7 @@ input:-webkit-autofill {
 .select-address .add p,.address-list .add p{  top: 113px;left: 107px;}
 .select-address .receiver,.address-list .receiver{height:18px;width:100%;padding-bottom: 8px;border-bottom: 1px solid #ccc;text-align: left;margin-bottom: 8px;overflow: hidden;}
 .select-address .receiver-name,.address-list .receiver .receiver-name{float: left;height: 27px;line-height: 27px;overflow: hidden;}
-.select-address .default,.address-list .default{float: right;line-height: 27px;}
+.select-address .default,.address-list .default{float: right;height:18px;line-height: 18px;*margin-top:-16px;}
 .select-address .details-address,.address-list .details-address{margin-bottom: 8px;}
 .select-address .details-address p,.address-list .details-address p{
     padding-bottom: 2px;
@@ -366,6 +366,7 @@ input:-webkit-autofill {
 .confirm-product table,.mycart-list table{width: 1199px;text-align: center;vertical-align: middle;}
 .confirm-product th,.mycart-list th{padding-bottom: 10px;}
 .confirm-product tr,.mycart-list thead,.mycart-list tbody tr{border-bottom: 1px solid #e5e5e5;}
+.mycart-list tbody .disabled{background: #FFFBF0;}
 .mycart-list .toDelete{/*border:1px solid #fd2049;*/}
 .confirm-product td{}
 .confirm-product table .col1,.mycart-list table .col1{width: 100px;}
@@ -542,6 +543,7 @@ input:-webkit-autofill {
 /*#right-fixed{position: absolute;top: 241px;margin-left: 837px;}*/
 
 .detail-inner .debut-img{width: 373px;height: 226px;margin:58px 0 23px 0; }
+.detail-inner #debut-box{width: 373px;overflow: hidden;}
 .debut-info,.detail-size-color{padding-bottom: 32px;border-bottom: 1px solid #e5e5e5;*height:1%;}
 .debut-info .debut-info-left{float: left;width:180px;}
 .debut-info-left p{line-height: 34px;font-size: 12px;}
@@ -556,7 +558,7 @@ input:-webkit-autofill {
 }
 .detail-size-color{padding: 35px 0;}
 .detail-size-color .detail-size{padding-bottom: 28px;*height:1%;}
-#choose-sku dl{margin-bottom: 12px;}
+#choose-sku dl{margin-bottom: 12px;width: 373px;}
 #choose-sku dt{margin-bottom: 4px;}
 #choose-sku dd{float: left;margin: 8px 8px 0 0;padding: 3px 14px;border: 1px solid #cccccc;cursor:pointer;}
 .detail-size-color .disabled{color: #ccc;}
@@ -753,6 +755,7 @@ input:-webkit-autofill {
 .designer-brand-inner .designer-con h2{padding: 10px 0 30px 0;}
 .designer-brand-inner .designer-con h2 .focus{font-weight: normal;margin-left: 30px;padding: 5px 10px 5px 30px;font-size: 12px; border: 1px solid #fd2049; color: #fd2049;
     background: url(../images/sprite.gif) no-repeat -733px -54px;cursor: pointer;}
+.designer-brand-inner ul{width: 1200px;}
 .designer-brand-inner .designer-con h2 .hasFocus{background-position:-733px -95px;}
 .designer-brand-inner .designer-con-content p{text-indent: 22px;line-height: 180%;}
 .designer-brand-inner .designer-con p{text-indent: 22px;font-size: 14px;margin-bottom: 20px;line-height: 180%;}
@@ -898,8 +901,8 @@ input:-webkit-autofill {
 .footer .copy-right{text-align: center;padding: 30px 0;}
 /*end footer*/
 .sider-bar{
-    position: fixed;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
-    bottom: 291px;left: 50%;margin-left: 600px;display: none;
+    position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
+    /*bottom: 291px;*/left: 50%;margin-left: 610px;top: 600px;
 }
 .sider-bar li{width: 62px;height: 63px;border-bottom: 1px solid #ccc;background: url("../images/sider-bar.gif") no-repeat;}
 .sider-bar .cart{position: relative;}
@@ -925,7 +928,7 @@ input:-webkit-autofill {
 .about-img img{display: block;}
 .about-info{background: url('../images/about-info.jpg') no-repeat;width: 1200px;height: 788px;}
 .about-info-text{text-align: center;width: 360px;padding: 73px 0 0 168px;}
-.about-info-text h2{font-size: 30px;margin-bottom: 10px;height: 30px;font-weight: normal;}
+.about-info-text h2{font-size: 30px;margin-bottom: 10px;height: 30px;line-height:30px;font-weight: normal;}
 .about-info-text h3{font-size: 20px;margin-bottom: 20px;font-weight: normal;}
 .about-info-text p{line-height: 290%;}
 .about-info-text .line{margin-bottom: 47px;}

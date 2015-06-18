@@ -1,10 +1,33 @@
 $(function(){
 
     $('#all').click(function(){
+
         if(this.checked){
             $('.product-list :checkbox').attr('checked',true);
+                var checkMoney = 0.00;
+                $('.product-list :checked').each(function(index,item){
+                    $(item).parents('tr').find('input[type=text]').attr('disabled',null);
+                    $(item).parents('tr').removeClass('disabled');
+                    checkMoney += parseFloat($(item).parents('tr').find('.pro-total-money').text());
+                });
+                $('.product-list input[type=checkbox]:not(:checked)').each(function(index,item){
+                    $(item).parents('tr').find('input[type=text]').attr('disabled',true);
+                    $(item).parents('tr').addClass('disabled');
+                });
+                $('.total-price').text(checkMoney.toFixed(2));
         }else{
             $('.product-list :checkbox').attr('checked',false);
+                var checkMoney = 0.00;
+                $('.product-list :checked').each(function(index,item){
+                    $(item).parents('tr').find('input[type=text]').attr('disabled',null);
+                    $(item).parents('tr').removeClass('disabled');
+                    checkMoney += parseFloat($(item).parents('tr').find('.pro-total-money').text());
+                });
+                $('.product-list input[type=checkbox]:not(:checked)').each(function(index,item){
+                    $(item).parents('tr').find('input[type=text]').attr('disabled',true);
+                    $(item).parents('tr').addClass('disabled');
+                });
+                $('.total-price').text(checkMoney.toFixed(2));
         }
     });
 
@@ -23,6 +46,21 @@ $(function(){
             $('#all').attr('checked',false);
         }
 
+    });
+
+    //checkbox 状态改变会 改变总价
+    $('.product-list :checkbox').change(function(){
+        var checkMoney = 0.00;
+       $('.product-list :checked').each(function(index,item){
+           $(item).parents('tr').find('input[type=text]').attr('disabled',null);
+           $(item).parents('tr').removeClass('disabled');
+           checkMoney += parseFloat($(item).parents('tr').find('.pro-total-money').text());
+       });
+        $('.product-list input[type=checkbox]:not(:checked)').each(function(index,item){
+            $(item).parents('tr').find('input[type=text]').attr('disabled',true);
+            $(item).parents('tr').addClass('disabled');
+        });
+        $('.total-price').text(checkMoney.toFixed(2));
     });
 
     var cartPage = $('.mycart');
@@ -60,10 +98,6 @@ $(function(){
                         updatePrice(ele,val,price);
                         //总价
                         setTotalPrice();
-                        ele.attr('disabled',null);
-                        ele.attr('disabled',null);
-                        $('#toOrder').attr('disabled',null);
-
                     }
                 }
             });
@@ -127,21 +161,19 @@ $(function(){
 
     // 增加数量事件
     cartPage.on('click', '.btn-add', function () {
-        $(this).attr('disabled',true);
-        $('#toOrder').attr('disabled',true);
+        if(!$(this).parents('tr').find('input[type=checkbox]').is(':checked')){return false;}
         updateNumber($(this)).add();
     });
 
     // 减小数量事件
     cartPage.on('click', '.btn-sub', function () {
-        $(this).attr('disabled',true);
-        $('#toOrder').attr('disabled',true);
+        if(!$(this).parents('tr').find('input[type=checkbox]').is(':checked')){return false;}
         updateNumber($(this)).remove();
     });
 
     // 手动输入数量验证
     cartPage.on('blur', '.text-number', function () {
-        $('#toOrder').attr('disabled',true);
+        if(!$(this).parents('tr').find('input[type=checkbox]').is(':checked')){return false;}
         updateNumber($(this)).checkValue();
     });
 
