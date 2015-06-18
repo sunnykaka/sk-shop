@@ -14,7 +14,7 @@
                         <span class="over-text">结束</span></p>
             </div>
             <div class="title">
-                <img  class="lazy"   data-original="@exhibition.getDesignerLogo" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getDesignerLogo" height="60"/>
+                <img  class="lazy"   data-original="@exhibition.getDesignerLogo" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getIntroduction" height="60"/>
                 <p><span class="designer">@exhibition.getIntroduction</span></p>
             </div>
         </a>
@@ -43,7 +43,7 @@
                 <ul class="clearfix">
                     @for((content,index) <- sliderBoxs.zipWithIndex) {
                        <li>
-                           <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;"><img class="lazy"   data-original="@content.getContent" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getContent" width="390" height="103"/></a>
+                           <a href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;"><img class="lazy"   data-original="@content.getContent" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getTitle" width="390" height="103"/></a>
                            <div class="cover"></div>
                        </li>
                     }
@@ -82,7 +82,7 @@
                 @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_TWO)) {
                     <li>
                         <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <img class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="390" height="240" />
+                            <img class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
                                 <p class="time"><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span><span class="over-text">结束</span></p>
@@ -111,7 +111,7 @@
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(0, 4)) {
                         <li class="">
                             <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getPic()"/>
+                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getIntroduction"/>
                             </a>
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
@@ -125,7 +125,7 @@
                 @if(doubleEx != null) {
                     <li class="double">
                         <a href="@routes.Application.designerProd(doubleEx.getDesignerId)">
-                            <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getPic()" width="594" height="437"/>
+                            <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getIntroduction)" width="594" height="437"/>
                         </a>
                         <div class="title">
                             <p><span class="designer">@doubleEx.getIntroduction()</span></p>
@@ -140,7 +140,7 @@
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(4, 6)) {
                         <li class="">
                             <a href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getPic()" width="291" height="437"/>
+                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction()" width="291" height="437"/>
                             </a>
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>

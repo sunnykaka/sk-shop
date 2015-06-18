@@ -139,13 +139,13 @@ $(function(){
         type=='add'?name.siblings("span").remove():name.siblings('p').remove();
 
         if (province.val() === '0') {
-            type=='add'?province.siblings("span").remove():province.siblings('p').remove();
+            type=='add'?districts.siblings("span").remove():districts.siblings('p').remove();
             message.text("请选择省");
             districts.after(message.clone());
             return false;
         }
         if (city.val() === '0') {
-            type=='add'? city.siblings("span").remove():city.siblings('p').remove();
+            type=='add'?districts.siblings("span").remove():districts.siblings('p').remove();
             message.text("请选择市");
             districts.after(message.clone());
             return false;
@@ -182,13 +182,13 @@ $(function(){
         type=='add'? zipCode.siblings("span").remove():zipCode.siblings("span").remove();
 
         if (!mobile.val() || !regexMobile.test(mobile.val())) {
-            type=='add'?mobile.siblings("span").remove():mobile.siblings("span").remove();
+            type=='add'?mobile.siblings("span").remove():mobile.siblings("p").remove();
             message.text("请输入正确的电话/手机号码");
             mobile.after(message.clone());
             mobile.focus();
             return false;
         }
-        type=='add'?mobile.siblings("span").remove():mobile.siblings("span").remove();
+        type=='add'?mobile.siblings("span").remove():mobile.siblings("p").remove();
 
         return true;
     }

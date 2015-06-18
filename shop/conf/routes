@@ -141,6 +141,7 @@ GET         /order/toPayOrder                     @controllers.shop.OrderAndPayC
 #支付
 GET         /payOrder/normalReturn                @controllers.shop.OrderPayCallBackController.normalReturn
 GET         /payOrder/notifyReturn                @controllers.shop.OrderPayCallBackController.notifyReturn
+GET         /payOrder/checkPayState               @controllers.shop.OrderPayCallBackController.checkPayState(tradeNo:String)
 
 #product
 GET         /product/valuations                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
@@ -151,3 +152,5 @@ GET         /help/:name                           @controllers.help.HelpCenterCo
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
+GET         /robots.txt                           controllers.Assets.at(path="/public", file="robots.txt")
+

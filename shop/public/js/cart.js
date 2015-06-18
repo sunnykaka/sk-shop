@@ -33,19 +33,19 @@ $(function(){
             return;
         }
         proTotalMoney.each(function(){
-            totalPrice += parseInt($(this).text(),0);
+            totalPrice += parseFloat($(this).text(),0);
         });
 
-        var  val = parseInt(totalPrice, 0).toFixed(2);
+        var  val = parseFloat(totalPrice, 0).toFixed(2);
         $('.total-price').text('¥' + val);
     }
 
     // 更新数量
     function updateNumber(ele) {
         var numberInput = ele.parent('.amount').find('.text-number'),
-            val = parseInt(numberInput.val(), 0),
-            limit = parseInt(numberInput.attr('limit'), 0),
-            price = parseInt(numberInput.attr('data-price'), 0);
+            val = parseFloat(numberInput.val(), 0),
+            limit = parseFloat(numberInput.attr('limit'), 0),
+            price = parseFloat(numberInput.attr('data-price'), 0);
         // 同步更改到数据库
         function sync() {
             var skuId = ele.parent('.amount').attr('data-skuId');

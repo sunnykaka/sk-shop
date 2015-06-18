@@ -7,7 +7,7 @@
     <# 
         for(var i=0; i<data.length; i++) { 
             echo( 
-                '<li class="add"><a href="/designerProd?dId='+data[i].id+'"><img class="designer-img lazy" data-original="'+data[i].mainPic+'" src="'+data[i].mainPic+'" alt="'+data[i].description+'" width="289" height="460" style="display: block;"><div><img src="'+data[i].brandPic+'" alt="" width="289" height="60"><p>设计师：'+data[i].name+'</p></div></a></li>'
+                '<li class="add"><a href="/designerProd?dId='+data[i].id+'"><img class="designer-img lazy" data-original="'+data[i].mainPic+'" src="'+data[i].mainPic+'" alt="'+data[i].name+'" width="289" height="460" style="display: block;"><div><img src="'+data[i].brandPic+'" alt="" width="289" height="60"><p>设计师：'+data[i].name+'</p></div></a></li>'
              );
         }
     #>
@@ -56,10 +56,10 @@ $('#more').click(function(){
                 <ul class="clearfix">
                 @for(designer <- designerList) {
                     <li>
-                        <a href="@routes.Application.designerProd(designer.getId)">
+                        <a target="_blank" href="@routes.Application.designerProd(designer.getId)">
                             <img class="designer-img lazy"  data-original="@designer.getMainPic" src="@routes.Assets.versioned("images/grey.gif")"  alt="@designer.getDescription" width="289" height="460"/>
                             <div>
-                                <img src="@designer.getBrandPic" alt="" width="289" height="60"/>
+                                <img src="@designer.getBrandPic" alt="@designer.getName" width="289" height="60"/>
                                 <p>设计师：@designer.getName</p>
                             </div>
                         </a>

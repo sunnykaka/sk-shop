@@ -48,6 +48,28 @@ public class TradeService {
     /**
      * 通过tradeNo获取交易
      * @param tradeNo 交易号
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Trade getTradeByTradeNo(String tradeNo) {
+        Logger.info("--------TradeService getTradeByTradeNo begin exe-----------" + tradeNo);
+
+        String jpql = "select v from Trade v where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and v.tradeNo = :tradeNo ";
+        queryParams.put("tradeNo", tradeNo);
+
+        Trade trade = null;
+        List<Trade> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        if(itemList != null && itemList.size() > 0) {
+            trade = itemList.get(0);
+        }
+        return trade;
+    }
+
+    /**
+     * 通过tradeNo获取交易
+     * @param tradeNo 交易号
      * @param outerTradeNo 第三方平台交易号
      * @return
      */
