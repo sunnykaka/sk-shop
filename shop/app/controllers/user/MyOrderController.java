@@ -8,6 +8,7 @@ import ordercenter.dtos.BackApplyForm;
 import ordercenter.models.*;
 import ordercenter.services.BackGoodsService;
 import ordercenter.services.OrderService;
+import ordercenter.services.TradeService;
 import ordercenter.services.ValuationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
@@ -41,6 +42,9 @@ public class MyOrderController extends Controller {
 
     @Autowired
     private BackGoodsService backGoodsService;
+
+    @Autowired
+    private TradeService tradeService;
 
     /**
      * 单订管理首页
@@ -93,9 +97,10 @@ public class MyOrderController extends Controller {
             orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
         }
         List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
+        Trade trade = tradeService.getTradeOrdeByOrderId(order.getId());
 
 
-        return ok(myOrderInfo.render(order, logistics, orderStateHistories));
+        return ok(myOrderInfo.render(order, logistics, orderStateHistories, trade));
 
     }
 

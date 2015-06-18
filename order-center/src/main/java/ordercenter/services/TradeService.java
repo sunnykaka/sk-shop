@@ -111,6 +111,29 @@ public class TradeService {
     }
 
     /**
+     * 通过订单ID查询支付交易信息
+     *
+     * @param orderId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Trade getTradeOrdeByOrderId(int orderId) {
+
+        //select o2. from Trade o2 exists(select 1 from TradeOrder o1 where o2.tradeNo=o1.tradeNo and o1.orderId=:orderId)
+
+        String jpql = "select o2 from Trade o2 where exists(select 1 from TradeOrder o1 where o2.tradeNo=o1.tradeNo and o1.orderId=:orderId)";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("orderId", orderId);
+
+        List<Trade> tradeList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        Trade trade = null;
+        if(tradeList != null && tradeList.size() > 0) {
+            trade= tradeList.get(0);
+        }
+        return  trade;
+    }
+
+    /**
      * 支付交易处理方法
      * @param tradeNo
      * @param orderList

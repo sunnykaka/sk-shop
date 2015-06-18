@@ -87,7 +87,7 @@ public class Logistics implements EntityClass<Integer> {
         this.setAddressId(address.getId());
         this.setEmail(address.getEmail());
         this.setLocation(address.getLocation());
-        this.setProvince(address.getProvince());
+        this.setProvince(address.getProvince() + address.getCity() + address.getArea());
         this.setTelephone(address.getTelephone());
         this.setMobile(address.getMobile());
         this.setZipCode(address.getZipCode());

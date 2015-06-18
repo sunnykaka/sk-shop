@@ -1,4 +1,4 @@
-@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics,orderStateHistories:List[ordercenter.models.OrderStateHistory])
+@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics,orderStateHistories:List[ordercenter.models.OrderStateHistory],trade:ordercenter.models.Trade)
 
 @import common.utils.DateUtils;
 
@@ -33,8 +33,8 @@
                                     <p><span>邮政编码： <b class="post-number">@logistics.getZipCode</b></span></p>
                                 </div>
                                 <p class="pay">
-                                    <span>支付方式：<b class="pay-type">@if(null != order.getPayType){ @order.getPayType.getValue }else{ 未选择 }</b></span>
-                                    <span>支付号：<b class="pay-num">@if(null != order.getPayBank){ @order.getPayBank.getValue }</b></span>
+                                    @if(null != trade){<span>支付方式：<b class="pay-num"> @order.getPayBank.getValue </b></span>}
+                                    @if(null != trade){<span>支付号：<b class="pay-type"> @trade.getOuterTradeNo </b></span>}
                                 </p>
                             </div>
                         </div>
