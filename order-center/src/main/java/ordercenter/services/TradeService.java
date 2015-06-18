@@ -269,18 +269,18 @@ public class TradeService {
                 } else {
                     long orderNo = order.getOrderNo();
 
+                    //更新订单
+                    OrderState oldState = order.getOrderState();
+                    // 订单状态只能从 创建 到 付款成功
+                    order.setMustPreviousState(OrderState.Create);
+                    order.setOrderState(OrderState.Pay);  //支付成功
+
                     //记录订单状态历史信息
                     try {
                         orderService.createOrderStateHistory(new OrderStateHistory(order));
                     } catch (Exception e) {
                         Logger.error(errPrefix + "订单[" + orderNo + "]订单id[" + order.getId() + "]记录订单状态历史信息发生异常：", e);
                     }
-
-                    //更新订单
-                    OrderState oldState = order.getOrderState();
-                    // 订单状态只能从 创建 到 付款成功
-                    order.setMustPreviousState(OrderState.Create);
-                    order.setOrderState(OrderState.Pay);  //支付成功
 
                     //更新订单状态
                     try {
