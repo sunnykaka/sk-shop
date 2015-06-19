@@ -91,6 +91,8 @@ input:-webkit-autofill {
     background-color: #FF2D54;
     border-color: #e85650;
 }
+/*产品信息宽度*/
+table .pro{width: 360px;}
 /*top*/
 .top{background: #f3f7f6;height:40px;width: 100%;}
 .top .left h1{font-size:12px;line-height: 40px;font-weight: normal;}
@@ -902,9 +904,9 @@ input:-webkit-autofill {
 /*end footer*/
 .sider-bar{
     position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
-    left: 50%;margin-left: 605px;top: 600px;
+    left: 50%;margin-left: 600px;top: 740px;
 }
-.small-sider{width: 36px;}
+.small-sider{width: 36px;border-top: 3px solid #FF2D54;}
 
 .sider-bar li{width: 62px;height: 63px;border-bottom: 1px solid #ccc;background: url("../images/sider-bar.gif") no-repeat;}
 .sider-bar .cart{position: relative;}

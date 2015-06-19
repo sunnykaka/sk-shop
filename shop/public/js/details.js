@@ -13,15 +13,7 @@ $(function () {
         }
     });
 
-    //判断窗口宽度
-    $(window).on('resize load',function(){
-        if($(window).width()<=1300){
-            $('#cart').addClass('small-sider');
-        }else{
-            $('#cart').removeClass('small-sider');
-        }
 
-    });
 
     //重置
     if ($("#buy-number").size() > 0) {
@@ -32,7 +24,6 @@ $(function () {
     $('#cart-quantity-btn').click(function () {
         window.location.href = "/cart/showCart";
     });
-
 
 
     //侧栏固定
@@ -61,40 +52,10 @@ $(function () {
         });
     }
 
-
-    //固定购物车
-    function fixedcart(obj, scopeObj) {
-        var t = obj.offset().top;
-        var mt = scopeObj.offset().top;
-        var fh = obj.height();
-        var top = obj.css('top');
-        var objPosition = obj.css('position');
-        var objTop = obj.position().top;
-
-
-        $(window).scroll(function (e) {
-            var s = $(document).scrollTop();
-            var mh = scopeObj.height();
-            if (s > objTop) {
-                if ((s + fh) > (mt + mh)) {
-                    obj.css('top', (mt + mh) - (s + fh));
-                    return;
-                }
-                obj.css('position', 'fixed');
-                obj.css('top', 0);
-            } else {
-                obj.css({
-                    position:objPosition,
-                    top:objTop
-                });
-
-            }
-        });
-    }
-
     fixed($('#debut-box'), $('#detail'));
-
+    //固定购物车
     fixedcart($('#cart'), $('#detail'));
+
 
 
     $('.comment-header li').click(function () {
@@ -333,22 +294,34 @@ $(function () {
                     var maxPrice = Math.max.apply(Math, prices);
                     var minPrice = Math.min.apply(Math, prices);
                     var currentSku = skuMap[_selectedIds.join(',')];
-
+                    //设置价格
                     if (len == _skuAttrNum) {
                         _price = currentSku.marketPrice;
-                        if ($("#start-price").length) {
-                            $("#start-price").html(currentSku.price);
-                        }
+                        if(inExhibition){ //判断是否是首发
+                            if ($("#start-price").length) {
+                                $("#start-price").html(currentSku.price);
+                            }
 
-                        if (currentSku.marketPrice) {
-                            if ($("#market-price").length) {
-                                $("#market-price").html(currentSku.marketPrice);
+                            if (currentSku.marketPrice) {
+                                if ($("#market-price").length) {
+                                    $("#market-price").html(currentSku.marketPrice);
+                                }
+                            }
+                        }else{
+                            if ($("#start-price").length) {
+                                $("#start-price").html(currentSku.marketPrice);
+                            }
+
+                            if (currentSku.marketPrice) {
+                                if ($("#market-price").length) {
+                                    $("#market-price").html(currentSku.price);
+                                }
                             }
                         }
+
                     }
 
                     //用已选中的节点验证待测试节点 underTestObjs
-
                     _skuEles.not(selectedObjs).not(self).each(function () {
                         var siblingsSelectedObj = $(this).siblings('.selected');
                         var testAttrIds = [];//从选中节点中去掉选中的兄弟节点

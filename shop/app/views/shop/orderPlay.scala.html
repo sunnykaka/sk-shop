@@ -37,27 +37,63 @@ $('#pay-money-btn').click(function(){
             success: function (data) {
                 if(data.result){
                  $('#tradeNo').val(data.data);
+                 console.log(data.data);
                  $('#payMethod').val(payMethod);
                  $('#payOrg').val(currentPay);
                  $('#pay-form').submit();
                          $.dialog({
+                            id:'idialog',
                             title:'提示',
-                            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请在第三方支付页面完成付款<br/><span style="padding-left: 44px;">付款完成前请不要关闭此窗口</span></p></div>',
+                            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico">' +
+                             '</span>请在第三方支付页面完成付款<br/><span style="padding-left: 44px;">付款完成前请不要关闭此窗口</span></p></div>',
                             width:518,
-                            height:260,
+                            height:300,
                             lock:true,
-                            padding:'20',
+                            padding:'20px',
+                            show: function(){
+                              $('.i-dialog').find('.error').text('');
+                            },
                             btn: {
+                                cancle: {
+                                    val: '付款遇到问题，重新支付'
+                                },
                                 ok: {
                                     val: '我已付款成功',
                                     type: 'red',
                                     click: function(btn) {
-                                        window.location.href = "/my/order/info?orderId="+$('#orderIds').val()
-                                    }
-                                },
-                                cancle: {
-                                    val: '付款遇到问题，重新支付',
-                                     click: function(btn) {
+                                         $.ajax({
+                                            type: "get",
+                                            url: '/payOrder/checkPayState?tradeNo='+data.data,
+                                            async: false,
+                                            dataType: 'json',
+                                            cache: false,
+                                            success:function(data){
+                                                if(data.result){
+                                                     $.dialog.get.idialog.$content.html('');
+                                                     $.dialog.get.idialog.$dialog.find('.i-wrapBtn').remove();
+                                                     var index = 3;
+                                                     var interval =  setInterval(function(){
+                                                        $('#second').text(index);
+                                                        if(index--<1){
+                                                            clearInterval(interval);
+                                                             window.location.href = "/my/order/info?orderId="+$('#orderIds').val();
+                                                        }
+                                                      },1000);
+                                                     $.dialog.get.idialog.$content.append('<div class="success-inner clearfix"><h4>检测到订单已成功支付</h4>' +
+                                                      '<p><span id="second">'+index+'</span>秒后将自动跳转到订单详情 <a href="/my/order/info?orderId='+$('#orderIds').val()+'">立即查看订单&gt;&gt;</a></p></div>');
+
+
+                                                }else{
+                                                    $(btn).val('重新检测');
+                                                    if($.dialog.get.idialog.$dialog.find('.error').size()==0){
+                                                        $.dialog.get.idialog.$dialog.append('<p class="error" style="color: red;text-align: center;">*'+data.message+'</p>');
+                                                    }else{
+                                                        $.dialog.get.idialog.$dialog.find('.error').text('*'+data.message);
+                                                    }
+
+                                                }
+                                            }
+                                        });
                                         return false;
                                     }
                                 }
