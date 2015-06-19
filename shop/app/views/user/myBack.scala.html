@@ -124,7 +124,7 @@
                                                 </td>
                                                 <td rowspan="@backOrder.getBackGoodsItemList.size()" class="control">
                                                     @if(!backOrder.getBackState.checkCanNotCancelForUser()){
-                                                        <p><span class="cancel" style="po" data-id="@backOrder.getId">取消</span></p>
+                                                        <p><span class="cancel" style="cursor: pointer" data-id="@backOrder.getId">取消</span></p>
                                                     }
                                                     <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId)" class="details">查看详情</a></p>
                                                 </td>

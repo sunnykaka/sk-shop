@@ -48,6 +48,28 @@ public class TradeService {
     /**
      * 通过tradeNo获取交易
      * @param tradeNo 交易号
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Trade getTradeByTradeNo(String tradeNo) {
+        Logger.info("--------TradeService getTradeByTradeNo begin exe-----------" + tradeNo);
+
+        String jpql = "select v from Trade v where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and v.tradeNo = :tradeNo ";
+        queryParams.put("tradeNo", tradeNo);
+
+        Trade trade = null;
+        List<Trade> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        if(itemList != null && itemList.size() > 0) {
+            trade = itemList.get(0);
+        }
+        return trade;
+    }
+
+    /**
+     * 通过tradeNo获取交易
+     * @param tradeNo 交易号
      * @param outerTradeNo 第三方平台交易号
      * @return
      */
@@ -108,6 +130,29 @@ public class TradeService {
         queryParams.put("tradeNo", tradeNo);
 
        return generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+    }
+
+    /**
+     * 通过订单ID查询支付交易信息
+     *
+     * @param orderId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Trade getTradeOrdeByOrderId(int orderId) {
+
+        //select o2. from Trade o2 exists(select 1 from TradeOrder o1 where o2.tradeNo=o1.tradeNo and o1.orderId=:orderId)
+
+        String jpql = "select o2 from Trade o2 where exists(select 1 from TradeOrder o1 where o2.tradeNo=o1.tradeNo and o1.orderId=:orderId)";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("orderId", orderId);
+
+        List<Trade> tradeList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        Trade trade = null;
+        if(tradeList != null && tradeList.size() > 0) {
+            trade= tradeList.get(0);
+        }
+        return  trade;
     }
 
     /**
@@ -224,18 +269,18 @@ public class TradeService {
                 } else {
                     long orderNo = order.getOrderNo();
 
+                    //更新订单
+                    OrderState oldState = order.getOrderState();
+                    // 订单状态只能从 创建 到 付款成功
+                    order.setMustPreviousState(OrderState.Create);
+                    order.setOrderState(OrderState.Pay);  //支付成功
+
                     //记录订单状态历史信息
                     try {
                         orderService.createOrderStateHistory(new OrderStateHistory(order));
                     } catch (Exception e) {
                         Logger.error(errPrefix + "订单[" + orderNo + "]订单id[" + order.getId() + "]记录订单状态历史信息发生异常：", e);
                     }
-
-                    //更新订单
-                    OrderState oldState = order.getOrderState();
-                    // 订单状态只能从 创建 到 付款成功
-                    order.setMustPreviousState(OrderState.Create);
-                    order.setOrderState(OrderState.Pay);  //支付成功
 
                     //更新订单状态
                     try {

@@ -45,10 +45,10 @@ GET         /qq/user/get_user_info                @controllers.user.FakeOpenIDPr
 
 
 # my favorites
-GET         /my/favorites/product                 @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+GET         /my/favorites/product                 @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
 POST        /my/favorites/product/del             @controllers.user.ProductFavoritesController.del(productId:Int)
 POST        /my/favorites/product/add             @controllers.user.ProductFavoritesController.add(productId:Int)
-GET         /my/favorites/designer                @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 5)
+GET         /my/favorites/designer                @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
 POST        /my/favorites/designer/del            @controllers.user.DesignerFavoritesController.del(designerId:Int)
 POST        /my/favorites/designer/add            @controllers.user.DesignerFavoritesController.add(designerId:Int)
 # my address
@@ -109,14 +109,14 @@ GET         /image/checkCode                      @controllers.user.ImageControl
 # 下发手机短信
 POST        /user/phone/sendSMS                   @controllers.user.SendSMSController.sendSMS(phone)
 # 订单管理
-GET         /my/order                             @controllers.user.MyOrderController.index(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 5)
+GET         /my/order                             @controllers.user.MyOrderController.index(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET         /my/order/info                        @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0)
 POST        /my/order/cancel                      @controllers.user.MyOrderController.orderCancel(orderId:Int ?= 0,canceltype:Int ?= 0)
 GET         /my/order/receiving                   @controllers.user.MyOrderController.orderReceiving(orderId:Int ?= 0)
 GET         /my/backApply                         @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
 POST        /my/back/submit                       @controllers.user.MyOrderController.backApplySubmit()
 GET         /my/appraise                          @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)
-GET         /my/back                              @controllers.user.MyOrderController.backIndex(pageNo:Int ?= 1,pageSize:Int ?= 5)
+GET         /my/back                              @controllers.user.MyOrderController.backIndex(pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET         /my/back/info                         @controllers.user.MyOrderController.backContent(backId:Int ?= 0)
 POST        /my/back/cancel                       @controllers.user.MyOrderController.backCancel(backId:Int ?= 0)
 
@@ -141,6 +141,7 @@ GET         /order/toPayOrder                     @controllers.shop.OrderAndPayC
 #支付
 GET         /payOrder/normalReturn                @controllers.shop.OrderPayCallBackController.normalReturn
 GET         /payOrder/notifyReturn                @controllers.shop.OrderPayCallBackController.notifyReturn
+GET         /payOrder/checkPayState               @controllers.shop.OrderPayCallBackController.checkPayState(tradeNo:String)
 
 #product
 GET         /product/valuations                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
