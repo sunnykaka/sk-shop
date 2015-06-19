@@ -8,6 +8,11 @@
     <script type="text/javascript">
         FG.user.login();
         $('#username').focus();
+        $(window).load(function(){
+         if($('input:-webkit-autofill').size()>0){
+                $('label').css('display','none');
+             }
+        });
     </script>
 } {
 

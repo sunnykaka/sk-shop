@@ -1,83 +1,121 @@
 /**
  * Created by lein on 2015/5/22.
  */
-$(function(){
-    $.scrollTo('#detail',600);
+$(function () {
+    $.scrollTo('#detail', 600);
     //获取购物车 商品数量
     $.ajax({
-        url:'/cart/getUserCartItemNum',
-        success:function(data) {
-            if(data.result){
+        url: '/cart/getUserCartItemNum',
+        success: function (data) {
+            if (data.result) {
                 $('#cart-quantity').text(data.data);
             }
         }
     });
 
     //重置
-    if($("#buy-number").size()>0){
+    if ($("#buy-number").size() > 0) {
         $("#buy-number").val(1);
     }
 
     //点击购物车，进入购物车页面
-    $('#cart-quantity-btn').click(function(){
+    $('#cart-quantity-btn').click(function () {
         window.location.href = "/cart/showCart";
     });
-    //固定跟随侧栏
 
 
-    //判断窗口宽度
-    $(window).on('resize load',function(){
-        if($(window).width()<=1250){
-            $('#cart').fadeOut();
-        }else{
-            $('#cart').fadeIn();
-        }
 
-    });
-    $(window).on('resize load scroll',function() {
-            $('#debut-box').stickySidebar({
-                headerSelector: '.top',
-                navSelector: '.nav',
-                contentSelector: '#detail',
-                footerSelector: '.footer',
-                placeholdHeight: 310,
-                sidebarTopMargin: 20,
-                footerThreshold: 310
-            });
-    });
+    //侧栏固定
+    function fixed(obj, scopeObj) {
+        var t = obj.offset().top;
+        var mt = scopeObj.offset().top;
+        var fh = obj.height();
+        var top = obj.css('top');
+        var objPosition = obj.css('position');
+        var objTop = obj.css('top');
+
+        $(window).scroll(function (e) {
+            var s = $(document).scrollTop();
+            var mh = scopeObj.height();
+            if (s > t) {
+                if ((s + fh) > (mt + mh)) {
+                    obj.css('top', (mt + mh) - (s + fh));
+                    return;
+                }
+                obj.css('position', 'fixed');
+                obj.css('top', 0);
+            } else {
+                obj.css('position', objPosition);
+                objTop != undefined ? obj.css('top', objTop) : null;
+            }
+        });
+    }
+
+    function fixedcart(obj, scopeObj) {
+        var t = obj.offset().top;
+        var mt = scopeObj.offset().top;
+        var fh = obj.height();
+        var top = obj.css('top');
+        var objPosition = obj.css('position');
+        var objTop = obj.position().top;
 
 
-    $('.comment-header li').click(function(){
+        $(window).scroll(function (e) {
+            var s = $(document).scrollTop();
+            var mh = scopeObj.height();
+            if (s > objTop) {
+                if ((s + fh) > (mt + mh)) {
+                    obj.css('top', (mt + mh) - (s + fh));
+                    return;
+                }
+                obj.css('position', 'fixed');
+                obj.css('top', 0);
+            } else {
+                obj.css({
+                    position:objPosition,
+                    top:objTop
+                });
+
+            }
+        });
+    }
+
+    fixed($('#debut-box'), $('#detail'));
+
+    fixedcart($('#cart'), $('#detail'));
+
+
+    $('.comment-header li').click(function () {
         $(this).addClass('current').siblings('li').removeClass('current');
     });
     //查看详情
-    $('#openDetail').click(function(){
+    $('#openDetail').click(function () {
         $('.container').slideToggle();
         $('.hide-detail').show();
 
     });
     //隐藏详情
-    $('#hideDetail').click(function(){
+    $('#hideDetail').click(function () {
         $(this).hide();
         $('.container').slideUp(500);
     });
 
 
     //我喜欢按钮
-    $('.detail-like .like').click(function(){
+    $('.detail-like .like').click(function () {
 
-        if(!$(this).is('.current')){
-            var id = $(this).attr('data-id'),that = $(this);
+        if (!$(this).is('.current')) {
+            var id = $(this).attr('data-id'), that = $(this);
             $.ajax({
-                type:'post',
-                url:'/my/favorites/product/add?productId='+id,
-                success:function(res){
-                    if(res.result){
+                type: 'post',
+                url: '/my/favorites/product/add?productId=' + id,
+                success: function (res) {
+                    if (res.result) {
                         $('.like-text').text(res.message);
-                    }else{
-                       if(res.message == 'Credentials required' ){
+                    } else {
+                        if (res.message == 'Credentials required') {
                             createLoginReg();
-                       }
+                        }
                     }
                 }
             });
@@ -85,10 +123,10 @@ $(function(){
     });
 
     //市场价格tips
-    $('.market-price').hover(function(){
+    $('.market-price').hover(function () {
         $(this).addClass('current');
         $('.info-tip').fadeIn(500);
-    },function(){
+    }, function () {
         $(this).removeClass('current');
         $('.info-tip').hide();
     })
@@ -176,10 +214,10 @@ $(function(){
     }
 
     //判断是否有 skuMap
-    if( typeof skuMap!= 'undefined'){
+    if (typeof skuMap != 'undefined') {
         skuView({
             priceEle: '#start-price',
-            marketPrice:'#market-price',
+            marketPrice: '#market-price',
             amountEle: '#amount',
             //integralEle: '#integral',
             //descEle: '#skuDesc',//2014-07-29新增描述
@@ -194,7 +232,7 @@ $(function(){
         });
     }
 
-    function skuView(options){
+    function skuView(options) {
         var priceEle = $(options.priceEle);
         var skuTextEle = (!options.skuTextEle ? null : $(options.skuTextEle));
         var amountEle = $(options.amountEle);
@@ -210,9 +248,9 @@ $(function(){
         var _stock = 0;
 
         //防止数据没有提前获取
-        if(_isSKU){
-            var _limit =1;
-        }else{
+        if (_isSKU) {
+            var _limit = 1;
+        } else {
             var _limit = defaultSku['limit'];
         }
 
@@ -223,7 +261,9 @@ $(function(){
         var _num = 1;
         var _skuImgList = null;
         //下架产品判断
-        if(!productOnline){amountInputEle.val(0)}
+        if (!productOnline) {
+            amountInputEle.val(0)
+        }
 
         //有多个sku的情况
         if (!!options.hasSkuMap) {
@@ -345,7 +385,7 @@ $(function(){
 
                 function readSkuDom(sku) {
                     priceEle.html(sku.price);
-                    if(sku.skuPropertiesInDb){
+                    if (sku.skuPropertiesInDb) {
                         sku.skuPropertiesInDb = sku.skuPropertiesInDb.split(',');
                         for (var i = 0; i < _skuAttrNum; i++) {
                             skuMapEle.find(".sku[data=" + sku.skuPropertiesInDb[i] + "]").addClass("selected");
@@ -364,22 +404,22 @@ $(function(){
         }
 
         //立即购买
-        addToOrderBtn.click(function(){
-            var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val();
+        addToOrderBtn.click(function () {
+            var skuId = skuMap[_selectedIds.join(',')]["skuId"], number = amountInputEle.val();
 
             $.ajax({
                 type: "get",
-                url: '/cart/verifyPromptlyPayData?skuId='+skuId+"&number="+number,
+                url: '/cart/verifyPromptlyPayData?skuId=' + skuId + "&number=" + number,
                 async: false,
                 dataType: 'json',
-                data:{skuId:skuId,number:number},
+                data: {skuId: skuId, number: number},
                 cache: false,
                 success: function (data) {
-                    if(data.result){
-                        window.location.href = '/cart/promptlyPayChooseAddress?skuId='+skuId+"&number="+number;
-                    }else{
-                        if(data.message == 'Credentials required' ){
-                        createLoginReg();
+                    if (data.result) {
+                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=' + skuId + "&number=" + number;
+                    } else {
+                        if (data.message == 'Credentials required') {
+                            createLoginReg();
                         }
                     }
                 }
@@ -389,32 +429,32 @@ $(function(){
         });
 
         //添加购物车
-        addToCartBtn.click(function(event){
-            $(this).attr('disabled',true);
-            var skuId = skuMap[_selectedIds.join(',')]["skuId"],number = amountInputEle.val(),that= $(this);
+        addToCartBtn.click(function (event) {
+            $(this).attr('disabled', true);
+            var skuId = skuMap[_selectedIds.join(',')]["skuId"], number = amountInputEle.val(), that = $(this);
             $.ajax({
                 type: "get",
-                url: ' /cart/addSkuToCartAddNum?skuId='+skuId+"&number="+number,
+                url: ' /cart/addSkuToCartAddNum?skuId=' + skuId + "&number=" + number,
                 async: false,
                 dataType: 'json',
-                data:{skuId:skuId,number:number},
+                data: {skuId: skuId, number: number},
                 cache: false,
                 success: function (data) {
-                    that.attr('disabled',null);
-                    if(data.result){
+                    that.attr('disabled', null);
+                    if (data.result) {
                         $('#cart-quantity').text(data.data.itemTotalNum);
-                    }else{
+                    } else {
 
-                        if(data.message == 'Credentials required' ){
+                        if (data.message == 'Credentials required') {
                             createLoginReg();
-                        }else{
+                        } else {
                             $.dialog({
-                                title:'提示',
-                                lock:true,
-                                content:'<p class="warning-inner" style="text-align: center;font-size: 16px;padding: 30px 40px 0 40px;">'+data.message+'</p>',
-                                width:500,
-                                height:200,
-                                padding:"20"
+                                title: '提示',
+                                lock: true,
+                                content: '<p class="warning-inner" style="text-align: center;font-size: 16px;padding: 30px 40px 0 40px;">' + data.message + '</p>',
+                                width: 500,
+                                height: 200,
+                                padding: "20"
                             });
                         }
 
@@ -428,7 +468,10 @@ $(function(){
         //数量组件绑定事件
         amountEle.click(function (event) {
             //下架产品判断
-            if(!productOnline){amountInputEle.val(0); return false;}
+            if (!productOnline) {
+                amountInputEle.val(0);
+                return false;
+            }
             if (_isSKU) {
                 if (!verifySku()) return false;
                 _limit = skuMap[_selectedIds.join(',')]["tradeMaxNumber"];
@@ -446,7 +489,7 @@ $(function(){
                 _num = parseInt(amountInputEle.val()) + 1;
                 if (_num > _limit) {
                     _num = _limit;
-                    FG.tip(amountInputEle, "limit_tip", "此商品限购"+_num+"件", 0,90);
+                    FG.tip(amountInputEle, "limit_tip", "此商品限购" + _num + "件", 0, 90);
                 }
                 amountInputEle.val(_num);
 
@@ -464,18 +507,21 @@ $(function(){
 
         amountInputEle.blur(function () {
             //下架产品判断
-            if(!productOnline){amountInputEle.val(0); return false;}
+            if (!productOnline) {
+                amountInputEle.val(0);
+                return false;
+            }
             var reg = /^[0-9]+$/;
             if (!reg.test(amountInputEle.val())) {
                 amountInputEle.val(1);
             }
             if (amountInputEle.val() > _limit) {
                 amountInputEle.val(_limit);
-                FG.tip(amountInputEle, "limit_tip", "此商品限购"+_limit+"件", 0,90);
+                FG.tip(amountInputEle, "limit_tip", "此商品限购" + _limit + "件", 0, 90);
             }
             if (amountInputEle.val() < 1 && _limit > 0) {
                 amountInputEle.val(1);
-                FG.tip(amountInputEle, "limit_tip", "商品购买数量不能小于1", 0,90);
+                FG.tip(amountInputEle, "limit_tip", "商品购买数量不能小于1", 0, 90);
             }
             //countPrice(+amountInputEle.val());
         });

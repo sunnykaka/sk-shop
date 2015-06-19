@@ -4,21 +4,30 @@ import common.exceptions.AppBusinessException;
 import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;
+import common.utils.play.BaseGlobal;
 import ordercenter.dtos.BackApplyForm;
 import ordercenter.models.*;
 import ordercenter.services.BackGoodsService;
 import ordercenter.services.OrderService;
+import ordercenter.services.TradeService;
 import ordercenter.services.ValuationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Results;
 import productcenter.services.SkuAndStorageService;
+import usercenter.dtos.DesignerView;
 import usercenter.models.User;
+import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
+import utils.Global;
 import utils.secure.SecuredAction;
+import views.html.error_404;
 import views.html.user.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +50,12 @@ public class MyOrderController extends Controller {
 
     @Autowired
     private BackGoodsService backGoodsService;
+
+    @Autowired
+    private TradeService tradeService;
+
+    @Autowired
+    private DesignerService designerService;
 
     /**
      * 单订管理首页
@@ -88,14 +103,26 @@ public class MyOrderController extends Controller {
         User user = SessionUtils.currentUser();
 
         Order order = orderService.getOrderById(orderId, user.getId());
+
+        if(null == order){
+            List<DesignerView> designerViews = new ArrayList<>();
+            try {
+                designerViews = designerService.lastCreateDesigner(4);
+            } catch (Exception e) {
+                Logger.error("", e);
+            }
+            return Results.notFound(error_404.render("查询不到你的订单", designerViews));
+        }
+
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
         for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
         }
         List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
+        Trade trade = tradeService.getTradeOrdeByOrderId(order.getId());
 
 
-        return ok(myOrderInfo.render(order, logistics, orderStateHistories));
+        return ok(myOrderInfo.render(order, logistics, orderStateHistories, trade));
 
     }
 
@@ -130,7 +157,7 @@ public class MyOrderController extends Controller {
 
         orderService.receivingOrder(orderId, user.getId());
 
-        return redirect(routes.MyOrderController.index(0,1,5));//(new JsonResult(true, "确认收货成功").toNode());
+        return redirect(routes.MyOrderController.index(0,1,10));//(new JsonResult(true, "确认收货成功").toNode());
 
     }
 
@@ -145,6 +172,17 @@ public class MyOrderController extends Controller {
         User user = SessionUtils.currentUser();
 
         Order order = orderService.getOrderById(orderId, user.getId());
+
+        if(null == order){
+            List<DesignerView> designerViews = new ArrayList<>();
+            try {
+                designerViews = designerService.lastCreateDesigner(4);
+            } catch (Exception e) {
+                Logger.error("", e);
+            }
+            return Results.notFound(error_404.render("查询不到你的订单", designerViews));
+        }
+
         for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
             if (orderItem.isAppraise()) {
@@ -167,6 +205,17 @@ public class MyOrderController extends Controller {
         User user = SessionUtils.currentUser();
 
         Order order = orderService.getOrderById(orderId, user.getId());
+
+        if(null == order){
+            List<DesignerView> designerViews = new ArrayList<>();
+            try {
+                designerViews = designerService.lastCreateDesigner(4);
+            } catch (Exception e) {
+                Logger.error("", e);
+            }
+            return Results.notFound(error_404.render("查询不到你的订单", designerViews));
+        }
+
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
         for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
@@ -257,6 +306,17 @@ public class MyOrderController extends Controller {
         User user = SessionUtils.currentUser();
 
         BackGoods backGoods = backGoodsService.getBackGoods(backGoodsId,user.getId());
+
+        if(null == backGoods){
+            List<DesignerView> designerViews = new ArrayList<>();
+            try {
+                designerViews = designerService.lastCreateDesigner(4);
+            } catch (Exception e) {
+                Logger.error("", e);
+            }
+            return Results.notFound(error_404.render("查询不到你的售后订单", designerViews));
+        }
+
         for(BackGoodsItem backGoodsItem:backGoods.getBackGoodsItemList()){
             OrderItem orderItem = orderService.getOrderItemById(backGoodsItem.getOrderItemId());
             orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));

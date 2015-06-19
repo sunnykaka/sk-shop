@@ -7,7 +7,7 @@
     <# 
         for(var i=0; i<data.length; i++) { 
             echo( 
-                '<li class="add"><a href="/designerProd?dId='+data[i].id+'"><img class="designer-img lazy" data-original="'+data[i].mainPic+'" src="'+data[i].mainPic+'" alt="'+data[i].name+'" width="289" height="460" style="display: block;"><div><img src="'+data[i].brandPic+'" alt="" width="289" height="60"><p>设计师：'+data[i].name+'</p></div></a></li>'
+                '<li class="add"><a target="_blank" href="/designerProd?dId='+data[i].id+'"><img class="designer-img lazy" data-original="'+data[i].mainPic+'" src="'+data[i].mainPic+'" alt="'+data[i].name+'" width="289" height="460" style="display: block;"><div><img src="'+data[i].brandPic+'" alt="" width="289" height="60"><p>设计师：'+data[i].name+'</p></div></a></li>'
              );
         }
     #>

@@ -121,6 +121,11 @@ public class Seo implements EntityClass<Integer>, OperableData {
         this.createTime = createTime;
     }
 
+    @Override
+    public void setUpdateTime(DateTime updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Column(name = "updateDate")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Override
