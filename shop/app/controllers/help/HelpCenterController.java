@@ -1,14 +1,27 @@
 package controllers.help;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Results;
+import usercenter.dtos.DesignerView;
+import usercenter.services.DesignerService;
+import views.html.error_404;
 import views.html.help.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 帮助中心、静态页面
  */
 @org.springframework.stereotype.Controller
 public class HelpCenterController extends Controller {
+
+
+    @Autowired
+    private DesignerService designerService;
 
     public Result index(String name) {
 
@@ -28,8 +41,18 @@ public class HelpCenterController extends Controller {
             return ok(shopping.render());
         } else if ("sizeInfo".equals(name)) {
             return ok(sizeInfo.render());
+        }else if ("joinUs".equals(name)) {
+            return ok(joinUs.render());
         }
-        return ok();
+
+
+        List<DesignerView> designerViews = new ArrayList<>();
+        try {
+            designerViews = designerService.lastCreateDesigner(4);
+        } catch (Exception e) {
+            Logger.error("", e);
+        }
+        return Results.notFound(error_404.render("您请求的页面没有找到，去其他地方逛逛吧", designerViews));
 
     }
 
