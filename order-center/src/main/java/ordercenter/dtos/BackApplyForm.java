@@ -1,5 +1,7 @@
 package ordercenter.dtos;
 
+import play.data.validation.Constraints;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class BackApplyForm {
     private List<String> orderItem = new ArrayList<>();
 
     /** 退货原因 */
+    @Constraints.MaxLength(value = 400, message = "输入超过最大400字符限制")
     private String backReason;
 
     public int getOrderId() {

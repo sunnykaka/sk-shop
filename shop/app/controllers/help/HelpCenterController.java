@@ -41,10 +41,9 @@ public class HelpCenterController extends Controller {
             return ok(shopping.render());
         } else if ("sizeInfo".equals(name)) {
             return ok(sizeInfo.render());
-        }else if ("joinUs".equals(name)) {
+        } else if ("joinUs".equals(name)) {
             return ok(joinUs.render());
         }
-
 
         List<DesignerView> designerViews = new ArrayList<>();
         try {
