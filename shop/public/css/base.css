@@ -743,7 +743,7 @@ input:-webkit-autofill {
 .designer-list .designer-list-con .more{width:208px;height:36px;border: 1px solid #838383;line-height: 36px;text-align: center;
     color: #838383;background: #fff;padding: 0;margin-left: auto;margin-right: auto;cursor: pointer;
 }
-.designer-list .designer-list-con .more:hover{border-color: #000;color:#FF2D54;}
+.designer-list .designer-list-con .more:hover{border-color: #000;color:#000;}
 /*end designer-list*/
 /*designer-brand*/
 .designer-brand{margin-bottom: 100px;}
@@ -902,8 +902,10 @@ input:-webkit-autofill {
 /*end footer*/
 .sider-bar{
     position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
-    /*bottom: 291px;*/left: 50%;margin-left: 610px;top: 600px;
+    left: 50%;margin-left: 605px;top: 600px;
 }
+.small-sider{width: 36px;}
+
 .sider-bar li{width: 62px;height: 63px;border-bottom: 1px solid #ccc;background: url("../images/sider-bar.gif") no-repeat;}
 .sider-bar .cart{position: relative;}
 .sider-bar .quantity{position: absolute;top:8px;right: 5px;background: #FF2D54;border-radius: 8px;padding: 0 8px;color: #fff;}
@@ -911,6 +913,13 @@ input:-webkit-autofill {
 .sider-bar .like-designer{background-position: 0 -126px;}
 .sider-bar .go-top{border-bottom: none;background-position: 0 -189px;}
 .sider-bar a,.sider-bar #gotoTop,.sider-bar #cart-quantity-btn{float: left;width: 62px;height: 63px;cursor:pointer;}
+
+.small-sider li{width: 36px;height:37px;background: url("../images/small-sider-bar.gif") no-repeat; }
+.small-sider .quantity{position: absolute;top:1px;right: 0;border-radius: 4px;padding: 0 3px;color: #fff;}
+.small-sider .like-product{background-position: 0 -37px;}
+.small-sider .like-designer{background-position: 0 -74px;}
+.small-sider .go-top{border-bottom: none;background-position: 0 -111px;}
+.small-sider a,.small-sider #gotoTop,.small-sider #cart-quantity-btn{float: left;width: 36px;height: 37px;cursor:pointer;}
 /* 提示信息 */
 .com_tip{ border: 1px solid #FF2D54; padding: 2px 6px; line-height: 18px; background: #fef6f1; font-size: 12px; z-index: 9999 }
 .com_tip a{color:#FF2D54;}
@@ -996,7 +1005,7 @@ input:-webkit-autofill {
 
 /*end after-service*/
 /*contact*/
-.contact{margin-bottom: 100px;}
+.contact,.join-us{margin-bottom: 100px;}
 .contact-img{margin-bottom: 30px;}
 .contact-box-left li{height: 30px;line-height: 30px;margin: 8px 0;font-size: 14px;}
 /*end contact*/

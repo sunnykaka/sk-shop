@@ -149,7 +149,7 @@
                                                         <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)" class="confirm">评价</a></p>
                                                     }
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
-                                                        <p><span class="cancel" data-id="@order.getId">取消</span></p>
+                                                        <p><span class="cancel" style="cursor: pointer" data-id="@order.getId">取消</span></p>
                                                     }
                                                     @if(order.isBackGoodsl){
                                                         <p><a href="@controllers.user.routes.MyOrderController.backApply(order.getId)" >申请退货</a></p>

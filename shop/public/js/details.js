@@ -13,6 +13,16 @@ $(function () {
         }
     });
 
+    //判断窗口宽度
+    $(window).on('resize load',function(){
+        if($(window).width()<=1300){
+            $('#cart').addClass('small-sider');
+        }else{
+            $('#cart').removeClass('small-sider');
+        }
+
+    });
+
     //重置
     if ($("#buy-number").size() > 0) {
         $("#buy-number").val(1);
@@ -24,27 +34,7 @@ $(function () {
     });
 
 
-    //判断窗口宽度
-    //$(window).on('resize load', function () {
-    //    if ($(window).width() <= 1250) {
-    //        $('#cart').fadeOut();
-    //    } else {
-    //        $('#cart').fadeIn();
-    //    }
-    //
-    //});
 
-    //$(window).on('resize load scroll',function() {
-    //        $('#debut-box').stickySidebar({
-    //            headerSelector: '.top',
-    //            navSelector: '.nav',
-    //            contentSelector: '#detail',
-    //            footerSelector: '.footer',
-    //            placeholdHeight: 310,
-    //            sidebarTopMargin: 20,
-    //            footerThreshold: 310
-    //        });
-    //});
     //侧栏固定
     function fixed(obj, scopeObj) {
         var t = obj.offset().top;
@@ -71,6 +61,8 @@ $(function () {
         });
     }
 
+
+    //固定购物车
     function fixedcart(obj, scopeObj) {
         var t = obj.offset().top;
         var mt = scopeObj.offset().top;
