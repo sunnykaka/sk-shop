@@ -120,12 +120,12 @@
                     @for(orderItem <- order.getOrderItemList){
                         <tr>
                             <td>
-                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >
+                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
                                     <img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/>
                                 </a>
                             </td>
                             <td>
-                                <p><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >@orderItem.getProductName</a></p>
+                                <p><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >@orderItem.getProductName</a></p>
                             </td>
                             <td>
                                 @for(keyValue <- orderItem.getProperties){

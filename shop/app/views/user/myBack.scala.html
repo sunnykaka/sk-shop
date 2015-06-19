@@ -102,12 +102,12 @@
                                                 <tr>
                                             }
                                             <td class="product-img">
-                                                <a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"")" target="_blank">
+                                                <a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"-" + backOrderItem.getOrderItem.getSkuId)" target="_blank">
                                                     <img src="@backOrderItem.getOrderItem.getMainPicture" alt="" height="147px" width="90px"/>
                                                 </a>
                                             </td>
                                             <td class="product-name">
-                                                <p><a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"")" target="_blank">@backOrderItem.getOrderItem.getProductName</a></p>
+                                                <p><a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"-" + backOrderItem.getOrderItem.getSkuId)" target="_blank">@backOrderItem.getOrderItem.getProductName</a></p>
                                             </td>
                                             <td class="product-size">
                                                 @for(keyValue <- backOrderItem.getOrderItem.getProperties){

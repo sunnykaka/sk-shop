@@ -68,12 +68,12 @@
                                     @for(backGoodsItem <- backGoods.getBackGoodsItemList){
                                         <tr>
                                             <td>
-                                                <a href="@controllers.product.routes.ProductController.detail(backGoodsItem.getOrderItem.getProductId+"")" target="_blank" >
+                                                <a href="@controllers.product.routes.ProductController.detail(backGoodsItem.getOrderItem.getProductId+"-" + backGoodsItem.getOrderItem.getSkuId)" target="_blank" >
                                                     <img src="@backGoodsItem.getOrderItem.getMainPicture" alt="" height="154px" width="90px"/>
                                                 </a>
                                             </td>
                                             <td>
-                                                <p><a href="@controllers.product.routes.ProductController.detail(backGoodsItem.getOrderItem.getProductId+"")" target="_blank" >@backGoodsItem.getOrderItem.getProductName</a></p>
+                                                <p><a href="@controllers.product.routes.ProductController.detail(backGoodsItem.getOrderItem.getProductId+"-" + backGoodsItem.getOrderItem.getSkuId)" target="_blank" >@backGoodsItem.getOrderItem.getProductName</a></p>
                                             </td>
                                             <td>
                                                 @for(keyValue <- backGoodsItem.getOrderItem.getProperties){
