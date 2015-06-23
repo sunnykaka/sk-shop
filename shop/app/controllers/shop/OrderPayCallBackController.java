@@ -104,7 +104,8 @@ public class OrderPayCallBackController extends Controller {
     public Result generateAliPayPayReturnUrl(String tradeNo) {
         Logger.info("订单交易号: " + tradeNo);
         try {
-            if(!"test".equalsIgnoreCase(Play.application().configuration().getString("shop.env"))) {
+            if(!("test".equalsIgnoreCase(Play.application().configuration().getString("shop.env"))
+                    || "dev".equalsIgnoreCase(Play.application().configuration().getString("shop.env")))) {
                 return ok(new JsonResult(false,"此功能不可用！").toNode());
             }
 
