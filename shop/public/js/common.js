@@ -270,17 +270,25 @@ function fixedcart(obj, scopeObj) {
     var objPosition = obj.css('position');
     var objTop = obj.position().top;
 
+    var windowH = $(window).height(),objH = obj.height();
+    var placeH = parseInt((windowH - objH)/2);
+    $(window).resize(function(){
+        windowH = $(window).height();
+        objH = obj.height();
+        placeH = parseInt((windowH - objH)/2);
+    });
 
     $(window).scroll(function (e) {
         var s = $(document).scrollTop();
         var mh = scopeObj.height();
         if (s > objTop) {
-            if ((s + fh) > (mt + mh)) {
+
+            if ((s + fh + placeH) > (mt + mh)) {
                 obj.css('top', (mt + mh) - (s + fh));
                 return;
             }
             obj.css('position', 'fixed');
-            obj.css('top', 0);
+            obj.css('top', placeH);
         } else {
             obj.css({
                 position:objPosition,
