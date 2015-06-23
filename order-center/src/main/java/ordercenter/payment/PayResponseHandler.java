@@ -92,13 +92,19 @@ public class PayResponseHandler {
         }
 
         this.trade = this.builder.buildFromRequest(request);
-
         this.backParams = this.builder.buildParam(request);
 
-        Logger.info("交易号号为：" + tradeNoStr + "----签名认证结果------------:" + trade.verify(this.backParams, type));
+        boolean signVerifyFlag = trade.verify(this.backParams, type);
+        Logger.info("交易号号为：" + tradeNoStr + "----签名认证结果------------:" + signVerifyFlag);
 
-        if (!trade.verify(backParams, type)) {
+        if (!signVerifyFlag) {
             Logger.error("回调签名验证出错: " + backParams);
+            result.setResult(false);
+            return result;
+        }
+
+        if (!trade.isSuccess()) {
+            Logger.error("交易不成功，状态为failure: " + backParams);
             result.setResult(false);
             return result;
         }
@@ -122,12 +128,6 @@ public class PayResponseHandler {
         }
 
         Logger.info("支付返回参数以及类型信息: " + type.getValue() + " : " + backParams);
-
-        if (!trade.isSuccess()) {
-            Logger.error("交易不成功，状态为failure: " + backParams);
-            result.setResult(false);
-            return result;
-        }
 
         PayCallback callBackHandler;
         try {

@@ -9,6 +9,7 @@ import ordercenter.payment.constants.ResponseType;
 import ordercenter.services.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
+import play.Play;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.secure.SecuredAction;
@@ -79,7 +80,7 @@ public class OrderPayCallBackController extends Controller {
             }
             Trade traderade = tradeService.getTradeByTradeNo(tradeNo);
             if(traderade == null) {
-                return ok(new JsonResult(false,"未支付成功。若已付款，可能是银行反应延迟了，请重新检测或联系商城客服").toNode());
+                return ok(new JsonResult(false,"未支付成功。若已付款，请联系商城客服人员").toNode());
             } else {
                 String state = traderade.getTradeStatus();
                 //现在只有支付宝
@@ -103,6 +104,11 @@ public class OrderPayCallBackController extends Controller {
     public Result generateAliPayPayReturnUrl(String tradeNo) {
         Logger.info("订单交易号: " + tradeNo);
         try {
+            if(!("test".equalsIgnoreCase(Play.application().configuration().getString("shop.env"))
+                    || "dev".equalsIgnoreCase(Play.application().configuration().getString("shop.env")))) {
+                return ok(new JsonResult(false,"此功能不可用！").toNode());
+            }
+
             if(tradeNo == null || tradeNo.trim().length() == 0) {
                 return ok(new JsonResult(false,"用户订单交易号不存在！").toNode());
             }

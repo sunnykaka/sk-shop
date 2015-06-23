@@ -88,7 +88,7 @@ public class OrderAndPayController extends Controller {
                 }
 
                 if(skuId <= 0) {
-                    return ok(new JsonResult(false,"在系统中找不到立即购买的商品！").toNode());
+                    return ok(new JsonResult(false,"在系统中找不到商品！").toNode());
                 }
 
                 if(number <= 0) {
@@ -122,14 +122,14 @@ public class OrderAndPayController extends Controller {
             }
 
             if (cart == null || cart.getCartItemList().size() == 0) {
-                return ok(new JsonResult(false,"出现错误：购物车为空").toNode());
+                return ok(new JsonResult(false,"购物车为空").toNode());
             }
 
             //库存校验
             for(CartItem cartItem : cart.getCartItemList()) {
                 if (!skuAndStorageService.isSkuUsable(cartItem.getSkuId())) {
                     Logger.warn("商品：" + cartItem.getProductName() + "已售完或已下架或已移除，不能再购买");
-                    return ok(new JsonResult(false,"商品：" + cartItem.getProductName() + "已售完或已下架或已移除，不能再购买").toNode());
+                    return ok(new JsonResult(false,"商品：" + cartItem.getProductName() + "已售罄或已下架，不能再购买").toNode());
                 }
             }
 
@@ -220,7 +220,7 @@ public class OrderAndPayController extends Controller {
                 }
                 if (verifyOrderItem(order)) {
                     Logger.warn("订单：" + order.getOrderNo() + "已售完或已下架或已移除，不能再购买");
-                    return ok(new JsonResult(false,"订单：" + order.getOrderNo() + "中商品已售完或已下架或已移除，不能再购买").toNode());
+                    return ok(new JsonResult(false,"订单：" + order.getOrderNo() + "中商品已售罄或已下架，不能再购买").toNode());
                 }
                 order.setAccountType(curUser.getAccountType());
                 order.setPayType(TradePayType.valueOf(payType));
