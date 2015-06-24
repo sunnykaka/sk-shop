@@ -8,6 +8,24 @@ $(function(){
         $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
     });
 
+    //获取购物车 商品数量
+    $.ajax({
+        url: '/cart/getUserCartItemNum',
+        success: function (data) {
+            if (data.result) {
+                $('#cart-quantity').text(data.data);
+            }
+        }
+    });
+
+    //固定购物车
+    fixedcart($('#cart'), $('#container'));
+
+    //点击购物车，进入购物车页面
+    $('#cart-quantity-btn').click(function () {
+        window.location.href = "/cart/showCart";
+    });
+
 
     //轮播
     $('.slider-box-inner').mobilyslider({

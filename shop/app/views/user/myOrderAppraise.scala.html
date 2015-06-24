@@ -6,92 +6,76 @@
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
     <script>
 
-    $(function(){
+$(function(){
 
     $('.not-comment').click(function(){
-    var valArr = $(this).parents('tbody').find('.add-comment');
-    if($(this).parents('tr').hasClass('current')) {return false};
-    if(valArr.length>0){
-    $(this).parents('tbody').find('.add-comment').remove();
-    $(this).parents('tr').siblings('tr').removeClass('current');
-    }
+        var valArr = $(this).parents('tbody').find('.add-comment');
+        if($(this).parents('tr').hasClass('current')) {return false};
+        if(valArr.length>0){
+            $(this).parents('tbody').find('.add-comment').remove();
+            $(this).parents('tr').siblings('tr').removeClass('current');
+        }
 
 
-    $(this).parents('tr').addClass('current').after("<tr class='add-comment'><td colspan='5'><div class='select-comment'><span class='label'>评价：</span> <label><input type='radio' name='comment' value='0'>好评</label><label>" +
-    "<input type='radio' name='comment' value='1'>中评</label><label><input type='radio' name='comment' value='2'>差评</label><span class='select-info'>请选择一个评价</span></div>" +
-    "<div class='comment-textarea'><span class='label'>内容：</span><textarea name='comment-content' id='comment-content'>商品满意吗？来分享你的使用感受吧~</textarea> <span class='text-limit'>评价字数限<span class='limit'>300</span>字</span><span class='content-info'>请根据实际填写相关内容</span></div>" +
-    "<div class='comment-confirm'><span class='comment-submit'>评价</span></div></td></tr>");
+        $(this).parents('tr').addClass('current').after("<tr class='add-comment'><td colspan='5'><div class='select-comment'><span class='label'>评价：</span> <label><input type='radio' name='comment' value='0'>好评</label><label>" +
+        "<input type='radio' name='comment' value='1'>中评</label><label><input type='radio' name='comment' value='2'>差评</label><span class='select-info'>请选择一个评价</span></div>" +
+        "<div class='comment-textarea'><span class='label'>内容：</span><textarea name='comment-content' id='comment-content'>商品满意吗？来分享你的使用感受吧~</textarea> <span class='text-limit'>评价字数限<span class='limit'>300</span>字</span><span class='content-info'>请根据实际填写相关内容</span></div>" +
+        "<div class='comment-confirm'><span class='comment-submit'>评价</span></div></td></tr>");
 
-    var commentCon= $('#comment-content').val();
-    $('#comment-content').focus(function(){
-    if($(this).val() == commentCon){
-    $(this).val('');
-    }
-    }).blur(function(){
-    if($(this).val() == ''){
-    $(this).val(commentCon);
-    }
-    });
+        var commentCon= $('#comment-content').val();
+        $('#comment-content').focus(function(){
+        if($(this).val() == commentCon){
+            $(this).val('');
+        }
+        }).blur(function(){
+            if($(this).val() == ''){
+                $(this).val(commentCon);
+            }
+        });
 
-    $('.comment-submit').click(function(){
-    var currentTr = $(this).parents('.add-comment').siblings('.current').find('.not-comment');
-    var orderItemId = currentTr.siblings('.orderItemId').val(),
-    productId = currentTr.siblings('.productId').val();
+        $('.comment-submit').click(function(){
+            var currentTr = $(this).parents('.add-comment').siblings('.current').find('.not-comment');
+            var orderItemId = currentTr.siblings('.orderItemId').val(),
+            productId = currentTr.siblings('.productId').val();
 
-    var comment =  $('input[name="comment"]:checked').val();
-    if(comment){
-    console.log(comment);
-    }else{
-    console.log('请选择一个评价');
-    }
+            var comment =  $('input[name="comment"]:checked').val();
+            if(comment){
+                console.log(comment);
+            }else{
+                console.log('请选择一个评价');
+            }
 
-    var commentCon= $('#comment-content').val();
+            var commentCon= $('#comment-content').val();
 
-    $.ajax({
-    url:'/my/valuation/add',
-    type:'POST',
-    data:{
-    orderItemId:orderItemId,
-    productId:productId,
-    point:comment,
-    content:commentCon
-    },
-    success: function (response) {
-    if (response.result) {
-
-    $(this).parents('.add-comment').siblings('tr').removeClass('current');
-    $('.add-comment').remove();
-    }
-    },
-    error: function () {
-
-    }
-    });
-
-
-    });
+            $.ajax({
+                url:'/my/valuation/add',
+                type:'POST',
+                data:{
+                orderItemId:orderItemId,
+                productId:productId,
+                point:comment,
+                content:commentCon
+            },
+            success: function (response) {
+                if (response.result) {
+                    $(this).parents('.add-comment').siblings('tr').removeClass('current');
+                    $('.add-comment').remove();
+                    }
+                }
+            });
+        });
 
     });
 
 
     //显示评论
     $('.showComment').hover(function(){
-
-    $(this).siblings('.comment-con').show();
+        $(this).siblings('.comment-con').show();
     },function(){
-    $(this).siblings('.comment-con').hide();
+        $(this).siblings('.comment-con').hide();
     });
 
-
-
-
-
-
-
-
-
-
-    });
+});
 
     </script>
 } {
@@ -120,12 +104,12 @@
                     @for(orderItem <- order.getOrderItemList){
                         <tr>
                             <td>
-                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >
+                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
                                     <img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/>
                                 </a>
                             </td>
                             <td>
-                                <p><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >@orderItem.getProductName</a></p>
+                                <p><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >@orderItem.getProductName</a></p>
                             </td>
                             <td>
                                 @for(keyValue <- orderItem.getProperties){

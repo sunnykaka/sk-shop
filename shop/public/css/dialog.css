@@ -167,6 +167,10 @@
 	transform: translateY(0);
 	opacity: 1;
 }
-.i-content .warning-inner{padding: 20px 0;}
+.i-content .warning-inner,.i-content .success-inner{padding: 20px 0;}
+.i-content .success-inner h4{height: 32px;  line-height: 32px;  font-size: 16px;  padding-left: 40px;  background: url("../images/pay-title-ico.gif") no-repeat left center;  width: 212px;
+	margin: 0 auto 10px;}
+.i-content .success-inner p{padding: 10px;font-size: 14px; text-align: center;}
+.i-content .success-inner a{color: red;}
 .i-content .warning{font-size: 16px;line-height: 40px;text-align: center;}
 .i-content .warning-ico{padding:17px;margin-right:10px;background:url("../images/sprite.gif") no-repeat -728px 16px;}

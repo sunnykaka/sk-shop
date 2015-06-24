@@ -59,7 +59,6 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th><label for="all"><input type="checkbox" id="all"> 全选 </label></th>
                                         <th class="col1"></th>
                                         <th>商品信息</th>
                                         <th>细节</th>
@@ -71,17 +70,17 @@
                                 <tbody class="product-list">
                                     @for((orderItem, index) <- order.getOrderItemList.zipWithIndex){
                                         <tr>
-                                            <td class="checkbox">
-                                                <input type="checkbox" name="orderItem[@index]" value="@orderItem.getId-@orderItem.getNumber"/>
-                                            </td>
+
+                                            <input type="hidden" name="orderItem[@index]" value="@orderItem.getId-@orderItem.getNumber"/>
+
                                             <td>
-                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >
+                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
                                                     <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>
                                                 </a>
                                             </td>
-                                            <td>
+                                            <td class="pro">
                                                 <div class="pro-info">
-                                                    <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"")" target="_blank" >@orderItem.getProductName</a></p>
+                                                    <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >@orderItem.getProductName</a></p>
                                                 </div>
                                             </td>
                                             <td>
@@ -97,11 +96,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="amount" >
-                                                    <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
-                                                    <input type="text" size="3" maxlength="3" class="text-number" limit="@orderItem.getNumber" value="@orderItem.getNumber" data-price="@orderItem.getCurUnitPrice.getAmountWithBigDecimal">
-                                                    <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
-                                                </div>
+                                                @orderItem.getNumber
                                             </td>
                                             <td class="col6">
                                             ￥@orderItem.getTotalPrice.getAmountWithBigDecimal
@@ -111,22 +106,22 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="5"></td>
+                                        <td colspan="4"></td>
                                         <td>商品总计：</td>
                                         <td class="total-price">￥@order.getTotalMoney.getAmountWithBigDecimal</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5"></td>
+                                        <td colspan="4"></td>
                                         <td>运费：</td>
                                         <td>￥0.00</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5"></td>
+                                        <td colspan="4"></td>
                                         <td>关税：</td>
                                         <td>￥0.00</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5"></td>
+                                        <td colspan="4"></td>
                                         <td class="refund-title">退货金额：</td>
                                         <td class="refund-price">￥@order.getTotalMoney.getAmountWithBigDecimal</td>
                                     </tr>
@@ -135,7 +130,7 @@
 
                             <input type="hidden" name="orderId" value="@order.getId">
                             <h3>退货原因</h3>
-                            <textarea name="backReason" id="backReason" cols="30" rows="10"></textarea>
+                            <textarea name="backReason" id="backReason" cols="30" rows="10" style="padding:10px;"></textarea>
                             <div class="form-item">
                                 <button type="button" class="submit-btn">提交退货申请</button>
                             </div>

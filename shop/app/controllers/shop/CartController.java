@@ -149,13 +149,13 @@ public class CartController extends Controller {
                 }
             }
             if (!flag) {
-                return ok(new JsonResult(false, "商品已下架或被移除！","addForbid").toNode());
+                return ok(new JsonResult(false, "商品已下架或已售罄！","addForbid").toNode());
             }
 
             SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
             int maxStockNum = skuStorage.getStockQuantity();
             if (maxStockNum <= 0) {
-                return ok(new JsonResult(false,"已经售完","addForbid").toNode());
+                return ok(new JsonResult(false,"已售罄","addForbid").toNode());
             }
 
             User curUser = SessionUtils.currentUser();
@@ -182,7 +182,7 @@ public class CartController extends Controller {
 
             if (addNumber > maxCanBuyNum) {
                 retMap.put("maxCanBuyNum", maxCanBuyNum);
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
+                return ok(new JsonResult(false,"超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
             }
 
             if (addNumber > maxStockNum) {
@@ -192,7 +192,7 @@ public class CartController extends Controller {
                     maxCanBuyNum = maxStockNum;
                 }
                 retMap.put("maxCanBuyNum", maxCanBuyNum);
-                return ok(new JsonResult(false,"超过最大能购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
+                return ok(new JsonResult(false,"超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
             }
 
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
@@ -214,7 +214,7 @@ public class CartController extends Controller {
             return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", retMap).toNode());
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
-            return ok(new JsonResult(false,"加入购物车时服务器发生异常").toNode());
+            return ok(new JsonResult(false,"加入购物车时服务器发生异常，请联系商城客服人员").toNode());
         }
     }
 
@@ -247,10 +247,10 @@ public class CartController extends Controller {
     public Result deleteCartItem(int cartItemId) {
         try {
             cartService.deleteCartItemById(cartItemId);
-            return ok(new JsonResult(true,"删除购物车成功").toNode());
+            return ok(new JsonResult(true,"删除成功").toNode());
         } catch (Exception e) {
             Logger.error("删除购物车失败:", e);
-            return ok(new JsonResult(false,"删除购物车失败").toNode());
+            return ok(new JsonResult(false,"删除失败").toNode());
         }
     }
 
@@ -295,10 +295,10 @@ public class CartController extends Controller {
                     continue;
                 }
                 if(!cartItem.isHasStock()) {
-                    return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已经没有库存，无法购买").toNode());
+                    return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已售罄").toNode());
                 }
                 if(!cartItem.isOnline()) {
-                    return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "下架或已经被删除").toNode());
+                    return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已下架").toNode());
                 }
 
                 if(cartItem.getStockQuantity() < cartItem.getNumber()) {
@@ -311,7 +311,7 @@ public class CartController extends Controller {
             cartService.updateCartItemList(selCartItemList);
             return ok(new JsonResult(true,"选中购物车项选中状态更新成功").toNode());
         } catch (Exception e) {
-            Logger.warn("去结算-悬着邮递地址发生异常:", e);
+            Logger.warn("去结算-选择邮递地址发生异常:", e);
             return ok(new JsonResult(false,"去结算发生异常，请联系商城客服人员").toNode());
         }
     }
@@ -349,13 +349,13 @@ public class CartController extends Controller {
                 }
             }
             if (!flag) {
-                return ok(new JsonResult(false, "商品已下架或被移除！","addForbid").toNode());
+                return ok(new JsonResult(false, "商品已下架或已售罄！","addForbid").toNode());
             }
 
             SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
             int maxStockNum = skuStorage.getStockQuantity();
             if (maxStockNum <= 0) {
-                return ok(new JsonResult(false,"已经售完","addForbid").toNode());
+                return ok(new JsonResult(false,"已售罄","addForbid").toNode());
             }
             return ok(new JsonResult(true).toNode());
         } catch (Exception e) {

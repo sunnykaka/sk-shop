@@ -19,7 +19,7 @@
             $.dialog ( {
                 title : '提示',
                 lock : true,
-                content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除取消该退货订单吗？</p></div>',
+                content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除取消该售后订单吗？</p></div>',
                 width : 540,
                 height : 248,
                 drag : false,
@@ -90,8 +90,8 @@
                                         <tr class="space-row"><td colspan="6"></td></tr>
                                         <tr class="space-row"><td colspan="6"></td></tr>
                                         <tr class="order-hd">
-                                            <td class="order-hd-first">售后订单号：<span class="order-number">@backOrder.getOrderNo</span></td>
-                                            <td >订单号：<span class="order-number">@backOrder.getId</span></td>
+                                            <td class="order-hd-first">售后订单号：<span class="order-number">@backOrder.getOrderNo-@backOrder.getId</span></td>
+                                            <td >订单号：<span class="order-number">@backOrder.getOrderNo</span></td>
                                             <td colspan="4" class="order-hd-last">下单时间：<span class="order-time">@DateUtils.printDateTime(backOrder.getCreateTime)</span></td>
                                         </tr>
 
@@ -102,12 +102,12 @@
                                                 <tr>
                                             }
                                             <td class="product-img">
-                                                <a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"")" target="_blank">
+                                                <a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"-" + backOrderItem.getOrderItem.getSkuId)" target="_blank">
                                                     <img src="@backOrderItem.getOrderItem.getMainPicture" alt="" height="147px" width="90px"/>
                                                 </a>
                                             </td>
                                             <td class="product-name">
-                                                <p><a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"")" target="_blank">@backOrderItem.getOrderItem.getProductName</a></p>
+                                                <p><a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"-" + backOrderItem.getOrderItem.getSkuId)" target="_blank">@backOrderItem.getOrderItem.getProductName</a></p>
                                             </td>
                                             <td class="product-size">
                                                 @for(keyValue <- backOrderItem.getOrderItem.getProperties){
@@ -155,7 +155,7 @@
                         </div>
                     }else{
                          <div class="order-empty">
-                            <p>您还没有售后订单记录，赶紧去 <a href="/">逛逛吧</a></p>
+                            <p>您还没有售后订单记录</p>
                         </div>
                     }
                 </div>

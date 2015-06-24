@@ -4,65 +4,86 @@
 @import productcenter.models.Seo;
 
 @main(new Seo(designer.getName + Messages("title.product.list"),"尚客"+ designer.getName +"专场，全球首发，限量发售，限时抢购！",designer.getName + "," + Messages("seo.Keywords")))() {
-    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
-    <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
-    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
-    <script>
-        $(function(){
+<script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+<script src="@routes.Assets.versioned("js/login-reg.js")"></script>
+<script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+<script>
+    $(function(){
 
-                   
+       $('.brand-start-fashion li,.ready-online li,.hot-sale li').hover(function(){
+           $(".cover", this).stop().animate({top:"341"},{queue:false,duration:50});
+       },function(){
+           $(".cover", this).stop().animate({top:"462"},{queue:false,duration:100});
+       });
 
-           $('.brand-start-fashion li,.ready-online li,.hot-sale li').hover(function(){
-               $(".cover", this).stop().animate({top:"341"},{queue:false,duration:50});
-           },function(){
-               $(".cover", this).stop().animate({top:"462"},{queue:false,duration:100});
-           });
-        });
-
-        $('#designerFocus').click(function(){
-            var id = $(this).attr('data-id'),that = $(this);
-            if(that.hasClass('hasFocus')){//已经关注
-                $.ajax({
-                    type:'post',
-                    url:'/my/favorites/designer/del?designerId='+id,
-                    data:{designerId:id},
-                    success:function(res){
-                        if(res.message == 'Credentials required'){
-                            createLoginReg();
-                        }else{
-                            if(res.result){
-                                that.text('关注');
-                                that.removeClass('hasFocus');  
-                            }
-                        }    
-                    }
-
-                });
-
-            }else{
-                $.ajax({
-                    type:'post',
-                    url:'/my/favorites/designer/add?designerId='+id,
-                    data:{designerId:id},
-                    success:function(res){
-                        if(res.message == 'Credentials required'){
-                            createLoginReg();
-                        }else{
-                            if(res.result){
-                                that.text('已关注');
-                                that.addClass('hasFocus');  
-                            }
-                        }    
-                    }
-
-                });
+       //获取购物车 商品数量
+        $.ajax({
+            url: '/cart/getUserCartItemNum',
+            success: function (data) {
+                if (data.result) {
+                    $('#cart-quantity').text(data.data);
+                }
             }
         });
 
-    </script>
+            //固定购物车
+         fixedcart($('#cart'), $('#container'));
+
+             //点击购物车，进入购物车页面
+        $('#cart-quantity-btn').click(function () {
+            window.location.href = "/cart/showCart";
+        });
+
+
+        $('#designerFocus').click(function(){
+        var id = $(this).attr('data-id'),that = $(this);
+        if(that.hasClass('hasFocus')){//已经关注
+            $.ajax({
+                type:'post',
+                url:'/my/favorites/designer/del?designerId='+id,
+                data:{designerId:id},
+                success:function(res){
+                    if(res.message == 'Credentials required'){
+                        createLoginReg();
+                    }else{
+                        if(res.result){
+                            that.text('关注');
+                            that.removeClass('hasFocus');
+                        }
+                    }
+                }
+
+            });
+
+        }else{
+            $.ajax({
+                type:'post',
+                url:'/my/favorites/designer/add?designerId='+id,
+                data:{designerId:id},
+                success:function(res){
+                    if(res.message == 'Credentials required'){
+                        createLoginReg();
+                    }else{
+                        if(res.result){
+                            that.text('已关注');
+                            that.addClass('hasFocus');
+                        }
+                    }
+                }
+
+            });
+        }
+    });
+
+
+    });
+
+
+</script>
 
 
 } {
+<div id="container">
     <div class="designer-brand">
         <div class="designer-brand-inner width1200">
             <div class="bread-nav">
@@ -154,5 +175,13 @@
             }
         </div>
     </div>
-
+</div>
+    <!--siderbar-->
+    <ul class="sider-bar" id="cart">
+        <li class="cart"><span  id="cart-quantity-btn"></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"></a></li>
+        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"></a></li>
+        <li class="go-top"><span id="gotoTop"></span></li>
+    </ul>
+    <!--end sideebar-->
 }

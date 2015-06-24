@@ -65,7 +65,7 @@ $(function(){
 
     var cartPage = $('.mycart');
     function setTotalPrice() {
-        var totalPrice = 0,proTotalMoney =$('.pro-total-money') ;
+        var totalPrice = 0,proTotalMoney =$('.product-list').find('tr:not(".disabled") .pro-total-money');
         if(proTotalMoney.size()==0){
             $('.total-price').text('¥' + 0.00);
             return;

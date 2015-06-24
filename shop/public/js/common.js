@@ -261,4 +261,51 @@ if($('#gotoTop').size()>0){
     });
 }
 
+//固定购物车
+function fixedcart(obj, scopeObj) {
+    var t = obj.offset().top;
+    var mt = scopeObj.offset().top;
+    var fh = obj.height();
+    var top = obj.css('top');
+    var objPosition = obj.css('position');
+    var objTop = obj.position().top;
+
+    var windowH = $(window).height(),objH = obj.height();
+    var placeH = parseInt((windowH - objH)/2);
+    $(window).resize(function(){
+        windowH = $(window).height();
+        objH = obj.height();
+        placeH = parseInt((windowH - objH)/2);
+    });
+
+    $(window).scroll(function (e) {
+        var s = $(document).scrollTop();
+        var mh = scopeObj.height();
+        if (s > objTop) {
+
+            if ((s + fh + placeH) > (mt + mh)) {
+                obj.css('top', (mt + mh) - (s + fh));
+                return;
+            }
+            obj.css('position', 'fixed');
+            obj.css('top', placeH);
+        } else {
+            obj.css({
+                position:objPosition,
+                top:objTop
+            });
+
+        }
+    });
+}
+
+//判断窗口宽度
+$(window).on('resize load',function(){
+    if($(window).width()<=1300){
+        $('#cart').addClass('small-sider');
+    }else{
+        $('#cart').removeClass('small-sider');
+    }
+
+});
 

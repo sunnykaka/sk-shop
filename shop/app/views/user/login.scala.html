@@ -10,7 +10,7 @@
         $('#username').focus();
         $(window).load(function(){
          if($('input:-webkit-autofill').size()>0){
-                $('label').css('display','none');
+                $('.errormsg').siblings('label').css('display','none');
              }
         });
     </script>

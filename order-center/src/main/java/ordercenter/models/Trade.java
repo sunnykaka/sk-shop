@@ -147,7 +147,7 @@ public class Trade implements EntityClass<Integer> {
     @Transient
     public boolean isSuccess() {
         if (PayType.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
-            if ("TRADE_FINISHED".equalsIgnoreCase(tradeStatus) || "TRADE_SUCCESS".equalsIgnoreCase(tradeStatus)) {
+            if ("TRADE_FINISHED".equalsIgnoreCase(tradeStatus)) {
                 return true;
             }
         }

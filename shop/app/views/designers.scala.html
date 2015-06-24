@@ -14,28 +14,51 @@
 
  </script>
 <script type='text/javascript'>
-
-$('#more').click(function(){
-    $(this).attr('disabled',true);
-    var id = $(this).attr('data-id'),that = $(this);
-    $.ajax({
-        url:'/designers4more?currPage='+id,
-        success:function(response){
-             $(this).attr('disabled',null);
-            var html =  tpl('#demo', response);
-            if(response.data.length<8){
-                $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(300);
-                that.fadeOut();
-            }else{
-               $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(); 
-               that.attr('data-id',parseInt(id)+1);
+$(function(){
+        //获取购物车 商品数量
+        $.ajax({
+            url: '/cart/getUserCartItemNum',
+            success: function (data) {
+                if (data.result) {
+                    $('#cart-quantity').text(data.data);
+                }
             }
-            $(this).attr('disabled',null);
-        }
+        });
+
+            //固定购物车
+     fixedcart($('#cart'), $('#container'));
+
+         //点击购物车，进入购物车页面
+    $('#cart-quantity-btn').click(function () {
+        window.location.href = "/cart/showCart";
     });
+
+
+     //获取更多设计师
+    $('#more').click(function(){
+        $(this).attr('disabled',true);
+        var id = $(this).attr('data-id'),that = $(this);
+        $.ajax({
+            url:'/designers4more?currPage='+id,
+            success:function(response){
+                 $(this).attr('disabled',null);
+                var html =  tpl('#demo', response);
+                if(response.data.length<8){
+                    $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(300);
+                    that.fadeOut();
+                }else{
+                   $('.designer-list-con ul').append(html).find('.add').hide().fadeIn();
+                   that.attr('data-id',parseInt(id)+1);
+                }
+                $(this).attr('disabled',null);
+            }
+        });
+    });
+
 });
 </script>
 } {
+<div id="container">
     <div class="designer-list">
         <div class="designer-list-inner width1200">
             <div class="bread-nav">
@@ -73,4 +96,13 @@ $('#more').click(function(){
             </div>
         </div>
     </div>
+</div>
+    <!--siderbar-->
+    <ul class="sider-bar" id="cart">
+        <li class="cart"><span  id="cart-quantity-btn"></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"></a></li>
+        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"></a></li>
+        <li class="go-top"><span id="gotoTop"></span></li>
+    </ul>
+    <!--end sideebar-->
 }

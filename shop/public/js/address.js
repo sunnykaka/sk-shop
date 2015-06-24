@@ -103,7 +103,6 @@ $(function(){
                 saveForm(type, formId)
             });
         }else{
-            console.log(333333);
             form.on('click', 'input[type=submit]', function (e) {
                 e.preventDefault();
                 e.cancelBubble = true;
@@ -472,6 +471,9 @@ $(function(){
     function updateForm(type,formId,closeBtn){
 
         var formData = formId.serialize(),item;
+        //防止360游览器傻瓜
+        formData = formData+'&ts='+Math.random();
+        //alert(formData);
         //验证表单
         if (!validateForm(type,formId)) {
             return;
