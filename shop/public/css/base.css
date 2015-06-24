@@ -99,9 +99,9 @@ table .pro{width: 360px;}
 .top .right{margin-top: 10px;}
 .top .right .button{margin-right:15px;}
 .space{padding: 0 4px;}
-.top .logined li{float: left;margin-right: 10px;}
+.top .logined li{float: left;margin-right: 30px;}
 .top .logined a,.top .logined span{float: left;}
-.top .logined .user-name{width: 50px;text-align: center;overflow: hidden;white-space: nowrap;-o-text-overflow: ellipsis;text-overflow: ellipsis;}
+.top .logined .user-name{}
 .top .logined a:hover,.top #logout:hover{color: #fd2049;}
 .top #logout{cursor: pointer;}
 /*end top*/
@@ -884,7 +884,7 @@ table .pro{width: 360px;}
 .likeProduct-list .likeProduct-page li,.focusDesigner-list .focusDesigner-page li{float: left;margin-right: 15px;}
 /*end likeProduct*/
 /*footer*/
-.footer{width: 100%;background: #f1f3f5;}
+.footer{width: 100%;background: #f3f7f6;}
 .footer-inner dl{float: left;margin-right: 120px;padding:30px 0;}
 .footer-inner dt{padding-left: 22px;margin-bottom:20px;background: url("../images/footer-ico.gif") no-repeat 0 -2px;
     font-size: 14px;font-weight: 700;
@@ -892,15 +892,17 @@ table .pro{width: 360px;}
 .footer-inner .help dt{background-position: 0 -23px;}
 .footer-inner .sevice-center dt{background-position: 0 -46px;}
 .footer-inner .designer-in dt{background-position: 0 -72px;}
-.footer-inner dd{height: 25px;line-height: 25px;color: #cccccc;}
+.footer-inner dd{text-indent: 20px;height: 25px;line-height: 25px;}
 .footer-inner .social-ico{margin-top: 12px;}
 .footer-inner .social-ico a{display: inline-block;width:32px;height: 32px;text-indent: -99999px;
     background: url("../images/footer-social-ico.gif") no-repeat;margin-right: 10px;
 }
+.footer-inner .about-us{margin-left: 100px;_display:inline;}
 .footer-inner .social-ico .twitter{background-position:-44px 0; }
-.footer-inner .code-img{float: right;margin-top:60px;width: 110px;text-align: center;}
+.footer-inner .code-img{float: right;margin-top:30px;width: 110px;text-align: center;margin-right: 90px;_display:inline;}
 .footer-inner .code-img a{display: block;margin-bottom: 4px;}
 .footer .copy-right{text-align: center;padding: 30px 0;}
+.footer-inner a:hover{color: #fd2049;}
 /*end footer*/
 .sider-bar{
     position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
