@@ -14,7 +14,7 @@ $(function(){
                     $(item).parents('tr').find('input[type=text]').attr('disabled',true);
                     $(item).parents('tr').addClass('disabled');
                 });
-                $('.total-price').text(checkMoney.toFixed(2));
+                $('.total-price').text('¥' +checkMoney.toFixed(2));
         }else{
             $('.product-list :checkbox').attr('checked',false);
                 var checkMoney = 0.00;
@@ -27,7 +27,7 @@ $(function(){
                     $(item).parents('tr').find('input[type=text]').attr('disabled',true);
                     $(item).parents('tr').addClass('disabled');
                 });
-                $('.total-price').text(checkMoney.toFixed(2));
+                $('.total-price').text('¥' +checkMoney.toFixed(2));
         }
     });
 
@@ -60,7 +60,7 @@ $(function(){
             $(item).parents('tr').find('input[type=text]').attr('disabled',true);
             $(item).parents('tr').addClass('disabled');
         });
-        $('.total-price').text(checkMoney.toFixed(2));
+        $('.total-price').text('¥' +checkMoney.toFixed(2));
     });
 
     var cartPage = $('.mycart');

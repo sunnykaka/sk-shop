@@ -374,13 +374,15 @@ table .pro{width: 360px;}
 .confirm-product table .col1,.mycart-list table .col1{width: 100px;}
 .confirm-product .actual-price,.mycart-inner .actual-price{color: #FF2D54;}
 .total{margin-bottom: 20px;width: 100%;overflow: hidden;}
-.total-info{float:left;width: 747px;padding-left: 30px;}
+.total-info{float:left;width: 550px;padding-left: 30px;}
 .total-info h3{color: #FF2D54;overflow: hidden;}
-.total-info img{float: left;margin-top: 20px;margin-right: 22px;}
-.total-info p{overflow: hidden;color: #FF2D54;line-height: 200%;width:450px;}
-.total table{float:right;text-align: center;vertical-align: middle;width:350px;}
-.total table td{padding: 10px 0;}
+.total-info img{float: left;margin-right: 22px;}
+.total-info p{overflow: hidden;color: #FF2D54;line-height: 200%;width:450px;margin-left: 54px;}
+.total table{float:right;text-align: center;vertical-align: middle;width:330px;margin-right:80px;_display:inline;}
+.total table td{padding: 10px 0;text-align: center;}
 .total table .last {border-top:1px solid  #e5e5e5;}
+.total table .alginLeft{text-align: left;}
+.total table .alginRight{text-align: right;}
 .total .actual-pay-money{color: #FF2D54;font-size: 15px;}
 .order-btn{text-align: right;}
 .order-btn .order-submit-btn,.mycart-inner .toOrder,.pay-inner .pay-money-btn{float: right;width:410px;height: 80px;text-align: center;line-height: 80px;
@@ -620,7 +622,7 @@ table .pro{width: 360px;}
 .order-manage-inner .all-order-list .refund-order-info li{padding-bottom: 10px;line-height: 18px;}
 .all-order-list .order-list table{width:988px;text-align: center;border-collapse: collapse;margin-bottom: 20px;}
 .all-order-list .order-list th,.all-order-list .order-list td{vertical-align: middle;}
-.all-order-list .order-list thead th{height: 44px;}
+.all-order-list .order-list thead th,.order-comment-container thead th{height: 44px;}
 .all-order-list .order-list .order-hd{height:35px; background: #f7f7f7;border: none;}
 .all-order-list .order-list tbody td{border: 1px solid #e5e5e5;}
 .all-order-list .order-list .order-hd td{border: none;border-top: 1px solid #e5e5e5;border-bottom: 1px solid #e5e5e5;}
@@ -696,7 +698,7 @@ table .pro{width: 360px;}
 .refund-order-content .order-number{color: #FF2D54;}
 /*end order-detail*/
 /*order comment*/
-.order-comment{margin-bottom: 50px;}
+.order-comment{margin-bottom: 100px;}
 .order-comment-container{width: 100%;text-align: center;}
 .order-comment-container th,.order-comment-container td{border-bottom: 1px solid #ccc;}
 .order-comment-container .comment-box {position: relative;width: 200px;}
@@ -862,7 +864,7 @@ table .pro{width: 360px;}
 .phoneValidate-list .phoneValidate-sec .next-btn,.updatePw-list .updatePw-sec .next-btn{margin-left: 100px;}
 .phoneValidate-list .phoneValidate-sec .errormsg,.updatePw-list .updatePw-sec .errormsg{padding-left: 120px;}
 .phoneValidate-list .phoneValidate-thr p,.updatePw-list .updatePw-thr p{text-align: center;padding: 30px 0;}
-.phoneValidate-list .phoneValidate-thr a,.updatePw-list .updatePw-thr a,.validateEmail-list .send-email,.validateEmail-list .validateEmail-thr a{padding: 8px 15px;background: #000000;color: #fff;margin-left: 465px;}
+.phoneValidate-list .phoneValidate-thr a,.updatePw-list .updatePw-thr a,.validateEmail-list .send-email,.validateEmail-list .validateEmail-thr a,.validateEmail-list #check-email{padding: 8px 15px;background: #000000;color: #fff;margin-left: 465px;}
 .phoneValidate-list .phoneValidate-thr a:hover,.updatePw-list .updatePw-thr a:hover,.validateEmail-list .send-email:hover,.validateEmail-list .validateEmail-thr a:hover{color: #FF2D54;text-decoration: none;}
 .validateEmail-list p{text-align: center;padding: 20px 0;}
 .validateEmail-list .send-email{margin-left: 440px;display: block;width: 100px;text-align: center;}
