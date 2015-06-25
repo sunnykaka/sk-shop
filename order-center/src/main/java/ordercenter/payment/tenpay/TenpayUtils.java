@@ -27,7 +27,6 @@ import java.util.*;
  */
 public class TenpayUtils {
 
-
     public static final String PARTNER = "1250559701";
 
     public static final String PAY_GATEWAY = "https://gw.tenpay.com/intl/gateway/pay.htm?";
@@ -115,7 +114,6 @@ public class TenpayUtils {
                 sb.append(k + "=" + v + "&");
             }
         }
-
         sb.append("key=" + KEY);
         logger.info("财富通回传参数签名为：" + MD5Encode(sb.toString(), INPUT_CHARSET));
         return MD5Encode(sb.toString(), INPUT_CHARSET);
@@ -135,7 +133,6 @@ public class TenpayUtils {
         }
         sb.append("key=" + TenpayUtils.KEY);
         return MD5Encode(sb.toString(), INPUT_CHARSET).toLowerCase();
-
     }
 
     private static String byteArrayToHexString(byte b[]) {

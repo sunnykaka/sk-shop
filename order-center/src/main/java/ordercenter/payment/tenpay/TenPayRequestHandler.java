@@ -46,8 +46,7 @@ public class TenPayRequestHandler extends PayRequestHandler {
         Map<String, String> sParaTemp = new TreeMap<String, String>();
         sParaTemp.put("sign_type", TenpayUtils.SIGN_TYPE);
         sParaTemp.put("service_version", TenpayUtils.SERVICE_VERSION);
-
-        //sParaTemp.put("input_charset", TenpayUtils.INPUT_CHARSET);
+        sParaTemp.put("input_charset", TenpayUtils.INPUT_CHARSET);
 
         //sign
         sParaTemp.put("sign_key_index", "1");
