@@ -87,7 +87,7 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
     /**
      * 是否删除(0表示未删除, 1表示已删除)
      */
-    private Boolean isDelete;
+    private boolean isDelete;
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -216,11 +216,11 @@ public class TradeOrder implements EntityClass<Integer>, OperableData {
 
     @Column(name = "isDelete")
     @Basic
-    public Boolean getIsDelete() {
+    public boolean getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(Boolean isDelete) {
+    public void setIsDelete(boolean isDelete) {
         this.isDelete = isDelete;
     }
 }
