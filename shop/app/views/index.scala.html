@@ -8,7 +8,7 @@
     <li>
         <a target="_blank" href ="@routes.Application.designerProd(exhibition.getDesignerId)">
             <div class="img">
-                <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)"><img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="590" height="275"/></a>
+                <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)"><img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction" width="590" height="275"/></a>
                 <p class="time">
                     还剩 <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
                         <span class="over-text">结束</span></p>
@@ -35,7 +35,7 @@
                 @for((content,index) <- sliderBoxs.zipWithIndex) {
 
                 <div class="item" style="z-index:@{sliderBoxs.size-index};background-image:url(@content.getContent); background-position: 50% 50%;">
-                    <a target="_blank" href="@content.getLink" hidefocus="true" style="outline: none;">
+                    <a target="_blank" href="@content.getLink" hidefocus="true" style="outline: none;" alt="@content.getTitle">
                     </a>
                 </div>
                 }
