@@ -45,9 +45,9 @@
                         <embed wmode="transparent" src="@Html(pd.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
                     } else {
                         @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
-                            <img src="@pd.getProductPicture.getPictureUrl" width="803" height="536" />
+                            <img src="@pd.getProductPicture.getPictureUrl" width="803" height="536" alt="@pd.getProduct.getName"/>
                         } else {
-                            <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" />
+                            <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" alt="@pd.getProduct.getName"/>
                         }
                     }
                 </div>

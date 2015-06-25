@@ -11,15 +11,15 @@ public class BaseGlobal extends GlobalSettings {
 
     public static ApplicationContext ctx;
 
-    public boolean isDev() {
+    public static boolean isDev() {
         return "dev".equalsIgnoreCase(Play.application().configuration().getString("shop.env"));
     }
 
-    public boolean isProd() {
+    public static boolean isProd() {
         return "prod".equalsIgnoreCase(Play.application().configuration().getString("shop.env"));
     }
 
-    public boolean isTest() {
+    public static boolean isTest() {
         return "test".equalsIgnoreCase(Play.application().configuration().getString("shop.env"));
     }
 

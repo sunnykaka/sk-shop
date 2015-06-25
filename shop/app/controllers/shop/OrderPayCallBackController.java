@@ -1,6 +1,7 @@
 package controllers.shop;
 
 import common.utils.JsonResult;
+import common.utils.play.BaseGlobal;
 import ordercenter.models.Trade;
 import ordercenter.payment.CallBackResult;
 import ordercenter.payment.PayResponseHandler;
@@ -9,7 +10,6 @@ import ordercenter.payment.constants.ResponseType;
 import ordercenter.services.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
-import play.Play;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.secure.SecuredAction;
@@ -104,8 +104,7 @@ public class OrderPayCallBackController extends Controller {
     public Result generateAliPayPayReturnUrl(String tradeNo) {
         Logger.info("订单交易号: " + tradeNo);
         try {
-            if(!("test".equalsIgnoreCase(Play.application().configuration().getString("shop.env"))
-                    || "dev".equalsIgnoreCase(Play.application().configuration().getString("shop.env")))) {
+            if(!(BaseGlobal.isDev() || BaseGlobal.isTest())) {
                 return ok(new JsonResult(false,"此功能不可用！").toNode());
             }
 

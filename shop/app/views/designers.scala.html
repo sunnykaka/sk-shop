@@ -80,7 +80,7 @@ $(function(){
                 @for(designer <- designerList) {
                     <li>
                         <a target="_blank" href="@routes.Application.designerProd(designer.getId)">
-                            <img class="designer-img lazy"  data-original="@designer.getMainPic" src="@routes.Assets.versioned("images/grey.gif")"  alt="@designer.getDescription" width="289" height="460"/>
+                            <img class="designer-img lazy"  data-original="@designer.getMainPic" src="@routes.Assets.versioned("images/grey.gif")"  alt="@designer.getName" width="289" height="460"/>
                             <div>
                                 <img src="@designer.getBrandPic" alt="@designer.getName" width="289" height="60"/>
                                 <p>设计师：@designer.getName</p>

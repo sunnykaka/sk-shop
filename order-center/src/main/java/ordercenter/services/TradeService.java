@@ -173,6 +173,7 @@ public class TradeService {
             tradeOrder.setPayTotalFee(order.getTotalMoney());
             tradeOrder.setBizType(BizType.Order);
             tradeOrder.setDefaultPayOrg(order.getPayBank().getForexBankName());
+            tradeOrder.setIsDelete(false);
             this.createTradeOrder(tradeOrder);
 
             //更新订单
