@@ -145,7 +145,7 @@
                                                     @if(order.getOrderState.getName.equals(OrderState.Send.getName)){
                                                         <p><a href="@controllers.user.routes.MyOrderController.orderReceiving(order.getId)" class="confirm">确认收货</a></p>
                                                     }
-                                                    @if(order.getOrderState.getName.equals(OrderState.Receiving.getName) || order.getOrderState.getName.equals(OrderState.Success.getName)){
+                                                    @if(order.getOrderState.getName.equals(OrderState.Receiving.getName)){
                                                         <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)" class="confirm">评价</a></p>
                                                     }
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
