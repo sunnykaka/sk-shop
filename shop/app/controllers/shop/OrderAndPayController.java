@@ -277,6 +277,7 @@ public class OrderAndPayController extends Controller {
         } else {
             if(payMethod.equals(PayMethod.Tenpay.getName())) {
                 bank = PayBank.Tenpay;
+                payInfoWrapper.setBuyerIP(request().remoteAddress());
             }
         }
         Logger.info("--------------------真正的支付机构：" + bank.getValue() + ":" + bank.getName() + ":" + bank.getForexBankName());

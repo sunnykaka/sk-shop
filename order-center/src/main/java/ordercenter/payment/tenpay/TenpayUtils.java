@@ -28,11 +28,11 @@ import java.util.*;
 public class TenpayUtils {
 
 
-    public static final String PARTNER = "1215343201";
+    public static final String PARTNER = "1250559701";
 
-    public static final String PAY_GATEWAY = "https://gw.tenpay.com/gateway/pay.htm?";
+    public static final String PAY_GATEWAY = "https://gw.tenpay.com/intl/gateway/pay.htm?";
 
-    public static final String NOTIFY_GATEWAY = "https://gw.tenpay.com/gateway/simpleverifynotifyid.xml?";
+    public static final String NOTIFY_GATEWAY = "https://gw.tenpay.com/intl/gateway/verifynotifyid.xml?";
 
     public static final String SIGN_TYPE = "MD5";
 
@@ -40,7 +40,7 @@ public class TenpayUtils {
 
     public static final String SERVICE_VERSION = "1.0";
 
-    public static final String KEY = "bfe7249f88e4cc8135e7a2ae5b80a908";
+    public static final String KEY = "9c38f5467ff94936559bb27565afa49";
 
     public static final Log logger = LogFactory.getLog(TenpayUtils.class);
 
