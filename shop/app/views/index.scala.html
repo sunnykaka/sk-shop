@@ -35,7 +35,7 @@
                 @for((content,index) <- sliderBoxs.zipWithIndex) {
 
                 <div class="item" style="z-index:@{sliderBoxs.size-index};background-image:url(@content.getContent); background-position: 50% 50%;">
-                    <a target="_blank" href="@content.getLink" hidefocus="true" style="outline: none;" alt="@content.getTitle">
+                    <a target="_blank" @if(content.getLink !=null && content.getLink != ""){ href="@content.getLink"} hidefocus="true" style="outline: none;" alt="@content.getTitle">
                     </a>
                 </div>
                 }
