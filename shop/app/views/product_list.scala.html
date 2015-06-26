@@ -19,6 +19,7 @@
        //获取购物车 商品数量
         $.ajax({
             url: '/cart/getUserCartItemNum',
+            cache:false,
             success: function (data) {
                 if (data.result) {
                     $('#cart-quantity').text(data.data);
@@ -96,7 +97,7 @@
                 </ul>
             </div>
             <div class="top-con">
-                <img src="@designer.getStorePic" alt="@designer.getName" width="439px" height="370px"/>
+                <img  class="lazy"   data-original="@designer.getStorePic" alt="@designer.getName" width="439px" src="@routes.Assets.versioned("images/grey.gif")" height="370px"/>
                 <div class="designer-con">
                     <div class="designer-con-title">
                         <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites){hasFocus}" id="designerFocus" data-id="@designer.getId">@if(designer.isFavorites){已}关注</span></h2>
@@ -113,7 +114,7 @@
                     @for(prod <- sellingList) {
                         <li>
                             <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                <img src="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" width="283" height="462"/>
+                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"/>
                             </a>
                             <div class="cover">
                                 <div class="info">
@@ -135,7 +136,7 @@
                     @for(prod <- previewList) {
                         <li>
                             <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
-                                <img src="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" width="283" height="462"/>
+                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"/>
                             </a>
                             <div class="cover">
                                 <div class="info">
@@ -159,7 +160,7 @@
                     @for(prod <- normalList) {
                         <li>
                             <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                <img src="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" width="283" height="462"/>
+                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"/>
                             </a>
                             <div class="cover">
                                 <div class="info">

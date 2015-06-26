@@ -512,14 +512,16 @@ table .pro{width: 360px;}
 .detail-inner .video{width: 803px;height: 536px;overflow: hidden;margin-bottom: 32px;}
 .detail-inner .container{margin-bottom: 32px;display: none;}
 .detail-inner .img-list{width: 803px; overflow: hidden;}
-.detail-inner .img-list .open-detail,.detail-inner .img-list .hide-detail{padding: 14px 0;width: auto;
+.detail-inner .img-list .open-detail,.detail-inner .img-list .hide-detail{padding: 14px 0;width: 801px;
     text-align: center;border: 1px solid #cccccc;
     margin-bottom: 20px;cursor: pointer;
 }
 .detail-inner .img-list .hide-detail{display: none;}
-.detail-inner .comment-header{width: auto;height: 48px;line-height:48px;border: 1px solid #eaeaea;background: #f8f8f8;
-    margin-bottom: 30px;
+.detail-inner .comment-header{width: 803px;height: 48px;line-height:48px;border: 1px solid #eaeaea;background: #f8f8f8;
+    margin-bottom: 30px;overflow: hidden;
 }
+.detail-inner .comment-con{overflow:hidden;}
+.detail-inner .comment-header ul{height: 50px;}
 .detail-inner .comment-header li{float: left;margin-right:30px;position: relative;font-size: 14px;padding:0 20px;
     cursor: pointer;
 }
@@ -530,7 +532,7 @@ table .pro{width: 360px;}
     border-right: 1px solid #eaeaea;}
 .detail-inner .comment-header .first{border-left: none;}
 /*.detail-inner .comment-header .current i{background-position: 0 0;}*/
-.detail-inner .comment-list{border-top:1px solid #eaeaea;margin-bottom: 20px;}
+.detail-inner .comment-list{border-top:1px solid #eaeaea;margin-bottom: 20px;overflow: hidden;}
 .detail-inner .img-list img{margin-bottom: 0;display: block;}
 .detail-inner .comment-item{border-bottom:1px solid #eaeaea;border-top: none;padding: 10px 30px 20px 30px;}
 .detail-inner .comment-item .comment-content{height: 90px;overflow: hidden;margin-top:15px;}
@@ -540,7 +542,7 @@ table .pro{width: 360px;}
 .detail-inner .comment-item .comment-title{height: 34px;line-height: 34px;text-align: right;}
 .detail-inner .comment-item .comment-title .user{float: left;}
 .detail-inner .comment-item .comment-img{width: 50px;height: 90px;overflow: hidden;margin-right: 20px;padding-top: 5px;}
-.detail-inner .container .comment-page{padding-left:553px;}
+.detail-inner .container .comment-page{padding-left:553px;margin-bottom: 20px;}
 .detail-inner .container .comment-page li{float:left;margin-right: 10px;}
 .detail-inner .container .comment-page a:hover{text-decoration: none;}
 .detail-inner .right{width: 373px;}
