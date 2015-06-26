@@ -214,7 +214,7 @@ table .pro{width: 360px;}
 /* index empty-box*/
 .empty-box{height:1050px;margin-bottom: 40px;}
 .empty-box h2{text-align: center;font-size: 30px;font-weight: normal;height: 40px;line-height: 40px;margin: 10px 0 20px 0;}
-.empty-box .info{font-size: 14px;text-align: center;margin-bottom: 40px;}
+.empty-box .info{font-size: 14px;text-align: center;margin-bottom: 40px;line-height: 240%;}
 .empty-box-inner li{width: 291px;height: 437px;overflow: hidden;position: relative; cursor: pointer;
     float: left;margin: 0 4px 20px;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
 .empty-box-inner li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
