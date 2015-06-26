@@ -15,9 +15,10 @@
 
     var defaultSku = "@Html(pd.getDefaultSku.getSkuPropertiesInDb)";
 
-    var productOnline = @pd.getProduct.isOnline
+    var productOnline = @pd.getProduct.isOnline;
 
-    var inExhibition = @pd.isInExhibition
+    var inExhibition = @pd.isInExhibition;
+    var productId = @pd.getProduct.getId;
 
     </script>
     <script src="@routes.Assets.versioned("js/details.js")"></script>
@@ -45,7 +46,7 @@
                         <embed wmode="transparent" src="@Html(pd.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
                     } else {
                         @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
-                            <img src="@pd.getProductPicture.getPictureUrl" width="803" height="536" alt="@pd.getProduct.getName"/>
+                            <img class="lazy"   data-original="@pd.getProductPicture.getPictureUrl" width="803" height="536" src="@routes.Assets.versioned("images/grey.gif")" alt="@pd.getProduct.getName"/>
                         } else {
                             <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" alt="@pd.getProduct.getName"/>
                         }

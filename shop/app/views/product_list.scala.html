@@ -112,7 +112,7 @@
                     <ul class="clearfix">
                     @for(prod <- sellingList) {
                         <li>
-                            <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                            <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
                                 <img src="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" width="283" height="462"/>
                             </a>
                             <div class="cover">
@@ -134,7 +134,7 @@
 
                     @for(prod <- previewList) {
                         <li>
-                            <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
+                            <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
                                 <img src="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" width="283" height="462"/>
                             </a>
                             <div class="cover">
@@ -158,7 +158,7 @@
 
                     @for(prod <- normalList) {
                         <li>
-                            <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                            <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
                                 <img src="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" width="283" height="462"/>
                             </a>
                             <div class="cover">

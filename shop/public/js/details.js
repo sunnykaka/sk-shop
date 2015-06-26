@@ -52,12 +52,22 @@ $(function () {
         });
     }
 
+
+
     fixed($('#debut-box'), $('#detail'));
     //固定购物车
     fixedcart($('#cart'), $('#detail'));
 
 
-
+    //显示器所有评论
+    $.ajax({
+        url:'/product/valuations',
+        data:{id:productId},
+        success:function(data){
+            console.log(data);
+        }
+    });
+    //显示评论
     $('.comment-header li').click(function () {
         $(this).addClass('current').siblings('li').removeClass('current');
     });
