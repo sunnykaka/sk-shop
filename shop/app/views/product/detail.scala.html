@@ -59,7 +59,11 @@
                     <div class="container">
                         <div class="img-con">
                             @if(pd.getHtmlList.nonEmpty) {
-                                @Html(pd.getHtmlList.get(0).getContent)
+                                @if(null != pd.getHtmlList.get(0).getContent && !"".equals(pd.getHtmlList.get(0).getContent)){
+                                    @Html(pd.getHtmlList.get(0).getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' />"))
+                                }else{
+                                    @Html(pd.getHtmlList.get(0).getContent)
+                                }
                             }
                         </div>
                         <div class="comment-con">
