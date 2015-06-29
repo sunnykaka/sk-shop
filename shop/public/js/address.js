@@ -130,7 +130,7 @@ $(function(){
 
         if (!name.val() || name.val().length < 2) {
             type=='add'?name.siblings("span").remove():name.siblings('p').remove();
-            message.text("请输入收件人的姓名,不能少于2个字");
+            message.text("请输入收件人的姓名,不能少于2个字或者大于20个字");
             name.after(message.clone());
             name.focus();
             return false;
@@ -164,7 +164,7 @@ $(function(){
 
         if (!location.val()) {
             type='add'? location.siblings("span").remove():location.siblings("span").remove();
-            message.text("请输入收件人的详细地址");
+            message.text("请输入收件人的详细地址，不能大于200个字");
             location.after(message.clone());
             location.focus();
             return false;

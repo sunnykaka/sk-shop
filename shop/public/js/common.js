@@ -307,8 +307,10 @@ function fixedcart(obj, scopeObj) {
 $(window).on('resize load',function(){
     if($(window).width()<=1300){
         $('#cart').addClass('small-sider');
+        $('.sliderArrows div').css('width','1200');
     }else{
         $('#cart').removeClass('small-sider');
+        $('.sliderArrows div').css('width','90%');
     }
 
 });

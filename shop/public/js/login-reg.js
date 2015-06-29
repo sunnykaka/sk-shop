@@ -226,6 +226,11 @@
         });
 
         RegisterFormValidate.init();
+        $('#confirm-pw').keyup(function(evt){
+           if(evt.keyCode == 13){
+               $('#reg-btn').trigger('submit');
+           }
+        });
         delayHideLabel(options.items);
     }
 

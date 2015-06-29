@@ -148,32 +148,46 @@ $(function () {
 
 
     //查看详情
-    $('#openDetail').click(function () {
+    $('.img-list').on('click','#openDetail',function(){
         $('.container').slideToggle();
+        $(this).hide();
         $('.hide-detail').show();
     });
+
     //隐藏详情
     $('#hideDetail').click(function () {
         $(this).hide();
+        $('#openDetail').show();
         $('.container').slideUp(500);
     });
 
 
     //我喜欢按钮
     $('.detail-like .like').click(function () {
-
+        var id = $(this).attr('data-id'), that = $(this);
         if (!$(this).is('.current')) {
-            var id = $(this).attr('data-id'), that = $(this);
             $.ajax({
                 type: 'post',
                 url: '/my/favorites/product/add?productId=' + id,
                 success: function (res) {
                     if (res.result) {
+                        that.addClass('current');
                         $('.like-text').text(res.message);
                     } else {
                         if (res.message == 'Credentials required') {
                             createLoginReg();
                         }
+                    }
+                }
+            });
+        }else{
+            $.ajax({
+                type:'post',
+                url:'/my/favorites/product/del?productId='+id,
+                success:function(res){
+                    if(res.result){
+                        that.removeClass('current');
+                        $('.like-text').text('我喜欢');
                     }
                 }
             });
@@ -187,7 +201,7 @@ $(function () {
     }, function () {
         $(this).removeClass('current');
         $('.info-tip').hide();
-    })
+    });
 
     //转换skuMap数据
     function skuModel(skuMap) {
@@ -445,7 +459,7 @@ $(function () {
                     readSkuDom(selectSku);
                 } else {
                     for (var sku in skuMap) {
-                        if (skuMap[sku].skuPropertiesInDb > 0) {
+                        if (skuMap[sku].stockQuantity > 0) {
                             _selectedIds = skuMap[sku].pvList;
                             (skuMap[sku]);
                             break;
@@ -514,7 +528,6 @@ $(function () {
                     if (data.result) {
                         $('#cart-quantity').text(data.data.itemTotalNum);
                     } else {
-
                         if (data.message == 'Credentials required') {
                             createLoginReg();
                         } else {

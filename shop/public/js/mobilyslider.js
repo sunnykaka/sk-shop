@@ -206,10 +206,14 @@
                     }
                 }, arrows: {
                     create: function () {
-                        $t.append($("<div />").addClass("sliderArrows"));
-                        arrows = $t.find(".sliderArrows");
-                        arrows.append($("<a />").attr("href", "#").addClass(sets.prev).addClass("png_bg").text("Previous"));
-                        arrows.append($("<a />").attr("href", "#").addClass(sets.next).addClass("png_bg").text("Next"))
+                        if($t.find(".sliderArrows").size()>0){
+                            arrows = $t.find(".sliderArrows");
+                        }else{
+                            $t.append($("<div />").addClass("sliderArrows"));
+                            arrows = $t.find(".sliderArrows");
+                            arrows.append($("<a />").attr("href", "#").addClass(sets.prev).addClass("png_bg").text("Previous"));
+                            arrows.append($("<a />").attr("href", "#").addClass(sets.next).addClass("png_bg").text("Next"))
+                        }
                     }, trigger: function () {
                         arrows.find("." + sets.prev).click(function () {
                             slider.animation.previous();

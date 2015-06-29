@@ -12,7 +12,7 @@
             $(this).removeClass('hover')
         });
 
-        var html = '<div class="cancel-order"><p>主人~这么辛苦抢来的商品，取消订单后就被别人抢走啦~能告诉我们取消订单原因吗？</p>'+
+        var html = '<div class="cancel-order clearfix"><p>主人~这么辛苦抢来的商品，取消订单后就被别人抢走啦~能告诉我们取消订单原因吗？</p>'+
             '<p class="check-box"><label><input type="radio" name="canceltype" value="0" />改选其他商品</label></p>'+
              '<p class="check-box"><label><input type="radio" name="canceltype" value="1" />收货信息/商品错误</label></p>'+
              '<p class="check-box"><label><input type="radio" name="canceltype" value="2" />优惠券使用问题</label></p>'+
@@ -31,15 +31,19 @@
             lock:true,
             content:html,
             width:540,
-            height:408,
+            height:308,
             drag:false,
             btn: {
-                ok: {
+
+                cancle: {
+                    val: '关闭'
+                },
+                 ok: {
                     val: '确定',
                     type: 'red',
                     click: function(btn) {
                     if($('input[type=radio]:checked').size() == 0){
-                        $('.tip-msg').text('请选择一个选项');
+                        $('.tip-msg').text('*请选择一个选项');
                         return false;
                     }
                         $.ajax({
@@ -54,9 +58,6 @@
                             }
                         });
                     }
-                },
-                cancle: {
-                    val: '取消'
                 }
             }
         });

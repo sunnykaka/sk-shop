@@ -93,9 +93,16 @@ $(function(){
         if(evt.type == 'mouseenter'){
             $(this).siblings('.comment-con').show();
         }else{
-            $(this).siblings('.comment-con').hide();
+
+            $(this).parent('.comment-box').hover(function(){
+
+            },function(){
+                $(this).find('.comment-con').hide();
+            });
+
         }
     });
+
 
 });
 
