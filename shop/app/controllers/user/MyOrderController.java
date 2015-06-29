@@ -86,8 +86,6 @@ public class MyOrderController extends Controller {
 
         page.setResult(orderList);
 
-
-
         return ok(myOrder.render(page, queryType));
 
     }
@@ -120,7 +118,6 @@ public class MyOrderController extends Controller {
         }
         List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
         Trade trade = tradeService.getTradeOrdeByOrderId(order.getId());
-
 
         return ok(myOrderInfo.render(order, logistics, orderStateHistories, trade));
 

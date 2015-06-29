@@ -95,6 +95,42 @@ $(function(){
        }
     });
     var sendEmailBtn = $('#send-email');
+
+    //重新发送
+    $('#repeat-send').on('click',function() {
+        $.ajax({
+            type: 'POST',
+            async: false,
+            url: '/my/security/email/end',
+            data: {
+                email: $('#email-show').text(),
+                token: $('#token').val()
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data.result){
+                    $.dialog({
+                        title:'提示',
+                        content:'<p style="text-align: center;font-size: 16px;padding: 20px;">邮件重新发送成功</p>',
+                        width:400,
+                        height:160,
+                        padding:"20"
+                    });
+                }else{
+                    $.dialog({
+                        title:'提示',
+                        lock:true,
+                        content:'<p style="text-align: center;font-size: 16px;padding: 20px;">'+data.message+'</p>',
+                        width:400,
+                        height:160,
+                        padding:"20"
+                    });
+                }
+            }
+        });
+    });
+
+
     sendEmailBtn.on('click',function(evt){
         evt.preventDefault(); var email = $('#email');
         if(ValidateEmail(email)){
@@ -112,6 +148,17 @@ $(function(){
                 success: function (data) {
                     if(data.result){
 
+                        //隐藏输入框
+                        $('.vcode-input').hide();
+
+                        sendEmailBtn.siblings('p').show();
+                        //显示按钮
+                        sendEmailBtn.fadeOut(200,function(){
+                            $('#check-email').fadeIn();
+                        });
+                        $('#email-show').text(email.val());
+                        var links = (email.val()).split('@');
+                        $('#check-email').attr('href','http://mail.'+links[1]);
                     }else{
                         sendEmailBtn.text('重发送email');
                         sendEmailBtn.attr('disabled',null);

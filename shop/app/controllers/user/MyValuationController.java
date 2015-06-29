@@ -76,6 +76,21 @@ public class MyValuationController extends Controller {
     @SecuredAction
     public Result findValuation(long orderItemId) {
 
+        //测试，没有用代码，下次删除 zhenghaobin
+//        int[] a = new int[]{0,1,2};
+//
+//        for(int ia:a){
+//            for(int i=0;i<=20;i++){
+//                Valuation valuation = new Valuation();
+//                valuation.setPoint(ia);
+//                valuation.setOrderItemId(13236);
+//                valuation.setProductId(2206);
+//                valuation.setUserId(14341);
+//                valuation.setUserName("hello");
+//                valuationService.addValuation(valuation);
+//            }
+//        }
+
 //        User user = SessionUtils.currentUser();
 //
 //        Valuation valuation = valuationService.findByOrderItemId(user.getId(),orderItemId);
@@ -85,7 +100,7 @@ public class MyValuationController extends Controller {
 //        }
 //
 //        return ok(new JsonResult(true,"已评价",valuation).toNode());
-        return ok();
+        return ok("true");
 
     }
 

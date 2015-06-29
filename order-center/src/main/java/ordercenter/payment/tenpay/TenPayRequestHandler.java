@@ -3,7 +3,6 @@ package ordercenter.payment.tenpay;
 import common.utils.DateUtils;
 import ordercenter.payment.PayInfoWrapper;
 import ordercenter.payment.PayRequestHandler;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -45,33 +44,57 @@ public class TenPayRequestHandler extends PayRequestHandler {
 
         //把请求参数打包成数组
         Map<String, String> sParaTemp = new TreeMap<String, String>();
-        sParaTemp.put("partner", TenpayUtils.PARTNER);
-        sParaTemp.put("out_trade_no", out_trade_no);
-        sParaTemp.put("total_fee", String.valueOf(total_fee));
-
-        sParaTemp.put("body", subject);
-        sParaTemp.put("bank_type", "DEFAULT");
-        sParaTemp.put("spbill_create_ip", "119.137.111.192");
-        sParaTemp.put("fee_type", "1");
-        sParaTemp.put("subject", subject);
         sParaTemp.put("sign_type", TenpayUtils.SIGN_TYPE);
         sParaTemp.put("service_version", TenpayUtils.SERVICE_VERSION);
         sParaTemp.put("input_charset", TenpayUtils.INPUT_CHARSET);
+
+        //sign
         sParaTemp.put("sign_key_index", "1");
 
-        sParaTemp.put("attach", payInfoWrapper.getCallBackClass());
-        sParaTemp.put("product_fee", String.valueOf(total_fee));
-        sParaTemp.put("transport_fee", "0");
+
+        sParaTemp.put("bank_type", "DEFAULT");
+        sParaTemp.put("body", subject);
+
+
+        //daiding
+        //sParaTemp.put("attach", payInfoWrapper.getCallBackClass());
+
+
+        //return_url
+        //notify_url
+
+        //sParaTemp.put("buyer_id", StringUtils.EMPTY);
+
+        sParaTemp.put("partner", TenpayUtils.PARTNER);
+        sParaTemp.put("out_trade_no", out_trade_no);
+        sParaTemp.put("fee_type", "CNY");
+        sParaTemp.put("total_fee", String.valueOf(total_fee));
+
+        sParaTemp.put("spbill_create_ip", payInfoWrapper.getBuyerIP());
+
         sParaTemp.put("time_start", DateUtils.printDateTime(DateUtils.current(), DateUtils.SIMPLE_DATE_TIME_FORMAT_STR));
-        sParaTemp.put("time_expire", StringUtils.EMPTY);
-        sParaTemp.put("buyer_id", StringUtils.EMPTY);
-        sParaTemp.put("goods_tag", StringUtils.EMPTY);
-        sParaTemp.put("trade_mode", "1");
-        sParaTemp.put("transport_desc", StringUtils.EMPTY);
-        sParaTemp.put("trans_type", "1");
-        sParaTemp.put("agentid", StringUtils.EMPTY);
-        sParaTemp.put("agent_type", "0");
-        sParaTemp.put("seller_id", StringUtils.EMPTY);
+
+        //sParaTemp.put("time_expire", StringUtils.EMPTY);
+
+        sParaTemp.put("transport_fee", "0");
+        sParaTemp.put("product_fee", String.valueOf(total_fee));
+
+        //sParaTemp.put("goods_tag", StringUtils.EMPTY);
+
+        //partner_no
+        //partner_name
+        //trade_way
+
+        sParaTemp.put("trade_way", "1");
+
+
+//        sParaTemp.put("subject", subject);
+//        sParaTemp.put("trade_mode", "1");
+//        sParaTemp.put("transport_desc", StringUtils.EMPTY);
+//        sParaTemp.put("trans_type", "1");
+//        sParaTemp.put("agentid", StringUtils.EMPTY);
+//        sParaTemp.put("agent_type", "0");
+//        sParaTemp.put("seller_id", StringUtils.EMPTY);
 
         return sParaTemp;
     }

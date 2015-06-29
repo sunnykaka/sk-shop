@@ -9,15 +9,32 @@
     <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
     <script src="@routes.Assets.versioned("js/jquery.scrollTo.js")"></script>
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+    <script src="@routes.Assets.versioned("js/tpl.js")"></script>
+    <script type="text/template" id="demo">
+    <#
+        for(var i=0; i<result.length; i++) {
+            echo(
+            '<div class="comment-item">'+
+            '<div class="comment-title">'+
+            '<p><span class="user">'+result[i].userName+'</span>发表于 <span class="comment-time">'+result[i].updateDate+'</span></p>'+
+            '</div>'+
+            '<div class="comment-content clearfix">'+
+            '<div class="comment-detail">'+result[i].content+'</div></div></div>'
+            );
+        }
+    #>
+    </script>
     <script type="text/javascript">
 
     var skuMap = @Html(object2Json(pd.getSkuMap));
 
     var defaultSku = "@Html(pd.getDefaultSku.getSkuPropertiesInDb)";
 
-    var productOnline = @pd.getProduct.isOnline
+    var productOnline = @pd.getProduct.isOnline;
 
-    var inExhibition = @pd.isInExhibition
+    var inExhibition = @pd.isInExhibition;
+
+    var productId = @pd.getProduct.getId;
 
     </script>
     <script src="@routes.Assets.versioned("js/details.js")"></script>
@@ -45,9 +62,9 @@
                         <embed wmode="transparent" src="@Html(pd.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
                     } else {
                         @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
-                            <img src="@pd.getProductPicture.getPictureUrl" width="803" height="536" />
+                            <img class="lazy"   data-original="@pd.getProductPicture.getPictureUrl" width="803" height="536" src="@routes.Assets.versioned("images/grey.gif")" alt="@pd.getProduct.getName"/>
                         } else {
-                            <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" />
+                            <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" alt="@pd.getProduct.getName"/>
                         }
                     }
                 </div>
@@ -58,16 +75,20 @@
                     <div class="container">
                         <div class="img-con">
                             @if(pd.getHtmlList.nonEmpty) {
-                                @Html(pd.getHtmlList.get(0).getContent)
+                                @if(null != pd.getHtmlList.get(0).getContent && !"".equals(pd.getHtmlList.get(0).getContent)){
+                                    @Html(pd.getHtmlList.get(0).getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' />"))
+                                }else{
+                                    @Html(pd.getHtmlList.get(0).getContent)
+                                }
                             }
                         </div>
                         <div class="comment-con">
                             <div class="comment-header">
                                 <ul class="clearfix">
-                                    <li class="current first">全部评价(@pd.getAllValuationCount)</li>
-                                    <li class="">好评(@pd.getGoodValuationCount)</li>
-                                    <li class="">中评(@pd.getNormalValuationCount)</li>
-                                    <li class="">差评(@pd.getBadValuationCount)</li>
+                                    <li class="current first" data-id="全部评价">全部评价(@pd.getAllValuationCount)</li>
+                                    <li class="" data-id="好评">好评(@pd.getGoodValuationCount)</li>
+                                    <li class="" data-id="中评">中评(@pd.getNormalValuationCount)</li>
+                                    <li class="" data-id="差评">差评(@pd.getBadValuationCount)</li>
                                 </ul>
                             </div>
                             <div class="comment-list">
@@ -75,6 +96,7 @@
                             </div>
                         </div>
                         <div class="comment-page">
+
                         </div>
                         <div class="hide-detail" id="hideDetail">
                             <p>隐藏商品详情 <span class="ico"></span></p>

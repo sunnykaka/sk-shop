@@ -8,7 +8,10 @@
 
 $(function(){
 
+
+
     $('.not-comment').click(function(){
+
         var valArr = $(this).parents('tbody').find('.add-comment');
         if($(this).parents('tr').hasClass('current')) {return false};
         if(valArr.length>0){
@@ -36,13 +39,20 @@ $(function(){
         $('.comment-submit').click(function(){
             var currentTr = $(this).parents('.add-comment').siblings('.current').find('.not-comment');
             var orderItemId = currentTr.siblings('.orderItemId').val(),
-            productId = currentTr.siblings('.productId').val();
+            productId = currentTr.siblings('.productId').val(),that = this;
 
             var comment =  $('input[name="comment"]:checked').val();
-            if(comment){
-                console.log(comment);
-            }else{
-                console.log('请选择一个评价');
+            var contentText,t= new Date();
+            switch (comment){
+                case '0':
+                contentText = "好评";
+                break;
+                case '1':
+                contentText = "中评";
+                break;
+                case '2':
+                contentText = "差评";
+                break;
             }
 
             var commentCon= $('#comment-content').val();
@@ -58,8 +68,15 @@ $(function(){
             },
             success: function (response) {
                 if (response.result) {
-                    $(this).parents('.add-comment').siblings('tr').removeClass('current');
-                    $('.add-comment').remove();
+                    $(that).parents('.add-comment').siblings('tr').removeClass('current');
+                    var currentComBtn = $(that).parents('.add-comment').siblings('tr').find('.not-comment');
+                    currentComBtn.text('已评价').removeClass('not-comment').addClass('showComment');
+                    //添加评价内容
+                    currentComBtn.after('<div class="comment-con" style="display: none;">' +
+                     '<ul><li>【'+contentText+'】发表于：'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+(t.getDay()+1)+' '+(t.getHours()+1)+':'+t.getMinutes()+':'+t.getSeconds()+'</li><li>【评语】:'+commentCon+'</li></ul></div>');
+                      $('.add-comment').fadeOut(300,function(){
+                        $('.add-comment,.arc').remove();
+                      });
                     }
                 }
             });
@@ -67,12 +84,17 @@ $(function(){
 
     });
 
+    //默认触发第一个评论
+    $('.not-comment:first').trigger('click');
+
 
     //显示评论
-    $('.showComment').hover(function(){
-        $(this).siblings('.comment-con').show();
-    },function(){
-        $(this).siblings('.comment-con').hide();
+    $('.comment-box').on('mouseenter mouseout','.showComment',function(evt){
+        if(evt.type == 'mouseenter'){
+            $(this).siblings('.comment-con').show();
+        }else{
+            $(this).siblings('.comment-con').hide();
+        }
     });
 
 });

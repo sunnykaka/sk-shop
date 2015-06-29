@@ -177,26 +177,30 @@
             @if(cart != null) {
             <table>
                 <tr>
-                    <td>商品总计：</td>
-                    <td>￥@cart.getTotalMoney</td>
+                    <td class="alginLeft">商品总计：</td>
+                    <td style="width: 100px;"></td>
+                    <td class="alginRight">￥@cart.getTotalMoney</td>
                 </tr>
                 <tr>
-                    <td>运费：</td>
-                    <td>￥0.00</td>
+                    <td class="alginLeft">运费：</td>
+                    <td></td>
+                    <td class="alginRight">￥0.00</td>
                 </tr>
                 <tr>
-                    <td>关税：</td>
-                    <td>￥0.00</td>
+                    <td class="alginLeft">关税：</td>
+                    <td></td>
+                    <td class="alginRight">￥0.00</td>
                 </tr>
                 <tr class="last">
-                    <td>应付金额：</td>
-                    <td class="actual-pay-money">￥@cart.getTotalMoney</td>
+                    <td class="alginLeft">应付金额：</td>
+                    <td></td>
+                    <td class="actual-pay-money alginRight">￥@cart.getTotalMoney</td>
                 </tr>
             </table>
             }
         </div>
         <div class="order-btn">
-            <span class="btn order-submit-btn" id="order-submit-btn">提交订单</span>
+            <span class="btn order-submit-btn" id="order-submit-btn" style="width: 335px;margin-right: 77px;">提交订单</span>
         </div>
     </div>
 </div>

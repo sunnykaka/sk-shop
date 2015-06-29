@@ -6,6 +6,7 @@ $(function () {
     //获取购物车 商品数量
     $.ajax({
         url: '/cart/getUserCartItemNum',
+        cache:false,
         success: function (data) {
             if (data.result) {
                 $('#cart-quantity').text(data.data);
@@ -52,20 +53,104 @@ $(function () {
         });
     }
 
+
+
     fixed($('#debut-box'), $('#detail'));
     //固定购物车
     fixedcart($('#cart'), $('#detail'));
 
+    function createPagehtml(curPage,totalPage){
 
+        var prevPage,nextPage;
+        if(curPage == 1){
+            prevPage = '<li>上一页</li>';
+        }else{
+            prevPage = '<li><a href="javascript:void(0);"  data-page="'+(curPage-1)+'">上一页</a></li>';
+        }
 
-    $('.comment-header li').click(function () {
-        $(this).addClass('current').siblings('li').removeClass('current');
+        if(curPage == totalPage){
+            nextPage = '<li>下一页</li>';
+        }else{
+            nextPage = '<li><a href="javascript:void(0);"  data-page="'+(curPage+1)+'">下一页</a></li>';
+        }
+
+        var html = '<ul class="clearfix">'+
+            '<li>第<span class="current-page">'+curPage+'</span>/<span class="total-page">'+totalPage+'</span>页</li>'+prevPage+nextPage+'</ul>';
+
+        return html;
+    }
+
+    //分页添加事件
+    $('.comment-page').on('click','a',function(){
+       var page = $(this).attr('data-page');
+       switch ($('.comment-header .current').attr('data-id')){
+           case '全部评价':
+               pointer = {id:productId,page:page};
+               break;
+           case '好评':
+               pointer ={id:productId,point:0,page:page};
+               break;
+           case '中评':
+               pointer ={id:productId,point:1,page:page};
+               break;
+           case '差评':
+               pointer ={id:productId,point:2,page:page};
+               break;
+       }
+
+        //显示器所有评论
+        $.ajax({
+            url:'/product/valuations',
+            data:pointer,
+            success:function(data){
+                var html =  tpl('#demo', data.data);
+                $('.comment-page').html('').append(createPagehtml(data.data.pageNo,data.data.totalPage));
+                $('.comment-list').html('').append(html).hide().fadeIn();
+            }
+        });
     });
+
+    //显示评论
+    $('.comment-header li').click(function () {
+        var pointer;
+        $(this).addClass('current').siblings('li').removeClass('current');
+        switch ($(this).attr('data-id')){
+            case '全部评价':
+                pointer = {id:productId};
+            break;
+            case '好评':
+                pointer ={id:productId,point:0};
+            break;
+            case '中评':
+                pointer ={id:productId,point:1};
+            break;
+            case '差评':
+                pointer ={id:productId,point:2};
+            break;
+        }
+
+        //显示器所有评论
+        $.ajax({
+            url:'/product/valuations',
+            data:pointer,
+            success:function(data){
+                var html =  tpl('#demo', data.data);
+                $('.comment-page').html('').append(createPagehtml(data.data.pageNo,data.data.totalPage));
+                $('.comment-list').html('').append(html).hide().fadeIn();
+            }
+        });
+
+    });
+
+    //初始显示全部评价
+    $('.comment-header li:first').trigger('click');
+
+
+
     //查看详情
     $('#openDetail').click(function () {
         $('.container').slideToggle();
         $('.hide-detail').show();
-
     });
     //隐藏详情
     $('#hideDetail').click(function () {

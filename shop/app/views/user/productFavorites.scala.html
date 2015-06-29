@@ -1,7 +1,7 @@
 @(page:common.utils.page.Page[productcenter.models.ProductCollect])
 
 @myCenter(Messages("title.my.favorites.product")){
-
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script>
         $(function(){
             $('.likeProduct-list li').hover(function(){
@@ -13,18 +13,40 @@
 
         $('.del' ).click(function(){
             var id = $(this).attr('data-id'),that = $(this);
-            $.ajax({
-                type:'post',
-                url:'/my/favorites/product/del?productId='+id,
-                success:function(res){
-                    if(res.result){
-                        that.parent().remove();
-                    }else{
-                        alert("删除失败");
+            $.dialog({
+                title:'提示',
+                content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除这个商品？</p></div>',
+                width:540,
+                height:248,
+                lock:true,
+                drag:false,
+                btn: {
+                    ok: {
+                        val: '确定',
+                        type: 'red',
+                        click: function(btn) {
+                            $.ajax({
+                                type:'post',
+                                url:'/my/favorites/product/del?productId='+id,
+                                success:function(res){
+                                    if(res.result){
+                                        that.parent().fadeOut(300,function(){
+                                            that.parent().remove();
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    cancle: {
+                        val: '取消'
                     }
                 }
             });
         });
+
+
+
     </script>
 
 } {
@@ -47,7 +69,7 @@
                         <ul class="clearfix likeProduct-box">
                             @for(pc <- page.getResult){
                                 <li>
-                                    <a href="@controllers.product.routes.ProductController.detail(pc.getProductId.toString)"><img src="@pc.getProductPic" alt="@pc.getProductName" width="235px" height="384px"/></a>
+                                    <a href="@controllers.product.routes.ProductController.detail(pc.getProductId.toString)"><img class="lazy"   data-original="@pc.getProductPic" alt="@pc.getProductName" src="@routes.Assets.versioned("images/grey.gif")" width="235px" height="384px"/></a>
                                     <p class="title">@pc.getProductName</p>
                                     <span class="del" data-id="@pc.getProductId"></span>
                                 </li>

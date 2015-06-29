@@ -42,6 +42,11 @@ public class PayInfoWrapper {
      */
     private String bizType;
 
+    /**
+     * 购买者pc ip地址（财付通需要用）
+     */
+    private String buyerIP;
+
     public String getDefaultbank() {
         return defaultbank;
     }
@@ -120,5 +125,13 @@ public class PayInfoWrapper {
 
     public void setBizType(String bizType) {
         this.bizType = bizType;
+    }
+
+    public String getBuyerIP() {
+        return buyerIP;
+    }
+
+    public void setBuyerIP(String buyerIP) {
+        this.buyerIP = buyerIP;
     }
 }

@@ -20,16 +20,35 @@ public class TenpayInfoBuilder implements BackInfoBuilder {
 
     @Override
     public Trade buildFromRequest(Request request) {
-        String trade_no = ParamUtils.getByKey(request,"out_trade_no");  //获取订单号
+
+
         Trade tradeInfo = new Trade();
-        tradeInfo.setTradeNo(trade_no);
-        tradeInfo.setPayTotalFee(Money.valueOf(ParamUtils.getByKey(request, "total_fee")));
-        tradeInfo.setGmtCreateTime(new DateTime());
-        tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_state"));
-        tradeInfo.setOuterBuyerAccount(ParamUtils.getByKey(request, "buyer_alias"));
         tradeInfo.setOuterTradeNo(ParamUtils.getByKey(request, "transaction_id"));
-        tradeInfo.setOuterPlatformType(PayType.TenPay.getValue());
+
+        String trade_no = ParamUtils.getByKey(request,"out_trade_no");  //获取订单号
+        tradeInfo.setTradeNo(trade_no);
+        tradeInfo.setGmtCreateTime(new DateTime());
+
+        //0-success
+        tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_state"));
+        tradeInfo.setPayCurrency(ParamUtils.getByKey(request, "fee_type"));
+        tradeInfo.setPayRetTotalFee(ParamUtils.getByKey(request, "total_fee"));
+        tradeInfo.setPayTotalFee(Money.valueOf(ParamUtils.getByKey(request, "rmb_total_fee"))); //
         tradeInfo.setNotifyId(ParamUtils.getByKey(request, "notify_id"));
+
+
+
+
+
+
+
+
+
+
+        tradeInfo.setOuterBuyerAccount(ParamUtils.getByKey(request, "buyer_alias"));
+
+        tradeInfo.setOuterPlatformType(PayType.TenPay.getValue());
+
         tradeInfo.setNotifyType("redirect");
         return tradeInfo;
     }

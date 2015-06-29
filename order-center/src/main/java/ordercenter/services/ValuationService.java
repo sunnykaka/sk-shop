@@ -97,10 +97,12 @@ public class ValuationService {
      * @return
      */
     @Transactional(readOnly = true)
-    public int[] countValuationGroupByPoint(){
+    public int[] countValuationGroupByPoint(int productId){
 
-        String jpql = "select v.point, count(v.id) from Valuation v group by v.point order by v.point";
-        List<Object[]> results = generalDao.query(jpql, Optional.empty(), new HashMap<>());
+        String jpql = "select v.point, count(v.id) from Valuation v where v.productId = :productId group by v.point order by v.point";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+        List<Object[]> results = generalDao.query(jpql, Optional.empty(), queryParams);
 
         Map<Integer, Integer> map = new HashMap<Integer, Integer>() {{
             put(0, 0);

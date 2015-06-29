@@ -233,6 +233,10 @@ var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="
                        }
 
                     $('#goLogin').click(function(){
+                        //清空chrome默认填充
+                        if($('input:-webkit-autofill').size()>0){
+                            $('.errormsg').siblings('label').css('display','none');
+                        }
                        $.dialog.get.regLogin.$content.find('.reg-box-inner').fadeOut(function(){
                          if($('#login-form').size()>0){
                                 $.dialog.get.regLogin.$content.find('.login-inner').fadeIn(); 

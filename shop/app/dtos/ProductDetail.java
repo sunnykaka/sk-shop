@@ -195,7 +195,7 @@ public class ProductDetail {
          * @return
          */
         public Builder buildValuation() {
-            int[] counts = valuationService.countValuationGroupByPoint();
+            int[] counts = valuationService.countValuationGroupByPoint(productDetail.product.getId());
             productDetail.goodValuationCount = counts[0];
             productDetail.normalValuationCount = counts[1];
             productDetail.badValuationCount = counts[2];

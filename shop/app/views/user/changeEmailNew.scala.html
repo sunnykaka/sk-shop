@@ -34,12 +34,14 @@
                             <input type="hidden" name="token" id="token" value="@flash.get(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY)"/>
                             <div class="form-item vcode-input">
                                 <label for="email">@if(null == user.getEmail || "".equals(user.getEmail)){绑定}else{修改}邮箱：</label>
-                                <input type="text" id="email" name="email" class="form-text email"/>
+                                <input type="text" id="email" name="email" class="form-text email" placeholder="请输入邮箱地址"/>
                                 <span class="errormsg" id="errormsg-phoneCode"></span>
                             </div>
                         </form>
-                        <p>验证邮件已发送，请立即<a href="">查看验证邮件</a>，验证邮件24小时有效，请尽快登录您的邮箱完成验证。</p>
+                        <p style="display: none;">已发送验证邮件至：<span id="email-show"></span></p>
+                        <p style="display: none;">验证邮件24小时有效，请尽快登录您的邮箱完成验证。没有收到？<span id="repeat-send" style="color: #fd2049; cursor: pointer;">重新发送</span></p>
                         <button type="submit" class="send-email"  id="send-email" style="cursor: pointer;width:150px;border: none;margin-left: 420px;">发送email到邮箱</button>
+                        <a href="#" target="_blank" id="check-email"  style="cursor: pointer;width:150px;border: none;margin-left: 450px; display: none;">查看验证邮件</a>
                     }else{
                         <div class="failure">
                             <p>身份验证失败，<a href="@controllers.user.routes.MySecurityController.changeEmailIndex()">重新验证</a></p>
