@@ -232,8 +232,8 @@ public class ProductDetail {
                     skuAndStorageService.querySkuListByProductId(productDetail.product.getId()).
                     stream().
                     filter(sku -> sku.getSkuState() == SKUState.NORMAL || sku.getId().equals(defaultSkuId)).
-                            map(sku -> SkuDetail.Builder.newBuilder(sku).buildSku().build()).
-                            collect(Collectors.toList());
+                    map(sku -> SkuDetail.Builder.newBuilder(sku).buildSku().build()).
+                    collect(Collectors.toList());
 
             if(skuDetailList.isEmpty()) {
                 play.Logger.warn(String.format("商品[id=%d]无有效的sku", productDetail.product.getId()));
@@ -345,19 +345,31 @@ public class ProductDetail {
                 }
                 if(!findDefaultSku) {
                     //查找价格最低的sku
-                    Optional<SkuInfo> min;
-                    if(productDetail.isInExhibition) {
+                    //查找库存数量大于0, 并且价格最低的sku
+                    Optional<SkuInfo> min = productDetail.skuMap.values().stream().
+                            filter(skuInfo -> skuInfo.getStockQuantity() > 0).
+                            min(minSkuPriceComparator());
+                    //如果min不存在，代表库存数量都为0，直接找价格最低的sku
+                    if(!min.isPresent()) {
                         min = productDetail.skuMap.values().stream().
-                                min((o1, o2) -> o1.getPrice().compareTo(o2.getPrice()));
-                    } else {
-                        min = productDetail.skuMap.values().stream().
-                                min((o1, o2) -> o1.getMarketPrice().compareTo(o2.getMarketPrice()));
+                                min(minSkuPriceComparator());
                     }
+
                     productDetail.defaultSku = min.get();
                 }
             }
 
             return this;
+        }
+
+        private Comparator<SkuInfo> minSkuPriceComparator() {
+            return (o1, o2) -> {
+                if (productDetail.isInExhibition) {
+                    return o1.getPrice().compareTo(o2.getPrice());
+                } else {
+                    return o1.getMarketPrice().compareTo(o2.getMarketPrice());
+                }
+            };
         }
 
         public Builder buildFavorites(){
