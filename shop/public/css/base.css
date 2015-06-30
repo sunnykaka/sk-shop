@@ -707,8 +707,8 @@ table .pro{width: 360px;}
 .order-comment{margin-bottom: 100px;}
 .order-comment-container{width: 100%;text-align: center;}
 .order-comment-container th,.order-comment-container td{border-bottom: 1px solid #ccc;}
-.order-comment-container .comment-box {position: relative;width: 200px;}
-.order-comment-container .comment-box .not-comment{color: #FF2D54;cursor: pointer;}
+.order-comment-container .comment-box {position: relative;}
+.order-comment-container .comment-box .not-comment{background: #FF2D54;color:#fff;cursor: pointer;padding: 8px 14px;}
 .order-comment-container .comment-box {position: relative;}
 .order-comment-container .comment-box .arc{position: absolute;bottom: -1px;width: 24px;height: 16px;
     background: url("../images/comment-arc.gif") no-repeat;left: 50%;margin-left: -12px;display: none;
@@ -722,9 +722,10 @@ table .pro{width: 360px;}
 .order-comment-container .select-comment .select-info{position: absolute;top: 22px;background: #fdf2f4;padding: 4px 8px;
     border: 1px solid #FF2D54;
 }
-.order-comment-container .comment-box .comment-con{position: absolute;padding: 10px;border: 1px solid #FF2D54;width: 400px;
-    right: 0;_height:50px;min-height: 50px;background:#fdf2f4;z-index: 100;display: none;
+.order-comment-container .comment-box .comment-con{position: absolute;padding: 10px;border: 1px solid #FF2D54;width: 390px;
+    right: 0;bottom:0;height:50px;background:#fdf2f4;z-index: 100;display: none;overflow: hidden;
 }
+.order-comment-container .comment-box .comment-con .commenter{white-space: nowrap;  width: 100%;/* IE6 需要定义宽度 */  overflow: hidden;  -o-text-overflow: ellipsis;/* Opera */ text-overflow:ellipsis; /* IE, Safari (WebKit) */}
 .order-comment-container .comment-box .showComment{cursor: pointer;}
 .order-comment-container .comment-box .comment-con ul{width: 100%;height: 100%;}
 .order-comment-container .comment-box .comment-con li{display: block;width: 100%;text-align: left;}
@@ -736,7 +737,7 @@ table .pro{width: 360px;}
 .order-comment-container .comment-textarea .limit{color: #FF2D54;}
 .order-comment-container .comment-textarea .content-info{left: 750px;background: #fdf2f4;padding: 4px 8px;  border: 1px solid #FF2D54;}
 .order-comment-container .comment-confirm{padding-left: 54px;}
-.order-comment-container .comment-submit{padding: 10px 30px;background: #000;color: #fff;margin-right: 20px;cursor: pointer;}
+.order-comment-container .comment-submit{display:block;width:25px;padding: 10px 30px;background: #000;color: #fff;margin-right: 20px;cursor: pointer;text-align: center;}
 .order-comment-container .comment-confirm input{margin-right: 4px;vertical-align: middle;}
 
 /*end order comment*/
@@ -1023,6 +1024,7 @@ table .pro{width: 360px;}
 .contact-box-left li{height: 30px;line-height: 30px;margin: 8px 0;font-size: 14px;}
 /*end contact*/
 /*deliver-info*/
+.deliver-info-right .first{border-top: 1px solid #ccc;padding-top: 10px;}
 .deliver-info-right span{margin-right: 10px;font-size: 18px;color: #FF2D54;}
 .deliver-info-right p{margin-bottom: 10px;}
 /*end deliver-info*/

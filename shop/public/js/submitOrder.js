@@ -53,7 +53,7 @@ $(function(){
             zipCode = formItems.zipCode,
             mobile = formItems.mobile,
             message = formItems.message,
-            regexZipCode = /^([0-9]{6})$/,
+            regexZipCode = /^([0-9]{3,6})$/,
             regexMobile = /(^0?(1[358][0-9]{9})$)|(^(\d{3,4}-)?\d{7,8}$)/;
 
 
@@ -70,7 +70,7 @@ $(function(){
         location.blur(function () {
             if (!location.val()||location.val().length >200) {
                 type=='add'?location.siblings("span").remove():location.siblings('p').remove();
-                message.text("请输入收件人的详细地址，不能大于200个字");
+                message.text("请输入收件人的详细地址");
                 location.after(message.clone());
             } else {
                 type=='add'?location.siblings("span").remove():location.siblings('p').remove();
@@ -80,7 +80,7 @@ $(function(){
         zipCode.blur(function () {
             if (!zipCode.val() || !regexZipCode.test(zipCode.val())) {
                 type=='add'?zipCode.siblings("span").remove():zipCode.siblings('p').remove();
-                message.text("请输入六位数字的邮政编码");
+                message.text("请输入正确的邮政编码");
                 zipCode.after(message.clone());
             } else {
                 type=='add'?zipCode.siblings("span").remove():zipCode.siblings('p').remove();
@@ -129,7 +129,7 @@ $(function(){
             city = formItems.city,
             districts = formItems.districts,
             message = formItems.message,
-            regexZip = /^([0-9]{6})$/,
+            regexZip = /^([0-9]{3,6})$/,
             regexMobile = /(^0?(1[358][0-9]{9})$)|(^(\d{3,4}-)?\d{7,8}$)/;
 
 
@@ -169,7 +169,7 @@ $(function(){
 
         if (!location.val()) {
             type='add'? location.siblings("span").remove():location.siblings("span").remove();
-            message.text("请输入收件人的详细地址，不能大于200个字");
+            message.text("请输入收件人的详细地址");
             location.after(message.clone());
             location.focus();
             return false;
@@ -178,7 +178,7 @@ $(function(){
 
         if (!zipCode.val() || !regexZip.test(zipCode.val())) {
             type=='add'? zipCode.siblings("span").remove():zipCode.siblings("span").remove();
-            message.text("请输入六位数字的邮政编码");
+            message.text("请输入正确的邮政编码");
             zipCode.after(message.clone());
             zipCode.focus();
             return false;

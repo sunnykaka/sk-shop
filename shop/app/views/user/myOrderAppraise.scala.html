@@ -4,12 +4,10 @@
 
 @myCenter(Messages("title.my.order.appraise")) {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script>
 
 $(function(){
-
-
-
     $('.not-comment').click(function(){
 
         var valArr = $(this).parents('tbody').find('.add-comment');
@@ -55,7 +53,29 @@ $(function(){
                 break;
             }
 
+            if(!contentText){
+                 $.dialog({
+                    title:'提示',
+                    lock:true,
+                    content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请选择一个评价！</p></div>',
+                    width:540,
+                    height:200
+                });
+                return;
+            }
+
+
             var commentCon= $('#comment-content').val();
+            if(commentCon == ""||commentCon == "商品满意吗？来分享你的使用感受吧~"){
+                $.dialog({
+                    title:'提示',
+                    lock:true,
+                    content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>评论内容不能为空！</p></div>',
+                    width:540,
+                    height:200
+                });
+                return;
+            }
 
             $.ajax({
                 url:'/my/valuation/add',
@@ -68,15 +88,25 @@ $(function(){
             },
             success: function (response) {
                 if (response.result) {
-                    $(that).parents('.add-comment').siblings('tr').removeClass('current');
-                    var currentComBtn = $(that).parents('.add-comment').siblings('tr').find('.not-comment');
+
+                    var currentComBtn = $(that).parents('.add-comment').siblings('.current').find('.not-comment');
                     currentComBtn.text('已评价').removeClass('not-comment').addClass('showComment');
                     //添加评价内容
                     currentComBtn.after('<div class="comment-con" style="display: none;">' +
-                     '<ul><li>【'+contentText+'】发表于：'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+(t.getDay()+1)+' '+(t.getHours()+1)+':'+t.getMinutes()+':'+t.getSeconds()+'</li><li>【评语】:'+commentCon+'</li></ul></div>');
+                     '<ul><li>【'+contentText+'】发表于：'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+(t.getDay()+1)+' '+(t.getHours()+1)+':'+t.getMinutes()+':'+t.getSeconds()+'</li><li class="commenter" title="'+commentCon+'">【评语】:'+commentCon+'</li></ul></div>');
+                     $(that).parents('.add-comment').siblings('tr').removeClass('current');
                       $('.add-comment').fadeOut(300,function(){
                         $('.add-comment,.arc').remove();
                       });
+
+                    }else{
+                        $.dialog({
+                            title:'提示',
+                            lock:true,
+                            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>'+response.message+'</p></div>',
+                            width:540,
+                            height:200
+                        });
                     }
                 }
             });
@@ -91,13 +121,13 @@ $(function(){
     //显示评论
     $('.comment-box').on('mouseenter mouseout','.showComment',function(evt){
         if(evt.type == 'mouseenter'){
-            $(this).siblings('.comment-con').show();
+            $(this).siblings('.comment-con').fadeIn();
         }else{
 
             $(this).parent('.comment-box').hover(function(){
 
             },function(){
-                $(this).find('.comment-con').hide();
+                $(this).find('.comment-con').fadeOut();
             });
 
         }
@@ -163,7 +193,7 @@ $(function(){
                                                 @if(orderItem.getValuation.getPoint == 2){
                                                     <li>【差评】发表于：@DateUtils.printDateTime(orderItem.getValuation.getCreateDate)</li>
                                                 }
-                                                <li>【评语】:@orderItem.getValuation.getContent</li>
+                                                <li class="commenter" title="@orderItem.getValuation.getContent">【评语】:@orderItem.getValuation.getContent</li>
                                             </ul>
                                         }
                                     </div>

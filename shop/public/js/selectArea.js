@@ -133,7 +133,7 @@ $(function ($) {
                 selected = $(this).find("option[value='" + value + "']"),
                 code = selected.attr('data-code');
             if (value !== 0) {
-                zipCode.val(code);
+                code == "null"?zipCode.val(""):zipCode.val(code);
                 districts.siblings("span").remove();
                 zipCode.siblings("span").remove();
             }

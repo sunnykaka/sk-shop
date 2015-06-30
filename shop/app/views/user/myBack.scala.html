@@ -19,12 +19,15 @@
             $.dialog ( {
                 title : '提示',
                 lock : true,
-                content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除取消该售后订单吗？</p></div>',
+                content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要取消该售后订单吗？</p></div>',
                 width : 540,
                 height : 248,
                 drag : false,
                 btn : {
-                    ok : {
+                    cancle : {
+                        val : '取消'
+                    },
+                     ok : {
                         val : '确定',
                         type : 'red',
                         click : function ( btn ) {
@@ -39,9 +42,6 @@
                                 }
                             } ) ;
                         }
-                    },
-                    cancle : {
-                        val : '取消'
                     }
                 }
             } ) ;
