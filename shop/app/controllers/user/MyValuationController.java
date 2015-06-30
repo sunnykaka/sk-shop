@@ -1,6 +1,7 @@
 package controllers.user;
 
 import common.exceptions.AppBusinessException;
+import common.utils.FormUtils;
 import common.utils.JsonResult;
 import ordercenter.models.Valuation;
 import ordercenter.services.ValuationService;
@@ -63,7 +64,7 @@ public class MyValuationController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, valuationForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(valuationForm.errors())).toNode());
 
     }
 
