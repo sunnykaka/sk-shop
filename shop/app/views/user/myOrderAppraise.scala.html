@@ -90,10 +90,10 @@ $(function(){
                 if (response.result) {
 
                     var currentComBtn = $(that).parents('.add-comment').siblings('.current').find('.not-comment');
-                    currentComBtn.text('已评价').removeClass('not-comment').addClass('showComment');
+                    currentComBtn.text('查看评价').removeClass('not-comment').addClass('showComment');
                     //添加评价内容
                     currentComBtn.after('<div class="comment-con" style="display: none;">' +
-                     '<ul><li>【'+contentText+'】发表于：'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+(t.getDay()+1)+' '+(t.getHours()+1)+':'+t.getMinutes()+':'+t.getSeconds()+'</li><li class="commenter" title="'+commentCon+'">【评语】:'+commentCon+'</li></ul></div>');
+                     '<ul><li>【'+contentText+'】发表于：'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+(t.getDay()+1)+' '+(t.getHours()+1)+':'+t.getMinutes()+':'+t.getSeconds()+'</li><li class="commenter">【评语】:'+commentCon+'</li></ul></div>');
                      $(that).parents('.add-comment').siblings('tr').removeClass('current');
                       $('.add-comment').fadeOut(300,function(){
                         $('.add-comment,.arc').remove();
@@ -120,16 +120,26 @@ $(function(){
 
     //显示评论
     $('.comment-box').on('mouseenter mouseout','.showComment',function(evt){
-        if(evt.type == 'mouseenter'){
-            $(this).siblings('.comment-con').fadeIn();
+        var curScrollTop = $(window).scrollTop();
+        var offset = $(this).offset();
+        if(evt.type == 'mouseenter'&& $('.show-comment').size()==0){
+            $('<div>',{
+                "class":'show-comment',
+                "html":$(this).siblings('.comment-con').html(),
+                "css":{
+                    'position':'absolute',
+                    'display':'none',
+                    'width':'400',
+                    'padding':'10px',
+                    'background':'#fdf2f4',
+                    'border':'1px solid #FF2D54',
+                    'top':parseInt(offset.top)+40,
+                    'left':parseInt(offset.left)-355
+                }
+
+            }).appendTo('body').fadeIn();
         }else{
-
-            $(this).parent('.comment-box').hover(function(){
-
-            },function(){
-                $(this).find('.comment-con').fadeOut();
-            });
-
+             $('.show-comment').remove();
         }
     });
 
@@ -180,20 +190,21 @@ $(function(){
                             </td>
                             <td class="comment-box">
                                 @if(orderItem.isAppraise){
-                                    <span class="showComment">已评价</span>
+                                    <span class="showComment">查看评价</span>
                                     <div class="comment-con">
                                         @if(null != orderItem.getValuation){
                                             <ul>
+                                                    <li class="clearfix"><span>评价时间：</span><p>@DateUtils.printDateTime(orderItem.getValuation.getCreateDate)</p></li>
                                                 @if(orderItem.getValuation.getPoint == 0){
-                                                    <li>【好评】发表于：@DateUtils.printDateTime(orderItem.getValuation.getCreateDate)</li>
+                                                    <li class="clearfix"><span>评价结果：</span><p>好评</p></li>
                                                 }
                                                 @if(orderItem.getValuation.getPoint == 1){
-                                                    <li>【中评】发表于：@DateUtils.printDateTime(orderItem.getValuation.getCreateDate)</li>
+                                                    <li class="clearfix"><span>评价结果：</span><p>中评</p></li>
                                                 }
                                                 @if(orderItem.getValuation.getPoint == 2){
-                                                    <li>【差评】发表于：@DateUtils.printDateTime(orderItem.getValuation.getCreateDate)</li>
+                                                    <li class="clearfix"><span>评价结果：</span><p>差评</p</li>
                                                 }
-                                                <li class="commenter" title="@orderItem.getValuation.getContent">【评语】:@orderItem.getValuation.getContent</li>
+                                                <li class="clearfix commenter"><span>评价内容：</span><p>@orderItem.getValuation.getContent</p></li>
                                             </ul>
                                         }
                                     </div>

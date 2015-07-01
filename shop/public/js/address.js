@@ -271,6 +271,9 @@ $(function(){
             lock:true,
             drag:false,
             btn: {
+                cancle: {
+                    val: '取消'
+                },
                 ok: {
                     val: '确定',
                     type: 'red',
@@ -289,10 +292,8 @@ $(function(){
                             }
                         });
                     }
-                },
-                cancle: {
-                    val: '取消'
                 }
+
             }
         });
 

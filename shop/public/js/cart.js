@@ -230,6 +230,10 @@ $(function(){
                 this.content.parents('tr').hasClass('toDelete')? this.content.parents('tr').removeClass('toDelete'):null;
             },
             btn: {
+
+                cancle: {
+                    val: '取消'
+                },
                 ok: {
                     val: '确定',
                     type: 'red',
@@ -250,9 +254,6 @@ $(function(){
                             }
                         });
                     }
-                },
-                cancle: {
-                    val: '取消'
                 }
             }
         });

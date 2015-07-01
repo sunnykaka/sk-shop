@@ -684,7 +684,7 @@ table .pro{width: 360px;}
 .updatePw h2,.validateEmail-list h2,.likeProduct-list h2,.focusDesigner-list h2
 {font-weight: normal;font-size: 14px;height: 45px;line-height: 45px;border-bottom: 1px solid #ccc;}
 .order-detail-list .order-item,.address-manage-inner .address-form-inner{padding-left: 30px;margin-bottom: 20px;}
-.order-detail-list .order-item h3,.address-manage-inner h3{height: 30px;line-height: 30px;}
+.order-detail-list .order-item h3,.address-manage-inner h3{height: 30px;line-height: 30px;font-size:14px;}
 .order-detail-list .order-profile-content,.order-detail-list .order-track table{padding-left: 25px;}
 .order-detail-list .order-profile-content span{margin-right: 30px;}
 .order-detail-list .order-profile-content b{font-weight: normal;}
@@ -702,9 +702,9 @@ table .pro{width: 360px;}
 .order-detail-list .back{text-align: center;}
 .order-detail-list .back a{padding: 8px 50px;height:30px;line-height:30px;background: #000;color: #fff;}
 .refund-order-content .refund-order-status{padding: 10px 0 0 25px;}
-.refund-order-content .refund-order-reason{padding: 10px 0;}
+.refund-order-content .refund-order-reason{padding: 10px 0;height: 100px;}
 .refund-order-content .refund-order-reason span,.refund-order-content .refund-order-reason p{float: left;padding: 0;}
-.refund-order-content .refund-order-reason span{height: 100px;}
+.refund-order-content .refund-order-reason span{display:block;height: 100px;}
 .refund-order-content .refund-order-reason p{width:820px;border: none;line-height: 180%;height: auto;}
 .refund-order-content .order-number{color: #FF2D54;}
 /*end order-detail*/
@@ -730,10 +730,13 @@ table .pro{width: 360px;}
 .order-comment-container .comment-box .comment-con{position: absolute;padding: 10px;border: 1px solid #FF2D54;width: 390px;
     right: 0;bottom:0;height:50px;background:#fdf2f4;z-index: 100;display: none;overflow: hidden;
 }
-.order-comment-container .comment-box .comment-con .commenter{white-space: nowrap;  width: 100%;/* IE6 需要定义宽度 */  overflow: hidden;  -o-text-overflow: ellipsis;/* Opera */ text-overflow:ellipsis; /* IE, Safari (WebKit) */}
-.order-comment-container .comment-box .showComment{cursor: pointer;}
-.order-comment-container .comment-box .comment-con ul{width: 100%;height: 100%;}
-.order-comment-container .comment-box .comment-con li{display: block;width: 100%;text-align: left;}
+.show-comment span{width: 80px;float: left;text-align: right;}
+.show-comment p{float: left;width: 300px;line-height: 180%}
+.show-comment li{margin-bottom: 15px;}
+.order-comment-container .comment-box .comment-con .commenter{}
+.order-comment-container .comment-box .showComment{cursor: pointer;padding: 8px 14px;background: #000;color: #fff;}
+/*.order-comment-container .comment-box .comment-con ul{width: 100%;height: 100%;}*/
+/*.order-comment-container .comment-box .comment-con li{display: block;width: 100%;margin-bottom: 10px;}*/
 .order-comment-container .add-comment .comment-textarea{height: 206px;margin-bottom: 30px;}
 .order-comment-container .comment-textarea textarea{float: left;margin: 10px 10px 0 0;width: 648px;height: 178px;border: 1px solid #cacaca;
     padding: 8px;font-family: "Microsoft Yahei", STHeiti;color:#4a4947;
@@ -927,7 +930,7 @@ table .pro{width: 360px;}
 .sider-bar li{width: 62px;height: 63px;border-bottom: 1px solid #ccc;background: url("../images/sider-bar.gif") no-repeat;}
 .sider-bar .cart{position: relative;}
 .sider-bar .quantity{position: absolute;top:8px;right: 5px;background: #FF2D54;border-radius: 8px;padding: 0 8px;color: #fff;}
-.sider-bar #msg{position: absolute;color: #FF2D54;left:20px;font-size: 14px;}
+.sider-bar #msg{position: absolute;color: #FF2D54;left:20px;font-size: 14px;font-weight: 700;}
 .sider-bar .like-product{background-position: 0 -63px;}
 .sider-bar .like-designer{background-position: 0 -126px;}
 .sider-bar .go-top{border-bottom: none;background-position: 0 -189px;}
