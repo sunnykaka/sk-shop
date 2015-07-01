@@ -1,6 +1,6 @@
 @(pd: dtos.ProductDetail)
 
-@import common.utils.DateUtils._
+@import common.utils.DateUtils
 @import common.utils.JsonUtils._
 @import org.apache.commons.lang3.StringUtils._
 
@@ -10,6 +10,10 @@
     <script src="@routes.Assets.versioned("js/jquery.scrollTo.js")"></script>
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script src="@routes.Assets.versioned("js/tpl.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.fly.min.js")"></script>
+    <!--[if lte IE 9]>
+    <script src="@routes.Assets.versioned("js/requestAnimationFrame.js")"></script>
+    <![endif]-->
     <script type="text/template" id="demo">
     <#
         for(var i=0; i<result.length; i++) {
@@ -114,7 +118,7 @@
                     @if(pd.isInExhibition) {
                         <div class="debut-info-left">
                             <p>首发价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getPrice </span></p>
-                            <p class="debut-time">还剩<span class="time-detail">@printDeadlineFromNow(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
+                            <p class="debut-time">还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
                         </div>
                         <div class="debut-info-right">
                             <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice </span>
@@ -164,7 +168,7 @@
                     } else {
                         <div class="detail-btn">
                         <span  class="btn addToOrder" id="addToOrder">立即购买</span>
-                        <span  class="btn addToCart" id="addToCart">加入购物车</span>
+                        <a href="javascript:;" class="btn addToCart" id="addToCart">加入购物车</a>
                         </div>
                     }
                 }
@@ -178,7 +182,7 @@
 
     <!--siderbar-->
     <ul class="sider-bar" id="cart">
-        <li class="cart"><span  id="cart-quantity-btn"></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="cart"><span  id="cart-quantity-btn"></span><span class="quantity" id="cart-quantity">0</span><span id="msg"></span></li>
         <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"></a></li>
         <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"></a></li>
         <li class="go-top"><span id="gotoTop"></span></li>

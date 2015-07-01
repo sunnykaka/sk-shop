@@ -15,7 +15,7 @@ $(function(){
         if(i==0){
             obj.attr('disabled',null);
             obj.text(str);
-            i=120;
+            i=60;
             clearInterval(timer);
         }else{
             obj.text(i+'秒后重发送');

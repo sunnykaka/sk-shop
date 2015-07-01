@@ -5,6 +5,18 @@
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
     <script >
         $(".submit-btn").click(function(){
+            var backReason = $('#backReason').val();
+            if(backReason.length>400){
+                $.dialog ( {
+                    title : '提示',
+                    lock : true,
+                    content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>输入超过最大400字符限制！</p></div>',
+                    width : 540,
+                    height : 198,
+                    drag : false
+                }) ;
+                return;
+            }
             $.ajax ( {
                 type : 'POST',
                 url : '/my/back/submit',
@@ -130,7 +142,10 @@
 
                             <input type="hidden" name="orderId" value="@order.getId">
                             <h3>退货原因</h3>
-                            <textarea name="backReason" id="backReason" cols="30" rows="10" style="padding:10px;"></textarea>
+                            <div class="backReason-wrap">
+                                <textarea name="backReason" id="backReason" cols="30" rows="10" style="padding:10px;"></textarea>
+                                <span class="text-limit">退货原因字数限<span class="limit">400</span>字</span>
+                            </div>
                             <div class="form-item">
                                 <button type="button" class="submit-btn">提交退货申请</button>
                             </div>

@@ -16,6 +16,40 @@ $(function () {
 
 
 
+    //$("#addToCart").click(function(event){
+    //
+    //});
+
+
+
+
+    //倒计时
+    setInterval(function(){
+        $(".time-detail:not(:contains(已结束))").each(function(){
+            var obj = $(this);
+            //var endTime = new Date(obj.attr('value'));
+            var nowTime = new Date(), utc = nowTime.getUTCFullYear()+"/"+(nowTime.getUTCMonth()+1)+"/"+nowTime.getUTCDate()+" "+nowTime.getUTCHours()+":"+nowTime.getUTCMinutes()+":"+nowTime.getUTCSeconds();
+            var nMS = +new Date(obj.attr('value').replace(/-/g,'/')) - (+new Date(utc)+28800000);
+            //var nMS = +new Date(obj.attr('value').replace(/-/g,'/')) - nowTime.getTime();
+            var myD=Math.floor(nMS/(1000 * 60 * 60 * 24)); //天
+            var myH=Math.floor(nMS/(1000*60*60)) % 24; //小时
+            var myM=Math.floor(nMS/(1000*60)) % 60; //分钟
+            var myS=Math.floor(nMS/1000) % 60; //秒
+            var myMS=Math.floor(nMS/100) % 10; //拆分秒
+
+            if(myD>= 0){
+                var str = myD+"天"+myH+"小时"+myM+"分"+myS+"秒";
+
+            }else{
+                var str = "已结束！";
+                //$(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
+                obj.parent('.time').html('').text(str);
+            }
+            obj.text(str);
+        });
+    }, 100); //每个0.1秒执行一次
+
+
     //重置
     if ($("#buy-number").size() > 0) {
         $("#buy-number").val(1);
@@ -515,7 +549,10 @@ $(function () {
         //添加购物车
         addToCartBtn.click(function (event) {
             $(this).attr('disabled', true);
-            var skuId = skuMap[_selectedIds.join(',')]["skuId"], number = amountInputEle.val(), that = $(this);
+            var skuId = skuMap[_selectedIds.join(',')]["skuId"], number = amountInputEle.val(), curScrollTop = $(window).scrollTop(),that = $(this),
+                offset = $("#cart-quantity-btn").offset(),
+                img = $('.video').find('img').attr('src'),
+                flyer = $('<img class="u-flyer" src="'+img+'">');
             $.ajax({
                 type: "get",
                 url: ' /cart/addSkuToCartAddNum?skuId=' + skuId + "&number=" + number,
@@ -527,6 +564,22 @@ $(function () {
                     that.attr('disabled', null);
                     if (data.result) {
                         $('#cart-quantity').text(data.data.itemTotalNum);
+                        flyer.fly({
+                            start: {
+                                left: event.clientX,
+                                top: event.clientY
+                            },
+                            end: {
+                                left: parseInt(offset.left)+10,
+                                top: (parseInt(offset.top)+10)-curScrollTop,
+                                width: 0,
+                                height: 0
+                            },
+                            onEnd: function(){
+                                $("#msg").html('+'+$('#buy-number').val()).show().css({'opacity':1,'top':'0'}).stop().animate({top:'-50px',opacity:0}, "slow");
+                                this.destory();
+                            }
+                        });
                     } else {
                         if (data.message == 'Credentials required') {
                             createLoginReg();
