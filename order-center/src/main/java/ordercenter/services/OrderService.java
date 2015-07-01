@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
 import productcenter.constants.StoreStrategy;
+import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 
@@ -23,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 订单Service
@@ -38,15 +38,13 @@ public class OrderService {
     GeneralDao generalDao;
 
     @Autowired
-    private TradeService tradeService;
-
-    @Autowired
     private CartService cartService;
 
     @Autowired
     private BackGoodsService backGoodsService;
 
-    private static final ReentrantLock LOCK = new ReentrantLock();
+    @Autowired
+    private SkuAndStorageService skuAndStorageService;
 
     /**
      * 判断是否可以退货申请
@@ -156,9 +154,23 @@ public class OrderService {
         return generalDao.get(Order.class, orderId);
     }
 
-    @Transactional(readOnly = true)
     private String getSelectAllOrderSql() {
         return "select v from Order v where 1=1 ";
+    }
+
+    /**
+     * 按照订单状态获取订单列表
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<Order> getAllOrderListByOrderState(OrderState orderState) {
+        String jpql = getSelectAllOrderSql();
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and v.orderState = :orderState ";
+        queryParams.put("orderState", orderState);
+
+        List<Order> orderList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        return orderList;
     }
 
     /**
@@ -262,6 +274,8 @@ public class OrderService {
             if(count == 1) {
                 for (OrderItem oi : order.getOrderItemList()) {
                     this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
+                    //增加库存
+                    skuAndStorageService.addSkuStock(oi.getSkuId(), oi.getNumber());
                 }
                 this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), CancelOrderType.getName(type)));
             }
@@ -493,6 +507,9 @@ public class OrderService {
            orderItem.setTotalPrice(item.getTotalPrice());
            orderItem.setAppraise(false);
            this.createOrderItem(orderItem);
+
+           //扣减库存
+           skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
        }
 
        //创建订单状态历史

@@ -7,7 +7,6 @@ import ordercenter.constants.TradePayType;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.models.Order;
-import ordercenter.models.OrderItem;
 import ordercenter.payment.PayInfoWrapper;
 import ordercenter.payment.PayRequestHandler;
 import ordercenter.payment.PaymentManager;
@@ -128,7 +127,7 @@ public class OrderAndPayController extends Controller {
             //库存校验
             for(CartItem cartItem : cart.getCartItemList()) {
                 if (!skuAndStorageService.isSkuUsable(cartItem.getSkuId())) {
-                    Logger.warn("商品：" + cartItem.getProductName() + "已售完或已下架或已移除，不能再购买");
+                    Logger.warn("商品：" + cartItem.getProductName() + "已售罄或已下架或已移除，不能再购买");
                     return ok(new JsonResult(false,"商品：" + cartItem.getProductName() + "已售罄或已下架，不能再购买").toNode());
                 }
             }
@@ -218,10 +217,7 @@ public class OrderAndPayController extends Controller {
                     Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")不支持付款操作，此订单已经支付或是已经被取消！");
                     return ok(new JsonResult(false,"订单(" + orderNo + ")不支持付款操作，此订单已经支付或是已经被取消！").toNode());
                 }
-                if (verifyOrderItem(order)) {
-                    Logger.warn("订单：" + order.getOrderNo() + "已售完或已下架或已移除，不能再购买");
-                    return ok(new JsonResult(false,"订单：" + order.getOrderNo() + "中商品已售罄或已下架，不能再购买").toNode());
-                }
+
                 order.setAccountType(curUser.getAccountType());
                 order.setPayType(TradePayType.valueOf(payType));
                 order.setPayBank(payBank);
@@ -311,20 +307,4 @@ public class OrderAndPayController extends Controller {
         return money.getCent();
     }
 
-    /**
-     * 验证订单项
-     * @param order
-     * @return
-     */
-    private boolean verifyOrderItem(Order order) {
-        List<OrderItem> orderItemList = orderService.queryOrderItemsByOrderId(order.getId());
-        boolean flag = false;
-        for (OrderItem orderItem : orderItemList) {
-            if (!skuAndStorageService.isSkuUsable(orderItem.getSkuId())) {
-                flag = true;
-                break;
-            }
-        }
-        return flag;
-    }
 }

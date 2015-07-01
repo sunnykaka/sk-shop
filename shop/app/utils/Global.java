@@ -22,10 +22,9 @@ import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import play.twirl.api.BaseScalaTemplate;
 import scala.concurrent.duration.Duration;
-import scala.concurrent.duration.FiniteDuration;
 import scheduler.ExhibitionStartReminderTask;
+import scheduler.SysCancelOrderTask;
 import usercenter.dtos.DesignerView;
 import usercenter.services.DesignerService;
 import views.html.error_400;
@@ -60,6 +59,13 @@ public class Global extends BaseGlobal {
                 Duration.create(20, TimeUnit.SECONDS),
                 Duration.create(60, TimeUnit.SECONDS),
                 ExhibitionStartReminderTask.getInstance(),
+                Akka.system().dispatcher()
+        );
+
+        Akka.system().scheduler().schedule(
+                Duration.create(5, TimeUnit.MINUTES),
+                Duration.create(1, TimeUnit.HOURS),
+                SysCancelOrderTask.getInstance(),
                 Akka.system().dispatcher()
         );
 

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
-import productcenter.services.SkuAndStorageService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +31,6 @@ public class TradeService {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private SkuAndStorageService skuAndStorageService;
 
     /**
      * 创建交易记录
@@ -302,13 +298,6 @@ public class TradeService {
                             } catch (Exception e) {
                                 Logger.error(errPrefix + "订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]从当前状态[" + oldState.getValue() + "]更新为["
                                         + order.getOrderState().getValue() + "]发生异常", e);
-                            }
-
-                            //扣减库存
-                            try {
-                                skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
-                            } catch (Exception e) {
-                                Logger.error(errPrefix + "订单[" + orderNo + "]订单项id[" + orderItem.getId() + "]扣减库存发生异常", e);
                             }
 
                             //统计付款成功数

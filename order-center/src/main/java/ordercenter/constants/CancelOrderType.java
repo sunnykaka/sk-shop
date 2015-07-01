@@ -18,6 +18,8 @@ public enum CancelOrderType {
 
     Dont("不想买了",4),
 
+    Sys("订单一小时未支付，系统定时取消订单",6),
+
     Other("其他原因",5);
 
     // 成员变量
