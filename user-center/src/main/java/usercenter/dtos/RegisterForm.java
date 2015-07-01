@@ -3,15 +3,13 @@ package usercenter.dtos;
 import common.utils.RegExpUtils;
 import play.data.validation.Constraints;
 
-import javax.validation.constraints.Pattern;
-
 /**
  * Created by liubin on 15-4-24.
  */
 public class RegisterForm {
 
     @Constraints.Required(message = "用户名不能为空")
-    @Pattern(regexp = RegExpUtils.USERNAME_REG_EXP, message = "用户名请输入4-20位，可由中文、英文或数字组成")
+    @Constraints.Pattern(value = RegExpUtils.USERNAME_REG_EXP, message = "用户名请输入4-20位，可由中文、英文或数字组成")
     String username;
 
     @Constraints.Required(message = "密码不能为空")
@@ -25,7 +23,7 @@ public class RegisterForm {
     String verificationCode;
 
     @Constraints.Required(message = "手机不能为空")
-    @Pattern(regexp = RegExpUtils.PHONE_REG_EXP, message = "请输入正确的手机号码")
+    @Constraints.Pattern(value = RegExpUtils.PHONE_REG_EXP, message = "请输入正确的手机号码")
     String phone;
 
     public String getUsername() {

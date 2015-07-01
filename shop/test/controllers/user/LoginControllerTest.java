@@ -40,7 +40,7 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
     public void testRegisterErrorForUsernameTooShort() throws Exception {
 
         String phone = "1" + RandomStringUtils.randomNumeric(10);
-        String username = RandomStringUtils.randomAlphabetic(2);
+        String username = RandomStringUtils.randomAlphabetic(1);
         String password = RandomStringUtils.randomAlphabetic(10);
 
         FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
@@ -170,7 +170,7 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         FakeRequest request = new FakeRequest(GET, controllers.routes.Application.index().url());
         Result result = route(request);
         assertThat(status(result), is(OK));
-        assertThat(contentAsString(result).contains("游客"), is(true));
+        assertThat(contentAsString(result).contains("登录"), is(true));
 
     }
 
@@ -199,7 +199,7 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
     @Test
     public void testRequestPhoneCodeSixTimesError() throws Exception {
         String phone = "1" + RandomStringUtils.randomNumeric(10);
-        for (int i=0; i<5; i++) {
+        for (int i=0; i<SmsSender.SEND_MESSAGE_MAX_TIMES_IN_DAY; i++) {
             FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
             Result result = route(request);
             assertThat(status(result), is(OK));
@@ -213,7 +213,7 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         assertThat(status(result), is(OK));
         assertThat(contentType(result), is("application/json"));
         assertThat(contentAsString(result), containsString("false"));
-        assertThat(contentAsString(result), containsString("验证码发送失败"));
+        assertThat(contentAsString(result), containsString("发送次数超过上限"));
 
     }
 

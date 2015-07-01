@@ -32,7 +32,7 @@ public class PlainTest {
 
 //        System.out.println(Money.valueOf(2.15d).toString());
 
-        System.out.println(RegExpUtils.isUsername("Alvens"));
+        System.out.println(RegExpUtils.isUsername("1"));
 
     }
 

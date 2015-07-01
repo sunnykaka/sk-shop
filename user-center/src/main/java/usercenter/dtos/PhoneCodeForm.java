@@ -1,8 +1,7 @@
 package usercenter.dtos;
 
+import common.utils.RegExpUtils;
 import play.data.validation.Constraints;
-
-import javax.validation.constraints.Pattern;
 
 /**
  * Created by zhb on 15-4-30.
@@ -15,7 +14,7 @@ public class PhoneCodeForm {
     String verificationCode;
 
     @Constraints.Required(message = "手机不能为空")
-    @Pattern(regexp = "^[1][\\d]{10}", message = "请输入正确的手机号码")
+    @Constraints.Pattern(value = RegExpUtils.PHONE_REG_EXP, message = "请输入正确的手机号码")
     String phone;
 
     public String getVerificationCode() {

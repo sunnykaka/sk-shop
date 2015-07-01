@@ -1,8 +1,8 @@
 package usercenter.dtos;
 
+import common.utils.RegExpUtils;
 import play.data.validation.Constraints;
 
-import javax.validation.constraints.Pattern;
 
 /**
  * 更新用户资料
@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
  */
 public class UserDataForm {
 
-    @Pattern(regexp = "^[A-Za-z\u4e00-\u9fa5]{2,20}$", message = "请输入2~20个汉字或字母")
+    @Constraints.Pattern(value = RegExpUtils.USERNAME_REG_EXP, message = "请输入2~20个汉字或字母")
     private String name;
 
     private int sex;

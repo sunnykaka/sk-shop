@@ -4,6 +4,7 @@ import models.CmsExhibition;
 import models.ExhibitionStatus;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import play.test.WithApplication;
 import services.CmsService;
@@ -29,6 +30,7 @@ public class CmsTest extends WithApplication {
     }
 
     @Test
+    @Ignore
     public void testProdOnPublish() {
 
         Boolean result = cmsService.onFirstPublish(2184);
@@ -38,6 +40,7 @@ public class CmsTest extends WithApplication {
     }
 
     @Test
+    @Ignore
     public void testFindAllExhibition() {
         Map<ExhibitionStatus, List<CmsExhibition>> result = cmsService.queryAllExhibition();
         Assert.assertEquals(2, result.size());

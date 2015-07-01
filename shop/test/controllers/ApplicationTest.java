@@ -2,6 +2,7 @@ package controllers;
 
 import common.utils.JsonResult;
 import common.utils.test.BaseTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -19,6 +20,7 @@ public class ApplicationTest extends WithApplication implements BaseTest {
 
 
     @Test
+    @Ignore
     public void testUserLikeExhibition() throws Exception {
 
         int exhibitionId = 25;

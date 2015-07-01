@@ -1,8 +1,7 @@
 package usercenter.dtos;
 
+import common.utils.RegExpUtils;
 import play.data.validation.Constraints;
-
-import javax.validation.constraints.Pattern;
 
 /**
  * 通过手机，找回密码
@@ -17,7 +16,7 @@ public class RecoverCodeForm {
     String imageCode;
 
     @Constraints.Required(message = "手机不能为空")
-    @Pattern(regexp = "^[1][\\d]{10}", message = "请输入正确的手机号码")
+    @Constraints.Pattern(value = RegExpUtils.PHONE_REG_EXP, message = "请输入正确的手机号码")
     String phone;
 
     public String getImageCode() {
