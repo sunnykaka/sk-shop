@@ -158,6 +158,7 @@ public class SkuAndStorageService {
      * @param number
      * @return
      */
+    @Transactional
     public boolean minusSkuStock(int skuId, int number) {
         play.Logger.info("------SkuAndStorageService minusSkuStock begin exe-----------" + skuId + ":" + number);
         EntityManager em = generalDao.getEm();
@@ -172,6 +173,7 @@ public class SkuAndStorageService {
      * @param number
      * @return
      */
+    @Transactional
     public boolean addSkuStock(int skuId, int number) {
         play.Logger.info("------SkuAndStorageService addSkuStock begin exe-----------" + skuId + ":" + number);
         EntityManager em = generalDao.getEm();
