@@ -111,19 +111,29 @@ $(function(){
                 if(data.result){
                     $.dialog({
                         title:'提示',
-                        content:'<p style="text-align: center;font-size: 16px;padding: 20px;">邮件重新发送成功</p>',
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>邮件重新发送成功</p></div>',
                         width:400,
-                        height:160,
-                        padding:"20"
+                        height:248,
+                        btn: {
+                            ok : {
+                                val : '关闭',
+                                type : 'red',
+                            }
+                        }
                     });
                 }else{
                     $.dialog({
                         title:'提示',
                         lock:true,
-                        content:'<p style="text-align: center;font-size: 16px;padding: 20px;">'+data.message+'</p>',
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+data.message+'</p></div>',
                         width:400,
-                        height:160,
-                        padding:"20"
+                        height:248,
+                        btn: {
+                            ok : {
+                                val : '关闭',
+                                type : 'red',
+                            }
+                        }
                     });
                 }
             }
@@ -166,10 +176,15 @@ $(function(){
                         $.dialog({
                             title:'提示',
                             lock:true,
-                            content:'<p style="text-align: center;font-size: 16px;padding: 20px;">'+data.message+'</p>',
+                            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+data.message+'</p></div>',
                             width:400,
                             height:160,
-                            padding:"20"
+                            btn: {
+                                ok : {
+                                    val : '关闭',
+                                    type : 'red',
+                                }
+                            }
                         });
                     }
                 }

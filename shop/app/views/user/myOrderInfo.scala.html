@@ -77,7 +77,7 @@
                                         <tr>
                                             <td>
                                                 <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
-                                                    <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>
+                                                    <img class="lazy"   data-original="@orderItem.getMainPicture" src="/assets/images/grey.gif" alt="" height="147px" width="90px"/>
                                                 </a>
                                             </td>
                                             <td>

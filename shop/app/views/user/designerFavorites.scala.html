@@ -15,7 +15,7 @@
                 var id = $(this).attr('data-id'),that = $(this);
                 $.dialog({
                     title:'提示',
-                    content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除关注设计师？</p></div>',
+                    content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>确定要删除关注设计师？</p></div>',
                     width:540,
                     height:248,
                     lock:true,
@@ -69,7 +69,7 @@
                         <ul class="clearfix focusDesigner-box">
                             @for(dc <- page.getResult){
                                 <li>
-                                    <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img src="@dc.getDesignerPic" alt="@dc.getDesignerName" width="235px" height="374px"/></a>
+                                    <a href="@controllers.routes.Application.designerProd(dc.getDesignerId)" class="imglink"><img class="lazy"   data-original="@dc.getDesignerPic" alt="@dc.getDesignerName" src="/assets/images/grey.gif" width="235px" height="374px"/></a>
                                     <p class="title">@dc.getDesignerName</p>
                                     <span class="del" data-id="@dc.getDesignerId"></span>
                                 </li>

@@ -134,7 +134,7 @@ FG.tip = function (ele, id, msg, x, y, timer) {
 $('img.lazy').lazyload({effect:'fadeIn', threshold: 300});
 
 //登录字符串
-var loginHtml = '<div class="login-inner idialog-login idialog-form"><span class="close-btn"></span>'+
+var loginHtml = '<div class="login-inner idialog-login idialog-form"><span class="close-btn"><i class="icon iconfont">&#xe606;</i></span>'+
             '<h2>用户登录</h2>'+
 
             '<div class="other-login clearfix">'+
@@ -168,7 +168,7 @@ var loginHtml = '<div class="login-inner idialog-login idialog-form"><span class
             '<p class="not-reg">还没有账号？<a href="javascript:void(0);" id="goReg">注册</a></p>'+
         '</div>';
 //注册字符串
-var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="close-btn"></span>'+
+var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="close-btn"><i class="icon iconfont">&#xe606;</i></span>'+
             '<h2>用户注册</h2>'+
             '<form class="reg-form" id="reg-form" >'+
                 '<div class="item-row reg-username">'+

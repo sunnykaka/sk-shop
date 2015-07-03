@@ -47,7 +47,7 @@
                                 </td>
                                 <td>
                                     <a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId+"-" + cartItem.getSkuId)" target="_blank" >
-                                        <img src="@cartItem.getMainPicture" alt="" width="90" height="147"/><!--此拿到的只是图的url地址，可能没有值-->
+                                        <img class="lazy"   data-original="@cartItem.getMainPicture" alt="" src="/assets/images/grey.gif" width="90" height="147"/><!--此拿到的只是图的url地址，可能没有值-->
                                     </a>
                                 </td>
                                 <td class="pro">

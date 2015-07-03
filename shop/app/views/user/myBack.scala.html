@@ -19,7 +19,7 @@
             $.dialog ( {
                 title : '提示',
                 lock : true,
-                content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要取消该售后订单吗？</p></div>',
+                content : '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>确定要取消该售后订单吗？</p></div>',
                 width : 540,
                 height : 248,
                 drag : false,
@@ -103,10 +103,10 @@
                                             }
                                             <td class="product-img">
                                                 <a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"-" + backOrderItem.getOrderItem.getSkuId)" target="_blank">
-                                                    <img src="@backOrderItem.getOrderItem.getMainPicture" alt="" height="147px" width="90px"/>
+                                                    <img class="lazy"   data-original="@backOrderItem.getOrderItem.getMainPicture" alt="" src="/assets/images/grey.gif" height="147px" width="90px"/>
                                                 </a>
                                             </td>
-                                            <td class="product-name">
+                                            <td class="pro product-name">
                                                 <p><a href="@controllers.product.routes.ProductController.detail(backOrderItem.getOrderItem.getProductId+"-" + backOrderItem.getOrderItem.getSkuId)" target="_blank">@backOrderItem.getOrderItem.getProductName</a></p>
                                             </td>
                                             <td class="product-size">

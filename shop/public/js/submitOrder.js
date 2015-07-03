@@ -269,7 +269,7 @@ $(function(){
         var addressId = $(this).attr('data-id'),item = $(this).parents('li'),that = $(this);
         $.dialog({
             title:'提示',
-            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>确定要删除这个收货地址？</p></div>',
+            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>确定要删除这个收货地址？</p></div>',
             width:540,
             height:248,
             lock:true,
@@ -525,7 +525,13 @@ $(function(){
                 lock:true,
                 content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请选择收货地址！</p></div>',
                 width:540,
-                height:200
+                height:248,
+                btn: {
+                    ok : {
+                        val : '关闭',
+                        type : 'red',
+                    }
+                }
             });
         }
 
@@ -545,7 +551,13 @@ $(function(){
                         lock:true,
                         content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>订单提交有误，请联系客服人员</p></div>',
                         width:540,
-                        height:200
+                        height:248,
+                        btn: {
+                            ok : {
+                                val : '关闭',
+                                type : 'red',
+                            }
+                        }
                     });
                 }
             }

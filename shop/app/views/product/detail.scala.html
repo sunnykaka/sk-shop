@@ -118,15 +118,15 @@
                     @if(pd.isInExhibition) {
                         <div class="debut-info-left">
                             <p>首发价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getPrice </span></p>
-                            <p class="debut-time">还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
+                            <p class="debut-time"><i class="icon iconfont">&#xe611;</i>还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
                         </div>
                         <div class="debut-info-right">
-                            <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice </span>
+                            <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice</span>
                                 <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
                         </div>
                     } else {
                         <div class="debut-info-left">
-                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getMarketPrice </span></p>
+                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getMarketPrice</span></p>
                         </div>
                         <div class="debut-info-right">
                             <p>首发价:￥<span class="market-price" id="market-price">@pd.getDefaultSku.getPrice </span>

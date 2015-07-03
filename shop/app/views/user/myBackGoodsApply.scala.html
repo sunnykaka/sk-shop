@@ -6,14 +6,20 @@
     <script >
         $(".submit-btn").click(function(){
             var backReason = $('#backReason').val();
-            if(backReason.length>400){
+            if(backReason =="" || backReason.length>400){
                 $.dialog ( {
                     title : '提示',
                     lock : true,
-                    content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>输入超过最大400字符限制！</p></div>',
+                    content : '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>内容不能为空或者大于400字！</p></div>',
                     width : 540,
-                    height : 198,
-                    drag : false
+                    height : 248,
+                    drag : false,
+                    btn: {
+                      ok : {
+                        val : '关闭',
+                        type : 'red',
+                        }
+                    }
                 }) ;
                 return;
             }
@@ -29,10 +35,16 @@
                         $.dialog ( {
                             title : '提示',
                             lock : true,
-                            content : '<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>'+data.message+'</p></div>',
+                            content : '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+data.message+'</p></div>',
                             width : 540,
-                            height : 198,
-                            drag : false
+                            height : 248,
+                            drag : false,
+                            btn: {
+                              ok : {
+                                val : '关闭',
+                                type : 'red',
+                                }
+                            }
                         } ) ;
                     }
                 }

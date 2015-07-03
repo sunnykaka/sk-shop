@@ -19,8 +19,8 @@ $(function(){
 
 
         $(this).parents('tr').addClass('current').after("<tr class='add-comment'><td colspan='5'><div class='select-comment'><span class='label'>评价：</span> <label><input type='radio' name='comment' value='0'>好评</label><label>" +
-        "<input type='radio' name='comment' value='1'>中评</label><label><input type='radio' name='comment' value='2'>差评</label><span class='select-info'>请选择一个评价</span></div>" +
-        "<div class='comment-textarea'><span class='label'>内容：</span><textarea name='comment-content' id='comment-content'>商品满意吗？来分享你的使用感受吧~</textarea> <span class='text-limit'>评价字数限<span class='limit'>300</span>字</span><span class='content-info'>请根据实际填写相关内容</span></div>" +
+        "<input type='radio' name='comment' value='1'>中评</label><label><input type='radio' name='comment' value='2'>差评</label><span class='select-info'>请选择评价结果</span></div>" +
+        "<div class='comment-textarea'><span class='label'>内容：</span><textarea name='comment-content' id='comment-content'>商品满意吗？来分享你的使用感受吧~</textarea> <span class='text-limit'>评价字数限<span class='limit'>300</span>字</span><span class='content-info'>请填写评价内容</span></div>" +
         "<div class='comment-confirm'><span class='comment-submit'>评价</span></div></td></tr>");
 
         var commentCon= $('#comment-content').val();
@@ -56,23 +56,37 @@ $(function(){
             if(!contentText){
                  $.dialog({
                     title:'提示',
+                    padding:0,
                     lock:true,
-                    content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>请选择一个评价！</p></div>',
+                    content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>请选择评价结果！</p></div>',
                     width:540,
-                    height:200
+                    height:248,
+                    btn: {
+                      ok : {
+                        val : '关闭',
+                        type : 'red',
+                        }
+                    }
                 });
                 return;
             }
 
 
             var commentCon= $('#comment-content').val();
-            if(commentCon == ""||commentCon == "商品满意吗？来分享你的使用感受吧~"){
+            if(commentCon == ""||commentCon == "商品满意吗？来分享你的使用感受吧~"|| commentCon.length>300){
                 $.dialog({
                     title:'提示',
                     lock:true,
-                    content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>评论内容不能为空！</p></div>',
+                    padding:0,
+                    content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>评价内容不能为空或者大于300字</p></div>',
                     width:540,
-                    height:200
+                    height:248,
+                      btn: {
+                      ok : {
+                        val : '关闭',
+                        type : 'red',
+                        }
+                    }
                 });
                 return;
             }
@@ -90,10 +104,14 @@ $(function(){
                 if (response.result) {
 
                     var currentComBtn = $(that).parents('.add-comment').siblings('.current').find('.not-comment');
+                    currentComBtn.unbind('click');
                     currentComBtn.text('查看评价').removeClass('not-comment').addClass('showComment');
                     //添加评价内容
                     currentComBtn.after('<div class="comment-con" style="display: none;">' +
-                     '<ul><li>【'+contentText+'】发表于：'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+(t.getDay()+1)+' '+(t.getHours()+1)+':'+t.getMinutes()+':'+t.getSeconds()+'</li><li class="commenter">【评语】:'+commentCon+'</li></ul></div>');
+                     '<ul><li class="clearfix"><span>评价时间：</span>'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()+' '+t.getHours()+':'+t.getMinutes()+':'+t.getSeconds()+'</li>' +
+                      '<li class="clearfix"><span>评价结果：</span>'+contentText+'</li>' +
+                       '<li class="clearfix commenter"><span>评价内容：</span>'+commentCon+'</li>' +
+                       '</ul></div>');
                      $(that).parents('.add-comment').siblings('tr').removeClass('current');
                       $('.add-comment').fadeOut(300,function(){
                         $('.add-comment,.arc').remove();
@@ -103,9 +121,15 @@ $(function(){
                         $.dialog({
                             title:'提示',
                             lock:true,
-                            content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>'+response.message+'</p></div>',
+                            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+response.message+'</p></div>',
                             width:540,
-                            height:200
+                            height:248,
+                            btn: {
+                              ok : {
+                                val : '关闭',
+                                type : 'red',
+                                }
+                            }
                         });
                     }
                 }
@@ -130,6 +154,7 @@ $(function(){
                     'position':'absolute',
                     'display':'none',
                     'width':'400',
+                    'overflow':'hidden',
                     'padding':'10px',
                     'background':'#fdf2f4',
                     'border':'1px solid #FF2D54',
@@ -174,7 +199,7 @@ $(function(){
                         <tr>
                             <td>
                                 <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
-                                    <img src="@orderItem.getMainPicture" alt="" height="154px" width="90px"/>
+                                    <img class="lazy"   data-original="@orderItem.getMainPicture" src="/assets/images/grey.gif" alt="" height="154px" width="90px"/>
                                 </a>
                             </td>
                             <td>
@@ -202,7 +227,7 @@ $(function(){
                                                     <li class="clearfix"><span>评价结果：</span><p>中评</p></li>
                                                 }
                                                 @if(orderItem.getValuation.getPoint == 2){
-                                                    <li class="clearfix"><span>评价结果：</span><p>差评</p</li>
+                                                    <li class="clearfix"><span>评价结果：</span><p>差评</p></li>
                                                 }
                                                 <li class="clearfix commenter"><span>评价内容：</span><p>@orderItem.getValuation.getContent</p></li>
                                             </ul>

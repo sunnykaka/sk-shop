@@ -1,9 +1,10 @@
 .i-dialog{position:fixed;_position:absolute;background:#fff;border-radius:3px;border:1px solid #9d9d9d;box-shadow: 0 0 2px rgba(0,0,0,.2);display:none;}
 .i-dialog .i-target{background:#fff;cursor:move;line-height:32px;}
 .i-dialog .i-target h2{font-size:16px;font-weight:normal;line-height:32px;padding:22px 40px 0 35px;margin:0;}
-.i-dialog .i-close{display:block;width:30px;height:30px;text-align:center;line-height:20px;font-size:14px;text-decoration:none;position:absolute;top:23px;right:23px;font-family:'\u9ed1\u4f53';color: #000000;
-	background:url("../images/sprite.gif") no-repeat -2px -1px;
+.i-dialog .i-close{display:block;width:30px;height:30px;text-align:center;line-height:20px;font-size:14px;text-decoration:none;position:absolute;top:28px;right:23px;font-family:'\u9ed1\u4f53';color: #000000;
+	/*background:url("../images/sprite.gif") no-repeat -2px -1px;*/
 }
+.i-dialog .i-close i{font-size: 26px;color: #4a4947;}
 .i-dialog .i-close:hover{color:#E60012;}
 .i-dialog .i-content{clear:both;}
 .i-dialog .i-wrapBtn{height:40px;background:#fff;text-align:center;padding-bottom: 20px;}
@@ -30,8 +31,8 @@
 	font-family: 'Microsoft Yahei';
 }
 .i-dialog .i-wrapBtn input:hover{
-	background-color: #EBEBEB;
-    border-color: #ADADAD;
+	/*background-color: #EBEBEB;*/
+    border-color: #000;
 }
 .i-dialog .i-wrapBtn input.green{
     background-color: #5CB85C;
@@ -67,8 +68,8 @@
 
 }
 .i-dialog .i-wrapBtn input.red:hover{
-	background-color: #000;
-    border-color: #000;
+	background-color: #29292c;
+    border-color: #29292c;
 }
 .i-dialog .i-wrapBtn input.i-disabled,.i-dialog .i-wrapBtn input.i-disabled:hover{
 	color: #C1BBBB;
@@ -173,4 +174,5 @@
 .i-content .success-inner p{padding: 10px;font-size: 14px; text-align: center;}
 .i-content .success-inner a{color: red;}
 .i-content .warning{font-size: 16px;line-height: 40px;text-align: center;}
-.i-content .warning-ico{padding:17px;margin-right:10px;background:url("../images/sprite.gif") no-repeat -728px 16px;}
+/*.i-content .warning-ico{padding:17px;margin-right:10px;background:url("../images/sprite.gif") no-repeat -728px 16px;}*/
+.i-content i{margin-right: 6px;font-size: 24px;color: #000;}

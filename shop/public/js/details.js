@@ -587,10 +587,16 @@ $(function () {
                             $.dialog({
                                 title: '提示',
                                 lock: true,
-                                content: '<p class="warning-inner" style="text-align: center;font-size: 16px;padding: 30px 40px 0 40px;">' + data.message + '</p>',
+                                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+data.message+'</p></div>',
                                 width: 500,
-                                height: 200,
-                                padding: "20"
+                                height: 248,
+                                padding: "20",
+                                btn: {
+                                    ok : {
+                                        val : '关闭',
+                                        type : 'red',
+                                    }
+                                }
                             });
                         }
 
