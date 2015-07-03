@@ -17,7 +17,7 @@ public class BackApplyForm {
     private int orderId;
 
     /** 订单项ID */
-    private List<String> orderItem = new ArrayList<>();
+    //private List<String> orderItem = new ArrayList<>();
 
     /** 退货原因 */
     @Constraints.MaxLength(value = 400, message = "输入超过最大400字符限制")
@@ -31,13 +31,13 @@ public class BackApplyForm {
         this.orderId = orderId;
     }
 
-    public List<String> getOrderItem() {
-        return orderItem;
-    }
-
-    public void setOrderItem(List<String> orderItem) {
-        this.orderItem = orderItem;
-    }
+//    public List<String> getOrderItem() {
+//        return orderItem;
+//    }
+//
+//    public void setOrderItem(List<String> orderItem) {
+//        this.orderItem = orderItem;
+//    }
 
     public String getBackReason() {
         return backReason;

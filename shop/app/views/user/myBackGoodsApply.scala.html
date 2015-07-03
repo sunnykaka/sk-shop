@@ -94,9 +94,6 @@
                                 <tbody class="product-list">
                                     @for((orderItem, index) <- order.getOrderItemList.zipWithIndex){
                                         <tr>
-
-                                            <input type="hidden" name="orderItem[@index]" value="@orderItem.getId-@orderItem.getNumber"/>
-
                                             <td>
                                                 <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
                                                     <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>

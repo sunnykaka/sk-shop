@@ -120,7 +120,7 @@
                                                     ￥@backOrder.getBackPrice.getAmountWithBigDecimal
                                                 </td>
                                                 <td rowspan="@backOrder.getBackGoodsItemList.size()" class="order-detail">
-                                                    <p>@backOrder.getBackState.userDesc(BackGoodsState.BackGoodsType.YetSend)</p>
+                                                    <p>@backOrder.getBackState.value</p>
                                                 </td>
                                                 <td rowspan="@backOrder.getBackGoodsItemList.size()" class="control">
                                                     @if(!backOrder.getBackState.checkCanNotCancelForUser()){

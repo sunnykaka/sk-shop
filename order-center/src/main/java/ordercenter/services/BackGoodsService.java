@@ -6,6 +6,8 @@ import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.dtos.BackApplyForm;
 import ordercenter.models.*;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,17 +36,12 @@ public class BackGoodsService {
      */
     public void submitBackGoods(BackApplyForm backApply,User user){
 
-        Map<Integer,OrderItem> orderItemMap = new HashMap<>();
         Order order = orderService.getOrderById(backApply.getOrderId(), user.getId());
-        for (OrderItem orderItem : order.getOrderItemList()) {
-            orderItemMap.put(orderItem.getId(),orderItem);
-        }
 
         List<BackGoodsItem> backGoodsItems = new ArrayList<>();
-        List<String> orderItemStr = backApply.getOrderItem();
 
-        if(orderItemStr.size() <= 0){
-            throw new AppBusinessException("退货失败，没有选中退货商品！");
+        if(null == order){
+            throw new AppBusinessException("退货失败，没有选中订单！");
         }
 
         List<BackGoods> backGoodsList = getBackGoodsByOrderId(order.getId());
@@ -55,47 +52,31 @@ public class BackGoodsService {
         }
 
         try{
-            Money backPrice = Money.valueOf(0);
 
-            for(String str:orderItemStr){
+            for(OrderItem orderItem : order.getOrderItemList()){
 
                 BackGoodsItem backGoodsItem = new BackGoodsItem();
-                String[] item = str.split("-");
-                int orderItemId = Integer.parseInt(item[0]);
-                int number = Integer.parseInt(item[1]);
-
-                OrderItem orderItem = orderItemMap.get(orderItemId);
-                if(null == orderItem){
-                    throw new AppBusinessException("退货数据异常，请重新操作!");
-                }
-
-                if(number > orderItem.getNumber()){
-                    throw new AppBusinessException("退货数据异常，请重新操作!");
-                }
-
-                backGoodsItem.setNumber(number);
+                backGoodsItem.setNumber(orderItem.getNumber());
                 backGoodsItem.setUnitPrice(orderItem.getCurUnitPrice());
                 backGoodsItem.setOrderState(order.getOrderState());
-                backGoodsItem.setOrderItemId(orderItemId);
+                backGoodsItem.setOrderItemId(orderItem.getId());
                 backGoodsItems.add(backGoodsItem);
-
-                backPrice = backPrice.add(orderItem.getCurUnitPrice().multiply(number));
 
             }
 
             BackGoods backGoods = new BackGoods();
             backGoods.setUserId(user.getId());
             backGoods.setAccountType(user.getAccountType());
-            backGoods.setBackReason(backApply.getBackReason());
+            backGoods.setBackReason(StringEscapeUtils.escapeHtml4(StringUtils.trim(backApply.getBackReason())));
             backGoods.setBackReasonReal(BackGoods.BackReason.NoQualityProblem);
             backGoods.setOrderId(order.getId());
             backGoods.setOrderNo(order.getOrderNo());
-            backGoods.setBackPrice(backPrice);
+            backGoods.setBackPrice(order.getTotalMoney());
             backGoods.setBackPhone(user.getPhone());
             backGoods.setUserName(user.getUserName());
             backGoods.setBackGoodsItemList(backGoodsItems);
             backGoods.setBackState(BackGoodsState.Create);
-            backGoods.setBackType(BackGoodsState.BackGoodsType.NoSend);
+            backGoods.setBackType(BackGoodsState.BackGoodsType.YetSend);
 
             createBackGoods(backGoods);
 
@@ -117,7 +98,7 @@ public class BackGoodsService {
             backGoodsItem.setBackGoodsId(backGoods.getId());
             generalDao.persist(backGoodsItem);
         }
-        BackGoodsLog backGoodsLog = new BackGoodsLog(backGoods,backGoods.getUserName(),"创建退货单,等待审核","");
+        BackGoodsLog backGoodsLog = new BackGoodsLog(backGoods,backGoods.getUserName(),backGoods.getBackState().logMsg,"");
         generalDao.persist(backGoodsLog);
 
     }

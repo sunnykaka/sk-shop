@@ -22,7 +22,7 @@
                         <h2>售后详情</h2>
                         <div class="order-item order-profile">
                             <h3>售后订单概况</h3>
-                            <p class="refund-order-status"><span>售后单状态：<span>@backGoods.getBackState.userDesc(backGoods.getBackType)</span></span></p>
+                            <p class="refund-order-status"><span>售后单状态：<span>@backGoods.getBackState.value</span></span></p>
                             <div class="order-profile-content">
                                 <p><span>售后订单号: <b class="order-number">@backGoods.getOrderNo-@backGoods.getId</b></span> <span>订单号: <b class="order-number">@backGoods.getOrderNo</b></span>
                                     <span>申请售后时间： <b class="order-time">@DateUtils.printDateTime(backGoods.getCreateTime)</b></span></p>
