@@ -284,6 +284,35 @@ public class OrderService {
         }
     }
 
+    /**
+     *定时器定时取消订单（现在是指定1小时）
+     */
+    public void timerAutoCancelOrderProcess() {
+        Logger.info("--------OrderService timerAutoCancelOrderProcess begin exe-----------");
+        List<Order> orderList = this.getAllOrderListByOrderState(OrderState.Create);
+        if(orderList != null && orderList.size() > 0) {
+            for(Order order : orderList) {
+                if(!order.getOrderState().equals(OrderState.Create)) {
+                    continue;
+                }
+
+                if(DateUtils.current().getMillis() - order.getCreateTime().getMillis() < 3600000) {
+                    continue;
+                }
+
+                int count = this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel,order.getOrderState());
+                if(count == 1) {
+                    List<OrderItem> orderItemList = this.queryOrderItemsByOrderId(order.getId());
+                    for(OrderItem orderItem : orderItemList) {
+                        this.updateOrderItemStateByStrictState(orderItem.getId(), OrderState.Cancel, orderItem.getOrderState());
+                        //增加库存
+                        skuAndStorageService.addSkuStock(orderItem.getSkuId(), orderItem.getNumber());
+                    }
+                    this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), CancelOrderType.Sys.getName()));
+                }
+            }
+        }
+    }
 
     /**
      * 确认收货
