@@ -3,6 +3,7 @@ package controllers.shop;
 import common.utils.JsonResult;
 import common.utils.Money;
 import ordercenter.constants.BizType;
+import ordercenter.constants.OrderState;
 import ordercenter.constants.TradePayType;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
@@ -213,9 +214,15 @@ public class OrderAndPayController extends Controller {
                     return ok(new JsonResult(false,"要支付的订单不存在！").toNode());
                 }
                 long orderNo = order.getOrderNo();
+
                 if (!order.getOrderState().waitPay(TradePayType.valueOf(payType))) {
-                    Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")不支持付款操作，此订单已经支付或是已经被取消！");
-                    return ok(new JsonResult(false,"订单(" + orderNo + ")不支持付款操作，此订单已经支付或是已经被取消！").toNode());
+                    if(order.getOrderState().getName().equals(OrderState.Cancel)) {
+                        Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")已取消，请重新下单！");
+                        return ok(new JsonResult(false,"订单(" + orderNo + ")已取消，请重新下单！").toNode());
+                    } else {
+                        Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")已支付，请勿重复支付！");
+                        return ok(new JsonResult(false,"订单(" + orderNo + ")已支付，请勿重复支付！").toNode());
+                    }
                 }
 
                 order.setAccountType(curUser.getAccountType());
