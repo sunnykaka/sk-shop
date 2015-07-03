@@ -211,6 +211,9 @@ public class Order implements EntityClass<Integer> {
      */
     private boolean isBackGoodsl;
 
+    //是否可评论
+    private boolean valuation;
+
     @Override
     public String toString() {
         return "Order{" +
@@ -616,5 +619,14 @@ public class Order implements EntityClass<Integer> {
 
     public void setBackGoodsl(boolean isBackGoodsl) {
         this.isBackGoodsl = isBackGoodsl;
+    }
+
+    @Column(name = "valid")
+    public boolean isValuation() {
+        return valuation;
+    }
+
+    public void setValuation(boolean valuation) {
+        this.valuation = valuation;
     }
 }

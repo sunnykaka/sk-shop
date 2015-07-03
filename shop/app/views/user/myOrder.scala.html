@@ -146,7 +146,12 @@
                                                         <p><a href="@controllers.user.routes.MyOrderController.orderReceiving(order.getId)" class="confirm">确认收货</a></p>
                                                     }
                                                     @if(order.getOrderState.getName.equals(OrderState.Receiving.getName)){
-                                                        <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)" class="confirm">评价</a></p>
+                                                        @if(order.isValuation){
+                                                            <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)">查看评价</a></p>
+                                                        }else{
+                                                            <p><a href="@controllers.user.routes.MyOrderController.orderAppraise(order.getId)" class="confirm">评价</a></p>
+                                                        }
+
                                                     }
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
                                                         <p><span class="cancel" style="cursor: pointer" data-id="@order.getId">取消</span></p>

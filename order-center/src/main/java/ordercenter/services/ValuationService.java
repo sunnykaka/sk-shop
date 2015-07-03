@@ -2,6 +2,7 @@ package ordercenter.services;
 
 import common.services.GeneralDao;
 import common.utils.page.Page;
+import ordercenter.models.Order;
 import ordercenter.models.OrderItem;
 import ordercenter.models.Valuation;
 import org.apache.commons.lang3.ArrayUtils;
@@ -43,6 +44,19 @@ public class ValuationService {
         orderItem.setAppraise(true);//同步订单项，已评论
         orderService.updateOrderItem(orderItem);
 
+        //同步订单 ------开始
+        Order order = orderService.getOrderById(orderItem.getOrderId(),valuation.getUserId());
+        int count = 0;
+        for(OrderItem oi:order.getOrderItemList()){
+            if(oi.isAppraise()){
+                count = count + 1;
+            }
+        }
+        if(count == order.getOrderItemList().size()){
+            order.setValuation(true);
+            orderService.updateOrder(order);
+        }
+        //----------结束
         return valuation;
 
     }

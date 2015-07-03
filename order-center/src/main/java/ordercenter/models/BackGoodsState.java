@@ -70,11 +70,11 @@ public enum BackGoodsState {
 
     static {
         // 用户对应的状态
-        userMapping.put(Create, "创建退货单,等待审核");
-        userMapping.put(Verify, "审核通过");
-        userMapping.put(Receive, "确认收货");
-        userMapping.put(Success, "已退款");
-        userMapping.put(Cancel, "已取消");
+        userMapping.put(Create, "您的售后单已提交，请等待客服审核");
+        userMapping.put(Verify, "您的售后单已审核通过");
+        userMapping.put(Receive, "商家已收到您退回的商品，将尽快安排退款");
+        userMapping.put(Success, "已退款，预计7个工作日内到账（以各银行具体情况为准）。");
+        userMapping.put(Cancel, "您的售后单已取消");
 
         // 财务对应的状态
         financeMapping.put(Create, "");
@@ -84,11 +84,11 @@ public enum BackGoodsState {
         financeMapping.put(Cancel, "");
 
         // 客服对应的状态
-        serviceMapping.put(Create, "[用户]创建退货单,等待[客服]审核");
-        serviceMapping.put(Verify, "[客服]审核通过");
-        serviceMapping.put(Receive, "等待[财务]退款");
-        serviceMapping.put(Success, "[财务]退款完成");
-        serviceMapping.put(Cancel, "已取消");
+        serviceMapping.put(Create, "您的售后单已提交，请等待客服审核");
+        serviceMapping.put(Verify, "您的售后单已审核通过");
+        serviceMapping.put(Receive, "商家已收到您退回的商品，将尽快安排退款");
+        serviceMapping.put(Success, "已退款，预计7个工作日内到账（以各银行具体情况为准）。");
+        serviceMapping.put(Cancel, "您的售后单已取消");
     }
 
 

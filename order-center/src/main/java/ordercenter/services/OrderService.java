@@ -213,13 +213,13 @@ public class OrderService {
         jpql += " and o.userId = :userId ";
         queryParams.put("userId", userId);
 
-        if(querytType == 1){
+        if(querytType == 1){//待收货
             jpql += " and o.orderState in (:type0, :type1, :type2, :type3) ";
             for(int i=0; i<type_1.length; i++) {
                 queryParams.put("type" + i, type_1[i]);
             }
-        }else if(querytType == 2){
-            jpql += " and o.orderState in (:type0, :type1) ";
+        }else if(querytType == 2){//待评价
+            jpql += " and o.valuation = false and o.orderState in (:type0, :type1) ";
             for(int i=0; i<type_2.length; i++) {
                 queryParams.put("type" + i, type_2[i]);
             }

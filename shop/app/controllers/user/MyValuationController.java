@@ -50,7 +50,7 @@ public class MyValuationController extends Controller {
                 Valuation valuation = new Valuation();
                 valuation.setUserId(user.getId());
                 valuation.setUserName(user.getUserName());
-                valuation.setContent(StringEscapeUtils.escapeHtml4(valuationF.getContent()));
+                valuation.setContent(StringEscapeUtils.escapeHtml4(StringUtils.trim(valuationF.getContent())));
                 valuation.setPoint(valuationF.getPoint());
                 valuation.setOrderItemId(valuationF.getOrderItemId());
                 valuation.setProductId(valuationF.getProductId());
