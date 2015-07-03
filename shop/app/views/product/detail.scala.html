@@ -68,7 +68,7 @@
                         @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
                             <img class="lazy"   data-original="@pd.getProductPicture.getPictureUrl" width="803" height="536" src="@routes.Assets.versioned("images/grey.gif")" alt="@pd.getProduct.getName"/>
                         } else {
-                            <img src="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" alt="@pd.getProduct.getName"/>
+                            <img class="lazy"   data-original="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" src="/assets/images/grey.gif" alt="@pd.getProduct.getName"/>
                         }
                     }
                 </div>
@@ -111,7 +111,7 @@
             </div>
             <div id="right-fixed" class="right" >
                 <div class="debut-img">
-                    <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
+                    <img class="lazy"   data-original="@routes.Assets.versioned("images/detail/debut.jpg")" src="/assets/images/grey.gif" alt="全球首发"/>
                 </div>
             <div id="debut-box">
                 <div class="debut-info clearfix">
