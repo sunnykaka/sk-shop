@@ -594,7 +594,7 @@ $(function () {
                                 btn: {
                                     ok : {
                                         val : '关闭',
-                                        type : 'red',
+                                        type : 'red'
                                     }
                                 }
                             });
