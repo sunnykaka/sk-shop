@@ -63,8 +63,8 @@ public class Global extends BaseGlobal {
         );
 
         Akka.system().scheduler().schedule(
+                Duration.create(1, TimeUnit.MINUTES),
                 Duration.create(5, TimeUnit.MINUTES),
-                Duration.create(1, TimeUnit.HOURS),
                 SysCancelOrderTask.getInstance(),
                 Akka.system().dispatcher()
         );
