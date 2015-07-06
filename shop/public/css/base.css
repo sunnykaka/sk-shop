@@ -550,10 +550,10 @@ table .pro{width: 360px;}
 .detail-inner .info p{margin-top:10px;line-height: 32px;font-size: 13px;}
 .detail-inner .video{width: 803px;height: 536px;overflow: hidden;margin-bottom: 32px;}
 .detail-inner .container{margin-bottom: 32px;display: none;}
-.detail-inner .container table{border-collapse: collapse;text-align: center;margin: 30px 0;}
-.detail-inner .container table td{border: 1px solid #cccacc;}
-.detail-inner .container table tr:first-child{background:#dbdbdb;}
-.detail-inner .container table tr:first-child td{font-weight: 700;}
+/*.detail-inner .container table{border-collapse: collapse;text-align: center;margin: 30px 0;}*/
+/*.detail-inner .container table td{border: 1px solid #cccacc;}*/
+/*.detail-inner .container table tr:first-child{background:#dbdbdb;}*/
+/*.detail-inner .container table tr:first-child td{font-weight: 700;}*/
 .detail-inner .img-list{width: 803px; overflow: hidden;}
 .detail-inner .img-list .open-detail,.detail-inner .img-list .hide-detail{padding: 14px 0;width: 801px;
     text-align: center;border: 1px solid #cccccc;
