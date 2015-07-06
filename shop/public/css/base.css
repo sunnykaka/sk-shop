@@ -386,7 +386,7 @@ table .pro{width: 360px;}
 .mycart-step .current{color: #FF2D54;}
 .mycart-step .step-bg{height:20px;width: 541px;background: url("../images/step-bg-mycart.gif") no-repeat;margin: 0 auto;}
 .mycart-inner .mycart-empty p,.order-empty p{height: 52px;width: 210px; line-height: 52px;padding-left: 70px;text-align: center;
-    background: url("../images/sk-sprite.png") no-repeat 0 -970px; margin: 0 auto;
+    background: url("../images/sk-sprite.png") no-repeat  -130px -970px; margin: 0 auto;
 }
 .mycart-inner .mycart-empty a{color: #FF2D54;}
 .mycart-inner .amount,.refund-order-detail .amount{line-height:24px;height:30px;position:relative;padding-left:87px;}
@@ -690,7 +690,7 @@ table .pro{width: 360px;}
 .order-comment-container .comment-box .not-comment{background: #FF2D54;color:#fff;cursor: pointer;padding: 8px 14px;}
 .order-comment-container .comment-box {position: relative;}
 .order-comment-container .comment-box .arc{position: absolute;bottom: -1px;width: 24px;height: 16px;
-    background: url("../images/sk-sprite.png") no-repeat -170px -983px;left: 50%;margin-left: -12px;display: none;
+    background: url("../images/sk-sprite.png") no-repeat 0 -990px;left: 50%;margin-left: -12px;display: none;
 }
 .order-comment-container .current .comment-box .arc{display: block;}
 .order-comment-container .add-comment{text-align: left;}
