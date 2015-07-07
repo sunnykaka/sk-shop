@@ -154,7 +154,7 @@ public class MyOrderController extends Controller {
 
         orderService.receivingOrder(orderId, user.getId());
 
-        return redirect(routes.MyOrderController.index(0,1,10));//(new JsonResult(true, "确认收货成功").toNode());
+        return redirect(routes.MyOrderController.orderAppraise(orderId));//(new JsonResult(true, "确认收货成功").toNode());
 
     }
 
