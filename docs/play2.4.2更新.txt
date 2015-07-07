@@ -13,6 +13,7 @@
 5. 编译或运行项目之前，查看Modules（左上角File -> Project Structure）中shop的Source Folders，如果只有app和app2.1这两个目录，
 重新再refresh一下就可以了
 
+现在不需要手动设置Source Folders了, 运行test之前也不需要手动编译了
 
 
 Play2.4 API变化:
