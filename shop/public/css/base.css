@@ -339,7 +339,7 @@ table .pro{width: 360px;}
 .order-submit .select-address .add,.address-list .add{height: 121px;position: relative;cursor: pointer;}
 .order-submit .select-address .current .current-ico,.order-submit .select-address .highLight .current-ico,
 .address-list .highLight .current-ico,.address-list .current .current-ico {
-    position: absolute;width: 31px;height: 31px;background: url("../images/sk-sprite.png") no-repeat -163px -925px;right: 0;bottom: 0;
+    position: absolute;width: 31px;height: 31px;background: url("../images/sk-sprite.png") no-repeat -160px -925px;right: 0;bottom: 0;
 }
 
 .select-address .add .add-ico,.select-address .add p,.address-list .add p,.address-list .add .add-ico{position: absolute;}
