@@ -26,7 +26,7 @@ object Dependencies {
 
   val c3p0 = Seq("c3p0" % "c3p0" % "0.9.1.2")
   val common = Seq(
-    "junit" % "junit-dep" % "4.8.1" % "test" exclude("org.hamcrest", "hamcrest-core"),
+    "junit" % "junit" % "4.11" % "test" exclude("org.hamcrest", "hamcrest-core"),
     //"joda-time" % "joda-time" % "2.6",
     "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" exclude("junit", "junit"),
     //"org.apache.commons" % "commons-lang3" % "3.3.1",
