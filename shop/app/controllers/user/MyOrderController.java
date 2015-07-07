@@ -17,6 +17,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Results;
+import productcenter.models.StockKeepingUnit;
 import productcenter.services.SkuAndStorageService;
 import usercenter.dtos.DesignerView;
 import usercenter.models.User;
@@ -72,7 +73,10 @@ public class MyOrderController extends Controller {
         List<Order> orderList = orderService.getOrderByUserId(Optional.of(page), user.getId(), queryType);
         for (Order order : orderList) {
             for (OrderItem orderItem : order.getOrderItemList()) {
-                orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
+                StockKeepingUnit stockKeepingUnit = skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId());
+                if(stockKeepingUnit != null) {
+                    orderItem.setProperties(stockKeepingUnit.getSkuProperties());
+                }
             }
             Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
             if (null != logistics) {
@@ -114,7 +118,10 @@ public class MyOrderController extends Controller {
 
         Logistics logistics = orderService.getLogisticsByOrderId(order.getId());
         for (OrderItem orderItem : order.getOrderItemList()) {
-            orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
+            StockKeepingUnit stockKeepingUnit = skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId());
+            if(stockKeepingUnit != null) {
+                orderItem.setProperties(stockKeepingUnit.getSkuProperties());
+            }
         }
         List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
         Trade trade = tradeService.getTradeOrdeByOrderId(order.getId());
@@ -181,7 +188,11 @@ public class MyOrderController extends Controller {
         }
 
         for (OrderItem orderItem : order.getOrderItemList()) {
-            orderItem.setProperties(skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId()).getSkuProperties());
+            StockKeepingUnit stockKeepingUnit = skuAndStorageService.getStockKeepingUnitById(orderItem.getSkuId());
+            if(stockKeepingUnit != null) {
+                orderItem.setProperties(stockKeepingUnit.getSkuProperties());
+            }
+
             if (orderItem.isAppraise()) {
                 orderItem.setValuation(valuationService.findByOrderItemId(user.getId(), orderItem.getId()));
             }
