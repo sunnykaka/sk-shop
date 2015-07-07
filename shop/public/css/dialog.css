@@ -4,7 +4,7 @@
 .i-dialog .i-close{display:block;width:30px;height:30px;text-align:center;line-height:20px;font-size:14px;text-decoration:none;position:absolute;top:28px;right:23px;font-family:'\u9ed1\u4f53';color: #000000;
 	/*background:url("../images/sprite.gif") no-repeat -2px -1px;*/
 }
-.i-dialog .i-close i{font-size: 26px;color: #4a4947;}
+.i-dialog .i-close i{font-size: 26px;color: #4a4947;*font-size:18px;}
 .i-dialog .i-close:hover{color:#E60012;}
 .i-dialog .i-content{clear:both;}
 .i-dialog .i-wrapBtn{height:40px;background:#fff;text-align:center;padding-bottom: 20px;}

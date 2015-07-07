@@ -91,10 +91,10 @@
                         likeOjb.text(parseInt(likeOjb.text())+1);
                             $.dialog({
                                 title:'提示',
-                                content:'<p style="text-align: center;font-size: 16px;padding: 20px;">成功订阅开售提醒，我们将在开售当天通知你。</p>',
+                                content:'<p style="text-align: center;font-size: 16px;padding:20px;">成功订阅开售提醒，我们将在开售当天通知你。</p>',
                                 width:400,
                                 height:180,
-                                padding:"20",
+                                padding:"0",
                                  top:parseInt(liObj.offset().top)+diffY,
                                 left:parseInt(liObj.offset().left)+diffX,
                                 btn: {
@@ -107,10 +107,10 @@
                     }else{
                          $.dialog({
                                 title:'提示',
-                                content:'<p style="text-align: center;font-size: 16px;padding: 20px;">'+data.message+'</p>',
+                                content:'<p style="text-align: center;font-size: 16px;padding:20px;">'+data.message+'</p>',
                                 width:400,
                                 height:180,
-                                padding:"20",
+                                padding:"0",
                                 top:parseInt(liObj.offset().top)+diffY,
                                 left:parseInt(liObj.offset().left)+diffX,
                                 btn: {
