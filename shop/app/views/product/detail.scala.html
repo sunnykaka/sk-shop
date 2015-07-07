@@ -118,10 +118,10 @@
                     @if(pd.isInExhibition) {
                         <div class="debut-info-left">
                             <p>首发价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getPrice </span></p>
-                            <p class="debut-time"><i class="icon iconfont">&#xe611;</i>还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
+                            <p class="debut-time"><i class="icon iconfont">&#xe605;</i>还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
                         </div>
                         <div class="debut-info-right">
-                            <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice</span>
+                            <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
                                 <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
                         </div>
                     } else {
@@ -129,7 +129,7 @@
                             <p>售卖价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getMarketPrice</span></p>
                         </div>
                         <div class="debut-info-right">
-                            <p>首发价:￥<span class="market-price" id="market-price">@pd.getDefaultSku.getPrice </span>
+                            <p>首发价:￥<span class="market-price" id="market-price">@pd.getDefaultSku.getPrice </span><i class="iconfont">&#xe610;</i>
                                 <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
                         </div>
                     }
@@ -173,7 +173,10 @@
                     }
                 }
                 <div class="detail-like">
-                    <span class="like @if(pd.isFavorites){current}" data-id="@pd.getProduct.getId"><i></i><span class="like-text">@if(pd.isFavorites){ @pd.getFavoritesNum }else{我喜欢}</span></span>
+                    <span class="like @if(pd.isFavorites){current}" data-id="@pd.getProduct.getId">
+                        <i class="iconfont shi" @if(!pd.isFavorites){style="display: none;"}>&#xe603;</i>
+                        <i class="iconfont kong" @if(pd.isFavorites){style="display: none;"}>&#xe602;</i>
+                        <span class="like-text">@if(pd.isFavorites){ @pd.getFavoritesNum }else{我喜欢}</span></span>
                 </div>
             </div>
         </div>
@@ -182,12 +185,11 @@
 
     <!--siderbar-->
     <ul class="sider-bar" id="cart">
-        <li class="cart"><span  id="cart-quantity-btn"></span><span class="quantity" id="cart-quantity">0</span><span id="msg"></span></li>
-        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"></a></li>
-        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"></a></li>
-        <li class="go-top"><span id="gotoTop"></span></li>
+        <li class="cart"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
+        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+        <li class="go-top"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
     </ul>
     <!--end sideebar-->
-
 }
 

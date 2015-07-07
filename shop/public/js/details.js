@@ -207,6 +207,9 @@ $(function () {
                     if (res.result) {
                         that.addClass('current');
                         $('.like-text').text(res.message);
+                        $('.kong').fadeOut('300',function(){
+                            $('.shi').fadeIn();
+                        });
                     } else {
                         if (res.message == 'Credentials required') {
                             createLoginReg();
@@ -222,6 +225,9 @@ $(function () {
                     if(res.result){
                         that.removeClass('current');
                         $('.like-text').text('我喜欢');
+                        $('.shi').fadeOut('300',function(){
+                            $('.kong').fadeIn();
+                        });
                     }
                 }
             });
@@ -229,11 +235,9 @@ $(function () {
     });
 
     //市场价格tips
-    $('.market-price').hover(function () {
-        $(this).addClass('current');
+    $('.debut-info-right i').hover(function () {
         $('.info-tip').fadeIn(500);
     }, function () {
-        $(this).removeClass('current');
         $('.info-tip').hide();
     });
 
@@ -587,7 +591,7 @@ $(function () {
                             $.dialog({
                                 title: '提示',
                                 lock: true,
-                                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+data.message+'</p></div>',
+                                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
                                 width: 500,
                                 height: 248,
                                 padding: "20",

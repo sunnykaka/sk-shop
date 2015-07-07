@@ -269,7 +269,7 @@ $(function(){
         var addressId = $(this).attr('data-id'),item = $(this).parents('li'),that = $(this);
         $.dialog({
             title:'提示',
-            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>确定要删除这个收货地址？</p></div>',
+            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>确定要删除这个收货地址？</p></div>',
             width:540,
             height:248,
             lock:true,

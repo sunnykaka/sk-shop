@@ -190,7 +190,7 @@ $(function(){
             $.dialog({
                 title:'提示',
                 lock:true,
-                content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>请选择您需要购买的商品</p></div>',
+                content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>请选择您需要购买的商品</p></div>',
                 width:500,
                 height:248,
                 btn: {
@@ -224,7 +224,7 @@ $(function(){
         $.dialog({
             title:'提示',
             lock:true,
-            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>确定要删除该商品吗？</p></div>',
+            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>确定要删除该商品吗？</p></div>',
             width:540,
             height:248,
             drag:false,

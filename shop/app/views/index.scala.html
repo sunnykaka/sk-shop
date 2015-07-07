@@ -10,7 +10,7 @@
             <div class="img">
                 <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)"><img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction" width="590" height="275"/></a>
                 <p class="time">
-                    还剩 <i class="icon iconfont">&#xe611;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                    还剩 <i class="icon iconfont">&#xe605;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
                         <span class="over-text">结束</span></p>
             </div>
             <div class="title">
@@ -92,7 +92,7 @@
                             <img class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
-                                <p class="time"><i class="icon iconfont">&#xe611;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span><span class="over-text">结束</span></p>
+                                <p class="time"><i class="icon iconfont">&#xe605;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span><span class="over-text">结束</span></p>
                             </div>
                         </a>
                     </li>
@@ -122,7 +122,7 @@
                             </a>
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                                <p class="time"><i class="icon iconfont">&#xe611;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                <p class="time"><i class="icon iconfont">&#xe605;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
                                     <span class="over-text">结束</span></p>
                             </div>
                         </li>
@@ -136,7 +136,7 @@
                         </a>
                         <div class="title">
                             <p><span class="designer">@doubleEx.getIntroduction()</span></p>
-                            <p class="time"><i class="icon iconfont">&#xe611;</i><span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
+                            <p class="time"><i class="icon iconfont">&#xe605;</i><span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
                                 <span class="over-text">结束</span></p>
                         </div>
                     </li>
@@ -151,7 +151,7 @@
                             </a>
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                                <p class="time"><i class="icon iconfont">&#xe611;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                <p class="time"><i class="icon iconfont">&#xe605;</i><span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
                                     <span class="over-text"> 结束</span></p>
                             </div>
                         </li>
@@ -164,10 +164,10 @@
 </div>
     <!--siderbar-->
     <ul class="sider-bar" id="cart">
-        <li class="cart"><span  id="cart-quantity-btn"></span><span class="quantity" id="cart-quantity">0</span></li>
-        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"></a></li>
-        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"></a></li>
-        <li class="go-top"><span id="gotoTop"></span></li>
+        <li class="cart"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
+        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+        <li class="go-top"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
     </ul>
     <!--end sideebar-->
 }

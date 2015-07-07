@@ -111,7 +111,7 @@ $(function(){
                 if(data.result){
                     $.dialog({
                         title:'提示',
-                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>邮件重新发送成功</p></div>',
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>邮件重新发送成功</p></div>',
                         width:400,
                         height:248,
                         btn: {
@@ -125,7 +125,7 @@ $(function(){
                     $.dialog({
                         title:'提示',
                         lock:true,
-                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+data.message+'</p></div>',
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
                         width:400,
                         height:248,
                         btn: {
@@ -176,7 +176,7 @@ $(function(){
                         $.dialog({
                             title:'提示',
                             lock:true,
-                            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe602;</i>'+data.message+'</p></div>',
+                            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
                             width:400,
                             height:160,
                             btn: {
