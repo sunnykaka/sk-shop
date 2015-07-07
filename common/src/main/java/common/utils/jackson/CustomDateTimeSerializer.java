@@ -1,8 +1,9 @@
 package common.utils.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.datatype.joda.ser.JacksonJodaFormat;
+import com.fasterxml.jackson.datatype.joda.cfg.JacksonJodaDateFormat;
 import com.fasterxml.jackson.datatype.joda.ser.JodaDateSerializerBase;
 import common.utils.DateUtils;
 import org.joda.time.DateTime;
@@ -15,16 +16,16 @@ import java.io.IOException;
  */
 public class CustomDateTimeSerializer extends JodaDateSerializerBase<DateTime> {
 
-    protected final static JacksonJodaFormat DEFAULT_FORMAT
-            = new JacksonJodaFormat(ISODateTimeFormat.dateTime().withZoneUTC());
+    protected final static JacksonJodaDateFormat DEFAULT_FORMAT
+            = new JacksonJodaDateFormat(ISODateTimeFormat.dateTime().withZoneUTC());
 
 
     public CustomDateTimeSerializer() {
-        super(DateTime.class, DEFAULT_FORMAT);
+        super(DateTime.class, DEFAULT_FORMAT, false, SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     @Override
-    public JodaDateSerializerBase withFormat(JacksonJodaFormat format) {
+    public JodaDateSerializerBase withFormat(JacksonJodaDateFormat format) {
         return new CustomDateTimeSerializer();
     }
 

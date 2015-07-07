@@ -1,5 +1,6 @@
 package cms;
 
+import base.BaseTest;
 import models.CmsExhibition;
 import models.ExhibitionStatus;
 import org.junit.Assert;
@@ -20,7 +21,7 @@ import static play.test.Helpers.running;
 /**
  * Created by amos on 15-5-11.
  */
-public class CmsTest extends WithApplication {
+public class CmsTest extends BaseTest {
 
     private CmsService cmsService;
 

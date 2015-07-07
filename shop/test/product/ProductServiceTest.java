@@ -1,10 +1,10 @@
 package product;
 
 
+import base.BaseTest;
 import common.utils.page.Page;
 import org.junit.Before;
 import org.junit.Test;
-import play.test.WithApplication;
 import productcenter.constants.StoreStrategy;
 import productcenter.models.Product;
 import productcenter.services.ProductService;
@@ -18,7 +18,7 @@ import java.util.Optional;
  * User: lidujun
  * Date: 2015-04-02
  */
-public class ProductServiceTest extends WithApplication {
+public class ProductServiceTest extends BaseTest {
 
     private ProductService productService;
 

@@ -1,6 +1,7 @@
 package product;
 
 
+import base.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
@@ -15,7 +16,7 @@ import java.util.List;
  * User: lidujun
  * Date: 2015-04-02
  */
-public class ProductDescServiceTest extends WithApplication {
+public class ProductDescServiceTest extends BaseTest {
 
     private ProductDescService productDesService;
 

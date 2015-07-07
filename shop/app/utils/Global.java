@@ -1,5 +1,6 @@
 package utils;
 
+import akka.actor.Cancellable;
 import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.JsonResult;
@@ -39,12 +40,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Global extends BaseGlobal {
 
+    private List<Cancellable> schedulers = new ArrayList<>();
+
     @Override
     public synchronized void onStart(Application app) {
-        if(ctx != null) {
-            Logger.warn("Global 启动的时候发现ctx != null");
-            return;
-        }
+        super.onStart(app);
+        injector = app.injector();
         ctx = new AnnotationConfigApplicationContext(AppConfig.class, DataConfig.class);
 
         Formatters.register(DateTime.class, new JodaDateFormatter());
@@ -53,29 +54,42 @@ public class Global extends BaseGlobal {
         runSchedulers();
     }
 
+    @Override
+    public void onStop(Application app) {
+        super.onStop(app);
+        stopSchedulers();
+        injector = null;
+        if(ctx != null) {
+            ((AnnotationConfigApplicationContext)ctx).close();
+            ctx = null;
+        }
+    }
+
     private void runSchedulers() {
 
-        Akka.system().scheduler().schedule(
-                Duration.create(20, TimeUnit.SECONDS),
-                Duration.create(60, TimeUnit.SECONDS),
-                ExhibitionStartReminderTask.getInstance(),
-                Akka.system().dispatcher()
+        schedulers.add(
+                Akka.system().scheduler().schedule(
+                        Duration.create(20, TimeUnit.SECONDS),
+                        Duration.create(60, TimeUnit.SECONDS),
+                        ExhibitionStartReminderTask.getInstance(),
+                        Akka.system().dispatcher()
+                )
         );
 
-        Akka.system().scheduler().schedule(
-                Duration.create(1, TimeUnit.MINUTES),
-                Duration.create(5, TimeUnit.MINUTES),
-                SysCancelOrderTask.getInstance(),
-                Akka.system().dispatcher()
+        schedulers.add(
+            Akka.system().scheduler().schedule(
+                    Duration.create(1, TimeUnit.MINUTES),
+                    Duration.create(5, TimeUnit.MINUTES),
+                    SysCancelOrderTask.getInstance(),
+                    Akka.system().dispatcher()
+            )
         );
-
     }
 
-
-    @Override
-    public <A> A getControllerInstance(Class<A> clazz) {
-        return ctx.getBean(clazz);
+    private void stopSchedulers() {
+        schedulers.forEach(Cancellable::cancel);
     }
+
 
     @Override
     public Action onRequest(Http.Request request, Method actionMethod) {

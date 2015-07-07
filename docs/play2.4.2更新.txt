@@ -1,0 +1,34 @@
+更新步骤:
+
+1. 配置代理仓库.可以加速下载jar包. linux下, 打开~/.sbt/repositories文件, 将下面两行拷贝到local语句下
+  my-maven-proxy-releases: http://192.168.1.100:8081/nexus/content/groups/public/
+  my-ivy-proxy-releases: http://192.168.1.100:8081/nexus/content/groups/ivy-proxy/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
+
+2. 更新代码.
+
+3. refresh SBT项目.
+
+4. 关掉IDEA, 进入项目所在目录，删除.idea文件，然后打开IDEA, 使用Open重新打开这个项目。（因为IDEA貌似不会自动清除不再使用的包，所以手动导入一次）
+
+5. 编译或运行项目之前，查看Modules（左上角File -> Project Structure）中shop的Source Folders，如果只有app和app2.1这两个目录，
+重新再refresh一下就可以了
+
+
+
+Play2.4 API变化:
+
+1. BaseGlobal现在有两个静态变量，分别代表两个容器：
+injector: Guice容器
+ctx: Spring容器
+Play2.4内置容器使用的是Guice，与框架内置的组件都需要从该容器中取得，例如CacheApi，DataSource，WSClient等。
+使用方法: BaseGlobal.injector.instanceOf(CacheApi.class)
+Spring容器还是和原来一样，Service和Controller都在这个容器里。
+
+2. 原Cache，WS现在需要从容器里获得。
+例如原来操作缓存：Cache.set(key, value)
+现在需要从Guice容器里拿到CacheApi在做操作：
+CacheApi cacheApi = BaseGlobal.injector.instanceOf(CacheApi.class);
+cacheApi.set(key, value)
+
+3. 测试Api变化
+现在的单元测试类要继承BaseTest这个抽象类

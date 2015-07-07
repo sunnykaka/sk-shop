@@ -1,8 +1,8 @@
 package common.utils;
 
+import base.BaseTest;
 import org.junit.Test;
 import play.Play;
-import play.test.WithApplication;
 
 import java.util.Base64;
 
@@ -13,7 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by liubin on 15-4-2.
  */
-public class AESTest extends WithApplication{
+public class AESTest extends BaseTest{
 
 
     @Test

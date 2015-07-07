@@ -1,34 +1,23 @@
 package controllers.user;
 
-import common.utils.DateUtils;
-import common.utils.JsonResult;
-import common.utils.test.BaseTest;
+import base.BaseTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
-import play.mvc.Result;
-import play.test.FakeRequest;
-import play.test.WithApplication;
-import usercenter.cache.UserCache;
 import usercenter.domain.QQLogin;
-import usercenter.domain.SmsSender;
 import usercenter.domain.WeiboLogin;
 import usercenter.domain.WeixinLogin;
 import usercenter.models.User;
-import usercenter.utils.SessionUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static play.test.Helpers.*;
 
 
 /**
  * Created by liubin on 15-4-2.
  */
-public class OpenIdLoginControllerTest extends WithApplication implements BaseTest {
+public class OpenIdLoginControllerTest extends BaseTest {
 
     @Test
     @Ignore

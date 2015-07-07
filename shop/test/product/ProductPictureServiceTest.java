@@ -1,9 +1,9 @@
 package product;
 
 
+import base.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
-import play.test.WithApplication;
 import productcenter.models.ProductPicture;
 import productcenter.services.ProductPictureService;
 import utils.Global;
@@ -15,7 +15,7 @@ import java.util.List;
  * User: lidujun
  * Date: 2015-04-02
  */
-public class ProductPictureServiceTest extends WithApplication {
+public class ProductPictureServiceTest extends BaseTest {
 
     private ProductPictureService productPictureService;
 

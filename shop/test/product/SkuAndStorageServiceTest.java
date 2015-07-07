@@ -1,8 +1,8 @@
 package product;
 
+import base.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
-import play.test.WithApplication;
 import productcenter.models.SkuStorage;
 import productcenter.models.StockKeepingUnit;
 import productcenter.services.SkuAndStorageService;
@@ -15,7 +15,7 @@ import java.util.List;
  * User: lidujun
  * Date: 2015-04-02
  */
-public class SkuAndStorageServiceTest extends WithApplication {
+public class SkuAndStorageServiceTest extends BaseTest {
 
     private SkuAndStorageService skuAndStorageService;
 

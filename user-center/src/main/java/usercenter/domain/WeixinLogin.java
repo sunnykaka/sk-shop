@@ -4,23 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
 import common.exceptions.AppBusinessException;
 import common.utils.JsonUtils;
-import common.utils.UrlUtils;
-import common.utils.play.BaseGlobal;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import play.Configuration;
 import play.Logger;
-import play.Play;
 import play.libs.F;
-import play.mvc.Http;
+import usercenter.dtos.OpenUserInfo;
+import usercenter.models.User;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import play.libs.ws.*;
-import usercenter.dtos.OpenUserInfo;
-import usercenter.models.User;
 
 /**
  * Created by liubin on 15-5-22.
@@ -53,7 +45,7 @@ public class WeixinLogin extends OpenIDConnector {
         checkState(state);
 
         F.Promise<OpenUserInfo> openUserInfoPromise =
-                WS.url(accessTokenUrl).
+                wsClient.url(accessTokenUrl).
                 setQueryParameter("appid", appId).
                 setQueryParameter("secret", appSecret).
                 setQueryParameter("code", code).
@@ -64,7 +56,7 @@ public class WeixinLogin extends OpenIDConnector {
                     logResponse("微信登录请求accessToken的返回结果", jsonNode);
                     Map<String, Object> map = JsonUtils.node2Object(jsonNode, Map.class);
                     throwExceptionIfErrorHappen(map);
-                    return WS.url(userInfoUrl).
+                    return wsClient.url(userInfoUrl).
                             setQueryParameter("access_token", map.get("access_token").toString()).
                             setQueryParameter("openid", map.get("openid").toString()).
                             get();

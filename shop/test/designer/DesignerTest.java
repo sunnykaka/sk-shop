@@ -1,5 +1,6 @@
 package designer;
 
+import base.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
@@ -9,7 +10,7 @@ import utils.Global;
 /**
  * Created by amos on 15-5-15.
  */
-public class DesignerTest  extends WithApplication {
+public class DesignerTest  extends BaseTest {
 
     private DesignerService designerService;
 

@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
 import common.exceptions.AppBusinessException;
 import common.utils.JsonUtils;
-import common.utils.UrlUtils;
 import org.apache.commons.lang3.StringUtils;
 import play.Logger;
 import play.libs.F;
-import play.libs.ws.WS;
 import usercenter.dtos.OpenUserInfo;
 import usercenter.models.User;
 
@@ -48,7 +46,7 @@ public class WeiboLogin extends OpenIDConnector {
         checkState(state);
 
         F.Promise<OpenUserInfo> openUserInfoPromise =
-                WS.url(accessTokenUrl).
+                wsClient.url(accessTokenUrl).
                         setQueryParameter("client_id", appId).
                         setQueryParameter("client_secret", appSecret).
                         setQueryParameter("code", code).
@@ -60,7 +58,7 @@ public class WeiboLogin extends OpenIDConnector {
                     logResponse("微博登录请求accessToken的返回结果", jsonNode);
                     Map<String, Object> map = JsonUtils.node2Object(jsonNode, Map.class);
                     throwExceptionIfErrorHappen(map);
-                    return WS.url(userInfoUrl).
+                    return wsClient.url(userInfoUrl).
                             setQueryParameter("access_token", map.get("access_token").toString()).
                             setQueryParameter("uid", map.get("uid").toString()).
                             get();

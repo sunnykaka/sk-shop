@@ -1,4 +1,3 @@
-import play.PlayImport.PlayKeys._
 import sbt._
 import Keys._
 
@@ -15,10 +14,11 @@ object Commons {
     resolvers ++= Seq(
       Opts.resolver.mavenLocalFile,
       "local repository" at "http://192.168.1.100:8081/nexus/content/groups/public/",
-//      Resolver.typesafeRepo("releases"),
+      Resolver.typesafeRepo("releases"),
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots"),
-      "pk11 repo" at "http://pk11-scratch.googlecode.com/svn/trunk"
+      "pk11 repo" at "http://pk11-scratch.googlecode.com/svn/trunk",
+      "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
     ),
     credentials += Credentials("Sonatype Nexus Repository Manager",
       "192.168.1.100", "admin", "admin123"),

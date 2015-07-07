@@ -2,8 +2,8 @@ package usercenter.cache;
 
 import common.utils.DateUtils;
 import common.utils.RedisUtils;
-import play.Play;
-import play.cache.Cache;
+import common.utils.play.BaseGlobal;
+import play.cache.CacheApi;
 import usercenter.domain.SmsSender;
 import usercenter.models.User;
 
@@ -12,15 +12,18 @@ import usercenter.models.User;
  */
 public class UserCache {
 
+    private static CacheApi cacheApi = BaseGlobal.injector.instanceOf(CacheApi.class);
+
+
     public static void setUserInSession(User user, int expiration) {
 
-        Cache.set(RedisUtils.buildKey("session", "users", String.valueOf(user.getId())), user, expiration);
+        cacheApi.set(RedisUtils.buildKey("session", "users", String.valueOf(user.getId())), user, expiration);
 
     }
 
     public static User getUserInSession(Integer userId) {
 
-        return (User)Cache.get(RedisUtils.buildKey("session", "users", String.valueOf(userId)));
+        return (User)cacheApi.get(RedisUtils.buildKey("session", "users", String.valueOf(userId)));
 
     }
 
@@ -47,25 +50,16 @@ public class UserCache {
     }
 
     public static String getPhoneVerificationCode(String phone, SmsSender.Usage usage) {
-        return (String)Cache.get(RedisUtils.buildKey("register_phone", phone, usage.toString()));
+        return (String)cacheApi.get(RedisUtils.buildKey("register_phone", phone, usage.toString()));
     }
 
     public static void setPhoneVerificationCode(String phone, SmsSender.Usage usage, String value, int expiration) {
-        Cache.set(RedisUtils.buildKey("register_phone", phone, usage.toString()), value, expiration);
+        cacheApi.set(RedisUtils.buildKey("register_phone", phone, usage.toString()), value, expiration);
     }
 
     private static String toadyInString() {
         return DateUtils.print(DateUtils.current(), "yyyyMMdd");
     }
-
-
-//    public static void setUserRequestTime(Integer userId, long requestTime) {
-//        Cache.set(RedisUtils.buildKey("session", String.valueOf(userId)), requestTime);
-//    }
-//
-//    public static Long getLastUserRequestTime(Integer userId) {
-//        return (Long)Cache.get(RedisUtils.buildKey("session", String.valueOf(userId)));
-//    }
 
 
 

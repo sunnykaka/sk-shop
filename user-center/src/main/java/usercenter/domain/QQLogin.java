@@ -8,7 +8,6 @@ import common.utils.UrlUtils;
 import org.apache.commons.lang3.StringUtils;
 import play.Logger;
 import play.libs.F;
-import play.libs.ws.WS;
 import usercenter.dtos.OpenUserInfo;
 import usercenter.models.User;
 
@@ -47,7 +46,7 @@ public class QQLogin extends OpenIDConnector {
         checkState(state);
 
         F.Promise<OpenUserInfo> openUserInfoPromise =
-                WS.url(accessTokenUrl).
+                wsClient.url(accessTokenUrl).
                 setQueryParameter("grant_type", "authorization_code").
                 setQueryParameter("client_id", appId).
                 setQueryParameter("client_secret", appSecret).
@@ -67,7 +66,8 @@ public class QQLogin extends OpenIDConnector {
                     String accessToken = map.get("access_token").get(0);
                     //请求openid
                     return F.Promise.pure(new Object[]{
-                            WS.url(userInfoUrl).setQueryParameter("access_token", accessToken).get(),
+                            wsClient.url(userInfoUrl).
+                            setQueryParameter("access_token", accessToken).get(),
                             accessToken});
                 }).flatMap(array -> {
                     F.Promise<play.libs.ws.WSResponse> p = (F.Promise<play.libs.ws.WSResponse>) array[0];
@@ -83,7 +83,7 @@ public class QQLogin extends OpenIDConnector {
                             String openId = (String) map.get("openid");
                             //请求userDetailInfo
                             return F.Promise.pure(new Object[]{
-                                    WS.url(userDetailInfoUrl).
+                                    wsClient.url(userDetailInfoUrl).
                                             setQueryParameter("access_token", accessToken).
                                             setQueryParameter("oauth_consumer_key", appId).
                                             setQueryParameter("openid", openId).

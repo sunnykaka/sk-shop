@@ -1,14 +1,14 @@
 package common.utils;
 
+import base.BaseTest;
 import org.junit.Ignore;
 import org.junit.Test;
-import play.test.WithApplication;
 
 
 /**
  * Created by liubin on 15-4-2.
  */
-public class SmsTest extends WithApplication{
+public class SmsTest extends BaseTest {
 
 
     @Test

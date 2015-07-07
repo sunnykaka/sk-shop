@@ -1,9 +1,10 @@
 package controllers;
 
+import base.BaseTest;
 import common.utils.JsonResult;
-import common.utils.test.BaseTest;
 import org.junit.Ignore;
 import org.junit.Test;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.test.FakeRequest;
 import play.test.WithApplication;
@@ -16,7 +17,7 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class ApplicationTest extends WithApplication implements BaseTest {
+public class ApplicationTest extends BaseTest {
 
 
     @Test
@@ -25,23 +26,23 @@ public class ApplicationTest extends WithApplication implements BaseTest {
 
         int exhibitionId = 25;
 
-        FakeRequest request = new FakeRequest(POST, routes.Application.userLikeExhibition(exhibitionId, "186820005933").url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.Application.userLikeExhibition(exhibitionId, "186820005933").url());
         Result result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(false));
         assertThat(jsonResult.getData(), is(nullValue()));
         assertThat(jsonResult.getMessage(), is(notNullValue()));
 
-        request = new FakeRequest(POST, routes.Application.userLikeExhibition(exhibitionId, "18682000593").url());
+        request = new Http.RequestBuilder().method(POST).uri(routes.Application.userLikeExhibition(exhibitionId, "18682000593").url());
         result = route(request);
-        assertThat(status(result), is(OK));
-        assertThat(contentType(result), is("application/json"));
+        assertThat(result.status(), is(OK));
+        assertThat(result.contentType(), is("application/json"));
         assertThat(contentAsString(result), containsString("true"));
 
-        request = new FakeRequest(POST, routes.Application.userLikeExhibition(exhibitionId, "18682000593").url());
+        request = new Http.RequestBuilder().method(POST).uri(routes.Application.userLikeExhibition(exhibitionId, "18682000593").url());
         result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(false));
         assertThat(jsonResult.getData(), is(nullValue()));

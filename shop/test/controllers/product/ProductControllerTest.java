@@ -1,15 +1,14 @@
 package controllers.product;
 
+import base.BaseTest;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;
-import common.utils.test.BaseTest;
 import ordercenter.models.Valuation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
+import play.mvc.Http;
 import play.mvc.Result;
-import play.test.FakeRequest;
-import play.test.WithApplication;
 
 import java.util.*;
 
@@ -21,7 +20,7 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class ProductControllerTest extends WithApplication implements BaseTest {
+public class ProductControllerTest extends BaseTest {
 
     @Test
     public void testListProductValuations() throws Exception {
@@ -31,10 +30,10 @@ public class ProductControllerTest extends WithApplication implements BaseTest {
         prepareValuations(size, Optional.of(fakeProductId));
 
 
-        FakeRequest request = new FakeRequest(GET, routes.ProductController.valuations(fakeProductId, null).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId, null).url());
         Result result = route(request);
         System.out.println(contentAsString(result));
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
         assertThat(jsonResult.getData(), is(notNullValue()));
@@ -48,9 +47,9 @@ public class ProductControllerTest extends WithApplication implements BaseTest {
         int allTotal = 0;
 
         for(int i=0; i<3; i++) {
-            request = new FakeRequest(GET, routes.ProductController.valuations(fakeProductId, i).url());
+            request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId, i).url());
             result = route(request);
-            assertThat(status(result), is(OK));
+            assertThat(result.status(), is(OK));
             jsonResult = JsonResult.fromJson(contentAsString(result));
             page = (Map) jsonResult.getData();
             int totalCount = (Integer)page.get("totalCount");

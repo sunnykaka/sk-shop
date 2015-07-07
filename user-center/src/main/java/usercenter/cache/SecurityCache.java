@@ -1,7 +1,8 @@
 package usercenter.cache;
 
 import common.utils.RedisUtils;
-import play.cache.Cache;
+import common.utils.play.BaseGlobal;
+import play.cache.CacheApi;
 
 /**
  * Created by zhb on 15-4-30.
@@ -16,6 +17,8 @@ public class SecurityCache {
 
     public static final String SECURITY_TOKEN_PHONE_KEY = "changePhone";
 
+    private static CacheApi cacheApi = BaseGlobal.injector.instanceOf(CacheApi.class);
+
     /**
      * 添加
      * @param key
@@ -23,7 +26,7 @@ public class SecurityCache {
      */
     public static void setToken(String staticKey, String key, String value) {
 
-        Cache.set(RedisUtils.buildKey("token", staticKey, key), value, SECURITY_TOKEN_EXPIRE_TIME);
+        cacheApi.set(RedisUtils.buildKey("token", staticKey, key), value, SECURITY_TOKEN_EXPIRE_TIME);
 
     }
 
@@ -34,7 +37,7 @@ public class SecurityCache {
      */
     public static String getToken(String staticKey, String key) {
 
-        return (String) Cache.get(RedisUtils.buildKey("token", staticKey, key));
+        return (String) cacheApi.get(RedisUtils.buildKey("token", staticKey, key));
 
     }
 
@@ -44,7 +47,7 @@ public class SecurityCache {
      */
     public static void removeToken(String staticKey, String key){
 
-        Cache.remove(RedisUtils.buildKey("token", staticKey, key));
+        cacheApi.remove(RedisUtils.buildKey("token", staticKey, key));
 
     }
 }

@@ -19,9 +19,8 @@ public class SysCancelOrderTask extends SchedulerTask {
 
     @Override
     void doRun() {
-        Logger.info("----------------定时1小时未支付系统定时自动取消订单SysCancelOrderTask开始执行---------------------");
         OrderService orderService = Global.ctx.getBean(OrderService.class);
         orderService.timerAutoCancelOrderProcess();
-        Logger.info("----------------定时1小时未支付系统定时自动取消订单SysCancelOrderTask执行结束---------------------");
+        //父类会负责打印日志并计时
     }
 }

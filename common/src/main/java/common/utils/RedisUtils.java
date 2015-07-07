@@ -1,8 +1,9 @@
 package common.utils;
 
-import common.play.plugin.RedisPlugin;
+import common.utils.play.BaseGlobal;
 import play.Logger;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.io.UnsupportedEncodingException;
 import java.util.function.Function;
@@ -16,14 +17,15 @@ public class RedisUtils {
 
     public static <T> T withJedisClient(Function<Jedis, T> callback) {
 
-        Jedis j = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
+        JedisPool jedisPool = BaseGlobal.injector.instanceOf(JedisPool.class);
+        Jedis j = jedisPool.getResource();
 
         try {
             T result = callback.apply(j);
 
             return result;
         } finally {
-            play.Play.application().plugin(RedisPlugin.class).jedisPool().returnResource(j);
+            jedisPool.returnResource(j);
         }
 
     }

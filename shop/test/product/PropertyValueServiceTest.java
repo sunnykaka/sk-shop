@@ -1,8 +1,8 @@
 package product;
 
+import base.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
-import play.test.WithApplication;
 import productcenter.models.Property;
 import productcenter.models.PropertyValueDetail;
 import productcenter.models.Value;
@@ -16,7 +16,7 @@ import java.util.List;
  * User: lidujun
  * Date: 2015-04-02
  */
-public class PropertyValueServiceTest extends WithApplication {
+public class PropertyValueServiceTest extends BaseTest {
 
     private PropertyAndValueService propertyAndValueService;
 

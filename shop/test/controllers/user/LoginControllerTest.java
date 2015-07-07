@@ -1,17 +1,22 @@
 package controllers.user;
 
+import base.BaseTest;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
+import play.*;
+import play.Application;
+import play.api.*;
+import play.core.DefaultWebCommands;
+import play.mvc.Http;
+import scala.Option;
 import usercenter.utils.SessionUtils;
-import common.utils.test.BaseTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import play.mvc.Result;
-import play.test.FakeRequest;
-import play.test.WithApplication;
 import usercenter.cache.UserCache;
 import usercenter.domain.SmsSender;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +28,8 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class LoginControllerTest extends WithApplication implements BaseTest {
+public class LoginControllerTest extends BaseTest {
+
 
     @Test
     public void testRegisterSuccess() throws Exception {
@@ -43,10 +49,10 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         String username = RandomStringUtils.randomAlphabetic(1);
         String password = RandomStringUtils.randomAlphabetic(10);
 
-        FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
         Result result = route(request);
-        assertThat(status(result), is(OK));
-        assertThat(contentType(result), is("application/json"));
+        assertThat(result.status(), is(OK));
+        assertThat(result.contentType(), is("application/json"));
         assertThat(contentAsString(result), containsString("true"));
 
         String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
@@ -59,9 +65,9 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         params.put("phone", phone);
         params.put("verificationCode", verificationCode);
 
-        request = new FakeRequest(POST, routes.LoginController.register().url()).withFormUrlEncodedBody(params);
+        request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
         result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(false));
         assertThat(jsonResult.getData(), is(nullValue()));
@@ -76,11 +82,11 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         String username = RandomStringUtils.randomAlphabetic(10);
         String password = RandomStringUtils.randomAlphabetic(10);
 
-        FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
 
         Result result = route(request);
-        assertThat(status(result), is(OK));
-        assertThat(contentType(result), is("application/json"));
+        assertThat(result.status(), is(OK));
+        assertThat(result.contentType(), is("application/json"));
         assertThat(contentAsString(result), containsString("true"));
 
         String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
@@ -93,9 +99,9 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         params.put("phone", phone);
         params.put("verificationCode", "foobar");
 
-        request = new FakeRequest(POST, routes.LoginController.register().url()).withFormUrlEncodedBody(params);
+        request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
         result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(false));
         assertThat(jsonResult.getData(), is(nullValue()));
@@ -119,23 +125,23 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         params.put("passport", username);
         params.put("password", password);
 
-        FakeRequest request = new FakeRequest(POST, routes.LoginController.login().url()).withFormUrlEncodedBody(params);
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.login().url()).bodyForm(params);
         Result result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
         assertThat(jsonResult.getData(), is(notNullValue()));
         assertThat(jsonResult.getMessage(), is(nullValue()));
 
-        assertThat(flash(result).isEmpty(), is(true));
-        String userId = session(result).get(SessionUtils.SESSION_CREDENTIALS);
+        assertThat(result.flash().isEmpty(), is(true));
+        String userId = result.session().get(SessionUtils.SESSION_CREDENTIALS);
         assertThat(userId, notNullValue());
 
-        request = new FakeRequest(GET, controllers.routes.Application.index().url()).
-                withSession(SessionUtils.SESSION_CREDENTIALS, userId).
-                withSession(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
+        request = new Http.RequestBuilder().method(GET).uri(controllers.routes.Application.index().url()).
+                session(SessionUtils.SESSION_CREDENTIALS, userId).
+                session(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
         result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         assertThat(contentAsString(result).contains(username), is(true));
 
         //使用手机登录
@@ -143,21 +149,21 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         params.put("passport", phone);
         params.put("password", password);
 
-        request = new FakeRequest(POST, routes.LoginController.login().url()).withFormUrlEncodedBody(params);
+        request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.login().url()).bodyForm(params);
         result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
         assertThat(jsonResult.getData(), is(notNullValue()));
         assertThat(jsonResult.getMessage(), is(nullValue()));
 
-        assertThat(flash(result).isEmpty(), is(true));
-        userId = session(result).get(SessionUtils.SESSION_CREDENTIALS);
+        assertThat(result.flash().isEmpty(), is(true));
+        userId = result.session().get(SessionUtils.SESSION_CREDENTIALS);
         assertThat(userId, notNullValue());
 
-        request = new FakeRequest(GET, controllers.routes.Application.index().url()).
-                withSession(SessionUtils.SESSION_CREDENTIALS, userId).
-                withSession(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
+        request = new Http.RequestBuilder().method(GET).uri(controllers.routes.Application.index().url()).
+                session(SessionUtils.SESSION_CREDENTIALS, userId).
+                session(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
 
         result = route(request);
         assertThat(status(result), is(OK));
@@ -167,9 +173,9 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
 
     @Test
     public void testRequestIndexAsGuest() throws Exception {
-        FakeRequest request = new FakeRequest(GET, controllers.routes.Application.index().url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(controllers.routes.Application.index().url());
         Result result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         assertThat(contentAsString(result).contains("登录"), is(true));
 
     }
@@ -186,9 +192,9 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
         params.put("password", "12345678");
-        FakeRequest request = new FakeRequest(POST, routes.LoginController.login().url()).withFormUrlEncodedBody(params);
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.login().url()).bodyForm(params);
         Result result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(false));
         assertThat(jsonResult.getData(), is(nullValue()));
@@ -200,18 +206,18 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
     public void testRequestPhoneCodeSixTimesError() throws Exception {
         String phone = "1" + RandomStringUtils.randomNumeric(10);
         for (int i=0; i<SmsSender.SEND_MESSAGE_MAX_TIMES_IN_DAY; i++) {
-            FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
+            Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
             Result result = route(request);
-            assertThat(status(result), is(OK));
-            assertThat(contentType(result), is("application/json"));
+            assertThat(result.status(), is(OK));
+            assertThat(result.contentType(), is("application/json"));
             assertThat(contentAsString(result), containsString("true"));
 
         }
-        FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
 
         Result result = route(request);
-        assertThat(status(result), is(OK));
-        assertThat(contentType(result), is("application/json"));
+        assertThat(result.status(), is(OK));
+        assertThat(result.contentType(), is("application/json"));
         assertThat(contentAsString(result), containsString("false"));
         assertThat(contentAsString(result), containsString("发送次数超过上限"));
 
@@ -219,11 +225,11 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
 
 
     private void registerUser(String phone, String username, String password) {
-        FakeRequest request = new FakeRequest(POST, routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
 
         Result result = route(request);
-        assertThat(status(result), is(OK));
-        assertThat(contentType(result), is("application/json"));
+        assertThat(result.status(), is(OK));
+        assertThat(result.contentType(), is("application/json"));
         assertThat(contentAsString(result), containsString("true"));
 
         String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
@@ -236,10 +242,10 @@ public class LoginControllerTest extends WithApplication implements BaseTest {
         params.put("phone", phone);
         params.put("verificationCode", verificationCode);
 
-        request = new FakeRequest(POST, routes.LoginController.register().url()).withFormUrlEncodedBody(params);
+        request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
         result = route(request);
-        assertThat(status(result), is(OK));
-        assertThat(flash(result).isEmpty(), is(true));
+        assertThat(result.status(), is(OK));
+        assertThat(result.flash().isEmpty(), is(true));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
         assertThat(jsonResult.getData(), is(notNullValue()));

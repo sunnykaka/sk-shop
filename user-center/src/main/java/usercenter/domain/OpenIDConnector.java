@@ -9,6 +9,7 @@ import play.Configuration;
 import play.Logger;
 import play.Play;
 import play.libs.F;
+import play.libs.ws.WSClient;
 import play.mvc.Http;
 import usercenter.dtos.OpenUserInfo;
 import usercenter.models.User;
@@ -22,6 +23,7 @@ import java.util.Map;
  */
 public abstract class OpenIDConnector {
 
+    WSClient wsClient = BaseGlobal.injector.instanceOf(WSClient.class);
     Configuration conf = Play.application().configuration();
     public final String appId;
     public final String appSecret;

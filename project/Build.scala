@@ -3,7 +3,6 @@ import com.typesafe.sbt.gzip.Import._
 import com.typesafe.sbt.web.Import._
 import sbt._
 import Keys._
-import play.Play.autoImport._
 import Dependencies._
 
 object ApplicationBuild extends Build {
@@ -55,7 +54,7 @@ object ApplicationBuild extends Build {
 */
 
   lazy val shop = (project in file("shop")).
-    enablePlugins(play.PlayJava).
+    enablePlugins(play.sbt.PlayJava).
     settings(Commons.settings: _*).
     settings(
       libraryDependencies ++= shopDependencies,
