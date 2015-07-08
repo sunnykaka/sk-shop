@@ -8,7 +8,6 @@ object Dependencies {
   val springVersion = "4.1.6.RELEASE"
 
   val mysqlConnector = "mysql" % "mysql-connector-java" % mysqlConnectorVersion
-  val h2Connector = "com.h2database" % "h2" % "1.4.181"
 
   val springHibernate = Seq(
     "org.springframework" % "spring-context" % springVersion,
@@ -24,12 +23,9 @@ object Dependencies {
     "org.springframework" % "spring-test" % springVersion % "test" exclude("junit", "junit")
   )
 
-  val c3p0 = Seq("c3p0" % "c3p0" % "0.9.1.2")
   val common = Seq(
     "junit" % "junit" % "4.11" % "test" exclude("org.hamcrest", "hamcrest-core"),
-    //"joda-time" % "joda-time" % "2.6",
     "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" exclude("junit", "junit"),
-    //"org.apache.commons" % "commons-lang3" % "3.3.1",
     "com.fasterxml.jackson.datatype" % "jackson-datatype-hibernate4" % "2.5.4",
     "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.5.4",
     "com.typesafe.play" %% "play-mailer" % "3.0.1"
@@ -51,7 +47,7 @@ object Dependencies {
 
   val orderDependencies: Seq[ModuleID] = Seq("jdom" % "jdom" % "1.0")
 
-  val adminDependencies: Seq[ModuleID] = Seq(mysqlConnector) ++ springTest ++ c3p0
+  val adminDependencies: Seq[ModuleID] = Seq(mysqlConnector) ++ springTest
 
   val shopDependencies: Seq[ModuleID] = adminDependencies
 

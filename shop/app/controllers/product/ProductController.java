@@ -37,13 +37,13 @@ public class ProductController extends Controller {
         Integer productId = null;
         Integer skuId = null;
         if(!StringUtils.isNumeric(array[0])) {
-            return badRequest();
+            return Global.show400();
         } else {
             productId = Integer.parseInt(array[0]);
         }
         if(array.length > 1) {
             if(!StringUtils.isNumeric(array[1])) {
-                return badRequest();
+                return Global.show400();
             } else {
                 skuId = Integer.parseInt(array[1]);
             }

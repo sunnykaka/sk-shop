@@ -198,7 +198,7 @@ public class Global extends BaseGlobal {
     }
 
     public static Result show400() {
-        String errorMessage = "oops! 服务器开小差了, 请过会儿再来吧。";
+        String errorMessage = "您的请求参数有误。";
         List<DesignerView> designerViews = new ArrayList<>();
         try {
             designerViews = ctx.getBean(DesignerService.class).lastCreateDesigner(4);
