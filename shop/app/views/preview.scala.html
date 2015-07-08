@@ -155,7 +155,7 @@
             @if(sellingMap.get(ExhibitionPosition.FLOOR_ONE) != null) {
                 @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_ONE, null)) {
 
-                    <li>
+                    <li class="clearfix preview">
                         <div class="img">
                             <a href="#"><img  class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction()" width="590" height="275"/></a>
                         </div>
@@ -186,7 +186,7 @@
                 <p class="en-info">@Html(font1.getContent)</p>
             }
 
-            <ul class="clearfix">
+            <ul class="clearfix preview">
 
             @if(sellingMap.get(ExhibitionPosition.FLOOR_TWO) != null) {
                 @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_TWO, null)) {
@@ -219,7 +219,7 @@
                 <p class="info">@Html(font2.getContent)</p>
             }
 
-            <ul class="clearfix">
+            <ul class="clearfix preview">
 
 
                 @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
@@ -242,7 +242,7 @@
                 }
 
                 @if(doubleEx != null) {
-                    <li class="double">
+                    <li class="double preview">
                         <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getIntroduction()" width="594" height="437"/>
                         <img src="@doubleEx.getPic" alt=""/>
                         <div class="title preview-info">
@@ -260,7 +260,7 @@
 
                 @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
                     @for(exhibition <- sellingMap.getOrElse(ExhibitionPosition.FLOOR_THREE, null).slice(4, 6)) {
-                        <li class="">
+                        <li class="preview">
                             <img src="@exhibition.getPic" alt="" width="291" height="437"/>
                             <img  alt="@exhibition.getIntroduction()" class="lazy"  data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" width="291" height="437"/>
                             <div class="title">

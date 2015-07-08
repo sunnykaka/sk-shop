@@ -11,9 +11,9 @@
     $(function(){
 
        $('.brand-start-fashion li,.ready-online li,.hot-sale li').hover(function(){
-           $(".cover", this).stop().animate({top:"341"},{queue:false,duration:50});
+           $(".cover",this).stop().animate({top:"402px"},{queue:false,duration:50});
        },function(){
-           $(".cover", this).stop().animate({top:"462"},{queue:false,duration:100});
+           $(".cover",this).stop().animate({top:"462px"},{queue:false,duration:100});
        });
 
        //获取购物车 商品数量
@@ -106,8 +106,6 @@
                 <img  class="lazy"   data-original="@designer.getStorePic" alt="@designer.getName" width="439px" src="@routes.Assets.versioned("images/grey.gif")" height="370px"/>
                 <div class="designer-con">
                     <div class="designer-con-title">
-
-
                         <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites){hasFocus}" id="designerFocus" data-id="@designer.getId">
                             <i class="iconfont shi"  @if(!designer.isFavorites){style="display: none;"}>&#xe603;</i> <i class="iconfont kong" @if(designer.isFavorites){style="display: none;"}>&#xe602;</i>
                             <span class="focus-text">@if(designer.isFavorites){已}关注</span></span>
@@ -125,9 +123,10 @@
                     @for(prod <- sellingList) {
                         <li>
                             <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"/>
+                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display: block;"/>
                             </a>
                             <div class="cover">
+                                <div class="design-cover"></div>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
                                 </div>
@@ -147,9 +146,10 @@
                     @for(prod <- previewList) {
                         <li>
                             <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
-                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"/>
+                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"  style="display: block;"/>
                             </a>
                             <div class="cover">
+                                <div class="design-cover"></div>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
                                 </div>
@@ -171,9 +171,10 @@
                     @for(prod <- normalList) {
                         <li>
                             <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"/>
+                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"  style="display: block;"/>
                             </a>
                             <div class="cover">
+                                <div class="design-cover"></div>
                                 <div class="info">
                                     <p class="name">@prod.getProduct.getName</p>
                                 </div>
