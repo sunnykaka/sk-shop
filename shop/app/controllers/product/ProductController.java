@@ -63,6 +63,9 @@ public class ProductController extends Controller {
         Page<Valuation> page = PageFactory.getPage(request());
 
         valuationService.findByProduct(Optional.of(page), productId, point);
+        for(Valuation valuation:page.getResult()){
+            valuation.setUserName(common.utils.StringUtils.getSecurityName(valuation.getUserName()));
+        }
 
         return ok(new JsonResult(true, null, page).toNode());
     }
