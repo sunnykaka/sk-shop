@@ -252,7 +252,8 @@ public class CmsService {
 
         List<CmsExhibition> exhibitionList = findCmsExhibitionByBeginTime(beginTimeStart, beginTimeEnd);
         exhibitionList.forEach(exhibition -> {
-            String introduction = StringUtils.abbreviate(exhibition.getIntroduction(), 30);
+//            String introduction = StringUtils.abbreviate(exhibition.getIntroduction(), 30);
+            String introduction = exhibition.getIntroduction();
             int hourOfDay = exhibition.getBeginTime().getHourOfDay();
             String message = exhibistionStartRemind.render(introduction, hourOfDay).body();
 
