@@ -1,4 +1,5 @@
 /* CSS Reset test */
+html{overflow: scroll;overflow-y: scroll;}
 html,body,h1,h2,h3,h4,h5,h6,p,br,form,input,button,textarea,select,ul,ol,li,dl,dt,dd,pre{margin:0;padding:0;}
 html,body{font:normal normal 12px/1.5em 'Microsoft Yahei',SimSun,Tahoma,Arial;color:#4a4a4a;background:#fff;}
 body {min-width: 1200px;color: #4a4947;}
@@ -833,7 +834,7 @@ table .pro{width: 360px;}
 .account-safe-con span{width: 21px;height: 26px;line-height: 26px;
     /*background: url("../images/sk-sprite.png") no-repeat 30px -1040px;*/
     padding-left: 16px;}
-.account-safe-con span i{color: #fd2049;font-size: 24px;padding-right: 30px;}
+.account-safe-con span i{color: #fd2049;font-size: 23px;padding-right: 30px;}
 /*.account-safe-con .off span{background-position: 30px -1125px;}*/
 .account-safe-con .off span i{color: #7B7B7B;}
 /*end account-safe*/

@@ -108,8 +108,13 @@ $(function () {
             nextPage = '<li><a href="javascript:void(0);"  data-page="'+(curPage+1)+'">下一页</a></li>';
         }
 
-        var html = '<ul class="clearfix">'+
-            '<li>第<span class="current-page">'+curPage+'</span>/<span class="total-page">'+totalPage+'</span>页</li>'+prevPage+nextPage+'</ul>';
+        //假如没有有评论时
+        if(totalPage == 0){
+            html = "";
+        }else{
+            var html = '<ul class="clearfix">'+
+                '<li>第<span class="current-page">'+curPage+'</span>/<span class="total-page">'+totalPage+'</span>页</li>'+prevPage+nextPage+'</ul>';
+        }
 
         return html;
     }
