@@ -123,6 +123,16 @@ public class Product implements EntityClass<Integer>, OperableData {
     private String video;
 
     /**
+     * 模特信息
+     */
+    private String modelInfo;
+
+    /**
+     * 设计师尺码表ID
+     */
+    private Integer designerSizeId;
+
+    /**
      * 一个商品对应一个或者多个SKU对象,一个SKU对应一个物理单品
      */
     private List<StockKeepingUnit> stockKeepingUnits;
@@ -365,5 +375,21 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     public void setVideo(String video) {
         this.video = video;
+    }
+
+    public String getModelInfo() {
+        return modelInfo;
+    }
+
+    public void setModelInfo(String modelInfo) {
+        this.modelInfo = modelInfo;
+    }
+
+    public Integer getDesignerSizeId() {
+        return designerSizeId;
+    }
+
+    public void setDesignerSizeId(Integer designerSizeId) {
+        this.designerSizeId = designerSizeId;
     }
 }

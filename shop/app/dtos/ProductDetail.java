@@ -9,7 +9,9 @@ import productcenter.constants.SKUState;
 import productcenter.models.*;
 import productcenter.services.*;
 import services.CmsService;
+import usercenter.models.DesignerSize;
 import usercenter.models.User;
+import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
 import utils.Global;
 
@@ -28,6 +30,8 @@ public class ProductDetail {
     private List<Html> htmlList;
 
     private ProductPicture productPicture;
+
+    private DesignerSize designerSize;
 
     //评论总数量
     private int goodValuationCount;
@@ -79,6 +83,14 @@ public class ProductDetail {
 
     public ProductPicture getProductPicture() {
         return productPicture;
+    }
+
+    public DesignerSize getDesignerSize() {
+        return designerSize;
+    }
+
+    public void setDesignerSize(DesignerSize designerSize) {
+        this.designerSize = designerSize;
     }
 
     public int getGoodValuationCount() {
@@ -159,6 +171,7 @@ public class ProductDetail {
         private SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
         private CategoryPropertyService categoryPropertyService = Global.ctx.getBean(CategoryPropertyService.class);
         private ProductCollectService productCollectService = Global.ctx.getBean(ProductCollectService.class);
+        private DesignerService designerService = Global.ctx.getBean(DesignerService.class);
 
 
         public static Builder newBuilder(Product product, Integer defaultSkuId) {
@@ -186,6 +199,10 @@ public class ProductDetail {
             //读取商品描述
             List<Html> htmlList = productService.queryHtmlByProductId(productDetail.product.getId());
             productDetail.htmlList = htmlList;
+
+            //读尺码表
+            DesignerSize ds = designerService.getDesignerSizeById(productDetail.product.getDesignerSizeId());
+            productDetail.setDesignerSize(ds);
 
             return this;
         }

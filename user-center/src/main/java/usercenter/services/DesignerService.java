@@ -9,6 +9,7 @@ import usercenter.constants.DesignerPictureType;
 import usercenter.dtos.DesignerView;
 import usercenter.models.Designer;
 import usercenter.models.DesignerPicture;
+import usercenter.models.DesignerSize;
 
 import java.util.*;
 
@@ -144,5 +145,31 @@ public class DesignerService {
             designerPicture = list.get(0);
         }
         return designerPicture;
+    }
+
+    //================================= 设计师尺码表 =================================
+
+    /**
+     * 查询设计师尺码表
+     *
+     * @param id
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public DesignerSize getDesignerSizeById(Integer id){
+        DesignerSize designerSize = null;
+        if(null == id){
+            return designerSize;
+        }
+
+        String jpql = "select ds from DesignerSize ds where ds.id =:id";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("id", id);
+
+        List<DesignerSize> list = generalDAO.query(jpql, Optional.ofNullable(null), queryParams);
+        if (list != null && list.size() > 0) {
+            designerSize = list.get(0);
+        }
+        return designerSize;
     }
 }
