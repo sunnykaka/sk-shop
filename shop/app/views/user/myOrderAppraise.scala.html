@@ -110,7 +110,7 @@ $(function(){
                     currentComBtn.after('<div class="comment-con" style="display: none;">' +
                      '<ul><li class="clearfix"><span>评价时间：</span>'+t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()+' '+t.getHours()+':'+t.getMinutes()+':'+t.getSeconds()+'</li>' +
                       '<li class="clearfix"><span>评价结果：</span>'+contentText+'</li>' +
-                       '<li class="clearfix commenter"><span>评价内容：</span>'+commentCon+'</li>' +
+                       '<li class="clearfix commenter"><span>评价内容：</span><p>'+commentCon+'</p></li>' +
                        '</ul></div>');
                      $(that).parents('.add-comment').siblings('tr').removeClass('current');
                       $('.add-comment').fadeOut(300,function(){
