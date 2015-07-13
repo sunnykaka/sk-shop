@@ -102,6 +102,11 @@ public class Product implements EntityClass<Integer>, OperableData {
     private Boolean isDelete;
 
     /**
+     * 搭配描述
+     */
+    private String recommendDesc;
+
+    /**
      * 创建时间
      */
     private DateTime createTime;
@@ -137,6 +142,11 @@ public class Product implements EntityClass<Integer>, OperableData {
      */
     private List<StockKeepingUnit> stockKeepingUnits;
 
+    /**
+     * 搭配商品
+     */
+    private List<Product> matchProductList;
+
     @Transient
     public List<StockKeepingUnit> getStockKeepingUnits() {
         return stockKeepingUnits;
@@ -144,6 +154,15 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     public void setStockKeepingUnits(List<StockKeepingUnit> stockKeepingUnits) {
         this.stockKeepingUnits = stockKeepingUnits;
+    }
+
+    @Transient
+    public List<productcenter.models.Product> getMatchProductList() {
+        return matchProductList;
+    }
+
+    public void setMatchProductList(List<productcenter.models.Product> matchProductList) {
+        this.matchProductList = matchProductList;
     }
 
     /**
@@ -182,6 +201,7 @@ public class Product implements EntityClass<Integer>, OperableData {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", stockKeepingUnits=" + stockKeepingUnits +
+                ", recommendDesc=" + recommendDesc +
                 '}';
     }
 
@@ -357,6 +377,16 @@ public class Product implements EntityClass<Integer>, OperableData {
     @Override
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Column(name = "recommendDesc")
+    @Basic
+    public String getRecommendDesc() {
+        return recommendDesc;
+    }
+
+    public void setRecommendDesc(String recommendDesc) {
+        this.recommendDesc = recommendDesc;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

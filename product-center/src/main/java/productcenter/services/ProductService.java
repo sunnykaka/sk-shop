@@ -10,7 +10,6 @@ import productcenter.constants.ProductTagType;
 import productcenter.constants.StoreStrategy;
 import productcenter.models.Html;
 import productcenter.models.Product;
-import productcenter.models.ProductPicture;
 
 import java.util.HashMap;
 import java.util.List;
@@ -173,6 +172,16 @@ public class ProductService {
         String sql = "select * from product where isDelete = 0 and online = 1 and customerId = ?1";
         return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, designerId).getResultList();
 
+    }
+
+    /**
+     * 查询商品搭配商品列表
+     * @param productId
+     * @return
+     */
+    public List<Product> queryMatchProductList(Integer productId) {
+        String sql = "select id, productCode, categoryId, customerId, brandId, name, enName, description, tagType, storeStrategy, createTime, onlineTime, offlineTime, onLineTimeLong, updateTime,online, video,recommendDesc from product a where exists (select 1 from RecommendProduct b where a.id = b.recommendProductId and b.productId =? and b.recommendType ='MATCH') and isDelete =0";
+        return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, productId).getResultList();
     }
 
 }
