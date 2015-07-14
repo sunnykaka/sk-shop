@@ -10,9 +10,11 @@
                 <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)"><img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction" width="590" height="275"/></a>
                 <div class="time">
                     <div class="cover"></div>
+                    <span class="time-text">
                     还剩 <i class="icon iconfont">&#xe605;</i>
                         <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
                         <span class="over-text">结束</span>
+                    </span>
                 </div>
             </div>
             <div class="title">
@@ -94,9 +96,11 @@
                             <div class="info">
                                 <p><span class="designer">@exhibition.getIntroduction</span></p>
                                 <div class="time">
-                                    <i class="icon iconfont">&#xe605;</i>
-                                    <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    <span class="over-text">结束</span>
+                                    <span class="time-text">
+                                        <i class="icon iconfont">&#xe605;</i>
+                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                        <span class="over-text">结束</span>
+                                    </span>
                                 </div>
                             </div>
                         </a>
@@ -129,9 +133,11 @@
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
                                 <div class="cover"></div>
                                 <div class="time">
-                                    <i class="icon iconfont">&#xe605;</i>
-                                    <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    <span class="over-text">结束</span>
+                                    <span class="time-text">
+                                        <i class="icon iconfont">&#xe605;</i>
+                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                        <span class="over-text">结束</span>
+                                    </span>
                                 </div>
                             </div>
                         </li>
@@ -147,9 +153,11 @@
                             <p><span class="designer">@doubleEx.getIntroduction()</span></p>
                             <div class="cover"></div>
                             <div class="time">
-                                <i class="icon iconfont">&#xe605;</i>
-                                <span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
-                                <span class="over-text">结束</span>
+                                <span class="time-text">
+                                    <i class="icon iconfont">&#xe605;</i>
+                                    <span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
+                                    <span class="over-text">结束</span>
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -166,9 +174,11 @@
                                 <div class="cover"></div>
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>
                                 <div class="time">
-                                    <i class="icon iconfont">&#xe605;</i>
-                                    <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    <span class="over-text"> 结束</span>
+                                    <span class="time-text">
+                                        <i class="icon iconfont">&#xe605;</i>
+                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                        <span class="over-text"> 结束</span>
+                                    </span>
                                 </div>
                             </div>
                         </li>

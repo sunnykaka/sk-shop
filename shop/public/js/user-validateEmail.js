@@ -178,7 +178,7 @@ $(function(){
                             lock:true,
                             content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
                             width:400,
-                            height:160,
+                            height:248,
                             btn: {
                                 ok : {
                                     val : '关闭',
