@@ -1,4 +1,4 @@
-package usercenter.models;
+package models;
 
 import common.models.utils.EntityClass;
 import org.hibernate.annotations.Type;
@@ -7,13 +7,13 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 
 /**
- * 反馈意见中的公告
+ * 友情链接
  * User: lidujun
- * Date: 2015-07-13
+ * Date: 2015-07-14
  */
 @Entity
-@Table(name = "bulletin")
-public class Bulletin implements EntityClass<Integer> {
+@Table(name = "links")
+public class Link implements EntityClass<Integer>{
 
     /**
      * 主键
@@ -21,9 +21,14 @@ public class Bulletin implements EntityClass<Integer> {
     private Integer id;
 
     /**
-     * 内容
+     * 名称
      */
-    private String content;
+    private String name;
+
+    /**
+     * 链接
+     */
+    private String link;
 
     /**
      * 是否有效，默认有效
@@ -50,6 +55,7 @@ public class Bulletin implements EntityClass<Integer> {
      */
     private Integer updateBy;
 
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override
@@ -62,15 +68,28 @@ public class Bulletin implements EntityClass<Integer> {
         this.id = id;
     }
 
-    @Column(name = "content")
-    public String getContent() {
-        return content;
+
+    @Basic
+    @Column(name = "name")
+    public String getName() {
+        return name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    @Basic
+    @Column(name = "link")
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    @Basic
     @Column(name = "effective")
     public Boolean getEffective() {
         return effective;
@@ -90,6 +109,7 @@ public class Bulletin implements EntityClass<Integer> {
         this.createTime = createTime;
     }
 
+    @Basic
     @Column(name = "createBy")
     public Integer getCreateBy() {
         return createBy;
@@ -109,6 +129,7 @@ public class Bulletin implements EntityClass<Integer> {
         this.updateTime = updateTime;
     }
 
+    @Basic
     @Column(name = "updateBy")
     public Integer getUpdateBy() {
         return updateBy;

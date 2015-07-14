@@ -151,6 +151,9 @@ GET         /product/:id                                @controllers.product.Pro
 #help
 GET         /help/:name                                 @controllers.help.HelpCenterController.index(name)
 
+#友情链接
+GET         /link/getLinkList                           @controllers.link.LinkController.getLinkList
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
 GET         /robots.txt                                 controllers.Assets.at(path="/public", file="robots.txt")
