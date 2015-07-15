@@ -25,7 +25,6 @@ import java.util.List;
  * Date: 2015-05-06
  */
 @Service
-@Transactional(readOnly = true)
 public class CartProcess {
 
     @Autowired
@@ -76,6 +75,7 @@ public class CartProcess {
      * @param userId
      * @return
      */
+    @Transactional
     public Cart buildUserCartBySelItem(int userId, String selCartItems) {
         Cart cart = cartService.getCartByUserId(userId);
         if (cart != null) {
