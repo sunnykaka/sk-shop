@@ -52,6 +52,7 @@ public class CartProcess {
      * @param userId
      * @return
      */
+    @Transactional
     public Cart buildUserCart(int userId) {
         Cart cart = cartService.getCartByUserId(userId);
         if (cart != null) {
