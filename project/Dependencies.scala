@@ -9,6 +9,8 @@ object Dependencies {
 
   val mysqlConnector = "mysql" % "mysql-connector-java" % mysqlConnectorVersion
 
+  val kamonVersion = "0.4.0"
+
   val springHibernate = Seq(
     "org.springframework" % "spring-context" % springVersion,
     "org.springframework" % "spring-orm" % springVersion,
@@ -36,7 +38,10 @@ object Dependencies {
     javaWs,
     cache,
     javaJdbc,
-    "com.typesafe.play.modules" %% "play-modules-redis" % "2.4.1" exclude("junit", "junit")
+    "com.typesafe.play.modules" %% "play-modules-redis" % "2.4.1" exclude("junit", "junit"),
+    "io.kamon" %% "kamon-core" % kamonVersion,
+    "io.kamon" %% "kamon-statsd" % kamonVersion,
+    "io.kamon" %% "kamon-system-metrics" % kamonVersion
   )
 
   val commonDependencies: Seq[ModuleID] = common ++ springHibernate ++ playDependencies
