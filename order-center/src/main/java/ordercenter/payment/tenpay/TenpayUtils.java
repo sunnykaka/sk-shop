@@ -39,7 +39,7 @@ public class TenpayUtils {
 
     public static final String SERVICE_VERSION = "1.0";
 
-    public static final String KEY = "9c38f5467ff94936559bb27565afa49";
+    public static final String KEY = "9c38f5467ff94936559bb27565afa494";
 
     public static final Log logger = LogFactory.getLog(TenpayUtils.class);
 

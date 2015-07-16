@@ -27,22 +27,16 @@ public class TenPayRequestHandler extends PayRequestHandler {
 
     @Override
     protected Map<String, String> buildPayParam(PayInfoWrapper payInfoWrapper) {
-        //必填参数//
-
         //************订单参数***************//
         //请与贵网站订单系统中的唯一订单号匹配
         String out_trade_no = payInfoWrapper.getTradeNo();
 
-        //订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
+        //订单名称，显示在收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
         String subject = "尚客-购物编号-" + out_trade_no;
 
         //订单总金额，显示在支付宝收银台里的“应付总额”里 ,以分为单位
         long total_fee = payInfoWrapper.getTotalFee();
-        //************/订单参数***************//
 
-        //扩展功能参数——默认支付方式//
-
-        //把请求参数打包成数组
         Map<String, String> sParaTemp = new TreeMap<String, String>();
         sParaTemp.put("sign_type", TenpayUtils.SIGN_TYPE);
         sParaTemp.put("service_version", TenpayUtils.SERVICE_VERSION);
@@ -51,24 +45,13 @@ public class TenPayRequestHandler extends PayRequestHandler {
         //sign
         sParaTemp.put("sign_key_index", "1");
 
-
         sParaTemp.put("bank_type", "DEFAULT");
         sParaTemp.put("body", subject);
-
-
-        //daiding
-        //sParaTemp.put("attach", payInfoWrapper.getCallBackClass());
-
-
-        //return_url
-        //notify_url
-
-        //sParaTemp.put("buyer_id", StringUtils.EMPTY);
 
         sParaTemp.put("partner", TenpayUtils.PARTNER);
         sParaTemp.put("out_trade_no", out_trade_no);
         sParaTemp.put("fee_type", "CNY");
-        sParaTemp.put("total_fee", String.valueOf(total_fee));
+        sParaTemp.put("total_fee", String.valueOf(1)); //total_fee
 
         sParaTemp.put("spbill_create_ip", payInfoWrapper.getBuyerIP());
 
@@ -77,24 +60,9 @@ public class TenPayRequestHandler extends PayRequestHandler {
         //sParaTemp.put("time_expire", StringUtils.EMPTY);
 
         sParaTemp.put("transport_fee", "0");
-        sParaTemp.put("product_fee", String.valueOf(total_fee));
-
-        //sParaTemp.put("goods_tag", StringUtils.EMPTY);
-
-        //partner_no
-        //partner_name
-        //trade_way
+        sParaTemp.put("product_fee", String.valueOf(1)); //total_fee
 
         sParaTemp.put("trade_way", "1");
-
-
-//        sParaTemp.put("subject", subject);
-//        sParaTemp.put("trade_mode", "1");
-//        sParaTemp.put("transport_desc", StringUtils.EMPTY);
-//        sParaTemp.put("trans_type", "1");
-//        sParaTemp.put("agentid", StringUtils.EMPTY);
-//        sParaTemp.put("agent_type", "0");
-//        sParaTemp.put("seller_id", StringUtils.EMPTY);
 
         return sParaTemp;
     }
