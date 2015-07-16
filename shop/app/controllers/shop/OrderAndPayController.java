@@ -216,7 +216,7 @@ public class OrderAndPayController extends Controller {
                 long orderNo = order.getOrderNo();
 
                 if (!order.getOrderState().waitPay(TradePayType.valueOf(payType))) {
-                    if(order.getOrderState().getName().equals(OrderState.Cancel)) {
+                    if(order.getOrderState().getName().equals(OrderState.Cancel.getName())) {
                         Logger.warn("订单支付出现异常:" + "订单(" + orderNo + ")已取消，请重新下单！");
                         return ok(new JsonResult(false,"订单(" + orderNo + ")已取消，请重新下单！").toNode());
                     } else {
