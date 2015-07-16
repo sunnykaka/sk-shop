@@ -67,14 +67,15 @@ public class Global extends BaseGlobal {
 
     private void runSchedulers() {
 
-        schedulers.add(
-                Akka.system().scheduler().schedule(
-                        Duration.create(20, TimeUnit.SECONDS),
-                        Duration.create(60, TimeUnit.SECONDS),
-                        ExhibitionStartReminderTask.getInstance(),
-                        Akka.system().dispatcher()
-                )
-        );
+        //开新通道前不能发送提醒短信
+//        schedulers.add(
+//                Akka.system().scheduler().schedule(
+//                        Duration.create(20, TimeUnit.SECONDS),
+//                        Duration.create(60, TimeUnit.SECONDS),
+//                        ExhibitionStartReminderTask.getInstance(),
+//                        Akka.system().dispatcher()
+//                )
+//        );
 
         schedulers.add(
                 Akka.system().scheduler().schedule(
