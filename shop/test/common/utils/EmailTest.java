@@ -8,14 +8,18 @@ import org.junit.Test;
 /**
  * Created by liubin on 15-4-2.
  */
-public class EmailTest extends BaseTest{
+public class EmailTest extends BaseTest {
 
 
     @Test
     @Ignore
     public void test() throws Exception {
 
-        EmailUtils.sendEmail("youremail@qq.com", "这是测试", "<html><body><h1>这是测试信息</h1><body></html>");
+        EmailUtils.sendEmail("youremail@vip.qq.com", "这是测试", "这是测试信息");
+
+        //等待邮件发送完成
+        Thread.sleep(30000L);
+
 
     }
 
