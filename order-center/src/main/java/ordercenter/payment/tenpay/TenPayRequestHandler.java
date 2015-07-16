@@ -51,16 +51,14 @@ public class TenPayRequestHandler extends PayRequestHandler {
         sParaTemp.put("partner", TenpayUtils.PARTNER);
         sParaTemp.put("out_trade_no", out_trade_no);
         sParaTemp.put("fee_type", "CNY");
-        sParaTemp.put("total_fee", String.valueOf(1)); //total_fee
+        sParaTemp.put("total_fee", String.valueOf(total_fee));
 
         sParaTemp.put("spbill_create_ip", payInfoWrapper.getBuyerIP());
 
         sParaTemp.put("time_start", DateUtils.printDateTime(DateUtils.current(), DateUtils.SIMPLE_DATE_TIME_FORMAT_STR));
 
-        //sParaTemp.put("time_expire", StringUtils.EMPTY);
-
         sParaTemp.put("transport_fee", "0");
-        sParaTemp.put("product_fee", String.valueOf(1)); //total_fee
+        sParaTemp.put("product_fee", String.valueOf(total_fee));
 
         sParaTemp.put("trade_way", "1");
 

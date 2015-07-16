@@ -118,12 +118,9 @@ public class PayResponseHandler {
         trade.setTradeOrder(tradeOrderList);
 
         if(this.tradeOrder != null && payMethod != null) {
-            if(PayMethod.directPay.getName().equals(payMethod.getName())
-                    || PayMethod.bankPay.getName().equals(payMethod.getName())) { //支付宝和银行卡(银行，目前也是通过支付宝来实现)
-                this.trade.setDefaultbank(tradeOrder.getDefaultPayOrg());
-                this.trade.setPayTotalFee(tradeOrder.getPayTotalFee());
-                this.trade.setBizType(tradeOrder.getBizType().getName());
-            }
+            this.trade.setDefaultbank(tradeOrder.getDefaultPayOrg());
+            this.trade.setPayTotalFee(tradeOrder.getPayTotalFee());
+            this.trade.setBizType(tradeOrder.getBizType().getName());
             this.trade.setPayMethod(tradeOrder.getPayMethod().getName());
         }
 
