@@ -2,7 +2,8 @@ package common.play.kamon
 
 import kamon.Kamon.tracer
 import kamon.util.SameThreadExecutionContext
-import play.api.mvc.{RequestHeader, EssentialAction, EssentialFilter}
+import play.api.mvc._
+import play.api.mvc.Results._
 
 /**
  * Created by liubin on 15-7-14.
@@ -17,23 +18,31 @@ class KamonRequestFilter extends EssentialFilter {
         requestHeader.headers.get(playExtension.traceTokenHeaderName)
       } else None
 
-      val key = KamonHelper.setContext(tracer.newContext(playExtension.generateTraceName(requestHeader), token))
-      //      play.api.Logger.warn(s"before KamonRequestFilter... key: $key, uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: ${Tracer.currentContext}")
+      val context = tracer.newContext(playExtension.generateTraceName(requestHeader), token)
+//      play.api.Logger.warn(s"before KamonRequestFilter... uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: $context}")
 
       next(requestHeader).map { result =>
-        KamonHelper.getContext(key).fold(result) { context =>
-          KamonHelper.clearContext(key)
-          context.collect { ctx =>
-            //            play.api.Logger.debug(s"after KamonRequestFilter... random: $key, uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: $ctx")
-            ctx.finish()
+        context.collect { ctx =>
+//          play.api.Logger.debug(s"ok after KamonRequestFilter... uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: $ctx")
+          ctx.finish()
+          playExtension.httpServerMetrics.recordResponse(ctx.name, result.header.status.toString)
 
-            playExtension.httpServerMetrics.recordResponse(ctx.name, result.header.status.toString)
+          if (playExtension.includeTraceToken) result.withHeaders(playExtension.traceTokenHeaderName -> ctx.token)
+          else result
 
-            if (playExtension.includeTraceToken) result.withHeaders(playExtension.traceTokenHeaderName -> ctx.token)
-            else result
+        } getOrElse result
 
-          } getOrElse result
+      }(SameThreadExecutionContext).recover {case t: Throwable=>
+        //exception thrown in action
+        context.collect { ctx =>
+//          play.api.Logger.debug(s"error after KamonRequestFilter... uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: $ctx")
+          ctx.finish()
+          playExtension.httpServerMetrics.recordResponse(ctx.name, InternalServerError.header.status.toString)
         }
+
+        //throw to caller
+        throw t
+
       }(SameThreadExecutionContext)
     }
 
