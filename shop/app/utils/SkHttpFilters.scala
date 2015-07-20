@@ -16,7 +16,7 @@ class SkHttpFilters @Inject() (
 ) extends HttpFilters {
 
 
-  def filters = {
+  val filters = {
     var seq = Seq[EssentialFilter]()
     if(configuration.getBoolean("shop.statsEnable").getOrElse(false)) {
       seq = Seq(kamonRequestFilter) ++ seq

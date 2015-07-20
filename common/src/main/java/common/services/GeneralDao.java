@@ -103,12 +103,12 @@ public class GeneralDao {
     }
 
     public <T extends EntityClass<Integer>> void persist(T t) {
-        setOperableDataIfNecessary(t, true);
+        setOperableDataIfNecessary(t, t.getId() == null || t.getId() == 0);
         em.persist(t);
     }
 
     public <T extends EntityClass<Integer>> T merge(T t) {
-        setOperableDataIfNecessary(t, false);
+        setOperableDataIfNecessary(t, t.getId() == null || t.getId() == 0);
         return em.merge(t);
     }
 

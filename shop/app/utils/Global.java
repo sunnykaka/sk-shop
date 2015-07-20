@@ -120,7 +120,7 @@ public class Global extends BaseGlobal {
             //业务异常
             errorMessage = t.getMessage();
         } else {
-            Logger.error("服务器发生错误: " + t.getMessage());
+            Logger.error("服务器发生错误: " + t.getMessage(), t);
         }
 
         Result result;
