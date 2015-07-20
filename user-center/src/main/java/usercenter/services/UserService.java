@@ -162,6 +162,7 @@ public class UserService {
         userData.setUpdateDate(now);
         userData.setSex(openUserInfo.getGender().userSex);
         userData.setName(openUserInfo.getNickName());
+        Logger.debug(String.format("save userData unionId[%s], nickName[%s]", openUserInfo.getUnionId(), userData.getName()));
         generalDao.persist(userData);
 
         UserOuter userOuter = new UserOuter();
