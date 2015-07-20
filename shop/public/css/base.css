@@ -367,8 +367,8 @@ table .pro{width: 360px;}
     -o-text-overflow: ellipsis;    /* Opera */
     text-overflow:    ellipsis;    /* IE, Safari (WebKit) */
 }
-.select-address .edit-address .btn,.address-list .edit-address .btn{cursor: pointer;}
-.select-address .edit-address .edit,.address-list .edit-address .edit{margin-right: 20px;}
+.select-address .edit-address .btn,.address-list .edit-address .btn{}
+.select-address .edit-address .edit,.address-list .edit-address .edit{margin-right: 20px;cursor: pointer;}
 
 .confirm-product table,.mycart-list table{width: 1199px;text-align: center;vertical-align: middle;}
 .confirm-product th,.mycart-list th{padding-bottom: 10px;}
@@ -805,7 +805,7 @@ table .pro{width: 360px;}
 }
 .address-form-inner .add-address-btn:hover,.update-form .update-btn:hover,.i-dialog .add-form .add-address-btn:hover,
 .user-form .submit-btn:hover,.all-order-list .refund-order-content .submit-btn:hover,.order-comment-container .comment-submit:hover,
-.order-comment-container .comment-box .showComment:hover{
+.order-comment-container .comment-box .showComment:hover,.order-detail-list .back a:hover{
     background-color: #29292c;border-color: #29292c;
 }
 /*.address-form-inner .add-address-btn:hover{color: #FF2D54;}*/

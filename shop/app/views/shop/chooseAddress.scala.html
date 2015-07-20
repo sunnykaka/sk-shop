@@ -46,9 +46,9 @@
                     </div>
                     <div class="edit-address">
                         <!--浩斌那边要做的-->
-                        <span class="edit btn"  data-id="@address.getId">修改</span>
+                        <span class="edit"  data-id="@address.getId">修改</span>
                         @if(!address.isDefaultAddress) {
-                            <span class="delete btn" data-id="@address.getId">删除</span>
+                            <span class="delete" data-id="@address.getId">删除</span>
                         }
                     </div>
                     <span class="current-ico" @if(!address.isDefaultAddress){style="display: none;"}></span>
