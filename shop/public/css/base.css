@@ -757,10 +757,8 @@ table .pro{width: 360px;}
 /*designer-brand*/
 .designer-brand{margin-bottom: 100px;}
 .designer-brand-inner .top-con{height: 370px;overflow: hidden;margin-bottom: 20px;}
-.designer-brand-inner .top-con img{ float: left;}
-.designer-brand-inner .designer-con{overflow: hidden; float:left;border: 1px solid #838383;height: 236px;margin-left: -76px;
-    width: 700px;padding: 30px 30px 30px 105px;margin-top: 40px;
-}
+.designer-brand-inner .top-con img{ float: left;margin-right: 30px;}
+.designer-brand-inner .designer-con{overflow: hidden; float:left;border: 1px solid #838383;height: 236px;width: 658px;padding: 30px;margin-top: 40px;}
 .designer-brand-inner .designer-con h2{padding: 10px 0 30px 0;}
 .designer-brand-inner .designer-con h2 .focus{font-weight: normal;margin-left: 30px;padding: 5px 10px 5px 5px;font-size: 12px; border: 1px solid #fd2049; color: #fd2049;cursor: pointer;}
 .designer-brand-inner ul{width: 1200px;}
