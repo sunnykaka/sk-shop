@@ -106,10 +106,11 @@ table .pro{width: 360px;}
 /*header*/
 .header{height:200px;width: 100%;border-bottom: 1px solid #c6c6c6;}
 .header .nav{margin-left:83px;}
-.header li{float:left;height:70px;margin-top:128px;margin-right:111px;}
-.header li a{float:left;width: 100%;height: 100%;font-size:16px;line-height: 70px;padding:0 20px;text-align: center;
+.header li{float:left;height:60px;margin-top:138px;margin-right:105px;}
+.header li a{float:left;width: 100%;height: 100%;font-size:16px;line-height: 25px;padding:0 20px;text-align: center;
     text-decoration: none;
 }
+.header li span{font-size: 12px;}
 .header li .current,.header li a:hover{border-bottom:2px solid #FF2D54;}
 .header .last{margin-right: 0;}
 .header .logo{height: 200px;margin-top:0;margin-right:55px;width: 290px;}
