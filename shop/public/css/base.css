@@ -752,7 +752,7 @@ table .pro{width: 360px;}
 .designer-list .designer-list-con .more{width:208px;height:36px;border: 1px solid #838383;line-height: 36px;text-align: center;
     color: #838383;background: #fff;padding: 0;margin-left: auto;margin-right: auto;cursor: pointer;
 }
-/*.designer-list .designer-list-con .more:hover{border-color: #000;color:#000;}*/
+.designer-list .designer-list-con .more:hover,.detail-inner .img-list .open-detail:hover,.detail-inner .img-list .hide-detail:hover{border-color: #000;color:#000;}
 /*end designer-list*/
 /*designer-brand*/
 .designer-brand{margin-bottom: 100px;}

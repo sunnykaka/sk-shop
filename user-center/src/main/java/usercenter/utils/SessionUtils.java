@@ -182,7 +182,11 @@ public class SessionUtils {
     }
 
     public static void setOriginalUrl(String uri) {
-        Http.Context.current().session().put(SESSION_ORIGINAL_URL, uri);
+        if(StringUtils.isNotBlank(uri)) {
+            if(uri.contains("fashiongeeker")) {
+                Http.Context.current().session().put(SESSION_ORIGINAL_URL, uri);
+            }
+        }
     }
 
     public static String getOriginalUrlOrDefault(String defaultUrl) {

@@ -22,23 +22,18 @@ class KamonRequestFilter extends EssentialFilter {
 //      play.api.Logger.warn(s"before KamonRequestFilter... uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: $context}")
 
       next(requestHeader).map { result =>
-        context.collect { ctx =>
 //          play.api.Logger.debug(s"ok after KamonRequestFilter... uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: $ctx")
-          ctx.finish()
-          playExtension.httpServerMetrics.recordResponse(ctx.name, result.header.status.toString)
+        context.finish()
+        playExtension.httpServerMetrics.recordResponse(context.name, result.header.status.toString)
 
-          if (playExtension.includeTraceToken) result.withHeaders(playExtension.traceTokenHeaderName -> ctx.token)
-          else result
-
-        } getOrElse result
+        if (playExtension.includeTraceToken) result.withHeaders(playExtension.traceTokenHeaderName -> context.token)
+        else result
 
       }(SameThreadExecutionContext).recover {case t: Throwable=>
         //exception thrown in action
-        context.collect { ctx =>
 //          play.api.Logger.debug(s"error after KamonRequestFilter... uri: ${requestHeader.uri}, thread: ${Thread.currentThread()}, current context: $ctx")
-          ctx.finish()
-          playExtension.httpServerMetrics.recordResponse(ctx.name, InternalServerError.header.status.toString)
-        }
+        context.finish()
+        playExtension.httpServerMetrics.recordResponse(context.name, InternalServerError.header.status.toString)
 
         //throw to caller
         throw t

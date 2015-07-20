@@ -83,8 +83,8 @@ public class OrderPayCallBackController extends Controller {
                 return ok(new JsonResult(false,"未支付成功。若已付款，请联系商城客服人员").toNode());
             } else {
                 String state = traderade.getTradeStatus();
-                //现在只有支付宝
-                if("TRADE_FINISHED".equalsIgnoreCase(state)) {
+                //现在只有支付宝和财富通
+                if("TRADE_FINISHED".equalsIgnoreCase(state) || "0".equalsIgnoreCase(state)) {
                     return ok(new JsonResult(true,"支付成功").toNode());
                 } else {
                     return ok(new JsonResult(false,"未支付成功，请重新支付").toNode());

@@ -131,7 +131,7 @@ FG.tip = function (ele, id, msg, x, y, timer) {
         return!a.rightoffold(b, {threshold: 0})
     }})
 })(jQuery, window, document);
-$('img.lazy').lazyload({effect:'fadeIn', threshold: 100});
+$('img.lazy').lazyload({effect:'fadeIn', threshold: 300});
 
 //登录字符串
 var loginHtml = '<div class="login-inner idialog-login idialog-form"><span class="close-btn"><i class="icon iconfont">&#xe607;</i></span>'+
