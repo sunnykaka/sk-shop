@@ -804,7 +804,8 @@ table .pro{width: 360px;}
     cursor: pointer;
 }
 .address-form-inner .add-address-btn:hover,.update-form .update-btn:hover,.i-dialog .add-form .add-address-btn:hover,
-.user-form .submit-btn:hover,.all-order-list .refund-order-content .submit-btn:hover,.order-comment-container .comment-submit:hover{
+.user-form .submit-btn:hover,.all-order-list .refund-order-content .submit-btn:hover,.order-comment-container .comment-submit:hover,
+.order-comment-container .comment-box .showComment:hover{
     background-color: #29292c;border-color: #29292c;
 }
 /*.address-form-inner .add-address-btn:hover{color: #FF2D54;}*/
