@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import usercenter.models.User;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by zhb on 15-5-19.
@@ -81,6 +82,7 @@ public class BackGoodsService {
             createBackGoods(backGoods);
 
         }catch (Exception e){
+            play.Logger.error("退货数据异常，请重新操作!订单Id[" + order.getId() + "]", e);
             throw new AppBusinessException("退货数据异常，请重新操作!");
         }
 

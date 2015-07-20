@@ -4,7 +4,6 @@ import common.exceptions.AppBusinessException;
 import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;
-import common.utils.play.BaseGlobal;
 import ordercenter.dtos.BackApplyForm;
 import ordercenter.models.*;
 import ordercenter.services.BackGoodsService;
@@ -23,9 +22,9 @@ import usercenter.dtos.DesignerView;
 import usercenter.models.User;
 import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
-import utils.Global;
 import utils.secure.SecuredAction;
 import views.html.error_404;
+import views.html.error_500;
 import views.html.user.*;
 
 import java.util.ArrayList;
@@ -287,18 +286,27 @@ public class MyOrderController extends Controller {
         User user = SessionUtils.currentUser();
 
         Page<BackGoods> page = new Page<>(pageNo, pageSize);
-
         List<BackGoods> backGoodsList = backGoodsService.getMyBackGoods(Optional.of(page), user.getId());
         for(BackGoods backGoods:backGoodsList){
+            try{
+                for(BackGoodsItem backGoodsItem:backGoods.getBackGoodsItemList()){
+                    OrderItem orderItem = orderService.getOrderItemById(backGoodsItem.getOrderItemId());
+                    orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
+                    backGoodsItem.setOrderItem(orderItem);
+                }
+            }catch (Exception e){
+                Logger.error("售后服务首页异常：用户Id[" + user.getId() + "],售后服务Id[" + backGoods.getId() + "]"+e);
+                List<DesignerView> designerViews = new ArrayList<>();
+                try {
+                    designerViews = designerService.lastCreateDesigner(4);
+                } catch (Exception es) {
+                    Logger.error("", es);
+                }
+                return Results.notFound(error_500.render("查询不到你的订单", designerViews));
 
-            for(BackGoodsItem backGoodsItem:backGoods.getBackGoodsItemList()){
-                OrderItem orderItem = orderService.getOrderItemById(backGoodsItem.getOrderItemId());
-                orderItem.setProperties(skuAndStorageService.getSKUPropertyValueMap(orderItem.getSkuId()));
-                backGoodsItem.setOrderItem(orderItem);
             }
-
+            page.setResult(backGoodsList);
         }
-        page.setResult(backGoodsList);
 
         return ok(myBack.render(page));
 
