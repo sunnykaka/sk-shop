@@ -371,6 +371,7 @@ table .pro{width: 360px;}
 .select-address .edit-address .edit,.address-list .edit-address .edit{margin-right: 20px;cursor: pointer;}
 
 .confirm-product table,.mycart-list table{width: 1199px;text-align: center;vertical-align: middle;}
+.mycart-list table .del{cursor: pointer}
 .confirm-product th,.mycart-list th{padding-bottom: 10px;}
 .confirm-product tr,.mycart-list thead,.mycart-list tbody tr{border-bottom: 1px solid #e5e5e5;}
 .mycart-list tbody .disabled{background: #FFFBF0;}
