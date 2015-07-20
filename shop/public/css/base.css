@@ -23,7 +23,7 @@ table td{padding: 10px 0;}
 .right{float:right;}
 .both{clear:both;}
 .btn{cursor:pointer;}
-.btn:hover{}
+.btn:hover{	background-color: #29292c;border-color: #29292c;}
 .form-text,.text{width:280px;padding-left: 8px;border:1px solid #ccc;height: 32px;line-height: 32px;}
 .form-text-error {border-color: #FF2D54;}
 .form-input-tip{  position: absolute;  background-color: #f5f5f5;  padding: 4px 0;  color: #999;width: 290px;}
@@ -306,6 +306,7 @@ table .pro{width: 360px;}
 .reg-box-inner h2{height:30px;text-align: center;font-weight: normal;font-size: 25px;padding-bottom:20px;}
 .reg-box-inner .reg-form div,.forget-pw-fir-form div,.item-row{position: relative;width: 290px;margin: 0 auto;}
 .item-row #next-btn{display: block;text-align: center;background: #000;color: #fff;height: 34px;width: 100px;margin-left: 100px;cursor: pointer;border: none;}
+.item-row #next-btn:hover{background-color: #29292c;border-color: #29292c;}
 .reg-box-inner .reg-form .phone-code-input{width: 150px;}
 .reg-box-inner .reg-form label,.forget-pw-fir-form label,.forget-pw-sec-form label,.forget-pw-thr-form label{
     position: absolute;color: #a1a1a1;top: 8px;left: 8px;
@@ -391,6 +392,7 @@ table .pro{width: 360px;}
 .order-btn .order-submit-btn,.mycart-inner .toOrder,.pay-inner .pay-money-btn{float: right;width:410px;height: 80px;text-align: center;line-height: 80px;
     background: #000;font-size: 14px;color: #fff;cursor: pointer;
 }
+.order-btn .order-submit-btn:hover,.mycart-inner .toOrder:hover,.pay-inner .pay-money-btn:hover,.order-submit h3 a:hover{background-color: #29292c;border-color: #29292c;}
 /*end order-submit*/
 /*mycart*/
 .mycart{margin-bottom: 50px;}
@@ -800,7 +802,11 @@ table .pro{width: 360px;}
 .address-form-inner .add-address-btn,.update-form .update-btn,.i-dialog .add-form .add-address-btn{padding: 10px 20px;background: #000;color: #fff;border: 1px solid #000;margin-left: 110px;
     cursor: pointer;
 }
-.address-form-inner .add-address-btn:hover{color: #FF2D54;}
+.address-form-inner .add-address-btn:hover,.update-form .update-btn:hover,.i-dialog .add-form .add-address-btn:hover,
+.user-form .submit-btn:hover,.all-order-list .refund-order-content .submit-btn:hover,.order-comment-container .comment-submit:hover{
+    background-color: #29292c;border-color: #29292c;
+}
+/*.address-form-inner .add-address-btn:hover{color: #FF2D54;}*/
 .address-form-inner .form-item .errormsg,.i-dialog .update-form .errormsg,.i-dialog .add-form .errormsg{color: #FF2D54;margin-left: 10px;}
 .address-list ul{margin-top: 30px;}
 .address-list li{margin-right: 20px;margin-bottom: 20px;}
@@ -923,7 +929,7 @@ table .pro{width: 360px;}
     text-align: center;line-height: 63px;
     }
 .sider-bar li i{font-size: 23px;color: #7B7B7B;}
-.sider-bar li i:hover{color: #FF2D54;}
+.sider-bar li:hover i{color: #FF2D54;}
 .sider-bar .cart{position: relative;}
 .sider-bar .cart:hover{background-position: -70px -199px;}
 .sider-bar .quantity{position: absolute;top:8px;right: 5px;background: #FF2D54;border-radius: 8px;padding: 0 8px;color: #fff;line-height: 150%;}
@@ -936,7 +942,7 @@ table .pro{width: 360px;}
 .sider-bar .go-top:hover{background-position: -70px -388px;}
 .sider-bar a,.sider-bar #gotoTop,.sider-bar #cart-quantity-btn{float: left;width: 62px;height: 63px;cursor:pointer;}
 
-.small-sider li{width: 36px;height:37px;/*background: url("../images/sk-sprite.png") no-repeat -158px -454px;*/line-height: 37px;}
+.small-sider li{width: 36px;height:37px;line-height: 37px;}
 .small-sider li i{font-size: 14px;}
 .small-sider .cart{position: relative;}
 .small-sider .cart:hover{background-position:-122px -454px; }
