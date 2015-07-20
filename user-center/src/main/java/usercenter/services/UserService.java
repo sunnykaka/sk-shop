@@ -144,9 +144,14 @@ public class UserService {
         user.setRegisterDate(DateUtils.printDateTime(now));
         user.setRegisterIP(registerIP);
         String username = null;
-        if(RegExpUtils.isUsername(openUserInfo.getNickName())) {
+        String nickName = openUserInfo.getNickName();
+        if(RegExpUtils.isUsername(nickName)) {
             //昵称满足用户名规则,直接使用
-            username = openUserInfo.getNickName();
+            username = nickName;
+        } else {
+            if(StringUtils.isNoneBlank(nickName)) {
+                nickName = nickName.replaceAll("[^(0-9a-zA-Z\\u4e00-\\u9fa5)]", "");
+            }
         }
         while(username == null || isUsernameExist(username, Optional.<Integer>empty())) {
             //生成随机6位数字作为用户名
@@ -161,8 +166,7 @@ public class UserService {
         userData.setCreateDate(now);
         userData.setUpdateDate(now);
         userData.setSex(openUserInfo.getGender().userSex);
-        userData.setName(openUserInfo.getNickName());
-        Logger.debug(String.format("save userData unionId[%s], nickName[%s]", openUserInfo.getUnionId(), userData.getName()));
+        userData.setName(nickName);
         generalDao.persist(userData);
 
         UserOuter userOuter = new UserOuter();

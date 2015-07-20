@@ -3,11 +3,13 @@ package base;
 import common.utils.DateUtils;
 import common.utils.Money;
 import common.utils.RegExpUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +34,14 @@ public class PlainTest {
 
 //        System.out.println(Money.valueOf(2.15d).toString());
 
-        System.out.println(RegExpUtils.isUsername("1"));
+        String s = "<U+1F4B0>刘斌<U+1F4B0>";
+        System.out.println(StringEscapeUtils.escapeHtml4(s));
+        System.out.println(StringEscapeUtils.escapeHtml4(s).length());
+        System.out.println(s.replaceAll("[^(0-9a-zA-Z\\u4e00-\\u9fa5)]", ""));
+
+//        Pattern p = Pattern.compile("<[^>]+>刘斌<[^>]+>");
+//        System.out.println(s.matches(p.pattern()));
+
 
     }
 
