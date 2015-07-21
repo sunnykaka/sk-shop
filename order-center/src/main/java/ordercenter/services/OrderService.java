@@ -308,6 +308,7 @@ public class OrderService {
                         //增加库存
                         skuAndStorageService.addSkuStock(orderItem.getSkuId(), orderItem.getNumber());
                     }
+                    order.setOrderState(OrderState.Cancel);
                     this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), CancelOrderType.Sys.getName()));
                 }
             }
