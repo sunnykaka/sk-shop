@@ -35,7 +35,6 @@ public class OrderPayCallBackController extends Controller {
      * 支付正常返回
      * @return
      */
-    @SecuredAction
     public Result normalReturn() {
         Logger.info("支付平台返回的数据 : " + request().queryString());
         PayResponseHandler handler = new PayResponseHandler(request());
@@ -54,7 +53,6 @@ public class OrderPayCallBackController extends Controller {
      * 支付有通知信息返回
      * @return
      */
-    @SecuredAction
     public Result notifyReturn() {
         Logger.info("支付平台返回的数据 : " + request().queryString());
         PayResponseHandler handler = new PayResponseHandler(request());
