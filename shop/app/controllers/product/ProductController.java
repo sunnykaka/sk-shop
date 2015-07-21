@@ -35,21 +35,21 @@ public class ProductController extends Controller {
 
         String[] array = id.split("-");
         Integer productId = null;
-        Integer skuId = null;
+//        Integer skuId = null;
         if(!StringUtils.isNumeric(array[0])) {
             return Global.show400();
         } else {
             productId = Integer.parseInt(array[0]);
         }
-        if(array.length > 1) {
-            if(!StringUtils.isNumeric(array[1])) {
-                return Global.show400();
-            } else {
-                skuId = Integer.parseInt(array[1]);
-            }
-        }
+//        if(array.length > 1) {
+//            if(!StringUtils.isNumeric(array[1])) {
+//                return Global.show400();
+//            } else {
+//                skuId = Integer.parseInt(array[1]);
+//            }
+//        }
 
-        ProductDetail productDetail = productDetailService.showDetail(productId, skuId);
+        ProductDetail productDetail = productDetailService.showDetail(productId, null);
         if(productDetail == null) {
             return Global.show404();
         }
