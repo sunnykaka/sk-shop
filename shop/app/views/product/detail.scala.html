@@ -136,7 +136,7 @@
                 </div>
                 @if(pd.getSkuCandidateList.nonEmpty) {
                     <div class="detail-size-color" id="choose-sku">
-                        <span class="show-size-btn" id="show-size">尺码小帮手</span>
+                    @if(pd.getDesignerSize != null){<span class="show-size-btn" id="show-size">尺码小帮手</span>}
                     @for(sc <- pd.getSkuCandidateList) {
                         <dl class="clearfix">
                             <dt>@sc.getSkuProp.getValue：</dt>
@@ -184,76 +184,29 @@
     </div>
 </div>
 
-    <div id="size-detail" style="display: none;">
-        <div class="size-detail-inner">
-            <div class="size-detail-header">
-                <h4>尺码小帮手 <span class="line">|</span> <span>请放心挑选尺码，尚客7天退货服务替你保驾护航！</span></h4>
-            </div>
-            <div class="size-detail-table">
-                <table>
-                    <tr>
-                        <td width="98px">国际通用</td>
-                        <td width="38px">XXS</td>
-                        <td width="38px">XS</td>
-                        <td width="38px">S</td>
-                        <td width="38px">M</td>
-                        <td width="38px">L</td>
-                    </tr>
-                    <tr>
-                        <td>国际通用</td>
-                        <td>XXS</td>
-                        <td>XS</td>
-                        <td>S</td>
-                        <td>M</td>
-                        <td>L</td>
-                    </tr>
-
-                    <tr>
-                        <td>国际通用</td>
-                        <td>XXS</td>
-                        <td>XS</td>
-                        <td>S</td>
-                        <td>M</td>
-                        <td>L</td>
-                    </tr>
-                    <tr>
-                        <td>国际通用</td>
-                        <td>XXS</td>
-                        <td>XS</td>
-                        <td>S</td>
-                        <td>M</td>
-                        <td>L</td>
-                    </tr>
-                    <tr>
-                        <td>国际通用</td>
-                        <td>XXS</td>
-                        <td>XS</td>
-                        <td>S</td>
-                        <td>M</td>
-                        <td>L</td>
-                    </tr>
-                    <tr>
-                        <td>国际通用</td>
-                        <td>XXS</td>
-                        <td>XS</td>
-                        <td>S</td>
-                        <td>M</td>
-                        <td>L</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="model-info">
-                <p>模特身高：178cm，三围：83cm、62cm、89cm，此款穿M码适合，建议按正常尺码选择。</p>
-            </div>
-            <div class="size-detail-tips">
-                <span>温馨提示：</span>
-                <ul>
-                    <li>1，呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵。</li>
-                    <li>2，呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵。</li>
-                </ul>
+    @if(pd.getDesignerSize != null){
+        <div id="size-detail" style="display: none;">
+            <div class="size-detail-inner">
+                <div class="size-detail-header">
+                    <h4>尺码小帮手 <span class="line">|</span> <span>请放心挑选尺码，尚客7天退货服务替你保驾护航！</span></h4>
+                </div>
+                <div class="size-detail-table">
+                    @Html(pd.getDesignerSize.getContent)
+                </div>
+                <div class="model-info">
+                    <p>模特身高：@pd.getProduct.getModelInfo </p>
+                </div>
+                <div class="size-detail-tips">
+                    <span>温馨提示：</span>
+                    <ul>
+                        @for((info,index) <- pd.getDesignerSize.getPromptList.zipWithIndex){
+                            <li>@(index+1)，@info</li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+    }
 
     <!--siderbar-->
     <ul class="sider-bar" id="cart">

@@ -2,10 +2,13 @@ package usercenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.TableTimeData;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 设计师尺码表
@@ -34,6 +37,17 @@ public class DesignerSize implements EntityClass<Integer>,TableTimeData {
     private DateTime updateDate;
 
     private boolean delete;
+
+    @Transient
+    public String[] getPromptList(){
+
+        if(StringUtils.isEmpty(prompt)){
+            return null;
+        }
+
+        return prompt.split(";|；");
+    }
+
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
