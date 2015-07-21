@@ -190,6 +190,7 @@ $(function () {
     $('#show-size').on('click',function(){
         $.dialog({
             title:"",
+            lock:true,
             content: $('#size-detail').html(),
             width: 900,
             padding: "40px"

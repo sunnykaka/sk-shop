@@ -560,11 +560,11 @@ table .pro{width: 360px;}
     font-size: 12px;padding: 8px 5px 2px 6px;left: 0;top: 27px;color: #7b7b7b;display: none;
 }
 .detail-size-color{padding: 35px 0;position: relative;}
-.detail-size-color .show-size-btn{position: absolute;right: 0;top: 14px;padding: 5px 10px;border: 1px solid #fd2049;color:#fd2049;cursor:pointer;border-radius: 30px;}
+.detail-size-color .show-size-btn{position: absolute;right: 0;top: 14px;padding: 3px 10px;border: 1px solid #fd2049;color:#fd2049;cursor:pointer;border-radius: 30px;}
 .detail-size-color .detail-size{padding-bottom: 28px;*height:1%;}
 .size-detail-inner{}
 .size-detail-inner .size-detail-header h4{font-size: 18px;font-weight: normal;}
-.size-detail-inner .size-detail-header h4 .line{margin: 0 10px;color: #ccc;}
+.size-detail-inner .size-detail-header h4 .line{margin: 0 10px;color: #ccc;font-size: 18px;}
 .size-detail-inner .size-detail-header span{font-size: 12px;}
 .size-detail-inner .size-detail-table table{margin:10px 0;border-collapse: collapse;}
 .size-detail-inner .size-detail-table table td{border:1px solid #ccc;text-align: center}
