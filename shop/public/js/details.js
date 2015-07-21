@@ -124,16 +124,16 @@ $(function () {
        var page = $(this).attr('data-page');
        switch ($('.comment-header .current').attr('data-id')){
            case '全部评价':
-               pointer = {id:productId,page:page};
+               pointer = {id:productId,page:page,limit:10};
                break;
            case '好评':
-               pointer ={id:productId,point:0,page:page};
+               pointer ={id:productId,point:0,page:page,limit:10};
                break;
            case '中评':
-               pointer ={id:productId,point:1,page:page};
+               pointer ={id:productId,point:1,page:page,limit:10};
                break;
            case '差评':
-               pointer ={id:productId,point:2,page:page};
+               pointer ={id:productId,point:2,page:page,limit:10};
                break;
        }
 
@@ -149,22 +149,24 @@ $(function () {
         });
     });
 
+
+
     //显示评论
     $('.comment-header li').click(function () {
         var pointer;
         $(this).addClass('current').siblings('li').removeClass('current');
         switch ($(this).attr('data-id')){
             case '全部评价':
-                pointer = {id:productId};
+                pointer = {id:productId,limit:10};
             break;
             case '好评':
-                pointer ={id:productId,point:0};
+                pointer ={id:productId,point:0,limit:10};
             break;
             case '中评':
-                pointer ={id:productId,point:1};
+                pointer ={id:productId,point:1,limit:10};
             break;
             case '差评':
-                pointer ={id:productId,point:2};
+                pointer ={id:productId,point:2,limit:10};
             break;
         }
 
@@ -184,7 +186,15 @@ $(function () {
     //初始显示全部评价
     $('.comment-header li:first').trigger('click');
 
-
+    //显示尺码表
+    $('#show-size').on('click',function(){
+        $.dialog({
+            title:"",
+            content: $('#size-detail').html(),
+            width: 900,
+            padding: "40px"
+        })
+    });
 
     //查看详情
     $('.img-list').on('click','#openDetail',function(){
