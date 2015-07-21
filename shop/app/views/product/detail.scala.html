@@ -193,15 +193,18 @@
                 <div class="size-detail-table">
                     @Html(pd.getDesignerSize.getContent)
                 </div>
-                <div class="model-info">
-                    <p>模特身高：@pd.getProduct.getModelInfo </p>
-                </div>
+                @if(pd.getProduct.getModelInfo != null && !"".eq(pd.getProduct.getModelInfo)){
+                    <div class="model-info">
+                        <p>模特身高：@pd.getProduct.getModelInfo </p>
+                    </div>
+                }
+
                 <div class="size-detail-tips">
                     <span>温馨提示：</span>
                     <ul>
-                        @for((info,index) <- pd.getDesignerSize.getPromptList.zipWithIndex){
-                            <li>@(index+1)，@info</li>
-                        }
+                    @for((info, index) <- pd.getDesignerSize.getPromptList.zipWithIndex) {
+                        <li>@(index + 1)、@info</li>
+                    }
                     </ul>
                 </div>
             </div>
