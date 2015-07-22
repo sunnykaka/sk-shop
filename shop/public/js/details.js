@@ -213,7 +213,9 @@ $(function () {
 
 
     //我喜欢按钮
+    var flag = true;
     $('.detail-like .like').click(function () {
+        if(flag){flag = false;}else{return false;}
         var id = $(this).attr('data-id'), that = $(this);
         if (!$(this).is('.current')) {
             $.ajax({
@@ -224,7 +226,9 @@ $(function () {
                         that.addClass('current');
                         $('.like-text').text(res.message);
                         $('.kong').fadeOut('300',function(){
-                            $('.shi').fadeIn();
+                            $('.shi').fadeIn('100',function(){
+                                flag = true;
+                            });
                         });
                     } else {
                         if (res.message == 'Credentials required') {
@@ -242,7 +246,9 @@ $(function () {
                         that.removeClass('current');
                         $('.like-text').text('我喜欢');
                         $('.shi').fadeOut('300',function(){
-                            $('.kong').fadeIn();
+                            $('.kong').fadeIn('100',function(){
+                                flag = true;
+                            });
                         });
                     }
                 }

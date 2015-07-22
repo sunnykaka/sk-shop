@@ -549,7 +549,7 @@ table .pro{width: 360px;}
 .detail-inner .comment-item .comment-title{height: 34px;line-height: 34px;text-align: right;}
 .detail-inner .comment-item .comment-title .user{float: left;}
 .detail-inner .comment-item .comment-img{width: 50px;height: 90px;overflow: hidden;margin-right: 20px;padding-top: 5px;}
-.detail-inner .container .comment-page{padding-left:553px;margin-bottom: 20px;}
+.detail-inner .container .comment-page{padding-left:630px;margin-bottom: 20px;}
 .detail-inner .container .comment-page li{float:left;margin-right: 10px;}
 .detail-inner .container .comment-page a:hover{text-decoration: none;}
 .detail-inner .right{width: 373px;}
@@ -667,7 +667,7 @@ table .pro{width: 360px;}
 .all-order-list .order-list .not-pay{color: #FF2D54;}
 .all-order-list .order-list .pay{padding: 8px 14px;background: #FF2D54;color: #fff;}
 .all-order-list .order-list .confirm,.all-order-list .order-list .comment,.all-order-list .refund .cancel{padding: 8px 14px;background: #000;color: #fff;}
-.all-order-list .order-page{padding-left:700px;}
+.all-order-list .order-page{padding-left:795px;}
 .all-order-list .order-page li{float: left;margin-right: 15px;}
 
 .all-order-list .refund .order-number{color: #FF2D54}
@@ -796,13 +796,9 @@ table .pro{width: 360px;}
 .designer-brand-inner .brand-start-fashion li:hover,.designer-brand-inner .ready-online li:hover,.designer-brand-inner .hot-sale li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
 .designer-brand-inner .brand-start-fashion li .cover,.designer-brand-inner .ready-online li .cover,.designer-brand-inner .hot-sale li .cover{position: absolute;width:283px;top: 462px;z-index: 10;height: 60px;}
 .designer-brand-inner .brand-start-fashion li .cover .design-cover,.designer-brand-inner .ready-online li  .cover .design-cover,.designer-brand-inner .hot-sale li .cover .design-cover{position: absolute;width:283px;top: 0;height: 60px;background: #000;opacity: .6;filter:alpha(opacity=60);z-index: -1;}
-/*.designer-brand-inner .brand-start-fashion a:hover,.designer-brand-inner .ready-online a:hover,.designer-brand-inner .hot-sale a:hover{text-decoration: none;}*/
-/*.designer-brand-inner .brand-start-fashion .like,.designer-brand-inner .ready-online .like,.designer-brand-inner .like,.designer-brand-inner  .buy{padding: 3px 20px 3px 30px;border: 1px solid #FF2D54;border-radius: 50px;margin:0 20px 0 40px;}*/
-/*.designer-brand-inner  .like{background: #fff;}*/
-/*.designer-brand-inner  .buy{background: #FF2D54;color: #fff;margin: 0 0 0 0;}*/
+
 .designer-brand-inner .brand-start-fashion .info,.designer-brand-inner .ready-online .info,.designer-brand-inner .hot-sale .info{height: 60px;}
 .designer-brand-inner .brand-start-fashion .info p,.designer-brand-inner .ready-online .info p,.designer-brand-inner .hot-sale .info p{color: #fff;text-align: center;padding: 20px 0;}
-/*.designer-brand-inner .ready-online .like{margin-left: 96px}*/
 .designer-brand-inner .ready-online .info p,.designer-brand-inner .hot-sale .info p{padding-top: 20px;}
 /*end designer-brand */
 /*address-manage*/
@@ -943,7 +939,7 @@ table .pro{width: 360px;}
 .footer-inner a:hover{color: #fd2049;}
 /*end footer*/
 .sider-bar{
-    position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
+    position: fixed;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
     left: 50%;margin-left: 600px;top: 740px;
 }
 .small-sider{width: 36px;border-top: 3px solid #FF2D54;margin-left: 592px;}

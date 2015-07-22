@@ -34,9 +34,9 @@
         $('#cart-quantity-btn').click(function () {
             window.location.href = "/cart/showCart";
         });
-
-
+        var flag = true;
         $('#designerFocus').click(function(){
+            if(flag){flag = false;}else{return false;}
         var id = $(this).attr('data-id'),that = $(this);
         if(that.hasClass('hasFocus')){//已经关注
             $.ajax({
@@ -50,8 +50,10 @@
                         if(res.result){
                             that.find('.focus-text').text('关注');
                             that.removeClass('hasFocus');
-                              $('.shi').fadeOut('300',function(){
-                                 $('.kong').fadeIn();
+                              $('.shi').fadeOut('100',function(){
+                                 $('.kong').fadeIn('100',function(){
+                                    flag = true;
+                                 });
                               });
                         }
                     }
@@ -71,8 +73,10 @@
                         if(res.result){
                             that.find('.focus-text').text('已关注');
                             that.addClass('hasFocus');
-                             $('.kong').fadeOut('300',function(){
-                                $('.shi').fadeIn();
+                             $('.kong').fadeOut('100',function(){
+                                $('.shi').fadeIn('100',function(){
+                                flag = true;
+                                });
                              });
                         }
                     }
