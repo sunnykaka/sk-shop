@@ -45,7 +45,7 @@ public class DesignerSize implements EntityClass<Integer>,TableTimeData {
             return null;
         }
 
-        return prompt.split(";|；");
+        return prompt.split("<br/>");
     }
 
 
