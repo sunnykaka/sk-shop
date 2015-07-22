@@ -162,7 +162,7 @@ public class DesignerService {
             return designerSize;
         }
 
-        String jpql = "select ds from DesignerSize ds where ds.id =:id";
+        String jpql = "select ds from DesignerSize ds where ds.deleted=false and ds.id =:id ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("id", id);
 

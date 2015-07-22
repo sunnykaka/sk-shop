@@ -36,7 +36,7 @@ public class DesignerSize implements EntityClass<Integer>,TableTimeData {
 
     private DateTime updateDate;
 
-    private boolean delete;
+    private boolean deleted;
 
     @Transient
     public String[] getPromptList(){
@@ -122,11 +122,11 @@ public class DesignerSize implements EntityClass<Integer>,TableTimeData {
     }
 
     @Column(name = "isDelete")
-    public boolean isDelete() {
-        return delete;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setDelete(boolean delete) {
-        this.delete = delete;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

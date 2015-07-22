@@ -277,6 +277,7 @@ public class OrderService {
                     //增加库存
                     skuAndStorageService.addSkuStock(oi.getSkuId(), oi.getNumber());
                 }
+                order.setOrderState(OrderState.Cancel);
                 this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), CancelOrderType.getName(type)));
             }
         } catch (AppBusinessException a) {
@@ -333,6 +334,7 @@ public class OrderService {
             for (OrderItem oi : order.getOrderItemList()) {
                 this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Receiving, oi.getOrderState());
             }
+            order.setOrderState(OrderState.Receiving);
             this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Receiving.getLogMsg()));
         } catch (AppBusinessException a) {
             throw new AppBusinessException("确认收货失败");
