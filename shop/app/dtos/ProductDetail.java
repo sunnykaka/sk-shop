@@ -416,7 +416,7 @@ public class ProductDetail {
                //读取主图
                 List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(product.getId());
                 if(!productPictures.isEmpty()) {
-                    List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMainPic).collect(Collectors.toList());
+                    List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMinorPic).collect(Collectors.toList());
                     if(!collect.isEmpty()) {
                         product.setMainPic(collect.get(0).getPictureUrl());
                     }
