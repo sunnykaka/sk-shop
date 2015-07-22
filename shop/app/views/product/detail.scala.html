@@ -75,7 +75,12 @@
 
                 @if(pd.getMatchProductList != null && pd.getMatchProductList.size > 0) {
                     <div class="Collocation" id="Collocation">
-                        <h3>同系列推荐SIMILAR RECOMMENDATION</h3>
+                        @if(pd.getMatchProductList.size == 1) {
+                            <h3 class="first">
+                        } else {
+                            <h3>
+                        }
+                        同系列推荐SIMILAR RECOMMENDATION</h3>
                         @if(pd.getMatchProductList.size >= 3) {
                             <p class="collocation-text">
                             @Html(pd.getProduct.getRecommendDesc)
@@ -84,14 +89,22 @@
                         <ul class="clearfix collacation-list">
                         @for((product,index) <- pd.getMatchProductList.zipWithIndex) {
                             @if(index < 3) {
-                                @if(index == 2) {
-                                <li>
-                                } else {
-                                <li>
+                                @if(pd.getMatchProductList.size == 1) {
+                                    <li class="first">
                                 }
-                                <a href="#"><img src="@product.getMainPic" alt="" width="240" height="290"/></a>
-                                <h4>@product.getName</h4>
-                                <a href="#" class="pro-btn">SHOP SHOW</a>
+                                @if(pd.getMatchProductList.size == 2) {
+                                    <li class="second">
+                                }
+                                @if(pd.getMatchProductList.size > 2) {
+                                    @if(index == 2) {
+                                    <li class="last">
+                                    } else {
+                                    <li>
+                                    }
+                                }
+                                <a href="/product/@product.getId" target="_blank"><img src="@product.getMainPic" alt="" width="240" height="392"/></a>
+                                <h4 title="@product.getName">@product.getName</h4>
+                                <a href="/product/@product.getId"  class="pro-btn" target="_blank">SHOP SHOW</a>
                             </li>
                             }
                         }
@@ -145,7 +158,7 @@
                     @if(pd.isInExhibition) {
                         <div class="debut-info-left">
                             <p>首发价：￥<span class="start-price" id="start-price">@pd.getDefaultSku.getPrice </span></p>
-                            <p class="debut-time"><i class="icon iconfont">&#xe605;</i>还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></p>
+                            <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getExhibitionEndTime)</span><span class="over-text">结束</span></span></p>
                         </div>
                         <div class="debut-info-right">
                             <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>

@@ -43,7 +43,7 @@ $(function () {
             }else{
                 var str = "已结束！";
                 //$(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
-                obj.parent('.time').html('').text(str);
+                obj.parent('.time-text').html('').text(str);
             }
             obj.text(str);
         });
