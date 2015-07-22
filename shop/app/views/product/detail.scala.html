@@ -78,16 +78,22 @@
                         <h3>同系列推荐SIMILAR RECOMMENDATION</h3>
                         @if(pd.getMatchProductList.size >= 3) {
                             <p class="collocation-text">
-                            @pd.getProduct.getRecommendDesc
+                            @Html(pd.getProduct.getRecommendDesc)
                             </p>
                         }
                         <ul class="clearfix collacation-list">
-                        @for(product <- pd.getMatchProductList) {
-                            <li>
-                                <a href="#"><img src="" alt="" width="240" height="290"/></a>
+                        @for((product,index) <- pd.getMatchProductList.zipWithIndex) {
+                            @if(index < 3) {
+                                @if(index == 2) {
+                                <li>
+                                } else {
+                                <li>
+                                }
+                                <a href="#"><img src="@product.getMainPic" alt="" width="240" height="290"/></a>
                                 <h4>@product.getName</h4>
                                 <a href="#" class="pro-btn">SHOP SHOW</a>
                             </li>
+                            }
                         }
                         </ul>
                     </div>

@@ -147,6 +147,8 @@ public class Product implements EntityClass<Integer>, OperableData {
      */
     private List<Product> matchProductList;
 
+    private String mainPic;
+
     @Transient
     public List<StockKeepingUnit> getStockKeepingUnits() {
         return stockKeepingUnits;
@@ -163,6 +165,15 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     public void setMatchProductList(List<productcenter.models.Product> matchProductList) {
         this.matchProductList = matchProductList;
+    }
+
+    @Transient
+    public String getMainPic() {
+        return mainPic;
+    }
+
+    public void setMainPic(String mainPic) {
+        this.mainPic = mainPic;
     }
 
     /**

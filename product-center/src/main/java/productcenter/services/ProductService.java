@@ -180,7 +180,7 @@ public class ProductService {
      * @return
      */
     public List<Product> queryMatchProductList(Integer productId) {
-        String sql = "select id, productCode, categoryId, customerId, brandId, name, enName, description, tagType, storeStrategy, createTime, onlineTime, offlineTime, onLineTimeLong, updateTime,online, video,recommendDesc from product a where exists (select 1 from RecommendProduct b where a.id = b.recommendProductId and b.productId =? and b.recommendType ='MATCH') and isDelete =0";
+        String sql = "select a.*,c.pictureUrl mainPic from product a, ProductPicture c where c.mainPic=1 and a.id = c.productId and exists (select 1 from RecommendProduct b where a.id = b.recommendProductId and b.productId =? and b.recommendType ='MATCH') and isDelete =0";
         return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, productId).getResultList();
     }
 

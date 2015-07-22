@@ -411,6 +411,23 @@ public class ProductDetail {
          * @return
          */
         public Builder buildMatchProductList() {
+
+
+            //读取主图
+            List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(productDetail.product.getId());
+            if(!productPictures.isEmpty()) {
+                List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMainPic).collect(Collectors.toList());
+                if(!collect.isEmpty()) {
+                    productDetail.productPicture = collect.get(0);
+                }
+            }
+
+
+
+
+
+
+
             List<Product> matchProjectList = productService.queryMatchProductList(productDetail.product.getId());
             productDetail.setMatchProductList(matchProjectList);
             return this;
