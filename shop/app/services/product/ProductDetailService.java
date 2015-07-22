@@ -27,6 +27,7 @@ public class ProductDetailService {
         builder.buildSku();
         builder.buildDefaultSku();
         builder.buildFavorites();
+        builder.buildMatchProductList();
 
         return builder.build();
     }

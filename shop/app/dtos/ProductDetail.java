@@ -10,7 +10,6 @@ import productcenter.models.*;
 import productcenter.services.*;
 import services.CmsService;
 import usercenter.models.DesignerSize;
-import usercenter.models.User;
 import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
 import utils.Global;
@@ -68,6 +67,8 @@ public class ProductDetail {
     private SkuInfo defaultSku;
 
     private Seo seo;
+
+    private List<Product> matchProductList;
 
     private ProductDetail(Product product) {
         this.product = product;
@@ -155,6 +156,14 @@ public class ProductDetail {
 
     public void setSeo(Seo seo) {
         this.seo = seo;
+    }
+
+    public List<Product> getMatchProductList() {
+        return matchProductList;
+    }
+
+    public void setMatchProductList(List<Product> matchProductList) {
+        this.matchProductList = matchProductList;
     }
 
     public static class Builder {
@@ -397,9 +406,20 @@ public class ProductDetail {
             return this;
         }
 
+        /**
+         * 搭配产品（商品）
+         * @return
+         */
+        public Builder buildMatchProductList() {
+            List<Product> matchProjectList = productService.queryMatchProductList(productDetail.product.getId());
+            productDetail.setMatchProductList(matchProjectList);
+            return this;
+        }
+
         public ProductDetail build() {
             return productDetail;
         }
     }
+
 
 }
