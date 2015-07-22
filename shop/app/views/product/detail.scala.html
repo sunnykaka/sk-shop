@@ -72,6 +72,27 @@
                         }
                     }
                 </div>
+
+                @if(pd.getMatchProductList != null && pd.getMatchProductList.size > 0) {
+                    <div class="Collocation" id="Collocation">
+                        <h3>同系列推荐SIMILAR RECOMMENDATION</h3>
+                        @if(pd.getMatchProductList.size >= 3) {
+                            <p class="collocation-text">
+                            @pd.getProduct.getRecommendDesc
+                            </p>
+                        }
+                        <ul class="clearfix collacation-list">
+                        @for(product <- pd.getMatchProductList) {
+                            <li>
+                                <a href="#"><img src="" alt="" width="240" height="290"/></a>
+                                <h4>@product.getName</h4>
+                                <a href="#" class="pro-btn">SHOP SHOW</a>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                }
+
                 <div class="img-list">
                     <div class="open-detail" id="openDetail">
                         <p>点击查看详情 <span class="ico"></span></p>
