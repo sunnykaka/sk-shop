@@ -15,7 +15,7 @@ public class SmsTest extends BaseTest {
     @Ignore
     public void test() throws Exception {
 
-        SmsUtils.sendSms("yourphone", "圣光普照众生");
+        SmsUtils.sendSms("yourphone", "您好，您的验证码是123456");
 
     }
 
