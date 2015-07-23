@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Table(name = "ordertable")
 @Entity
-public class Order implements EntityClass<Integer> {
+public class Order implements EntityClass<Integer>, Cloneable {
     /**
      * 主键id
      */
@@ -252,6 +252,11 @@ public class Order implements EntityClass<Integer> {
                 ", milliDate=" + milliDate +
                 ", updateTime=" + updateTime +
                 '}';
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")

@@ -260,7 +260,13 @@ public class TradeService {
             Logger.error(errPrefix + "系统中找不到交易信息！");
         } else {
             for(TradeOrder tradeOrder : tradeOrderList) {
-                Order order = orderService.getOrderById(tradeOrder.getOrderId());
+                Order preOrder = orderService.getOrderById(tradeOrder.getOrderId());
+
+                Order order = new Order();
+                order.setId(preOrder.getId());
+                order.setOrderState(preOrder.getOrderState());
+                order.setUserName(preOrder.getUserName());
+
                 if(order == null || order.getId() <= 0) {
                     Logger.error(errPrefix + "系统中找不到订单，订单id[" + tradeOrder.getOrderId() + "]");
                 } else {
