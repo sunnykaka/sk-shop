@@ -32,8 +32,8 @@ public class OrderPayCallBackController extends Controller {
     @Autowired
     TradeService tradeService;
 
-    private void recordLog() {
-        Logger.info("支付平台返回的数据 : \n");
+    private void recordLog(String way) {
+        Logger.info(way + "支付平台返回的数据 : \n");
         Map<String, String[]> queryMap = request().queryString();
         if(queryMap != null) {
             Set<String> keySet = queryMap.keySet();
@@ -61,7 +61,7 @@ public class OrderPayCallBackController extends Controller {
      * @return
      */
     public Result normalReturn() {
-        recordLog();
+        recordLog("normalReturn");
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.RETURN);
 
@@ -79,7 +79,7 @@ public class OrderPayCallBackController extends Controller {
      * @return
      */
     public Result notifyReturn() {
-        recordLog();
+        recordLog("notifyReturn");
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.NOTIFY);
         Map<String, Object> resultMap = result.getData();
