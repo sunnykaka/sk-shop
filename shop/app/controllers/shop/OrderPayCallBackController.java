@@ -18,6 +18,7 @@ import views.html.shop.paySuccess;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -31,12 +32,36 @@ public class OrderPayCallBackController extends Controller {
     @Autowired
     TradeService tradeService;
 
+    private void recordLog() {
+        Logger.info("支付平台返回的数据 : \n");
+        Map<String, String[]> queryMap = request().queryString();
+        if(queryMap != null) {
+            Set<String> keySet = queryMap.keySet();
+            for(String key : keySet) {
+                Logger.info(key + " = ");
+                String[] valueArr = queryMap.get(key);
+                String value = "";
+                if(valueArr != null) {
+                    StringBuilder sb = new StringBuilder();
+                    for(String str : valueArr) {
+                        if(sb.length() > 0) {
+                            sb.append(",");
+                        }
+                        sb.append(str);
+                    }
+                    value = sb.toString();
+                    Logger.info(value + "\n");
+                }
+            }
+        }
+    }
+
     /**
      * 支付正常返回
      * @return
      */
     public Result normalReturn() {
-        Logger.info("支付平台返回的数据 : " + request().queryString());
+        recordLog();
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.RETURN);
 
@@ -54,7 +79,7 @@ public class OrderPayCallBackController extends Controller {
      * @return
      */
     public Result notifyReturn() {
-        Logger.info("支付平台返回的数据 : " + request().queryString());
+        recordLog();
         PayResponseHandler handler = new PayResponseHandler(request());
         CallBackResult result = handler.handleCallback(ResponseType.NOTIFY);
         Map<String, Object> resultMap = result.getData();
