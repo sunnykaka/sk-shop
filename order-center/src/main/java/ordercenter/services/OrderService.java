@@ -312,7 +312,7 @@ public class OrderService {
                         skuAndStorageService.addSkuStock(orderItem.getSkuId(), orderItem.getNumber());
                     }
                     order.setOrderState(OrderState.Cancel);
-                    this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), CancelOrderType.Sys.getName()));
+                    this.createOrderStateHistory(new OrderStateHistory(order, "系统", OrderState.Cancel.getLogMsg(), CancelOrderType.Sys.getName()));
                 }
             }
         }
