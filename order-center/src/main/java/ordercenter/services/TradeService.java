@@ -306,7 +306,7 @@ public class TradeService {
                                         + order.getOrderState().getValue() + "]发生异常", e);
                             }
 
-                            //统计付款成功数
+                            //统计付款成功数(这个统计数据其实很不精确)
                             try {
                                 SkuTradeResult tradeResult = this.getSkuTradeResultBySkuId(orderItem.getSkuId());
                                 if (tradeResult == null) {

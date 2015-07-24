@@ -127,10 +127,12 @@ public class OrderService {
             jpql += ", o.endDate =:endDate ";
             params.put("endDate", curTime);
         }
-        jpql += " where o.id=:orderId and o.orderState =:previousState ";
+        jpql += " where o.id=:orderId ";
         params.put("orderId", orderId);
-        params.put("previousState", previousState);
-
+        if(!OrderState.Pay.getName().equals(orderState.getName())) {
+            jpql += " and o.orderState =:previousState ";
+            params.put("previousState", previousState);
+        }
         return generalDao.update(jpql, params);
     }
 
@@ -391,10 +393,11 @@ public class OrderService {
         jpql += " where o.id=:orderItemId ";
         params.put("orderItemId", orderItemId);
 
-        if(previousState != null && StringUtils.isNotEmpty(previousState.getName())) {
+        if(previousState != null && StringUtils.isNotEmpty(previousState.getName()) && !OrderState.Pay.getName().equals(orderState.getName())) {
             jpql += " and o.orderState =:previousState ";
             params.put("previousState", previousState);
         }
+
         return generalDao.update(jpql, params);
     }
 
@@ -441,8 +444,23 @@ public class OrderService {
      * 创建订单状态历史
      */
     public void createOrderStateHistory(OrderStateHistory orderStateHistory) {
-        play.Logger.info("--------TradeService createOrderStateHistory begin exe-----------" + orderStateHistory);
+        play.Logger.info("--------OrderService createOrderStateHistory begin exe-----------" + orderStateHistory);
+        if(orderStateHistory.getOrderState().getName().equals(OrderState.Pay.getName())) {
+            deleteCancelOrderStateHistory(orderStateHistory.getOrderId());
+        }
         generalDao.persist(orderStateHistory);
+    }
+
+    /**
+     * 删除订单状态历史
+     */
+    public void deleteCancelOrderStateHistory(int orderId) {
+        play.Logger.info("--------OrderService deleteCancelOrderStateHistory begin exe-----------" + orderId);
+        String jpql = "delete from OrderStateHistory where orderId=:orderId and orderState=:orderState";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("orderId", orderId);
+        queryParams.put("orderState", OrderState.Cancel);
+        generalDao.update(jpql, queryParams);
     }
 
     /**
