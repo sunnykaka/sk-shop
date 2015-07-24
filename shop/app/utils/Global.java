@@ -1,6 +1,5 @@
 package utils;
 
-import akka.actor.Cancellable;
 import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.JsonResult;
@@ -10,6 +9,7 @@ import common.utils.play.JodaDateFormatter;
 import common.utils.play.MoneyFormatter;
 import common.utils.play.interceptor.ActionFilterChain;
 import common.utils.play.interceptor.OpenEntityManagerInViewActionFilter;
+import common.utils.scheduler.StateCoordinator;
 import configs.AppConfig;
 import configs.DataConfig;
 import org.joda.time.DateTime;
@@ -24,7 +24,6 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import scala.concurrent.duration.Duration;
-import scheduler.ExhibitionStartReminderTask;
 import scheduler.SysCancelOrderTask;
 import usercenter.dtos.DesignerView;
 import usercenter.services.DesignerService;
@@ -38,9 +37,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Optional.*;
+
+
 public class Global extends BaseGlobal {
 
-    private List<Cancellable> schedulers = new ArrayList<>();
+    StateCoordinator stateCoordinator = StateCoordinator.getInstance();
 
     @Override
     public synchronized void onStart(Application app) {
@@ -68,27 +70,21 @@ public class Global extends BaseGlobal {
     private void runSchedulers() {
 
         //开新通道前不能发送提醒短信
-//        schedulers.add(
-//                Akka.system().scheduler().schedule(
-//                        Duration.create(20, TimeUnit.SECONDS),
-//                        Duration.create(60, TimeUnit.SECONDS),
-//                        ExhibitionStartReminderTask.getInstance(),
-//                        Akka.system().dispatcher()
-//                )
-//        );
+//        stateCoordinator.addScheduler(
+//                of(Duration.create(20, TimeUnit.SECONDS)),
+//                of(Duration.create(60, TimeUnit.SECONDS)),
+//                ExhibitionStartReminderTask.getInstance());
 
-        schedulers.add(
-                Akka.system().scheduler().schedule(
-                        Duration.create(1, TimeUnit.MINUTES),
-                        Duration.create(5, TimeUnit.MINUTES),
-                        SysCancelOrderTask.getInstance(),
-                        Akka.system().dispatcher()
-                )
-        );
+        stateCoordinator.addScheduler(
+                of(Duration.create(1, TimeUnit.MINUTES)),
+                of(Duration.create(5, TimeUnit.MINUTES)),
+                SysCancelOrderTask.getInstance());
+
+        stateCoordinator.start(Akka.system().scheduler(), Akka.system().dispatcher());
     }
 
     private void stopSchedulers() {
-        schedulers.forEach(Cancellable::cancel);
+        stateCoordinator.stop();
     }
 
 

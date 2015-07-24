@@ -1,7 +1,7 @@
 package scheduler;
 
+import common.utils.scheduler.SchedulerTask;
 import ordercenter.services.OrderService;
-import play.Logger;
 import utils.Global;
 
 /**
@@ -18,9 +18,8 @@ public class SysCancelOrderTask extends SchedulerTask {
     }
 
     @Override
-    void doRun() {
+    protected void doRun() {
         OrderService orderService = Global.ctx.getBean(OrderService.class);
         orderService.timerAutoCancelOrderProcess();
-        //父类会负责打印日志并计时
     }
 }

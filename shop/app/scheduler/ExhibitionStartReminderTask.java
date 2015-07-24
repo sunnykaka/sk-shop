@@ -1,5 +1,6 @@
 package scheduler;
 
+import common.utils.scheduler.SchedulerTask;
 import services.CmsService;
 import utils.Global;
 
@@ -17,7 +18,7 @@ public class ExhibitionStartReminderTask extends SchedulerTask {
     }
 
     @Override
-    void doRun() {
+    protected void doRun() {
 
         CmsService cmsService = Global.ctx.getBean(CmsService.class);
 

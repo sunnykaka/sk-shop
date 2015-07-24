@@ -1,4 +1,4 @@
-package scheduler;
+package common.utils.scheduler;
 
 import com.google.common.base.Stopwatch;
 import play.Logger;
@@ -34,7 +34,7 @@ public abstract class SchedulerTask implements Runnable {
     }
 
 
-    abstract void doRun();
+    protected abstract void doRun();
 
 
 }
