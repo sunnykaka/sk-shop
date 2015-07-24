@@ -275,6 +275,7 @@ function fixedcart(obj, scopeObj) {
     var objTop = obj.position().top;
 
     var windowH = $(window).height(),objH = obj.height();
+    //获取居中的高度
     var placeH = parseInt((windowH - objH)/2);
     $(window).resize(function(){
         windowH = $(window).height();
@@ -285,15 +286,14 @@ function fixedcart(obj, scopeObj) {
     $(window).scroll(function (e) {
         var s = $(document).scrollTop();
         var mh = scopeObj.height();
-        if (s > objTop) {
-
+        if (s >= (objTop-placeH)) {
             if ((s + fh + placeH) > (mt + mh)) {
                 obj.css('top', (mt + mh) - (s + fh));
                 return;
             }
             obj.css('position', 'fixed');
             obj.css('top', placeH);
-        } else {
+        } else if(s < (objTop-placeH)) {
             obj.css({
                 position:objPosition,
                 top:objTop

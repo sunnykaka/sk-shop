@@ -152,6 +152,7 @@ $(function () {
 
 
     //显示评论
+    var commentFlag = true;
     $('.comment-header li').click(function () {
         var pointer;
         $(this).addClass('current').siblings('li').removeClass('current');
@@ -175,6 +176,11 @@ $(function () {
             url:'/product/valuations',
             data:pointer,
             success:function(data){
+                if(data.data.totalCount == 0 && commentFlag){
+                    $('.comment-con,.comment-page').css('display','none');
+                    commentFlag = false;
+                    return;
+                }
                 var html =  tpl('#demo', data.data);
                 $('.comment-page').html('').append(createPagehtml(data.data.pageNo,data.data.totalPage));
                 $('.comment-list').html('').append(html).hide().fadeIn();

@@ -522,7 +522,7 @@ table .pro{width: 360px;}
 .detail-inner .Collocation .collacation-list .pro-btn{width: 90px;padding: 4px 8px;text-align:center;margin:8px auto 0;border: 1px solid #cccccc;}
 .detail-inner .Collocation .collacation-list .pro-btn:hover{border: 1px solid #000;}
 .detail-inner .container{margin-bottom: 32px;display: none;}
-.detail-inner .img-list{width: 803px; overflow: hidden;}
+.detail-inner .img-list{width: 803px;  overflow: hidden;}
 .detail-inner .img-list .open-detail,.detail-inner .img-list .hide-detail{padding: 14px 0;width: 801px;
     text-align: center;border: 1px solid #cccccc;
     margin-bottom: 20px;cursor: pointer;
@@ -541,6 +541,7 @@ table .pro{width: 360px;}
 .detail-inner .comment-header .first{border-left: none;}
 .detail-inner .comment-list{border-top:1px solid #eaeaea;margin-bottom: 20px;overflow: hidden;}
 .detail-inner .img-list img{margin-bottom: 0;display: block;}
+.detail-inner .img-list .img-con{margin-bottom: 32px;}
 .detail-inner .comment-item{border-bottom:1px solid #eaeaea;border-top: none;padding: 10px 30px 20px 30px;}
 .detail-inner .comment-item .comment-content{height: 90px;overflow: hidden;margin-top:15px;}
 .detail-inner .comment-item .comment-content div{float: left;}
@@ -939,7 +940,7 @@ table .pro{width: 360px;}
 .footer-inner a:hover{color: #fd2049;}
 /*end footer*/
 .sider-bar{
-    position: fixed;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
+    position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
     left: 50%;margin-left: 600px;top: 740px;
 }
 .small-sider{width: 36px;border-top: 3px solid #FF2D54;margin-left: 592px;}
@@ -1073,3 +1074,7 @@ table .pro{width: 360px;}
 .failure a{color:#FF2D54;}
 /*统计*/
 #cnzz_stat_icon_1255394214{display: none;}
+
+@media screen and (max-width: 600px) {
+    .sider-bar{position:fixed;}
+}
