@@ -41,9 +41,20 @@
                         </thead>
                         <tbody class="product-list">
                         @for(cartItem <- cart.getCartItemList) {
-                            <tr>
+
+                            @if(!cartItem.isOnline || !cartItem.isHasStock){　
+
+                                <tr class="disabled">
+                            } else {
+
+                                <tr>
+                            }
                                 <td>
-                                    <input type="checkbox" checked="checked"  value="@cartItem.getId" />
+                                    @if(!cartItem.isOnline || !cartItem.isHasStock){
+                                        <p>无效</p>
+                                    } else {
+                                        <input type="checkbox" checked="checked"  value="@cartItem.getId" />
+                                   }
                                 </td>
                                 <td>
                                     <a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId+"-" + cartItem.getSkuId)" target="_blank" >
@@ -54,6 +65,11 @@
                                     <div class="pro-info">
                                         <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId+"-" + cartItem.getSkuId)" target="_blank" >@cartItem.getProductName</a></p>
                                     </div>
+                                    @if(!cartItem.isOnline){<p class="invalid">商品已下架</p>} else {
+                                        @if(!cartItem.isHasStock){
+                                            <p class="invalid">此商品暂时缺货</p>
+                                        }
+                                    }
                                 </td>
                                 <td>
                                     <div>
@@ -70,14 +86,20 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="amount" data-skuId="@cartItem.getSkuId">
-                                        <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
-                                        <input type="text" size="3" maxlength="3" class="text-number" limit="@cartItem.getTradeMaxNumber" value="@cartItem.getNumber" data-price="@cartItem.getCurUnitPrice">
-                                        <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
-                                    </div>
+                                    @if(!cartItem.isOnline || !cartItem.isHasStock){
+                                        @cartItem.getNumber
+                                    } else {
+                                        <div class="amount" data-skuId="@cartItem.getSkuId">
+                                            <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
+                                            <input type="text" size="3" maxlength="3" class="text-number" limit="@cartItem.getTradeMaxNumber" value="@cartItem.getNumber" data-price="@cartItem.getCurUnitPrice">
+                                            <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
+                                        </div>
+                                    }
+
                                 </td>
                                 <td>
                                     ￥<span class="pro-total-money">@cartItem.getTotalPrice</span>
+
                                 </td>
                                 <td>
                                     <span  class="del" title="删除" data-id="@cartItem.getId">X</span>
@@ -94,7 +116,10 @@
                             <tr>
                                 <td colspan="6"></td>
                                 <td colspan="2">
-                                    <span class="btn toOrder" id="toOrder">去结算</span>
+                                    <div class="btn-wrap">
+                                        <span class="btn toOrder loading-before" id="toOrder">去结算</span>
+                                        <span class="btn loading-after"><i class="loading-btn"></i>处理中...</span>
+                                    </div>
                                 </td>
                             </tr>
                         </tfoot>

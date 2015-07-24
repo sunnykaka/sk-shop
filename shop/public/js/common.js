@@ -150,7 +150,7 @@ var loginHtml = '<div class="login-inner idialog-login idialog-form"><span class
                 '<div class="login-input">'+
                     '<span class="ico ico1"></span>'+
                     '<label for="loginUser">手机号/用户名</label>'+
-                    '<input type="text" id="loginUser" name="passport" autocomplete="off" class="text"/>'+
+                    '<input type="text" id="loginUser" name="passport" autocomplete="off" autofocus="true" class="text"/>'+
                     '<span class="errormsg" id="errormsg-loginUser"></span>'+
                 '</div>'+
                 '<div class="login-PW">'+
@@ -233,10 +233,6 @@ var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="
                        }
 
                     $('#goLogin').click(function(){
-                        //清空chrome默认填充
-                        if($('input:-webkit-autofill').size()>0){
-                            $('.errormsg').siblings('label').css('display','none');
-                        }
                        $.dialog.get.regLogin.$content.find('.reg-box-inner').fadeOut(function(){
                          if($('#login-form').size()>0){
                                 $.dialog.get.regLogin.$content.find('.login-inner').fadeIn(); 
@@ -247,6 +243,7 @@ var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="
                     });
                    });
                 });
+
             },
             hide:function(){
                 $('#goLogin').off();$('#goReg').off();

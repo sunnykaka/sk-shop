@@ -555,8 +555,9 @@ $(function () {
 
         //立即购买
         addToOrderBtn.click(function () {
+            var that = this;
+            $(this).parent('.btn-wrap').addClass('loading');
             var skuId = skuMap[_selectedIds.join(',')]["skuId"], number = amountInputEle.val();
-
             $.ajax({
                 type: "get",
                 url: '/cart/verifyPromptlyPayData?skuId=' + skuId + "&number=" + number,
@@ -571,6 +572,7 @@ $(function () {
                         if (data.message == 'Credentials required') {
                             createLoginReg();
                         }
+                        $(that).parent('.btn-wrap').removeClass('loading');
                     }
                 }
             });

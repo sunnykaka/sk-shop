@@ -179,6 +179,8 @@ $(function(){
 
     //提交购物车
     $('#toOrder').click(function(){
+        var that =this;
+        $(this).parent('.btn-wrap').addClass('loading');
         var checkboxs = $('.product-list :checkbox'),cartItem=[];
         checkboxs.each(function(){
             if($(this).is(':checked')){
@@ -200,9 +202,9 @@ $(function(){
                     }
                 }
             });
+            $(that).parent('.btn-wrap').removeClass('loading');
             return;
         }
-
         $.ajax({
             type: "get",
             url: '/cart/selCartItemProcess?selCartItems='+cartItem.join(','),
@@ -212,6 +214,21 @@ $(function(){
             success: function (data) {
                 if(data.result){
                     window.location.href = '/cart/chooseAddress?selCartItems='+cartItem.join(',');
+                }else{
+                    $.dialog({
+                        title:'提示',
+                        lock:true,
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
+                        width:500,
+                        height:248,
+                        btn: {
+                            ok : {
+                                val : '关闭',
+                                type : 'red'
+                            }
+                        }
+                    });
+                    $(that).parent('.btn-wrap').removeClass('loading');
                 }
             }
         });
