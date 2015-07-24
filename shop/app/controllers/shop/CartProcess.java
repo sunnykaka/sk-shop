@@ -61,7 +61,7 @@ public class CartProcess {
             Money totalMoney = Money.valueOf(0);
             if(cartItems != null && cartItems.size() > 0) {
                 for (CartItem cartItem : cartItems) {
-                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem));
+                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem,true));
                 }
             }
             cart.setTotalMoney(totalMoney);
@@ -99,6 +99,16 @@ public class CartProcess {
      */
     @Transactional
     public Money setCartItemValues(CartItem cartItem) {
+        return setCartItemValues(cartItem, false);
+    }
+
+    /**
+     * 设置订单项的各个需要的属性值
+     * @param cartItem
+     * @param isForShowCart 是否是购物车展示界面
+     */
+    @Transactional
+    public Money setCartItemValues(CartItem cartItem, boolean isForShowCart) {
         Money totalMoney = Money.valueOf(0);
         StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
         cartItem.setCurUnitPrice(Money.valueOf(0));
@@ -150,6 +160,12 @@ public class CartProcess {
             }
 
             Money itemTotalMoney = cartItem.getCurUnitPrice().multiply(cartItem.getNumber());
+            if(isForShowCart) {
+               if(!cartItem.isOnline() || !cartItem.isHasStock()) {
+                   itemTotalMoney = Money.valueOf(0);
+               }
+            }
+
             cartItem.setTotalPrice(itemTotalMoney);
 
             totalMoney = totalMoney.add(itemTotalMoney);
