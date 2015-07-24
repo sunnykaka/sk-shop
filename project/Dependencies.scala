@@ -41,7 +41,8 @@ object Dependencies {
     "com.typesafe.play.modules" %% "play-modules-redis" % "2.4.1" exclude("junit", "junit"),
     "io.kamon" %% "kamon-core" % kamonVersion,
     "io.kamon" %% "kamon-statsd" % kamonVersion,
-    "io.kamon" %% "kamon-system-metrics" % kamonVersion
+    "io.kamon" %% "kamon-system-metrics" % kamonVersion exclude("io.kamon", "sigar-loader"),
+    "io.kamon" %  "sigar-loader" % "1.6.6"
   )
 
   val commonDependencies: Seq[ModuleID] = common ++ springHibernate ++ playDependencies
