@@ -9,10 +9,7 @@ import productcenter.models.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Sku和库存Service
@@ -122,6 +119,11 @@ public class SkuAndStorageService {
      */
     public List<SkuProperty> getSKUPropertyValueMap(int skuId){
         StockKeepingUnit SKU = this.getStockKeepingUnitById(skuId);
+
+        if(null == SKU){
+            return new ArrayList<>();//防止SKU为null引起的异常
+        }
+
         for(SkuProperty p :SKU.getSkuProperties()){
             Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
             p.setPropertyName(property.getName());
