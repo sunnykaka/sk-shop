@@ -242,8 +242,8 @@
                 <div class="size-detail-tips">
                     <span>温馨提示：</span>
                     <ul>
-                    @for((info, index) <- pd.getDesignerSize.getPromptList.zipWithIndex) {
-                        <li>@(index + 1)、@info</li>
+                    @for(info <- pd.getDesignerSize.getPromptList) {
+                        <li>@info</li>
                     }
                     </ul>
                 </div>
