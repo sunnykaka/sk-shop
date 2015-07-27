@@ -47,7 +47,9 @@
                 <ul class="clearfix">
                     @for((content,index) <- sliderBoxs.zipWithIndex) {
                        <li>
-                           <a target="_blank" href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;"><img class="lazy"   data-original="@content.getContent" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getTitle" width="390" height="103"/></a>
+                           <a target="_blank" href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;">
+                               <img src="@content.getContent" alt="@content.getTitle" width="390" height="103"/>
+                           </a>
                            <div class="cover"></div>
                        </li>
                     }

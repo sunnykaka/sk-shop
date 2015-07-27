@@ -107,7 +107,7 @@
                 </ul>
             </div>
             <div class="top-con">
-                <img  class="lazy"   data-original="@designer.getStorePic" alt="@designer.getName" width="439px" src="@routes.Assets.versioned("images/grey.gif")" height="370px"/>
+                <img  alt="@designer.getName"  src="@designer.getStorePic" width="439px" height="370px"/>
                 <div class="designer-con">
                     <div class="designer-con-title">
                         <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites){hasFocus}" id="designerFocus" data-id="@designer.getId">
@@ -124,10 +124,14 @@
                 <div class="brand-start-fashion">
                     <h3>正在首发</h3>
                     <ul class="clearfix">
-                    @for(prod <- sellingList) {
+                    @for((prod,index) <- sellingList.zipWithIndex) {
                         <li>
                             <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display: block;"/>
+                                @if(index<=3){
+                                    <img  alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display: block;"/>
+                                }else{
+                                    <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display: block;"/>
+                                }
                             </a>
                             <div class="cover">
                                 <div class="design-cover"></div>

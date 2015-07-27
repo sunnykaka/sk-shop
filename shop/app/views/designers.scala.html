@@ -70,7 +70,7 @@ $(function(){
                 </ul>
             </div>
             <div class="top-img">
-                <img  class="lazy"   data-original="@content.getContent" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getContent" width="1200px" height="416px"/>
+                <img  src="@content.getContent" alt="@content.getContent" width="1200px" height="416px"/>
             </div>
             <div class="designer-list-title">
                 <h2>所有设计师</h2>
@@ -78,10 +78,14 @@ $(function(){
             </div>
             <div class="designer-list-con">
                 <ul class="clearfix">
-                @for(designer <- designerList) {
+                @for((designer,index)<- designerList.zipWithIndex) {
                     <li>
                         <a target="_blank" href="@routes.Application.designerProd(designer.getId)">
-                            <img class="designer-img lazy"  data-original="@designer.getMainPic" src="@routes.Assets.versioned("images/grey.gif")"  alt="@designer.getName" width="289" height="460"/>
+                            @if(index<=3){
+                                <img class="designer-img"  src="@designer.getMainPic"  alt="@designer.getName" width="289" height="460"/>
+                            }else{
+                                <img class="designer-img lazy"  data-original="@designer.getMainPic" src="@routes.Assets.versioned("images/grey.gif")"  alt="@designer.getName" width="289" height="460"/>
+                            }
                             <div>
                                 <img src="@designer.getBrandPic" alt="@designer.getName" width="289" height="60"/>
                                 <p>设计师：@designer.getName</p>

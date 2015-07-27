@@ -70,9 +70,9 @@
                         <embed wmode="transparent" src="@Html(pd.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
                     } else {
                         @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
-                            <img class="lazy"   data-original="@pd.getProductPicture.getPictureUrl" width="803" height="536" src="@routes.Assets.versioned("images/grey.gif")" alt="@pd.getProduct.getName"/>
+                            <img width="803" height="536" src="@pd.getProductPicture.getPictureUrl" alt="@pd.getProduct.getName"/>
                         } else {
-                            <img class="lazy"   data-original="@routes.Assets.versioned("images/detail/1.jpg")" width="803" height="536" src="/assets/images/grey.gif" alt="@pd.getProduct.getName"/>
+                            <img width="803" height="536" src="@routes.Assets.versioned("images/detail/1.jpg")" alt="@pd.getProduct.getName"/>
                         }
                     }
                 </div>
@@ -116,11 +116,19 @@
                     </div>
                 }
 
+
                 <div class="img-list">
                     <div class="open-detail" id="openDetail">
                         <p>点击查看详情 <span class="ico"></span></p>
                     </div>
+
                     <div class="container">
+                        <div class="product-info">
+                            <h3>产品说明 <span class="icon iconfont arc">&#xe612;</span></h3>
+                            @for((spec,index) <- pd.getSpecList.zipWithIndex) {
+                                <p>@spec.getName：@spec.getValue</p>
+                            }
+                        </div>
                         <div class="img-con">
                             @if(pd.getHtmlList.nonEmpty) {
                                 @if(null != pd.getHtmlList.get(0).getContent && !"".equals(pd.getHtmlList.get(0).getContent)){
@@ -155,7 +163,7 @@
             </div>
             <div id="right-fixed" class="right" >
                 <div class="debut-img">
-                    <img class="lazy"   data-original="@routes.Assets.versioned("images/detail/debut.jpg")" src="/assets/images/grey.gif" alt="全球首发"/>
+                    <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
                 </div>
             <div id="debut-box">
                 <div class="debut-info clearfix">

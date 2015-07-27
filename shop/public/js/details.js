@@ -239,6 +239,7 @@ $(function () {
                     } else {
                         if (res.message == 'Credentials required') {
                             createLoginReg();
+                            flag = true;
                         }
                     }
                 }
