@@ -170,7 +170,7 @@ public class ProductService {
      */
     public List<ProductSpec> querySpecByProductId(Integer productId) {
 
-        String jpql = "select ps from ProductSpec ps where ps.productId=:productId";
+        String jpql = "select ps from ProductSpec ps where ps.productId=:productId order by ps.priority desc ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
 

@@ -20,6 +20,8 @@ public class ProductSpec implements EntityClass<Integer> {
 
     private Integer productId;
 
+    private int priority = 0;
+
     @Override
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -57,5 +59,14 @@ public class ProductSpec implements EntityClass<Integer> {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    @Column(name = "priority")
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }
