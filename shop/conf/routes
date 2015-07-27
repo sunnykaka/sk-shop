@@ -158,4 +158,5 @@ GET         /link/getLinkList                           @controllers.link.LinkCo
 GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
 GET         /robots.txt                                 controllers.Assets.at(path="/public", file="robots.txt")
 GET         /google364d7dcf8709c4e5.html                controllers.Assets.at(path="/public", file="google364d7dcf8709c4e5.html")
+GET         /sitemap.xml                                controllers.Assets.at(path="/public", file="sitemap.xml")
 

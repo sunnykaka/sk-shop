@@ -10,6 +10,7 @@ import productcenter.constants.ProductTagType;
 import productcenter.constants.StoreStrategy;
 import productcenter.models.Html;
 import productcenter.models.Product;
+import productcenter.models.ProductSpec;
 
 import java.util.HashMap;
 import java.util.List;
@@ -161,6 +162,21 @@ public class ProductService {
         List<Html> list = generalDao.query(jpql, Optional.empty(), queryParams);
         return list;
     }
+
+    /**
+     * 查询商品说明
+     * @param productId
+     * @return
+     */
+    public List<ProductSpec> querySpecByProductId(Integer productId) {
+
+        String jpql = "select ps from ProductSpec ps where ps.productId=:productId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+
+        return generalDao.query(jpql, Optional.empty(), queryParams);
+    }
+
 
 
     /**

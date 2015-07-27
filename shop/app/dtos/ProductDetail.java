@@ -28,6 +28,8 @@ public class ProductDetail {
 
     private List<Html> htmlList;
 
+    private List<ProductSpec> specList;
+
     private ProductPicture productPicture;
 
     private DesignerSize designerSize;
@@ -80,6 +82,10 @@ public class ProductDetail {
 
     public List<Html> getHtmlList() {
         return htmlList;
+    }
+
+    public List<ProductSpec> getSpecList() {
+        return specList;
     }
 
     public ProductPicture getProductPicture() {
@@ -206,12 +212,14 @@ public class ProductDetail {
             }
 
             //读取商品描述
-            List<Html> htmlList = productService.queryHtmlByProductId(productDetail.product.getId());
-            productDetail.htmlList = htmlList;
+            productDetail.htmlList = productService.queryHtmlByProductId(productDetail.product.getId());
 
             //读尺码表
             DesignerSize ds = designerService.getDesignerSizeById(productDetail.product.getDesignerSizeId());
             productDetail.setDesignerSize(ds);
+
+            //读取商品说明
+            productDetail.specList = productService.querySpecByProductId(productDetail.product.getId());
 
             return this;
         }
