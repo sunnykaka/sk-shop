@@ -46,6 +46,7 @@
                 success:function(res){
                     if(res.message == 'Credentials required'){
                         createLoginReg();
+                         flag = true;
                     }else{
                         if(res.result){
                             that.find('.focus-text').text('关注');
