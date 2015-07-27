@@ -421,7 +421,7 @@ public class ProductDetail {
         public Builder buildMatchProductList() {
             List<Product> matchProjectList = productService.queryMatchProductList(productDetail.product.getId());
             for(Product product : matchProjectList) { //先这样，以后再优化
-               //读取主图
+               //读取副图
                 List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(product.getId());
                 if(!productPictures.isEmpty()) {
                     List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMinorPic).collect(Collectors.toList());

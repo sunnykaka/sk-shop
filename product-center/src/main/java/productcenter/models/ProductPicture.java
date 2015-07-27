@@ -52,7 +52,7 @@ public class ProductPicture implements EntityClass<Integer> {
     private Boolean mainPic;
 
     /**
-     *是否副图：0 代表不是主图, 1 代表是, 默认是 0
+     *是否副图：0 代表不是副图, 1 代表是, 默认是 0
      */
     private Boolean minorPic;
 
