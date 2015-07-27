@@ -28,7 +28,7 @@ public class ProductDetail {
 
     private List<Html> htmlList;
 
-    private List<ProductSpec> specList;
+    private List<ProductSpec> specList = new ArrayList<>();
 
     private ProductPicture productPicture;
 

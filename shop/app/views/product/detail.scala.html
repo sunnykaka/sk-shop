@@ -123,12 +123,14 @@
                     </div>
 
                     <div class="container">
-                        <div class="product-info">
-                            <h3>产品说明 <span class="icon iconfont arc">&#xe612;</span></h3>
-                            @for((spec,index) <- pd.getSpecList.zipWithIndex) {
-                                <p>@spec.getName：@spec.getValue</p>
-                            }
-                        </div>
+                        @if(pd.getSpecList.size > 0){
+                            <div class="product-info">
+                                <h3>产品说明 <span class="icon iconfont arc">&#xe612;</span></h3>
+                                @for((spec,index) <- pd.getSpecList.zipWithIndex) {
+                                    <p>@spec.getName：@spec.getValue</p>
+                                }
+                            </div>
+                        }
                         <div class="img-con">
                             @if(pd.getHtmlList.nonEmpty) {
                                 @if(null != pd.getHtmlList.get(0).getContent && !"".equals(pd.getHtmlList.get(0).getContent)){
