@@ -51,7 +51,11 @@
                     <ul class="clearfix">
                         <li><a href="@routes.Application.index()">首页</a></li>
                         <li>&gt;</li>
-                        <li><a href="@routes.Application.designerProd(pd.getProduct.getCustomer.getId)">设计师品牌：@pd.getProduct.getCustomer.getName</a></li>
+                        @if(pd.getProduct.getCustomer.getIsDelete || !pd.getProduct.getCustomer.getIsPublished) {
+                            <li>设计师品牌：@pd.getProduct.getCustomer.getName</li>
+                        } else {
+                            <li><a href="@routes.Application.designerProd(pd.getProduct.getCustomer.getId)">设计师品牌：@pd.getProduct.getCustomer.getName</a></li>
+                        }
                         <li>&gt;</li>
                         <li>@pd.getProduct.getName </li>
                     </ul>
