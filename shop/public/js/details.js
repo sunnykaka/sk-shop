@@ -176,7 +176,7 @@ $(function () {
             url:'/product/valuations',
             data:pointer,
             success:function(data){
-                if(data.data.totalCount == 0 && commentFlag){
+                if(data.data.totalCount == 0 && commentFlag && typeof(pointer.point) == 'undefined'){
                     $('.comment-con,.comment-page').css('display','none');
                     commentFlag = false;
                     return;
