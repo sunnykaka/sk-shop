@@ -711,13 +711,13 @@ $(function () {
 
             if (selectAttrNum < _skuAttrNum) {
 
-                skuMapEle.addClass('no_finished');
-                if (!skuMapEle.find('a.close_btn').length) {
-                    var closeBtn = $('<a class="close_btn" href="javascript:;">关闭</a>').appendTo(skuMapEle);
-                    closeBtn.bind('click', function () {
-                        skuMapEle.removeClass('no_finished');
-                    })
-                }
+                //skuMapEle.addClass('no_finished');
+                //if (!skuMapEle.find('a.close_btn').length) {
+                //    var closeBtn = $('<a class="close_btn" href="javascript:;">关闭</a>').appendTo(skuMapEle);
+                //    closeBtn.bind('click', function () {
+                //        skuMapEle.removeClass('no_finished');
+                //    })
+                //}
                 return false;
             }
             return true;

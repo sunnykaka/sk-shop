@@ -654,6 +654,7 @@ table .pro{width: 360px;}
 .detail-btn  .loading .loading-after{margin-top: -38px;}
 .detail-btn .loading-btn{position: absolute;top: 11px;left: 20px;}
 .detail-btn span,.detail-btn a{display:block;width:128px;height:36px;line-height:36px;text-align:center;background: #000000;border:1px solid #000;color: #fff;*display: inline-block;}
+.detail-btn a.disabled{background: #ccc;cursor: not-allowed;border: 1px solid #ccc;}
 .detail-btn .loading span{border: 1px solid #d0d0d0;}
 .detail-btn a{float: left;}
 .detail-btn .addToOrder{margin-right:0px;}

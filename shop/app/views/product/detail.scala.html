@@ -3,7 +3,6 @@
 @import common.utils.DateUtils
 @import common.utils.JsonUtils._
 @import org.apache.commons.lang3.StringUtils._
-
 @main(pd.getSeo)() {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
     <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
@@ -166,6 +165,7 @@
             </div>
             <div id="right-fixed" class="right" >
                 <div class="debut-img">
+
                     <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
                 </div>
             <div id="debut-box">
@@ -219,7 +219,7 @@
                 } else {
                     @if(pd.getDefaultSku.getStockQuantity <= 0) {
                         <div class="detail-btn">
-                            <a href="javascript:void(0);" class="btn addToOrder">商品已售罄</a>
+                            <a href="javascript:void(0);" class="btn addToOrder disabled">商品已售罄</a>
                         </div>
                     } else {
                         <div class="detail-btn">
