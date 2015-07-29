@@ -103,7 +103,12 @@ public enum PayBank implements ViewEnum {
     /**
      * 财付通
      */
-    Tenpay("财付通","Tenpay");
+    Tenpay("财付通","Tenpay"),
+
+    /**
+     * 微信支付
+     */
+    WXSM("微信支付","WXSM");
 
     public String value;
 
