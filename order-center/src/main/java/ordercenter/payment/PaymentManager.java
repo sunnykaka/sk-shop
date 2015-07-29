@@ -25,8 +25,10 @@ public class PaymentManager {
         addPayService(PayMethod.directPay, AliPayRequestHandler.class);
         //银行，目前也是通过支付宝来实现
         addPayService(PayMethod.bankPay, AliPayRequestHandler.class);
-         //财富通，实现类
+        //财富通，实现类
         addPayService(PayMethod.Tenpay, TenPayRequestHandler.class);
+        //微信，实现类
+        addPayService(PayMethod.WXSM, TenPayRequestHandler.class);
     }
 
     /**

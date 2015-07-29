@@ -278,8 +278,11 @@ public class OrderAndPayController extends Controller {
         if (payInfoWrapper.isBank()) {
             bank = PayBank.valueOf(payInfoWrapper.getDefaultbank());
         } else {
-            if(payMethod.equals(PayMethod.Tenpay.getName())) {
+            if(payMethod.equals(PayMethod.Tenpay.getName()) || payMethod.equals(PayMethod.WXSM.getName())) {
                 bank = PayBank.Tenpay;
+                if(payMethod.equals(PayMethod.WXSM.getName())) {
+                    bank = PayBank.WXSM;
+                }
                 payInfoWrapper.setBuyerIP(request().remoteAddress());
             }
         }

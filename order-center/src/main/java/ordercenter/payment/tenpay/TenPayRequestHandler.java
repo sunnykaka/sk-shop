@@ -45,7 +45,12 @@ public class TenPayRequestHandler extends PayRequestHandler {
         //sign
         sParaTemp.put("sign_key_index", "1");
 
-        sParaTemp.put("bank_type", "WXSM");
+        if(payInfoWrapper.isWXSM()) {
+            sParaTemp.put("bank_type", "WXSM");
+        } else {
+            sParaTemp.put("bank_type", "DEFAULT");
+        }
+
         sParaTemp.put("body", subject);
 
         sParaTemp.put("partner", TenpayUtils.PARTNER);

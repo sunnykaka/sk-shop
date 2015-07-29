@@ -87,6 +87,14 @@ public class PayInfoWrapper {
     }
 
     /**
+     * 是否是腾讯微信支付
+     * @return
+     */
+    public boolean isWXSM() {
+        return payMethod != null && payMethod == PayMethod.WXSM;
+    }
+
+    /**
      * 是否是银行支付
      * @return
      */

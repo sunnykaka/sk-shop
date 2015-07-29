@@ -12,7 +12,8 @@ public enum PayMethod implements ViewEnum {
     directPay("支付宝"),
     creditPay("信用卡"),
     bankPay("银行卡"),
-    Tenpay("财付通");
+    Tenpay("财付通"),
+    WXSM("微信支付");
 
     public String value;
 
