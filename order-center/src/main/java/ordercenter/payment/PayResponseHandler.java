@@ -6,6 +6,7 @@ import ordercenter.models.Trade;
 import ordercenter.models.TradeOrder;
 import ordercenter.payment.alipay.AlipayInfoBuilder;
 import ordercenter.payment.constants.PayMethod;
+import ordercenter.payment.constants.PayType;
 import ordercenter.payment.constants.ResponseType;
 import ordercenter.payment.tenpay.TenpayInfoBuilder;
 import ordercenter.services.OrderPayCallbackProcess;
@@ -82,7 +83,8 @@ public class PayResponseHandler {
             if(PayMethod.directPay.getName().equals(payMethod.getName())
                     || PayMethod.bankPay.getName().equals(payMethod.getName())) { //支付宝和银行卡(银行，目前也是通过支付宝来实现)
                 this.builder = new AlipayInfoBuilder();
-            } else  if(PayMethod.Tenpay.getName().equals(payMethod.getName()) ) {
+            } else  if(PayMethod.Tenpay.getName().equals(payMethod.getName())
+                    || PayMethod.WXSM.getName().equals(payMethod.getName()) ) {
                 this.builder = new TenpayInfoBuilder();
             } else {
                 Logger.error("「订单回调」订单支付成功，但是系统中找不到此支付方式！，此交易号号为：" + tradeNoStr);
@@ -122,6 +124,10 @@ public class PayResponseHandler {
             this.trade.setPayTotalFee(tradeOrder.getPayTotalFee());
             this.trade.setBizType(tradeOrder.getBizType().getName());
             this.trade.setPayMethod(tradeOrder.getPayMethod().getName());
+
+            if(PayMethod.WXSM.getName().equals(payMethod.getName())) {
+                this.trade.setOuterPlatformType(PayType.WXSM.getValue());
+            }
         }
 
         Logger.info("支付返回参数以及类型信息: " + type.getValue() + " : " + backParams);

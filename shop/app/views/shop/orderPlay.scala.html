@@ -25,6 +25,8 @@ $('#pay-money-btn').click(function(){
                 break;
             case  'Tenpay':  payMethod = 'Tenpay';
                 break;
+            case  'WXSM':  payMethod = 'WXSM';
+                break;
             default :
                 payMethod = 'bankPay';
         }
@@ -37,7 +39,6 @@ $('#pay-money-btn').click(function(){
             success: function (data) {
                 if(data.result){
                  $('#tradeNo').val(data.data);
-                 console.log(data.data);
                  $('#payMethod').val(payMethod);
                  $('#payOrg').val(currentPay);
                  $('#pay-form').submit();
@@ -143,10 +144,15 @@ $('#pay-money-btn').click(function(){
                             <i></i>
                             <img src="../assets/images/bank-zfb.jpg" alt="支付宝">
                         </li>
+                        <li paybank="WXSM" class="">
+                            <i></i>
+                            <img src="../assets/images/bank-weixin.jpg" alt="微信支付">
+                        </li>
                         <li paybank="Tenpay" class="">
                             <i></i>
                             <img src="../assets/images/bank-cft.jpg" alt="财付通">
                         </li>
+
 
                         @*<li class="more-payBank">*@
                             @*<a href="javascript:void(0);">选择更多支付方式&gt;&gt;</a>*@

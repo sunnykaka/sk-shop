@@ -31,7 +31,7 @@ public class AliPayRequestHandler extends PayRequestHandler {
 
     @Override
     protected Map<String, String> buildPayParam(PayInfoWrapper payInfoWrapper) {
-        if (!(payInfoWrapper.isAlipay() || payInfoWrapper.isBank())) {
+        if (!(payInfoWrapper.isAlipay() || payInfoWrapper.isWXSM() || payInfoWrapper.isBank())) {
             throw new RuntimeException("不支持的支付类型");
         }
 

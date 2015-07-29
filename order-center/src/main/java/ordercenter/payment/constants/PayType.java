@@ -16,7 +16,12 @@ public enum PayType implements ViewEnum {
     /**
      * 财富通
      */
-    TenPay("tenpay");
+    TenPay("tenpay"),
+
+    /**
+     * 微信
+     */
+    WXSM("WXSM");
 
     public String value;
 
