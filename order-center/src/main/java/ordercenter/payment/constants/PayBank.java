@@ -106,9 +106,9 @@ public enum PayBank implements ViewEnum {
     Tenpay("财付通","Tenpay"),
 
     /**
-     * 微信
+     * 微信支付
      */
-    WXSM("微信", "WXSM");
+    WXSM("微信支付","WXSM");
 
     public String value;
 
