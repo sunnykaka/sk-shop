@@ -18,7 +18,6 @@ package common.play.kamon
 
 import akka.actor.{ ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import akka.event.Logging
-import kamon.Kamon
 import kamon.http.HttpServerMetrics
 import play.api.libs.ws.WSRequest
 import play.api.mvc.RequestHeader
@@ -30,12 +29,12 @@ object Play extends ExtensionId[PlayExtension] with ExtensionIdProvider {
   val SegmentLibraryName = "WS-client"
 }
 
-class PlayExtension(private val system: ExtendedActorSystem) extends Kamon.Extension {
+class PlayExtension(private val system: ExtendedActorSystem) extends kamon.Kamon.Extension {
   val log = Logging(system, classOf[PlayExtension])
   log.info(s"Starting the Kamon(Play) extension")
 
   private val config = system.settings.config.getConfig("kamon.play")
-  val httpServerMetrics = Kamon.metrics.entity(HttpServerMetrics, "play-server")
+  val httpServerMetrics = kamon.Kamon.metrics.entity(HttpServerMetrics, "play-server")
 
   val includeTraceToken: Boolean = config.getBoolean("automatic-trace-token-propagation")
   val traceTokenHeaderName: String = config.getString("trace-token-header-name")
