@@ -1,10 +1,12 @@
 package controllers.help;
 
+import models.Link;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Results;
+import services.LinkService;
 import usercenter.dtos.DesignerView;
 import usercenter.services.DesignerService;
 import views.html.error_404;
@@ -22,6 +24,9 @@ public class HelpCenterController extends Controller {
 
     @Autowired
     private DesignerService designerService;
+
+    @Autowired
+    private LinkService linkService;
 
     public Result index(String name) {
 
@@ -43,6 +48,9 @@ public class HelpCenterController extends Controller {
             return ok(sizeInfo.render());
         } else if ("joinUs".equals(name)) {
             return ok(joinUs.render());
+        } else if("friendLink".equals(name)) { //友情链接
+            List<Link> linkList = linkService.getLinkList();
+            return ok(friendLink.render(linkList));
         }
 
         List<DesignerView> designerViews = new ArrayList<>();

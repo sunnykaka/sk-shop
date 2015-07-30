@@ -33,7 +33,7 @@ public class Link implements EntityClass<Integer>{
     /**
      * 是否有效，默认有效
      */
-    private Boolean effective = false;
+    private Boolean effective = true;
 
     /**
      * 创建时间

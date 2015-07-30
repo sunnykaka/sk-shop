@@ -23,7 +23,7 @@ public class LinkService {
     private GeneralDao generalDao;
 
     /**
-     * 根据userId分页查询
+     * 获取有效的友情连接列表
      *
      * @return
      */
@@ -31,8 +31,9 @@ public class LinkService {
     public List<Link> getLinkList(){
         play.Logger.info("--------LinkService getLinkList begin exe-----------");
 
-        String jpql = "select o from Link o where o.effective=true order by o.name";
+        String jpql = "select o from Link o where o.effective=:effective order by o.name";
         Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("effective", true);
         return generalDao.query(jpql, Optional.ofNullable(null), queryParams);
     }
 
