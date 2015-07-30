@@ -43,7 +43,7 @@ public class FeedbackService {
     public Bulletin getBulletin() {
         Bulletin bulletin = null;
 
-        String jpql = "select dp from Bulletin b where b.effective=:effective";
+        String jpql = "select b from Bulletin b where b.effective=:effective";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("effective", true);
 
