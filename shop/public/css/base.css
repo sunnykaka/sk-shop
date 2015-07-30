@@ -295,7 +295,7 @@ table .pro{width: 360px;}
 .forget-pw-sec-form .errormsg,.forget-pw-thr-form .errormsg,.phoneValidate-list .errormsg,.updatePw-list .errormsg,.validateEmail-list .errormsg{height: 18px;padding: 4px 0 4px 34px;line-height: 20px;
     color: #FF2D54;display: block;
 }
-.login-inner .login-btn,.reg-box-inner .reg-btn{width: 290px;height: 34px;background: #000;text-align: center;color:#fff;border: none;
+.login-inner .login-btn,.reg-box-inner .reg-btn,.feedback .feedback-left .feedback-btn{width: 290px;height: 34px;background: #000;text-align: center;color:#fff;border: none;
     font-weight: 700;cursor: pointer;
 }
 .login-inner .login-form .login-remember{width:280px;margin-top: 18px;text-align: right;}
@@ -760,9 +760,9 @@ table .pro{width: 360px;}
 .order-detail-list .back{text-align: center;}
 .order-detail-list .back a{padding: 8px 50px;height:30px;line-height:30px;background: #000;color: #fff;}
 .refund-order-content .refund-order-status{padding: 10px 0 0 25px;}
-.refund-order-content .refund-order-reason{padding: 10px 0;height: 100px;}
+.refund-order-content .refund-order-reason{padding: 10px 0;}
 .refund-order-content .refund-order-reason span,.refund-order-content .refund-order-reason p{float: left;padding: 0;}
-.refund-order-content .refund-order-reason span{display:block;height: 100px;}
+.refund-order-content .refund-order-reason div{float: left;overflow: hidden;}
 .refund-order-content .refund-order-reason p{width:820px;border: none;line-height: 180%;height: auto;}
 .refund-order-content .order-number{color: #FF2D54;}
 /*end order-detail*/
@@ -1042,8 +1042,9 @@ table .pro{width: 360px;}
 .member-clause-left dd{padding:10px 18px;text-align: center;}
 .member-clause-left dd a{padding-left: 5px;color: #585858;}
 .member-clause-left .highLight,.member-clause-left .highLight a{color: #FF2D54;}
-.member-clause-right,.size-info-right,.pay-type-right,.shopping-process-right,.rights-info-right,.after-service-right,.deliver-info-right{width: 1000px;}
-.member-clause h2,.size-info h2,.pay-type h2,.shopping-process h2,.rights-info h2,.after-service h2,.deliver-info h2{height:20px;padding: 0 0 0 8px;border-left:5px solid #737373;margin-bottom: 19px;font-size: 16px;font-weight: normal;}
+.member-clause-right,.size-info-right,.pay-type-right,.shopping-process-right,.rights-info-right,.after-service-right,.deliver-info-right,.feedback-process-right{width: 1000px;}
+.member-clause h2,.size-info h2,.pay-type h2,.shopping-process h2,.rights-info h2,.after-service h2,.deliver-info h2,.feedback-process-right h2{height:20px;padding: 0 0 0 8px;border-left:5px solid #737373;margin-bottom: 9px;
+    margin-top: 10px;font-size: 16px;font-weight: normal;}
 .member-clause-right .first-para,.rights-info-right .first-para{padding-top: 30px;border-top: 1px solid #cccccc;line-height: 200%;text-indent: 25px;font-size: 13px;color: #000;
     margin-bottom: 30px;
 }
@@ -1101,6 +1102,23 @@ table .pro{width: 360px;}
 .contact-box-left ul{margin-bottom: 50px;}
 .contact-box-left li{height: 30px;line-height: 30px;margin: 8px 0;font-size: 14px;}
 /*end contact*/
+/*friend-link*/
+.friend-link{margin: 10px 0 0 20px;}
+.friend-link a{float: left;width:150px;text-align:center;margin: 10px 20px 10px 0;}
+.friend-link a:hover{color: #fd2049;}
+/*end friend-link*/
+/*feedback*/
+.feedback{padding:20px 0 0 20px;}
+.feedback .formItem{margin-bottom: 30px;}
+.feedback .feedback-left{float: left;width: 750px;}
+.feedback .feedback-left label{vertical-align: top;}
+.feedback .feedback-left .contact-label{float: left;width: 60px;height: 34px;line-height: 34px;}
+.feedback .feedback-left textarea{width: 660px;padding:8px;border: 1px solid #ccc;resize: none;}
+.feedback .feedback-left .text{width: 670px;}
+.feedback .feedback-left .feedback-btn{margin-left: 60px;font-weight: normal;width: 200px;}
+.feedback .feedback-left .feedback-btn:hover{background-color: #29292c; border-color: #29292c;}
+.feedback .feedback-right{width: 200px;float: right;}
+/*end feedback*/
 /*deliver-info*/
 .deliver-info-right .first{border-top: 1px solid #ccc;padding-top: 10px;}
 .deliver-info-right span{margin-right: 10px;font-size: 18px;color: #FF2D54;}
@@ -1214,3 +1232,5 @@ table .pro{width: 360px;}
     -moz-animation: ani-ui-loading-show .8s;
     animation: ani-ui-loading-show .8s
 }
+/*placehold*/
+::-webkit-input-placeholder{color:#a9a9a9;opacity:1}:focus::-webkit-input-placeholder{color:transparent}.ph-fix :focus::-webkit-input-placeholder{color:#e0e0e0}:-moz-placeholder{color:#a9a9a9;opacity:1}:focus:-moz-placeholder{color:transparent}.ph-fix :focus:-moz-placeholder{color:#e0e0e0}::-moz-placeholder{color:#a9a9a9;opacity:1}:focus::-moz-placeholder{color:transparent}.ph-fix :focus::-moz-placeholder{color:#e0e0e0}:-ms-input-placeholder{color:#a9a9a9;opacity:1}:focus:-ms-input-placeholder{color:transparent}.ph-fix :focus:-ms-input-placeholder{color:#e0e0e0}.ph-fix :-ms-input-placeholder{color:transparent}.ph-safari ::-webkit-input-placeholder{color:transparent}.ph-label{position:relative;border:none !important;background:transparent !important;vertical-align:top;color:#a9a9a9 !important;*margin-top:1px;}.ph-label span{position:absolute;white-space:nowrap;overflow:hidden;color:#a9a9a9 !important;pointer-events:none;-ms-user-select:none;user-select:none}.ph-focus span{color:#e0e0e0 !important}.ph-hide{display:none !important}

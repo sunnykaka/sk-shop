@@ -1,17 +1,35 @@
 @(linkList:List[models.Link])
 
-@myCenter(Messages("title.help.service")) {
-    <script src="@routes.Assets.versioned("../../public/js/FormValidate.js")"></script>
+@myCenter(Messages("title.help.friendLink")) {
 
 } {
-    <!--order-manage-->
-    <div class="order-manage">
-        @for(link <- linkList) {
-           <a href="@link.getLink">@link.getName</a>
-        }
+
+    <div class="after-service">
+        <div class="after-service-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="/" target="_blank">首页</a></li>
+                    <li>&gt;</li>
+                    <li>帮助中心</li>
+                    <li>&gt;</li>
+                    <li>购物流程</li>
+                </ul>
+            </div>
+            <div class="member-clause-content">
+                @left("friendLink")
+                <div class="shopping-process-right right">
+                    <h2>友情链接</h2>
+                    <div style="border-bottom: 1px solid #ccc;color: #ccc;background: #ccc;"></div>
+                        <!--order-manage-->
+                    <div class="friend-link">
+                        @for(link <- linkList) {
+                            <a href="@link.getLink" target="_blank">@link.getName</a>
+                        }
+                    </div>
+                        <!--end order-manage-->
+                </div>
+            </div>
+        </div>
     </div>
-    <!--end order-manage-->
 
 }
-
-

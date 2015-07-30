@@ -1,13 +1,133 @@
+
+
+
+
 @(bulletin:usercenter.models.Bulletin)
 
-@myCenter(Messages("title.help.service")) {
-    <script src="@routes.Assets.versioned("../../public/js/FormValidate.js")"></script>
+@myCenter(Messages("title.help.feedback")) {
+    <script src="@routes.Assets.versioned("js/jquery.placeholder.js")"></script>
+    <script >
+        $(function(){
+            $('#feedback-btn').on('click',function(evt){
+                evt.preventDefault();
+                if($('#advice').val()=="" || $('#advice').val().length>800){
+                    $.dialog({
+                        title:'提示',
+                        lock:true,
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>反馈内容不能为空或者超过800字！</p></div>',
+                        width:540,
+                        height:248,
+                        btn: {
+                          ok : {
+                            val : '关闭',
+                            type : 'red'
+                            }
+                        }
+                    });
+
+                    return false;
+                }
+                if($('#contact').val()==""|| $('#contact').val().length>100){
+                    $.dialog({
+                        title:'提示',
+                        lock:true,
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>联系方式不能为空或者超过100字！</p></div>',
+                        width:540,
+                        height:248,
+                        btn: {
+                          ok : {
+                            val : '关闭',
+                            type : 'red'
+                            }
+                        }
+                    });
+
+                    return false;
+                }
+
+                $.ajax({
+                    url:'@controllers.user.routes.FeedbackController.submitFeedback',
+                    data:$('#feedback').serialize(),
+                    type:'post',
+                    success:function(response){
+                       if(response.result){
+                             $.dialog({
+                                title:'提示',
+                                lock:true,
+                                content:'<div class="warning-inner clearfix"><p class="warning">意见反馈提交成功！</p></div>',
+                                width:540,
+                                height:248,
+                                btn: {
+                                  ok : {
+                                    val : '关闭',
+                                    type : 'red'
+                                    }
+                                }
+                            });
+                            $('#feedback').get(0).reset();
+                       }else{
+                            $.dialog({
+                                title:'提示',
+                                lock:true,
+                                content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+response.message+'</p></div>',
+                                width:540,
+                                height:248,
+                                btn: {
+                                  ok : {
+                                    val : '关闭',
+                                    type : 'red'
+                                    }
+                                }
+                            });
+                       }
+                    }
+                })
+            })
+        });
+    </script>
 
 } {
-    @if(bulletin != null && bulletin.getContent != null) {
-        @bulletin
-    }
+    <div class="after-service">
+        <div class="after-service-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    <li><a href="/" target="_blank">首页</a></li>
+                    <li>&gt;</li>
+                    <li>帮助中心</li>
+                    <li>&gt;</li>
+                    <li>意见反馈</li>
+                </ul>
+            </div>
+            <div class="member-clause-content">
+                @left("feedback")
+                <div class="feedback-process-right right">
+                    <h2>意见反馈</h2>
+                    <div style="border-bottom: 1px solid #ccc;color: #ccc;background: #ccc;"></div>
 
+                    <div class="feedback clearfix">
+                        <div class="feedback-left">
+                            <form id="feedback">
+                                <div class="formItem">
+                                    <label for="advice">反馈内容：</label>
+                                    <textarea name="advice" id="advice" cols="30" rows="10" placeholder="哪里有不爽，来喷吧！800字内"></textarea>
+                                </div>
+                                <div class="formItem">
+                                    <label for="contact" class="contact-label">联系方式：</label>
+                                    <input type="text" class="text" name="contact" id="contact" placeholder="求联系方式（邮箱、qq）!100字内"/>
+                                </div>
+                                <div><button type="submit"  id="feedback-btn" class="feedback-btn">提交</button></div>
+                            </form>
+                        </div>
+                        <div class="feedback-right">
+                            @if(bulletin != null && bulletin.getContent != null) {
+                                @Html(bulletin.getContent)
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 }
-
 

@@ -14,5 +14,7 @@
         <dd @if("service".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("service")">售后服务</a></dd>
         <dd @if("memberClause".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("memberClause")">会员条款</a></dd>
         <dd @if("rightsInfo".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("rightsInfo")">权责说明</a></dd>
+        <dd @if("friendLink".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("friendLink")">友情链接</a></dd>
+        <dd @if("feedback".equals(focus)){class="highLight"}>&bull;<a href="@controllers.help.routes.HelpCenterController.index("feedback")">意见反馈</a></dd>
     </dl>
 </div>

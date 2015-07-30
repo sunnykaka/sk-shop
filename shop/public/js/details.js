@@ -652,10 +652,10 @@ $(function () {
             if (_isSKU) {
                 if (!verifySku()) return false;
                 _limit = skuMap[_selectedIds.join(',')]["tradeMaxNumber"];
-                _stock = skuMap[_selectedIds.join(',')]["stock"];
+                _stock = skuMap[_selectedIds.join(',')]["stockQuantity"];
             } else {
                 _limit = defaultSku["tradeMaxNumber"];
-                _stock = defaultSku["stock"];
+                _stock = defaultSku["stockQuantity"];
             }
 
             var _targetParentClassName = event.target.parentNode.className;
@@ -711,13 +711,6 @@ $(function () {
 
             if (selectAttrNum < _skuAttrNum) {
 
-                //skuMapEle.addClass('no_finished');
-                //if (!skuMapEle.find('a.close_btn').length) {
-                //    var closeBtn = $('<a class="close_btn" href="javascript:;">关闭</a>').appendTo(skuMapEle);
-                //    closeBtn.bind('click', function () {
-                //        skuMapEle.removeClass('no_finished');
-                //    })
-                //}
                 return false;
             }
             return true;
