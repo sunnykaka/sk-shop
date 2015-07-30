@@ -1,0 +1,17 @@
+@(linkList:List[models.Link])
+
+@myCenter(Messages("title.help.service")) {
+    <script src="@routes.Assets.versioned("../../public/js/FormValidate.js")"></script>
+
+} {
+    <!--order-manage-->
+    <div class="order-manage">
+        @for(link <- linkList) {
+           <a href="@link.getLink">@link.getName</a>
+        }
+    </div>
+    <!--end order-manage-->
+
+}
+
+
