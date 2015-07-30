@@ -151,8 +151,8 @@ GET         /product/:id                                @controllers.product.Pro
 #help
 GET         /help/:name                                 @controllers.help.HelpCenterController.index(name)
 
-#友情链接
-GET         /link/getLinkList                           @controllers.link.LinkController.getLinkList
+#意见反馈
+POST        /feedback/submitFeedback                    @controllers.user.FeedbackController.submitFeedback
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)

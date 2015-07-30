@@ -1,0 +1,13 @@
+@(bulletin:usercenter.models.Bulletin)
+
+@myCenter(Messages("title.help.service")) {
+    <script src="@routes.Assets.versioned("../../public/js/FormValidate.js")"></script>
+
+} {
+    @if(bulletin != null && bulletin.getContent != null) {
+        @bulletin
+    }
+
+}
+
+

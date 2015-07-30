@@ -8,7 +8,9 @@ import play.mvc.Result;
 import play.mvc.Results;
 import services.LinkService;
 import usercenter.dtos.DesignerView;
+import usercenter.models.Bulletin;
 import usercenter.services.DesignerService;
+import usercenter.services.FeedbackService;
 import views.html.error_404;
 import views.html.help.*;
 
@@ -27,6 +29,9 @@ public class HelpCenterController extends Controller {
 
     @Autowired
     private LinkService linkService;
+
+    @Autowired
+    FeedbackService feedbackService;
 
     public Result index(String name) {
 
@@ -51,6 +56,9 @@ public class HelpCenterController extends Controller {
         } else if("friendLink".equals(name)) { //友情链接
             List<Link> linkList = linkService.getLinkList();
             return ok(friendLink.render(linkList));
+        } else if("feedback".equals(name)) { //意见反馈
+            Bulletin bulletin = feedbackService.getBulletin();
+            return ok(feedback.render(bulletin));
         }
 
         List<DesignerView> designerViews = new ArrayList<>();
