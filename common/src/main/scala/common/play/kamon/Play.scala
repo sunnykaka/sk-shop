@@ -75,7 +75,7 @@ class DefaultNameGenerator extends NameGenerator {
       }
       traceName
     })
-  } getOrElse s"${requestHeader.method}: ${requestHeader.uri}"
+  }.fold(s"U_${requestHeader.method}: ${requestHeader.uri}")("K_" + _)  //K开头为controller请求，U开头为未知请求
 
   def generateHttpClientSegmentName(request: WSRequest): String = request.url
 }
