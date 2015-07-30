@@ -389,6 +389,7 @@ $(function () {
         //防止数据没有提前获取
         if (_isSKU) {
             var _limit = 1;
+            var _limitText = '限购';
         } else {
             var _limit = defaultSku['limit'];
         }
@@ -662,11 +663,12 @@ $(function () {
 
 
             if (_targetParentClassName == "btn-add") {
+                _limitText = _limit > _stock ? '库存' : '限购';
                 _limit = _limit > _stock ? _stock : _limit;
                 _num = parseInt(amountInputEle.val()) + 1;
                 if (_num > _limit) {
                     _num = _limit;
-                    FG.tip(amountInputEle, "limit_tip", "此商品限购" + _num + "件", 0, 90);
+                    FG.tip(amountInputEle, "limit_tip", "此商品"+_limitText + _num + "件", 0, 90);
                 }
                 amountInputEle.val(_num);
 
@@ -692,9 +694,11 @@ $(function () {
             if (!reg.test(amountInputEle.val())) {
                 amountInputEle.val(1);
             }
+            _limitText = _limit > _stock ? '库存' : '限购';
+            _limit = _limit > _stock ? _stock : _limit;
             if (amountInputEle.val() > _limit) {
                 amountInputEle.val(_limit);
-                FG.tip(amountInputEle, "limit_tip", "此商品限购" + _limit + "件", 0, 90);
+                FG.tip(amountInputEle, "limit_tip", "此商品"+_limitText + _limit + "件", 0, 90);
             }
             if (amountInputEle.val() < 1 && _limit > 0) {
                 amountInputEle.val(1);
