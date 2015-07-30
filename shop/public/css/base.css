@@ -545,10 +545,10 @@ table .pro{width: 360px;}
 .detail-inner .info p{margin-top:10px;line-height: 32px;font-size: 13px;}
 .detail-inner .video{width: 803px;height: 536px;overflow: hidden;margin-bottom: 32px;}
 .detail-inner .Collocation{margin-bottom: 30px;overflow: hidden;}
-.detail-inner .Collocation h3{position:relative;width: 310px;text-align: center;padding: 10px;border-bottom: 1px solid #000;margin: 0 auto 20px;font-weight: normal;font-size: 16px;}
+.detail-inner .Collocation h3{position:relative;width: 310px;text-align: center;padding: 10px;border-bottom: 1px solid #000;margin: 0 auto 30px;font-weight: normal;font-size: 16px;}
 .detail-inner .Collocation h3 span{top: 33px;left: 168px;}
 .detail-inner .Collocation h3.first{text-align: left; margin: 0 0 20px 0;}
-.detail-inner .Collocation .collocation-text,.detail-inner .Collocation .collacation-list h4{text-align: center;line-height: 20px;margin: 8px 0;}
+.detail-inner .Collocation .collocation-text,.detail-inner .Collocation .collacation-list h4{text-align: center;line-height: 20px;margin: 20px 0;}
 .detail-inner .Collocation .collacation-list h4{font-weight:normal;}
 .detail-inner .Collocation .collacation-list a,.detail-inner .Collocation .collacation-list img{display: block;}
 .detail-inner .Collocation .collacation-list li{float: left;width:240px;margin-right: 41px;overflow: hidden;}
