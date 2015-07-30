@@ -135,13 +135,13 @@
                     @for(cartItem <- cart.getCartItemList) {
                     <tr>
                         <td>
-                            <a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId+"-" + cartItem.getSkuId)" target="_blank" >
+                            <a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId.toString)" target="_blank" >
                                 <img class="lazy"   data-original="@cartItem.getMainPicture" alt="" src="/assets/images/grey.gif" width="90" height="147"/><!--此拿到的只是图的url地址，可能没有值-->
                             </a>
                         </td>
                         <td class="pro">
                             <div class="pro-info">
-                                <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId+"-" + cartItem.getSkuId)" target="_blank" >@cartItem.getProductName</a></p>
+                                <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId.toString)" target="_blank" >@cartItem.getProductName</a></p>
                             </div>
                         </td>
                         <td>
