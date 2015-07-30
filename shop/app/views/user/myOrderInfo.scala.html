@@ -45,7 +45,6 @@
                                     <tr>
                                         <th>处理时间</th>
                                         <th>处理信息</th>
-                                        <th>操作人</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,7 +52,6 @@
                                         <tr>
                                             <td>@DateUtils.printDateTime(orderStateHistory.getDate)</td>
                                             <td>@orderStateHistory.getDoWhat</td>
-                                            <td>@orderStateHistory.getOperator</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -76,12 +74,12 @@
                                     @for(orderItem <- order.getOrderItemList){
                                         <tr>
                                             <td>
-                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
+                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId.toString)" target="_blank" >
                                                     <img class="lazy"   data-original="@orderItem.getMainPicture" src="/assets/images/grey.gif" alt="" height="147px" width="90px"/>
                                                 </a>
                                             </td>
                                             <td>
-                                                <p><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >@orderItem.getProductName</a></p>
+                                                <p><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId.toString)" target="_blank" >@orderItem.getProductName</a></p>
                                             </td>
                                             <td>
                                                 @for(keyValue <- orderItem.getProperties){

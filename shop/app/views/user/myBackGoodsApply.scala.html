@@ -95,13 +95,13 @@
                                     @for((orderItem, index) <- order.getOrderItemList.zipWithIndex){
                                         <tr>
                                             <td>
-                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >
+                                                <a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId.toString)" target="_blank" >
                                                     <img src="@orderItem.getMainPicture" alt="" height="147px" width="90px"/>
                                                 </a>
                                             </td>
                                             <td class="pro">
                                                 <div class="pro-info">
-                                                    <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId+"-" + orderItem.getSkuId)" target="_blank" >@orderItem.getProductName</a></p>
+                                                    <p class="pro-name"><a href="@controllers.product.routes.ProductController.detail(orderItem.getProductId.toString)" target="_blank" >@orderItem.getProductName</a></p>
                                                 </div>
                                             </td>
                                             <td>
