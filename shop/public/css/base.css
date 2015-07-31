@@ -406,7 +406,7 @@ table .pro{width: 360px;}
 .order-btn .order-submit-btn:hover,.mycart-inner .toOrder:hover,.pay-inner .pay-money-btn:hover,.order-submit h3 a:hover{background-color: #29292c;border-color: #29292c;}
 /*end order-submit*/
 /*products-list*/
-.products-list{min-height: 1000px;margin-bottom: 100px;}
+.products-list{min-height: 870px;margin-bottom: 100px;}
 .products-list .products-category{width: 1138px;border: 1px solid #ccc;padding: 20px 30px 13px 30px;font-size: 14px;margin-bottom: 26px;}
 .products-list .products-category-con{overflow:hidden;}
 .products-list .products-category-con div{width: 80px;float: left;padding: 3px 0;}
