@@ -10,6 +10,8 @@ GET         /designers                                  @controllers.Application
 GET         /designers4more                             @controllers.Application.designers4More(currPage:Int ?= 1)
 GET         /designerProd                               @controllers.Application.designerProd(dId:Int)
 GET         /about                                      @controllers.Application.about
+GET         /products                                   @controllers.product.ProductController.list(pageNo:Int ?=1,navId:Int ?= -1,st:Int ?=0 )
+
 
 # user
 GET         /register                                   @controllers.user.LoginController.registerPage

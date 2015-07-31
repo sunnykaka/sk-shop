@@ -1,22 +1,30 @@
-@(name:String)
+@(name: String)
 
 <div class="header">
     <div class="header-inner width1200">
         <ul class="nav clearfix">
             <li>
-                <a @if("index".equals(name)){class="current"} href="@controllers.routes.Application.index()">首页<br/><span>home</span></a>
+                <a @if("index".equals(name)) {
+                    class="current"
+                } href="@controllers.routes.Application.index()">首页<br/><span>home</span></a>
             </li>
             <li>
-                <a @if("preview".equals(name)){class="current"} href="@controllers.routes.Application.preview()">预告<br/><span>preview</span></a>
+                <a @if("preview".equals(name)) {
+                    class="current"
+                } href="@controllers.routes.Application.preview()">预告<br/><span>preview</span></a>
             </li>
             <li class="logo">
                 <a title="尚客" href="@controllers.routes.Application.index()">fashiongeeker/尚客</a>
             </li>
             <li>
-                <a @if("designer".equals(name)){class="current"} href="@controllers.routes.Application.designers()">设计师<br/><span>designer</span></a>
+                <a @if("designer".equals(name)) {
+                    class="current"
+                } href="@controllers.routes.Application.designers()">设计师<br/><span>designer</span></a>
             </li>
             <li class="last">
-                <a @if("about".equals(name)){class="current"} href="@controllers.routes.Application.about()">关于我们<br/><span>about us</span></a>
+                <a @if("products".equals(name)) {
+                    class="current"
+                } href="@controllers.product.routes.ProductController.list()">所有商品<br/><span>products</span></a>
             </li>
         </ul>
     </div>
