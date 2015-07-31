@@ -434,6 +434,7 @@ table .pro{width: 360px;}
 .products-list .products-list-body img{display: block;}
 .products-list .products-list-footer{text-align: center;height: 50px;line-height: 50px;}
 .products-list .products-list-footer a{padding: 6px 16px;border: 1px solid #ccc;font-size: 14px;}
+.products-list .products-list-hd-right .disabled:hover,.products-list .products-list-footer .disabled:hover{border: 1px solid #ccc;cursor: not-allowed;}
 /*end products-list*/
 /*mycart*/
 .mycart{margin-bottom: 50px;}
@@ -1121,7 +1122,7 @@ table .pro{width: 360px;}
 .feedback .feedback-left .text{width: 670px;}
 .feedback .feedback-left .feedback-btn{margin-left: 60px;font-weight: normal;width: 200px;}
 .feedback .feedback-left .feedback-btn:hover{background-color: #29292c; border-color: #29292c;}
-.feedback .feedback-right{width: 200px;float: right;}
+.feedback .feedback-right{width: 200px;float: right;word-break:break-all;word-wrap:break-word;}
 /*end feedback*/
 /*deliver-info*/
 .deliver-info-right .first{border-top: 1px solid #ccc;padding-top: 10px;}
