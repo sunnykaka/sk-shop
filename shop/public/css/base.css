@@ -406,14 +406,18 @@ table .pro{width: 360px;}
 .order-btn .order-submit-btn:hover,.mycart-inner .toOrder:hover,.pay-inner .pay-money-btn:hover,.order-submit h3 a:hover{background-color: #29292c;border-color: #29292c;}
 /*end order-submit*/
 /*products-list*/
-.products-list{min-height: 1900px;margin-bottom: 100px;}
+.products-list{min-height: 1000px;margin-bottom: 100px;}
 .products-list .products-category{width: 1138px;border: 1px solid #ccc;padding: 20px 30px;font-size: 14px;margin-bottom: 26px;}
 .products-list .products-category-con{overflow:hidden;}
 .products-list .products-category-con div{width: 80px;float: left;}
 .products-list .products-category-con  ul{width: 1055px}
-.products-list .products-category-con  ul,.products-list .products-category-con  li{float: left;}
+.products-list .products-category-con  ul,.products-list .products-category-con  li,.products-list .products-category-con a{float: left;}
 .products-list .products-category-con  li{margin: 0 23px 10px 0}
-.products-list .products-category-con a:hover{color: #fd2049;}
+.products-list .products-category-con a{padding: 3px 6px;}
+.products-list .products-category-con .current a,.products-list .products-category-con a:hover{background: #000;color: #fff;}
+.products-list .products-list-con .mycart-empty p{text-align: center;padding-bottom: 50px;}
+.products-list .products-list-con .mycart-empty p i{margin-right: 5px;}
+/*.products-list .products-category-con a:hover{color: #fd2049;}*/
 .products-list .products-list-hd-left li{float: left;margin-right: 10px;font-size: 14px;}
 .products-list .products-list-hd-left a{float: left;padding: 6px 16px;border: 1px solid #ccc;}
 .products-list .products-list-hd-left .current a{border: 1px solid #000;background: #000;color: #fff;}
