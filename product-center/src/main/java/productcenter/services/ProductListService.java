@@ -60,11 +60,14 @@ public class ProductListService {
      * @return
      */
     public List<ProductCategory> category4AllTree(List<Integer> cateIds) {
-        String jpql = " select pc from ProductCategory pc where pc.deleted = 0 and pc.parentId in (:cateIds) or pc.id in (:cateIds)" +
-                "union select t1 from ProductCategory t1, ProductCategory t2 where t1.parentId = t2.id and t2.parentId in (:cateIds) and t1.deleted = 0 ";
+        String jpql = " select pc from ProductCategory pc where pc.deleted = 0 and pc.parentId in (:cateIds) or pc.id in (:cateIds)";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("cateIds", cateIds);
-        return generalDao.query(jpql, Optional.<Page<ProductCategory>>empty(), queryParams);
+        List<ProductCategory> c1 = generalDao.query(jpql, Optional.<Page<ProductCategory>>empty(), queryParams);
+        String jpql2 = " select t1 from ProductCategory t1, ProductCategory t2 where t1.parentId = t2.id and t2.parentId in (:cateIds) and t1.deleted = 0";
+        List<ProductCategory> c2 = generalDao.query(jpql2, Optional.<Page<ProductCategory>>empty(), queryParams);
+        c1.addAll(c2);
+        return c1;
     }
 
     /**
