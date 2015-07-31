@@ -14,7 +14,15 @@
                 <ul class="clearfix">
                     <li><a href="@controllers.routes.Application.index()">首页</a></li>
                     <li>&gt;</li>
-                    <li>商品列表</li>
+                    <li><a href="@controllers.product.routes.ProductController.list()">所有商品</a></li>
+                    @if(queryVO.getNavigateId != null){
+                        <li>&gt;</li>
+                        @for(nav <- navList) {
+                            @if(queryVO.getNavigateId.equals(nav.getId)) {
+                                <li>@nav.getName</li>
+                            }
+                        }
+                    }
                 </ul>
             </div>
                 <!-- 产品分类-->
@@ -41,14 +49,23 @@
                 <div class="products-list-header clearfix">
                     <div class="products-list-hd-left left">
                         <ul class="clearfix">
-                            <li class="current"><a href="@controllers.product.routes.ProductController.list()">
-                                全部</a></li>
-                                <!--
+                            @if(queryVO.getSt != null && queryVO.getSt == 1){
+                                <li><a href="@controllers.product.routes.ProductController.list()">
+                                    全部</a></li>
+                                    <!--
                                 <li><a href="#"><i class="icon iconfont">&#xe612;</i>价格</a></li>
                                 -->
-                            <li><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1)">
-                                只显示有货商品</a></li>
-
+                                <li class="current"><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1)">
+                                    只显示有货商品</a></li>
+                            }else {
+                                <li class="current"><a href="@controllers.product.routes.ProductController.list()">
+                                    全部</a></li>
+                                    <!--
+                                <li><a href="#"><i class="icon iconfont">&#xe612;</i>价格</a></li>
+                                -->
+                                <li><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1)">
+                                    只显示有货商品</a></li>
+                            }
                         </ul>
                     </div>
                     @if(pageResult.getResult != null && pageResult.getTotalCount > 0) {
