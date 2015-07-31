@@ -52,7 +52,6 @@ public class ProductController extends Controller {
      * 商品列表页的查询
      *
      * @param pageNo
-     * @param pageSize
      * @param navId
      * @return
      */
