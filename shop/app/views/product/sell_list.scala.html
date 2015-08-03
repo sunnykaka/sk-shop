@@ -39,7 +39,7 @@
                     <li><a href="@controllers.routes.Application.index()">首页</a></li>
                     <li>&gt;</li>
                     <li><a href="@controllers.product.routes.ProductController.list()">所有商品</a></li>
-                    @if(queryVO.getNavigateId != null){
+                    @if(queryVO.getNavigateId != null && queryVO.getNavigateId != -1){
                         <li>&gt;</li>
                         @for(nav <- navList) {
                             @if(queryVO.getNavigateId.equals(nav.getId)) {

@@ -3,6 +3,7 @@ package dtos;
 import common.utils.Money;
 import models.CmsExhibition;
 import models.ExhibitionStatus;
+import productcenter.constants.SKUState;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 import productcenter.models.StockKeepingUnit;
@@ -14,6 +15,8 @@ import utils.Global;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by amoszhou on 15/7/20.
@@ -94,8 +97,8 @@ public class ProductInSellList {
         public ProductInSellList buildProdct(Product product) {
             this.productInSellList = new ProductInSellList();
             this.productId = product.getId();
-            this.productInSellList.product   = product;
-            buildPicture().buildPrice().buildStatus();
+            this.productInSellList.product = product;
+            buildPicture().buildPriceAndStatus();
             return productInSellList;
         }
 
@@ -116,25 +119,37 @@ public class ProductInSellList {
          *
          * @return
          */
-        protected Builder buildPrice() {
-            List<StockKeepingUnit> skuList = skuAndStorageService.querySkuListByProductId(productId);
-            Optional<StockKeepingUnit> stockKeepingUnit = skuList.stream().min((s1, s2) -> new Double(s1.getPrice().getAmount()).compareTo(new Double(s2.getPrice().getAmount())));
-            StockKeepingUnit mostCheapSku = stockKeepingUnit.get();
-            this.productInSellList.price = mostCheapSku.getPrice();
-            return this;
-        }
+        protected Builder buildPriceAndStatus() {
 
-        protected Builder buildStatus() {
+            /**
+             * 读取商品的状态
+             */
             Optional<CmsExhibition> exhibition = cmsService.findExhibitionWithProdId(this.productId);
+            ExhibitionStatus status = ExhibitionStatus.OVER; //默认是正常售卖
             if (exhibition.isPresent()) {
-                ExhibitionStatus status = exhibition.get().getStatus();
-                this.productInSellList.status = status.toString();
+                status = exhibition.get().getStatus();
+            }
+            this.productInSellList.status = status.toString();
+
+            /**
+             * 只需要查询有效的sku
+             */
+            List<StockKeepingUnit> skuList = skuAndStorageService.querySkuListByProductId(productId).stream().filter(sku -> sku.getSkuState().equals(SKUState.NORMAL)).collect(toList());
+            /**
+             * 取最便宜的的SKU
+             */
+            
+            Optional<StockKeepingUnit> stockKeepingUnit = skuList.stream().min((s1, s2) -> new Double(s1.getMarketPrice().getAmount()).compareTo(new Double(s2.getMarketPrice().getAmount())));
+            StockKeepingUnit mostCheapSku = stockKeepingUnit.get();
+            /**
+             * 首发就读首发价，其余状态都读正常售卖价
+             */
+            if (status.equals(ExhibitionStatus.SELLING)) {
+                this.productInSellList.price = mostCheapSku.getPrice();
             } else {
-                this.productInSellList.status = ExhibitionStatus.OVER.toString();
+                this.productInSellList.price = mostCheapSku.getMarketPrice();
             }
             return this;
         }
-
-
     }
 }
