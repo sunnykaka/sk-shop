@@ -152,8 +152,8 @@
             <!--footer-->
         @foot()
 
-        <script src="js/jquery.min.js"></script>
-
+        <script src="@routes.Assets.versioned("js/jquery.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("js/common.js")"></script>
         <script>
             $(function(){
                 $('.empty-box li').hover(function(){
@@ -162,6 +162,16 @@
                     $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
                 });
             });
+        </script>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1255394214'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1255394214%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "//hm.baidu.com/hm.js?073d5b8b70770381e5ea3718a95c696f";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
         </script>
 
     </body>
