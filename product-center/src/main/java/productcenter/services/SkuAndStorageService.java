@@ -113,6 +113,27 @@ public class SkuAndStorageService {
     }
 
     /**
+     * 获取售卖价最低的SKU信息
+     *
+     * @param productId
+     * @return
+     */
+    public StockKeepingUnit querySkuByProductIdPriceSmall(int productId) {
+        play.Logger.info("------SkuAndStorageService querySKUByProductId begin exe-----------" + productId);
+
+        String jpql = "select o from StockKeepingUnit o where 1=1 and o.productId=:productId and o.skuState='NORMAL' order by o.marketPrice asc";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+        List<StockKeepingUnit> skus = generalDao.query(jpql, Optional.<Page<StockKeepingUnit>>empty(), queryParams);
+
+        StockKeepingUnit stockKeepingUnit = null;
+        if(skus != null && skus.size() > 0) {
+            stockKeepingUnit = skus.get(0);
+        }
+        return stockKeepingUnit;
+    }
+
+    /**
      * 产生SKU属性及对应值
      *
      * @param skuId

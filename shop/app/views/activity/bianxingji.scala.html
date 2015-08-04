@@ -1,0 +1,168 @@
+@(map:Map[Integer,String])
+
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>变型记，对平凡说NO-尚客</title>
+        <link rel="stylesheet" href="@routes.Assets.versioned("css/base.css")"/>
+        <link rel='shortcut icon' href='@routes.Assets.versioned("images/fashiongeeker.ico")' />
+        <meta name="description" content="办公室女郎变型记，优雅名媛、干练女王、运动达人、俏丽佳人任你选。">
+        <meta name="Keywords" content="全球首发，独立设计师，限量发售，限时首发，变型记">
+        <style>
+        .dapei{width: 100%;}
+        .dapei-inner{width: 1200px;margin: 0 auto;}
+        .dapei-inner img{display: block;}
+        .dapei-inner .dapei-header-top{margin-bottom: 76px;}
+        .dapei-inner .floor{width: 1200px;height: 597px;margin-bottom: 83px;}
+        .dapei-inner .dapei-floor-1{background: url('@routes.Assets.versioned("images/activity/floor-1-bg.jpg")') no-repeat;position: relative;}
+        .dapei-inner .dapei-floor-2{background: url('@routes.Assets.versioned("images/activity/floor-2-bg.jpg")') no-repeat;position: relative;}
+        .dapei-inner .dapei-floor-3{background: url('@routes.Assets.versioned("images/activity/floor-3-bg.jpg")') no-repeat;position: relative;}
+        .dapei-inner .dapei-floor-4{background: url('@routes.Assets.versioned("images/activity/floor-4-bg.jpg")') no-repeat;position: relative;}
+        .product-link{position: absolute;}.product-price{position: absolute;color: #ff2d54;font-size: 16px;}
+        .product-link-483{width:470px;height: 597px;left: 0;top: 0;}
+        .product-price-483{top: 441px;left: 291px;}
+        .product-link-217{width:124px;height: 310px;left: 424px;top: 282px;}
+        .product-price-217{top: 347px;left: 584px;}
+        .product-link-119{width:134px;height: 254px;left: 728px;top: 50px;}
+        .product-price-119{top: 32px;left: 751px;}
+        .product-link-407{width:208px;height: 156px;left: 664px;top: 389px;}
+        .product-price-407{top: 466px;left: 724px;}
+        .product-link-141{width:119px;height: 317px;right: 0;top: 5px;}
+        .product-price-141{right: 146px;top: 123px;}
+        .product-link-215{width:104px;height: 302px;left: 937px;top: 288px;}
+        .product-price-215{left: 1082px;top: 450px;}
+        /*floor-2*/
+        .product-link-255{width:407px;height: 597px;left: 522px;top: 0;}
+        .product-price-255{left: 834px;top: 195px;color: #fff;}
+        .product-link-147{width:153px;height: 201px;left: 999px;top: 381px;}
+        .product-price-147{left: 1038px;top: 577px;}
+        .product-link-249{width:97px;height: 279px;left: 393px;top: 318px;}
+        .product-price-249{left: 397px;top: 266px;}
+        .product-link-127{width:160px;height: 162px;left: 185px;top: 13px;}
+        .product-price-127{left: 362px;top: 75px;}
+        .product-link-113{width:120px;height: 336px;left: 19px;top: 261px;}
+        .product-price-113{left: 36px;top: 197px;}
+        .product-link-123{width:106px;height: 201px;left: 204px;top: 251px;}
+        .product-price-123{left: 214px;top: 567px;}
+        /*end floor-2*/
+        /*floor-3*/
+        .product-link-237{width:406px;height: 597px;left: 190px;top: 0;}
+        .product-price-237{left: 226px;top: 97px;color: #fff;}
+        .product-link-115{width:128px;height: 381px;left: 35px;top: 206px;}
+        .product-price-115{left: 60px;top: 151px;}
+        .product-link-257{width:256px;height: 164px;left: 624px;top: 421px;}
+        .product-price-257{left: 687px;top: 366px;}
+        .product-link-107{width:184px;height: 183px;right: 0;top: 0;}
+        .product-price-107{right: 230px;top: 94px;}
+        .product-link-259{width:262px;height: 191px;right: 47px;top: 206px;}
+        .product-price-259{right: 30px;top: 350px;}
+        .product-link-111{width:167px;height: 147px;right: 5px;top: 450px;}
+        .product-price-111{right: 207px;top: 493px;}
+        /*end floor-3*/
+        /*floor-4*/
+        .product-link-175{width:406px;height: 597px;right: 0;top: 0;}
+        .product-price-175{right: 307px;top: 319px;color: #fff;}
+        .product-link-155{width:162px;height: 283px;right: 423px;top: 285px;}
+        .product-price-155{right: 595px;top: 344px;}
+        .product-link-475{width:131px;height: 198px;left: 365px;top: 391px;}
+        .product-price-475{left: 234px;top: 543px;}
+        .product-link-165{width:204px;height: 140px;left: 98px;top: 326px;}
+        .product-price-165{left: 28px;top: 356px;}
+        .product-link-171{width:168px;height: 190px;left: 310px;top: 0;}
+        .product-price-171{left: 360px;top: 250px;}
+        .product-link-471{width:132px;height: 245px;left: 8px;top: 30px;}
+        .product-price-471{left: 170px;top: 128px;}
+        /*end floor-4*/
+        </style>
+    </head>
+    <body>
+            <!--top-->
+        @header()
+            <!--end top-->
+            <!--header-->
+        @navigator("")
+            <!--end header-->
+            <!--dapei-->
+        <div class="dapei">
+            <div class="dapei-inner">
+                <div class="dapei-header-top">
+                    <img src="@routes.Assets.versioned("images/activity/header-top.jpg")" width="1200" height="745" alt="对平凡说No！！！"/>
+                </div>
+                <div class="floor dapei-floor-1">
+                    <a href="http://www.fashiongeeker.com/product/483" target="_blank" class="product-link product-link-483"></a>
+                    <span class="product-price product-price-483">RMB:@map.get(483)</span>
+                    <a href="http://www.fashiongeeker.com/product/217" target="_blank" class="product-link product-link-217"></a>
+                    <span class="product-price product-price-217">RMB:@map.get(217)</span>
+                    <a href="http://www.fashiongeeker.com/product/119" target="_blank" class="product-link product-link-119"></a>
+                    <span class="product-price product-price-119">RMB:@map.get(119)</span>
+                    <a href="http://www.fashiongeeker.com/product/407" target="_blank" class="product-link product-link-407"></a>
+                    <span class="product-price product-price-407">RMB:@map.get(407)</span>
+                    <a href="http://www.fashiongeeker.com/product/141" target="_blank" class="product-link product-link-141"></a>
+                    <span class="product-price product-price-141">RMB:@map.get(141)</span>
+                    <a href="http://www.fashiongeeker.com/product/215" target="_blank" class="product-link product-link-215"></a>
+                    <span class="product-price product-price-215">RMB:@map.get(215)</span>
+                </div>
+                <div class="floor dapei-floor-2">
+                    <a href="http://www.fashiongeeker.com/product/255" target="_blank" class="product-link product-link-255"></a>
+                    <span class="product-price product-price-255">RMB:@map.get(255)</span>
+                    <a href="http://www.fashiongeeker.com/product/147" target="_blank" class="product-link product-link-147"></a>
+                    <span class="product-price product-price-147">RMB:@map.get(147)</span>
+                    <a href="http://www.fashiongeeker.com/product/249" target="_blank" class="product-link product-link-249"></a>
+                    <span class="product-price product-price-249">RMB:@map.get(249)</span>
+                    <a href="http://www.fashiongeeker.com/product/127" target="_blank" class="product-link product-link-127"></a>
+                    <span class="product-price product-price-127">RMB:@map.get(127)</span>
+                    <a href="http://www.fashiongeeker.com/product/113" target="_blank" class="product-link product-link-113"></a>
+                    <span class="product-price product-price-113">RMB:@map.get(113)</span>
+                    <a href="http://www.fashiongeeker.com/product/123" target="_blank" class="product-link product-link-123"></a>
+                    <span class="product-price product-price-123">RMB:@map.get(123)</span>
+                </div>
+                <div class="floor dapei-floor-3">
+                    <a href="http://www.fashiongeeker.com/product/237" target="_blank" class="product-link product-link-237"></a>
+                    <span class="product-price product-price-237">RMB:@map.get(237)</span>
+                    <a href="http://www.fashiongeeker.com/product/115" target="_blank" class="product-link product-link-115"></a>
+                    <span class="product-price product-price-115">RMB:@map.get(115)</span>
+                    <a href="http://www.fashiongeeker.com/product/257" target="_blank" class="product-link product-link-257"></a>
+                    <span class="product-price product-price-257">RMB:@map.get(257)</span>
+                    <a href="http://www.fashiongeeker.com/product/107" target="_blank" class="product-link product-link-107"></a>
+                    <span class="product-price product-price-107">RMB:@map.get(107)</span>
+                    <a href="http://www.fashiongeeker.com/product/259" target="_blank" class="product-link product-link-259"></a>
+                    <span class="product-price product-price-259">RMB:@map.get(259)</span>
+                    <a href="http://www.fashiongeeker.com/product/111" target="_blank" class="product-link product-link-111"></a>
+                    <span class="product-price product-price-111">RMB:@map.get(111)</span>
+                </div>
+                <div class="floor dapei-floor-4">
+                    <a href="http://www.fashiongeeker.com/product/175" target="_blank" class="product-link product-link-175"></a>
+                    <span class="product-price product-price-175">RMB:@map.get(175)</span>
+                    <a href="http://www.fashiongeeker.com/product/155" target="_blank" class="product-link product-link-155"></a>
+                    <span class="product-price product-price-155">RMB:@map.get(155)</span>
+                    <a href="http://www.fashiongeeker.com/product/475" target="_blank" class="product-link product-link-475"></a>
+                    <span class="product-price product-price-475">RMB:@map.get(475)</span>
+                    <a href="http://www.fashiongeeker.com/product/165" target="_blank" class="product-link product-link-165"></a>
+                    <span class="product-price product-price-165">RMB:@map.get(165)</span>
+                    <a href="http://www.fashiongeeker.com/product/171" target="_blank" class="product-link product-link-171"></a>
+                    <span class="product-price product-price-171">RMB:@map.get(171)</span>
+                    <a href="http://www.fashiongeeker.com/product/471" target="_blank" class="product-link product-link-471"></a>
+                    <span class="product-price product-price-471">RMB:@map.get(471)</span>
+                </div>
+
+            </div>
+        </div>
+            <!--end dapei-->
+            <!--footer-->
+        @foot()
+
+        <script src="js/jquery.min.js"></script>
+
+        <script>
+            $(function(){
+                $('.empty-box li').hover(function(){
+                    $(".title", this).stop().animate({top:"367px"},{queue:false,duration:100});
+                },function(){
+                    $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
+                });
+            });
+        </script>
+
+    </body>
+</html>

@@ -156,6 +156,9 @@ GET         /help/:name                                 @controllers.help.HelpCe
 #意见反馈
 POST        /feedback/submitFeedback                    @controllers.user.FeedbackController.submitFeedback
 
+#activity 活动页面
+GET         /activity/bianxingji                        @controllers.activity.ActivityController.bianxingji()
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
 GET         /robots.txt                                 controllers.Assets.at(path="/public", file="robots.txt")
