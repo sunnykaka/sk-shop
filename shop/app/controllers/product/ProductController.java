@@ -26,6 +26,7 @@ import views.html.product.detail;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static java.util.stream.Collectors.toList;
 
@@ -101,7 +102,10 @@ public class ProductController extends Controller {
         }
         productDetail.setSeo(seoService.getProductSeo(productDetail.getProduct()));
 
-        return ok(detail.render(productDetail));
+//        int a = ;
+
+
+        return ok(detail.render(productDetail,(int)(Math.random()*10)%6+1));
     }
 
     public Result valuations(Integer productId, Integer point) {

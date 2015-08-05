@@ -1,4 +1,4 @@
-@(pd: dtos.ProductDetail)
+@(pd: dtos.ProductDetail,imgsNum: Integer)
 
 @import common.utils.DateUtils
 @import common.utils.JsonUtils._
@@ -165,8 +165,7 @@
             </div>
             <div id="right-fixed" class="right" >
                 <div class="debut-img">
-
-                    <img src="@routes.Assets.versioned("images/detail/debut.jpg")" alt="全球首发"/>
+                    <img src="@routes.Assets.versioned("images/debut/"+imgsNum+".jpg")" width="373" height="226" alt="全球首发"/>
                 </div>
             <div id="debut-box">
                 <div class="debut-info clearfix">
