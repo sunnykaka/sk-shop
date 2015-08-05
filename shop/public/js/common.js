@@ -218,6 +218,7 @@ function fixedcart(obj, scopeObj) {
 
 //判断窗口宽度
 $(window).on('resize load',function(){
+
     if($(window).width()<=1300){
         $('#cart').addClass('small-sider');
         $('.sliderArrows div').css('width','1200');
@@ -226,5 +227,19 @@ $(window).on('resize load',function(){
         $('.sliderArrows div').css('width','90%');
     }
 
+    var sUserAgent = navigator.userAgent,
+        mobileAgents = ['Windows CE', 'iPod', 'Symbian', 'iPhone', 'BlackBerry', 'Android', 'Windows Phone'];
+
+
+    for (var i = 0, len = mobileAgents.length; i < len; i++) {
+        if (sUserAgent.indexOf(mobileAgents[i]) !== -1) {
+           $('.sider-bar').hide();
+            break;
+        }
+    }
+
+
 });
+
+
 
