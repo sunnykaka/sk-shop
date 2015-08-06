@@ -483,7 +483,7 @@ table .pro{width: 360px;}
 }
 .pay-fail h3{background: url("../images/sk-sprite.png") no-repeat -162px -1127px;}
 .pay-inner p,.pay-success-info p{font-size: 14px;line-height: 32px;text-indent: 34px; color: #4a4947;}
-.pay-inner .pay-list{margin-left:100px;border:1px solid #cccccc;padding: 38px 90px 80px;}
+.pay-inner .pay-list{width:815px;margin-left:100px;border:1px solid #cccccc;padding: 38px 90px 80px;}
 .pay-inner .pay-list h3{font-weight: normal;border-bottom: 1px solid #cccccc;padding-bottom: 8px;}
 .pay-inner .pay-list h4{font-weight: normal;}
 .pay-inner .pay-list .total-money{color: #FF2D54;font-size: 20px;}
