@@ -4,7 +4,7 @@
 $(function(){
 
     //地址鼠标移动 事件委托
-    $('.select-address').delegate('li:not(".add")','hover',function(evt){
+    $('.select-address').delegate('li','hover',function(evt){
        $(this).toggleClass('highLight');
     });
 
