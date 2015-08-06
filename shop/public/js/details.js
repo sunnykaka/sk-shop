@@ -429,10 +429,8 @@ $(function () {
                     self.addClass("selected");
                     veritySkuBtn(self);
                 }
-
                 if (!SKUResult[attr_id] || SKUResult[attr_id]['stock'] == 0) {
                     self.addClass("disabled");
-
                 }
             }).click(function () {
                 if ($(this).hasClass("disabled") || $(this).hasClass("selected")) return false;
@@ -446,8 +444,7 @@ $(function () {
             function veritySkuBtn(self) {
                 self = self || null;
                 var selectedObjs = $('.selected', skuMapEle);
-
-                if (selectedObjs.length) {
+                if (selectedObjs.length) {//已经确认多个属性
                     //获得组合key价格
                     _selectedIds = [];
                     selectedObjs.each(function () {
@@ -456,7 +453,60 @@ $(function () {
                     _selectedIds.sort(function (value1, value2) {
                         return parseInt(value1) - parseInt(value2);
                     });
+
+                    //查询是否存在这个商品组合
+                    if(!SKUResult[_selectedIds.join(',')]){
+                        //默认选择第一个有这产品sku组合
+                        var _selectedProArr;
+                        $.each(SKUResult,function(item){
+                            if(item.indexOf(self.attr('data'))>0){
+                                _selectedProArr = item.split(',');
+                            }
+                        });
+                        $('.sku').removeClass('selected');
+                        for (var i = 0; i < _selectedProArr.length; i++) {
+                            $(".sku[data="+_selectedProArr[i]+"]").addClass('selected');
+                        }
+                        //重新获取一次
+                        var selectedObjs = $('.selected', skuMapEle);
+                        _selectedIds = [];
+                        selectedObjs.each(function () {
+                            _selectedIds.push($(this).attr('data'));
+                        });
+                        _selectedIds.sort(function (value1, value2) {
+                            return parseInt(value1) - parseInt(value2);
+                        });
+
+                    }
+
                     var len = _selectedIds.length;
+                    //用已选中的节点验证待测试节点 underTestObjs
+                    _skuEles.not(selectedObjs).not(self).each(function () {
+                        var siblingsSelectedObj = $(this).siblings('.selected');
+                        var testAttrIds = [];//从选中节点中去掉选中的兄弟节点
+                        if (siblingsSelectedObj.length) {
+                            var siblingsSelectedObjId = siblingsSelectedObj.attr('data');
+                            for (var i = 0; i < len; i++) {
+                                (_selectedIds[i] != siblingsSelectedObjId) && testAttrIds.push(_selectedIds[i]);
+                            }
+                        } else {
+                            testAttrIds = _selectedIds.concat();
+
+                        }
+                        testAttrIds = testAttrIds.concat($(this).attr('data'));
+                        testAttrIds.sort(function (value1, value2) {
+                            return parseInt(value1) - parseInt(value2);
+                        });
+                        if (!SKUResult[testAttrIds.join(',')] || SKUResult[testAttrIds.join(',')]['stock'] == 0) {
+                            if($(this).siblings("dt:contains('颜色')").size() == 0){ //对颜色层进行隔离
+                                $(this).removeClass('selected').addClass("disabled");
+                            }
+                        } else {
+                            $(this).removeClass("disabled");
+                        }
+                    });
+
+
                     var prices = SKUResult[_selectedIds.join(',')].price;
                     var maxPrice = Math.max.apply(Math, prices);
                     var minPrice = Math.min.apply(Math, prices);
@@ -488,29 +538,7 @@ $(function () {
 
                     }
 
-                    //用已选中的节点验证待测试节点 underTestObjs
-                    _skuEles.not(selectedObjs).not(self).each(function () {
-                        var siblingsSelectedObj = $(this).siblings('.selected');
-                        var testAttrIds = [];//从选中节点中去掉选中的兄弟节点
-                        if (siblingsSelectedObj.length) {
-                            var siblingsSelectedObjId = siblingsSelectedObj.attr('data');
-                            for (var i = 0; i < len; i++) {
-                                (_selectedIds[i] != siblingsSelectedObjId) && testAttrIds.push(_selectedIds[i]);
-                            }
-                        } else {
-                            testAttrIds = _selectedIds.concat();
 
-                        }
-                        testAttrIds = testAttrIds.concat($(this).attr('data'));
-                        testAttrIds.sort(function (value1, value2) {
-                            return parseInt(value1) - parseInt(value2);
-                        });
-                        if (!SKUResult[testAttrIds.join(',')] || SKUResult[testAttrIds.join(',')]['stock'] == 0) {
-                            $(this).removeClass('selected').addClass("disabled");
-                        } else {
-                            $(this).removeClass("disabled");
-                        }
-                    });
 
                 } else {
 
