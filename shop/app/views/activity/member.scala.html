@@ -2,7 +2,7 @@
 
 @import productcenter.models.Seo;
 
-@main(new Seo())() {
+@main(new Seo("限时舍命召唤会员-尚客","即日起至8月24日，想红、手贱点进尚客官网注册，立即成为尚客会员，并有高冷礼品相送。","全球首发，独立设计师，限量发售，限时首发，限时召唤会员，秘密花园"))() {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
@@ -12,14 +12,14 @@
             $(this).text('正在处理..');
             $.ajax({
                 type: "get",
-                url: '/cart/verifyPromptlyPayData?skuId=5651&number=1',
+                url: '/cart/verifyPromptlyPayData?skuId=2246&number=1',
                 async: false,
                 dataType: 'json',
-                data: {skuId: 5651, number: 1},
+                data: {skuId: 2246, number: 1},
                 cache: false,
                 success: function (data) {
                     if (data.result) {
-                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=5651&number=1';
+                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=2246&number=1';
                     } else {
                         if (data.message == 'Credentials required') {
                             createLoginReg();
