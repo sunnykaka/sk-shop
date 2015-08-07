@@ -10,6 +10,7 @@ import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import services.CmsService;
 import views.html.activity.bianxingji;
+import views.html.activity.member;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,15 @@ public class ActivityController extends Controller {
 
     @Autowired
     private SkuAndStorageService skuSeervice;
+
+    /**
+     * 提交订单-选择支付方式(生成订单)
+     * @param orderId 用户选择的寄送地址
+     * @return
+     */
+    public Result toMember() {
+        return ok(member.render());
+    }
 
     public Result bianxingji() {
 

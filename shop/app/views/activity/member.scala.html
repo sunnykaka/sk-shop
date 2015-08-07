@@ -1,0 +1,72 @@
+@()
+
+@import productcenter.models.Seo;
+
+@main(new Seo())() {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+    <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
+    <script>
+        $('.get-gift').click(function () {
+            var that = this;
+            $(this).text('正在处理..');
+            $.ajax({
+                type: "get",
+                url: '/cart/verifyPromptlyPayData?skuId=5651&number=1',
+                async: false,
+                dataType: 'json',
+                data: {skuId: 5651, number: 1},
+                cache: false,
+                success: function (data) {
+                    if (data.result) {
+                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=5651&number=1';
+                    } else {
+                        if (data.message == 'Credentials required') {
+                            createLoginReg();
+                        }
+                        $(that).text('1元领取');
+                    }
+                }
+            });
+
+
+        });
+    </script>
+} {
+    <style>
+        .member{position: relative;margin: 0 auto 50px;height: 501px;overflow: hidden;}
+        .header-top{position:absolute;width: 100%;height: 501px;background: url('@routes.Assets.versioned("images/activity/member-top.jpg")');background-position: 50% 50%;text-align:center;}
+        .member-floor{width: 1200px;margin: 0 auto 15px;}
+        .member-floor-2{margin-bottom: 60px;}
+        .member-floor-4{margin-bottom: 100px;position: relative;}
+        .member-floor-4 .get-gift{position: absolute;width:186px;height:55px;line-height:55px;top: 51px;left: 507px;font-size: 30px;color: #fff;cursor: pointer;
+            text-align: center;
+        }
+    </style>
+    <!--member-->
+    <div class="member">
+        <div class="header-top" title="舍命召唤"></div>
+    </div>
+    <!--member-floor-1-->
+    <div class="member-floor member-floor-1">
+        <img src="@routes.Assets.versioned("images/activity/member-floor-1.jpg")" width="1200" height="725" alt="秘密花园"/>
+    </div>
+    <!--end member-floor-1-->
+    <!--member-floor-2-->
+    <div class="member-floor member-floor-2">
+        <img src="@routes.Assets.versioned("images/activity/member-floor-2.jpg")" width="1200" height="283" alt="秘密花园"/>
+    </div>
+    <!--end member-floor-2-->
+    <!--member-floor-3-->
+    <div class="member-floor member-floor-3">
+        <img src="@routes.Assets.versioned("images/activity/member-floor-3.jpg")" width="1200" height="548" alt="秘密花园"/>
+    </div>
+    <!--end member-floor-3-->
+    <!--member-floor-4-->
+    <div class="member-floor member-floor-4">
+        <img src="@routes.Assets.versioned("images/activity/member-floor-4.jpg")" width="1200" height="193" alt="秘密花园"/>
+        <span class="get-gift">1元领取</span>
+    </div>
+    <!--end member-floor-4-->
+    <!--end member-->
+}

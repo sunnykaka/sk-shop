@@ -134,6 +134,7 @@ var regHtml = '<div class="reg-box-inner idialog-reg idialog-form"><span class="
                 $('.close-btn').click(function(){
                     that.hide();
                 });
+                $('#password').focus();
                 $('#loginUser').focus();
                 $('#goReg').click(function(){
                    $.dialog.get.regLogin.$content.find('.login-inner').fadeOut(function(){

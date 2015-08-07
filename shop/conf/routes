@@ -158,6 +158,7 @@ POST        /feedback/submitFeedback                    @controllers.user.Feedba
 
 #activity 活动页面
 GET         /activity/bianxingji                        @controllers.activity.ActivityController.bianxingji()
+GET         /activity/member                            @controllers.activity.ActivityController.toMember()
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
