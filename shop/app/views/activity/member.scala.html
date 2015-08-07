@@ -24,6 +24,22 @@
                         if (data.message == 'Credentials required') {
                             createLoginReg();
                         }
+                        if(data.data == "addForbid"){
+                            $.dialog({
+                                title: '提示',
+                                lock: true,
+                                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
+                                width: 500,
+                                height: 248,
+                                padding: "20",
+                                btn: {
+                                    ok : {
+                                        val : '关闭',
+                                        type : 'red'
+                                    }
+                                }
+                            });
+                        }
                         $(that).text('1元领取');
                     }
                 }
