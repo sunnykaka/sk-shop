@@ -35,6 +35,12 @@ public class OrderPayCallBackController extends Controller {
     private void recordLog(String way) {
         Logger.info(way + "支付平台返回的数据 : \n");
         Map<String, String[]> queryMap = request().queryString();
+        if(queryMap == null || queryMap.size() == 0) {
+            if("POST".equals(request().method())){
+                queryMap = request().body().asFormUrlEncoded();
+            }
+        }
+
         if(queryMap != null) {
             Set<String> keySet = queryMap.keySet();
             for(String key : keySet) {
