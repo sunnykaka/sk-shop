@@ -1,5 +1,6 @@
 package controllers.user;
 
+import com.google.common.base.Stopwatch;
 import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.FormUtils;
@@ -126,12 +127,18 @@ public class LoginController extends Controller {
     public Result weixinLoginCallback(String code, String state) {
 
         Logger.debug(String.format("微信回调参数: code[%s], state[%s]", code, state));
+        Stopwatch stopwatch = Stopwatch.createStarted();
 
-        User user = new WeixinLogin().handleCallback(code, state, request().remoteAddress());
-        userService.loginByRegister(user, true);
-        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+        try {
+            User user = new WeixinLogin().handleCallback(code, state, request().remoteAddress());
+            userService.loginByRegister(user, true);
+            String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+            return redirect(originalUrl);
 
-        return redirect(originalUrl);
+        } finally {
+            stopwatch.stop();
+            Logger.info("微信回调任务运行结束, 耗时: " + stopwatch.toString());
+        }
     }
 
     public Result weiboLogin() {
