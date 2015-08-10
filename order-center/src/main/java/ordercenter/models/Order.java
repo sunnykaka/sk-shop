@@ -1,6 +1,7 @@
 package ordercenter.models;
 
 import common.models.utils.EntityClass;
+import common.utils.DateUtils;
 import common.utils.Money;
 import ordercenter.constants.TradePayType;
 import ordercenter.constants.OrderState;
@@ -188,6 +189,11 @@ public class Order implements EntityClass<Integer>, Cloneable {
      * 创建时间
      */
     private DateTime createTime;
+
+    /**
+     * 创建时间字符串表示形式
+     */
+    private String createTimeStr;
 
     /**
      * 下单时间的long型表示('创建订单时的时间戳')
@@ -596,6 +602,11 @@ public class Order implements EntityClass<Integer>, Cloneable {
 
     public void setCreateTime(DateTime createTime) {
         this.createTime = createTime;
+    }
+
+    @Transient
+    public String getCreateTimeStr() {
+        return DateUtils.printDateTime(this.createTime, DateUtils.DATE_TIME_FORMAT_STR);
     }
 
     @Column(name = "modifyDate")
