@@ -84,9 +84,17 @@
                         @if(pd.getSpecList.size > 0){
                             <div class="product-info">
                                 <h3>产品说明 <span class="icon iconfont arc">&#xe612;</span></h3>
+                                <table class="product-info-table">
                                 @for((spec,index) <- pd.getSpecList.zipWithIndex) {
-                                    <p>@spec.getName：@spec.getValue</p>
+                                    @if(index%2== 0){
+                                        <tr class="clearfix">
+                                    }
+                                    <td><div style="width: 80px; float:left;">@spec.getName：</div><div style="width: 250px;float:left;line-height: 22px;">@spec.getValue</div></td>
+                                    @if(index%2 != 0){
+                                        </tr>
+                                    }
                                 }
+                                </table>
                             </div>
                         }
                         <div class="img-con">
@@ -107,7 +115,7 @@
                                     } else {
                                     <h3>
                                     }
-                                同系列推荐SIMILAR RECOMMENDATION<span class="icon iconfont arc">&#xe612;</span></h3>
+                                同系列推荐Similar Recommendation<span class="icon iconfont arc">&#xe612;</span></h3>
                                 @if(pd.getMatchProductList.size >= 3) {
                                     <p class="collocation-text">
                                     @Html(pd.getProduct.getRecommendDesc)
