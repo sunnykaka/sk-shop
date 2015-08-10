@@ -142,7 +142,9 @@ GET         /order/toPayOrder                           @controllers.shop.OrderA
 
 #支付
 GET         /payOrder/normalReturn                      @controllers.shop.OrderPayCallBackController.normalReturn
+POST        /payOrder/normalReturn                      @controllers.shop.OrderPayCallBackController.normalReturn
 GET         /payOrder/notifyReturn                      @controllers.shop.OrderPayCallBackController.notifyReturn
+POST        /payOrder/notifyReturn                      @controllers.shop.OrderPayCallBackController.notifyReturn
 GET         /payOrder/checkPayState                     @controllers.shop.OrderPayCallBackController.checkPayState(tradeNo:String)
 GET         /payOrder/generateAliPayPayReturnUrl        @controllers.shop.OrderPayCallBackController.generateAliPayPayReturnUrl(tradeNo:String)
 
