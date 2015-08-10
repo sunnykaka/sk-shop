@@ -2,20 +2,20 @@ package base;
 
 import common.services.GeneralDao;
 import common.utils.play.BaseGlobal;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import play.Application;
-import play.Play;
+import play.Logger;
 import play.api.ApplicationLoader;
 import play.api.ApplicationLoader$;
 import play.api.Environment$;
 import play.api.Mode$;
 import play.core.DefaultWebCommands;
+import play.mvc.Http;
+import play.mvc.Result;
 import play.test.Helpers;
-import play.test.WithApplication;
 import scala.Option;
+import utils.Global;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,33 +25,11 @@ import java.io.File;
 /**
  * Created by liubin on 15/4/6.
  */
-public abstract class BaseTest extends WithApplication {
+public abstract class BaseTest {
 
-//    private static boolean setUpIsDone = false;
-//
-//    @Before
-//    @Override
-//    public void startPlay() {
-//        if(!setUpIsDone) {
-//            app = provideApplication();
-//            Helpers.start(app);
-//            setUpIsDone = true;
-//        }
-//    }
-//
-//    @After
-//    @Override
-//    public void stopPlay() {
-//        //do nothing
-////        if (app != null) {
-////            Helpers.stop(app);
-////            app = null;
-////        }
-//    }
+    protected static Application app;
 
-
-    @Override
-    protected Application provideApplication() {
+    protected static Application provideApplication() {
         ApplicationLoader.Context context = ApplicationLoader$.MODULE$.createContext(
                 Environment$.MODULE$.simple(new File("."), Mode$.MODULE$.Test()),
                 new scala.collection.immutable.HashMap<>(),
@@ -61,7 +39,23 @@ public abstract class BaseTest extends WithApplication {
         ApplicationLoader loader = ApplicationLoader$.MODULE$.apply(context);
 
         return loader.load(context).injector().instanceOf(Application.class);
+
     }
+
+    @BeforeClass
+    public static void startPlay() {
+        app = provideApplication();
+        Helpers.start(app);
+    }
+
+    @AfterClass
+    public static void stopPlay() {
+        if (app != null) {
+            Helpers.stop(app);
+            app = null;
+        }
+    }
+
 
 
     protected <T> T doInTransaction(EntityManagerCallback<T> callback) {
@@ -106,4 +100,22 @@ public abstract class BaseTest extends WithApplication {
     protected static interface GeneralDaoCallback<T> {
         T call(GeneralDao generalDao);
     }
+
+    public Result routeWithExceptionHandle(Http.RequestBuilder requestBuilder) {
+
+        Result result;
+        Http.RequestImpl req = requestBuilder.build();
+
+        try {
+            result = Helpers.route(requestBuilder);
+        } catch (Exception e) {
+            Global global = new Global();
+            return global.onError(req, e).get(3000000L);
+        }
+
+        String s = Helpers.contentAsString(result);
+        Logger.debug(String.format("request: %s, response: %s", req.toString(), s));
+        return result;
+    }
+
 }

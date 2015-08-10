@@ -26,13 +26,8 @@ import java.util.stream.Collectors;
  */
 public class StateCoordinator extends SchedulerTask {
 
-    private static StateCoordinator INSTANCE = new StateCoordinator();
-    private StateCoordinator() {}
-    public static StateCoordinator getInstance() {
-        return INSTANCE;
-    }
+    private String cacheKey;
 
-    public static final String SCHEDULER_KEY = RedisUtils.buildKey("state_coordinator", "scheduler");
     //租期，单位秒
     public static final int LEASE_TIME = 60;
 
@@ -46,8 +41,16 @@ public class StateCoordinator extends SchedulerTask {
 
     private volatile boolean schedulersRunning = false;
 
-
     public String uid = UUID.randomUUID().toString();
+
+    private StateCoordinator(String cacheKey) {
+        this.cacheKey = cacheKey;
+    }
+
+    public static StateCoordinator create(String cacheKey) {
+        return new StateCoordinator(RedisUtils.buildKey("state_coordinator", cacheKey));
+    }
+
 
     public void start(Scheduler scheduler, ExecutionContextExecutor dispatcher) {
         this.scheduler = scheduler;
@@ -88,7 +91,7 @@ public class StateCoordinator extends SchedulerTask {
 
             } else {
 
-                if(isSetOk(jedis.set(SCHEDULER_KEY, uid, "NX", "EX", LEASE_TIME))) {
+                if(isSetOk(jedis.set(cacheKey, uid, "NX", "EX", LEASE_TIME))) {
                     //创建租约成功，启动定时器
                     startSchedulers();
 
@@ -110,7 +113,7 @@ public class StateCoordinator extends SchedulerTask {
      * @param jedis
      */
     private void renewLease(Jedis jedis) {
-        String result = jedis.set(SCHEDULER_KEY, uid, "XX", "EX", LEASE_TIME);
+        String result = jedis.set(cacheKey, uid, "XX", "EX", LEASE_TIME);
         if(!isSetOk(result)) {
             //可能其他应用进程已经开启了定时任务，出现这种情况有可能是当前应用压力过大导致没有按时续租。
             //先停止任务，具体原因待查。

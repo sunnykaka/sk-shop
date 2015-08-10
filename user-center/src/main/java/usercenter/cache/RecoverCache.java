@@ -17,7 +17,9 @@ public class RecoverCache {
 
     public static final String SECURITY_TOKEN_OK_KEY = "ok";
 
-    private static CacheApi cacheApi = BaseGlobal.injector.instanceOf(CacheApi.class);
+    private static CacheApi cacheApi() {
+        return BaseGlobal.injector.instanceOf(CacheApi.class);
+    }
 
     /**
      * 添加
@@ -26,7 +28,7 @@ public class RecoverCache {
      */
     public static void setToken(String staticKey, String key, String value) {
 
-        cacheApi.set(RedisUtils.buildKey("token", staticKey, key), value, SECURITY_TOKEN_EXPIRE_TIME);
+        cacheApi().set(RedisUtils.buildKey("token", staticKey, key), value, SECURITY_TOKEN_EXPIRE_TIME);
 
     }
 
@@ -37,7 +39,7 @@ public class RecoverCache {
      */
     public static String getToken(String staticKey, String key) {
 
-        return (String) cacheApi.get(RedisUtils.buildKey("token", staticKey, key));
+        return (String) cacheApi().get(RedisUtils.buildKey("token", staticKey, key));
 
     }
 
@@ -47,7 +49,7 @@ public class RecoverCache {
      */
     public static void removeToken(String staticKey, String key){
 
-        cacheApi.remove(RedisUtils.buildKey("token", staticKey, key));
+        cacheApi().remove(RedisUtils.buildKey("token", staticKey, key));
 
     }
 }

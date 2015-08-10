@@ -3,6 +3,7 @@ package usercenter.services;
 import com.google.common.base.Preconditions;
 import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
+import common.exceptions.ErrorCode;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.PasswordHash;
@@ -14,10 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
-import play.twirl.api.Content;
 import usercenter.constants.AccountType;
+import usercenter.constants.MarketChannel;
 import usercenter.domain.SmsSender;
 import usercenter.dtos.*;
+import usercenter.models.LoginRecord;
 import usercenter.models.User;
 import usercenter.models.UserData;
 import usercenter.models.UserOuter;
@@ -95,13 +97,13 @@ public class UserService {
     @Transactional
     public User register(RegisterForm registerForm, String registerIP) {
         if(isUsernameExist(registerForm.getUsername(), Optional.empty())) {
-            throw new AppBusinessException("用户名已存在");
+            throw new AppBusinessException(ErrorCode.UsernameExist, "用户名已存在");
         }
         if(isPhoneExist(registerForm.getPhone(), Optional.empty())) {
-            throw new AppBusinessException("手机已存在");
+            throw new AppBusinessException(ErrorCode.PhoneExist, "手机已存在");
         }
         if(!new SmsSender(registerForm.getPhone(), SmsSender.Usage.REGISTER).verifyCode(registerForm.getVerificationCode())) {
-            throw new AppBusinessException("校验码验证失败");
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "校验码验证失败");
         }
 
         DateTime now = DateUtils.current();
@@ -180,16 +182,21 @@ public class UserService {
         return user;
     }
 
+    /**
+     * Web登录
+     * @param loginForm
+     * @return
+     */
     @Transactional
     public User login(LoginForm loginForm) {
         SessionUtils.clearRememberMe();
 
         User user = authenticate(loginForm.getPassport(), loginForm.getPassword());
         if(user == null) {
-            throw new AppBusinessException("用户名或密码错误");
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "用户名或密码错误");
         }
 
-        doLogin(user);
+        doLogin(user, loginForm.retrieveLoginInfo());
 
         try {
             SessionUtils.setCurrentUser(user, "true".equalsIgnoreCase(loginForm.getRememberMe()));
@@ -201,6 +208,11 @@ public class UserService {
 
     }
 
+    /**
+     * Web用Cookie登录
+     * @param userId
+     * @return
+     */
     @Transactional
     public User loginByCookie(Integer userId) {
 
@@ -210,7 +222,7 @@ public class UserService {
             return null;
         }
 
-        doLogin(user);
+        doLogin(user, new LoginForm.LoginInfo(null, MarketChannel.WEB.getValue(), null));
 
         try {
             SessionUtils.setCurrentUser(user, false);
@@ -223,10 +235,17 @@ public class UserService {
 
     }
 
+    /**
+     * Web在注册成功之后自动登录
+     * @param user
+     * @param rememberMe
+     * @return
+     */
     @Transactional
     public User loginByRegister(User user, boolean rememberMe) {
 
-        doLogin(user);
+
+        doLogin(user, new LoginForm.LoginInfo(null, MarketChannel.WEB.getValue(), null));
 
         try {
             SessionUtils.setCurrentUser(user, rememberMe);
@@ -250,7 +269,7 @@ public class UserService {
     public User updatePassword(User user,PswForm psw){
 
         if(!psw.getNewPassword().equals(psw.getRePassword())) {
-            throw new AppBusinessException("两次输入密码不一致");
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "两次输入密码不一致");
         }
 
         try {
@@ -276,13 +295,13 @@ public class UserService {
     public User updatePassword(User user,ChangePswForm psw){
 
         if(!psw.getNewPassword().equals(psw.getRePassword())) {
-            throw new AppBusinessException("两次输入密码不一致");
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "两次输入密码不一致");
         }
 
         try {
             User userNew = getById(user.getId());
             if(!PasswordHash.validatePassword(psw.getPassword(),userNew.getPassword())){
-                throw new AppBusinessException("旧密码输入错误");
+                throw new AppBusinessException(ErrorCode.InvalidArgument, "旧密码输入错误");
             }
 
             userNew.setPassword(PasswordHash.createHash(psw.getNewPassword()));
@@ -306,16 +325,16 @@ public class UserService {
     public User updatePhone(User user,PhoneCodeForm phoneCode){
 
         if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.BIND).verifyCode(phoneCode.getVerificationCode())) {
-            throw new AppBusinessException("校验码验证失败");
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "校验码验证失败");
         }
 
         if (phoneCode.getPhone().equals(user.getPhone())) {
-            throw new AppBusinessException("请输入与旧手机号码不一样的号码");
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "请输入与旧手机号码不一样的号码");
         }
 
         User userPhone = findByPhone(phoneCode.getPhone());
         if (null != userPhone) {
-            throw new AppBusinessException("输入的号码已被注册");
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "输入的号码已被注册");
         }
 
         User oldUser = getById(user.getId());
@@ -340,13 +359,46 @@ public class UserService {
         return generalDao.merge(newUser);
     }
 
-    private void doLogin(User user) {
+    /**
+     * 记录用户登录
+     * @param user
+     * @param loginInfo
+     */
+    @Transactional
+    public void doLogin(User user, LoginForm.LoginInfo loginInfo) {
         if(!user.isActive() || user.isDeleted() || user.isHasForbidden()) {
-            throw new AppBusinessException("抱歉,该用户已被禁止登录");
+            throw new AppBusinessException(ErrorCode.Forbidden, "抱歉,该用户已被禁止登录");
         }
         user.setLoginCount(user.getLoginCount() + 1);
         user.setLoginTime(DateUtils.current());
         generalDao.persist(user);
+
+        createLoginRecord(user, loginInfo);
+    }
+
+    /**
+     * 保存登录记录
+     * @param user
+     * @param loginInfo
+     */
+    private void createLoginRecord(User user, LoginForm.LoginInfo loginInfo) {
+        LoginRecord loginRecord = new LoginRecord();
+        loginRecord.setCreateTime(DateUtils.current());
+        loginRecord.setDeviceId(loginInfo.getDeviceId());
+        loginRecord.setDeviceInfo(loginInfo.getDeviceInfo());
+        loginRecord.setUserId(user.getId());
+        MarketChannel channel = null;
+        if(loginInfo.getChannel() != null) {
+            try {
+                channel = MarketChannel.valueOf(loginInfo.getChannel());
+            } catch (IllegalArgumentException ignore) {}
+        }
+        if(channel == null) {
+            throw new AppBusinessException(ErrorCode.InvalidArgument, "未知的渠道类型: " + loginInfo.getChannel());
+        }
+        loginRecord.setChannel(channel);
+
+        generalDao.persist(loginRecord);
     }
 
     @Transactional
@@ -413,7 +465,14 @@ public class UserService {
 
     }
 
-    private User authenticate(String passport, String password) {
+    /**
+     * 通过用户名/手机查找用户并且判断密码是否正确，如果成功返回用户，否则返回null
+     * @param passport
+     * @param password
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public User authenticate(String passport, String password) {
 
         User user = null;
         if(RegExpUtils.isPhone(passport)) {

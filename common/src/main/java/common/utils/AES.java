@@ -7,6 +7,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 public class AES {
 
@@ -45,6 +46,10 @@ public class AES {
         } catch (Exception e) {
             throw new AppException(e);
         }
+    }
+
+    public static void main(String[] args) throws Exception{
+        System.out.println(new String(Base64.getEncoder().encode(initPasswordKey()), "ISO8859-1"));
     }
 
 }

@@ -2,7 +2,9 @@ package controllers.user;
 
 import base.BaseTest;
 import common.utils.DateUtils;
+import common.utils.FileUtils;
 import common.utils.JsonResult;
+import org.apache.commons.io.IOUtils;
 import play.*;
 import play.Application;
 import play.api.*;
@@ -16,7 +18,13 @@ import play.mvc.Result;
 import usercenter.cache.UserCache;
 import usercenter.domain.SmsSender;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,7 +115,6 @@ public class LoginControllerTest extends BaseTest {
         assertThat(jsonResult.getData(), is(nullValue()));
         assertThat(jsonResult.getMessage(), is(notNullValue()));
 
-
     }
 
 
@@ -166,13 +173,14 @@ public class LoginControllerTest extends BaseTest {
                 session(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
 
         result = route(request);
-        assertThat(status(result), is(OK));
+        assertThat(result.status(), is(OK));
         assertThat(contentAsString(result).contains(username), is(true));
 
     }
 
     @Test
     public void testRequestIndexAsGuest() throws Exception {
+
         Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(controllers.routes.Application.index().url());
         Result result = route(request);
         assertThat(result.status(), is(OK));
@@ -204,6 +212,7 @@ public class LoginControllerTest extends BaseTest {
 
     @Test
     public void testRequestPhoneCodeSixTimesError() throws Exception {
+
         String phone = "1" + RandomStringUtils.randomNumeric(10);
         for (int i=0; i<SmsSender.SEND_MESSAGE_MAX_TIMES_IN_DAY; i++) {
             Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());

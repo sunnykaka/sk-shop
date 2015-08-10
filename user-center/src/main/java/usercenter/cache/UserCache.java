@@ -12,18 +12,19 @@ import usercenter.models.User;
  */
 public class UserCache {
 
-    private static CacheApi cacheApi = BaseGlobal.injector.instanceOf(CacheApi.class);
-
+    private static CacheApi cacheApi() {
+        return BaseGlobal.injector.instanceOf(CacheApi.class);
+    }
 
     public static void setUserInSession(User user, int expiration) {
 
-        cacheApi.set(RedisUtils.buildKey("session", "users", String.valueOf(user.getId())), user, expiration);
+        cacheApi().set(RedisUtils.buildKey("session", "users", String.valueOf(user.getId())), user, expiration);
 
     }
 
     public static User getUserInSession(Integer userId) {
 
-        return (User)cacheApi.get(RedisUtils.buildKey("session", "users", String.valueOf(userId)));
+        return (User)cacheApi().get(RedisUtils.buildKey("session", "users", String.valueOf(userId)));
 
     }
 
@@ -50,11 +51,11 @@ public class UserCache {
     }
 
     public static String getPhoneVerificationCode(String phone, SmsSender.Usage usage) {
-        return (String)cacheApi.get(RedisUtils.buildKey("register_phone", phone, usage.toString()));
+        return (String)cacheApi().get(RedisUtils.buildKey("register_phone", phone, usage.toString()));
     }
 
     public static void setPhoneVerificationCode(String phone, SmsSender.Usage usage, String value, int expiration) {
-        cacheApi.set(RedisUtils.buildKey("register_phone", phone, usage.toString()), value, expiration);
+        cacheApi().set(RedisUtils.buildKey("register_phone", phone, usage.toString()), value, expiration);
     }
 
     private static String toadyInString() {

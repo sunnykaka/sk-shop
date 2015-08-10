@@ -70,8 +70,25 @@ object ApplicationBuild extends Build {
     ).dependsOn(common % "test->test;compile->compile").
     dependsOn(user).dependsOn(product).dependsOn(order)
 
+  lazy val app = (project in file("app")).
+    enablePlugins(play.sbt.PlayJava).
+    settings(Commons.settings: _*).
+    settings(
+      libraryDependencies ++= appDependencies,
+      sourceGenerators in Compile += task {
+        val dir: File = (sourceManaged in Compile).value / "controllers"
+        val dirs = Seq(dir / "ref", dir / "javascript")
+        dirs.foreach(_.mkdirs)
+        Seq[File]()
+      },
+      unmanagedSourceDirectories in Compile += (sourceManaged in Compile).value,
+      pipelineStages := Seq(digest, gzip)
+    ).dependsOn(common % "test->test;compile->compile").
+    dependsOn(user).dependsOn(product).dependsOn(order)
+
+
 
   lazy val root = (project in file(".")).
     settings(Commons.settings: _*).
-    aggregate(shop)
+    aggregate(shop, app)
 }

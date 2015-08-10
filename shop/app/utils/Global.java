@@ -3,20 +3,13 @@ package utils;
 import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.JsonResult;
-import common.utils.Money;
 import common.utils.play.BaseGlobal;
-import common.utils.play.JodaDateFormatter;
-import common.utils.play.MoneyFormatter;
-import common.utils.play.interceptor.ActionFilterChain;
 import common.utils.play.interceptor.OpenEntityManagerInViewActionFilter;
 import common.utils.scheduler.StateCoordinator;
 import configs.AppConfig;
 import configs.DataConfig;
-import org.joda.time.DateTime;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import play.Application;
 import play.Logger;
-import play.data.format.Formatters;
 import play.libs.Akka;
 import play.libs.F;
 import play.mvc.Action;
@@ -37,37 +30,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.Optional.*;
+import static java.util.Optional.of;
 
 
 public class Global extends BaseGlobal {
 
-    StateCoordinator stateCoordinator = StateCoordinator.getInstance();
+    StateCoordinator stateCoordinator = StateCoordinator.create("shop");
 
     @Override
-    public synchronized void onStart(Application app) {
-        super.onStart(app);
-        injector = app.injector();
-        ctx = new AnnotationConfigApplicationContext(AppConfig.class, DataConfig.class);
-
-        Formatters.register(DateTime.class, new JodaDateFormatter());
-        Formatters.register(Money.class, new MoneyFormatter());
-
-        runSchedulers();
+    public void onStart(Application app) {
+        super.start(app, AppConfig.class, DataConfig.class);
     }
 
     @Override
     public void onStop(Application app) {
-        super.onStop(app);
-        stopSchedulers();
-        injector = null;
-        if(ctx != null) {
-            ((AnnotationConfigApplicationContext)ctx).close();
-            ctx = null;
-        }
+        super.stop(app);
     }
 
-    private void runSchedulers() {
+    @Override
+    protected void runSchedulers() {
 
         //开新通道前不能发送提醒短信
 //        stateCoordinator.addScheduler(
@@ -83,29 +64,17 @@ public class Global extends BaseGlobal {
         stateCoordinator.start(Akka.system().scheduler(), Akka.system().dispatcher());
     }
 
-    private void stopSchedulers() {
+    @Override
+    protected void stopSchedulers() {
         stateCoordinator.stop();
     }
 
 
     @Override
     public Action onRequest(Http.Request request, Method actionMethod) {
-
         final EntityManagerFactory emf = ctx.getBean(EntityManagerFactory.class);
 
-        return new Action.Simple() {
-            public F.Promise<Result> call(Http.Context ctx) throws Throwable {
-
-                ActionFilterChain filterChain = new ActionFilterChain(
-                        ctx,
-                        delegate,
-                        new OpenEntityManagerInViewActionFilter(emf)
-                );
-                filterChain.doFilter();
-                return filterChain.result;
-
-            }
-        };
+        return createActionWithActionFilters(new OpenEntityManagerInViewActionFilter(emf));
     }
 
     @Override
@@ -157,19 +126,6 @@ public class Global extends BaseGlobal {
         }
         return showResult(result, jsonResponse);
 
-    }
-
-    private boolean isJsonResponse(Http.RequestHeader request) {
-        return request.acceptedTypes().stream().filter(mr -> mr.toString().contains("json")).findFirst().isPresent();
-    }
-
-    private F.Promise<Result> showResult(Result result, boolean jsonResponse) {
-        if(!jsonResponse && isDev()) {
-            //开发环境显示play的错误页面
-            return null;
-        } else {
-            return F.Promise.pure(result);
-        }
     }
 
     public static Result show404() {

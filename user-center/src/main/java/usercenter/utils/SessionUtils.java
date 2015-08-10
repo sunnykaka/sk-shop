@@ -24,6 +24,7 @@ public class SessionUtils {
     public static final String SESSION_REQUEST_TIME = "rtime";
     public static final int REMEMBER_ME_DAYS = 14;
     public static final String USER_KEY = "sk_user";
+    public static final String USER_ID_KEY = "sk_user_id";
     public static final String COOKE_REMEMBER_ME = "sk_rm";
 
     public static User currentUser() {

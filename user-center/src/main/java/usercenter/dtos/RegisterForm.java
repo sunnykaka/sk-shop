@@ -26,6 +26,13 @@ public class RegisterForm {
     @Constraints.Pattern(value = RegExpUtils.PHONE_REG_EXP, message = "请输入正确的手机号码")
     String phone;
 
+    String deviceId;
+
+    String channel;
+
+    String deviceInfo;
+
+
     public String getUsername() {
         return username;
     }
@@ -57,5 +64,30 @@ public class RegisterForm {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    public void setDeviceInfo(String deviceInfo) {
+        this.deviceInfo = deviceInfo;
+    }
+
 
 }

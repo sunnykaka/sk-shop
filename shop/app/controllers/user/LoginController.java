@@ -1,6 +1,7 @@
 package controllers.user;
 
 import common.exceptions.AppBusinessException;
+import common.exceptions.AppException;
 import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.RegExpUtils;
@@ -10,6 +11,7 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.constants.MarketChannel;
 import usercenter.domain.QQLogin;
 import usercenter.domain.SmsSender;
 import usercenter.domain.WeiboLogin;
@@ -43,6 +45,7 @@ public class LoginController extends Controller {
 
         if(!registerForm.hasErrors()) {
             try {
+                registerForm.get().setChannel(MarketChannel.WEB.getValue());
                 User user = userService.register(registerForm.get(), request().remoteAddress());
                 userService.loginByRegister(user, true);
                 String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
@@ -69,6 +72,7 @@ public class LoginController extends Controller {
 
         if(!loginForm.hasErrors()) {
             try {
+                loginForm.get().setChannel(MarketChannel.WEB.getValue());
                 userService.login(loginForm.get());
                 String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
                 return ok(new JsonResult(true, null, originalUrl).toNode());
@@ -93,24 +97,15 @@ public class LoginController extends Controller {
 
     }
 
-
-
     public Result requestPhoneCode(String phone) {
-        if(!RegExpUtils.isPhone(phone)) {
-            return ok(new JsonResult(false, "手机号不能为空").toNode());
-        }
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
-        String code = smsSender.generatePhoneVerificationCode();
-        if(StringUtils.isBlank(code)) {
-            return ok(new JsonResult(false, "发送失败,发送次数超过上限").toNode());
-        } else {
-            if(smsSender.sendMessage(views.html.template.sms.userCode.render(code))) {
-                return ok(new JsonResult(true).toNode());
-            }
+        try {
+            smsSender.sendPhoneVerificationMessage();
+        } catch (AppException e) {
+            return ok(new JsonResult(false, e.getMessage()).toNode());
         }
 
-        return ok(new JsonResult(false, "验证码发送失败").toNode());
-
+        return ok(new JsonResult(true).toNode());
     }
 
     public Result isPhoneExist(String phone) {

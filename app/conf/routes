@@ -1,0 +1,22 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                          @controllers.Application.index
+PUT         /api/login                 @controllers.api.user.LoginApiController.login
+POST        /api/register              @controllers.api.user.LoginApiController.register
+PUT         /api/logout                @controllers.api.user.LoginApiController.logout
+GET         /api/users/exist           @controllers.api.user.LoginApiController.isUserExist(username ?= null, phone ?= null)
+POST        /api/phones/code           @controllers.api.user.LoginApiController.requestPhoneCode(phone)
+PUT         /api/refresh_token         @controllers.api.user.LoginApiController.refreshToken(refreshToken)
+
+POST        /api/test/public           @controllers.api.TestApiController.publicResource
+POST        /api/test/protected        @controllers.api.TestApiController.protectedResource
+
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
+GET         /robots.txt                controllers.Assets.at(path="/public", file="robots.txt")
+
