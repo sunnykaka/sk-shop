@@ -135,11 +135,15 @@ public class LoginController extends Controller {
             String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
             return redirect(originalUrl);
 
+        } catch (AppBusinessException e) {
+            Logger.error("第三方登录失败", e);
+            return redirect(routes.LoginController.loginPage());
+
         } finally {
-            stopwatch.stop();
-            Logger.info("微信回调任务运行结束, 耗时: " + stopwatch.toString());
+                stopwatch.stop();
+                Logger.info("微信回调任务运行结束, 耗时: " + stopwatch.toString());
+            }
         }
-    }
 
     public Result weiboLogin() {
 
@@ -150,11 +154,15 @@ public class LoginController extends Controller {
 
         Logger.debug(String.format("微博回调参数: code[%s], state[%s], error[%s], error_code[%s]", code, state, error, error_code));
 
-        User user = new WeiboLogin().handleCallback(code, state, error, error_code, request().remoteAddress());
-        userService.loginByRegister(user, true);
-        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+        try {
+            User user = new WeiboLogin().handleCallback(code, state, error, error_code, request().remoteAddress());
+            userService.loginByRegister(user, true);
+            String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
 
-        return redirect(originalUrl);
+            return redirect(originalUrl);
+        } catch (AppBusinessException e) {
+            return redirect(routes.LoginController.loginPage());
+        }
     }
 
     public Result qqLogin() {
@@ -164,13 +172,19 @@ public class LoginController extends Controller {
 
     public Result qqLoginCallback(String code, String state, String msg) {
 
-        Logger.debug(String.format("QQ回调参数: code[%s], state[%s], msg[%s]", code, state, msg));
+        try{
+            Logger.debug(String.format("QQ回调参数: code[%s], state[%s], msg[%s]", code, state, msg));
 
-        User user = new QQLogin().handleCallback(code, state, msg, request().remoteAddress());
-        userService.loginByRegister(user, true);
-        String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+            User user = new QQLogin().handleCallback(code, state, msg, request().remoteAddress());
+            userService.loginByRegister(user, true);
+            String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+            return redirect(originalUrl);
 
-        return redirect(originalUrl);
+        } catch (AppBusinessException e) {
+            Logger.error("第三方登录失败", e);
+            return redirect(routes.LoginController.loginPage());
+        }
+
     }
 
 

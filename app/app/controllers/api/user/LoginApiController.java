@@ -5,14 +5,12 @@ import api.response.user.RefreshTokenResult;
 import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.exceptions.ErrorCode;
-import common.utils.FormUtils;
 import common.utils.JsonUtils;
+import common.utils.ParamUtils;
 import controllers.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
-import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Result;
 import services.api.user.UserApiService;
 import services.api.user.UserTokenProvider;
@@ -56,10 +54,15 @@ public class LoginApiController extends BaseController {
     }
 
     public Result logout() {
+        String accessToken = ParamUtils.getByKey(request(), "accessToken");
+
+        userApiService.logout(accessToken);
+
         return noContent();
     }
 
-    public Result requestPhoneCode(String phone) throws AppException {
+    public Result requestPhoneCode() throws AppException {
+        String phone = ParamUtils.getByKey(request(), "phone");
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
 
         smsSender.sendPhoneVerificationMessage();
@@ -89,10 +92,11 @@ public class LoginApiController extends BaseController {
 
     /**
      * 刷新accessToken有效期
-     * @param refreshToken
      * @return
      */
-    public Result refreshToken(String refreshToken) {
+    public Result refreshToken() {
+
+        String refreshToken = ParamUtils.getByKey(request(), "refreshToken");
 
         Optional<RefreshTokenResult> refreshTokenResult = userTokenProvider.refreshToken(refreshToken);
         if(!refreshTokenResult.isPresent()) {

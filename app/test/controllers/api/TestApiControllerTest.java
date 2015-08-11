@@ -81,6 +81,27 @@ public class TestApiControllerTest extends BaseTest {
         assertThat(map.get("key1"), is("value1"));
         assertThat(map.get("key2"), is("value2"));
         assertThat(map.get("phone"), is(phone));
+
+        //登出
+        params = new HashMap<>();
+        params.put("accessToken", loginResult.getAccessToken());
+
+        request = new Http.RequestBuilder().
+                method(PUT).
+                uri(controllers.api.user.routes.LoginApiController.logout().url()).
+                bodyForm(params);
+
+        result = routeWithExceptionHandle(request);
+        assertThat(result.status(), is(NO_CONTENT));
+
+        //再次访问,提示无效的accessToken
+        request = new Http.RequestBuilder().
+                method(POST).
+                uri(routes.TestApiController.protectedResource().url()).
+                bodyForm(params);
+        result = routeWithExceptionHandle(request);
+        assertThat(result.status(), is(UNAUTHORIZED));
+
     }
 
 

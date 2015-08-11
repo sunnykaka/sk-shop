@@ -49,7 +49,7 @@ public class UserTokenProvider {
 
     /**
      *
-     * "user_tokens:access_token:$accessToken:$userId"
+     * "user_tokens:access_token:$accessToken:$refreshToken,$userId,$username"
      * "user_tokens:refresh_token:$refreshToken:$accessToken,$userId,$username"
      *
      * @param user
@@ -59,11 +59,11 @@ public class UserTokenProvider {
 
         cacheApi().set(
                 getAccessTokenKey(userToken.getAccessToken()),
-                userId,
+                createTokenValueInCache(userToken.getRefreshToken(), userId, username),
                 userToken.getAccessTokenExpiresInSeconds());
         cacheApi().set(
                 getRefreshTokenKey(userToken.getRefreshToken()),
-                userToken.getAccessToken() + "," + userId + "," + username,
+                createTokenValueInCache(userToken.getAccessToken(), userId, username),
                 userToken.getRefreshTokenExpiresInSeconds());
 
     }
@@ -85,37 +85,61 @@ public class UserTokenProvider {
 
     public Optional<Integer> retrieveUserIdByAccessToken(String accessToken) {
         if(StringUtils.isNoneBlank(accessToken)) {
-            Integer userId = cacheApi().get(getAccessTokenKey(accessToken));
-            return Optional.ofNullable(userId);
+            String[] array = retrieveTokenValueFromCache(cacheApi().get(getAccessTokenKey(accessToken)));
+            if(array.length == 3) {
+                return Optional.ofNullable(Integer.parseInt(array[1]));
+            }
         }
-
         return Optional.empty();
     }
 
     public Optional<RefreshTokenResult> refreshToken(String refreshToken) {
         if(StringUtils.isNotBlank(refreshToken)) {
-            String accessTokenAndUserId = cacheApi().get(getRefreshTokenKey(refreshToken));
-            if(StringUtils.isNotBlank(accessTokenAndUserId)) {
-                String[] array = accessTokenAndUserId.split(",");
-                if(array.length == 3) {
-                    String accessToken = array[0];
-                    String username = array[2];
+            String[] array = retrieveTokenValueFromCache(cacheApi().get(getRefreshTokenKey(refreshToken)));
+            if(array.length == 3) {
+                String accessToken = array[0];
+                String username = array[2];
 
-                    Optional<Integer> userId = retrieveUserIdByAccessToken(accessToken);
-                    if(!userId.isPresent()) {
-                        userId = Optional.of(Integer.parseInt(array[1]));
-                        //accessToken已过期,生成新的
-                        accessToken = generateToken(username);
-                    }
-
-                    UserToken userToken = createUserToken(accessToken, refreshToken);
-                    saveUserToken(userId.get(), username, userToken);
-
-                    return Optional.of(new RefreshTokenResult(accessToken, refreshToken, userToken.getAccessTokenExpiresInSeconds()));
+                Optional<Integer> userId = retrieveUserIdByAccessToken(accessToken);
+                if(!userId.isPresent()) {
+                    userId = Optional.of(Integer.parseInt(array[1]));
+                    //accessToken已过期,生成新的
+                    accessToken = generateToken(username);
                 }
+
+                UserToken userToken = createUserToken(accessToken, refreshToken);
+                saveUserToken(userId.get(), username, userToken);
+
+                return Optional.of(new RefreshTokenResult(accessToken, refreshToken, userToken.getAccessTokenExpiresInSeconds()));
             }
         }
 
         return Optional.empty();
+    }
+
+    private String createTokenValueInCache(String token, Integer userId, String username) {
+        return token + "," + userId + "," + username;
+    }
+
+    private String[] retrieveTokenValueFromCache(String value) {
+        if(StringUtils.isNotBlank(value)) {
+            return value.split(",");
+        }
+        return new String[0];
+    }
+
+    public void deleteByAccessToken(String accessToken) {
+        if(StringUtils.isNoneBlank(accessToken)) {
+            String accessTokenKey = getAccessTokenKey(accessToken);
+            String[] array = retrieveTokenValueFromCache(cacheApi().get(accessTokenKey));
+            if(array.length == 3) {
+                String refreshToken = array[0];
+                if(StringUtils.isNoneBlank(refreshToken)) {
+                    cacheApi().remove(getRefreshTokenKey(refreshToken));
+                }
+            }
+            cacheApi().remove(accessTokenKey);
+        }
+
     }
 }

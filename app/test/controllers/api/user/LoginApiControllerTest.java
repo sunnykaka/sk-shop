@@ -174,10 +174,13 @@ public class LoginApiControllerTest extends BaseTest{
         loginResult = JsonUtils.json2Object(contentAsString(result), LoginResult.class);
         assertLoginResultValid(phone, username, loginResult);
 
+        Map<String, String> params = new HashMap<>();
+        params.put("refreshToken", loginResult.getRefreshToken());
         //刷新token
         Http.RequestBuilder request = new Http.RequestBuilder().
-                method(PUT).
-                uri(routes.LoginApiController.refreshToken(loginResult.getRefreshToken()).url());
+                method(POST).
+                uri(routes.LoginApiController.refreshToken().url()).
+                bodyForm(params);
         result = routeWithExceptionHandle(request);
         assertThat(result.status(), is(OK));
         RefreshTokenResult refreshTokenResult = JsonUtils.json2Object(contentAsString(result), RefreshTokenResult.class);
@@ -199,7 +202,7 @@ public class LoginApiControllerTest extends BaseTest{
         params.put("channel", MarketChannel.iOS.getValue());
 
         Http.RequestBuilder request = new Http.RequestBuilder().
-                method(PUT).
+                method(POST).
                 uri(routes.LoginApiController.login().url()).
                 bodyForm(params);
         return routeWithExceptionHandle(request);
@@ -207,7 +210,14 @@ public class LoginApiControllerTest extends BaseTest{
 
 
     public Result registerUser(String phone, String username, String password) {
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginApiController.requestPhoneCode(phone).url());
+
+        Map<String, String> params = new HashMap<>();
+        params.put("phone", phone);
+
+        Http.RequestBuilder request = new Http.RequestBuilder().
+                method(POST).
+                uri(routes.LoginApiController.requestPhoneCode().url()).
+                bodyForm(params);
 
         Result result = routeWithExceptionHandle(request);
         assertThat(result.status(), is(NO_CONTENT));
@@ -216,7 +226,6 @@ public class LoginApiControllerTest extends BaseTest{
         assertThat(verificationCode, notNullValue());
         assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
 
-        Map<String, String> params = new HashMap<>();
         if(username != null) {
             params.put("username", username);
         }

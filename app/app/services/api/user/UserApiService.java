@@ -55,6 +55,10 @@ public class UserApiService {
         return createLoginResult(user);
     }
 
+    public void logout(String accessToken) {
+        userTokenProvider.deleteByAccessToken(accessToken);
+    }
+
 
     /**
      * 返回登录结果

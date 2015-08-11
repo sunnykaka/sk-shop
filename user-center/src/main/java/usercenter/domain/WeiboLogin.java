@@ -38,6 +38,7 @@ public class WeiboLogin extends OpenIDConnector {
                                String registerIP) {
 
         if (StringUtils.isBlank(code) || StringUtils.isBlank(state)) {
+            //微博取消登录按钮进来的没有state
             Logger.error(String.format("微博登录回调的时候发现code或者state值为空, error: [%s], error_code: [%s]",
                     error, error_code));
             throw new AppBusinessException("登录失败, 请尝试其他登录方式");
