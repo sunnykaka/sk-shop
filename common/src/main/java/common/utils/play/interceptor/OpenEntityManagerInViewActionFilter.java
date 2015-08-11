@@ -27,7 +27,7 @@ public class OpenEntityManagerInViewActionFilter implements ActionFilter {
         if (TransactionSynchronizationManager.hasResource(emf)) {
             participate = true;
         } else {
-            Logger.debug("Opening single JPA EntityManager in Global.onRequest");
+//            Logger.debug("Opening single JPA EntityManager in Global.onRequest");
             try {
                 EntityManager em = emf.createEntityManager();
                 EntityManagerHolder emHolder = new EntityManagerHolder(em);
@@ -46,8 +46,8 @@ public class OpenEntityManagerInViewActionFilter implements ActionFilter {
 
             if (!participate) {
                 EntityManagerHolder emHolder = (EntityManagerHolder)
-                        TransactionSynchronizationManager.unbindResource(emf);
-                Logger.debug("Closing JPA EntityManager in Global.onRequest");
+                TransactionSynchronizationManager.unbindResource(emf);
+//                Logger.debug("Closing JPA EntityManager in Global.onRequest");
                 EntityManagerFactoryUtils.closeEntityManager(emHolder.getEntityManager());
             }
         }
