@@ -1,4 +1,4 @@
-@()
+@(mapName:Map[Integer,String],mapPrice:Map[Integer,String])
 @import productcenter.models.Seo;
 
 @main(new Seo("5件最具风格单品，轻松掌握时尚流行-尚客","5件最具风格单品，尚客与您一起演绎属于您的生活时尚。","全球首发，独立设计师，限量发售，限时首发，风格单品"))() {
@@ -118,10 +118,10 @@
                   </ul>
                   <div class="right">
                       <ul>
-                          <li>1. <a target="_blank" href="http://www.fashiongeeker.com/product/385"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                          <li>2. <a target="_blank" href="http://www.fashiongeeker.com/product/403"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                          <li>3. <a target="_blank" href="http://www.fashiongeeker.com/product/405"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                          <li class="last">4. <a target="_blank" href="http://www.fashiongeeker.com/product/425"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
+                          <li>1. <a target="_blank" href="http://www.fashiongeeker.com/product/385"><span class="pro-name">@mapName.get(385)</span> ￥@mapPrice.get(385)</a></li>
+                          <li>2. <a target="_blank" href="http://www.fashiongeeker.com/product/403"><span class="pro-name">@mapName.get(403)</span> ￥@mapPrice.get(403)</a></li>
+                          <li>3. <a target="_blank" href="http://www.fashiongeeker.com/product/405"><span class="pro-name">@mapName.get(405)</span> ￥@mapPrice.get(405)</a></li>
+                          <li class="last">4. <a target="_blank" href="http://www.fashiongeeker.com/product/425"><span class="pro-name">@mapName.get(425)</span> ￥@mapPrice.get(425)</a></li>
                       </ul>
                   </div>
               </div>
@@ -148,23 +148,23 @@
                 <ul class="clearfix pro-list">
                     <li>
                         <a href="http://www.fashiongeeker.com/product/421"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-1.jpg")" alt="" width="232" height="410"/></a>
-                        <h4>1. <a target="_blank" href="http://www.fashiongeeker.com/product/421"><span class="pro-name">时尚半身短裙</span> ￥999</a></h4>
+                        <h4><a target="_blank" href="http://www.fashiongeeker.com/product/421"><span class="pro-name">@mapName.get(421)</span><br/>￥@mapPrice.get(421)</a></h4>
                     </li>
                     <li>
                         <a href="http://www.fashiongeeker.com/product/21"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-2.jpg")" alt="" width="232" height="410"/></a>
-                        <h4>1. <a target="_blank" href="http://www.fashiongeeker.com/product/21"><span class="pro-name">时尚半身短裙</span> ￥999</a></h4>
+                        <h4><a target="_blank" href="http://www.fashiongeeker.com/product/21"><span class="pro-name">@mapName.get(21)</span><br/>￥@mapPrice.get(21)</a></h4>
                     </li>
                     <li>
                         <a href="http://www.fashiongeeker.com/product/27"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-3.jpg")" alt="" width="232" height="410"/></a>
-                        <h4>1. <a target="_blank" href="http://www.fashiongeeker.com/product/27"><span class="pro-name">时尚半身短裙</span> ￥999</a></h4>
+                        <h4><a target="_blank" href="http://www.fashiongeeker.com/product/27"><span class="pro-name">@mapName.get(27)</span><br/>￥@mapPrice.get(27)</a></h4>
                     </li>
                     <li>
                         <a href="http://www.fashiongeeker.com/product/117"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-4.jpg")" alt="" width="232" height="410"/></a>
-                        <h4>1.<a target="_blank" href="http://www.fashiongeeker.com/product/117"><span class="pro-name">时尚半身短裙</span> ￥999</a></h4>
+                        <h4><a target="_blank" href="http://www.fashiongeeker.com/product/117"><span class="pro-name">@mapName.get(117)</span><br/>￥@mapPrice.get(117)</a></h4>
                     </li>
                     <li class="last">
                         <a href="http://www.fashiongeeker.com/product/133"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-5.jpg")" alt="" width="232" height="410"/></a>
-                        <h4>1. <a target="_blank" href="http://www.fashiongeeker.com/product/133"><span class="pro-name">时尚半身短裙</span> ￥999</a></h4>
+                        <h4> <a target="_blank" href="http://www.fashiongeeker.com/product/133"><span class="pro-name">@mapName.get(133)</span><br/>￥@mapPrice.get(133)</a></h4>
                     </li>
                 </ul>
 
@@ -195,10 +195,10 @@
                 </ul>
                 <div class="right">
                     <ul>
-                        <li>1. <a target="_blank" href="http://www.fashiongeeker.com/product/251"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                        <li>2. <a target="_blank" href="http://www.fashiongeeker.com/product/115"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                        <li>3. <a target="_blank" href="http://www.fashiongeeker.com/product/233"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                        <li class="last">4. <a target="_blank" href="http://www.fashiongeeker.com/product/441"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
+                        <li>1. <a target="_blank" href="http://www.fashiongeeker.com/product/251"><span class="pro-name">@mapName.get(251)</span> ￥@mapPrice.get(251)</a></li>
+                        <li>2. <a target="_blank" href="http://www.fashiongeeker.com/product/115"><span class="pro-name">@mapName.get(115)</span> ￥@mapPrice.get(115)</a></li>
+                        <li>3. <a target="_blank" href="http://www.fashiongeeker.com/product/233"><span class="pro-name">@mapName.get(233)</span> ￥@mapPrice.get(233)</a></li>
+                        <li class="last">4. <a target="_blank" href="http://www.fashiongeeker.com/product/441"><span class="pro-name">@mapName.get(441)</span> ￥@mapPrice.get(441)</a></li>
                     </ul>
                 </div>
             </div>
@@ -227,10 +227,10 @@
                 </ul>
                 <div class="left">
                     <ul>
-                        <li>1. <a target="_blank" href="http://www.fashiongeeker.com/product/169"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                        <li>2. <a target="_blank" href="http://www.fashiongeeker.com/product/239"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                        <li>3. <a target="_blank" href="http://www.fashiongeeker.com/product/389"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
-                        <li class="last">4. <a target="_blank" href="http://www.fashiongeeker.com/product/443"><span class="pro-name">时尚半身短裙</span> ￥999</a></li>
+                        <li>1. <a target="_blank" href="http://www.fashiongeeker.com/product/169"><span class="pro-name">@mapName.get(169)</span> ￥@mapPrice.get(169)</a></li>
+                        <li>2. <a target="_blank" href="http://www.fashiongeeker.com/product/239"><span class="pro-name">@mapName.get(239)</span> ￥@mapPrice.get(239)</a></li>
+                        <li>3. <a target="_blank" href="http://www.fashiongeeker.com/product/389"><span class="pro-name">@mapName.get(389)</span> ￥@mapPrice.get(389)</a></li>
+                        <li class="last">4. <a target="_blank" href="http://www.fashiongeeker.com/product/443"><span class="pro-name">@mapName.get(443)</span> ￥@mapPrice.get(443)</a></li>
                     </ul>
                 </div>
             </div>
@@ -259,11 +259,11 @@
                 <li><a target="_blank" href="http://www.fashiongeeker.com/product/399"><img src="@routes.Assets.versioned("images/activity/fashion-floor5-pro-4.jpg")" alt="" width="393" height="280"/></a></li>
                 <li><a target="_blank" href="http://www.fashiongeeker.com/product/401"><img src="@routes.Assets.versioned("images/activity/fashion-floor5-pro-5.jpg")" alt="" width="393" height="280"/></a></li>
                 <li class="last">
-                    <p>1. <a target="_blank" href="http://www.fashiongeeker.com/product/387"><span class="pro-name">时尚半身短裙</span> ￥999</a></p>
-                    <p>1. <a target="_blank" href="http://www.fashiongeeker.com/product/391"><span class="pro-name">时尚半身短裙</span> ￥999</a></p>
-                    <p>1. <a target="_blank" href="http://www.fashiongeeker.com/product/395"><span class="pro-name">时尚半身短裙</span> ￥999</a></p>
-                    <p>1. <a target="_blank" href="http://www.fashiongeeker.com/product/399"><span class="pro-name">时尚半身短裙</span> ￥999</a></p>
-                    <p>1. <a target="_blank" href="http://www.fashiongeeker.com/product/401"><span class="pro-name">时尚半身短裙</span> ￥999</a></p>
+                    <p>1. <a target="_blank" href="http://www.fashiongeeker.com/product/387"><span class="pro-name">@mapName.get(387)</span> ￥@mapPrice.get(387)</a></p>
+                    <p>2. <a target="_blank" href="http://www.fashiongeeker.com/product/391"><span class="pro-name">@mapName.get(391)</span> ￥@mapPrice.get(391)</a></p>
+                    <p>3. <a target="_blank" href="http://www.fashiongeeker.com/product/395"><span class="pro-name">@mapName.get(395)</span> ￥@mapPrice.get(395)</a></p>
+                    <p>4. <a target="_blank" href="http://www.fashiongeeker.com/product/399"><span class="pro-name">@mapName.get(399)</span> ￥@mapPrice.get(399)</a></p>
+                    <p>5. <a target="_blank" href="http://www.fashiongeeker.com/product/401"><span class="pro-name">@mapName.get(401)</span> ￥@mapPrice.get(401)</a></p>
                 </li>
             </ul>
         </div>

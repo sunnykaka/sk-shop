@@ -1,6 +1,5 @@
 package controllers.activity;
 
-import common.utils.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -33,13 +32,17 @@ public class ActivityController extends Controller {
 
     /**
      * 提交订单-选择支付方式(生成订单)
-     * @param orderId 用户选择的寄送地址
      * @return
      */
     public Result toMember() {
         return ok(member.render());
     }
 
+    /**
+     * 变形记活动
+     *
+     * @return
+     */
     public Result bianxingji() {
 
         final int[] activityProductId = {483,217,119,407,141,215,255,147,249,127,113,123,237,115,257,107,259,111,175,155,475,165,171,471};
@@ -71,7 +74,36 @@ public class ActivityController extends Controller {
     }
 
     public Result fashion() {
-        return ok(fashion.render());
+
+        final int[] activityProductId = {385,403,405,425,421,21,27,117,133,251,115,233,441,169,239,389,443,387,391,395,399,401};
+
+        Map<Integer, String> mapName = new HashMap<>();
+        Map<Integer, String> mapPrice = new HashMap<>();
+        for(int productId:activityProductId){
+            Product product = productService.getProductById(productId);
+
+            if(null == product){
+                mapPrice.put(productId,null);
+                mapName.put(productId,null);
+            }else{
+                //根据判断是否是首发，当前价格要现算
+                mapName.put(productId,product.getName());
+                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                if(null == stockKeepingUnit){
+                    mapPrice.put(productId,null);
+                }else{
+                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    if(isFirstPublish) {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
+                    } else {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getMarketPrice().toString()));
+                    }
+                }
+
+            }
+        }
+
+        return ok(fashion.render(mapName,mapPrice));
     }
 
     private String getPositivePrice(String str){
