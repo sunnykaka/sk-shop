@@ -542,8 +542,8 @@ table .pro{width: 360px;}
  .bread-nav li {float: left;margin-right: 18px;}
  .bread-nav a:hover {color: #FF2D54;text-decoration: none;}
 .detail-inner .product-info{margin-bottom: 37px;}
-.detail-inner .product-info h3{position:relative;width: 80px;margin: 10px auto 30px;padding-bottom: 10px; border-bottom: 1px solid #000;text-align: center;font-weight: normal;color: #000;font-size: 16px;}
-.detail-inner .product-info span,.detail-inner .Collocation h3 span{position: absolute;  font-size: 9px; left: 35px;  top: 24px;-webkit-transform : scale(0.75,0.75) ;}
+.detail-inner .product-info h3{position:relative;width: 240px;margin: 10px auto 30px;padding-bottom: 10px; border-bottom: 1px solid #000;text-align: center;font-weight: normal;color: #000;font-size: 16px;}
+.detail-inner .product-info span,.detail-inner .Collocation h3 span{position: absolute;  font-size: 9px; left: 113px;  top: 24px;-webkit-transform : scale(0.75,0.75) ;}
 .detail-inner .product-info p{padding: 8px;}
 .detail-inner .info{width: auto;border: 1px solid #cccccc;text-align: center;padding:42px 60px;margin-bottom: 32px;}
 .detail-inner .info h2,.detail-inner .info h3{font-weight: normal;}

@@ -83,7 +83,7 @@
                     <div class="container">
                         @if(pd.getSpecList.size > 0){
                             <div class="product-info">
-                                <h3>产品说明 <span class="icon iconfont arc">&#xe612;</span></h3>
+                                <h3>产品说明 Product Description <span class="icon iconfont arc">&#xe612;</span></h3>
                                 <table class="product-info-table">
                                 @for((spec,index) <- pd.getSpecList.zipWithIndex) {
                                     @if(index%2== 0){
@@ -115,7 +115,7 @@
                                     } else {
                                     <h3>
                                     }
-                                同系列推荐Similar Recommendation<span class="icon iconfont arc">&#xe612;</span></h3>
+                                同系列推荐 Similar Recommendation<span class="icon iconfont arc">&#xe612;</span></h3>
                                 @if(pd.getMatchProductList.size >= 3) {
                                     <p class="collocation-text">
                                     @Html(pd.getProduct.getRecommendDesc)

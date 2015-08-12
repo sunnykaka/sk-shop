@@ -11,6 +11,7 @@ import productcenter.services.SkuAndStorageService;
 import services.CmsService;
 import views.html.activity.bianxingji;
 import views.html.activity.member;
+import views.html.activity.fashion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +68,10 @@ public class ActivityController extends Controller {
         }
 
         return ok(bianxingji.render(map));
+    }
+
+    public Result fashion() {
+        return ok(fashion.render());
     }
 
     private String getPositivePrice(String str){

@@ -134,6 +134,11 @@ $('#pay-money-btn').click(function(){
                 <h3>订单提交成功，现在只差最后一步啦！</h3>
                 <p>请在提交订单后60分钟内完成支付，否则订单自动取消！</p>
                 <p>温馨提示：不同的设计师的商品将由不同的设计师分开发货。</p>
+@order.getOrderState
+                @if(order.getOrderState.getName == "Create") {
+                    hello
+                    <input type="hidden" id="orderTime" value=" @order.getCreateTimeStr"/>
+                }
             </div>
                 <!-- end pay-info -->
             <div class="pay-list">
