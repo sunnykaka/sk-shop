@@ -36,7 +36,7 @@ public class Designer implements EntityClass<Integer> {
     /**
      * 介绍
      */
-    private  String description;
+    private String description;
 
     /**
      * 是否删除
@@ -47,6 +47,11 @@ public class Designer implements EntityClass<Integer> {
      * 是否发布
      */
     private boolean isPublished;
+
+    /**
+     * 优先级
+     */
+    private Integer priority;
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -113,5 +118,14 @@ public class Designer implements EntityClass<Integer> {
 
     public void setIsPublished(boolean isPublished) {
         this.isPublished = isPublished;
+    }
+
+    @Column(name = "priority")
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

@@ -80,6 +80,7 @@ public class DesignerService {
         if(id != null){
             sql += " and t1.id = " +id;
         }
+        sql += " order by t1.priority desc, id desc  ";
         if(page != null){
             sql += " limit " + page.getStart() + " , " + page.getLimit();
         }
