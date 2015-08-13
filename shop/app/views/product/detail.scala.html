@@ -100,7 +100,7 @@
                         <div class="img-con">
                             @if(pd.getHtmlList.nonEmpty) {
                                 @if(null != pd.getHtmlList.get(0).getContent && !"".equals(pd.getHtmlList.get(0).getContent)){
-                                    @Html(pd.getHtmlList.get(0).getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' />").replaceFirst("<img.*?data-original='(.*?)'.*?>","<img src='$1' />"))
+                                    @Html(pd.getHtmlList.get(0).getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>","<img src='$1' />"))
                                 }else{
                                     @Html(pd.getHtmlList.get(0).getContent)
                                 }

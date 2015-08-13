@@ -4,6 +4,9 @@
 
 
 @main(new Seo(Messages("title.product"), Messages("seo.description"), Messages("seo.Keywords")))("product") {
+    <style>
+        .sider-bar{top: 452px;}
+    </style>
     <script >
         $(function(){
 
@@ -28,6 +31,7 @@
 
         });
     </script>
+
 
 } {
     <div id="container">
@@ -117,7 +121,7 @@
                         <ul class="clearfix">
                         @for(prod <- pageResult.getResult) {
                             <li>
-                                <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)"><img class="lazy" src="@prod.getMinorPic.getPictureUrl" alt="@prod.getProduct.getName" width="283" height="462"/></a>
+                                <a href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)"><img class="lazy" data-original="@prod.getMinorPic.getPictureUrl"  src="@routes.Assets.versioned("images/grey.gif")" alt="@prod.getProduct.getName" width="283" height="462"/></a>
                                 <h3>@prod.getProduct.getName</h3>
                                 <h4 class="price">￥@prod.getPrice</h4>
                             </li>
