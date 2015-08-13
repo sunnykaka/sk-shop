@@ -1,4 +1,4 @@
-@(content:models.CmsContent,designerList: List[usercenter.dtos.DesignerView])
+@(content:models.CmsContent,designerList: List[usercenter.dtos.DesignerView],count:Integer)
 
 @import productcenter.models.Seo;
 @main(new Seo(Messages("title.designers"),Messages("seo.description"),Messages("seo.Keywords")))("designer") {
@@ -95,6 +95,7 @@ $(function(){
 
                 }
                 </ul>
+                <input type="hidden" name="totalcount" id="totalcount" value="@count" />
                 @if(designerList.size == 8){
                     <p class="more" id="more" data-id="2">发现更多设计师</p>
                 }

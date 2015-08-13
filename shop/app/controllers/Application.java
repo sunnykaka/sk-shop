@@ -251,7 +251,8 @@ public class Application extends Controller {
         List<DesignerView> list = designerService.designerById(null,page);
         List<CmsContent> contents = cmsService.allContents();
         CmsContent content = contents.stream().filter(co -> co.getPosition().equals(CmsPosition.DESIGNER_LIST_LOGO)).findFirst().get();
-        return ok(designers.render(content,list));
+        Integer count = designerService.allOnlineDesignerCount();
+        return ok(designers.render(content,list,count));
     }
 
     public Result designers4More(int currPage) {
