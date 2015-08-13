@@ -46,10 +46,15 @@ $(function(){
                 var html =  tpl('#demo', response);
                 if(response.data.length<8){
                     $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(300);
-                    that.fadeOut();
+                    if($('#totalcount').val()== $('.designer-list-con li').size()){
+                     that.fadeOut();
+                    }
                 }else{
                    $('.designer-list-con ul').append(html).find('.add').hide().fadeIn();
                    that.attr('data-id',parseInt(id)+1);
+                   if($('#totalcount').val()== $('.designer-list-con li').size()){
+                     that.fadeOut();
+                    }
                 }
                 $(this).attr('disabled',null);
             }
