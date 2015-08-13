@@ -6,7 +6,7 @@
             <dt>关于我们</dt>
             <dd><a target="_blank" href="@controllers.routes.Application.about()">关于尚客</a></dd>
             <dd><a target="_blank" href="@controllers.help.routes.HelpCenterController.index("contact")">联系尚客</a></dd>
-            <dd><a target="_blank" href="@controllers.help.routes.HelpCenterController.index("joinUs")">join us</a></dd>
+            @*<dd><a target="_blank" href="@controllers.help.routes.HelpCenterController.index("joinUs")">join us</a></dd>*@
         </dl>
         <dl class="help">
             <dt>帮助中心</dt>
@@ -24,8 +24,9 @@
             <dd><a target="_blank" href="@controllers.help.routes.HelpCenterController.index("feedback")">意见反馈</a></dd>
         </dl>
         <dl class="designer-in">
-            <dt>New Designer</dt>
-            <dd>Email：<span>info@@yezaoshu.com</span></dd>
+            <dt>Designer sign up</dt>
+            <dd><a target="_blank" href="@controllers.help.routes.HelpCenterController.index("joinUs")">Profile</a></dd>
+            <dd>Email：<span>jennifer@@fashiongeeker.com</span></dd>
             <dd><span>Tel：400-9636-088</span></dd>
             <dd class="social-ico">
                 <a href="https://www.facebook.com/pages/FashionGeeker/812868722132688?ref=ts&fref=ts" target="_blank" class="facebook"><i class="iconfont">&#xe60f;</i></a>

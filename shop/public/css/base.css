@@ -969,7 +969,7 @@ table .pro{width: 360px;}
 /*end likeProduct*/
 /*footer*/
 .footer{width: 100%;background: #f3f7f6;}
-.footer-inner dl{float: left;margin-right: 120px;padding:30px 0;}
+.footer-inner dl{float: left;margin-right: 108px;padding:30px 0;}
 .footer-inner dt{padding-left: 22px;margin-bottom:20px;background: url("../images/sk-sprite.png") no-repeat -175px -838px;
     font-size: 14px;font-weight: 700;
 }
