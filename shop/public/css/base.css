@@ -79,6 +79,7 @@ border: 1px solid transparent;
 .icon-jinggao:before { content: "\e610"; }
 .icon-ttpodicon:before { content: "\e602"; }
 .icon-ttpodicon1:before { content: "\e603"; }
+.icon-fankui:before { content: "\e614"; }
 .icon-comfirmyemiandagou:before { content: "\e604"; }
 .icon-shijian:before { content: "\e605"; }
 .icon-gouwuche2:before { content: "\e606"; }
@@ -88,10 +89,10 @@ border: 1px solid transparent;
 .icon-posttwitter:before { content: "\e60a"; }
 .icon-iconfont57:before { content: "\e60b"; }
 .icon-jinggao1:before { content: "\e60c"; }
+.icon-xingxing1:before { content: "\e613"; }
 .icon-facebook:before { content: "\e60d"; }
 .icon-iconfontroundclosefill:before { content: "\e60e"; }
 .icon-loading:before { content: "\e611"; }
-.icon-xingxing1:before { content: "\e613"; }
 /*产品信息宽度*/
 table .pro{width: 360px;}
 /*top*/
@@ -1009,6 +1010,8 @@ table .pro{width: 360px;}
 .sider-bar .like-designer{background-position: -132px -325px;}
 .sider-bar .like-designer:hover{background-position: -70px -325px;}
 .sider-bar .go-top{border-bottom: none;background-position: -132px -388px;}
+.sider-bar .fan-kui{}
+.sider-bar .fan-kui i{font-size: 30px;}
 .sider-bar .go-top:hover{background-position: -70px -388px;}
 .sider-bar a,.sider-bar #gotoTop,.sider-bar #cart-quantity-btn{float: left;width: 62px;height: 63px;cursor:pointer;}
 
@@ -1022,6 +1025,7 @@ table .pro{width: 360px;}
 .small-sider .like-designer{background-position: -158px -528px;}
 .small-sider .like-designer:hover{background-position: -122px -528px;}
 .small-sider .go-top{border-bottom: none;background-position: -158px -565px;}
+.small-sider .fan-kui i{font-size: 18px;}
 .small-sider .go-top:hover{border-bottom: none;background-position: -122px -565px;}
 .small-sider a,.small-sider #gotoTop,.small-sider #cart-quantity-btn{float: left;width: 36px;height: 37px;cursor:pointer;}
 /* 提示信息 */
