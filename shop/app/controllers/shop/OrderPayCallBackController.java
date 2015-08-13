@@ -42,6 +42,7 @@ public class OrderPayCallBackController extends Controller {
         }
 
         if(queryMap != null) {
+            StringBuilder logSb = new StringBuilder();
             Set<String> keySet = queryMap.keySet();
             for(String key : keySet) {
                 String[] valueArr = queryMap.get(key);
@@ -56,8 +57,9 @@ public class OrderPayCallBackController extends Controller {
                     }
                     value = sb.toString();
                 }
-                Logger.info(key + " = " + value + "\n");
+                logSb.append(key + " = " + value + "\n");
             }
+            Logger.info(logSb.toString());
         }
     }
 

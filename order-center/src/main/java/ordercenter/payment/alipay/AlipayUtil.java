@@ -32,7 +32,7 @@ public class AlipayUtil {
 
     public static final String ALIPAY_GATEWAY_NEW = "https://www.alipay.com/cooperate/gateway.do?";
 
-    private static final String HTTPS_VERIFY_URL = "https://www.alipay.com/cooperate/gateway.do?service=create_forex_trade&";
+    private static final String HTTPS_VERIFY_URL = ALIPAY_GATEWAY_NEW +"service=notify_verify";
 
     public static boolean verify(String reqType, Map<String, String> params) {
         Map<String, String> sParaNew = paraFilter(params);
@@ -45,11 +45,8 @@ public class AlipayUtil {
         if (params.get("sign") != null) {
             sign = params.get("sign");
         }
-
         play.Logger.warn(String.format("请求类型: %s\n 响应结果: %s\n notify_url_log:sign=%s&mysign=%s\n 返回参数：%s",
                 reqType, responseTxt, sign, mysign, createLinkString(params)));
-
-        //验证
         //responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
         //mysign与sign不等，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
         return mysign.equals(sign) && responseTxt.equals("true");
@@ -85,7 +82,7 @@ public class AlipayUtil {
      */
     private static String verifyResponse(String notify_id) {
         //获取远程服务器ATN结果，验证是否是支付宝服务器发来的请求
-        return checkUrl(HTTPS_VERIFY_URL + "partner=" + partner + "&notify_id=" + notify_id);
+        return checkUrl(HTTPS_VERIFY_URL + "&partner=" + partner + "&notify_id=" + notify_id);
     }
 
     /**
