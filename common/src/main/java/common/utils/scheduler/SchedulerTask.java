@@ -19,7 +19,6 @@ public abstract class SchedulerTask implements Runnable {
         if(running.compareAndSet(false, true)) {
             Stopwatch stopwatch = Stopwatch.createStarted();
             try {
-                Logger.info(className + "定时任务开始运行");
                 doRun();
             } catch (Throwable e) {
                 Logger.error(className + "运行的时候发生错误: " + e.getMessage(), e);

@@ -2,6 +2,7 @@ package controllers.user;
 
 import common.exceptions.AppBusinessException;
 import common.utils.*;
+import constants.MessageJobSource;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.MessageJobService;
 import usercenter.cache.SecurityCache;
 import usercenter.domain.SmsSender;
 import usercenter.dtos.CodeForm;
@@ -37,6 +39,10 @@ public class MySecurityController extends Controller {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageJobService messageJobService;
+
 
     @SecuredAction
     public Result index() {
@@ -463,7 +469,9 @@ public class MySecurityController extends Controller {
 
         //生成token
         SecurityCache.setToken(SecurityCache.SECURITY_TOKEN_EMAIL_ACTIVITY_KEY, user.getEmail(), email);
-        EmailUtils.sendEmail(email, Messages.get("send.email.activity.title"), views.html.template.email.activity.render(user).toString());
+        messageJobService.sendEmail(email, Messages.get("send.email.activity.title"),
+                views.html.template.email.activity.render(user).toString(),
+                MessageJobSource.CHANGE_EMAIL, null);
 
         return ok(new JsonResult(true, "邮件已发送").toNode());
 
