@@ -48,7 +48,7 @@
                     @for((content,index) <- sliderBoxs.zipWithIndex) {
                        <li>
                            <a target="_blank" href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;">
-                               <img src="@content.getContent" alt="@content.getTitle" width="390" height="103"/>
+                               <img class="lazy" src="@content.getContent" alt="@content.getTitle" width="390" height="103"/>
                            </a>
                            <div class="cover"></div>
                        </li>
@@ -129,7 +129,7 @@
                     @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(0, 4)) {
                         <li class="">
                             <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getIntroduction"/>
+                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" width="291" height="437"   alt="@exhibition.getIntroduction"/>
                             </a>
                             <div class="title">
                                 <p><span class="designer">@exhibition.getIntroduction()</span></p>

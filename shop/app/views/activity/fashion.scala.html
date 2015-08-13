@@ -3,7 +3,28 @@
 
 @main(new Seo("5件最具风格单品，轻松掌握时尚流行-尚客","5件最具风格单品，尚客与您一起演绎属于您的生活时尚。","全球首发，独立设计师，限量发售，限时首发，风格单品"))() {
     <script>
+        $(function(){
 
+            //获取购物车 商品数量
+        $.ajax({
+            url: '/cart/getUserCartItemNum',
+            cache:false,
+            success: function (data) {
+                if (data.result) {
+                    $('#cart-quantity').text(data.data);
+                }
+            }
+        });
+
+                //固定购物车
+         fixedcart($('#cart'), $('#container'));
+
+             //点击购物车，进入购物车页面
+        $('#cart-quantity-btn').click(function () {
+            window.location.href = "/cart/showCart";
+        });
+
+        });
     </script>
 } {
     <style>
@@ -43,7 +64,7 @@
     .fashion-activity-floor2-header .activity-text{position: absolute;top: 406px;right: 56px;line-height: 30px;width: 253px}
     .fashion-activity-floor2 .activity-pro{height:460px;padding:30px 0 0 0;}
     .fashion-activity-floor2 .pro-list li{float:left;width:232px;height:460px;overflow: hidden;margin-right: 10px;}
-    .fashion-activity-floor2 .pro-list li h4{text-align: center;height: 30px;line-height: 30px;font-weight: normal;}
+    .fashion-activity-floor2 .pro-list li h4{text-align: center;height: 45px;line-height: 20px;font-weight: normal;}
     .fashion-activity-floor2 .pro-list .last{margin-right: 0;}
     .fashion-activity-floor3-header{height: 750px;}
     #floor3-img-1{position: absolute;right: 45px;top: 37px;}
@@ -54,9 +75,9 @@
     #floor4-img-2{position: absolute;right: 80px;top: 80px;}
     .fashion-activity-floor4-header .activity-text{position: absolute;top: 420px;left: 880px;line-height: 30px;width: 253px}
 
-    .fashion-activity-floor4 .pro-list{float:right;width:968px;}
+    .fashion-activity-floor4 .pro-list{float:right;width:960px;}
     .fashion-activity-floor4 .pro-list li{float:left;width:232px;height:410px;overflow: hidden;margin-right: 10px;}
-    .fashion-activity-floor4 .activity-pro .left{width: 220px;height: 380px;padding-top: 30px;}
+    .fashion-activity-floor4 .activity-pro .left{width: 228px;height: 380px;padding-top: 30px;}
     .fashion-activity-floor4 .activity-pro .left li{padding:15px 0;border-bottom:1px solid #ccc;}
     .fashion-activity-floor4 .activity-pro .left .pro-name{margin: 0 8px 0 2px;}
     .fashion-activity-floor4 .activity-pro .left .last{border:none;}
@@ -65,7 +86,7 @@
     #floor5-img-2{position: absolute;left:38px;top: 58px; }
     .fashion-activity-floor5-header .activity-text{position: absolute;top: 392px;left: 92px;line-height: 30px;width: 253px}
     .fashion-activity-floor5 ul{width: 1250px;height:600px;padding:30px 0 100px 0;}
-    .fashion-activity-floor5 .activity-pro{}
+    .activity-pro a:hover,.fashion-activity-floor5 .pro-list .last a:hover{color: #ff2d54;}
     .fashion-activity-floor5 .pro-list li{float:left;width:393px;height:280px;overflow: hidden;margin: 0 10px 10px 0;}
     .fashion-activity-floor5 .pro-list .last{width: 380px;margin-left: 10px;}
     .fashion-activity-floor5 .pro-list li p{float:left;width: 50%;padding:15px 0;border-bottom: 1px solid #ccc; }
@@ -73,8 +94,9 @@
     .fashion-activity-footer{margin-bottom: 100px;}
     .fashion-activity-footer p{text-align: center;font-size: 14px;margin-bottom: 30px;}
     .fashion-activity-footer h4{width: 176px;height: 43px;background: url('@routes.Assets.versioned("images/activity/fashion-activity-title.jpg")');text-indent: -9999px;margin: 0 auto;}
-
+    .sider-bar{top:928px;}
     </style>
+    <div id="container">
     <!--fashion-->
     <div class="fashion-activity">
         <div class="fasion-activity-header">
@@ -95,9 +117,9 @@
           <div class="floor fashion-activity-floor1">
                 <h3>style 01</h3>
                 <div class="floor-header fashion-activity-floor1-header">
-                    <img src="@routes.Assets.versioned("images/activity/fashion-floor1-1.jpg")" alt="" width="340" height="560" id="floor1-img-1"/>
-                    <img src="@routes.Assets.versioned("images/activity/fashion-floor1-2.jpg")" alt="" width="355" height="552" id="floor1-img-2" />
-                    <img src="@routes.Assets.versioned("images/activity/fashion-floor1-3.jpg")" alt="" width="270" height="253" id="floor1-img-3"/>
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor1-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="340" height="560" id="floor1-img-1"/>
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor1-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="355" height="552" id="floor1-img-2" />
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor1-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="270" height="253" id="floor1-img-3"/>
                     <div class="activity-text">
                         夏季穿飘逸的半身裙显得很有仙气，<br/>
                         时尚而又唯美。<br/>
@@ -111,10 +133,10 @@
               <div class="line"></div>
               <div class="activity-pro clearfix">
                   <ul class="clearfix pro-list">
-                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/385"><img src="@routes.Assets.versioned("images/activity/fashion-floor1-pro-1.jpg")" alt="" width="232" height="410"/></a></li>
-                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/403"><img src="@routes.Assets.versioned("images/activity/fashion-floor1-pro-2.jpg")" alt="" width="232" height="410"/></a></li>
-                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/405"><img src="@routes.Assets.versioned("images/activity/fashion-floor1-pro-3.jpg")" alt="" width="232" height="410"/></a></li>
-                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/425"><img src="@routes.Assets.versioned("images/activity/fashion-floor1-pro-4.jpg")" alt="" width="232" height="410"/></a></li>
+                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/385"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor1-pro-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/403"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor1-pro-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/405"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor1-pro-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                      <li><a target="_blank" href="http://www.fashiongeeker.com/product/425"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor1-pro-4.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
                   </ul>
                   <div class="right">
                       <ul>
@@ -131,10 +153,10 @@
         <div class="floor fashion-activity-floor2">
             <h3>style 02</h3>
             <div class="floor-header fashion-activity-floor2-header">
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor2-1.jpg")" alt="" width="171" height="437" id="floor2-img-1"/>
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor2-2.jpg")" alt="" width="254" height="537" id="floor2-img-2" />
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor2-3.jpg")" alt="" width="250" height="567" id="floor2-img-3"/>
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor2-4.jpg")" alt="" width="267" height="255" id="floor2-img-4"/>
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="171" height="437" id="floor2-img-1"/>
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="254" height="537" id="floor2-img-2" />
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="250" height="567" id="floor2-img-3"/>
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-4.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="267" height="255" id="floor2-img-4"/>
                 <div class="activity-text">
                     衬衫  可谓是长盛不衰的经典单品，<br/>
                     无论是简约的纯白款，<br/>
@@ -147,23 +169,23 @@
             <div class="activity-pro clearfix">
                 <ul class="clearfix pro-list">
                     <li>
-                        <a href="http://www.fashiongeeker.com/product/421"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-1.jpg")" alt="" width="232" height="410"/></a>
+                        <a target="_blank" href="http://www.fashiongeeker.com/product/421"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-pro-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a>
                         <h4><a target="_blank" href="http://www.fashiongeeker.com/product/421"><span class="pro-name">@mapName.get(421)</span><br/>￥@mapPrice.get(421)</a></h4>
                     </li>
                     <li>
-                        <a href="http://www.fashiongeeker.com/product/21"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-2.jpg")" alt="" width="232" height="410"/></a>
+                        <a target="_blank" href="http://www.fashiongeeker.com/product/21"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-pro-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a>
                         <h4><a target="_blank" href="http://www.fashiongeeker.com/product/21"><span class="pro-name">@mapName.get(21)</span><br/>￥@mapPrice.get(21)</a></h4>
                     </li>
                     <li>
-                        <a href="http://www.fashiongeeker.com/product/27"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-3.jpg")" alt="" width="232" height="410"/></a>
+                        <a target="_blank" href="http://www.fashiongeeker.com/product/27"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-pro-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a>
                         <h4><a target="_blank" href="http://www.fashiongeeker.com/product/27"><span class="pro-name">@mapName.get(27)</span><br/>￥@mapPrice.get(27)</a></h4>
                     </li>
                     <li>
-                        <a href="http://www.fashiongeeker.com/product/117"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-4.jpg")" alt="" width="232" height="410"/></a>
+                        <a target="_blank" href="http://www.fashiongeeker.com/product/117"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-pro-4.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a>
                         <h4><a target="_blank" href="http://www.fashiongeeker.com/product/117"><span class="pro-name">@mapName.get(117)</span><br/>￥@mapPrice.get(117)</a></h4>
                     </li>
                     <li class="last">
-                        <a href="http://www.fashiongeeker.com/product/133"><img src="@routes.Assets.versioned("images/activity/fashion-floor2-pro-5.jpg")" alt="" width="232" height="410"/></a>
+                        <a target="_blank" href="http://www.fashiongeeker.com/product/133"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor2-pro-5.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a>
                         <h4> <a target="_blank" href="http://www.fashiongeeker.com/product/133"><span class="pro-name">@mapName.get(133)</span><br/>￥@mapPrice.get(133)</a></h4>
                     </li>
                 </ul>
@@ -176,8 +198,8 @@
         <div class="floor fashion-activity-floor3">
             <h3>style 03</h3>
             <div class="floor-header fashion-activity-floor3-header">
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor3-1.jpg")" alt="" width="702" height="695" id="floor3-img-1"/>
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor3-2.jpg")" alt="" width="381" height="234" id="floor3-img-2" />
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor3-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="702" height="695" id="floor3-img-1"/>
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor3-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="381" height="234" id="floor3-img-2" />
                 <div class="activity-text">
                     今年在裤装上，<br/>
                     你需要留意的版型具有垂坠感、宽松。<br/>
@@ -188,10 +210,10 @@
             <div class="line"></div>
             <div class="activity-pro clearfix">
                 <ul class="clearfix pro-list">
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/251"><img src="@routes.Assets.versioned("images/activity/fashion-floor3-pro-1.jpg")" alt="" width="232" height="410"/></a></li>
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/115"><img src="@routes.Assets.versioned("images/activity/fashion-floor3-pro-2.jpg")" alt="" width="232" height="410"/></a></li>
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/233"><img src="@routes.Assets.versioned("images/activity/fashion-floor3-pro-3.jpg")" alt="" width="232" height="410"/></a></li>
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/441"><img src="@routes.Assets.versioned("images/activity/fashion-floor3-pro-4.jpg")" alt="" width="232" height="410"/></a></li>
+                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/251"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor3-pro-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/115"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor3-pro-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/233"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor3-pro-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/441"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor3-pro-4.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
                 </ul>
                 <div class="right">
                     <ul>
@@ -208,8 +230,8 @@
         <div class="floor fashion-activity-floor4">
             <h3>style 04</h3>
             <div class="floor-header fashion-activity-floor4-header">
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor4-1.jpg")" alt="" width="759" height="560" id="floor4-img-1"/>
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor4-2.jpg")" alt="" width="286" height="230" id="floor4-img-2" />
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor4-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="759" height="560" id="floor4-img-1"/>
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor4-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="286" height="230" id="floor4-img-2" />
                 <div class="activity-text">
                     透视风格是不变的潮流主题，<br/>
                     它无疑是最佳吸睛利器之一。<br/>
@@ -220,10 +242,10 @@
             <div class="line"></div>
             <div class="activity-pro clearfix">
                 <ul class="clearfix pro-list">
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/169"><img src="@routes.Assets.versioned("images/activity/fashion-floor4-pro-1.jpg")" alt="" width="232" height="410"/></a></li>
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/239"><img src="@routes.Assets.versioned("images/activity/fashion-floor4-pro-2.jpg")" alt="" width="232" height="410"/></a></li>
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/389"><img src="@routes.Assets.versioned("images/activity/fashion-floor4-pro-3.jpg")" alt="" width="232" height="410"/></a></li>
-                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/443"><img src="@routes.Assets.versioned("images/activity/fashion-floor4-pro-4.jpg")" alt="" width="232" height="410"/></a></li>
+                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/169"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor4-pro-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/239"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor4-pro-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                    <li><a target="_blank" href="http://www.fashiongeeker.com/product/389"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor4-pro-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
+                    <li style="margin-right: 0;"><a target="_blank" href="http://www.fashiongeeker.com/product/443"><img class="lazy" src="@routes.Assets.versioned("images/activity/fashion-floor4-pro-4.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="232" height="410"/></a></li>
                 </ul>
                 <div class="left">
                     <ul>
@@ -240,8 +262,8 @@
         <div class="floor fashion-activity-floor5">
             <h3>style 05</h3>
             <div class="floor-header fashion-activity-floor5-header">
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor5-1.jpg")" alt="" width="634" height="599" id="floor5-img-1"/>
-                <img src="@routes.Assets.versioned("images/activity/fashion-floor5-2.jpg")" alt="" width="334" height="234" id="floor5-img-2" />
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor5-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="634" height="599" id="floor5-img-1"/>
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor5-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="334" height="234" id="floor5-img-2" />
                 <div class="activity-text">
                     耳环是头部饰品中，<br/>
                     最常出现也最能直接代表你品味的单品之一。<br/>
@@ -253,11 +275,11 @@
             </div>
             <div class="line"></div>
             <ul class="clearfix pro-list">
-                <li><a target="_blank" href="http://www.fashiongeeker.com/product/387"><img src="@routes.Assets.versioned("images/activity/fashion-floor5-pro-1.jpg")" alt="" width="393" height="280"/></a></li>
-                <li><a target="_blank" href="http://www.fashiongeeker.com/product/391"><img src="@routes.Assets.versioned("images/activity/fashion-floor5-pro-2.jpg")" alt="" width="393" height="280"/></a></li>
-                <li><a target="_blank" href="http://www.fashiongeeker.com/product/395"><img src="@routes.Assets.versioned("images/activity/fashion-floor5-pro-3.jpg")" alt="" width="393" height="280"/></a></li>
-                <li><a target="_blank" href="http://www.fashiongeeker.com/product/399"><img src="@routes.Assets.versioned("images/activity/fashion-floor5-pro-4.jpg")" alt="" width="393" height="280"/></a></li>
-                <li><a target="_blank" href="http://www.fashiongeeker.com/product/401"><img src="@routes.Assets.versioned("images/activity/fashion-floor5-pro-5.jpg")" alt="" width="393" height="280"/></a></li>
+                <li><a target="_blank" href="http://www.fashiongeeker.com/product/387"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor5-pro-1.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="393" height="280"/></a></li>
+                <li><a target="_blank" href="http://www.fashiongeeker.com/product/391"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor5-pro-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="393" height="280"/></a></li>
+                <li><a target="_blank" href="http://www.fashiongeeker.com/product/395"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor5-pro-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="393" height="280"/></a></li>
+                <li><a target="_blank" href="http://www.fashiongeeker.com/product/399"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor5-pro-4.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="393" height="280"/></a></li>
+                <li><a target="_blank" href="http://www.fashiongeeker.com/product/401"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/fashion-floor5-pro-5.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")"  width="393" height="280"/></a></li>
                 <li class="last">
                     <p>1. <a target="_blank" href="http://www.fashiongeeker.com/product/387"><span class="pro-name">@mapName.get(387)</span> ￥@mapPrice.get(387)</a></p>
                     <p>2. <a target="_blank" href="http://www.fashiongeeker.com/product/391"><span class="pro-name">@mapName.get(391)</span> ￥@mapPrice.get(391)</a></p>
@@ -275,4 +297,13 @@
         </div>
     </div>
     <!--end fashion-->
+    </div>
+    <!--siderbar-->
+    <ul class="sider-bar" id="cart">
+        <li class="cart"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="like-product"><a href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
+        <li class="like-designer"><a href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+        <li class="go-top"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
+    </ul>
+    <!--end sideebar-->
 }
