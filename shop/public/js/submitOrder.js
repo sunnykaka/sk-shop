@@ -549,7 +549,7 @@ $(function(){
                     $.dialog({
                         title:'提示',
                         lock:true,
-                        content:'<div class="warning-inner clearfix"><p class="warning"><span class="warning-ico"></span>订单提交有误，请联系客服人员</p></div>',
+                        content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
                         width:540,
                         height:248,
                         btn: {
