@@ -2,7 +2,7 @@
 1. 如果一个Controller接收GET请求方式, 请不要将请求参数放在http body中.因为服务器不会解析.
 2. play的Controller方法的参数,只能通过QueryString或者url占位符的形式传递,http body的参数不会解析到Controller方法的参数里.
 3. 一般情况下, GET和DELETE的请求只能放在QueryString里, 而PUT, POST的请求参数只能放在http body里.
-4. GET, PUT, DELETE都是幂等的, POST不是.
+4. GET, PUT, DELETE都是幂等的,  POST不是.
 5. 改完routes文件后,最好先编译项目再写测试,因为修改的routes不会自动编译.
 
 
