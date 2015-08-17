@@ -13,8 +13,8 @@
                         <li>订单编号：<span class="pay-number">@tradeOrder.getOrderNo()</span><a href="/my/order/info?orderId=@tradeOrder.getOrderId()" class="check-order">查看订单&gt;&gt;</a></li>
                     }
                     </ul>
+                    <p>支付金额：<span class="pay-money">@resultMap.get("payTotalFee")</span></p>
                 }
-                <p>支付金额：<span class="pay-money">@resultMap.get("payTotalFee")</span></p>
                 <a href="@routes.Application.index()" class="continueShopping">继续购物</a>
             </div>
         </div>

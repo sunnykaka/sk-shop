@@ -1,5 +1,6 @@
 package ordercenter.payment;
 
+import common.utils.Money;
 import common.utils.ParamUtils;
 import common.utils.play.BaseGlobal;
 import ordercenter.models.Trade;
@@ -105,7 +106,13 @@ public class PayResponseHandler {
 
         if(this.tradeOrder != null && payMethod != null) {
             this.trade.setDefaultbank(tradeOrder.getDefaultPayOrg());
-            this.trade.setPayTotalFee(tradeOrder.getPayTotalFee());
+            Money totalFee = Money.valueOf(0);
+            if(tradeOrderList != null && tradeOrderList.size() > 0) {
+                for(TradeOrder tradeOrder : tradeOrderList) {
+                    totalFee = totalFee.add(tradeOrder.getPayTotalFee());
+                }
+            }
+            this.trade.setPayTotalFee(totalFee);
             this.trade.setBizType(tradeOrder.getBizType().getName());
             this.trade.setPayMethod(tradeOrder.getPayMethod().getName());
 
