@@ -253,14 +253,15 @@
         <div id="size-detail" style="display: none;">
             <div class="size-detail-inner">
                 <div class="size-detail-header">
-                    <h4>尺码小帮手 <span class="line">|</span> <span>请放心挑选尺码，尚客7天退货服务替您保驾护航！</span></h4>
+                    <h4>尺码小帮手 <span class="line">|</span> <span>让穿衣更简单！</span></h4>
                 </div>
                 <div class="size-detail-table">
                     @Html(pd.getDesignerSize.getContent)
                 </div>
                 @if(pd.getProduct.getModelInfo != null && !"".eq(pd.getProduct.getModelInfo)){
-                    <div class="model-info">
-                        <p>模特信息：@pd.getProduct.getModelInfo </p>
+                    <div class="model-info clearfix" style="width: 100%;">
+                        <div style="float: left">模特信息（Models Measurements）：</div>
+                        <div style="float: left"><p style="line-height: 25px;">@Html(pd.getProduct.getModelInfo) </p></div>
                     </div>
                 }
 
