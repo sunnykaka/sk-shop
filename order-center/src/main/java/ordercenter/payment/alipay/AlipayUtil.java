@@ -38,9 +38,11 @@ public class AlipayUtil {
         Map<String, String> sParaNew = paraFilter(params);
         String mysign = buildMysign(sParaNew);
         String responseTxt = "true";
+        /*
         if (params.get("notify_id") != null) {
             responseTxt = verifyResponse(params.get("notify_id"));
         }
+        */
         String sign = "";
         if (params.get("sign") != null) {
             sign = params.get("sign");
@@ -60,8 +62,7 @@ public class AlipayUtil {
 
         for (String key : sArray.keySet()) {
             String value = sArray.get(key);
-            if (value == null || value.equals("") || key.equalsIgnoreCase("sign")
-                    || key.equalsIgnoreCase("sign_type")) {
+            if (value == null || value.equals("") || key.equalsIgnoreCase("sign") || key.equalsIgnoreCase("sign_type")) {
                 continue;
             }
             result.put(key, value);

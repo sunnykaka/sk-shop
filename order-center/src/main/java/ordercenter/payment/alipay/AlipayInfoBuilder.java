@@ -41,7 +41,13 @@ public class AlipayInfoBuilder implements BackInfoBuilder {
     public Map<String, String> buildParam(Request request) {
         //获取支付宝GET过来反馈信息
         Map<String, String> params = new HashMap<String, String>();
-        Map requestParams = request.queryString();
+        Map<String, String[]> requestParams = request.queryString();
+        if(requestParams == null || requestParams.size() == 0) {
+            if("POST".equalsIgnoreCase(request.method())){
+                requestParams = request.body().asFormUrlEncoded();
+            }
+        }
+
         if(requestParams != null) {
             for (Object oName : requestParams.keySet()) {
                 String name = (String) oName;
