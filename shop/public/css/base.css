@@ -482,8 +482,12 @@ table .pro{width: 360px;}
 .pay-inner .pay-info h3,.pay-success-inner h3,.pay-fail h3{height: 32px;line-height: 32px;font-size: 16px;padding-left: 40px;
     background: url("../images/sk-sprite.png") no-repeat -162px -1165px;margin-bottom: 10px;
 }
+.pay-success-inner .pay-success-info ul,.pay-success-inner .pay-success-info ul li{width: 338px;}
+.pay-success-inner .pay-success-info li{text-align: left;height: 32px;line-height: 32px;font-size:14px;text-indent: 34px; }
+.pay-success-inner .pay-success-info li a{float: right;}
 .pay-fail h3{background: url("../images/sk-sprite.png") no-repeat -162px -1127px;}
-.pay-inner p,.pay-success-info p{font-size: 14px;line-height: 32px;text-indent: 34px; color: #4a4947;}
+.pay-inner p,.pay-success-info p{font-size: 14px;height:32px;line-height: 32px;text-indent: 34px; color: #4a4947;}
+.pay-success-info p{margin-bottom: 10px;}
 .pay-inner .pay-list{width:815px;margin-left:100px;border:1px solid #cccccc;padding: 38px 90px 80px;}
 .pay-inner .pay-list h3{font-weight: normal;border-bottom: 1px solid #cccccc;padding-bottom: 8px;}
 .pay-inner .pay-list h4{font-weight: normal;}
@@ -502,10 +506,12 @@ table .pro{width: 360px;}
 .pay-success-inner .pay-success-info{margin-top: 60px;}
 .pay-success-inner .pay-success-info a{display: block;margin: 0 0 0 32px;}
 .pay-success-inner .pay-success-info a:hover{text-decoration: none;}
-.pay-success-inner .pay-success-info .check-order{color: #FF2D54;font-size: 13px;margin-bottom: 10px;}
+.pay-success-inner .pay-success-info .check-order{color: #FF2D54;font-size: 14px;}
 .pay-success-inner .pay-success-info .continueShopping,.pay-success-inner .pay-success-info .rePay{width: 150px;height: 40px;line-height: 40px;background: #000;color: #fff;
     text-align: center;padding: 0;
 }
+.pay-success-inner .pay-success-info .continueShopping:hover,.pay-success-inner .pay-success-info .rePay:hover{
+    background-color: #29292c;  border-color: #29292c; }
 /*end pay*/
 /*forget-pw*/
 .forget-pw-fir,.forget-pw-sec,.forget-pw-thr,.forget-pw-fou{margin-bottom: 100px;}
