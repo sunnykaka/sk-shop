@@ -52,10 +52,10 @@ public class Global extends BaseGlobal {
     @Override
     protected void runSchedulers() {
 
-        stateCoordinator.addScheduler(
-                of(Duration.create(20, TimeUnit.SECONDS)),
-                of(Duration.create(60, TimeUnit.SECONDS)),
-                ExhibitionStartReminderTask.getInstance());
+//        stateCoordinator.addScheduler(
+//                of(Duration.create(20, TimeUnit.SECONDS)),
+//                of(Duration.create(60, TimeUnit.SECONDS)),
+//                ExhibitionStartReminderTask.getInstance());
 
         stateCoordinator.addScheduler(
                 of(Duration.create(1, TimeUnit.MINUTES)),
