@@ -75,15 +75,14 @@ public class PayResponseHandler {
             result.setResult(false);
             return result;
         } else {
-            //现在只对一个订单进行支付
+            //同一个交易其交易方式相同，取其中一个交易订单信息来判断即可
             tradeOrder = tradeOrderList.get(0);
             payMethod = tradeOrder.getPayMethod();
 
             //设置支付结束后处理类对象，不同的支付方式此处的值不同
-            if(PayMethod.directPay.getName().equals(payMethod.getName())
-                    || PayMethod.bankPay.getName().equals(payMethod.getName())) { //支付宝和银行卡(银行，目前也是通过支付宝来实现)
+            if(PayMethod.directPay.getName().equals(payMethod.getName())) { //银行|| PayMethod.bankPay.getName().equals(payMethod.getName()
                 this.builder = new AlipayInfoBuilder();
-            } else  if(PayMethod.Tenpay.getName().equals(payMethod.getName())
+            } else if(PayMethod.Tenpay.getName().equals(payMethod.getName())
                     || PayMethod.WXSM.getName().equals(payMethod.getName()) ) {
                 this.builder = new TenpayInfoBuilder();
             } else {
@@ -95,21 +94,6 @@ public class PayResponseHandler {
 
         this.trade = this.builder.buildFromRequest(request);
         this.backParams = this.builder.buildParam(request);
-
-        boolean signVerifyFlag = trade.verify(this.backParams, type);
-        Logger.info("交易号号为：" + tradeNoStr + "----签名认证结果------------:" + signVerifyFlag);
-
-        if (!signVerifyFlag) {
-            Logger.error("回调签名验证出错: " + backParams);
-            result.setResult(false);
-            return result;
-        }
-
-        if (!trade.isSuccess()) {
-            Logger.error("交易不成功，状态为failure: " + backParams);
-            result.setResult(false);
-            return result;
-        }
 
         User user = SessionUtils.currentUser();
         if(user != null) {
@@ -139,6 +123,21 @@ public class PayResponseHandler {
         } catch (Exception e) {
             Logger.error("支付成功，但是后续操作出现问题：实例化回调处理类时失败,TradeNo:" + trade.getOuterTradeNo(), e);
             result.setResult(true);
+            return result;
+        }
+
+        boolean signVerifyFlag = trade.verify(this.backParams, type);
+        Logger.info("交易号号为：" + tradeNoStr + "----签名认证结果------------:" + signVerifyFlag);
+
+        if (!signVerifyFlag) {
+            Logger.error("回调签名验证出错: " + backParams);
+            result.setResult(false);
+            return result;
+        }
+
+        if (!trade.isSuccess()) {
+            Logger.error("交易不成功，状态为failure: " + backParams);
+            result.setResult(false);
             return result;
         }
 

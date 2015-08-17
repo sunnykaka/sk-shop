@@ -7,10 +7,9 @@
         <!-- pay-info -->
         <div class="pay-success-info pay-fail">
             <h3>对不起，您的订单支付失败！</h3>
-            <p>订单编号：<span class="pay-number">@resultMap.get("orderNo")</span></p>
-            <p>支付金额：<span class="pay-money">@resultMap.get("payTotalFee")</span></p>
-            <a href="/my/order/info?orderId=@resultMap.get("orderId")" class="check-order">查看订单&gt;&gt;</a>
-            <a href="/order/toOrderPlay?orderId=@resultMap.get("orderId")" class="rePay">重新支付</a>
+            @if(resultMap.get("errOrderIds") != null && resultMap.get("errOrderIds").toString.trim.length > 0) {
+                <a href="/order/toOrderPlay?orderIds=@resultMap.get("errOrderIds")" class="rePay">重新支付</a>
+            }
         </div>
     </div>
 </div>

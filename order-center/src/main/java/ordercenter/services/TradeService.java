@@ -157,6 +157,7 @@ public class TradeService {
      * @param orderList
      */
     public void submitTradeOrderProcess(String tradeNo, List<Order> orderList, PayMethod payMethodEnum) {
+        Logger.info("--------TradeService submitTradeOrderProcess begin exe-----------" + tradeNo);
         for(Order order : orderList) {
             //创建交易订单信息
             TradeOrder tradeOrder = new TradeOrder();
@@ -171,16 +172,6 @@ public class TradeService {
             tradeOrder.setDefaultPayOrg(order.getPayBank().getForexBankName());
             tradeOrder.setIsDelete(false);
             this.createTradeOrder(tradeOrder);
-
-            //更新订单
-            String jpql = "update Order o set o.accountType=:accountType, o.payType=:payType, o.payBank=:payBank, o.updateTime=:modifyDate where o.id=:orderId";
-            Map<String, Object> params = new HashMap<>();
-            params.put("accountType", order.getAccountType());
-            params.put("payType", order.getPayType());
-            params.put("payBank", order.getPayBank());
-            params.put("modifyDate", DateUtils.current());
-            params.put("orderId", order.getId());
-            generalDao.update(jpql, params);
         }
     }
 
@@ -190,7 +181,7 @@ public class TradeService {
      * @return
      */
     public int updateTradeOrderPaySuccessful(Trade trade) {
-        Logger.info("--------TradeSuccessService updateTradeOrderPaySuccessful begin exe-----------" + trade);
+        Logger.info("--------TradeService updateTradeOrderPaySuccessful begin exe-----------" + trade);
 
         String jpql = "update TradeOrder o set o.payFlag=:payFlag,o.updateTime=:updateTime where o.tradeNo=:tradeNo ";
         Map<String, Object> params = new HashMap<>();

@@ -136,7 +136,7 @@ GET         /cart/promptlyPayChooseAddress              @controllers.shop.CartCo
 
 #订单
 GET         /order/submitOrder                          @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
-GET         /order/toOrderPlay                          @controllers.shop.OrderAndPayController.toOrderPlay(orderId:Int)
+GET         /order/toOrderPlay                          @controllers.shop.OrderAndPayController.toOrderPlay(orderIds:String)
 GET         /order/submitTradeOrder                     @controllers.shop.OrderAndPayController.submitTradeOrder(payType:String,payMethod:String,payOrg:String,orderIds:String)
 GET         /order/toPayOrder                           @controllers.shop.OrderAndPayController.toPayOrder(payMethod:String,payOrg:String,orderIds:String,tradeNo:String)
 

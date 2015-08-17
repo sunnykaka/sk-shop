@@ -140,7 +140,7 @@
                                                 </td>
                                                 <td rowspan="@order.getOrderItemList.size()" class="control">
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
-                                                        <p><a href="@controllers.shop.routes.OrderAndPayController.toOrderPlay(order.getId)" class="pay">立即付款</a></p>
+                                                        <p><a href="@controllers.shop.routes.OrderAndPayController.toOrderPlay(String.valueOf(order.getId))" class="pay">立即付款</a></p>
                                                     }
                                                     @if(order.getOrderState.getName.equals(OrderState.Send.getName)){
                                                         <p><a href="@controllers.user.routes.MyOrderController.orderReceiving(order.getId)" class="confirm">确认收货</a></p>

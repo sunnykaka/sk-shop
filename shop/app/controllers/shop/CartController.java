@@ -265,7 +265,7 @@ public class CartController extends Controller {
         }
         List<Integer>cartItemIdlist = new ArrayList<Integer>();
         try {
-            String[] split = selCartItems.split(",");
+            String[] split = selCartItems.split("_");
             for (int i = 0; i < split.length; i++) {
                 cartItemIdlist.add(Integer.valueOf(split[i]));
             }
@@ -322,6 +322,9 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result chooseAddress(String selCartItems) {
+        if(selCartItems.contains("_")) {
+            selCartItems = selCartItems.replaceAll("_", ",");
+        }
         User curUser = SessionUtils.currentUser();
         Cart cart = cartProcess.buildUserCartBySelItem(curUser.getId(), selCartItems);
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);

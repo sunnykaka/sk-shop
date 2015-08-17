@@ -207,13 +207,13 @@ $(function(){
         }
         $.ajax({
             type: "get",
-            url: '/cart/selCartItemProcess?selCartItems='+cartItem.join(','),
+            url: '/cart/selCartItemProcess?selCartItems='+cartItem.join('_'),
             async: false,
             dataType: 'json',
             cache: false,
             success: function (data) {
                 if(data.result){
-                    window.location.href = '/cart/chooseAddress?selCartItems='+cartItem.join(',');
+                    window.location.href = '/cart/chooseAddress?selCartItems='+cartItem.join('_');
                 }else{
                     $.dialog({
                         title:'提示',

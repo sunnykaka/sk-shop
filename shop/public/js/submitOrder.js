@@ -544,7 +544,7 @@ $(function(){
             cache: false,
             success: function (data) {
                 if(data.result){
-                    window.location.href = '/order/toOrderPlay?orderId='+data.data;
+                    window.location.href = '/order/toOrderPlay?orderIds='+data.data;
                 }else{
                     $.dialog({
                         title:'提示',

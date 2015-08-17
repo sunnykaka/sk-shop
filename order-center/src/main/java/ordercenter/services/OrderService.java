@@ -3,6 +3,7 @@ package ordercenter.services;
 import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
+import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.constants.CancelOrderType;
 import ordercenter.constants.OrderState;
@@ -20,10 +21,7 @@ import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 订单Service
@@ -515,66 +513,89 @@ public class OrderService {
         return  logistics;
     }
 
+    public String submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address) {
+        //将购物车项创建成订单项
+        List<CartItem> cartItemList = cart.getCartItemList();
 
-   public int submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address) {
-       int orderId = 0;
-       //创建订单
-       Order order = new Order();
-       order.setOrderNo(OrderNumberUtil.getOrderNo()); //生成订单号
-       order.setAccountType(user.getAccountType());
-       order.setUserId(user.getId());
-       order.setUserName(user.getUserName());
-       order.setTotalMoney(cart.getTotalMoney());
-       order.setOrderState(OrderState.Create);
+        Map<Integer, List<CartItem>> designerCartItemListMap = new HashMap<Integer, List<CartItem>>();
+        for(CartItem cartItem : cartItemList) {
+            List<CartItem> designerCartItemList = designerCartItemListMap.get(cartItem.getCustomerId());
+            if(designerCartItemList == null) {
+                designerCartItemList = new ArrayList<CartItem>();
+            }
+            designerCartItemList.add(cartItem);
+            designerCartItemListMap.put(cartItem.getCustomerId(), designerCartItemList);
+        }
 
-       DateTime curTime = DateUtils.current();
-       order.setCreateTime(curTime);
-       order.setMilliDate(curTime.getMillis());
-       order.setIsDelete(false);
-       order.setBrush(false);
-       this.createOrder(order);
+        StringBuilder orderIdSb = new StringBuilder();
+        Set<Integer> designerIdSet = designerCartItemListMap.keySet();
+        for(int designerId : designerIdSet) {
+            //创建订单
+            Order order = new Order();
+            //生成订单号
+            order.setOrderNo(OrderNumberUtil.getOrderNo());
+            order.setAccountType(user.getAccountType());
+            order.setUserId(user.getId());
+            order.setUserName(user.getUserName());
 
-       orderId = order.getId();
+            List<CartItem> designerCartItemList = designerCartItemListMap.get(designerId);
+            Money totalMoney = Money.valueOf(0);
+            for(CartItem cartItem : designerCartItemList) {
+                totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
+            }
+            order.setTotalMoney(totalMoney);
 
-       //创建订单项目
-       List<CartItem> cartItemList = cart.getCartItemList();
-       for(CartItem item : cartItemList) {
-           OrderItem orderItem = new OrderItem();
-           orderItem.setOrderId(orderId);
-           orderItem.setSkuId(item.getSkuId());
-           orderItem.setBarCode(item.getBarCode());
-           orderItem.setItemNo(item.getId() + "");
-           orderItem.setProductId(item.getProductId());
-           orderItem.setCategoryId(item.getCategoryId());
-           orderItem.setStorageId(item.getStorageId());
-           orderItem.setCustomerId(item.getCustomerId());
-           orderItem.setProductName(item.getProductName());
-           orderItem.setOrderState(order.getOrderState());
-           orderItem.setStoreStrategy(StoreStrategy.PayStrategy);
-           orderItem.setNumber(item.getNumber());
-           orderItem.setMainPicture(item.getMainPicture());
-           orderItem.setCurUnitPrice(item.getCurUnitPrice());
-           orderItem.setTotalPrice(item.getTotalPrice());
-           orderItem.setAppraise(false);
-           this.createOrderItem(orderItem);
+            order.setOrderState(OrderState.Create);
+            DateTime curTime = DateUtils.current();
+            order.setCreateTime(curTime);
+            order.setMilliDate(curTime.getMillis());
+            order.setIsDelete(false);
+            order.setBrush(false);
+            this.createOrder(order);
 
-           //扣减库存
-           skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
-       }
+            int orderId = order.getId();
 
-       //创建订单状态历史
-       this.createOrderStateHistory(new OrderStateHistory(order));
+            if(orderIdSb.length() > 0) {
+                orderIdSb.append("_");
+            }
+            orderIdSb.append(orderId);
 
-       //创建订单物流-邮寄地址
-       Logistics logistics = new Logistics(address);
-       logistics.setOrderId(orderId);
-       this.createLogistics(logistics);
+            for(CartItem item : designerCartItemList) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrderId(orderId);
+                orderItem.setSkuId(item.getSkuId());
+                orderItem.setBarCode(item.getBarCode());
+                orderItem.setItemNo(item.getId() + "");
+                orderItem.setProductId(item.getProductId());
+                orderItem.setCategoryId(item.getCategoryId());
+                orderItem.setStorageId(item.getStorageId());
+                orderItem.setCustomerId(item.getCustomerId());
+                orderItem.setProductName(item.getProductName());
+                orderItem.setOrderState(order.getOrderState());
+                orderItem.setStoreStrategy(StoreStrategy.NormalStrategy);
+                orderItem.setNumber(item.getNumber());
+                orderItem.setMainPicture(item.getMainPicture());
+                orderItem.setCurUnitPrice(item.getCurUnitPrice());
+                orderItem.setTotalPrice(item.getTotalPrice());
+                orderItem.setAppraise(false);
+                this.createOrderItem(orderItem);
+                //扣减库存
+                skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
+            }
 
-       //非立即购买，需要清除用户购物车项
-       if(!isPromptlyPay) {
-           cartService.deleteSelectCartItemBySelIds(cart.getId(),selItems);
-       }
-       return orderId;
-   }
+            //创建订单状态历史
+            this.createOrderStateHistory(new OrderStateHistory(order));
 
+            //创建订单物流-邮寄地址
+            Logistics logistics = new Logistics(address);
+            logistics.setOrderId(orderId);
+            this.createLogistics(logistics);
+
+            //非立即购买，需要清除用户购物车项
+            if(!isPromptlyPay) {
+                cartService.deleteSelectCartItemBySelIds(cart.getId(),selItems);
+            }
+        }
+        return orderIdSb.toString();
+    }
 }

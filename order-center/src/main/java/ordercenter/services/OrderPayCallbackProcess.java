@@ -31,10 +31,15 @@ public class OrderPayCallbackProcess implements PayCallback {
             Logger.error("「订单回调」订单支付成功，但是系统中找不到交易信息！，此交易号号为：" + trade.getTradeNo());
             result.setResult(false);
         } else {
-            //现在只对一个订单进行支付
-            TradeOrder tradeOrder = tradeOrderList.get(0);
-            result.addData("orderNo", tradeOrder.getOrderNo());
-            result.addData("orderId", tradeOrder.getOrderId());
+            result.addData("tradeOrderList", tradeOrderList);
+            StringBuilder orderIdSb = new StringBuilder();
+            for(TradeOrder tradeOrder : tradeOrderList) {
+                if(orderIdSb.length() > 0) {
+                    orderIdSb.append("_");
+                }
+                orderIdSb.append(tradeOrder.getOrderId());
+            }
+            result.addData("errOrderIds", orderIdSb.toString());
         }
         Logger.info("「订单回调」CallBackResult初始化Success");
         return result;

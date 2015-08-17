@@ -1,5 +1,6 @@
 package controllers.shop;
 
+import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.Money;
 import ordercenter.constants.BizType;
@@ -31,7 +32,9 @@ import views.html.shop.orderPlay;
 import views.html.shop.orderToPay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -68,7 +71,7 @@ public class OrderAndPayController extends Controller {
         Cart cart = null;
         try {
             if(selItems == null || selItems.trim().length() == 0) {
-                return ok(new JsonResult(false,"去结算项为空！").toNode());
+                return ok(new JsonResult(false,"订单为空！").toNode());
             }
 
             User curUser = SessionUtils.currentUser();
@@ -102,8 +105,8 @@ public class OrderAndPayController extends Controller {
 
                 Money totalMoney = Money.valueOf(0);
                 totalMoney = cartProcess.setCartItemValues(cartItem);
-
                 cart.setTotalMoney(totalMoney);
+
                 List<CartItem> cartItemList = new ArrayList<CartItem>();
                 cartItemList.add(cartItem);
                 cart.setCartItemList(cartItemList);
@@ -122,7 +125,7 @@ public class OrderAndPayController extends Controller {
             }
 
             if (cart == null || cart.getCartItemList().size() == 0) {
-                return ok(new JsonResult(false,"购物车为空").toNode());
+                return ok(new JsonResult(false,"订单为空").toNode());
             }
 
             //库存校验
@@ -140,8 +143,8 @@ public class OrderAndPayController extends Controller {
             }
 
             //生成订单相关信息
-            int orderId = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
-            return ok(new JsonResult(true,"生成订单成功",orderId).toNode());
+            String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
+            return ok(new JsonResult(true,"生成订单成功",orderIds).toNode());
         } catch (Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             return ok(new JsonResult(false,"生成订单失败，请联系商城客服人员！").toNode());
@@ -150,14 +153,34 @@ public class OrderAndPayController extends Controller {
 
     /**
      * 提交订单-选择支付方式(生成订单)
-     * @param orderId 用户选择的寄送地址
+     * @param orderIds 用户的订单
      * @return
      */
     @SecuredAction
-    public Result toOrderPlay(int orderId) {
+    public Result toOrderPlay(String orderIds) {
         User curUser = SessionUtils.currentUser();
-        Order order = orderService.getOrderById(orderId, curUser.getId());
-        return ok(orderPlay.render(order));
+
+        String[] split = null;
+        split = orderIds.split("_");
+        //拆出来的订单不会很多，一般不会超过10个，所以采用for循环获取订单的方式
+        StringBuilder orderIdsSb = new StringBuilder();
+        Money totalMoney = Money.valueOf(0);
+        for(int i=0; i < split.length; i++) {
+            int orderId = Integer.valueOf(split[i]);
+            Order order = orderService.getOrderById(orderId, curUser.getId());
+            if(order != null) {
+                if(orderIdsSb.length() > 0) {
+                    orderIdsSb.append("_");
+                }
+                orderIdsSb.append(orderId);
+                totalMoney = totalMoney.add(order.getTotalMoney());
+            }
+        }
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("orderIds", orderIdsSb.toString());
+        resultMap.put("totalMoney", totalMoney);
+        return ok(orderPlay.render(resultMap));
     }
 
     /**
@@ -193,7 +216,7 @@ public class OrderAndPayController extends Controller {
             //仅用于验证用
             PayMethod payMethodEnum = PayMethod.valueOf(payMethod);
 
-            String[] split = orderIds.split(",");
+            String[] split = orderIds.split("_");
             Integer[] idList = new Integer[split.length];
             for (int i = 0; i < split.length; i++) {
                 if (!NumberUtils.isNumber(split[i])) {
@@ -225,9 +248,11 @@ public class OrderAndPayController extends Controller {
                     }
                 }
 
+                //更新订单
                 order.setAccountType(curUser.getAccountType());
                 order.setPayType(TradePayType.valueOf(payType));
                 order.setPayBank(payBank);
+                order.setUpdateTime(DateUtils.current());
 
                 orderList.add(order);
             }
@@ -252,22 +277,15 @@ public class OrderAndPayController extends Controller {
      */
     @SecuredAction
     public Result toPayOrder(String payMethod, String payOrg, String orderIds, String tradeNo) {
-        String[] split = orderIds.split(",");
-        Integer[] idList = new Integer[split.length];
+        String[] split = orderIds.split("_");
+        List<Integer> idList = new ArrayList<Integer>();
         for (int i = 0; i < split.length; i++) {
-            if (!NumberUtils.isNumber(split[i])) {
-                Logger.warn("订单支付出现异常:" + "订单号" + split[i] + "错误！");
-                return ok(new JsonResult(false,"订单号" + split[i] + "错误！").toNode());
-            } else {
-                idList[i] = Integer.valueOf(split[i]);
-            }
+            idList.add(Integer.valueOf(split[i]));
         }
         PayInfoWrapper payInfoWrapper = new PayInfoWrapper();
         payInfoWrapper.setTradeNo(tradeNo);
         //设置购买方式为order，订单
         payInfoWrapper.setBizType(BizType.Order.getName());
-
-        //payInfoWrapper.setCallBackClass(OrderPayCallbackProcess.class); //ldj
 
         payInfoWrapper.setPayMethod(PayMethod.valueOf(payMethod));
         payInfoWrapper.setDefaultbank(payOrg);
@@ -289,7 +307,7 @@ public class OrderAndPayController extends Controller {
         Logger.info("--------------------真正的支付机构：" + bank.getValue() + ":" + bank.getName() + ":" + bank.getForexBankName());
         payInfoWrapper.setDefaultbank(bank.getForexBankName());
 
-        List<Order> orderList = new ArrayList<Order>(idList.length);
+        List<Order> orderList = new ArrayList<Order>(idList.size());
         for (int id : idList) {
             Order order = orderService.getOrderById(id);
             orderList.add(order);
