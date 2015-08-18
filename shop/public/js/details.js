@@ -14,11 +14,42 @@ $(function () {
         }
     });
 
-
+    //索引点击
     $('.imgIndex a').on('click',function(){
         $(this).addClass('active').siblings().removeClass();
         $('#bigPic').attr('src',$(this).attr('bigimg'));
     });
+
+    $('.sliderBtn .next').on('click',function(){
+        var aIndex = $('.imgIndex a'),len = aIndex.size();
+        var index =  aIndex.index($('.imgIndex .active'));
+        index++;
+        index>=len? index = 0 : index;
+        invoke(index);
+    });
+    $('.sliderBtn .prev').on('click',function(){
+        var aIndex = $('.imgIndex a'),len = aIndex.size();
+        var index =  aIndex.index($('.imgIndex .active'));
+        index--;
+        index<=0? index = (len-1) : index;
+        invoke(index);
+    });
+
+    //图片切换
+    function invoke(index){
+        $('.imgIndex a').removeClass();
+        $('.imgIndex a').eq(index).addClass('active');
+        $('#bigPic').attr('src',$('.imgIndex a').eq(index).attr('bigimg'));
+    }
+
+    $('.detail-inner .video').hover(function(){
+        $('.sliderBtn').fadeIn();
+    },function(){
+        $('.sliderBtn').fadeOut();
+    });
+
+
+
 
     //倒计时
     setInterval(function(){
