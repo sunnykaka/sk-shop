@@ -77,7 +77,13 @@ $('#pay-money-btn').click(function(){
                                                         $('#second').text(index);
                                                         if(index--<1){
                                                             clearInterval(interval);
-                                                             window.location.href = "/my/order/info?orderId="+$('#orderIds').val();
+                                                            var orderId = $('#orderIds').val();
+                                                            if(/_/g.test(orderId)){
+                                                                window.location.href = "/my/order";
+                                                            }else{
+                                                                window.location.href = "/my/order/info?orderId="+$('#orderIds').val();
+                                                            }
+
                                                         }
                                                       },1000);
                                                      $.dialog.get.idialog.$content.append('<div class="success-inner clearfix"><h4>检测到订单已成功支付</h4>' +
