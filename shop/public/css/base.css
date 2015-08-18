@@ -551,7 +551,11 @@ table .pro{width: 360px;}
 .detail-inner .info h2{padding: 10px 0;}
 .detail-inner .info h3{padding-bottom: 10px;width: 400px;margin:0 auto;border-bottom: 1px solid #cccccc;}
 .detail-inner .info p{margin-top:10px;line-height: 32px;font-size: 13px;}
-.detail-inner .video{width: 803px;height: 536px;overflow: hidden;margin-bottom: 32px;}
+.detail-inner .video{width: 803px;height: 560px;overflow: hidden;margin-bottom: 32px;position: relative;}
+.detail-inner .video img{display: block;margin-bottom: 10px;}
+.detail-inner .video .imgIndex{width: 100%;text-align: center;}
+.detail-inner .video .imgIndex a{display:inline-block;width: 12px;height: 12px;background: #000;outline: none;margin-left: 5px;text-indent: -99999px;cursor: pointer;border-radius: 50%;}
+.detail-inner .video .imgIndex .active{background: #fd2049;}
 .detail-inner .Collocation{margin-bottom: 30px;overflow: hidden;}
 .detail-inner .Collocation h3{position:relative;width: 284px;text-align: center;padding: 10px;border-bottom: 1px solid #000;margin: 0 auto 30px;font-weight: normal;font-size: 16px;}
 .detail-inner .Collocation h3 span{top: 34px;left: 145px;}

@@ -15,13 +15,10 @@ $(function () {
     });
 
 
-
-    //$("#addToCart").click(function(event){
-    //
-    //});
-
-
-
+    $('.imgIndex a').on('click',function(){
+        $(this).addClass('active').siblings().removeClass();
+        $('#bigPic').attr('src',$(this).attr('bigimg'));
+    });
 
     //倒计时
     setInterval(function(){
@@ -393,7 +390,6 @@ $(function () {
         } else {
             var _limit = defaultSku['limit'];
         }
-
         var _price = 0;
         var _marketing = false;
         var _marketingPrice = 0;
@@ -404,7 +400,6 @@ $(function () {
         if (!productOnline) {
             amountInputEle.val(0)
         }
-
         //有多个sku的情况
         if (!!options.hasSkuMap) {
             var isDirectBuy = options.isDirectBuy;
@@ -420,7 +415,6 @@ $(function () {
 
         //当有sku组合时，绑定事件
         function attachSkuEvent() {
-
             //skumap初始化及事件绑定
             _skuEles.each(function () {
                 var self = $(this);
@@ -478,7 +472,6 @@ $(function () {
                         });
 
                     }
-
                     var len = _selectedIds.length;
                     //用已选中的节点验证待测试节点 underTestObjs
                     _skuEles.not(selectedObjs).not(self).each(function () {
@@ -535,11 +528,15 @@ $(function () {
                                 }
                             }
                         }
+                        if (currentSku.imageList && currentSku.imageList.length > 0) {
+                            var bigImgUrl = currentSku.imageList[0];
+                                $('.imgIndex a').each(function(index,item){
+                                   if($(item).attr('bigimg') == bigImgUrl){$(item).addClass('active').siblings().removeClass();}
+                               });
+                               $('#bigPic').attr('src',bigImgUrl);
+                        }
 
                     }
-
-
-
                 } else {
 
                     _selectedIds = [];
