@@ -1,7 +1,7 @@
 package scheduler;
 
+import common.services.MessageJobService;
 import common.utils.scheduler.SchedulerTask;
-import services.MessageJobService;
 import utils.Global;
 
 /**

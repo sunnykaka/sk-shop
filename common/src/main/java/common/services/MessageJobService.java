@@ -1,12 +1,11 @@
-package services;
+package common.services;
 
-import common.services.GeneralDao;
+import common.constants.MessageJobSource;
+import common.constants.MessageJobType;
+import common.models.MessageJob;
 import common.utils.DateUtils;
 import common.utils.EmailUtils;
 import common.utils.SmsUtils;
-import constants.MessageJobSource;
-import constants.MessageJobType;
-import models.MessageJob;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

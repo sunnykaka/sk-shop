@@ -1,10 +1,10 @@
-package models;
+package common.models;
 
 
+import common.constants.MessageJobSource;
+import common.constants.MessageJobType;
 import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
-import constants.MessageJobSource;
-import constants.MessageJobType;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 

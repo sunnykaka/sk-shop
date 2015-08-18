@@ -1,8 +1,9 @@
 package controllers.user;
 
+import common.constants.MessageJobSource;
 import common.exceptions.AppBusinessException;
+import common.services.MessageJobService;
 import common.utils.*;
-import constants.MessageJobSource;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.MessageJobService;
 import usercenter.cache.SecurityCache;
 import usercenter.domain.SmsSender;
 import usercenter.dtos.CodeForm;

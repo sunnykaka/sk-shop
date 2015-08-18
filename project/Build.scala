@@ -53,28 +53,16 @@ object ApplicationBuild extends Build {
       dependsOn(user).dependsOn(product).dependsOn(order)
 */
 
-  lazy val shop = (project in file("shop")).
-    enablePlugins(play.sbt.PlayJava).
-    settings(Commons.settings: _*).
-    settings(
-      libraryDependencies ++= shopDependencies,
-      sourceGenerators in Compile += task {
-        val dir: File = (sourceManaged in Compile).value / "controllers"
-        val dirs = Seq(dir / "ref", dir / "javascript")
-        dirs.foreach(_.mkdirs)
-        Seq[File]()
-      },
-      unmanagedSourceDirectories in Compile += (sourceManaged in Compile).value,
-      //      unmanagedSourceDirectories in Compile += baseDirectory.value / "target" / "scala-2.11" / "src_managed" / "main"
-      pipelineStages := Seq(digest, gzip)
-    ).dependsOn(common % "test->test;compile->compile").
-    dependsOn(user).dependsOn(product).dependsOn(order)
+  lazy val shop = webProject("shop", shopDependencies)
 
-  lazy val app = (project in file("app")).
+  lazy val app = webProject("app", appDependencies)
+
+  def webProject(name: String, dependencies: Seq[ModuleID]) = {
+    Project(name, file(name)).
     enablePlugins(play.sbt.PlayJava).
     settings(Commons.settings: _*).
     settings(
-      libraryDependencies ++= appDependencies,
+      libraryDependencies ++= dependencies,
       sourceGenerators in Compile += task {
         val dir: File = (sourceManaged in Compile).value / "controllers"
         val dirs = Seq(dir / "ref", dir / "javascript")
@@ -85,8 +73,7 @@ object ApplicationBuild extends Build {
       pipelineStages := Seq(digest, gzip)
     ).dependsOn(common % "test->test;compile->compile").
     dependsOn(user).dependsOn(product).dependsOn(order)
-
-
+  }
 
   lazy val root = (project in file(".")).
     settings(Commons.settings: _*).

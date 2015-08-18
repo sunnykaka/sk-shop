@@ -1,4 +1,4 @@
-package constants;
+package common.constants;
 
 import common.models.utils.ViewEnum;
 

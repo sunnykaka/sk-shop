@@ -1,11 +1,12 @@
 package services;
 
 import base.BaseTest;
+import common.constants.MessageJobSource;
+import common.models.MessageJob;
+import common.services.MessageJobService;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
-import constants.MessageJobSource;
 import controllers.user.routes;
-import models.MessageJob;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import play.mvc.Http;
