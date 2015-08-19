@@ -126,7 +126,7 @@
                                                     @if(!backOrder.getBackState.checkCanNotCancelForUser()){
                                                         <p><span class="cancel" style="cursor: pointer" data-id="@backOrder.getId">取消</span></p>
                                                     }
-                                                    <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId,page.getPageNo,backOrder.getOrderNo.toString)" class="details">查看详情</a></p>
+                                                    <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId,page.getPageNo)" class="details">查看详情</a></p>
                                                 </td>
                                             }
                                         </tr>

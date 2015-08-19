@@ -136,7 +136,7 @@
                                                     }else{
                                                         <p>@order.getOrderState.getValue</p>
                                                     }
-                                                    <p><a href="@controllers.user.routes.MyOrderController.orderContent(order.getId,queryType,page.getPageNo,order.getOrderNo.toString)">订单详情</a></p>
+                                                    <p><a href="@controllers.user.routes.MyOrderController.orderContent(order.getId,queryType,page.getPageNo)">订单详情</a></p>
                                                 </td>
                                                 <td rowspan="@order.getOrderItemList.size()" class="control">
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
