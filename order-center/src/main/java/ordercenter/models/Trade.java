@@ -135,7 +135,7 @@ public class Trade implements EntityClass<Integer> {
         if (PayType.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
             return AlipayUtil.verify(type.getValue(), backParams);
         }
-        if (PayType.TenPay.getValue().equalsIgnoreCase(outerPlatformType)) {
+        if (PayType.TenPay.getValue().equalsIgnoreCase(outerPlatformType) || PayType.WXSM.getValue().equalsIgnoreCase(outerPlatformType)) {
             return TenpayUtils.verify(type.getValue(), backParams);
         }
         return false;
@@ -151,7 +151,7 @@ public class Trade implements EntityClass<Integer> {
                 return true;
             }
         }
-        if (PayType.TenPay.getValue().equalsIgnoreCase(outerPlatformType)) {
+        if (PayType.TenPay.getValue().equalsIgnoreCase(outerPlatformType) || PayType.WXSM.getValue().equalsIgnoreCase(outerPlatformType)) {
             if ("0".equalsIgnoreCase(tradeStatus)) {
                 return true;
             }

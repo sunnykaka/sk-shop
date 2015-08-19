@@ -11,7 +11,6 @@ import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -46,6 +45,11 @@ public class TenpayUtils {
     public static boolean verify(String reqType, Map<String, String> params) {
         try {
             boolean success = createSign(params).equalsIgnoreCase(params.get("sign"));
+
+            if(success) {
+                return success;
+            }
+            /*
             if ("return".equals(reqType)) {
                 return success;
             } else if ("notify".equals(reqType)) {
@@ -79,7 +83,7 @@ public class TenpayUtils {
                 }
                 logger.error("httpClient.errorinfo=: " + httpClient.getErrInfo());
                 return false;
-            }
+            }*/
             return false;
         } catch (Exception e) {
             logger.error("财付通回调验证异常", e);
