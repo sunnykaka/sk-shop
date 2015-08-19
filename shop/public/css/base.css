@@ -1,5 +1,5 @@
 /* CSS Reset test */
-html{overflow: scroll;overflow-y: scroll;}
+html{overflow-y: scroll;}
 html,body,h1,h2,h3,h4,h5,h6,p,br,form,input,button,textarea,select,ul,ol,li,dl,dt,dd,pre{margin:0;padding:0;}
 html,body{font:normal normal 12px/1.5em 'Microsoft Yahei',SimSun,Tahoma,Arial;color:#4a4a4a;background:#fff;}
 body {min-width: 1200px;color: #4a4947;}
