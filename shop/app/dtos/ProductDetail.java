@@ -30,7 +30,8 @@ public class ProductDetail {
 
     private List<ProductSpec> specList = new ArrayList<>();
 
-    private ProductPicture productPicture;
+    //private ProductPicture productPicture;
+    private List<ProductPicture> productPictureList = new ArrayList<>();
 
     private DesignerSize designerSize;
 
@@ -88,10 +89,6 @@ public class ProductDetail {
         return specList;
     }
 
-    public ProductPicture getProductPicture() {
-        return productPicture;
-    }
-
     public DesignerSize getDesignerSize() {
         return designerSize;
     }
@@ -142,6 +139,10 @@ public class ProductDetail {
 
     public List<SkuDetail> getSkuDetailList() {
         return skuDetailList;
+    }
+
+    public List<ProductPicture> getProductPictureList() {
+        return productPictureList;
     }
 
     public Map<String, SkuInfo> getSkuMap() {
@@ -204,12 +205,14 @@ public class ProductDetail {
 
             //读取主图
             List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(productDetail.product.getId());
-            if(!productPictures.isEmpty()) {
-                List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMainPic).collect(Collectors.toList());
-                if(!collect.isEmpty()) {
-                    productDetail.productPicture = collect.get(0);
-                }
-            }
+            productDetail.productPictureList.addAll(productPictures);
+//            需求变动。改为多主图轮播
+//            if(!productPictures.isEmpty()) {
+//                List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMainPic).collect(Collectors.toList());
+//                if(!collect.isEmpty()) {
+//                    productDetail.productPicture = collect.get(0);
+//                }
+//            }
 
             //读取商品描述
             productDetail.htmlList = productService.queryHtmlByProductId(productDetail.product.getId());

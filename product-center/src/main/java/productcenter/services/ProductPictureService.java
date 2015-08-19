@@ -50,10 +50,9 @@ public class ProductPictureService {
     public List<ProductPicture> queryProductPicturesByProductId(int productId) {
         play.Logger.info("------ProductPictureService queryProductPicturesByProductId begin exe-----------" + productId);
 
-        String jpql = "select o from ProductPicture o where 1=1 and o.productId=:productId";
+        String jpql = "select o from ProductPicture o where 1=1 and o.productId=:productId and o.mainPic = 1 order by o.number, o.name";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
-        jpql += " order by o.name";
         return generalDao.query(jpql, Optional.<Page<ProductPicture>>empty(), queryParams);
     }
 
@@ -65,10 +64,10 @@ public class ProductPictureService {
     public List<ProductPicture> queryProductPicturesBySkuId(String skuId) {
         play.Logger.info("------ProductPictureService queryProductPicturesBySkuId begin exe-----------" + skuId);
 
-        String jpql = "select o from ProductPicture o where 1=1 and o.skuId=:skuId";
+        String jpql = "select o from ProductPicture o where 1=1 and o.skuId like concat('%', :skuId, '%')";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("skuId", skuId);
-        jpql += " order by o.name";
+        jpql += " order by o.number, o.name";
         return generalDao.query(jpql, Optional.<Page<ProductPicture>>empty(), queryParams);
     }
 

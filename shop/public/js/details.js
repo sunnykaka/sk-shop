@@ -14,11 +14,39 @@ $(function () {
         }
     });
 
+    //索引点击
+    $('.imgIndex a').on('click',function(){
+        $(this).addClass('active').siblings().removeClass();
+        $('#bigPic').attr('src',$(this).attr('bigimg'));
+    });
 
+    $('.sliderBtn .next').on('click',function(){
+        var aIndex = $('.imgIndex a'),len = aIndex.size();
+        var index =  aIndex.index($('.imgIndex .active'));
+        index++;
+        index>=len? index = 0 : index;
+        invoke(index);
+    });
+    $('.sliderBtn .prev').on('click',function(){
+        var aIndex = $('.imgIndex a'),len = aIndex.size();
+        var index =  aIndex.index($('.imgIndex .active'));
+        index--;
+        index<=0? index = (len-1) : index;
+        invoke(index);
+    });
 
-    //$("#addToCart").click(function(event){
-    //
-    //});
+    //图片切换
+    function invoke(index){
+        $('.imgIndex a').removeClass();
+        $('.imgIndex a').eq(index).addClass('active');
+        $('#bigPic').attr('src',$('.imgIndex a').eq(index).attr('bigimg'));
+    }
+
+    $('.detail-inner .video').hover(function(){
+        $('.sliderBtn').fadeIn();
+    },function(){
+        $('.sliderBtn').fadeOut();
+    });
 
 
 
@@ -393,7 +421,6 @@ $(function () {
         } else {
             var _limit = defaultSku['limit'];
         }
-
         var _price = 0;
         var _marketing = false;
         var _marketingPrice = 0;
@@ -404,7 +431,6 @@ $(function () {
         if (!productOnline) {
             amountInputEle.val(0)
         }
-
         //有多个sku的情况
         if (!!options.hasSkuMap) {
             var isDirectBuy = options.isDirectBuy;
@@ -420,7 +446,6 @@ $(function () {
 
         //当有sku组合时，绑定事件
         function attachSkuEvent() {
-
             //skumap初始化及事件绑定
             _skuEles.each(function () {
                 var self = $(this);
@@ -478,7 +503,6 @@ $(function () {
                         });
 
                     }
-
                     var len = _selectedIds.length;
                     //用已选中的节点验证待测试节点 underTestObjs
                     _skuEles.not(selectedObjs).not(self).each(function () {
@@ -535,11 +559,15 @@ $(function () {
                                 }
                             }
                         }
+                        if (currentSku.imageList && currentSku.imageList.length > 0) {
+                            var bigImgUrl = currentSku.imageList[0];
+                                $('.imgIndex a').each(function(index,item){
+                                   if($(item).attr('bigimg') == bigImgUrl){$(item).addClass('active').siblings().removeClass();}
+                               });
+                               $('#bigPic').attr('src',bigImgUrl);
+                        }
 
                     }
-
-
-
                 } else {
 
                     _selectedIds = [];
