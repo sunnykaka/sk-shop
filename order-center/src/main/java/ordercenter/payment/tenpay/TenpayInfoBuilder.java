@@ -47,6 +47,12 @@ public class TenpayInfoBuilder implements BackInfoBuilder {
     public Map<String, String> buildParam(Request request) {
         Map<String, String> params = new TreeMap<String, String>();
         Map requestParams = request.queryString();
+        if(requestParams == null || requestParams.size() == 0) {
+            if("POST".equalsIgnoreCase(request.method())){
+                requestParams = request.body().asFormUrlEncoded();
+            }
+        }
+
         for (Object oName : requestParams.keySet()) {
             String name = (String) oName;
             String[] values = (String[]) requestParams.get(name);
