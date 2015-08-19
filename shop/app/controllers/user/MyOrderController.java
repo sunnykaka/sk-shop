@@ -100,7 +100,7 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result orderContent(int orderId) {
+    public Result orderContent(int orderId, int queryType, int pageNo, String orderNo) {
         User user = SessionUtils.currentUser();
 
         Order order = orderService.getOrderById(orderId, user.getId());
@@ -125,7 +125,7 @@ public class MyOrderController extends Controller {
         List<OrderStateHistory> orderStateHistories = orderService.getOrderStateHistoryByOrderId(order.getId());
         Trade trade = tradeService.getTradeOrdeByOrderId(order.getId());
 
-        return ok(myOrderInfo.render(order, logistics, orderStateHistories, trade));
+        return ok(myOrderInfo.render(order, logistics, orderStateHistories, trade, queryType, pageNo, orderNo));
 
     }
 
@@ -318,7 +318,7 @@ public class MyOrderController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result backContent(int backGoodsId) {
+    public Result backContent(int backGoodsId,int pageNo,String orderNo) {
         User user = SessionUtils.currentUser();
 
         BackGoods backGoods = backGoodsService.getBackGoods(backGoodsId,user.getId());
@@ -340,7 +340,7 @@ public class MyOrderController extends Controller {
         }
         List<BackGoodsLog> backGoodsLogs = backGoodsService.getBackGoodsLog(backGoodsId);
 
-        return ok(myBackInfo.render(backGoods,backGoodsLogs));
+        return ok(myBackInfo.render(backGoods,backGoodsLogs,pageNo,orderNo));
 
     }
 

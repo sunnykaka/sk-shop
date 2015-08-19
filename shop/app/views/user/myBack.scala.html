@@ -91,7 +91,7 @@
                                         <tr class="space-row"><td colspan="6"></td></tr>
                                         <tr class="order-hd">
                                             <td class="order-hd-first">售后订单号：<span class="order-number">@backOrder.getOrderNo-@backOrder.getId</span></td>
-                                            <td >订单号：<span class="order-number">@backOrder.getOrderNo</span></td>
+                                            <td >订单号：<span class="order-number" id="@backOrder.getOrderNo">@backOrder.getOrderNo</span></td>
                                             <td colspan="4" class="order-hd-last">下单时间：<span class="order-time">@DateUtils.printDateTime(backOrder.getCreateTime)</span></td>
                                         </tr>
 
@@ -126,7 +126,7 @@
                                                     @if(!backOrder.getBackState.checkCanNotCancelForUser()){
                                                         <p><span class="cancel" style="cursor: pointer" data-id="@backOrder.getId">取消</span></p>
                                                     }
-                                                    <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId)" class="details">查看详情</a></p>
+                                                    <p><a href="@controllers.user.routes.MyOrderController.backContent(backOrder.getId,page.getPageNo,backOrder.getOrderNo.toString)" class="details">查看详情</a></p>
                                                 </td>
                                             }
                                         </tr>

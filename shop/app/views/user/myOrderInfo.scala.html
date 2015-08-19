@@ -1,4 +1,4 @@
-@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics,orderStateHistories:List[ordercenter.models.OrderStateHistory],trade:ordercenter.models.Trade)
+@(order:ordercenter.models.Order,logistics:ordercenter.models.Logistics,orderStateHistories:List[ordercenter.models.OrderStateHistory],trade:ordercenter.models.Trade,queryType:Integer, pageNo:Integer, orderNo:String)
 
 @import common.utils.DateUtils;
 
@@ -115,7 +115,7 @@
                                 <!-- end total-->
                         </div>
                     </div>
-                    <p class="back"><a href="javascript:void();" onclick="window.history.back();">返回</a></p>
+                    <p class="back"><a href="@controllers.user.routes.MyOrderController.index(queryType,pageNo)#@orderNo" >返回</a></p>
                 </div>
                     <!-- end order-detail-->
             </div>

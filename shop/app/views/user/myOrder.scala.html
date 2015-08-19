@@ -100,7 +100,7 @@
                                 @for(order <- page.getResult) {
                                     <tbody>
                                         <tr class="space-row"><td colspan="6"></td></tr>
-                                        <tr class="order-hd">
+                                        <tr class="order-hd" id="@order.getOrderNo">
                                             <td class="order-hd-first">订单号：<span class="order-number">@order.getOrderNo</span></td>
                                             <td>收货人：<span class="user">@order.getAddressName</span></td>
                                             <td colspan="4" class="order-hd-last">下单时间：<span class="order-time">@DateUtils.printDateTime(order.getCreateTime)</span></td>
@@ -136,7 +136,7 @@
                                                     }else{
                                                         <p>@order.getOrderState.getValue</p>
                                                     }
-                                                    <p><a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)">订单详情</a></p>
+                                                    <p><a href="@controllers.user.routes.MyOrderController.orderContent(order.getId,queryType,page.getPageNo,order.getOrderNo.toString)">订单详情</a></p>
                                                 </td>
                                                 <td rowspan="@order.getOrderItemList.size()" class="control">
                                                     @if(order.getOrderState.getName.equals(OrderState.Create.getName)){
