@@ -102,9 +102,6 @@ public class ProductController extends Controller {
         }
         productDetail.setSeo(seoService.getProductSeo(productDetail.getProduct()));
 
-//        int a = ;
-
-
         return ok(detail.render(productDetail,(int)(Math.random()*10)%6+1));
     }
 

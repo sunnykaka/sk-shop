@@ -68,8 +68,16 @@
                     @if(isNotBlank(pd.getProduct.getVideo)) {
                         <embed wmode="transparent" src="@Html(pd.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
                     } else {
-                        @if(pd.getProductPicture != null && isNotBlank(pd.getProductPicture.getPictureUrl)) {
-                            <img class="lazy" width="803" height="536" src="@pd.getProductPicture.getPictureUrl" alt="@pd.getProduct.getName"/>
+                        @if(pd.getProductPictureList.size() > 0){
+                            <img class="lazy" id="bigPic" width="803" height="536" src="@pd.getProductPictureList.get(0).getPictureUrl" alt="@pd.getProduct.getName"/>
+                            @if(pd.getProductPictureList.size() > 1){
+                                <div class="imgIndex">
+                                @for( (pic,index) <- pd.getProductPictureList.zipWithIndex ){
+                                    <a rel="@index" bigImg="@pic.getPictureUrl"></a>
+                                }
+                                </div>
+                                <div class="sliderBtn"><a class="prev"><i class="icon iconfont">&#xe616;</i></a><a class="next"><i class="icon iconfont">&#xe615;</i></a></div>
+                            }
                         } else {
                             <img width="803" height="536" src="@routes.Assets.versioned("images/detail/1.jpg")" alt="@pd.getProduct.getName"/>
                         }
