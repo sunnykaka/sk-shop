@@ -2,6 +2,7 @@ package ordercenter.payment;
 
 import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayMethod;
+import ordercenter.util.TradeSequenceUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -30,7 +31,7 @@ public class PayInfoWrapper {
     /**
      * 交易流水号
      */
-    private String tradeNo;
+    private String tradeNo = TradeSequenceUtil.getTradeNo();
 
     /**
      *支付方式
@@ -40,6 +41,7 @@ public class PayInfoWrapper {
     /**
      * 购买的方式：是order还是coupon
      */
+    //todo 改为枚举类型
     private String bizType;
 
     /**

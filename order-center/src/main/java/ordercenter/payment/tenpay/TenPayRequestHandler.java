@@ -1,8 +1,9 @@
 package ordercenter.payment.tenpay;
 
 import common.utils.DateUtils;
-import ordercenter.payment.PayInfoWrapper;
+import ordercenter.models.Trade;
 import ordercenter.payment.PayRequestHandler;
+import ordercenter.payment.constants.PayChannel;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,16 +27,16 @@ public class TenPayRequestHandler extends PayRequestHandler {
     }
 
     @Override
-    protected Map<String, String> buildPayParam(PayInfoWrapper payInfoWrapper) {
+    protected Map<String, String> buildPayParam(Trade trade) {
         //************订单参数***************//
         //请与贵网站订单系统中的唯一订单号匹配
-        String out_trade_no = payInfoWrapper.getTradeNo();
+        String out_trade_no = trade.getTradeNo();
 
         //订单名称，显示在收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
-        String subject = "尚客-购物编号-" + out_trade_no;
+        String subject = "尚客-" + out_trade_no;
 
-        //订单总金额，显示在支付宝收银台里的“应付总额”里 ,以分为单位
-        long total_fee = payInfoWrapper.getTotalFee();
+        //订单总金额，显示在财付通收银台里的“应付总额”里 ,以分为单位
+        long total_fee = trade.getPayTotalFee().getCent();
 
         Map<String, String> sParaTemp = new TreeMap<String, String>();
         sParaTemp.put("sign_type", TenpayUtils.SIGN_TYPE);
@@ -45,7 +46,7 @@ public class TenPayRequestHandler extends PayRequestHandler {
         //sign
         sParaTemp.put("sign_key_index", "1");
 
-        if(payInfoWrapper.isWXSM()) {
+        if(trade.getOuterPlatformType().equalsIgnoreCase(PayChannel.WXSM.toString())) {
             sParaTemp.put("bank_type", "WXSM");
         } else {
             sParaTemp.put("bank_type", "DEFAULT");
@@ -58,7 +59,7 @@ public class TenPayRequestHandler extends PayRequestHandler {
         sParaTemp.put("fee_type", "CNY");
         sParaTemp.put("total_fee", String.valueOf(total_fee));
 
-        sParaTemp.put("spbill_create_ip", payInfoWrapper.getBuyerIP());
+//        sParaTemp.put("spbill_create_ip", payInfoWrapper.getBuyerIP());//TODO 暂时先屏蔽掉
 
         sParaTemp.put("time_start", DateUtils.printDateTime(DateUtils.current(), DateUtils.SIMPLE_DATE_TIME_FORMAT_STR));
 

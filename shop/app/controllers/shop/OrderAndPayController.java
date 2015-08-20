@@ -9,6 +9,7 @@ import ordercenter.constants.TradePayType;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.models.Order;
+import ordercenter.models.Trade;
 import ordercenter.payment.PayInfoWrapper;
 import ordercenter.payment.PayRequestHandler;
 import ordercenter.payment.PaymentManager;
@@ -59,6 +60,21 @@ public class OrderAndPayController extends Controller {
 
     @Autowired
     CartProcess cartProcess;
+
+
+
+    /**
+     * 用于测试支付1分钱
+     *
+     * @return
+     */
+    public Result testPay() {
+        Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(1L), BizType.Order, PayBank.Alipay);
+        PayRequestHandler handler = PayBank.valueOf(trade.getDefaultbank()).getPayMethod().getPayRequestHandler();
+        String form = handler.forwardToPay(trade);
+        return ok(orderToPay.render(form));
+    }
+
 
     /**
      * 提交订单-生成订单
@@ -304,8 +320,8 @@ public class OrderAndPayController extends Controller {
                 payInfoWrapper.setBuyerIP(request().remoteAddress());
             }
         }
-        Logger.info("--------------------真正的支付机构：" + bank.getValue() + ":" + bank.getName() + ":" + bank.getForexBankName());
-        payInfoWrapper.setDefaultbank(bank.getForexBankName());
+        Logger.info("--------------------真正的支付机构：" + bank.getValue() + ":" + bank.getName() + ":" + bank.toString());
+        payInfoWrapper.setDefaultbank(bank.toString());//TODO checkout
 
         List<Order> orderList = new ArrayList<Order>(idList.size());
         for (int id : idList) {
@@ -318,7 +334,7 @@ public class OrderAndPayController extends Controller {
         payInfoWrapper.setTotalFee(totalFee);
 
         PayRequestHandler payService = PaymentManager.getPayRequestHandler(PayMethod.valueOf(payMethod));
-        String form = payService.forwardToPay(payInfoWrapper);
+        String form =  ""; //todo   need revert payService.forwardToPay(payInfoWrapper);
         return ok(orderToPay.render(form));
     }
 

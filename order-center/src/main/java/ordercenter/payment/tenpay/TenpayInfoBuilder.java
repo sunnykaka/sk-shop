@@ -5,7 +5,7 @@ import common.utils.Money;
 import common.utils.ParamUtils;
 import ordercenter.models.Trade;
 import ordercenter.payment.BackInfoBuilder;
-import ordercenter.payment.constants.PayType;
+import ordercenter.payment.constants.PayChannel;
 import play.mvc.Http.Request;
 
 import java.util.Map;
@@ -21,7 +21,7 @@ public class TenpayInfoBuilder implements BackInfoBuilder {
     @Override
     public Trade buildFromRequest(Request request) {
         Trade tradeInfo = new Trade();
-        tradeInfo.setOuterPlatformType(PayType.TenPay.getValue());
+        tradeInfo.setOuterPlatformType(PayChannel.TenPay.getValue());
 
         //尚客系统交易号
         tradeInfo.setTradeNo(ParamUtils.getByKey(request, "out_trade_no"));
@@ -47,6 +47,12 @@ public class TenpayInfoBuilder implements BackInfoBuilder {
     public Map<String, String> buildParam(Request request) {
         Map<String, String> params = new TreeMap<String, String>();
         Map requestParams = request.queryString();
+        if(requestParams == null || requestParams.size() == 0) {
+            if("POST".equalsIgnoreCase(request.method())){
+                requestParams = request.body().asFormUrlEncoded();
+            }
+        }
+
         for (Object oName : requestParams.keySet()) {
             String name = (String) oName;
             String[] values = (String[]) requestParams.get(name);

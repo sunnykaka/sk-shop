@@ -2,11 +2,13 @@ package ordercenter.models;
 
 import common.models.utils.EntityClass;
 import common.utils.Money;
+import ordercenter.constants.BizType;
 import ordercenter.payment.alipay.AlipayUtil;
-import ordercenter.payment.constants.PayType;
-import ordercenter.payment.constants.ResponseType;
+import ordercenter.payment.constants.*;
 import ordercenter.payment.tenpay.TenpayUtils;
+import ordercenter.util.TradeSequenceUtil;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.internal.xml.PayloadType;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -23,7 +25,7 @@ import java.util.Map;
 public class Trade implements EntityClass<Integer> {
 
     /**
-     *主键 id
+     * 主键 id
      */
     private Integer id;
 
@@ -58,7 +60,7 @@ public class Trade implements EntityClass<Integer> {
     private String outerPlatformType;
 
     /**
-     *第三方支付平台的支付类型：例如及时到账，网银网关，快捷支付
+     * 第三方支付平台的支付类型：例如及时到账，网银网关，快捷支付
      */
     private String payMethod;
 
@@ -113,9 +115,11 @@ public class Trade implements EntityClass<Integer> {
     private String payRetTotalFee;
 
     /**
-     * 传递过去的币种
+     * 传递过去的币种,默认人民币
      */
-    private String payCurrency;
+    private String payCurrency = "CNY";
+
+    private Integer version;
 
     /**
      * 只用于后台展示
@@ -126,16 +130,49 @@ public class Trade implements EntityClass<Integer> {
      * 交易包含的订单
      */
     private List<TradeOrder> tradeOrder;
+//TODO 构造私有化
+//    private Trade(){}
+
+    public static class TradeBuilder {
+
+
+        /**
+         * 交易对象的构建
+         *
+         * @param payTotalFee 支付金额
+         * @param bizType     业务类型
+         * @param payBank     支付银行
+         * @return
+         */
+        public static Trade createNewTrade(Money payTotalFee, BizType bizType, PayBank payBank) {
+            Trade trade = new Trade();
+            //交易号是自动生成
+            trade.setTradeNo(TradeSequenceUtil.getTradeNo());
+            trade.setDefaultbank(payBank.toString());
+            trade.setOuterPlatformType(payBank.getPayChannel());
+            trade.setPayMethod(payBank.getPayMethod().toString());
+            trade.setBizType(bizType.toString());   //业务类型
+            trade.setGmtCreateTime(new DateTime());
+            trade.setPayTotalFee(payTotalFee);
+            trade.setTradeStatus(TradeStatus.INIT.toString());//状态为新建状态
+            return trade;
+        }
+    }
+
 
     /**
      * 交易签名是否真实
      */
     @Transient
     public boolean verify(Map<String, String> backParams, ResponseType type) {
-        if (PayType.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
+        if (PayChannel.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
             return AlipayUtil.verify(type.getValue(), backParams);
         }
-        if (PayType.TenPay.getValue().equalsIgnoreCase(outerPlatformType) || PayType.WXSM.getValue().equalsIgnoreCase(outerPlatformType)) {
+        /**
+         * 财付通和微信都是走财付通的通道，回调参数格式均为一样。
+         */
+        if (PayChannel.TenPay.getValue().equalsIgnoreCase(outerPlatformType) ||
+                PayChannel.WXSM.getValue().equalsIgnoreCase(outerPlatformType)) {
             return TenpayUtils.verify(type.getValue(), backParams);
         }
         return false;
@@ -146,16 +183,21 @@ public class Trade implements EntityClass<Integer> {
      */
     @Transient
     public boolean isSuccess() {
-        if (PayType.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
-            if ("TRADE_FINISHED".equalsIgnoreCase(tradeStatus)) {
-                return true;
-            }
+        if (TradeStatus.TRADE_SUCCESS.toString().equalsIgnoreCase(tradeStatus) ||
+                TradeStatus.TRADE_FINISHED.toString().equalsIgnoreCase(tradeStatus)) {
+            return true;
         }
-        if (PayType.TenPay.getValue().equalsIgnoreCase(outerPlatformType) || PayType.WXSM.getValue().equalsIgnoreCase(outerPlatformType)) {
-            if ("0".equalsIgnoreCase(tradeStatus)) {
-                return true;
-            }
-        }
+//        if (PayChannel.Alipay.getValue().equalsIgnoreCase(outerPlatformType)) {
+//            if (TradeStatus.TRADE_SUCCESS.toString().equalsIgnoreCase(tradeStatus)) {
+//                return true;
+//            }
+//        }
+//        if (PayChannel.TenPay.getValue().equalsIgnoreCase(outerPlatformType) ||
+//                PayChannel.WXSM.getValue().equalsIgnoreCase(outerPlatformType)) {
+//            if ("0".equalsIgnoreCase(tradeStatus)) {
+//                return true;
+//            }
+//        }
         return false;
     }
 
@@ -183,6 +225,16 @@ public class Trade implements EntityClass<Integer> {
                 ", payRetTotalFee='" + payRetTotalFee + '\'' +
                 ", payCurrency='" + payCurrency + '\'' +
                 '}';
+    }
+
+    @Version
+    @Column(name="version")
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Transient
@@ -296,7 +348,7 @@ public class Trade implements EntityClass<Integer> {
     }
 
     @Column(name = "payTotalFee")
-    @Type(type="common.utils.hibernate.MoneyType")
+    @Type(type = "common.utils.hibernate.MoneyType")
     public Money getPayTotalFee() {
         return payTotalFee;
     }
@@ -336,7 +388,7 @@ public class Trade implements EntityClass<Integer> {
     }
 
     @Column(name = "tradeGmtCreateTime")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getTradeGmtCreateTime() {
         return tradeGmtCreateTime;
     }
@@ -346,7 +398,7 @@ public class Trade implements EntityClass<Integer> {
     }
 
     @Column(name = "tradeGmtModifyTime")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getTradeGmtModifyTime() {
         return tradeGmtModifyTime;
     }
@@ -356,7 +408,7 @@ public class Trade implements EntityClass<Integer> {
     }
 
     @Column(name = "gmtCreateTime")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getGmtCreateTime() {
         return gmtCreateTime;
     }
@@ -366,7 +418,7 @@ public class Trade implements EntityClass<Integer> {
     }
 
     @Column(name = "gmtModifyTime")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getGmtModifyTime() {
         return gmtModifyTime;
     }

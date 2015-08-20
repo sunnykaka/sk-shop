@@ -7,7 +7,7 @@ import common.models.utils.ViewEnum;
  * User: lidujun
  * Date: 2015-05-11
  */
-public enum PayType implements ViewEnum {
+public enum PayChannel implements ViewEnum {
 
     /**
      * 支付宝
@@ -25,7 +25,7 @@ public enum PayType implements ViewEnum {
 
     public String value;
 
-    PayType(String value) {
+    PayChannel(String value) {
         this.value = value;
     }
 
