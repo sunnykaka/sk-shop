@@ -3,6 +3,7 @@ package controllers;
 import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
+import common.utils.play.BaseGlobal;
 import dtos.CmsPosition;
 import dtos.ExhibitionPosition;
 import dtos.ProductInfo;
@@ -287,6 +288,13 @@ public class Application extends Controller {
     public Result about() {
 
         return ok(about.render());
+
+    }
+
+
+    public Result robots() {
+
+        return ok(views.txt.robots.render(BaseGlobal.isProd()));
 
     }
 

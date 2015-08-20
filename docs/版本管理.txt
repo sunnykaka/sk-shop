@@ -1,0 +1,14 @@
+两个分支: master,develop,hotfix.
+三个角色: master分支管理员，开发人员，运维人员
+四个环境: development(开发环境), test(测试环境), preview(预演环境), production(正式环境).
+
+正常流程：
+开发在develop分支进行，开发人员自测完成可以将代码提交到develop分支，运维此时可以从develop分支打包到测试环境进行测试。
+测试环境测试通过之后，master管理员需要将代码从develop分支merge到master同时打tag，然后运维可以从master分支打包到预演环境再次测试。
+预演环境测试通过，运维将相同的包发布到正式环境，启动的时候指定正式环境的配置文件即可。
+
+特殊情况：
+测试环境正在测试的时候，有紧急bug需要修复。此时开发人员切换到hotfix分支，然后merge master分支的最新内容到本地hotfix分支。
+开发完成后将代码提交到hotfix分支，运维此时可以从hotfix分支打包到预演环境环境进行测试（不影响测试环境）。
+预演环境测试通过之后，master管理员需要将代码从hotfix分支merge到master同时打tag，然后运维从master分支打包到预演环境再次测试。
+预演环境测试通过，运维将相同的包发布到正式环境，启动的时候指定正式环境的配置文件即可。之后master管理员需要将代码从hotfix分支merge到develop。

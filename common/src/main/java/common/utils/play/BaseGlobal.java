@@ -38,6 +38,11 @@ public class BaseGlobal extends GlobalSettings {
         return "test".equalsIgnoreCase(Play.application().configuration().getString("shop.env"));
     }
 
+    public static boolean isPrev() {
+        return "prev".equalsIgnoreCase(Play.application().configuration().getString("shop.env"));
+    }
+
+
     protected Action createActionWithActionFilters(ActionFilter... actionFilters) {
 
         return new Action.Simple() {

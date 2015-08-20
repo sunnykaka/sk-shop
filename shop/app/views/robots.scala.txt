@@ -1,0 +1,6 @@
+@(prod: Boolean)@if(prod) {User-Agent: *
+Disallow: /user/
+Disallow: /my/
+} else {User-Agent: *
+Disallow: /
+}
