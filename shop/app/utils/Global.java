@@ -17,8 +17,8 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import scala.concurrent.duration.Duration;
-import scheduler.ExhibitionStartReminderTask;
 import scheduler.MessageJobExecuteTask;
+import scheduler.PayOrderTipTask;
 import scheduler.SysCancelOrderTask;
 import usercenter.dtos.DesignerView;
 import usercenter.services.DesignerService;
@@ -61,6 +61,11 @@ public class Global extends BaseGlobal {
                 of(Duration.create(1, TimeUnit.MINUTES)),
                 of(Duration.create(5, TimeUnit.MINUTES)),
                 SysCancelOrderTask.getInstance());
+
+        stateCoordinator.addScheduler(
+                of(Duration.create(20, TimeUnit.SECONDS)),
+                of(Duration.create(10, TimeUnit.SECONDS)),
+                PayOrderTipTask.getInstance());
 
         stateCoordinator.addScheduler(
                 of(Duration.create(20, TimeUnit.SECONDS)),

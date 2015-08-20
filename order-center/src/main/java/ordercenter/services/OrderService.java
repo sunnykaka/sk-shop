@@ -1,7 +1,9 @@
 package ordercenter.services;
 
+import common.constants.MessageJobSource;
 import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
+import common.services.MessageJobService;
 import common.utils.DateUtils;
 import common.utils.Money;
 import common.utils.page.Page;
@@ -20,6 +22,7 @@ import productcenter.constants.StoreStrategy;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
+import usercenter.services.UserService;
 
 import java.util.*;
 
@@ -43,6 +46,12 @@ public class OrderService {
 
     @Autowired
     private SkuAndStorageService skuAndStorageService;
+
+    @Autowired
+    MessageJobService messageJobService;
+
+    @Autowired
+    UserService userService;
 
     /**
      * 判断是否可以退货申请
@@ -317,6 +326,34 @@ public class OrderService {
     }
 
     /**
+     *定时器定时提醒支付订单(30分钟)
+     */
+    public void timerAutoTipPayOrderProcess() {
+        Logger.info("--------OrderService timerAutoTipPayOrderProcess begin exe-----------");
+        List<Order> orderList = this.getAllOrderListByOrderState(OrderState.Create);
+        if(orderList != null && orderList.size() > 0) {
+            for(Order order : orderList) {
+                if(!order.getOrderState().equals(OrderState.Create) || order.isSendPayRemind()) {
+                    continue;
+                }
+
+                if(DateUtils.current().getMillis() - order.getCreateTime().getMillis() < 1800000) {
+                    continue;
+                }
+                //发送短信
+                String tipMsg = "短信内容：亲爱的会员，您抢到的商品尚未支付，仍为您保留30分钟，因库存紧张，请及时支付！";
+                //性能有点差，未来再优化
+                User user = userService.getById(order.getUserId());
+                if(user != null && user.getPhone() != null && user.getPhone().trim().length() > 0) {
+                    messageJobService.sendSmsMessage(user.getPhone(), tipMsg, MessageJobSource.ORDER_PAY_REMIND, null);
+                    //更改订单的发送状态
+                    order.setSendPayRemind(true);
+                }
+            }
+        }
+    }
+
+    /**
      * 确认收货
      *
      * @param orderId
@@ -551,6 +588,7 @@ public class OrderService {
             order.setMilliDate(curTime.getMillis());
             order.setIsDelete(false);
             order.setBrush(false);
+            order.setSendPayRemind(false);
             this.createOrder(order);
 
             int orderId = order.getId();

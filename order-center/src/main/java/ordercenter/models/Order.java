@@ -220,6 +220,11 @@ public class Order implements EntityClass<Integer>, Cloneable {
     //是否可评论
     private boolean valuation;
 
+    /**
+     * 是否已经发送支付提醒
+     */
+    private boolean sendPayRemind = false;
+
     @Override
     public String toString() {
         return "Order{" +
@@ -644,5 +649,14 @@ public class Order implements EntityClass<Integer>, Cloneable {
 
     public void setValuation(boolean valuation) {
         this.valuation = valuation;
+    }
+
+    @Column(name = "sendPayRemind")
+    public boolean isSendPayRemind() {
+        return sendPayRemind;
+    }
+
+    public void setSendPayRemind(boolean sendPayRemind) {
+        this.sendPayRemind = sendPayRemind;
     }
 }

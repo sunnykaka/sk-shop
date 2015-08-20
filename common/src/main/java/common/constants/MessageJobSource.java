@@ -11,7 +11,9 @@ public enum MessageJobSource implements ViewEnum {
     CHANGE_VERIFICATION_CODE("修改绑定验证码"),
     INVOICE_NOTIFICATION("发货通知"),
     PAY_REMINDER("支付提醒"),
-    CHANGE_EMAIL("修改邮箱");
+    CHANGE_EMAIL("修改邮箱"),
+    ORDER_PAY_REMIND("订单催付"),
+    REFUND_ORDER_MONEY("退款通知");
 
     public String value;
 
