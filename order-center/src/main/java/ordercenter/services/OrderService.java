@@ -22,6 +22,7 @@ import productcenter.constants.StoreStrategy;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
+import usercenter.services.AddressService;
 import usercenter.services.UserService;
 
 import java.util.*;
@@ -52,6 +53,9 @@ public class OrderService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AddressService addressService;
 
     /**
      * 判断是否可以退货申请
@@ -310,7 +314,7 @@ public class OrderService {
                     continue;
                 }
 
-                int count = this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel,order.getOrderState());
+                int count = this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
                 if(count == 1) {
                     List<OrderItem> orderItemList = this.queryOrderItemsByOrderId(order.getId());
                     for(OrderItem orderItem : orderItemList) {
@@ -342,10 +346,10 @@ public class OrderService {
                 }
                 //发送短信
                 String tipMsg = "短信内容：亲爱的会员，您抢到的商品尚未支付，仍为您保留30分钟，因库存紧张，请及时支付！";
-                //性能有点差，未来再优化
-                User user = userService.getById(order.getUserId());
-                if(user != null && user.getPhone() != null && user.getPhone().trim().length() > 0) {
-                    messageJobService.sendSmsMessage(user.getPhone(), tipMsg, MessageJobSource.ORDER_PAY_REMIND, null);
+
+                Logistics logistics = getLogisticsByOrderId(order.getId());
+                if(logistics != null && logistics.getMobile() != null && logistics.getMobile().trim().length() > 0) {
+                    messageJobService.sendSmsMessage(logistics.getMobile().trim(), tipMsg, MessageJobSource.ORDER_PAY_REMIND, null);
                     //更改订单的发送状态
                     order.setSendPayRemind(true);
                 }

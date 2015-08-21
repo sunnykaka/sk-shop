@@ -177,8 +177,6 @@ public class ProductService {
         return generalDao.query(jpql, Optional.empty(), queryParams);
     }
 
-
-
     /**
      * 查询某个设计师下面所有的商品
      * @param designerId
@@ -196,7 +194,7 @@ public class ProductService {
      * @return
      */
     public List<Product> queryMatchProductList(Integer productId) {
-        String sql = "select a.* from product a where exists (select 1 from RecommendProduct b where a.id = b.recommendProductId and b.productId =? and b.recommendType ='MATCH') and isDelete =0 and online=1";
+        String sql = "select a.* from product a,RecommendProduct b where a.id=b.recommendProductId and b.productId =? and b.recommendType ='MATCH' and a.isDelete =0 and a.online=1 order by b.priority";
         return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, productId).getResultList();
     }
 
