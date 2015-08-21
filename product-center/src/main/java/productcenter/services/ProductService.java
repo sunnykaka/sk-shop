@@ -194,7 +194,7 @@ public class ProductService {
      * @return
      */
     public List<Product> queryMatchProductList(Integer productId) {
-        String sql = "select a.* from product a,RecommendProduct b where a.id=b.recommendProductId and b.productId =? and b.recommendType ='MATCH' and a.isDelete =0 and a.online=1 order by b.priority";
+        String sql = "select a.* from product a,RecommendProduct b where a.id=b.recommendProductId and b.productId =? and b.recommendType ='MATCH' and a.isDelete =0 and a.online=1 order by b.priority desc";
         return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, productId).getResultList();
     }
 
