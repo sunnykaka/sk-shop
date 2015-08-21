@@ -73,11 +73,11 @@ $('#pay-money-btn').click(function(){
                                                      $.dialog.get.idialog.$content.html('');
                                                      $.dialog.get.idialog.$dialog.find('.i-wrapBtn').remove();
                                                      var index = 3;
+                                                     var orderId = $('#orderIds').val();
                                                      var interval =  setInterval(function(){
                                                         $('#second').text(index);
                                                         if(index--<1){
                                                             clearInterval(interval);
-                                                            var orderId = $('#orderIds').val();
                                                             if(/_/g.test(orderId)){
                                                                 window.location.href = "/my/order";
                                                             }else{
@@ -86,9 +86,13 @@ $('#pay-money-btn').click(function(){
 
                                                         }
                                                       },1000);
-                                                     $.dialog.get.idialog.$content.append('<div class="success-inner clearfix"><h4>检测到订单已成功支付</h4>' +
-                                                      '<p><span id="second">'+index+'</span>秒后将自动跳转到订单详情 <a href="/my/order/info?orderId='+$('#orderIds').val()+'">立即查看订单&gt;&gt;</a></p></div>');
-
+                                                      if(/_/g.test(orderId)){//多个订单
+                                                           $.dialog.get.idialog.$content.append('<div class="success-inner clearfix"><h4>检测到订单已成功支付</h4>' +
+                                                          '<p><span id="second">'+index+'</span>秒后将自动跳转到订单详情 <a href="/my/order">立即查看订单&gt;&gt;</a></p></div>');
+                                                      }else{
+                                                           $.dialog.get.idialog.$content.append('<div class="success-inner clearfix"><h4>检测到订单已成功支付</h4>' +
+                                                          '<p><span id="second">'+index+'</span>秒后将自动跳转到订单详情 <a href="/my/order/info?orderId='+$('#orderIds').val()+'">立即查看订单&gt;&gt;</a></p></div>');
+                                                      }
 
                                                 }else{
                                                     $(btn).val('重新检测');
