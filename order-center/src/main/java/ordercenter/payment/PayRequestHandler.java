@@ -77,7 +77,7 @@ public abstract class PayRequestHandler {
      */
     protected String buildPaymentString(Map<String, String> params) {
         StringBuilder sbHtml = new StringBuilder();
-        sbHtml.append("<form id=\"payForm\" name=\"payForm\" action=\"" + getPaymentURL() + "\" "
+        sbHtml.append("<form id=\"payForm\" name=\"payForm\" target=\"_blank\" action=\"" + getPaymentURL() + "\" "
                 + "method=\"get\">");
         for (Map.Entry<String, String> entry : params.entrySet()) {
             sbHtml.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue() + "\"/>");

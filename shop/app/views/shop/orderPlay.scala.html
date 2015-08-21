@@ -1,7 +1,9 @@
-@(resultMap:Map[String, Object])
+@(resultMap: Map[String, Object])
 
 @import productcenter.models.Seo;
-@main(new Seo(Messages("title.toPlay"),Messages("seo.description"),Messages("seo.Keywords")))() {
+@import ordercenter.payment.constants.PayBank;
+
+@main(new Seo(Messages("title.toPlay"), Messages("seo.description"), Messages("seo.Keywords")))() {
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script type="text/javascript">
 
@@ -38,10 +40,12 @@ $('#pay-money-btn').click(function(){
             cache: false,
             success: function (data) {
                 if(data.result){
-                 $('#tradeNo').val(data.data);
-                 $('#payMethod').val(payMethod);
-                 $('#payOrg').val(currentPay);
-                 $('#pay-form').submit();
+                    $('body').append(data.data);
+                    $('#payForm').submit();
+//                 $('#tradeNo').val(data.data);
+//                 $('#payMethod').val(payMethod);
+//                 $('#payOrg').val(currentPay);
+                // $('#pay-form').submit();
                          $.dialog({
                             id:'idialog',
                             title:'提示',
@@ -146,118 +150,113 @@ $('#pay-money-btn').click(function(){
                 <h3>支付金额：<span class="total-money">￥@resultMap.get("totalMoney")</span></h3>
                 <div class="default-pay">
                     <ul class="list clearfix">
-                        <li paybank="Alipay" class="current">
+                        <li paybank= @PayBank.Alipay.toString class="current">
                             <i></i>
                             <img src="../assets/images/bank-zfb.jpg" alt="支付宝">
                         </li>
-                        <li paybank="WXSM" class="">
+                        <li paybank= @PayBank.WXSM.toString class="">
                             <i></i>
                             <img src="../assets/images/bank-weixin.jpg" alt="微信支付">
                         </li>
-                        <li paybank="Tenpay" class="">
+                        <li paybank= @PayBank.Tenpay.toString class="">
                             <i></i>
                             <img src="../assets/images/bank-cft.jpg" alt="财付通">
                         </li>
 
 
-                        @*<li class="more-payBank">*@
-                        @*<a href="javascript:void(0);">选择更多支付方式&gt;&gt;</a>*@
-                        @*</li>*@
+                        <li class="more-payBank">
+                            <a href="javascript:void(0);">选择更多支付方式&gt;&gt;</a>
+                        </li>
                     </ul>
                 </div>
-                @*<div class="clearfix more-list">*@
-                @*<h4>网上银行 <span>由支付宝提供接口，确保您的资金安全</span></h4>*@
-                @*<ul class="list clearfix">*@
-                @*<li paybank="ICBCB2C">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-gs.jpg" alt="工商银行">*@
-                @*</li>*@
-                @*<li paybank="CCB">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-js.jpg" alt="建设银行">*@
-                @*</li>*@
-                @*<li paybank="BOCB2C">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-zg.jpg" alt="中国银行">*@
-                @*</li>*@
-                @*<li paybank="CMB">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-zs.jpg" alt="招商银行">*@
-                @*</li>*@
-                @*<li paybank="COMM">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-jt.jpg" alt="交通银行">*@
-                @*</li>*@
-                @*<li paybank="ABC">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-ny.jpg" alt="农业银行">*@
-                @*</li>*@
-                @*<li paybank="POSTGC">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-yz.jpg" alt="中国邮政储蓄">*@
-                @*</li>*@
-                @*<li paybank="CITIC">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-zx.jpg" alt="中信银行">*@
-                @*</li>*@
-                @*<li paybank="CIB">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-xy.jpg" alt="兴业银行">*@
-                @*</li>*@
-                @*<li paybank="SPDB">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-pf.jpg" alt="浦发银行">*@
-                @*</li>*@
-                @*<li paybank="CMBC">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-ns.jpg" alt="民生银行">*@
-                @*</li>*@
-                @*<li paybank="CEBBANK">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-gd.jpg" alt="光大银行">*@
-                @*</li>*@
-                @*<li paybank="NBBANK">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-nb.jpg" alt="宁波银行">*@
-                @*</li>*@
-                @*<li paybank="SDB">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-szfz.jpg" alt="深发展银行">*@
-                @*</li>*@
-                @*<li paybank="BJRCB">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-bjns.jpg" alt="北京农商银行">*@
-                @*</li>*@
-                @*<li paybank="SPABANK">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-pa.jpg" alt="平安银行">*@
-                @*</li>*@
-                @*<li paybank="GDB">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-gf.jpg" alt="广发银行">*@
-                @*</li>*@
-                @*<li paybank="SHBANK">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-sh.jpg" alt="上海银行">*@
-                @*</li>*@
-                @*<li paybank="HZCBB2C">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-hz.jpg" alt="杭州银行">*@
-                @*</li>*@
-                @*<li paybank="BJBANK">*@
-                @*<i></i>*@
-                @*<img src="../assets/images/bank-bj.jpg" alt="北京银行">*@
-                @*</li>*@
-                @*</ul>*@
-                @*</div>*@
+                <div class="clearfix more-list">
+                    <h4>网上银行 <span>由支付宝提供接口，确保您的资金安全</span></h4>
+                    <ul class="list clearfix">
+                        <li paybank= @PayBank.ICBCB2C.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-gs.jpg" alt="工商银行">
+                        </li>
+                        <li paybank= @PayBank.CCB.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-js.jpg" alt="建设银行">
+                        </li>
+                        <li paybank= @PayBank.BOCB2C.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-zg.jpg" alt="中国银行">
+                        </li>
+                        <li paybank= @PayBank.CMB.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-zs.jpg" alt="招商银行">
+                        </li>
+                        <li paybank= @PayBank.COMM.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-jt.jpg" alt="交通银行">
+                        </li>
+                        <li paybank=@PayBank.ABC.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-ny.jpg" alt="农业银行">
+                        </li>
+                        <li paybank= @PayBank.POSTGC.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-yz.jpg" alt="中国邮政储蓄">
+                        </li>
+                        <li paybank=@PayBank.CITIC.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-zx.jpg" alt="中信银行">
+                        </li>
+                        <li paybank=@PayBank.CIB.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-xy.jpg" alt="兴业银行">
+                        </li>
+                        <li paybank=@PayBank.SPDB.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-pf.jpg" alt="浦发银行">
+                        </li>
+                        <li paybank= @PayBank.CMBC.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-ns.jpg" alt="民生银行">
+                        </li>
+                        <li paybank=@PayBank.CEBBANK.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-gd.jpg" alt="光大银行">
+                        </li>
+                        <li paybank=@PayBank.NBBANK.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-nb.jpg" alt="宁波银行">
+                        </li>
+                        <li paybank=@PayBank.SDB.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-szfz.jpg" alt="深发展银行">
+                        </li>
+                        <li paybank= @PayBank.BJRCB.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-bjns.jpg" alt="北京农商银行">
+                        </li>
+                        <li paybank= @PayBank.SPABANK.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-pa.jpg" alt="平安银行">
+                        </li>
+                        <li paybank= @PayBank.GDB.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-gf.jpg" alt="广发银行">
+                        </li>
+                        <li paybank= @PayBank.SHBANK.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-sh.jpg" alt="上海银行">
+                        </li>
+                        <li paybank=@PayBank.HZCBB2C.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-hz.jpg" alt="杭州银行">
+                        </li>
+                        <li paybank=@PayBank.BJBANK.toString>
+                            <i></i>
+                            <img src="../assets/images/bank-bj.jpg" alt="北京银行">
+                        </li>
+                    </ul>
+                </div>
                 <span class="btn pay-money-btn" id="pay-money-btn">立即支付</span>
             </div>
-            <form action="/order/toPayOrder" target="_blank" id="pay-form" method="get">
-                <input type="hidden" id="tradeNo" name="tradeNo" value="" />
-                <input type="hidden" id="payMethod" name="payMethod" value="" />
-                <input type="hidden" id="payOrg" name="payOrg" value="" />
-                <input type="hidden" id="orderIds" name="orderIds" value="@resultMap.get("orderIds")">
-            </form>
+            <input type="hidden" id="orderIds" name="orderIds" value="@resultMap.get("orderIds")">
         </div>
     </div>
 }

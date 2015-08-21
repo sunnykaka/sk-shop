@@ -29,6 +29,7 @@ public class PayResponseHandler {
     private static final Logger.ALogger logger = Logger.of(PayResponseHandler.class);
     private static final Logger.ALogger ALIPAY_LOGGER = Logger.of("alipayTrade");
     private static final Logger.ALogger TEMPAY_LOGGER = Logger.of("tenpayTrade");
+    private static final Logger.ALogger TRADE_RETURN_LOGGER = Logger.of("TradeReturn");
 
     //交易信息
     private Trade tradeInfo;
@@ -45,7 +46,9 @@ public class PayResponseHandler {
      */
     private TradeStatus statusBeforeBack;
 
+    //TODO 要不要从构造函数中移出？ 还有整个支付过程中异常处理，以及必要的日志记录
     public PayResponseHandler(Request request) {
+        TRADE_RETURN_LOGGER.info("第三方平台返回数据：" + request.queryString());
 
         /**
          * 先从回调参数中取出交易号，并查出对应出交易记录
