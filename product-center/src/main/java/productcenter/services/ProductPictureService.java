@@ -50,7 +50,7 @@ public class ProductPictureService {
     public List<ProductPicture> queryProductPicturesByProductId(int productId) {
         play.Logger.info("------ProductPictureService queryProductPicturesByProductId begin exe-----------" + productId);
 
-        String jpql = "select o from ProductPicture o where 1=1 and o.productId=:productId and o.mainPic = 1 order by o.number, o.name";
+        String jpql = "select o from ProductPicture o where 1=1 and o.productId=:productId order by o.number, o.name";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
         return generalDao.query(jpql, Optional.<Page<ProductPicture>>empty(), queryParams);
