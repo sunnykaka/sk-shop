@@ -149,6 +149,23 @@ public class PayResponseHandler {
             tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_status"));
         }
 
+        if (PayChannel.TenPay.toString().equals(tradeInfo.getOuterPlatformType()) ||
+                PayChannel.WXSM.toString().equals(tradeInfo.getOuterPlatformType())) {
+            tradeInfo.setNotifyId(ParamUtils.getByKey(request, "notify_id"));
+            tradeInfo.setNotifyType("redirect");
+            tradeInfo.setTradeGmtCreateTime(DateUtils.parseDateTime(ParamUtils.getByKey(request, "time_end")));
+//            tradeInfo.setOuterBuyerAccount(""); 财付通没有这个字段，无法返回
+            tradeInfo.setOuterBuyerId(ParamUtils.getByKey(request, "buyer_alias"));  //TODO 64位，数据库长度要修改
+            tradeInfo.setOuterTradeNo(ParamUtils.getByKey(request, "transaction_id"));
+            tradeInfo.setGmtModifyTime(new DateTime());
+            tradeInfo.setPayRetTotalFee(ParamUtils.getByKey(request, "total_fee"));
+            /**
+             * 支付状态都是以支付宝为准的，所以就不需要再转换成枚举了，直接存进去就好
+             */
+            tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_state"));
+        }
+
+
     }
 
     /**

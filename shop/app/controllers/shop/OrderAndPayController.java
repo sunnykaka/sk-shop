@@ -10,9 +10,7 @@ import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.models.Order;
 import ordercenter.models.Trade;
-import ordercenter.payment.PayInfoWrapper;
 import ordercenter.payment.PayRequestHandler;
-import ordercenter.payment.PaymentManager;
 import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayMethod;
 import ordercenter.services.OrderService;
@@ -299,61 +297,61 @@ public class OrderAndPayController extends Controller {
         }
     }
 
-    /**
-     * 提交订单：订单支付
-     * @deprecate
-     * @param payMethod
-     * @param payOrg
-     * @param orderIds
-     * @param tradeNo
-     * @return
-     */
-    @SecuredAction
-    public Result toPayOrder(String payMethod, String payOrg, String orderIds, String tradeNo) {
-        String[] split = orderIds.split("_");
-        List<Integer> idList = new ArrayList<Integer>();
-        for (int i = 0; i < split.length; i++) {
-            idList.add(Integer.valueOf(split[i]));
-        }
-        PayInfoWrapper payInfoWrapper = new PayInfoWrapper();
-        payInfoWrapper.setTradeNo(tradeNo);
-        //设置购买方式为order，订单
-        payInfoWrapper.setBizType(BizType.Order.getName());
-
-        payInfoWrapper.setPayMethod(PayMethod.valueOf(payMethod));
-        payInfoWrapper.setDefaultbank(payOrg);
-
-        //默认为支付宝,主要用来更新支付方式
-        PayBank bank = PayBank.Alipay;
-        //目前设置默为阿里支付
-        if (payInfoWrapper.isBank()) {
-            bank = PayBank.valueOf(payInfoWrapper.getDefaultbank());
-        } else {
-            if (payMethod.equals(PayMethod.Tenpay.getName()) || payMethod.equals(PayMethod.WXSM.getName())) {
-                bank = PayBank.Tenpay;
-                if (payMethod.equals(PayMethod.WXSM.getName())) {
-                    bank = PayBank.WXSM;
-                }
-                payInfoWrapper.setBuyerIP(request().remoteAddress());
-            }
-        }
-        Logger.info("--------------------真正的支付机构：" + bank.getValue() + ":" + bank.getName() + ":" + bank.toString());
-        payInfoWrapper.setDefaultbank(bank.toString());//TODO checkout
-
-        List<Order> orderList = new ArrayList<Order>(idList.size());
-        for (int id : idList) {
-            Order order = orderService.getOrderById(id);
-            orderList.add(order);
-        }
-        //订单总金额，显示在支付宝收银台里的“应付总额”里
-        long totalFee = this.getPayMoneyForCent(orderList);
-
-        payInfoWrapper.setTotalFee(totalFee);
-
-        PayRequestHandler payService = PaymentManager.getPayRequestHandler(PayMethod.valueOf(payMethod));
-        String form = ""; //todo   need revert payService.forwardToPay(payInfoWrapper);
-        return ok(orderToPay.render(form));
-    }
+//    /**
+//     * 提交订单：订单支付
+//     * @deprecate
+//     * @param payMethod
+//     * @param payOrg
+//     * @param orderIds
+//     * @param tradeNo
+//     * @return
+//     */
+//    @SecuredAction
+//    public Result toPayOrder(String payMethod, String payOrg, String orderIds, String tradeNo) {
+//        String[] split = orderIds.split("_");
+//        List<Integer> idList = new ArrayList<Integer>();
+//        for (int i = 0; i < split.length; i++) {
+//            idList.add(Integer.valueOf(split[i]));
+//        }
+//        PayInfoWrapper payInfoWrapper = new PayInfoWrapper();
+//        payInfoWrapper.setTradeNo(tradeNo);
+//        //设置购买方式为order，订单
+//        payInfoWrapper.setBizType(BizType.Order.getName());
+//
+//        payInfoWrapper.setPayMethod(PayMethod.valueOf(payMethod));
+//        payInfoWrapper.setDefaultbank(payOrg);
+//
+//        //默认为支付宝,主要用来更新支付方式
+//        PayBank bank = PayBank.Alipay;
+//        //目前设置默为阿里支付
+//        if (payInfoWrapper.isBank()) {
+//            bank = PayBank.valueOf(payInfoWrapper.getDefaultbank());
+//        } else {
+//            if (payMethod.equals(PayMethod.Tenpay.getName()) || payMethod.equals(PayMethod.WXSM.getName())) {
+//                bank = PayBank.Tenpay;
+//                if (payMethod.equals(PayMethod.WXSM.getName())) {
+//                    bank = PayBank.WXSM;
+//                }
+//                payInfoWrapper.setBuyerIP(request().remoteAddress());
+//            }
+//        }
+//        Logger.info("--------------------真正的支付机构：" + bank.getValue() + ":" + bank.getName() + ":" + bank.toString());
+//        payInfoWrapper.setDefaultbank(bank.toString());//TODO checkout
+//
+//        List<Order> orderList = new ArrayList<Order>(idList.size());
+//        for (int id : idList) {
+//            Order order = orderService.getOrderById(id);
+//            orderList.add(order);
+//        }
+//        //订单总金额，显示在支付宝收银台里的“应付总额”里
+//        long totalFee = this.getPayMoneyForCent(orderList);
+//
+//        payInfoWrapper.setTotalFee(totalFee);
+//
+//        PayRequestHandler payService = PaymentManager.getPayRequestHandler(PayMethod.valueOf(payMethod));
+//        String form = ""; //todo   need revert payService.forwardToPay(payInfoWrapper);
+//        return ok(orderToPay.render(form));
+//    }
 
     /**
      * 按照支付订单号列表重新计算支付总金额，单位分

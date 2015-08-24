@@ -11,6 +11,7 @@ import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -21,16 +22,19 @@ import java.util.*;
 
 /**
  * 财付通支付工具类
- * User: lidujun
- * Date: 2015-04-29
+ *
+ * @author Tiger
+ * @version 1.0
+ * @since 13-1-21 下午3:40
  */
 public class TenpayUtils {
 
-    public static final String PARTNER = "1250559701";
 
-    public static final String PAY_GATEWAY = "https://gw.tenpay.com/intl/gateway/pay.htm?";
+    public static final String PARTNER = "1215343201";
 
-    public static final String NOTIFY_GATEWAY = "https://gw.tenpay.com/intl/gateway/verifynotifyid.xml?";
+    public static final String PAY_GATEWAY = "https://gw.tenpay.com/gateway/pay.htm?";
+
+    public static final String NOTIFY_GATEWAY = "https://gw.tenpay.com/gateway/simpleverifynotifyid.xml?";
 
     public static final String SIGN_TYPE = "MD5";
 
@@ -38,18 +42,13 @@ public class TenpayUtils {
 
     public static final String SERVICE_VERSION = "1.0";
 
-    public static final String KEY = "9c38f5467ff94936559bb27565afa494";
+    public static final String KEY = "bfe7249f88e4cc8135e7a2ae5b80a908";
 
     public static final Log logger = LogFactory.getLog(TenpayUtils.class);
 
     public static boolean verify(String reqType, Map<String, String> params) {
         try {
             boolean success = createSign(params).equalsIgnoreCase(params.get("sign"));
-
-            if(success) {
-                return success;
-            }
-            /*
             if ("return".equals(reqType)) {
                 return success;
             } else if ("notify".equals(reqType)) {
@@ -83,7 +82,7 @@ public class TenpayUtils {
                 }
                 logger.error("httpClient.errorinfo=: " + httpClient.getErrInfo());
                 return false;
-            }*/
+            }
             return false;
         } catch (Exception e) {
             logger.error("财付通回调验证异常", e);
@@ -118,6 +117,7 @@ public class TenpayUtils {
                 sb.append(k + "=" + v + "&");
             }
         }
+
         sb.append("key=" + KEY);
         logger.info("财富通回传参数签名为：" + MD5Encode(sb.toString(), INPUT_CHARSET));
         return MD5Encode(sb.toString(), INPUT_CHARSET);
@@ -137,6 +137,7 @@ public class TenpayUtils {
         }
         sb.append("key=" + TenpayUtils.KEY);
         return MD5Encode(sb.toString(), INPUT_CHARSET).toLowerCase();
+
     }
 
     private static String byteArrayToHexString(byte b[]) {
@@ -684,6 +685,7 @@ public class TenpayUtils {
          * @return String
          */
         public static String getURL(String strUrl) {
+
             if (null != strUrl) {
                 int indexOf = strUrl.indexOf("?");
                 if (-1 != indexOf) {
@@ -694,6 +696,7 @@ public class TenpayUtils {
             }
 
             return strUrl;
+
         }
 
         /**
@@ -703,6 +706,7 @@ public class TenpayUtils {
          * @return String
          */
         public static String getQueryString(String strUrl) {
+
             if (null != strUrl) {
                 int indexOf = strUrl.indexOf("?");
                 if (-1 != indexOf) {
@@ -711,6 +715,7 @@ public class TenpayUtils {
 
                 return "";
             }
+
             return strUrl;
         }
 
@@ -732,7 +737,9 @@ public class TenpayUtils {
                 String pair = strArray[index];
                 HttpClientUtil.putMapByPair(pair, m);
             }
+
             return m;
+
         }
 
         /**
@@ -743,6 +750,7 @@ public class TenpayUtils {
          * @param m
          */
         public static void putMapByPair(String pair, Map m) {
+
             if (null == pair || "".equals(pair)) {
                 return;
             }
@@ -999,6 +1007,8 @@ public class TenpayUtils {
             return (String) doc.getProperty("encoding");
         }
 
+
     }
+
 
 }

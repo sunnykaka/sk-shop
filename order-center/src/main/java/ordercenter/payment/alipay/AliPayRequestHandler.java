@@ -2,11 +2,9 @@ package ordercenter.payment.alipay;
 
 import common.utils.Money;
 import ordercenter.models.Trade;
-import ordercenter.payment.PayInfoWrapper;
 import ordercenter.payment.PayRequestHandler;
 import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayMethod;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;

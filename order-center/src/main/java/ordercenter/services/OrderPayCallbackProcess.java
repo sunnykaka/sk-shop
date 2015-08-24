@@ -26,6 +26,8 @@ public class OrderPayCallbackProcess implements PayCallback {
         result.addData("payTotalFee", trade.getPayTotalFee());
 
         List<TradeOrder> tradeOrderList = tradeService.getTradeOrdeByTradeNo(trade.getTradeNo());
+        trade.setTradeOrder(tradeOrderList);
+
         result.addData("tradeOrderList", tradeOrderList);
         StringBuilder orderIdSb = new StringBuilder();
         for (TradeOrder tradeOrder : tradeOrderList) {
