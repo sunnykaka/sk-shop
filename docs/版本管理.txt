@@ -1,4 +1,4 @@
-两个分支: master,develop,hotfix.
+三个分支: master,develop,hotfix.
 三个角色: master分支管理员，开发人员，运维人员
 四个环境: development(开发环境), test(测试环境), preview(预演环境), production(正式环境).
 

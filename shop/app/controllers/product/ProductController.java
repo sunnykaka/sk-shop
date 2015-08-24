@@ -40,9 +40,6 @@ public class ProductController extends Controller {
     ValuationService valuationService;
 
     @Autowired
-    SeoService seoService;
-
-    @Autowired
     private ProductListService productListService;
 
     @Autowired
@@ -100,7 +97,6 @@ public class ProductController extends Controller {
         if (productDetail == null) {
             return Global.show404();
         }
-        productDetail.setSeo(seoService.getProductSeo(productDetail.getProduct()));
 
         return ok(detail.render(productDetail,(int)(Math.random()*10)%6+1));
     }
