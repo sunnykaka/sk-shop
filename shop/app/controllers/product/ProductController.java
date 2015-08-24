@@ -5,8 +5,6 @@ import common.utils.page.Page;
 import common.utils.page.PageFactory;
 import dtos.ProductDetail;
 import dtos.ProductInSellList;
-import dtos.ProductInfo;
-import models.CmsExhibition;
 import ordercenter.models.Valuation;
 import ordercenter.services.ValuationService;
 import org.apache.commons.lang3.StringUtils;
@@ -18,15 +16,12 @@ import productcenter.models.NavigateCategory;
 import productcenter.models.Product;
 import productcenter.services.ProductListService;
 import productcenter.services.ProductPictureService;
-import productcenter.services.ProductService;
-import productcenter.services.SeoService;
 import services.product.ProductDetailService;
 import utils.Global;
 import views.html.product.detail;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import static java.util.stream.Collectors.toList;
 
