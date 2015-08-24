@@ -205,14 +205,15 @@ public class ProductDetail {
 
             //读取主图
             List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(productDetail.product.getId());
-            productDetail.productPictureList.addAll(productPictures);
-//            需求变动。改为多主图轮播
-//            if(!productPictures.isEmpty()) {
-//                List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMainPic).collect(Collectors.toList());
-//                if(!collect.isEmpty()) {
-//                    productDetail.productPicture = collect.get(0);
-//                }
-//            }
+            //productDetail.productPictureList.addAll(productPictures);
+            //需求变动。改为多主图轮播
+            if(!productPictures.isEmpty()) {
+                List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMainPic).collect(Collectors.toList());
+                if(!collect.isEmpty()) {
+                    //productDetail.productPicture = collect.get(0);
+                    productDetail.productPictureList.addAll(collect);
+                }
+            }
 
             //读取商品描述
             productDetail.htmlList = productService.queryHtmlByProductId(productDetail.product.getId());
