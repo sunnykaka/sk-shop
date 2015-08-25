@@ -285,9 +285,6 @@ public class TradeService {
 //            //更新订单
 //            OrderState oldState = order.getOrderState();
 //            // 订单状态只能从 创建 到 付款成功
-//            order.setMustPreviousState(OrderState.Create);
-//            order.setOrderState(OrderState.Pay);  //支付成功
-
 
             /**
              * 将订单状态从已创建，更改为已付款
@@ -297,6 +294,10 @@ public class TradeService {
             } catch (Exception e) {
                 Logger.error("将订单状态从已创建改更为已经付款时失败，订单id:=" + preOrder.getId(), e);
             }
+
+            preOrder.setMustPreviousState(OrderState.Create);
+            preOrder.setOrderState(OrderState.Pay);  //支付成功
+
 
             //记录订单状态历史信息
             try {
