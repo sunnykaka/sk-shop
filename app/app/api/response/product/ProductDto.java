@@ -1,6 +1,9 @@
 package api.response.product;
 
+import api.response.user.DesignerDto;
 import productcenter.constants.ProductTagType;
+import productcenter.models.Product;
+import usercenter.models.DesignerSize;
 
 /**
  * Created by liubin on 15-8-21.
@@ -18,14 +21,9 @@ public class ProductDto {
     private String productCode;
 
     /**
-     * 所在的后台类目
+     * 设计师
      */
-    private Integer categoryId;
-
-    /**
-     * 客户（设计师）id
-     */
-    private Integer customerId;
+    private DesignerDto designer;
 
     /**
      * 产品名称
@@ -58,11 +56,6 @@ public class ProductDto {
     private Boolean isDelete;
 
     /**
-     * 设计师尺码表ID
-     */
-    private Integer designerSizeId;
-
-    /**
      * 设计师尺码表
      */
     private DesignerSizeDto designerSize;
@@ -84,20 +77,12 @@ public class ProductDto {
         this.productCode = productCode;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public DesignerDto getDesigner() {
+        return designer;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Integer getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setDesigner(DesignerDto designer) {
+        this.designer = designer;
     }
 
     public String getName() {
@@ -148,19 +133,28 @@ public class ProductDto {
         this.isDelete = isDelete;
     }
 
-    public Integer getDesignerSizeId() {
-        return designerSizeId;
-    }
-
-    public void setDesignerSizeId(Integer designerSizeId) {
-        this.designerSizeId = designerSizeId;
-    }
-
     public DesignerSizeDto getDesignerSize() {
         return designerSize;
     }
 
     public void setDesignerSize(DesignerSizeDto designerSize) {
         this.designerSize = designerSize;
+    }
+
+    public static ProductDto build(Product product, DesignerSize designerSize) {
+        if(product == null) return null;
+        ProductDto productDto = new ProductDto();
+        productDto.setDescription(product.getDescription());
+        productDto.setDesigner(DesignerDto.build(product.getCustomer()));
+        productDto.setDesignerSize(DesignerSizeDto.build(designerSize));
+        productDto.setEnName(product.getEnName());
+        productDto.setId(product.getId());
+        productDto.setIsDelete(product.getIsDelete());
+        productDto.setName(product.getName());
+        productDto.setOnline(product.isOnline());
+        productDto.setProductCode(product.getProductCode());
+        productDto.setTagType(product.getTagType());
+
+        return productDto;
     }
 }

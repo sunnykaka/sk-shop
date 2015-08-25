@@ -1,5 +1,7 @@
 package api.response.user;
 
+import usercenter.models.UserData;
+
 /**
  * 用户基本资料表
  */
@@ -112,5 +114,23 @@ public class UserDataDto {
 
     public void setBirthdayD(String birthdayD) {
         this.birthdayD = birthdayD;
+    }
+
+    public static UserDataDto build(UserData userData) {
+        if(userData == null) return null;
+
+        UserDataDto userDataDto = new UserDataDto();
+        userDataDto.setArea(userData.getArea());
+        userDataDto.setBirthday(userData.getBirthday());
+        userDataDto.setBirthdayD(userData.getBirthdayD());
+        userDataDto.setBirthdayM(userData.getBirthdayM());
+        userDataDto.setBirthdayY(userData.getBirthdayY());
+        userDataDto.setCity(userData.getCity());
+        userDataDto.setLocation(userData.getLocation());
+        userDataDto.setName(userData.getName());
+        userDataDto.setProvince(userData.getProvince());
+        userDataDto.setSex(userData.getSex());
+
+        return userDataDto;
     }
 }
