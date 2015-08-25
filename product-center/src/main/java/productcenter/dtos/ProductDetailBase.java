@@ -196,9 +196,9 @@ public class ProductDetailBase {
 
             //FIXME cms重做前的临时办法
             String sql = "select endTime from cms_exhibition where (beginTime  <= Now() AND endTime > Now())  and  id in ( select exhibitionId from exhibition_item where prodId = ?1)";
-            List<DateTime> list = BaseGlobal.ctx.getBean(GeneralDao.class).getEm().createNativeQuery(sql).setParameter(1, productDetailBase.product.getId()).getResultList();
+            List<java.sql.Timestamp> list = BaseGlobal.ctx.getBean(GeneralDao.class).getEm().createNativeQuery(sql).setParameter(1, productDetailBase.product.getId()).getResultList();
 
-            Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(list.get(0)) : Optional.empty();
+            Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(new DateTime(list.get(0).getTime())) : Optional.empty();
             if(exhibitionEndTime.isPresent()) {
                 productDetailBase.isInExhibition = true;
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
