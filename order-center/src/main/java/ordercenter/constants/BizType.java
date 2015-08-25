@@ -1,6 +1,8 @@
 package ordercenter.constants;
 
 import common.models.utils.ViewEnum;
+import ordercenter.payment.PayCallback;
+import ordercenter.services.OrderPayCallbackProcess;
 
 /**
  * 业务类型
@@ -11,16 +13,19 @@ public enum BizType implements ViewEnum {
     /**
      * 订单
      */
-    Order("订单"),
-    /**
-     * 优惠券
-     */
-    Coupon("优惠券");
+    Order("订单", OrderPayCallbackProcess.class);
+//    /**
+//     * 优惠券
+//     */
+//    Coupon("优惠券", OrderPayCallbackProcess.class);
 
-    public String value;
+    private String value;
 
-    BizType(String value) {
+    private Class<? extends PayCallback> handlerClass;
+
+    BizType(String value, Class<? extends PayCallback> handlerClass) {
         this.value = value;
+        this.handlerClass = handlerClass;
     }
 
     @Override
@@ -31,5 +36,9 @@ public enum BizType implements ViewEnum {
     @Override
     public String getValue() {
         return value;
+    }
+
+    public Class getHandlerClass(){
+        return this.handlerClass;
     }
 }

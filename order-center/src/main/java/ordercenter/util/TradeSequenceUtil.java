@@ -1,6 +1,7 @@
 package ordercenter.util;
 
 import common.utils.DateUtils;
+import usercenter.models.User;
 import usercenter.utils.SessionUtils;
 
 /**
@@ -17,7 +18,12 @@ public class TradeSequenceUtil {
      * @return
      */
     public static String getTradeNo() {
-       return SessionUtils.currentUser().getId() + String.valueOf(System.currentTimeMillis());
+        User user = SessionUtils.currentUser();
+        int userId = 1; //默认以1为种子用户
+        if(user != null){
+            userId = user.getId();
+        }
+       return userId + String.valueOf(System.currentTimeMillis());
     }
 
     /**

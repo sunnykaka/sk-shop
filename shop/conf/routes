@@ -136,10 +136,11 @@ GET         /cart/verifyPromptlyPayData                 @controllers.shop.CartCo
 GET         /cart/promptlyPayChooseAddress              @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
 
 #订单
+GET         /order/testPay                              @controllers.shop.OrderAndPayController.testPay()
 GET         /order/submitOrder                          @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
 GET         /order/toOrderPlay                          @controllers.shop.OrderAndPayController.toOrderPlay(orderIds:String)
 GET         /order/submitTradeOrder                     @controllers.shop.OrderAndPayController.submitTradeOrder(payType:String,payMethod:String,payOrg:String,orderIds:String)
-GET         /order/toPayOrder                           @controllers.shop.OrderAndPayController.toPayOrder(payMethod:String,payOrg:String,orderIds:String,tradeNo:String)
+#GET         /order/toPayOrder                           @controllers.shop.OrderAndPayController.toPayOrder(payMethod:String,payOrg:String,orderIds:String,tradeNo:String)
 
 #支付
 GET         /payOrder/normalReturn                      @controllers.shop.OrderPayCallBackController.normalReturn

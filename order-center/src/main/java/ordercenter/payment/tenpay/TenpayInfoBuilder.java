@@ -1,64 +1,42 @@
 package ordercenter.payment.tenpay;
 
-import common.utils.DateUtils;
-import common.utils.Money;
-import common.utils.ParamUtils;
-import ordercenter.models.Trade;
-import ordercenter.payment.BackInfoBuilder;
-import ordercenter.payment.constants.PayType;
-import play.mvc.Http.Request;
 
-import java.util.Map;
-import java.util.TreeMap;
+import ordercenter.models.Trade;
+import play.mvc.Http;
 
 /**
- * 财付通(tenpay) Builder
- * User: lidujun
- * Date: 2015-07-16
+ * User: amos.zhou
+ * Date: 13-10-24
+ * Time: 上午10:51
  */
-public class TenpayInfoBuilder implements BackInfoBuilder {
+public class TenpayInfoBuilder  {
 
-    @Override
-    public Trade buildFromRequest(Request request) {
-        Trade tradeInfo = new Trade();
-        tradeInfo.setOuterPlatformType(PayType.TenPay.getValue());
-
-        //尚客系统交易号
-        tradeInfo.setTradeNo(ParamUtils.getByKey(request, "out_trade_no"));
-        //财付通系统交易号
-        tradeInfo.setOuterTradeNo(ParamUtils.getByKey(request, "transaction_id"));
-
-        //交易状态 0—成功
-        tradeInfo.setTradeStatus(ParamUtils.getByKey(request, "trade_state"));
-
-        tradeInfo.setPayCurrency(ParamUtils.getByKey(request, "fee_type"));
-        tradeInfo.setPayRetTotalFee(ParamUtils.getByKey(request, "total_fee"));
-        tradeInfo.setPayTotalFee(Money.valueOf(ParamUtils.getByKey(request, "total_fee")));
-        tradeInfo.setNotifyId(ParamUtils.getByKey(request, "notify_id"));
-
-        tradeInfo.setGmtCreateTime(DateUtils.current());
-        tradeInfo.setTradeGmtCreateTime(DateUtils.current());
-
-        tradeInfo.setNotifyType("redirect");
-        return tradeInfo;
-    }
-
-    @Override
-    public Map<String, String> buildParam(Request request) {
-        Map<String, String> params = new TreeMap<String, String>();
-        Map requestParams = request.queryString();
-        if(requestParams == null || requestParams.size() == 0) {
-            if("POST".equalsIgnoreCase(request.method())){
-                requestParams = request.body().asFormUrlEncoded();
-            }
-        }
-
-        for (Object oName : requestParams.keySet()) {
-            String name = (String) oName;
-            String[] values = (String[]) requestParams.get(name);
-            if (values != null && values.length > 0)
-                params.put(name, values[0]);
-        }
-        return params;
-    }
+//    @Override
+//    public Trade buildFromRequest(Http.Request request) {
+//        String trade_no = request.getParameter("out_trade_no");  //获取订单号
+//        TradeInfo tradeInfo = new TradeInfo();
+//        tradeInfo.setTradeNo(trade_no);
+//        tradeInfo.setPayTotalFee(Long.valueOf(request.getParameter("total_fee")));
+//        tradeInfo.setGmtCreateTime(new Date());
+//        tradeInfo.setTradeStatus(request.getParameter("trade_state"));
+//        tradeInfo.setOuterBuyerAccount(request.getParameter("buyer_alias"));
+//        tradeInfo.setOuterTradeNo(request.getParameter("transaction_id"));
+//        tradeInfo.setOuterPlatformType(PayType.TenPay.getValue());
+//        tradeInfo.setNotifyId(request.getParameter("notify_id"));
+//        tradeInfo.setNotifyType("redirect");
+//        return tradeInfo;
+//    }
+//
+//    @Override
+//    public Map<String, String> buildParam(HttpServletRequest request) {
+//        Map<String, String> params = new TreeMap<String, String>();
+//        Map requestParams = request.getParameterMap();
+//        for (Object oName : requestParams.keySet()) {
+//            String name = (String) oName;
+//            String[] values = (String[]) requestParams.get(name);
+//            if (values != null && values.length > 0)
+//                params.put(name, values[0]);
+//        }
+//        return params;
+//    }
 }
