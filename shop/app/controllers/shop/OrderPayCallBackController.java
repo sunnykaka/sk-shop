@@ -7,6 +7,7 @@ import ordercenter.payment.CallBackResult;
 import ordercenter.payment.PayResponseHandler;
 import ordercenter.payment.alipay.AlipayUtil;
 import ordercenter.payment.constants.ResponseType;
+import ordercenter.payment.constants.TradeStatus;
 import ordercenter.services.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
@@ -114,7 +115,7 @@ public class OrderPayCallBackController extends Controller {
             } else {
                 String state = traderade.getTradeStatus();
                 //现在只有支付宝和财富通
-                if("TRADE_FINISHED".equalsIgnoreCase(state) || "0".equalsIgnoreCase(state)) {
+                if(TradeStatus.TRADE_FINISHED.toString().equalsIgnoreCase(state) || TradeStatus.TRADE_SUCCESS.toString().equalsIgnoreCase(state)) {
                     return ok(new JsonResult(true,"支付成功").toNode());
                 } else {
                     return ok(new JsonResult(false,"未支付成功，请重新支付").toNode());

@@ -290,7 +290,11 @@ public class OrderAndPayController extends Controller {
 
             tradeLogger.info("交易信息创建完成，tradeNo = " + trade.getTradeNo());
 
-            return ok(new JsonResult(true, "生成交易成功", form).toNode());
+            PayFormVO formVO = new PayFormVO();
+            formVO.setForm(form);
+            formVO.setTradeNo(trade.getTradeNo());
+
+            return ok(new JsonResult(true, "生成交易成功", formVO).toNode());
         } catch (Exception e) {
             Logger.error("用户" + curUserName + "订单支付在提交第三方支付前发生异常，其提交的订单编号如下：" + orderIds, e);
             return ok(new JsonResult(false, "订单支付失败，请联系商城客服人员！").toNode());

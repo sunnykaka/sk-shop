@@ -43,7 +43,7 @@ $('#pay-money-btn').click(function(){
                     if($('#payForm').size()>0){
                         $('#payForm').remove();
                     }
-                    $('body').append(data.data);
+                    $('body').append(data.data.form);
                     $('#payForm').submit();
 //                 $('#tradeNo').val(data.data);
 //                 $('#payMethod').val(payMethod);
@@ -71,7 +71,7 @@ $('#pay-money-btn').click(function(){
                                     click: function(btn) {
                                          $.ajax({
                                             type: "get",
-                                            url: '/payOrder/checkPayState?tradeNo='+data.data,
+                                            url: '/payOrder/checkPayState?tradeNo='+data.data.tradeNo,
                                             async: false,
                                             dataType: 'json',
                                             cache: false,
