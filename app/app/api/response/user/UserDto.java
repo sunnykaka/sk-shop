@@ -1,6 +1,8 @@
 package api.response.user;
 
 import usercenter.constants.AccountType;
+import usercenter.models.User;
+import usercenter.models.UserData;
 
 /**
  * Created by liubin on 15-8-3.
@@ -98,5 +100,23 @@ public class UserDto {
 
     public void setUserData(UserDataDto userData) {
         this.userData = userData;
+    }
+
+    public static UserDto build(User user, UserData userData) {
+        if(user == null) return null;
+
+        UserDto userDto = new UserDto();
+        userDto.setAccountType(user.getAccountType());
+        userDto.setDeleted(user.isDeleted());
+        userDto.setEmail(user.getEmail());
+        userDto.setHasForbidden(user.isHasForbidden());
+        userDto.setPhone(user.getPhone());
+        userDto.setRegisterDate(user.getRegisterDate());
+        userDto.setRegisterIP(user.getRegisterIP());
+        userDto.setUserName(user.getUserName());
+        userDto.setUserData(UserDataDto.build(userData));
+
+        return userDto;
+
     }
 }

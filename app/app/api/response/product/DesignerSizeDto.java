@@ -1,14 +1,14 @@
 package api.response.product;
 
 
+import usercenter.models.DesignerSize;
+
 /**
  * Created by liubin on 15-8-21.
  */
 public class DesignerSizeDto {
 
     private Integer id;
-
-    private int designerId;
 
     //尺码名
     private String name;
@@ -29,14 +29,6 @@ public class DesignerSizeDto {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public int getDesignerId() {
-        return designerId;
-    }
-
-    public void setDesignerId(int designerId) {
-        this.designerId = designerId;
     }
 
     public String getName() {
@@ -69,5 +61,16 @@ public class DesignerSizeDto {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public static DesignerSizeDto build(DesignerSize designerSize) {
+        if(designerSize == null) return null;
+        DesignerSizeDto designerSizeDto = new DesignerSizeDto();
+        designerSizeDto.setId(designerSize.getId());
+        designerSizeDto.setContent(designerSize.getContent());
+        designerSizeDto.setDeleted(designerSize.isDeleted());
+        designerSizeDto.setName(designerSize.getName());
+        designerSizeDto.setPrompt(designerSize.getPrompt());
+        return designerSizeDto;
     }
 }
