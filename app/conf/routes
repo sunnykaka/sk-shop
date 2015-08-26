@@ -14,6 +14,8 @@ POST        /refresh_token         @controllers.api.user.LoginApiController.refr
 POST        /test/public           @controllers.api.TestApiController.publicResource
 POST        /test/protected        @controllers.api.TestApiController.protectedResource
 
+#product
+GET         /product/:id           @controllers.api.product.ProductController.detail(id)
 
 
 # Map static resources from the /public folder to the /assets URL path
