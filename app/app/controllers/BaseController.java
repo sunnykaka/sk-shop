@@ -4,16 +4,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.FormUtils;
+import common.utils.ParamUtils;
 import common.utils.play.BaseGlobal;
 import play.api.mvc.Codec;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.twirl.api.Content;
+import services.api.user.UserTokenProvider;
 import usercenter.models.User;
 import usercenter.services.UserService;
 import usercenter.utils.SessionUtils;
 import utils.Global;
+
+import java.util.Optional;
 
 /**
  * Created by liubin on 15-8-4.
@@ -52,6 +56,16 @@ public abstract class BaseController extends Controller {
         }
 
         Integer userId = (Integer)Http.Context.current().args.get(SessionUtils.USER_ID_KEY);
+        if(userId == null) {
+            String accessToken = ParamUtils.getByKey(request(), UserTokenProvider.ACCESS_TOKEN_KEY);
+            Optional<Integer> userIdOption = Global.ctx.getBean(UserTokenProvider.class).retrieveUserIdByAccessToken(accessToken);
+            if(userIdOption.isPresent()) {
+                userId = userIdOption.get();
+                Http.Context.current().args.put(SessionUtils.USER_ID_KEY, userId);
+                Http.Context.current().args.remove(SessionUtils.USER_KEY);
+            }
+        }
+
         if(userId != null) {
             User user = Global.ctx.getBean(UserService.class).getById(userId);
             Http.Context.current().args.put(SessionUtils.USER_KEY, user);
