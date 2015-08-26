@@ -24,7 +24,7 @@ import java.util.Optional;
 public class UserTokenProvider {
 
     private Charset DEFAULT_CHARSET = Charset.forName("ISO8859-1");
-    public static final String ACCESS_TOKEN_KEY = "access_token";
+    public static final String ACCESS_TOKEN_KEY = "accessToken";
 
 
     private static CacheApi cacheApi() {
