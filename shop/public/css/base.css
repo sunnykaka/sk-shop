@@ -120,7 +120,7 @@ table .pro{width: 360px;}
 .header li .current,.header li a:hover{border-bottom:2px solid #FF2D54;}
 .header .last{margin-right: 0;}
 .header .logo{height: 200px;margin-top:0;margin-right:55px;width: 290px;}
-.header .logo a{padding: 0;width: 194px;text-indent: -9999px;background: url("../images/sk-sprite.png") no-repeat;margin-left: 42px;_display:inline;}
+.header .logo a{padding: 0;width: 194px;text-indent: -9999px;background: url("../images/sk-sprite.png") no-repeat;margin-left: 53px;_display:inline;}
 .header .logo a:hover{border-bottom: none;}
 /*end header*/
 /*index slider-box*/
