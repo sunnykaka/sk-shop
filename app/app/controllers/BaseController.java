@@ -50,6 +50,13 @@ public abstract class BaseController extends Controller {
         return new Status(play.core.j.JavaResults.Conflict(), content, utf8);
     }
 
+    /**
+     * 拿到当前用户
+     * 如果调用该方法的Controller方法加了@SecuredAction注解，则调用currentUser返回的user对象一定不为null
+     * 否则可能会返回null，这要看客户端是不是传了有效的accessToken
+     *
+     * @return
+     */
     protected User currentUser() {
         if(Http.Context.current().args.get(SessionUtils.USER_KEY) != null) {
             return (User)Http.Context.current().args.get(SessionUtils.USER_KEY);
