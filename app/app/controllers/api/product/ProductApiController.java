@@ -26,7 +26,7 @@ import utils.Global;
 import java.util.Optional;
 
 @org.springframework.stereotype.Controller
-public class ProductController extends BaseController {
+public class ProductApiController extends BaseController {
 
     @Autowired
     ProductService productService;
