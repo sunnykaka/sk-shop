@@ -15,7 +15,7 @@ POST        /test/public           @controllers.api.TestApiController.publicReso
 POST        /test/protected        @controllers.api.TestApiController.protectedResource
 
 #product
-GET         /product/:id           @controllers.api.product.ProductController.detail(id)
+GET         /products/:id           @controllers.api.product.ProductController.detail(id)
 
 #购物车
 GET         /app/cart/getUserCartItemNum                    @controllers.api.shop.CartApiController.getUserCartItemNum()

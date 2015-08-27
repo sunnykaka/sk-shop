@@ -55,10 +55,6 @@ public class ProductDto {
      */
     private Boolean isDelete;
 
-    /**
-     * 设计师尺码表
-     */
-    private DesignerSizeDto designerSize;
 
 
     public Integer getId() {
@@ -133,20 +129,12 @@ public class ProductDto {
         this.isDelete = isDelete;
     }
 
-    public DesignerSizeDto getDesignerSize() {
-        return designerSize;
-    }
 
-    public void setDesignerSize(DesignerSizeDto designerSize) {
-        this.designerSize = designerSize;
-    }
-
-    public static ProductDto build(Product product, DesignerSize designerSize) {
+    public static ProductDto build(Product product) {
         if(product == null) return null;
         ProductDto productDto = new ProductDto();
         productDto.setDescription(product.getDescription());
         productDto.setDesigner(DesignerDto.build(product.getCustomer()));
-        productDto.setDesignerSize(DesignerSizeDto.build(designerSize));
         productDto.setEnName(product.getEnName());
         productDto.setId(product.getId());
         productDto.setIsDelete(product.getIsDelete());

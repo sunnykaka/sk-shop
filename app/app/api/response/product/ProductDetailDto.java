@@ -142,7 +142,7 @@ public class ProductDetailDto {
         productDetailDto.setFavoritesNum(base.getFavoritesNum());
         productDetailDto.setHtmlList(base.getHtmlList().stream().map(Html::getContent).collect(Collectors.toList()));
         productDetailDto.setInExhibition(base.isInExhibition());
-        productDetailDto.setProduct(ProductDto.build(base.getProduct(), base.getDesignerSize()));
+        productDetailDto.setProduct(ProductDto.build(base.getProduct()));
         productDetailDto.setSkuCandidateList(base.getSkuCandidateList());
         productDetailDto.setSkuMap(base.getSkuMap());
         productDetailDto.setSpecMap(base.getSpecList().
