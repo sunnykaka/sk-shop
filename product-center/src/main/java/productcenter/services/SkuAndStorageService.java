@@ -31,6 +31,7 @@ public class SkuAndStorageService {
 
     /**
      * 获取数据库中所有sku记录(包含sku属性)
+     *
      * @return
      */
     public List<StockKeepingUnit> queryAllStockKeepingUnits() {
@@ -40,6 +41,7 @@ public class SkuAndStorageService {
 
     /**
      * 按照sku主键获取sku(包含sku属性)
+     *
      * @param id
      * @return
      */
@@ -51,6 +53,7 @@ public class SkuAndStorageService {
 
     /**
      * 通过sku条码获取sku记录(包含sku属性)
+     *
      * @param barCode
      * @return
      */
@@ -63,7 +66,7 @@ public class SkuAndStorageService {
 
         List<StockKeepingUnit> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         StockKeepingUnit stockKeepingUnit = null;
-        if(list != null && list.size() > 0) {
+        if (list != null && list.size() > 0) {
             stockKeepingUnit = list.get(0);
         }
         return stockKeepingUnit;
@@ -71,6 +74,7 @@ public class SkuAndStorageService {
 
     /**
      * 判断是否可以添加sku
+     *
      * @param skuId
      * @return
      */
@@ -98,6 +102,7 @@ public class SkuAndStorageService {
 
     /**
      * 通过产品（商品）id获取sku列表(包含sku属性)
+     *
      * @param productId
      * @return
      */
@@ -127,7 +132,7 @@ public class SkuAndStorageService {
         List<StockKeepingUnit> skus = generalDao.query(jpql, Optional.<Page<StockKeepingUnit>>empty(), queryParams);
 
         StockKeepingUnit stockKeepingUnit = null;
-        if(skus != null && skus.size() > 0) {
+        if (skus != null && skus.size() > 0) {
             stockKeepingUnit = skus.get(0);
         }
         return stockKeepingUnit;
@@ -138,14 +143,14 @@ public class SkuAndStorageService {
      *
      * @param skuId
      */
-    public List<SkuProperty> getSKUPropertyValueMap(int skuId){
+    public List<SkuProperty> getSKUPropertyValueMap(int skuId) {
         StockKeepingUnit SKU = this.getStockKeepingUnitById(skuId);
 
-        if(null == SKU){
+        if (null == SKU) {
             return new ArrayList<>();//防止SKU为null引起的异常
         }
 
-        for(SkuProperty p :SKU.getSkuProperties()){
+        for (SkuProperty p : SKU.getSkuProperties()) {
             Property property = propertyAndValueService.getPropertyById(p.getPropertyId());
             p.setPropertyName(property.getName());
             Value value = propertyAndValueService.getValueById(p.getValueId());
@@ -155,8 +160,10 @@ public class SkuAndStorageService {
     }
 
     ///////////////////////////////////库存操作//////////////////////////////////////////
+
     /**
      * 通过skuId获取sku对应库存
+     *
      * @param skuId
      * @return
      */
@@ -169,14 +176,29 @@ public class SkuAndStorageService {
 
         List<SkuStorage> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         SkuStorage skuStorage = null;
-        if(list != null && list.size() > 0) {
+        if (list != null && list.size() > 0) {
             skuStorage = list.get(0);
         }
         return skuStorage;
     }
 
+
+    /**
+     * 查询商品有效SKU的总库存
+     * @param prodId
+     * @return
+     */
+    public Long getProductStorage(int prodId) {
+        String jpql = "select sum(ss.stockQuantity) from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and sk.skuState= 'NORMAL' and sk.productId =:productId ";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", prodId);
+        List<Long> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        return list.get(0);
+    }
+
     /**
      * 减去sku库存数
+     *
      * @param skuId
      * @param number
      * @return
@@ -192,6 +214,7 @@ public class SkuAndStorageService {
 
     /**
      * 增加sku库存数
+     *
      * @param skuId
      * @param number
      * @return

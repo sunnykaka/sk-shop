@@ -82,7 +82,7 @@ public class ProductListService {
         Integer storageFilter = query.getSt();
         Map<String, Object> queryParams = new HashMap<>();
         if (storageFilter != null && storageFilter == 1) {
-            jpql.append("  and id in ( select distinct sk.productId from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and ss.stockQuantity >0 ) ");
+            jpql.append("  and id in ( select distinct sk.productId from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and sk.skuState= 'NORMAL' and ss.stockQuantity >0 ) ");
         }
 
         //根据类目查询

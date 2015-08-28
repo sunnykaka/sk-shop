@@ -44,6 +44,12 @@ public class ProductInSellList {
      */
     private String status;
 
+    private Long storage;
+
+
+    public Long getStorage() {
+        return storage;
+    }
 
     public Product getProduct() {
         return product;
@@ -132,15 +138,10 @@ public class ProductInSellList {
             this.productInSellList.status = status.toString();
 
             /**
-             * 只需要查询有效的sku
-             */
-            List<StockKeepingUnit> skuList = skuAndStorageService.querySkuListByProductId(productId).stream().filter(sku -> sku.getSkuState().equals(SKUState.NORMAL)).collect(toList());
-            /**
              * 取最便宜的的SKU
              */
-            
-            Optional<StockKeepingUnit> stockKeepingUnit = skuList.stream().min((s1, s2) -> new Double(s1.getMarketPrice().getAmount()).compareTo(new Double(s2.getMarketPrice().getAmount())));
-            StockKeepingUnit mostCheapSku = stockKeepingUnit.get();
+
+            StockKeepingUnit mostCheapSku = skuAndStorageService.querySkuByProductIdPriceSmall(this.productId);
             /**
              * 首发就读首发价，其余状态都读正常售卖价
              */
@@ -149,6 +150,10 @@ public class ProductInSellList {
             } else {
                 this.productInSellList.price = mostCheapSku.getMarketPrice();
             }
+
+            Long storage = skuAndStorageService.getProductStorage(this.productId);
+            this.productInSellList.storage = storage;
+
             return this;
         }
     }

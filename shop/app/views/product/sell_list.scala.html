@@ -1,13 +1,13 @@
 @(navList: List[productcenter.models.NavigateCategory], pageResult: common.utils.page.Page[dtos.ProductInSellList], queryVO: productcenter.dtos.ProductQueryVO)
 
-@import productcenter.models.Seo
+    @import productcenter.models.Seo
 
 
-@main(new Seo(Messages("title.product"), Messages("seo.description"), Messages("seo.Keywords")))("product") {
-    <style>
-        .sider-bar{top: 452px;}
-    </style>
-    <script >
+    @main(new Seo(Messages("title.product"), Messages("seo.description"), Messages("seo.Keywords")))("product") {
+        <style>
+        .sider-bar { top : 452 px ; }
+        </style>
+        <script >
         $(function(){
 
             //获取购物车 商品数量
@@ -33,141 +33,151 @@
     </script>
 
 
-} {
-    <div id="container">
-    <!--designer-list-->
-    <div class="products-list">
-        <div class="products-list-inner width1200">
-            <div class="bread-nav">
-                <ul class="clearfix">
-                    <li><a href="@controllers.routes.Application.index()">首页</a></li>
-                    <li>&gt;</li>
-                    <li><a href="@controllers.product.routes.ProductController.list()">所有商品</a></li>
-                    @if(queryVO.getNavigateId != null && queryVO.getNavigateId != -1){
-                        <li>&gt;</li>
-                        @for(nav <- navList) {
-                            @if(queryVO.getNavigateId.equals(nav.getId)) {
-                                <li>@nav.getName</li>
-                            }
-                        }
-                    }
-                </ul>
-            </div>
-                <!-- 产品分类-->
-            @if(navList != null) {
-                <div class="products-category">
-                    <div class="products-category-con">
-                        <div>商品分类：</div>
+    } {
+        <div id="container">
+                <!--designer-list-->
+            <div class="products-list">
+                <div class="products-list-inner width1200">
+                    <div class="bread-nav">
                         <ul class="clearfix">
-                            <li @if(queryVO.getNavigateId == null || queryVO.getNavigateId.equals(-1)){ class="current" }><a href="@controllers.product.routes.ProductController.list()">全部分类</a></li>
-                        @for(nav <- navList) {
-                            @if(queryVO.getNavigateId.equals(nav.getId)) {
-                                <li class="current"><a href="@controllers.product.routes.ProductController.list(1, nav.getId)">@nav.getName</a></li>
-                            } else {
-                                <li><a href="@controllers.product.routes.ProductController.list(1, nav.getId)">@nav.getName</a></li>
-                            }
-                        }
-                        </ul>
-
-                    </div>
-                </div>
-            }
-
-                <!-- 产品容器-->
-            <div class="products-list-con">
-                <div class="products-list-header clearfix">
-                    <div class="products-list-hd-left left">
-                        <ul class="clearfix">
-                            @if(queryVO.getSt != null && queryVO.getSt == 1){
-                                <li><a href="@controllers.product.routes.ProductController.list(1,queryVO.getNavigateId)">
-                                    全部</a></li>
-                                    <!--
-                                <li><a href="#"><i class="icon iconfont">&#xe612;</i>价格</a></li>
-                                -->
-                                <li class="current"><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1)">
-                                    只显示有货商品</a></li>
-                            }else {
-                                <li class="current"><a href="@controllers.product.routes.ProductController.list()">
-                                    全部</a></li>
-                                    <!--
-                                <li><a href="#"><i class="icon iconfont">&#xe612;</i>价格</a></li>
-                                -->
-                                <li><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1)">
-                                    只显示有货商品</a></li>
+                            <li><a href="@controllers.routes.Application.index()">首页</a></li>
+                            <li>&gt;</li>
+                            <li><a href="@controllers.product.routes.ProductController.list()">所有商品</a></li>
+                            @if(queryVO.getNavigateId != null && queryVO.getNavigateId != -1) {
+                                <li>&gt;</li>
+                                @for(nav <- navList) {
+                                    @if(queryVO.getNavigateId.equals(nav.getId)) {
+                                        <li>@nav.getName</li>
+                                    }
+                                }
                             }
                         </ul>
                     </div>
-                    @if(pageResult.getResult != null && pageResult.getTotalCount > 0) {
-                        <div class="products-list-hd-right right">
-                            @if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {
-                                <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt)">
-                                    下一页</a>
-                            } else {
-                                <a class="disabled" href="javascript:void(0);">下一页</a>
-                            }
+                        <!-- 产品分类-->
+                    @if(navList != null) {
+                        <div class="products-category">
+                            <div class="products-category-con">
+                                <div>商品分类：</div>
+                                <ul class="clearfix">
+                                    <li @if(queryVO.getNavigateId == null || queryVO.getNavigateId.equals(-1)) {
+                                        class="current" }><a href="@controllers.product.routes.ProductController.list()">
+                                        全部分类</a></li>
+                                    @for(nav <- navList) {
+                                        @if(queryVO.getNavigateId.equals(nav.getId)) {
+                                            <li class="current"><a href="@controllers.product.routes.ProductController.list(1, nav.getId)">@nav.getName</a></li>
+                                        } else {
+                                            <li><a href="@controllers.product.routes.ProductController.list(1, nav.getId)">@nav.getName</a></li>
+                                        }
+                                    }
+                                </ul>
 
-                            @if(pageResult.getPageNo > 1) {
-                                <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt)">
-                                    上一页</a>
-                            } else {
-                                <a class="disabled" href="javascript:void(0);">上一页</a>
-                            }
+                            </div>
                         </div>
                     }
-                </div>
 
-                @if(pageResult.getResult != null && pageResult.getTotalCount > 0) {
-                    <div class="products-list-body">
-                        <ul class="clearfix">
-                        @for(prod <- pageResult.getResult) {
-                            <li>
-                                <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)"><img class="lazy" data-original="@prod.getMinorPic.getPictureUrl"  src="@routes.Assets.versioned("images/grey.gif")" alt="@prod.getProduct.getName" width="283" height="462"/></a>
-                                <h3>@prod.getProduct.getName</h3>
-                                <h4 class="price">￥@prod.getPrice</h4>
-                            </li>
-                        }
-                        </ul>
+                        <!-- 产品容器-->
+                    <div class="products-list-con">
+                        <div class="products-list-header clearfix">
+                            <div class="products-list-hd-left left">
+                                <ul class="clearfix">
+                                @if(queryVO.getSt != null && queryVO.getSt == 1) {
+                                    <li><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId)">
+                                        全部</a></li>
+                                        <!--
+                                <li><a href="#"><i class="icon iconfont">&#xe612;</i>价格</a></li>
+                                -->
+                                    <li class="current"><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1)">
+                                        只显示有货商品</a></li>
+                                } else {
+                                    <li class="current"><a href="@controllers.product.routes.ProductController.list()">
+                                        全部</a></li>
+                                        <!--
+                                <li><a href="#"><i class="icon iconfont">&#xe612;</i>价格</a></li>
+                                -->
+                                    <li><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1)">
+                                        只显示有货商品</a></li>
+                                }
+                                </ul>
+                            </div>
+                            @if(pageResult.getResult != null && pageResult.getTotalCount > 0) {
+                                <div class="products-list-hd-right right">
+                                    @if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {
+                                        <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt)">
+                                            下一页</a>
+                                    } else {
+                                        <a class="disabled" href="javascript:void(0);">下一页</a>
+                                    }
+
+                                    @if(pageResult.getPageNo > 1) {
+                                        <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt)">
+                                            上一页</a>
+                                    } else {
+                                        <a class="disabled" href="javascript:void(0);">上一页</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        @if(pageResult.getResult != null && pageResult.getTotalCount > 0) {
+                            <div class="products-list-body">
+                                <ul class="clearfix">
+                                @for(prod <- pageResult.getResult) {
+                                    <li>
+                                        <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                                            @if(prod.getStatus.equals("SELLING")) {
+                                                <span class="status-selling">首发</span>
+                                            }
+                                            @if(prod.getStorage <= 0) {
+                                                <span class="sold-out">已售完</span>
+                                            }
+                                    <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" src="@routes.Assets.versioned("images/grey.gif")" alt="@prod.getProduct.getName" width="283" height="462"/></a>
+                                    <h3>@prod.getProduct.getName</h3>
+                                    <h4 class="price">￥@prod.getPrice</h4>
+                                    </li>
+                                }
+                                </ul>
+                            </div>
+
+                            <div class="products-list-footer">
+                                @if(pageResult.getPageNo > 1) {
+                                    <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt)">
+                                        上一页</a>
+                                } else {
+                                    <a class="disabled" href="javascript:void(0);">
+                                        上一页</a>
+                                }
+
+                                @if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {
+                                    <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt)">
+                                        下一页</a>
+                                } else {
+                                    <a class="disabled" href="javascript:void(0);">
+                                        下一页</a>
+                                }
+
+                            </div>
+                        </div>
+                    } else {
+
+                    <div class="mycart-empty">
+                        <p><i class="iconfont">&#xe606;</i>没有符合条件的商品</p>
                     </div>
-
-                    <div class="products-list-footer">
-                        @if(pageResult.getPageNo > 1) {
-                            <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt)">
-                                上一页</a>
-                        } else {
-                            <a class="disabled" href="javascript:void(0);">
-                                上一页</a>
-                        }
-
-                        @if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {
-                            <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt)">
-                                下一页</a>
-                        } else {
-                            <a class="disabled" href="javascript:void(0);">
-                                下一页</a>
-                        }
-
-                    </div>
+                }
                 </div>
-            } else {
-
-            <div class="mycart-empty">
-                <p><i class="iconfont">&#xe606;</i>没有符合条件的商品</p>
             </div>
-        }
         </div>
-    </div>
-    </div>
-    </div>
-    <!--end order-manage-->
+        </div>
+        <!--end order-manage-->
 
-    <!--siderbar-->
-    <ul class="sider-bar" id="cart">
-        <li class="cart" title="购物车"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
-        <li class="like-product"><a title="喜欢商品" href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
-        <li class="like-designer"><a title="喜欢设计师"  href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
-        <li class="fan-kui"><a title="意见反馈"  href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
-        <li class="go-top" title="返回顶部"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
-    </ul>
-    <!--end sideebar-->
-}
+        <!--siderbar-->
+        <ul class="sider-bar" id="cart">
+            <li class="cart" title="购物车"><span id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">
+                0</span></li>
+            <li class="like-product"><a title="喜欢商品" href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
+            <li class="like-designer"><a title="喜欢设计师" href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+            <li class="fan-kui"><a title="意见反馈" href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
+            <li class="go-top" title="返回顶部"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
+        </ul>
+        <!--end sideebar-->
+    }
 
