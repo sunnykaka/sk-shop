@@ -1,6 +1,7 @@
 package productcenter.services;
 
 import common.services.GeneralDao;
+import common.utils.StringUtils;
 import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,10 @@ public class PropertyAndValueService {
 
 
     //////////////////////////////////属性////////////////////////////////////////////////
+
     /**
      * 获取数据库中所有属性，不包括已经删除了的
+     *
      * @return
      */
     public List<Property> queryAllProperties() {
@@ -41,6 +44,7 @@ public class PropertyAndValueService {
 
     /**
      * 通过属性id获取属性
+     *
      * @param id
      * @return
      */
@@ -54,12 +58,12 @@ public class PropertyAndValueService {
      * @return
      */
     public List<Property> getPropertyByIdList(List<Integer> ids) {
-        if(ids.isEmpty()) return new ArrayList<>();
+        if (ids.isEmpty()) return new ArrayList<>();
 
         StringBuilder jpql = new StringBuilder("select p from Property p where p.id in (");
         Map<String, Object> queryParams = new HashMap<>();
 
-        for(int i=0; i<ids.size(); i++) {
+        for (int i = 0; i < ids.size(); i++) {
             String paramName = "id" + i;
             jpql.append(String.format(":%s,", paramName));
             queryParams.put(paramName, ids.get(i));
@@ -75,12 +79,12 @@ public class PropertyAndValueService {
      * @return
      */
     public List<Value> getValueByIdList(List<Integer> ids) {
-        if(ids.isEmpty()) return new ArrayList<>();
+        if (ids.isEmpty()) return new ArrayList<>();
 
         StringBuilder jpql = new StringBuilder("select v from Value v where v.id in (");
         Map<String, Object> queryParams = new HashMap<>();
 
-        for(int i=0; i<ids.size(); i++) {
+        for (int i = 0; i < ids.size(); i++) {
             String paramName = "id" + i;
             jpql.append(String.format(":%s,", paramName));
             queryParams.put(paramName, ids.get(i));
@@ -92,11 +96,11 @@ public class PropertyAndValueService {
     }
 
 
-
-
     //////////////////////////////////值////////////////////////////////////////////////
+
     /**
      * 获取数据库中所有值，不包括已经删除了的
+     *
      * @return
      */
     public List<Value> queryAllValues() {
@@ -110,6 +114,7 @@ public class PropertyAndValueService {
 
     /**
      * 通过值id获取值
+     *
      * @param id
      * @return
      */
@@ -120,8 +125,10 @@ public class PropertyAndValueService {
 
 
     //////////////////////////////////属性及其值////////////////////////////////////////////////
+
     /**
      * 获取数据库中所有属性及其值，不包括已经删除了的
+     *
      * @return
      */
     public List<PropertyValueDetail> queryAllPropertyValueDetails() {
@@ -134,6 +141,7 @@ public class PropertyAndValueService {
 
     /**
      * 按照主键id获取属性及其值信息
+     *
      * @param id
      * @return
      */
@@ -143,7 +151,6 @@ public class PropertyAndValueService {
     }
 
     /**
-     *
      * @param propertyId
      * @param valueId
      * @return
@@ -157,10 +164,87 @@ public class PropertyAndValueService {
 
         List<PropertyValueDetail> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         PropertyValueDetail pv = null;
-        if(list != null && list.size() > 0) {
+        if (list != null && list.size() > 0) {
             pv = list.get(0);
         }
         return pv;
+    }
+
+    /**
+     * @param valueName
+     * @return
+     */
+    public Value getValueByName(String valueName) {
+        if(org.apache.commons.lang3.StringUtils.isBlank(valueName)) {
+            return null;
+        }
+        String jpql = "select v from Value v where v.valueName = :valueName and isDelete = false ";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("valueName", valueName);
+
+        List<Value> results = generalDao.query(jpql, Optional.empty(), queryParams);
+        if(results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0);
+        }
+
+    }
+
+    /**
+     * 根据property的name判断，如果property在数据库不存在，创建property，如果存在，直接返回主键id
+     * @param property
+     * @return property的主键id
+     */
+    public int createPropertyIfNotExist(Property property) {
+
+        Property currentProperty = getPropertyByName(property.getName());
+        if (currentProperty == null) {
+            generalDao.persist(property);
+            return property.getId();
+        } else {
+            return currentProperty.getId();
+        }
+    }
+
+    /**
+     * 根据value的name判断，如果value在数据库不存在，创建value，如果存在，直接返回主键id
+     * @param value
+     * @return value的主键id
+     */
+    public int createValueIfNotExist(Value value) {
+
+        Value currentValue = getValueByName(value.getValueName());
+        if (currentValue == null) {
+            generalDao.persist(currentValue);
+            return currentValue.getId();
+        } else {
+            return currentValue.getId();
+        }
+    }
+
+
+    /**
+     * 根据name得到property
+     * @param name
+     * @return
+     */
+    public Property getPropertyByName(String name) {
+        if(org.apache.commons.lang3.StringUtils.isBlank(name)) {
+            return null;
+        }
+
+        String jpql = "select p from Property p where p.name = :name and p.isDelete = false";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("name", name);
+
+        List<Property> results = generalDao.query(jpql, Optional.empty(), queryParams);
+        if(results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0);
+        }
+
     }
 
 }
