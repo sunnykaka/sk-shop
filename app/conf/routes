@@ -28,6 +28,25 @@ GET           /app/cart/chooseAddress                   @controllers.api.shop.Ca
 GET           /app/cart/verifyPromptlyPayData           @controllers.api.shop.CartApiController.verifyPromptlyPayData(skuId:Int, number:Int)
 GET           /app/cart/promptlyPayChooseAddress        @controllers.api.shop.CartApiController.promptlyPayChooseAddress(skuId:Int, number:Int)
 
+# 我的地址
+GET           /my/address/list                          @controllers.api.user.AddressApiController.list()
+POST          /my/address/add                           @controllers.api.user.AddressApiController.add()
+POST          /my/address/update                        @controllers.api.user.AddressApiController.update()
+DELETE        /my/address/del                           @controllers.api.user.AddressApiController.del(addressId:Int)
+POST          /my/address/defaultAddress                @controllers.api.user.AddressApiController.defaultAddress(addressId:Int)
+GET           /my/address/query                         @controllers.api.user.AddressApiController.getAddress(addressId:Int)
+GET           /my/address/province                      @controllers.api.user.AddressApiController.queryProvince()
+GET           /my/address/city                          @controllers.api.user.AddressApiController.queryCity()
+GET           /my/address/area                          @controllers.api.user.AddressApiController.queryArea()
+
+# my favorites
+GET         /my/favorites/product/list                  @controllers.api.user.ProductFavoritesApiController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
+DELETE      /my/favorites/product/del                   @controllers.api.user.ProductFavoritesApiController.del(productId:Int)
+POST        /my/favorites/product/add                   @controllers.api.user.ProductFavoritesApiController.add(productId:Int)
+GET         /my/favorites/designer/list                 @controllers.api.user.DesignerFavoritesApiController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
+DELETE      /my/favorites/designer/del                  @controllers.api.user.DesignerFavoritesApiController.del(designerId:Int)
+POST        /my/favorites/designer/add                  @controllers.api.user.DesignerFavoritesApiController.add(designerId:Int)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                             controllers.Assets.versioned(path="/public", file: Asset)
