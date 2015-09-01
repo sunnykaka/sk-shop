@@ -53,7 +53,7 @@
                         @if(pd.getBase.getProduct.getCustomer.getIsDelete || !pd.getBase.getProduct.getCustomer.getIsPublished) {
                             <li>设计师品牌：@pd.getBase.getProduct.getCustomer.getName</li>
                         } else {
-                            <li><a href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">设计师品牌：@pd.getBase.getProduct.getCustomer.getName</a></li>
+                            <li><a  href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">设计师品牌：@pd.getBase.getProduct.getCustomer.getName</a></li>
                         }
                         <li>&gt;</li>
                         <li>@pd.getBase.getProduct.getName </li>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="info">
                     <h2>@pd.getBase.getProduct.getName </h2>
-                    <h3>设计师：@pd.getBase.getProduct.getCustomer.getName </h3>
+                    <h3><a target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">设计师：@pd.getBase.getProduct.getCustomer.getName</a> </h3>
                     <p>@pd.getBase.getProduct.getDescription </p>
                 </div>
                 <div class="video">
@@ -247,6 +247,7 @@
                     }
                 }
                 <div class="detail-like">
+                    <span class="about-designer">查看<a target="_blank" target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">@pd.getBase.getProduct.getCustomer.getName</a>主页</span>
                     <span class="like @if(pd.getBase.isFavorites){current}" data-id="@pd.getBase.getProduct.getId">
                         <i class="iconfont shi" @if(!pd.getBase.isFavorites){style="display: none;"}>&#xe603;</i>
                         <i class="iconfont kong" @if(pd.getBase.isFavorites){style="display: none;"}>&#xe602;</i>

@@ -561,6 +561,7 @@ table .pro{width: 360px;}
 .detail-inner .info h2,.detail-inner .info h3{font-weight: normal;}
 .detail-inner .info h2{padding: 10px 0;}
 .detail-inner .info h3{padding-bottom: 10px;width: 400px;margin:0 auto;border-bottom: 1px solid #cccccc;}
+.detail-inner .info h3 a:hover{color: #fd2049;}
 .detail-inner .info p{margin-top:10px;line-height: 32px;font-size: 13px;}
 .detail-inner .video{width: 803px;height: 536px;overflow: hidden;margin-bottom: 32px;position: relative;-webkit-user-select: none;}
 .detail-inner .video img{display: block;margin-bottom: 10px;}
@@ -694,8 +695,9 @@ table .pro{width: 360px;}
 .detail-btn .addToCart{background: #fff;color: #000;}
 .detail-btn .soldOut{background: #ccc;border: none;}
 .detail-like{height: 30px;}
-.detail-like .like{padding: 3px 12px;border: 1px solid #FF2D54;border-radius: 50px;position: relative;cursor: pointer;}
-.detail-like i{color: #fd2049;}
+.detail-like .like,.detail-like .about-designer{padding: 3px 12px;border: 1px solid #FF2D54;border-radius: 50px;position: relative;cursor: pointer;color: #fd2049;}
+.detail-like .like{margin-left: 6px;}
+.detail-like i,.detail-like a{color: #fd2049;}
 .detail-like .like-text{color: #FF2D54;padding-left:3px}
 .detail-like .current i{width:18px;background-position: 0 -1066px;}
 /*end detail*/
