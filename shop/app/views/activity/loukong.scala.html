@@ -1,0 +1,291 @@
+@(mapName:Map[Integer,String],mapPrice:Map[Integer,String])
+@import productcenter.models.Seo;
+
+@main(new Seo("镂空美学，视觉与触觉的冲击-尚客","时尚与传统的碰撞，空间与色彩的搭档，演绎出时尚的镂空美学。","全球首发，独立设计师，限量发售，限时首发，性感蕾丝，活力网状，酷炫皮革，帅气时尚"))() {
+    <script>
+        $(function(){
+
+            //获取购物车 商品数量
+        $.ajax({
+            url: '/cart/getUserCartItemNum',
+            cache:false,
+            success: function (data) {
+                if (data.result) {
+                    $('#cart-quantity').text(data.data);
+                }
+            }
+        });
+
+                //固定购物车
+         fixedcart($('#cart'), $('#container'));
+
+             //点击购物车，进入购物车页面
+        $('#cart-quantity-btn').click(function () {
+            window.location.href = "/cart/showCart";
+        });
+
+        });
+    </script>
+} {
+    <style>
+
+    .loukong-activity-header{position: relative;margin: 0 auto;height: 502px;overflow: hidden;}
+    .loukong-activity-header-top{position:absolute;width: 100%;height: 502px;background: url('@routes.Assets.versioned("/images/activity/loukong-banner.jpg")');background-position: 50% 50%;text-align:center;}
+    .floor{width: 1200px;margin: 0 auto;}
+    .floor-1 .floor-text,.floor-1 .floor-pro-text{text-align: center;font-size: 14px;padding: 30px 0;}
+    .floor-1 .floor-text h2{font-size: 30px;color: #000;line-height: 30px;margin-bottom: 30px;text-align: center;}
+    .floor-1 .floor-text p,.floor-1 .floor-pro-text p{line-height: 180%;}
+    .floor-1 .line,.floor-2 .line{width: 1100px;margin: 0 auto;height: 1px;overflow: hidden;border-bottom: 1px dashed #4a4947;}
+    .floor-1 .img{padding: 70px 0;margin: 0 auto; width: 635px;height: 243px;}
+    .floor-1 .floor-pro{height: 920px;position: relative;}
+    .floor-1 .floor-2{height: 1100px;}
+    .floor-1 .floor-3{height: 1300px;}
+    .floor-1 .pro,.floor-1 .pro-label,.floor-1 .arc{position: absolute;}
+    .floor-1 .floor-pro-text{position: absolute;width: 254px;text-align: center;left: 50%;margin-left: -127px;z-index: 1001;}
+    .floor-1 .arc{background: url('@routes.Assets.versioned("images/activity/loukong-arc.png")') no-repeat;z-index: 10000;}
+    .floor-1 .arc-horiz{width:9px;height: 13px;}
+    .floor-1 .arc-verti{width:13px;height: 9px;}
+    .floor-1 .arc-left{background-position: -11px 0;}
+    .floor-1 .arc-right{background-position: 0 0;}
+    .floor-1 .arc-bottom{background-position: -22px -9px;}
+    .floor-1 .arc-top{background-position: -22px 0;}
+
+    .floor-1 .floor-pro .proId-119{left: 210px;top: 63px;z-index: 100}
+    .floor-1 .floor-pro .proId-119 .pro-label{width: 125px;height: 130px;left: -155px;top: 347px;}
+    .floor-1 .floor-pro .proId-119 .arc{left: 130px;top: 80px;}
+
+    .floor-1 .floor-pro .pro-price{font-size: 18px;line-height: 18px;color: #000;font-weight: 700;}
+    .floor-1 .floor-pro .pro-price span{margin-left: 4px;font-size: 16px;font-weight: normal;}
+    .floor-1 .floor-pro .go-order {margin: 10px 0;}
+    .floor-1 .floor-pro .go-order span,.floor-1 .go-index{font-size: 18px;color: #fff;padding: 4px 8px;background: #000;cursor: pointer;}
+    .floor-1 .floor-pro .go-order span:hover,.floor-1 .go-index:hover{background-color: #29292c;}
+    .floor-1 .go-index{display: block;width: 90px;margin: 0 auto 70px auto;text-align: center;padding: 6px 8px;}
+    .floor-1 .floor-pro .pro-name{font-size: 16px; line-height: 25px;cursor: pointer;}
+    .floor-1 .floor-pro .pro-name a:hover{color:#fd2049;}
+    .floor-1 .floor-pro .proId-69{left: 750px;top: 50px;  z-index: 100;}
+    .floor-1 .floor-pro .proId-69 .pro-label{width: 125px;height: 130px;left: 320px;top: 333px;}
+    .floor-1 .floor-pro .proId-69 .arc{left: -27px;top: 80px;}
+
+    .floor-1 .floor-pro .proId-241{left: 500px;top: 569px;  z-index: 1000;}
+    .floor-1 .floor-pro .proId-241 .pro-label{width: 135px;height: 130px;left: 96px;top: -170px;}
+    .floor-1 .floor-pro .proId-241 .arc{left: 40px;top: 130px;}
+
+    .floor-1 .floor-pro .proId-257{left: 226px;top: 202px;  z-index: 1000;}
+    .floor-1 .floor-pro .proId-257 .pro-label{width: 120px;height: 130px;left: -150px;top: 310px;}
+    .floor-1 .floor-pro .proId-257 .arc{left: 130px;top: 80px;}
+
+    .floor-1 .floor-pro .proId-243{left: 633px;top: 196px;  z-index: 1000;}
+    .floor-1 .floor-pro .proId-243 .pro-label{width: 120px;height: 130px;left: 400px;top: 310px;}
+    .floor-1 .floor-pro .proId-243 .arc{left: -30px;top: 80px;}
+
+    .floor-1 .floor-pro .proId-105{left: 140px;top: 196px;  z-index: 1000;}
+    .floor-1 .floor-pro .proId-105 .pro-label{width: 120px;height: 130px;left: -130px;top: 345px;}
+    .floor-1 .floor-pro .proId-105 .arc{left: 103px;top: 63px;}
+
+    .floor-1 .floor-pro .proId-135{left: 770px;top: 56px;  z-index: 1000;}
+    .floor-1 .floor-pro .proId-135 .pro-label{width: 120px;height: 130px;left: 296px;top: 370px;}
+    .floor-1 .floor-pro .proId-135 .arc{left: -30px;top: 80px;}
+
+    .floor-1 .floor-pro .proId-99{left: 431px;top: 656px;  z-index: 1000;}
+    .floor-1 .floor-pro .proId-99 .pro-label{width: 90px;height: 130px;left: 170px;top: -190px;}
+    .floor-1 .floor-pro .proId-99 .arc{left: 42px;top: 130px;}
+    </style>
+    <div id="container">
+            <!--loukong-->
+        <div class="loukong-activity">
+            <div class="loukong-activity-header">
+                <div class="loukong-activity-header-top"></div>
+            </div>
+            <div class="floor floor-1">
+                <div class="floor-text">
+                    <h2>镂</h2>
+                    <p>雕刻之意。<br/>镂空，一种民间的纯手工技术活儿。<br/><br/>一刻一画地将木或石变成珍品。<br/>
+                        高逼格的时装，怎么能少得了这样的艺术？<br/>
+                        时尚与传统的碰撞，空间与色彩的搭档，<br/>
+                        演绎出时尚的镂空美学。<br/><br/>
+                        妩媚性感蕾丝，活力气孔网状，酷炫皮质切割……<br/>
+                        表达出各种姿态的镂空韵味。<br/><br/>
+                        来上尚客，挑你爱的镂空衣裳<br/>
+                        穿出时髦的自我风采。
+                    </p>
+                </div>
+                <div class="line"></div>
+                <div class="img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="636" height="243"/>
+                </div>
+                <div class="floor-pro">
+                    <div class="floor-pro-text">
+                        <p>
+                            性感透视，通透镂空。<br/>
+                            轻盈的质感，若隐若现的视觉感，<br/>
+                            露与不露的分寸拿捏到位。<br/>
+                            相比露脐装或露肩装，<br/>
+                            更添一抹女性的妩媚。
+                        </p>
+                    </div>
+                    <!--proId-119-->
+                    <div class="pro proId-119">
+                        <a href="http://www.fashiongeeker.com/product/119" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-119.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="301" height="774"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(119) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/119" target="_blank"><span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/119" target="_blank">@mapName.get(119) </a></div>
+                            <div class="arc arc-horiz arc-left"></div>
+                        </div>
+                    </div>
+                        <!--proId-69-->
+                    <div class="pro proId-69">
+                        <a href="http://www.fashiongeeker.com/product/69" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-69.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="311" height="787"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(69) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/69" target="_blank"><span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/69" target="_blank">@mapName.get(69) </a></div>
+                            <div class="arc arc-horiz arc-right"></div>
+                        </div>
+                    </div>
+                        <!--proId-241-->
+                    <div class="pro proId-241">
+                        <a href="http://www.fashiongeeker.com/product/241" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-241.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="317" height="296"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(241) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/241" target="_blank"><span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/241" target="_blank">@mapName.get(241)</a></div>
+                            <div class="arc arc-verti arc-bottom"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor-2.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")" width="636" height="243"/>
+                </div>
+                <div class="floor-pro floor-2">
+                    <div class="floor-pro-text">
+                        <p>
+                            比起整面皮革，镂空的皮革更多了一份俏皮<br/>
+                            相信这也是众人追捧的缘故吧<br/>
+                            保留皮革的帅气酷感<br/>
+                            添入视觉的空间感<br/>
+                            两者的结合，帅气十足，炫酷满分<br/>
+                            深情拥抱新季摇滚复古风潮<br/>
+                            潇洒有理，狂野无罪！<br/>
+                        </p>
+                    </div>
+                        <!--proId-257-->
+                    <div class="pro proId-257">
+                        <a href="http://www.fashiongeeker.com/product/257" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-257.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="286" height="868"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(257) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/257" target="_blank"><span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/257" target="_blank">@mapName.get(257)</a></div>
+                            <div class="arc arc-horiz arc-left"></div>
+                        </div>
+                    </div>
+                        <!--proId-243-->
+                    <div class="pro proId-243">
+                        <a href="http://www.fashiongeeker.com/product/243" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-243.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="381" height="886"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(243) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/243" target="_blank"><span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/243" target="_blank">@mapName.get(243)</a></div>
+                            <div class="arc arc-horiz arc-right"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="img"  style="padding-bottom: 10px;">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor-3.jpg")" alt="" src="@routes.Assets.versioned("images/grey.gif")" width="636" height="243"/>
+                </div>
+                <div class="floor-pro floor-3">
+                    <div class="floor-pro-text">
+                        <p>
+                            高街未来主义的网眼镂空<br/>
+                            经过切割工艺，面料呈现视觉的空间感<br/>
+                            透过隙孔露出白皙肌肤<br/>
+                            若隐若现<br/>
+                            甚是神秘而前卫<br/>
+                            拼接动感流苏，使其更具有时髦感<br/>
+                            瞬间，成为时尚弄潮儿。
+                        </p>
+                    </div>
+                        <!--proId-105-->
+                    <div class="pro proId-105">
+                        <a href="http://www.fashiongeeker.com/product/105" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-105.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="271" height="885"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(105) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/105" target="_blank"><span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/105" target="_blank">@mapName.get(105)</a></div>
+                            <div class="arc arc-horiz arc-left"></div>
+                        </div>
+                    </div>
+                        <!--proId-135-->
+                    <div class="pro proId-135">
+                        <a href="http://www.fashiongeeker.com/product/135" target="_blank">
+                            <img class="lazy" class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-135.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="296" height="882"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(135) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/135" target="_blank"><span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/135" target="_blank">@mapName.get(135)</a></div>
+                            <div class="arc arc-horiz arc-right"></div>
+                        </div>
+                    </div>
+                        <!--proId-99-->
+                    <div class="pro proId-99">
+                        <a href="http://www.fashiongeeker.com/product/99" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor1-pro-99.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="418" height="528"/>
+                        </a>
+                        <div class="pro-label">
+                            <div class="pro-price">@mapPrice.get(99) <span>RMB</span></div>
+                            <div class="go-order">
+                                <a href="http://www.fashiongeeker.com/product/99" target="_blank"> <span>立即购买</span></a>
+                            </div>
+                            <div class="pro-name"><a href="http://www.fashiongeeker.com/product/99" target="_blank">@mapName.get(99)</a></div>
+                            <div class="arc arc-verti arc-bottom"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/loukong-floor-4.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="636" height="243"/>
+                </div>
+                <a href="http://www.fashiongeeker.com/" class="go-index">返回首页</a>
+            </div>
+        </div>
+            <!--end loukong-->
+    </div>
+    <!--siderbar-->
+    <ul class="sider-bar" id="cart">
+        <li class="cart" title="购物车"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="like-product"><a title="喜欢商品" href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
+        <li class="like-designer"><a title="喜欢设计师"  href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+        <li class="fan-kui"><a title="意见反馈"  href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
+        <li class="go-top" title="返回顶部"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
+    </ul>
+    <!--end sideebar-->
+}

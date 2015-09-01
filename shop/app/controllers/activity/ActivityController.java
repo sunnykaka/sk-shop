@@ -11,6 +11,7 @@ import services.CmsService;
 import views.html.activity.bianxingji;
 import views.html.activity.member;
 import views.html.activity.fashion;
+import views.html.activity.loukong;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +105,39 @@ public class ActivityController extends Controller {
         }
 
         return ok(fashion.render(mapName,mapPrice));
+    }
+
+    public Result loukong() {
+
+        final int[] activityProductId = {119,69,241,257,243,105,135,99};
+
+        Map<Integer, String> mapName = new HashMap<>();
+        Map<Integer, String> mapPrice = new HashMap<>();
+        for(int productId:activityProductId){
+            Product product = productService.getProductById(productId);
+
+            if(null == product){
+                mapPrice.put(productId,null);
+                mapName.put(productId,null);
+            }else{
+                //根据判断是否是首发，当前价格要现算
+                mapName.put(productId,product.getName());
+                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                if(null == stockKeepingUnit){
+                    mapPrice.put(productId,null);
+                }else{
+                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    if(isFirstPublish) {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
+                    } else {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getMarketPrice().toString()));
+                    }
+                }
+
+            }
+        }
+
+        return ok(loukong.render(mapName, mapPrice));
     }
 
     private String getPositivePrice(String str){
