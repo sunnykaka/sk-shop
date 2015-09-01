@@ -1,5 +1,7 @@
 package productcenter.util;
 
+import productcenter.constants.PropertyType;
+
 import java.util.*;
 
 /**
@@ -15,6 +17,16 @@ public class PidVid {
     private Map<Integer, Long> singlePidVidMap = new LinkedHashMap<Integer, Long>(); //单值的pidvid
 
     private Map<Integer, List<Long>> multiPidVidMap = new LinkedHashMap<Integer, List<Long>>(); //多值的pidvid
+
+    private PropertyType propertyType;
+
+    public PidVid(PropertyType propertyType) {
+        this.propertyType = propertyType;
+    }
+
+    public PropertyType getPropertyType() {
+        return propertyType;
+    }
 
     /**
      * 加入pid,vid，并且指定是否多值

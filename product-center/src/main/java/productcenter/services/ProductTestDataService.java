@@ -2,11 +2,13 @@ package productcenter.services;
 
 import com.google.common.collect.Lists;
 import common.services.GeneralDao;
+import common.utils.DateUtils;
 import common.utils.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import play.Logger;
 import productcenter.constants.ProductTagType;
 import productcenter.constants.PropertyType;
 import productcenter.constants.StoreStrategy;
@@ -41,6 +43,16 @@ public class ProductTestDataService {
     @Autowired
     BrandService brandService;
 
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    ProductPropertyService productPropertyService;
+
+    @Autowired
+    SkuAndStorageService skuAndStorageService;
+
+
 
     @Transactional
     public Product initProduct() {
@@ -57,7 +69,6 @@ public class ProductTestDataService {
         categoryValueMap.put("test尺寸", Lists.newArrayList("test大号"));
         ProductCategory category = initCategory(categoryValueMap);
 
-
         product.setCategoryId(category.getId());
         product.setDescription("产品推荐");
         DesignerSize designerSize = initDesignerSize(designer);
@@ -66,74 +77,113 @@ public class ProductTestDataService {
         product.setModelInfo("模特信息");
         product.setName(RandomStringUtils.randomAlphabetic(6) + "名称");
         product.setOnline(true);
+        product.setOnlineTime(DateUtils.current());
+        product.setOnLineTimeLong(0L);
+        product.setOfflineTime(DateUtils.current());
         product.setProductCode(RandomStringUtils.randomAlphanumeric(8));
         product.setRecommendDesc("推荐描述");
         product.setStoreStrategy(StoreStrategy.NormalStrategy);
         product.setTagType(ProductTagType.DEFAULT);
+        product.setIsDelete(false);
 
-        initSku(product, category, categoryValueMap);
+        generalDao.persist(product);
+
+        initSku(value.getId(), product, category, categoryValueMap);
 
         return product;
     }
 
-    private void initSku(Product product, ProductCategory category, Map<String, List<String>> categoryValueMap) {
+    private void initSku(Integer brandId, Product product, ProductCategory category, Map<String, List<String>> categoryValueMap) {
+
+        Logger.debug(String.format("init sku, brandId[%d], product[id=%d], category[id=%d], categoryValueMap[%s]",
+                brandId, product.getId(), category.getId(), categoryValueMap.toString()));
 
         List<CategoryProperty> categoryProperties = categoryPropertyService.findCategoryProperty(category.getId(), PropertyType.SELL_PROPERTY);
-        Property brandProperty = propertyAndValueService.getPropertyByName("品牌");
 
-        Map<ProductCategory, List<Integer>> selectedSkuValueMap = new HashMap<>();
+        Map<CategoryProperty, List<Integer>> selectedSkuValueMap = new LinkedHashMap<>();
         for (CategoryProperty categoryProperty : categoryProperties) {
             String propertyName = categoryProperty.getProperty().getName();
             List<String> categoryValueNames = categoryValueMap.get(propertyName);
             if(categoryValueNames != null && !categoryValueNames.isEmpty()) {
-                List<Value> valueList = categoryValueNames.stream().map(propertyAndValueService::getValueByName).collect(Collectors.toList());
-//                selectedSkuValueMap.compute(categoryProperty, (k, v) -> {
-//                    if (v == null) {
-//                        Set<SkuProperty> skuPropertySet = new LinkedHashSet<>();
-//                        skuPropertySet.add(skuProperty);
-//                        return skuPropertySet;
-//                    } else {
-//                        v.add(skuProperty);
-//                        return v;
-//                    }
-//                });
+
+                List<Integer> valueIdList =
+                        categoryValueNames.
+                        stream().
+                        map(valueName -> {
+                            Value value = propertyAndValueService.getValueByName(valueName);
+                            if (value == null) {
+                                Logger.warn(String.format("根据name[%s]查询value对象返回null", valueName));
+                                return null;
+                            }
+                            return value.getId();
+                        }).
+                        filter(x -> x != null).
+                        collect(Collectors.toList());
+
+                if(!categoryProperty.isMultiValue() && valueIdList.size() > 1) {
+                    String errorInfo = String.format("CategoryProperty[id=%d]不是多值属性, 但是valueIdList数量大于1, valueIdList[%s]",
+                            categoryProperty.getId(), valueIdList.toString());
+                    Logger.error(errorInfo);
+                    throw new IllegalStateException(errorInfo);
+                }
+
+                selectedSkuValueMap.compute(categoryProperty, (k, v) -> {
+                    if (v == null) {
+                        return valueIdList;
+                    } else {
+                        v.addAll(valueIdList);
+                        return v;
+                    }
+                });
             }
 
         }
 
+        PidVid[] keyAndSellPidVid = parsePidVid(brandId, selectedSkuValueMap);
+        PidVid key = keyAndSellPidVid[0];
+        PidVid sell = keyAndSellPidVid[1];
+
+        System.out.println("productPropertyService null: " + (productPropertyService == null));
+        System.out.println("product null: " + (product == null));
+        System.out.println("key null: " + (key == null));
+        productPropertyService.createProductProperty(product.getId(), key);
+        productPropertyService.createProductProperty(product.getId(), sell);
+
+        skuAndStorageService.createSkuByDescartes(sell, product);
+
     }
 
-    private Object[] parsePidVid(Integer brandId, List<CategoryProperty> categoryProperties) {
-        PidVid key = new PidVid();
-        PidVid sell = new PidVid();
+    private PidVid[] parsePidVid(Integer brandId, Map<CategoryProperty, List<Integer>> categoryProperties) {
+        PidVid key = new PidVid(PropertyType.KEY_PROPERTY);
+        PidVid sell = new PidVid(PropertyType.SELL_PROPERTY);
         Property property = propertyAndValueService.getPropertyByName("品牌");
-        for (CategoryProperty categoryProperty : categoryProperties) {
+
+        for(Map.Entry<CategoryProperty, List<Integer>> entry : categoryProperties.entrySet()) {
+            CategoryProperty categoryProperty = entry.getKey();
+            List<Integer> valueIdList = entry.getValue();
             int pid = categoryProperty.getPropertyId();//遍历这个类目下的所有类目属性，通过属性ID去request中得到值ID
-            if (pid != property.getId()) { //品牌属性不需要处理，因为品牌这个属性单独处理了
-                if (categoryProperty.isMultiValue()) {
-                    String[] values = request.getParameterValues("" + pid);
-                    for (String value : values) {
-                        if (categoryProperty.getPropertyType() == PropertyType.KEY_PROPERTY) {
-                            key.add(pid, Integer.parseInt(value), true);
-                        }
-                        if (categoryProperty.getPropertyType() == PropertyType.SELL_PROPERTY) {
-                            sell.add(pid, Integer.parseInt(value), true);
-                        }
-                    }
-                } else {
-                    String vid = request.getParameter("" + pid);
+            if (pid == property.getId()) { //品牌属性不需要处理，因为品牌这个属性单独处理了
+                continue;
+            }
+
+            if (valueIdList != null) {
+                for (Integer valueId : valueIdList) {
                     if (categoryProperty.getPropertyType() == PropertyType.KEY_PROPERTY) {
-                        key.add(pid, Integer.parseInt(vid), false);
+                        key.add(pid, valueId, categoryProperty.isMultiValue());
                     }
                     if (categoryProperty.getPropertyType() == PropertyType.SELL_PROPERTY) {
-                        sell.add(pid, Integer.parseInt(vid), false);
+                        sell.add(pid, valueId, categoryProperty.isMultiValue());
                     }
                 }
             }
         }
+
         key.add(property.getId(), brandId, false);
-        return new ProductPidVid(sell, key);
+
+        return new PidVid[]{key, sell};
     }
+
+
 
     @Transactional
     public DesignerSize initDesignerSize(Designer designer) {
@@ -206,6 +256,8 @@ public class ProductTestDataService {
         designerSize.setContent(content);
 
         generalDao.persist(designerSize);
+
+        return designerSize;
     }
 
     @Transactional
@@ -232,11 +284,10 @@ public class ProductTestDataService {
             List<String> propertyValueList = entry.getValue();
 
             CategoryProperty categoryProperty = new CategoryProperty();
-            Property property = new Property();
             categoryProperty.setCategoryId(categoryId);
-            property.setName(propertyName);
-            int propertyId = propertyAndValueService.createPropertyIfNotExist(property);
-            categoryProperty.setPropertyId(propertyId);
+            Property property = propertyAndValueService.createPropertyIfNotExist(propertyName);
+            categoryProperty.setPropertyId(property.getId());
+            categoryProperty.setProperty(property);
             if("品牌".equals(propertyName)) {
                 categoryProperty.setPropertyType(PropertyType.KEY_PROPERTY);
             } else {
@@ -249,14 +300,12 @@ public class ProductTestDataService {
             if(propertyValueList != null) {
                 int j = 0;
                 for(String valueName : propertyValueList) {
-                    Value value = new Value();
-                    value.setValueName(valueName);
-                    int valueId = propertyAndValueService.createValueIfNotExist(value);
+                    Value value = propertyAndValueService.createValueIfNotExist(valueName);
 
                     CategoryPropertyValue cpv = new CategoryPropertyValue();
                     cpv.setCategoryId(categoryId);
-                    cpv.setPropertyId(propertyId);
-                    cpv.setValueId(valueId);
+                    cpv.setPropertyId(property.getId());
+                    cpv.setValueId(value.getId());
                     cpv.setDeleted(false);
                     cpv.setPriority(propertyValueList.size() - ++j);
 

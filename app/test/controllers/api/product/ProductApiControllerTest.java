@@ -4,7 +4,9 @@ import base.BaseTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import productcenter.models.Product;
+import productcenter.services.ProductTestDataService;
 import usercenter.models.Designer;
+import utils.Global;
 
 
 /**
@@ -16,6 +18,10 @@ public class ProductApiControllerTest extends BaseTest{
     public void testRequestProductSuccess() throws Exception {
 
 //        initProduct();
+
+        ProductTestDataService productTestDataService = Global.ctx.getBean(ProductTestDataService.class);
+        Product product = productTestDataService.initProduct();
+        System.out.println("init product id: " + product.getId());
 
     }
 

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import productcenter.constants.PropertyType;
 import productcenter.models.ProductProperty;
+import productcenter.util.PidVid;
+import productcenter.util.PidVidJsonUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -78,5 +80,28 @@ public class ProductPropertyService {
         }
         return productProperty;
     }
+
+    @Transactional
+    public void createProductProperty(int productId, PidVid pidVid) {
+
+        if(pidVid.checkEmpty()) {
+            return;
+        }
+
+        ProductProperty keyProperty = new ProductProperty();
+        keyProperty.setProductId(productId);
+        keyProperty.setJson(PidVidJsonUtil.toJson(pidVid));
+        keyProperty.setPropertyType(pidVid.getPropertyType());
+
+        deleteProductPropertyByPropertyType(productId, pidVid.getPropertyType());
+        generalDao.persist(keyProperty);
+    }
+
+    @Transactional
+    public void deleteProductPropertyByPropertyType(int productId, PropertyType propertyType) {
+        List<ProductProperty> productProperties = queryByProductId(productId);
+        productProperties.stream().filter(pp -> pp.getPropertyType().equals(propertyType)).forEach(generalDao::remove);
+    }
+
 
 }

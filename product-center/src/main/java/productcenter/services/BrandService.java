@@ -28,17 +28,16 @@ public class BrandService {
         //暂时处理掉，商品中的品牌非必选项目
         Brand brand = new Brand();
         brand.setCustomerId(designer.getId());
+        brand.setName(designer.getName());
         brand.setDescription("自动生成默认品牌");
         this.createBrand(brand);
     }
 
     @Transactional
     public void createBrand(Brand brand) {
-        Value value = new Value();
-        value.setValueName(brand.getName());
-        int brandId = propertyAndValueService.createValueIfNotExist(value);
-        brand.setId(brandId);
-        generalDao.persist(brand);
+        Value value = propertyAndValueService.createValueIfNotExist(brand.getName());
+        brand.setId(value.getId());
+        generalDao.merge(brand);
     }
 
 

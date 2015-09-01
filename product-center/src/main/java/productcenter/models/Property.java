@@ -31,7 +31,7 @@ public class Property implements EntityClass<Integer>, OperableData {
     /**
      * 是否被删除
      */
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
     /**
      * 创建时间

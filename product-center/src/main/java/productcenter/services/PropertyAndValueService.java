@@ -192,35 +192,35 @@ public class PropertyAndValueService {
     }
 
     /**
-     * 根据property的name判断，如果property在数据库不存在，创建property，如果存在，直接返回主键id
-     * @param property
-     * @return property的主键id
+     * @param propertyName
+     * @return
      */
-    public int createPropertyIfNotExist(Property property) {
+    public Property createPropertyIfNotExist(String propertyName) {
 
-        Property currentProperty = getPropertyByName(property.getName());
-        if (currentProperty == null) {
+        Property property = getPropertyByName(propertyName);
+        if (property == null) {
+            property = new Property();
+            property.setName(propertyName);
             generalDao.persist(property);
-            return property.getId();
-        } else {
-            return currentProperty.getId();
         }
+
+        return property;
     }
 
     /**
-     * 根据value的name判断，如果value在数据库不存在，创建value，如果存在，直接返回主键id
-     * @param value
-     * @return value的主键id
+     * @param valueName
+     * @return
      */
-    public int createValueIfNotExist(Value value) {
+    public Value createValueIfNotExist(String valueName) {
 
-        Value currentValue = getValueByName(value.getValueName());
-        if (currentValue == null) {
-            generalDao.persist(currentValue);
-            return currentValue.getId();
-        } else {
-            return currentValue.getId();
+        Value value = getValueByName(valueName);
+        if (value == null) {
+            value = new Value();
+            value.setValueName(valueName);
+            generalDao.persist(value);
         }
+
+        return value;
     }
 
 

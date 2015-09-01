@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import productcenter.models.*;
+import productcenter.util.Descartes;
+import productcenter.util.PidVid;
+import productcenter.util.SkuUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -227,5 +230,83 @@ public class SkuAndStorageService {
         int count = query.executeUpdate();
         return count == 1;
     }
+
+    /**
+     * 创建SKU用多值pid的笛卡尔积
+     * 如果销售属性为空或者是单值，则不用笛卡尔积，sku属性列为空
+     * 创建过程中先会删除一次
+     *
+     * @param sell
+     * @param product
+     */
+    @Transactional
+    public void createSkuByDescartes(PidVid sell, Product product) {
+        deleteSkuByProductId(product.getId());//删除SKU及SKU相应库存
+        //销售属性为空，或者没有多值，直接创建SKU，这时属性为空
+        if (sell == null || sell.getMultiPidVidMap().isEmpty()) {
+            StockKeepingUnit stockKeepingUnit = new StockKeepingUnit();
+            stockKeepingUnit.setProductId(product.getId());
+            createStockKeepingUnit(product, null);
+        } else {
+            List<String> skuPropertiesInDbList = parseSkuList(sell);
+            for (String skuPropertiesInDb : skuPropertiesInDbList) {
+                createStockKeepingUnit(product, skuPropertiesInDb);
+            }
+        }
+    }
+
+    private List<String> parseSkuList(PidVid sell) {
+        Map<Integer, List<Long>> multiPidVidMap = sell.getMultiPidVidMap();
+        Descartes descartes = new Descartes();
+        //计算笛卡尔积
+        multiPidVidMap.values().forEach(descartes::compute);
+        List<List<Long>> result = descartes.getResult();
+        //新的sku列表
+        List<String> skuPropertiesInDbList = new LinkedList<>();
+        for (List<Long> pidvidList : result) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < pidvidList.size(); i++) {
+                Long pidvid = pidvidList.get(i);
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(pidvid);
+            }
+            skuPropertiesInDbList.add(sb.toString());
+        }
+        return skuPropertiesInDbList;
+    }
+
+
+    private void createStockKeepingUnit(Product product, String skuPropertiesInDb) {
+        StockKeepingUnit stockKeepingUnit = new StockKeepingUnit();
+        stockKeepingUnit.setProductId(product.getId());
+        stockKeepingUnit.setBarCode("");
+        stockKeepingUnit.setSkuPropertiesInDb(skuPropertiesInDb);
+        generalDao.persist(stockKeepingUnit);
+        stockKeepingUnit.setSkuCode(SkuUtil.initSkuCode(product.getCategoryId(), product.getId(), stockKeepingUnit.getId()));
+        generalDao.persist(stockKeepingUnit);
+    }
+
+    @Transactional
+    public void deleteSkuByProductId(int productId) {
+        List<StockKeepingUnit> skuList = querySkuListByProductId(productId);
+        for(StockKeepingUnit sku : skuList) {
+            SkuStorage skuStorage = getSkuStorage(sku.getId());
+            if(skuStorage != null) {
+                generalDao.remove(skuStorage);
+            }
+
+            generalDao.remove(sku);
+        }
+    }
+
+    private List<SkuStorage> querySkuStorageByProductId(int productId) {
+        String jpql = " select ss from SkuStorage ss join ss.sku sku where sku.productId = :productId";
+        Map<String, Object> params = new HashMap<>();
+        params.put("productId", productId);
+        return generalDao.query(jpql, Optional.empty(), params);
+    }
+
 
 }
