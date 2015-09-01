@@ -82,7 +82,7 @@ public class ProductTestDataService {
         product.setOfflineTime(DateUtils.current());
         product.setProductCode(RandomStringUtils.randomAlphanumeric(8));
         product.setRecommendDesc("推荐描述");
-        product.setStoreStrategy(StoreStrategy.NormalStrategy);
+        product.setStoreStrategy(StoreStrategy.PayStrategy);
         product.setTagType(ProductTagType.DEFAULT);
         product.setIsDelete(false);
 
@@ -108,17 +108,17 @@ public class ProductTestDataService {
 
                 List<Integer> valueIdList =
                         categoryValueNames.
-                        stream().
-                        map(valueName -> {
-                            Value value = propertyAndValueService.getValueByName(valueName);
-                            if (value == null) {
-                                Logger.warn(String.format("根据name[%s]查询value对象返回null", valueName));
-                                return null;
-                            }
-                            return value.getId();
-                        }).
-                        filter(x -> x != null).
-                        collect(Collectors.toList());
+                                stream().
+                                map(valueName -> {
+                                    Value value = propertyAndValueService.getValueByName(valueName);
+                                    if (value == null) {
+                                        Logger.warn(String.format("根据name[%s]查询value对象返回null", valueName));
+                                        return null;
+                                    }
+                                    return value.getId();
+                                }).
+                                filter(x -> x != null).
+                                collect(Collectors.toList());
 
                 if(!categoryProperty.isMultiValue() && valueIdList.size() > 1) {
                     String errorInfo = String.format("CategoryProperty[id=%d]不是多值属性, 但是valueIdList数量大于1, valueIdList[%s]",
@@ -143,9 +143,6 @@ public class ProductTestDataService {
         PidVid key = keyAndSellPidVid[0];
         PidVid sell = keyAndSellPidVid[1];
 
-        System.out.println("productPropertyService null: " + (productPropertyService == null));
-        System.out.println("product null: " + (product == null));
-        System.out.println("key null: " + (key == null));
         productPropertyService.createProductProperty(product.getId(), key);
         productPropertyService.createProductProperty(product.getId(), sell);
 
@@ -290,11 +287,12 @@ public class ProductTestDataService {
             categoryProperty.setProperty(property);
             if("品牌".equals(propertyName)) {
                 categoryProperty.setPropertyType(PropertyType.KEY_PROPERTY);
+                categoryProperty.setMultiValue(false);
             } else {
                 categoryProperty.setPropertyType(PropertyType.SELL_PROPERTY);
+                categoryProperty.setMultiValue(true);
             }
             categoryProperty.setPriority(categoryValueMap.size() - ++i);
-            categoryProperty.setMultiValue(propertyValueList != null && propertyValueList.size() > 1);
             categoryPropertyService.createCategoryProperty(categoryProperty);
 
             if(propertyValueList != null) {

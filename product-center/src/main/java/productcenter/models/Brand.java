@@ -42,7 +42,6 @@ public class Brand implements EntityClass<Integer> {
     private String description;
 
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override
     public Integer getId() {
