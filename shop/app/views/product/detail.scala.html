@@ -247,7 +247,7 @@
                     }
                 }
                 <div class="detail-like">
-                    <span class="about-designer">查看<a target="_blank" target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">@pd.getBase.getProduct.getCustomer.getName</a>主页</span>
+                    <span class="about-designer"><a target="_blank" target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">查看@pd.getBase.getProduct.getCustomer.getName 主页</a></span>
                     <span class="like @if(pd.getBase.isFavorites){current}" data-id="@pd.getBase.getProduct.getId">
                         <i class="iconfont shi" @if(!pd.getBase.isFavorites){style="display: none;"}>&#xe603;</i>
                         <i class="iconfont kong" @if(pd.getBase.isFavorites){style="display: none;"}>&#xe602;</i>
