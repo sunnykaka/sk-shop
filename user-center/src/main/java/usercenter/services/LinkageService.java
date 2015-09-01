@@ -36,6 +36,26 @@ public class LinkageService {
     }
 
     /**
+     * 获取所有城市信息.
+     *
+     * @return
+     */
+    public List<City> getAllCity(){
+
+        return generalDAO.findAll(City.class);
+    }
+
+    /**
+     * 获取所有区域信息.
+     *
+     * @return
+     */
+    public List<Area> getAllArea(){
+
+        return generalDAO.findAll(Area.class);
+    }
+
+    /**
      * 根据省市名查询对应的信息.
      *
      * @param name 城市名. 如 北京市, 河北省等
