@@ -64,7 +64,7 @@ public class ProductPictureService {
     public List<ProductPicture> queryProductPicturesBySkuId(String skuId) {
         play.Logger.info("------ProductPictureService queryProductPicturesBySkuId begin exe-----------" + skuId);
 
-        String jpql = "select o from ProductPicture o where 1=1 and o.skuId like concat('%', :skuId, '%')";
+        String jpql = "select o from ProductPicture o where 1=1 and o.skuId like concat('%,', :skuId, ',%')";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("skuId", skuId);
         jpql += " order by o.number, o.name";
