@@ -81,6 +81,11 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
     private DateTime updateTime;
 
     /**
+     * 是否默认sku
+     */
+    private boolean defaultSku;
+
+    /**
      * 设置为可以买
      * @return
      */
@@ -279,5 +284,13 @@ public class StockKeepingUnit implements EntityClass<Integer>, OperableData {
     @Override
     public void setUpdateTime(DateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public boolean isDefaultSku() {
+        return defaultSku;
+    }
+
+    public void setDefaultSku(boolean defaultSku) {
+        this.defaultSku = defaultSku;
     }
 }

@@ -243,7 +243,8 @@ public class ProductDetailBase {
                                     skuDetail.getSku().getSkuPropertiesInDbWithOrder(),
                                     skuDetail.getStockQuantity(),
                                     skuDetail.getTradeMaxNumber(),
-                                    skuDetail.getImageList())).
+                                    skuDetail.getImageList(),
+                                    skuDetail.getSku().isDefaultSku())).
                             collect(Collectors.toMap(
                                     skuInfo -> StringUtils.isBlank(skuInfo.getSkuPropertiesInDb()) ? NOT_EXIST_KEY : skuInfo.getSkuPropertiesInDb(),
                                     skuInfo -> skuInfo));
@@ -322,17 +323,19 @@ public class ProductDetailBase {
         public Builder buildDefaultSku() {
 
             if(!productDetailBase.skuMap.isEmpty()) {
-                boolean findDefaultSku = false;
+                Optional<SkuInfo> defaultSku = Optional.empty();
                 if(defaultSkuId != null) {
                     //前端请求的时候带了skuId
-                    Optional<SkuInfo> first = productDetailBase.skuMap.values().stream().
+                    defaultSku = productDetailBase.skuMap.values().stream().
                             filter(skuInfo -> skuInfo.getSkuId().equals(defaultSkuId)).findFirst();
-                    if(first.isPresent()) {
-                        findDefaultSku = true;
-                        productDetailBase.defaultSku = first.get();
-                    }
                 }
-                if(!findDefaultSku) {
+                if(!defaultSku.isPresent()) {
+                    //查找defaultSku为true的sku
+                    defaultSku = productDetailBase.skuMap.values().stream().
+                            filter(SkuInfo::isDefaultSku).findFirst();
+
+                }
+                if(!defaultSku.isPresent()) {
                     //查找价格最低的sku
                     //查找库存数量大于0, 并且价格最低的sku
                     Optional<SkuInfo> min = productDetailBase.skuMap.values().stream().
@@ -344,8 +347,11 @@ public class ProductDetailBase {
                                 min(minSkuPriceComparator());
                     }
 
-                    productDetailBase.defaultSku = min.get();
+                    defaultSku = min;
                 }
+
+                productDetailBase.defaultSku = defaultSku.orElse(null);
+
             }
 
             return this;
