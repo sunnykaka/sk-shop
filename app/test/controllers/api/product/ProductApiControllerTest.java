@@ -19,6 +19,7 @@ import usercenter.models.Designer;
 import utils.Global;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -66,8 +67,11 @@ public class ProductApiControllerTest extends BaseTest{
 
         List<SkuCandidate> skuCandidateList = productDetailDto.getSkuCandidateList();
         assertThat(skuCandidateList, notNullValue());
-        assertThat(skuCandidateList, notNullValue());
+        assertThat(skuCandidateList.size() > 0, is(true));
 
+        Map<String, SkuInfo> skuMap = productDetailDto.getSkuMap();
+        assertThat(skuMap, notNullValue());
+        assertThat(skuMap.size() > 0, is(true));
 
     }
 

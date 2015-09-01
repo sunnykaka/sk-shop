@@ -3,6 +3,7 @@ package productcenter.services;
 import com.google.common.collect.Lists;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
+import common.utils.Money;
 import common.utils.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
 import productcenter.constants.ProductTagType;
 import productcenter.constants.PropertyType;
+import productcenter.constants.SKUState;
 import productcenter.constants.StoreStrategy;
 import productcenter.models.*;
 import productcenter.util.PidVid;
@@ -146,7 +148,28 @@ public class ProductTestDataService {
         productPropertyService.createProductProperty(product.getId(), key);
         productPropertyService.createProductProperty(product.getId(), sell);
 
-        skuAndStorageService.createSkuByDescartes(sell, product);
+        List<StockKeepingUnit> skuList = skuAndStorageService.createSkuByDescartes(sell, product);
+        createSkuStorage(skuList);
+
+    }
+
+    private void createSkuStorage(List<StockKeepingUnit> skuList) {
+
+        for(StockKeepingUnit sku : skuList) {
+            double price = new java.util.Random().nextDouble();
+            double marketPrice = price + 0.5d;
+            sku.setPrice(Money.valueOf(price));
+            sku.setPrice(Money.valueOf(marketPrice));
+            sku.setSkuState(SKUState.NORMAL);
+            generalDao.persist(sku);
+
+            SkuStorage skuStorage = new SkuStorage();
+            skuStorage.setSkuId(sku.getId());
+            skuStorage.setStockQuantity(1);
+            skuStorage.setTradeMaxNumber(1);
+            generalDao.persist(skuStorage);
+        }
+
 
     }
 

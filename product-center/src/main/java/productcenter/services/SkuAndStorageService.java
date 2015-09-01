@@ -240,19 +240,22 @@ public class SkuAndStorageService {
      * @param product
      */
     @Transactional
-    public void createSkuByDescartes(PidVid sell, Product product) {
+    public List<StockKeepingUnit> createSkuByDescartes(PidVid sell, Product product) {
         deleteSkuByProductId(product.getId());//删除SKU及SKU相应库存
+        List<StockKeepingUnit> skuList = new ArrayList<>();
         //销售属性为空，或者没有多值，直接创建SKU，这时属性为空
         if (sell == null || sell.getMultiPidVidMap().isEmpty()) {
             StockKeepingUnit stockKeepingUnit = new StockKeepingUnit();
             stockKeepingUnit.setProductId(product.getId());
-            createStockKeepingUnit(product, null);
+            skuList.add(createStockKeepingUnit(product, null));
         } else {
             List<String> skuPropertiesInDbList = parseSkuList(sell);
             for (String skuPropertiesInDb : skuPropertiesInDbList) {
-                createStockKeepingUnit(product, skuPropertiesInDb);
+                skuList.add(createStockKeepingUnit(product, skuPropertiesInDb));
             }
         }
+
+        return skuList;
     }
 
     private List<String> parseSkuList(PidVid sell) {
@@ -278,7 +281,7 @@ public class SkuAndStorageService {
     }
 
 
-    private void createStockKeepingUnit(Product product, String skuPropertiesInDb) {
+    private StockKeepingUnit createStockKeepingUnit(Product product, String skuPropertiesInDb) {
         StockKeepingUnit stockKeepingUnit = new StockKeepingUnit();
         stockKeepingUnit.setProductId(product.getId());
         stockKeepingUnit.setBarCode("");
@@ -286,6 +289,8 @@ public class SkuAndStorageService {
         generalDao.persist(stockKeepingUnit);
         stockKeepingUnit.setSkuCode(SkuUtil.initSkuCode(product.getCategoryId(), product.getId(), stockKeepingUnit.getId()));
         generalDao.persist(stockKeepingUnit);
+
+        return stockKeepingUnit;
     }
 
     @Transactional
