@@ -187,8 +187,10 @@ public class CartApiController extends BaseController {
 
             if(!isReplace) {
                 List<CartItem> cartItems = null;
+                cart = this.buildUserSimpleCart(curUser.getId());
                 if(cart != null) {
-                   cartItems = cartService.queryCarItemsByCartId(cart.getId());
+                   //cartItems = cartService.queryCarItemsByCartId(cart.getId());
+                    cartItems = cart.getCartItemList();
                 }
                 if(cartItems == null || cartItems.size() == 0) {
                     throw new AppBusinessException(ErrorCode.Conflict, "用户当前购物车为空");

@@ -25,4 +25,17 @@ public class TestUtils {
         }
         return null;
     }
+
+    public static LoginResult createUserAndLogin() {
+        String phone = "1" + RandomStringUtils.randomNumeric(10);
+        String username = RandomStringUtils.randomAlphabetic(10);
+        String password = RandomStringUtils.randomAlphabetic(10);
+
+        LoginApiControllerTest loginApiControllerTest = new LoginApiControllerTest();
+        Result result = loginApiControllerTest.registerUser(phone, username, password);
+        LoginResult loginResult = JsonUtils.json2Object(contentAsString(result), LoginResult.class);
+        loginApiControllerTest.assertLoginResultValid(phone, username, loginResult);
+
+        return loginResult;
+    }
 }
