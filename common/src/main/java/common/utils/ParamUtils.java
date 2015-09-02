@@ -1,6 +1,8 @@
 package common.utils;
 
 
+import common.exceptions.AppBusinessException;
+import common.exceptions.ErrorCode;
 import play.mvc.Http;
 
 import java.util.HashMap;
@@ -54,6 +56,23 @@ public class ParamUtils {
             return result[0];
         }
 
+    }
+
+    /**
+     * 单个POST取id参数
+     *
+     * @param request
+     * @return
+     */
+    public static int getObjectId(Http.Request request){
+
+        String objectId = getByKey(request, "id");
+
+        try {
+            return Integer.parseInt(objectId);
+        }catch (Exception e){
+            throw new AppBusinessException(ErrorCode.Conflict, "id传参错误");
+        }
     }
 
 }

@@ -3,53 +3,51 @@
 # ~~~~
 
 # Home page
-GET           /                                         @controllers.Application.index
-POST          /login                                    @controllers.api.user.LoginApiController.login
-POST          /register                                 @controllers.api.user.LoginApiController.register
-PUT           /logout                                   @controllers.api.user.LoginApiController.logout
-GET           /users/exist                              @controllers.api.user.LoginApiController.isUserExist(username ?= null, phone ?= null)
-POST          /phones/code                              @controllers.api.user.LoginApiController.requestPhoneCode
-POST          /refresh_token                            @controllers.api.user.LoginApiController.refreshToken
+GET           /                                       @controllers.Application.index
+POST          /login                                  @controllers.api.user.LoginApiController.login
+POST          /register                               @controllers.api.user.LoginApiController.register
+PUT           /logout                                 @controllers.api.user.LoginApiController.logout
+GET           /users/exist                            @controllers.api.user.LoginApiController.isUserExist(username ?= null, phone ?= null)
+POST          /phones/code                            @controllers.api.user.LoginApiController.requestPhoneCode
+POST          /refresh_token                          @controllers.api.user.LoginApiController.refreshToken
 
-POST          /test/public                              @controllers.api.TestApiController.publicResource
-POST          /test/protected                           @controllers.api.TestApiController.protectedResource
+POST          /test/public                            @controllers.api.TestApiController.publicResource
+POST          /test/protected                         @controllers.api.TestApiController.protectedResource
 
 #product
-GET           /products/:id                             @controllers.api.product.ProductApiController.detail(id)
+GET           /products/:id                           @controllers.api.product.ProductApiController.detail(id)
 
 #购物车
-GET         /app/cart/getUserCartItemNum                @controllers.api.shop.CartApiController.getUserCartItemNum()
-POST        /app/cart/addSkuToCartAddNum                @controllers.api.shop.CartApiController.addSkuToCartAddNum(skuId:Int, number:Int)
-POST        /app/cart/addSkuToCartReplaceNum            @controllers.api.shop.CartApiController.addSkuToCartReplaceNum(skuId:Int, number:Int)
-GET         /app/cart/showCart                          @controllers.api.shop.CartApiController.showCart()
-DELETE      /app/cart/deleteCartItem                    @controllers.api.shop.CartApiController.deleteCartItem(cartItemId:Int)
-POST        /app/cart/toBilling                         @controllers.api.shop.CartApiController.toBilling(selCartItems:String)
-POST        /app/cart/toBillingByPromptlyPay            @controllers.api.shop.CartApiController.toBillingByPromptlyPay(skuId:Int, number:Int)
+GET           /app/cart/getUserCartItemNum            @controllers.api.shop.CartApiController.getUserCartItemNum()
+POST          /app/cart/addSkuToCartAddNum            @controllers.api.shop.CartApiController.addSkuToCartAddNum(skuId:Int, number:Int)
+POST          /app/cart/addSkuToCartReplaceNum        @controllers.api.shop.CartApiController.addSkuToCartReplaceNum(skuId:Int, number:Int)
+GET           /app/cart/showCart                      @controllers.api.shop.CartApiController.showCart()
+DELETE        /app/cart/deleteCartItem                @controllers.api.shop.CartApiController.deleteCartItem(cartItemId:Int)
+POST          /app/cart/toBilling                     @controllers.api.shop.CartApiController.toBilling(selCartItems:String)
+POST          /app/cart/toBillingByPromptlyPay        @controllers.api.shop.CartApiController.toBillingByPromptlyPay(skuId:Int, number:Int)
 
 #支付
-POST        /app/pay/submitToPay                        @controllers.api.shop.OrderAndPayApiController.submitToPay(isPromptlyPay:Boolean, selItems:String, addressId:Int, payOrg:String)
+POST          /app/pay/submitToPay                    @controllers.api.shop.OrderAndPayApiController.submitToPay(isPromptlyPay:Boolean, selItems:String, addressId:Int, payOrg:String)
 
 # 我的地址
-GET           /my/address/list                          @controllers.api.user.AddressApiController.list()
-POST          /my/address/add                           @controllers.api.user.AddressApiController.add()
-POST          /my/address/update                        @controllers.api.user.AddressApiController.update()
-DELETE        /my/address/del                           @controllers.api.user.AddressApiController.del(addressId:Int)
-POST          /my/address/defaultAddress                @controllers.api.user.AddressApiController.defaultAddress(addressId:Int)
-GET           /my/address/query                         @controllers.api.user.AddressApiController.getAddress(addressId:Int)
-GET           /my/address/province                      @controllers.api.user.AddressApiController.queryProvince()
-GET           /my/address/city                          @controllers.api.user.AddressApiController.queryCity()
-GET           /my/address/area                          @controllers.api.user.AddressApiController.queryArea()
+GET           /my/address/list                        @controllers.api.user.AddressApiController.list()
+POST          /my/address/add                         @controllers.api.user.AddressApiController.add()
+POST          /my/address/update                      @controllers.api.user.AddressApiController.update()
+DELETE        /my/address/del                         @controllers.api.user.AddressApiController.del()
+POST          /my/address/defaultAddress              @controllers.api.user.AddressApiController.defaultAddress()
+GET           /my/address/query                       @controllers.api.user.AddressApiController.getAddress()
+GET           /address/linkage                        @controllers.api.user.AddressApiController.getProvinceCityInfo()
 
 # my favorites
-GET         /my/favorites/product/list                  @controllers.api.user.ProductFavoritesApiController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
-DELETE      /my/favorites/product/del                   @controllers.api.user.ProductFavoritesApiController.del(productId:Int)
-POST        /my/favorites/product/add                   @controllers.api.user.ProductFavoritesApiController.add(productId:Int)
-GET         /my/favorites/designer/list                 @controllers.api.user.DesignerFavoritesApiController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
-DELETE      /my/favorites/designer/del                  @controllers.api.user.DesignerFavoritesApiController.del(designerId:Int)
-POST        /my/favorites/designer/add                  @controllers.api.user.DesignerFavoritesApiController.add(designerId:Int)
+GET           /my/favorites/product/list              @controllers.api.user.ProductFavoritesApiController.list(pageNo:Int ?= 1,pageSize:Int ?= 10)
+DELETE        /my/favorites/product/del               @controllers.api.user.ProductFavoritesApiController.del()
+POST          /my/favorites/product/add               @controllers.api.user.ProductFavoritesApiController.add()
+GET           /my/favorites/designer/list             @controllers.api.user.DesignerFavoritesApiController.list(pageNo:Int ?= 1,pageSize:Int ?= 10)
+DELETE        /my/favorites/designer/del              @controllers.api.user.DesignerFavoritesApiController.del()
+POST          /my/favorites/designer/add              @controllers.api.user.DesignerFavoritesApiController.add()
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file                             controllers.Assets.versioned(path="/public", file: Asset)
-GET           /robots.txt                               controllers.Assets.at(path="/public", file="robots.txt")
+GET           /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
+GET           /robots.txt                             controllers.Assets.at(path="/public", file="robots.txt")
 
