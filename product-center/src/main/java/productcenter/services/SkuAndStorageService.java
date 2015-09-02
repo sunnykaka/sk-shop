@@ -13,6 +13,7 @@ import productcenter.util.SkuUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Sku和库存Service
@@ -250,14 +251,20 @@ public class SkuAndStorageService {
             skuList.add(createStockKeepingUnit(product, null));
         } else {
             List<String> skuPropertiesInDbList = parseSkuList(sell);
-            for (String skuPropertiesInDb : skuPropertiesInDbList) {
-                skuList.add(createStockKeepingUnit(product, skuPropertiesInDb));
-            }
+            skuList.addAll(skuPropertiesInDbList.
+                    stream().
+                    map(skuPropertiesInDb -> createStockKeepingUnit(product, skuPropertiesInDb)).
+                    collect(Collectors.toList()));
         }
 
         return skuList;
     }
 
+    /**
+     * 分析销售属性,得到skuPropertiesInDbList集合
+     * @param sell
+     * @return
+     */
     private List<String> parseSkuList(PidVid sell) {
         Map<Integer, List<Long>> multiPidVidMap = sell.getMultiPidVidMap();
         Descartes descartes = new Descartes();

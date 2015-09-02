@@ -55,7 +55,14 @@ public class ProductTestDataService {
     SkuAndStorageService skuAndStorageService;
 
 
-
+    /**
+     *
+     * 初始化一个上架的产品对象并持久化到数据库,会生成2个sku并且库存都为1,其他产品信息都是随机的(名称,描述等).
+     * 该产品在初始化之前会自动初始化随机的类目,设计师,设计师尺码.
+     * 该方法不会依赖其他数据.除了国籍信息.
+     *
+     * @return
+     */
     @Transactional
     public Product initProduct() {
 
@@ -66,6 +73,7 @@ public class ProductTestDataService {
         Value value = propertyAndValueService.getValueByName(designer.getName());
         product.setBrandId(value.getId());
 
+        //产品初始化2个sku,分别为红色大号和蓝色大号
         Map<String, List<String>> categoryValueMap = new LinkedHashMap<>();
         categoryValueMap.put("test颜色", Lists.newArrayList("test红色", "test蓝色"));
         categoryValueMap.put("test尺寸", Lists.newArrayList("test大号"));
@@ -91,15 +99,46 @@ public class ProductTestDataService {
         generalDao.persist(product);
 
         initSku(value.getId(), product, category, categoryValueMap);
+        initProductPicture(product);
 
         return product;
     }
 
+    private void initProductPicture(Product product) {
+        ProductPicture productPicture = new ProductPicture();
+        productPicture.setProductId(product.getId());
+        productPicture.setOriginalName("347_main_3.jpg");
+        productPicture.setName("347_main_3.jpg");
+        productPicture.setMainPic(true);
+        productPicture.setMinorPic(false);
+        productPicture.setPictureUrl("http://imgp.fashiongeeker.com/47/347_main_3.jpg");
+        productPicture.setPictureLocalUrl("http://imgp.fashiongeeker.com/47/347_main_3.jpg");
+        generalDao.persist(productPicture);
+
+        productPicture = new ProductPicture();
+        productPicture.setProductId(product.getId());
+        productPicture.setOriginalName("566_main_1.jpg");
+        productPicture.setName("566_main_1.jpg");
+        productPicture.setMainPic(false);
+        productPicture.setMinorPic(true);
+        productPicture.setPictureUrl("http://imgp.fashiongeeker.com/66/566_main_1.jpg");
+        productPicture.setPictureLocalUrl("http://imgp.fashiongeeker.com/66/566_main_1.jpg");
+        generalDao.persist(productPicture);
+    }
+
+    /**
+     * 初始化sku信息
+     * @param brandId
+     * @param product
+     * @param category
+     * @param categoryValueMap
+     */
     private void initSku(Integer brandId, Product product, ProductCategory category, Map<String, List<String>> categoryValueMap) {
 
         Logger.debug(String.format("init sku, brandId[%d], product[id=%d], category[id=%d], categoryValueMap[%s]",
                 brandId, product.getId(), category.getId(), categoryValueMap.toString()));
 
+        //首先查询该类目下都有哪些销售属性
         List<CategoryProperty> categoryProperties = categoryPropertyService.findCategoryProperty(category.getId(), PropertyType.SELL_PROPERTY);
 
         Map<CategoryProperty, List<Integer>> selectedSkuValueMap = new LinkedHashMap<>();
@@ -107,7 +146,7 @@ public class ProductTestDataService {
             String propertyName = categoryProperty.getProperty().getName();
             List<String> categoryValueNames = categoryValueMap.get(propertyName);
             if(categoryValueNames != null && !categoryValueNames.isEmpty()) {
-
+                //选择的sku属性id
                 List<Integer> valueIdList =
                         categoryValueNames.
                                 stream().
@@ -159,7 +198,7 @@ public class ProductTestDataService {
             double price = new java.util.Random().nextDouble();
             double marketPrice = price + 0.5d;
             sku.setPrice(Money.valueOf(price));
-            sku.setPrice(Money.valueOf(marketPrice));
+            sku.setMarketPrice(Money.valueOf(marketPrice));
             sku.setSkuState(SKUState.NORMAL);
             generalDao.persist(sku);
 
@@ -173,6 +212,12 @@ public class ProductTestDataService {
 
     }
 
+    /**
+     * 分析选中的类目属性值,得到销售属性和关键属性对象
+     * @param brandId 品牌属性值ID
+     * @param categoryProperties key-类目属性名称,value-选中的类目属性值ID集合
+     * @return
+     */
     private PidVid[] parsePidVid(Integer brandId, Map<CategoryProperty, List<Integer>> categoryProperties) {
         PidVid key = new PidVid(PropertyType.KEY_PROPERTY);
         PidVid sell = new PidVid(PropertyType.SELL_PROPERTY);
@@ -181,7 +226,7 @@ public class ProductTestDataService {
         for(Map.Entry<CategoryProperty, List<Integer>> entry : categoryProperties.entrySet()) {
             CategoryProperty categoryProperty = entry.getKey();
             List<Integer> valueIdList = entry.getValue();
-            int pid = categoryProperty.getPropertyId();//遍历这个类目下的所有类目属性，通过属性ID去request中得到值ID
+            int pid = categoryProperty.getPropertyId();
             if (pid == property.getId()) { //品牌属性不需要处理，因为品牌这个属性单独处理了
                 continue;
             }
@@ -204,7 +249,11 @@ public class ProductTestDataService {
     }
 
 
-
+    /**
+     * 初始化设计师尺码表,名称随机,表格内容固定
+     * @param designer
+     * @return
+     */
     @Transactional
     public DesignerSize initDesignerSize(Designer designer) {
 
@@ -280,6 +329,11 @@ public class ProductTestDataService {
         return designerSize;
     }
 
+    /**
+     * 初始化类目,类目下的属性都是销售属性,除了品牌
+     * @param categoryValueMap key-类目属性名称, value-该类目属性可选的值
+     * @return
+     */
     @Transactional
     public ProductCategory initCategory(Map<String, List<String>> categoryValueMap) {
         ProductCategory pc = new ProductCategory();
@@ -340,6 +394,10 @@ public class ProductTestDataService {
 
     }
 
+    /**
+     * 初始化设计师,会自动初始化品牌
+     * @return
+     */
     @Transactional
     public Designer initDesigner() {
 

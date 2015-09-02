@@ -1,5 +1,8 @@
 package productcenter.dtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -11,7 +14,10 @@ public class SkuCandidate {
 
     private List<SkuValue> skuValueList;
 
-    public SkuCandidate(SkuProp skuProp, List<SkuValue> skuValueList) {
+    @JsonCreator
+    public SkuCandidate(
+            @JsonProperty("skuProp") SkuProp skuProp,
+            @JsonProperty("skuValueList") List<SkuValue> skuValueList) {
         this.skuProp = skuProp;
         this.skuValueList = skuValueList;
     }
@@ -32,7 +38,11 @@ public class SkuCandidate {
 
         private int priority;
 
-        public SkuProp(Integer id, String value, int priority) {
+        @JsonCreator
+        public SkuProp(
+                @JsonProperty("id") Integer id,
+                @JsonProperty("value") String value,
+                @JsonProperty("priority") int priority) {
             this.id = id;
             this.value = value;
             this.priority = priority;
@@ -78,7 +88,12 @@ public class SkuCandidate {
 
         private int priority;
 
-        public SkuValue(Integer id, String value, long pidvid, int priority) {
+        @JsonCreator
+        public SkuValue(
+                @JsonProperty("id") Integer id,
+                @JsonProperty("value") String value,
+                @JsonProperty("pidvid") long pidvid,
+                @JsonProperty("priority") int priority) {
             this.id = id;
             this.value = value;
             this.pidvid = pidvid;
