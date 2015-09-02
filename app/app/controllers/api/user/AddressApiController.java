@@ -1,9 +1,13 @@
 package controllers.api.user;
 
 import api.response.user.AddressDto;
+import api.response.user.AreaDto;
+import api.response.user.CityDto;
+import api.response.user.ProvinceDto;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
+import common.utils.ParamUtils;
 import common.utils.SQLUtils;
 import controllers.BaseController;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -19,7 +23,6 @@ import usercenter.models.address.City;
 import usercenter.models.address.Province;
 import usercenter.services.AddressService;
 import usercenter.services.LinkageService;
-import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 
 import java.util.ArrayList;
@@ -45,7 +48,7 @@ public class AddressApiController extends BaseController {
     @SecuredAction
     public Result list() {
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
 
         List<Address> addressList = addressService.queryAllAddress(user.getId(), true);
 
@@ -66,7 +69,7 @@ public class AddressApiController extends BaseController {
     @SecuredAction
     public Result add() {
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
 
         Form<AddressForm> addressForm = Form.form(AddressForm.class).bindFromRequest();
 
@@ -115,7 +118,7 @@ public class AddressApiController extends BaseController {
     @SecuredAction
     public Result update() {
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
 
         Form<AddressForm> addressForm = Form.form(AddressForm.class).bindFromRequest();
 
@@ -158,10 +161,10 @@ public class AddressApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result del(int addressId) {
+    public Result del() {
 
-        User user = SessionUtils.currentUser();
-        Address address = addressService.getAddress(addressId, user.getId());
+        User user = this.currentUser();
+        Address address = addressService.getAddress(ParamUtils.getObjectId(request()), user.getId());
 
         if (null == address) {
             throw new AppBusinessException(ErrorCode.Conflict, "删除送货地址失败");
@@ -180,10 +183,10 @@ public class AddressApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result defaultAddress(int addressId) {
+    public Result defaultAddress() {
 
-        User user = SessionUtils.currentUser();
-        Address address = addressService.getAddress(addressId, user.getId());
+        User user = this.currentUser();
+        Address address = addressService.getAddress(ParamUtils.getObjectId(request()), user.getId());
 
         if (null == address) {
             throw new AppBusinessException(ErrorCode.Conflict, "设置送货地址失败");
@@ -197,15 +200,12 @@ public class AddressApiController extends BaseController {
 
     /**
      * 获取地址信息
-     *
-     * @param addressId
      * @return
      */
     @SecuredAction
-    public Result getAddress(int addressId) {
-
-        User user = SessionUtils.currentUser();
-        Address address = addressService.getAddress(addressId, user.getId());
+    public Result getAddress(){
+        User user = this.currentUser();
+        Address address = addressService.getAddress(ParamUtils.getObjectId(request()), user.getId());
 
         if (null == address) {
             throw new AppBusinessException(ErrorCode.Conflict, "获取地址失败");
@@ -216,51 +216,38 @@ public class AddressApiController extends BaseController {
     }
 
     /**
-     * 省份信息
+     * 省份、城市、区域联动
+     * TODO for查询内容可能多，后面优化
      *
      * @return
      */
-    public Result queryProvince() {
-
+    public Result getProvinceCityInfo(){
         try {
+
+            List<ProvinceDto> provinceDtos = new ArrayList<>();
             List<Province> provinceList = linkageService.getAllProvince();
-            return ok(JsonUtils.object2Node(provinceList));
+            for(Province province:provinceList){
+                ProvinceDto provinceDto = ProvinceDto.build(province);
+                List<City> cityList = linkageService.getCityByProvinceCode(province.getId().toString());
+                List<CityDto> cityDtos = new ArrayList<>();
+                for(City city:cityList){
+                    CityDto cityDto = CityDto.build(city);
+                    List<Area> areaList = linkageService.getAreaByCityCode(city.getId().toString());
+                    List<AreaDto> areaDtos = new ArrayList<>();
+                    for(Area area:areaList){
+                        areaDtos.add(AreaDto.build(area));
+                    }
+                    cityDto.setAreas(areaDtos);
+                    cityDtos.add(cityDto);
+                }
+                provinceDto.setCitys(cityDtos);
+                provinceDtos.add(provinceDto);
+            }
+
+            return ok(JsonUtils.object2Node(provinceDtos));
         } catch (Exception e) {
             return conflict();
         }
-
-    }
-
-    /**
-     * 城市信息
-     *
-     * @return
-     */
-    public Result queryCity() {
-
-        try {
-            List<City> cityList = linkageService.getAllCity();
-            return ok(JsonUtils.object2Node(cityList));
-        } catch (Exception e) {
-            return conflict();
-        }
-
-    }
-
-    /**
-     * 区域信息
-     *
-     * @return
-     */
-    public Result queryArea() {
-
-        try {
-            List<Area> areaList = linkageService.getAllArea();
-            return ok(JsonUtils.object2Node(areaList));
-        } catch (Exception e) {
-            return conflict();
-        }
-
     }
 
 }
