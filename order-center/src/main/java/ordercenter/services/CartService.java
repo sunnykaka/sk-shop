@@ -17,6 +17,8 @@ import productcenter.models.StockKeepingUnit;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
+import usercenter.models.Designer;
+import usercenter.services.DesignerService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +48,9 @@ public class CartService {
 
     @Autowired
     private ProductPictureService pictureService;
+
+    @Autowired
+    private DesignerService designerService;
 
     //@Autowired
     //private CmsService cmsService;
@@ -395,12 +400,15 @@ public class CartService {
     @Transactional
     public Money setCartItemValues(CartItem cartItem, boolean isForShowCart) {
         Money totalMoney = Money.valueOf(0);
-        StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
+
         cartItem.setCurUnitPrice(Money.valueOf(0));
         cartItem.setOnline(false);
         cartItem.setHasStock(false);
         cartItem.setStockQuantity(0);
         cartItem.setTradeMaxNumber(0);
+        cartItem.setCustomerName("");
+
+        StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
         if (stockKeepingUnit != null) {
             cartItem.setSku(stockKeepingUnit);
             cartItem.setBarCode(stockKeepingUnit.getBarCode());
@@ -411,6 +419,10 @@ public class CartService {
                 cartItem.setProductName(product.getName());
                 cartItem.setCategoryId(product.getCategoryId());
                 cartItem.setCustomerId(product.getCustomerId());
+                Designer designer = product.getCustomer();
+                if(designer != null) {
+                    cartItem.setCustomerName(designer.getName());
+                }
             }
 
             //图片

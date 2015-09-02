@@ -18,15 +18,16 @@ POST          /test/protected                           @controllers.api.TestApi
 GET           /products/:id                             @controllers.api.product.ProductApiController.detail(id)
 
 #购物车
-GET           /app/cart/getUserCartItemNum              @controllers.api.shop.CartApiController.getUserCartItemNum()
-POST          /app/cart/addSkuToCartAddNum              @controllers.api.shop.CartApiController.addSkuToCartAddNum(skuId:Int, number:Int)
-POST          /app/cart/addSkuToCartReplaceNum          @controllers.api.shop.CartApiController.addSkuToCartReplaceNum(skuId:Int, number:Int)
-GET           /app/cart/showCart                        @controllers.api.shop.CartApiController.showCart()
-DELETE        /app/cart/deleteCartItem                  @controllers.api.shop.CartApiController.deleteCartItem(cartItemId:Int)
-GET           /app/cart/selCartItemProcess              @controllers.api.shop.CartApiController.selCartItemProcess(selCartItems:String)
-GET           /app/cart/chooseAddress                   @controllers.api.shop.CartApiController.chooseAddress(selCartItems:String)
-GET           /app/cart/verifyPromptlyPayData           @controllers.api.shop.CartApiController.verifyPromptlyPayData(skuId:Int, number:Int)
-GET           /app/cart/promptlyPayChooseAddress        @controllers.api.shop.CartApiController.promptlyPayChooseAddress(skuId:Int, number:Int)
+GET         /app/cart/getUserCartItemNum                @controllers.api.shop.CartApiController.getUserCartItemNum()
+POST        /app/cart/addSkuToCartAddNum                @controllers.api.shop.CartApiController.addSkuToCartAddNum(skuId:Int, number:Int)
+POST        /app/cart/addSkuToCartReplaceNum            @controllers.api.shop.CartApiController.addSkuToCartReplaceNum(skuId:Int, number:Int)
+GET         /app/cart/showCart                          @controllers.api.shop.CartApiController.showCart()
+DELETE      /app/cart/deleteCartItem                    @controllers.api.shop.CartApiController.deleteCartItem(cartItemId:Int)
+POST        /app/cart/toBilling                         @controllers.api.shop.CartApiController.toBilling(selCartItems:String)
+POST        /app/cart/toBillingByPromptlyPay            @controllers.api.shop.CartApiController.toBillingByPromptlyPay(skuId:Int, number:Int)
+
+#支付
+POST        /app/pay/submitToPay                        @controllers.api.shop.OrderAndPayApiController.submitToPay(isPromptlyPay:Boolean, selItems:String, addressId:Int, payOrg:String)
 
 # 我的地址
 GET           /my/address/list                          @controllers.api.user.AddressApiController.list()

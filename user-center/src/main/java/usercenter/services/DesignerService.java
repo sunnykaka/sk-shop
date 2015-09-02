@@ -5,6 +5,7 @@ import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import play.Logger;
 import usercenter.constants.DesignerPictureType;
 import usercenter.dtos.DesignerView;
 import usercenter.models.Designer;
@@ -124,6 +125,7 @@ public class DesignerService {
      */
     @Transactional(readOnly = true)
     public Designer getDesignerById(int designerId) {
+        Logger.info("------designerId-----" + designerId);
         return generalDAO.get(Designer.class, designerId);
     }
 

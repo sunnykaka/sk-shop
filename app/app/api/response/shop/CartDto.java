@@ -1,8 +1,10 @@
 package api.response.shop;
 
 import common.utils.Money;
-import org.joda.time.DateTime;
+import ordercenter.models.Cart;
+import ordercenter.models.CartItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,21 +20,6 @@ public class CartDto {
     private Integer id;
 
     /**
-     * 谁的购物车
-     */
-    private Integer userId;
-
-    /**
-     * 跟踪，比如用cookie
-     */
-    private String trackId = "";
-
-    /**
-     * 创建时间，配合客户端的cookie过期时间可以用于清除无用数据
-     */
-    private DateTime createDate;
-
-    /**
      * 购物车的总价，在加载车的时候动态计算，不需要入库
      */
     private Money totalMoney;
@@ -42,36 +29,33 @@ public class CartDto {
      */
     private List<CartItemDto> cartItemList;
 
+    public CartDto buildUserCart(Cart cart) {
+        if(cart == null)  {
+            return  null;
+        }
+
+        CartDto cartDto = new CartDto();
+        cartDto.setId(cart.getId());
+        cartDto.setTotalMoney(cart.getTotalMoney());
+
+        List<CartItem> cartItemList = cart.getCartItemList();
+        if(cartItemList != null) {
+            List<CartItemDto> cartItemDtoList = new ArrayList();
+            for(CartItem item : cartItemList) {
+                CartItemDto dto = new CartItemDto();
+                cartItemDtoList.add(dto.buildCartItemDto(item));
+            }
+            cartDto.setCartItemList(cartItemDtoList);
+        }
+        return cartDto;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getTrackId() {
-        return trackId;
-    }
-
-    public void setTrackId(String trackId) {
-        this.trackId = trackId;
-    }
-
-    public DateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(DateTime createDate) {
-        this.createDate = createDate;
     }
 
     public Money getTotalMoney() {

@@ -1,5 +1,6 @@
 package controllers.api.shop;
 
+import api.response.shop.CartDto;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
@@ -19,7 +20,6 @@ import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
-import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 
 import java.util.ArrayList;
@@ -47,30 +47,35 @@ public class CartApiController extends BaseController {
     @Autowired
     private ProductService productService;
 
-
     /**
      * 获取用户购物车中购买项当前数量
      * @return
      */
     public Result getUserCartItemNum() {
+        Logger.info("进入getUserCartItemNum方法");
         try {
             User curUser = this.currentUser();
+            Map<String,Integer> totalNumMap = new HashMap();
             if(curUser == null || curUser.getId() <= 0) {
-                return ok(JsonUtils.object2Node(0));
+                totalNumMap.put("totalNum", 0);
+                return ok(JsonUtils.object2Node(totalNumMap));
             } else {
                 Cart cart = cartService.getCartByUserId(curUser.getId());
                 if(cart == null) {
-                    return ok(JsonUtils.object2Node(0));
+                    totalNumMap.put("totalNum", 0);
+                    return ok(JsonUtils.object2Node(totalNumMap));
                 }
                 List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
                 if(cartItems == null || cartItems.size() == 0) {
-                    return ok(JsonUtils.object2Node(0));
+                    totalNumMap.put("totalNum", 0);
+                    return ok(JsonUtils.object2Node(totalNumMap));
                 }
                 int totalNum = 0;
                 for(CartItem cartItem : cartItems) {
                     totalNum += cartItem.getNumber();
                 }
-                return ok(JsonUtils.object2Node(totalNum));
+                totalNumMap.put("totalNum", totalNum);
+                return ok(JsonUtils.object2Node(totalNumMap));
             }
         } catch (final Exception e) {
             Logger.error("获取用户购物车信息失败，出现异常:", e);
@@ -89,6 +94,7 @@ public class CartApiController extends BaseController {
      */
     @SecuredAction
     public Result addSkuToCartAddNum(int skuId, int number) {
+        Logger.info("进入addSkuToCartAddNum方法，参数：skuId=" + skuId + " number=" + number);
         return this.addSkuToCart(skuId, number,false);
     }
 
@@ -103,6 +109,7 @@ public class CartApiController extends BaseController {
      */
     @SecuredAction
     public Result addSkuToCartReplaceNum(int skuId, int number) {
+        Logger.info("进入addSkuToCartReplaceNum方法，参数：skuId=" + skuId + " number=" + number);
         return this.addSkuToCart(skuId, number,true);
     }
 
@@ -116,6 +123,7 @@ public class CartApiController extends BaseController {
      * @return
      */
     private Result addSkuToCart(int skuId, int number, boolean isReplace){
+        Logger.info("进入addSkuToCart方法，参数：skuId=" + skuId + " number=" + number + " isReplace=" + isReplace);
         try {
             if (number < 1) {
                 throw new AppBusinessException(ErrorCode.Conflict, "购买数量不能小于1！");
@@ -163,8 +171,7 @@ public class CartApiController extends BaseController {
             Map<String,Integer> retMap = new HashMap<String,Integer>();
 
             if (addNumber > maxCanBuyNum) {
-                retMap.put("maxCanBuyNum", maxCanBuyNum);
-                throw new AppBusinessException(ErrorCode.Conflict, "超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品");
+                throw new AppBusinessException(ErrorCode.Conflict, "超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件");
             }
 
             if (addNumber > maxStockNum) {
@@ -173,8 +180,7 @@ public class CartApiController extends BaseController {
                 } else {
                     maxCanBuyNum = maxStockNum;
                 }
-                retMap.put("maxCanBuyNum", maxCanBuyNum);
-                throw new AppBusinessException(ErrorCode.Conflict, "超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品");
+                throw new AppBusinessException(ErrorCode.Conflict, "超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件");
             }
 
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
@@ -192,12 +198,17 @@ public class CartApiController extends BaseController {
                     totalNum += cartItem.getNumber();
                 }
                 retMap.put("itemTotalNum", totalNum);
+            } else {
+                retMap.put("itemTotalNum", number);
             }
-            //throw new AppBusinessException(ErrorCode.Conflict, "购物车成功添加" + number + "件该商品");
-            return ok(JsonUtils.object2Node(retMap)); //ldj
+            return ok(JsonUtils.object2Node(retMap));
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
-            throw new AppBusinessException(ErrorCode.Conflict, "加入购物车时服务器发生异常，请联系商城客服人员");
+            if(!isReplace) {
+                throw new AppBusinessException(ErrorCode.Conflict, "加入购物车失败，请联系商城客服人员");
+            } else {
+                throw new AppBusinessException(ErrorCode.Conflict, "购物车操作失败，请联系商城客服人员");
+            }
         }
     }
 
@@ -211,10 +222,12 @@ public class CartApiController extends BaseController {
      */
     @SecuredAction
     public Result showCart(){
+        Logger.info("进入showCart方法");
         try {
             User curUser = this.currentUser();
             Cart cart = cartService.buildUserCart(curUser.getId());
-            return ok(JsonUtils.object2Json(cart)); //ldj
+            CartDto cartDto = new CartDto();
+            return ok(JsonUtils.object2Node(cartDto.buildUserCart(cart)));
         } catch (Exception e) {
             Logger.error("进入我的购物车发生异常:", e);
             throw new AppBusinessException(ErrorCode.Conflict, "进入我的购物车发生异常，请联系商城客服人员");
@@ -228,6 +241,7 @@ public class CartApiController extends BaseController {
      */
     @SecuredAction
     public Result deleteCartItem(int cartItemId) {
+        Logger.info("进入deleteCartItem方法，参数：cartItemId=" + cartItemId);
         try {
             cartService.deleteCartItemById(cartItemId);
             return noContent(); //删除成功
@@ -238,11 +252,12 @@ public class CartApiController extends BaseController {
     }
 
     /**
-     * 去结算-验证数据
+     * 去结算
      * @return
      */
     @SecuredAction
-    public Result selCartItemProcess(String selCartItems) {
+    public Result toBilling(String selCartItems) {
+        Logger.info("进入toBilling方法，参数: selCartItems=" + selCartItems);
         if(selCartItems == null || selCartItems.trim().length() == 0) {
             throw new AppBusinessException(ErrorCode.Conflict, "去结算项为空！");
         }
@@ -258,7 +273,7 @@ public class CartApiController extends BaseController {
         }
 
         try {
-            User curUser = SessionUtils.currentUser();
+            User curUser = this.currentUser();
             Cart cart = cartService.buildUserCart(curUser.getId());
             String errMsg = "对不起您没有购买任何商品，不能前去支付！";
             if (cart == null) {
@@ -292,7 +307,20 @@ public class CartApiController extends BaseController {
             }
             //更新购物车是否选中
             cartService.updateCartItemList(selCartItemList);
-            return noContent(); //选中购物车项选中状态更新成功
+            if(selCartItems.contains("_")) {
+                selCartItems = selCartItems.replaceAll("_", ",");
+            }
+            cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItems);
+
+            //List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
+            Address defaultAddress = addressService.queryDefaultAddress(curUser.getId());
+
+            Map<String, Object> retMap = new HashMap();
+            CartDto cartDto = new CartDto();
+            retMap.put("cart",cartDto.buildUserCart(cart));
+            //retMap.put("addressList", addressList);
+            retMap.put("defaultAddress", defaultAddress);
+            return ok(JsonUtils.object2Node(retMap));
         } catch (Exception e) {
             Logger.warn("去结算-选择邮递地址发生异常:", e);
             throw new AppBusinessException(ErrorCode.Conflict, "去结算发生异常，请联系商城客服人员");
@@ -300,32 +328,12 @@ public class CartApiController extends BaseController {
     }
 
     /**
-     * 去结算-选择送货地址
+     * 立即支付
      * @return
      */
     @SecuredAction
-    public Result chooseAddress(String selCartItems) {
-        if(selCartItems.contains("_")) {
-            selCartItems = selCartItems.replaceAll("_", ",");
-        }
-        User curUser = SessionUtils.currentUser();
-        Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItems);
-        List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-
-        //ldj
-        Map<String, Object> retMap = new HashMap();
-        retMap.put("curUser",curUser);
-        retMap.put("cart",cart);
-        retMap.put("addressList",addressList);
-        return ok(JsonUtils.object2Node(retMap));
-    }
-
-    /**
-     * 验证立即支付数据
-     * @return
-     */
-    @SecuredAction
-    public Result verifyPromptlyPayData(int skuId, int number) {
+    public Result toBillingByPromptlyPay(int skuId, int number) {
+        Logger.info("进入toBillingByPromptlyPay方法，参数：skuId=" + skuId + " number=" + number);
         try {
             if (number < 1) {
                 throw new AppBusinessException(ErrorCode.Conflict, "购买数量不能小于1！");
@@ -349,7 +357,30 @@ public class CartApiController extends BaseController {
             if (maxStockNum <= 0) {
                 throw new AppBusinessException(ErrorCode.Conflict, "已售罄!");
             }
-            return noContent();
+
+            User curUser = this.currentUser();
+
+            Cart cart = new Cart();
+            CartItem cartItem = new CartItem();
+            cartItem.setSkuId(skuId);
+            cartItem.setNumber(number);
+
+            Money totalMoney = cartService.setCartItemValues(cartItem);
+
+            cart.setTotalMoney(totalMoney);
+            List<CartItem> cartItemList = new ArrayList<CartItem>();
+            cartItemList.add(cartItem);
+            cart.setCartItemList(cartItemList);
+
+            //List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
+            Address defaultAddress = addressService.queryDefaultAddress(curUser.getId());
+
+            Map<String, Object> retMap = new HashMap();
+            CartDto cartDto = new CartDto();
+            retMap.put("cart", cartDto.buildUserCart(cart));
+            //retMap.put("addressList", addressList);
+            retMap.put("defaultAddress", defaultAddress);
+            return ok(JsonUtils.object2Node(retMap));
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]立即支付出现异常:", e);
             throw new AppBusinessException(ErrorCode.Conflict, "立即支付失败，请联系商城客服人员！");
@@ -357,34 +388,19 @@ public class CartApiController extends BaseController {
     }
 
     /**
-     * 立即支付-去结算-选择送货地址
+     * 将Cart对象构建完整，仅只包含购物车和购物车项，其它关联对象都没有包含进来。
+     * 非界面展示时候使用
+     * @param userId
      * @return
      */
-    @SecuredAction
-    public Result promptlyPayChooseAddress(int skuId, int number) {
-        User curUser = SessionUtils.currentUser();
-
-        Cart cart = new Cart();
-        CartItem cartItem = new CartItem();
-        cartItem.setSkuId(skuId);
-        cartItem.setNumber(number);
-
-        Money totalMoney = Money.valueOf(0);
-        totalMoney = cartService.setCartItemValues(cartItem);
-
-        cart.setTotalMoney(totalMoney);
-        List<CartItem> cartItemList = new ArrayList<CartItem>();
-        cartItemList.add(cartItem);
-        cart.setCartItemList(cartItemList);
-
-        List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-
-        //ldj
-        Map<String, Object> retMap = new HashMap();
-        retMap.put("buyInfo",skuId + ":" + number);
-        retMap.put("cart", cart);
-        retMap.put("addressList", addressList);
-        return ok(JsonUtils.object2Node(retMap));
+    private Cart buildUserSimpleCart(int userId) {
+        Logger.info("进入buildUserSimpleCart方法，参数：userId=" + userId);
+        Cart cart = cartService.getCartByUserId(userId);
+        if (cart != null) {
+            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
+            cart.setCartItemList(cartItems);
+        }
+        return cart;
     }
 
     /**
@@ -396,27 +412,13 @@ public class CartApiController extends BaseController {
      * @return
      */
     private void createOrUpdateUserCart(int userId, int skuId, int number, boolean isReplace) {
+        Logger.info("进入createOrUpdateUserCart方法，参数：userId=" + userId + " skuId=" + skuId + " number=" + number + " isReplace=" + isReplace);
         Cart cart = this.buildUserSimpleCart(userId);
         if(cart == null) {
             cartService.initCartByUserId(userId, skuId, number);
         } else {
             cartService.addSkuToCart(cart, skuId, number, isReplace);
         }
-    }
-
-    /**
-     * 将Cart对象构建完整，仅只包含购物车和购物车项，其它关联对象都没有包含进来。
-     * 非界面展示时候使用
-     * @param userId
-     * @return
-     */
-    private Cart buildUserSimpleCart(int userId) {
-        Cart cart = cartService.getCartByUserId(userId);
-        if (cart != null) {
-            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
-            cart.setCartItemList(cartItems);
-        }
-        return cart;
     }
 
 }

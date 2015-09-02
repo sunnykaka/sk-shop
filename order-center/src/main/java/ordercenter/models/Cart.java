@@ -48,6 +48,7 @@ public class Cart implements EntityClass<Integer> {
      */
     private List<CartItem> cartItemList;
 
+
     @Transient
     public Money getTotalMoney() {
         return totalMoney;

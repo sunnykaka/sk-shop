@@ -18,7 +18,7 @@ public class ParamUtils {
      * @param key
      * @return
      */
-    public static String[] getAllByKey(Http.Request request,String key) {
+    private static String[] getAllByKey(Http.Request request,String key) {
 
         Map<String, String[]> params = request.body().asFormUrlEncoded();
         if(params == null) {
@@ -38,17 +38,22 @@ public class ParamUtils {
      */
     public static String getByKey(Http.Request request,String key) {
 
-        if("GET".equals(request.method())){
-            return request.getQueryString(key);
+        String s = request.getQueryString(key);
+
+        if(org.apache.commons.lang3.StringUtils.isNotBlank(s)) {
+
+            return s;
+        } else {
+
+            String[] result = getAllByKey(request, key);
+
+            if(result.length == 0){
+                return "";
+            }
+
+            return result[0];
         }
 
-        String[] result = getAllByKey(request,key);
-
-        if(result.length == 0){
-            return "";
-        }
-
-        return result[0];
     }
 
 }
