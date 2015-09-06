@@ -5,7 +5,6 @@ import api.response.product.ProductDetailDto;
 import api.response.product.ProductDto;
 import api.response.user.DesignerDto;
 import api.response.user.LoginResult;
-import api.response.user.UserDto;
 import base.BaseTest;
 import com.google.common.collect.Lists;
 import common.utils.JsonUtils;
@@ -36,8 +35,8 @@ import static play.test.Helpers.*;
  */
 public class CartControllerTest extends BaseTest {
 
-    private void testAddSkuToCartAddNum(LoginResult loginResult) {
 
+    public Map<String,Object> createProductAndSku() {
         ProductTestDataService productTestDataService = Global.ctx.getBean(ProductTestDataService.class);
         Product initProduct = productTestDataService.initProduct();
 
@@ -79,6 +78,15 @@ public class CartControllerTest extends BaseTest {
             return defaultSku;
         });
 
+        Map<String,Object> retMap = new HashMap();
+        retMap.put("product", initProduct);
+        retMap.put("sku", paramSku);
+        return retMap;
+    }
+
+    private void testAddSkuToCartAddNum(LoginResult loginResult, Map<String,Object> psMap) {
+
+        SkuInfo sku = (SkuInfo)psMap.get("sku");
 
         Map<String, String> params = new HashMap();
         params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());
@@ -86,7 +94,7 @@ public class CartControllerTest extends BaseTest {
         //addSkuToCartAddNum
         Http.RequestBuilder request = new Http.RequestBuilder().
                 method(POST).
-                uri(controllers.api.shop.routes.CartApiController.addSkuToCartAddNum(paramSku.getSkuId(), 1).url()).
+                uri(controllers.api.shop.routes.CartApiController.addSkuToCartAddNum(sku.getSkuId(), 1).url()).
                 bodyForm(params);
         Result result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
@@ -99,7 +107,7 @@ public class CartControllerTest extends BaseTest {
         //addSkuToCartReplaceNum
         request = new Http.RequestBuilder().
                 method(POST).
-                uri(controllers.api.shop.routes.CartApiController.addSkuToCartReplaceNum(paramSku.getSkuId(), 1).url()).
+                uri(controllers.api.shop.routes.CartApiController.addSkuToCartReplaceNum(sku.getSkuId(), 1).url()).
                 bodyForm(params);
         result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
@@ -125,7 +133,7 @@ public class CartControllerTest extends BaseTest {
         }
     }
 
-    private void testShowCart(LoginResult loginResult) {
+    private Map<String, Object> testShowCart(LoginResult loginResult) {
         Map<String, List<String>> params = new HashMap<>();
         params.put(UserTokenProvider.ACCESS_TOKEN_KEY, Lists.newArrayList(loginResult.getAccessToken()));
         Http.RequestBuilder request = new Http.RequestBuilder().
@@ -135,76 +143,97 @@ public class CartControllerTest extends BaseTest {
         if(result.status() != OK) {
             assertThat(result.status(), is(CONFLICT));
         } else {
-            Map<String, Integer> map = JsonUtils.json2Object(contentAsString(result), Map.class);
+            Map<String, Object> map = JsonUtils.json2Object(contentAsString(result), Map.class);
             assertThat(map.size(), is(3));
+            return map;
+        }
+        return null;
+    }
 
+    private void testToBilling(LoginResult loginResult, Map<String, Object> cartMap) {
+        List<Map> cartItemDtoListMap = (List<Map>)cartMap.get("cartItemList");
+        if(cartItemDtoListMap != null && cartItemDtoListMap.size() > 0) {
+            StringBuilder idSb = new StringBuilder();
+            for(Map map : cartItemDtoListMap) {
+                if(idSb.length() > 0) {
+                    idSb.append("_");
+                }
+                idSb.append(map.get("id"));
+            }
 
+            Map<String, String> params = new HashMap();
+            params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());
+            Http.RequestBuilder request = new Http.RequestBuilder().
+                    method(POST).
+                    uri(controllers.api.shop.routes.CartApiController.toBilling(idSb.toString()).url()).  //toBilling("47073")
+                    bodyForm(params);
+            Result result = routeWithExceptionHandle(request);
+            if(result.status() != OK) {
+                assertThat(result.status(), is(CONFLICT));
+            } else {
+                Map<String, Object> map = JsonUtils.json2Object(contentAsString(result), Map.class);
+                assertThat(map.size(), is(2));
+            }
         }
     }
 
-    private void testToBilling(UserDto userDto) {
-        Http.RequestBuilder request  = new Http.RequestBuilder().method(GET).uri(controllers.api.shop.routes.CartApiController.toBilling("47073").url());
+    private void testToBillingByPromptlyPay(LoginResult loginResult, Map<String,Object> psMap) {
+        SkuInfo sku = (SkuInfo)psMap.get("sku");
+
+        Map<String, String> params = new HashMap();
+        params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());
+        Http.RequestBuilder request = new Http.RequestBuilder().
+                method(POST).
+                uri(controllers.api.shop.routes.CartApiController.toBillingByPromptlyPay(sku.getSkuId(), 1).url()).
+                bodyForm(params);
         Result result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
             assertThat(result.status(), is(CONFLICT));
+        } else {
+            Map<String, Object> map = JsonUtils.json2Object(contentAsString(result), Map.class);
+            assertThat(map.size(), is(2));
         }
     }
 
-    private void testToBillingByPromptlyPay(UserDto userDto) {
-        Http.RequestBuilder request  = new Http.RequestBuilder().method(POST).uri(controllers.api.shop.routes.CartApiController.toBillingByPromptlyPay(5651, 1).url());
-        Result result = routeWithExceptionHandle(request);
-        if(result.status() != OK) {
-            assertThat(result.status(), is(CONFLICT));
-        }
-    }
+    private void testDeleteCartItem(LoginResult loginResult, Map<String, Object> cartMap) {
+        int cartItemId = 0;
+        List<Map> cartItemDtoListMap = (List<Map>)cartMap.get("cartItemList");
+        if(cartItemDtoListMap != null && cartItemDtoListMap.size() > 0) {
+            for(Map map : cartItemDtoListMap) {
+                if(map.get("id") != null) {
+                    cartItemId = (int)map.get("id");
+                }
+                if(cartItemId > 0) {
+                     break;
+                }
+            }
 
-    private void testDeleteCartItem(UserDto userDto) {
-        Http.RequestBuilder request  = new Http.RequestBuilder().method(DELETE).uri(controllers.api.shop.routes.CartApiController.deleteCartItem(47073).url());
-        Result result = routeWithExceptionHandle(request);
-        if(result.status() != OK) {
-            assertThat(result.status(), is(CONFLICT));
+            Map<String, List<String>> params = new HashMap<>();
+            params.put(UserTokenProvider.ACCESS_TOKEN_KEY, Lists.newArrayList(loginResult.getAccessToken()));
+            Http.RequestBuilder request = new Http.RequestBuilder().
+                    method(DELETE).
+                    uri(controllers.api.shop.routes.CartApiController.deleteCartItem(cartItemId).url() + "&" + UrlUtils.buildQueryString(params)); //47073
+            Result result = routeWithExceptionHandle(request);
+            assertThat(result.status(), is(NO_CONTENT));
         }
     }
 
     //有些数据如sku等会发生变化，在测试时需要手工调整一下
     @Test
     public void testAllCartMethod() throws Exception {
+        Map<String,Object> psMap = createProductAndSku();
         LoginResult loginResult = TestUtils.createUserAndLogin();
-        if(loginResult != null) {
-            testAddSkuToCartAddNum(loginResult);
-            testGetUserCartItemNum(loginResult);
-            testShowCart(loginResult);
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//            UserDto userDto = loginResult.getUser();
-//            if(userDto != null) {
-//
-//
-//
-//
-//
-//
-//
-//
-////                testAddSkuToCartReplaceNum(userDto);
-////                testGetUserCartItemNum(userDto);
-////                testShowCart(userDto);
-////                testDeleteCartItem(userDto);
-////                testToBilling(userDto);
-////                testToBillingByPromptlyPay(userDto);
-//            }
+        if(psMap != null) {
+            if(loginResult != null) {
+                testAddSkuToCartAddNum(loginResult, psMap);
+                testGetUserCartItemNum(loginResult);
+                Map<String, Object> cartMap = testShowCart(loginResult);
+                if(cartMap != null) {
+                    testToBilling(loginResult, cartMap);
+                }
+                testToBillingByPromptlyPay(loginResult, psMap);
+                testDeleteCartItem(loginResult, cartMap);
+            }
         }
     }
 }
