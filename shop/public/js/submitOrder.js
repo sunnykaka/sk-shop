@@ -15,7 +15,6 @@ $(function(){
         $(this).addClass('current').siblings().removeClass('current');
     });
 
-
     if( $('.add-form').length>0){
         $('.add-form').find('.area').selectArea();
         // 表单item事件(blur,submit)
@@ -35,7 +34,6 @@ $(function(){
             element: form,
             name: form.find("input[name='name']"),
             location: form.find("input[name='location']"),
-            zipCode: form.find("input[name='zipCode']"),
             mobile: form.find("input[name='mobile']"),
             province: form.find('select[name=province]'),
             city: form.find('select[name=city]'),
@@ -50,10 +48,8 @@ $(function(){
             form = formItems.element,
             name = formItems.name,
             location = formItems.location,
-            zipCode = formItems.zipCode,
             mobile = formItems.mobile,
             message = formItems.message,
-            regexZipCode = /^([0-9]{3,6})$/,
             regexMobile = /(^0?(1[358][0-9]{9})$)|(^(\d{3,4}-)?\d{7,8}$)/;
 
 
@@ -76,18 +72,6 @@ $(function(){
                 type=='add'?location.siblings("span").remove():location.siblings('p').remove();
             }
         });
-
-        zipCode.blur(function () {
-            if (!zipCode.val() || !regexZipCode.test(zipCode.val())) {
-                type=='add'?zipCode.siblings("span").remove():zipCode.siblings('p').remove();
-                message.text("请输入正确的邮政编码");
-                zipCode.after(message.clone());
-            } else {
-                type=='add'?zipCode.siblings("span").remove():zipCode.siblings('p').remove();
-
-            }
-        });
-
         mobile.blur(function () {
             if (!mobile.val() || !regexMobile.test(mobile.val())) {
                 type=='add'?mobile.siblings("span").remove():mobile.siblings('p').remove();
@@ -123,13 +107,13 @@ $(function(){
         var formItems = getFormItems(type,formId),
             name = formItems.name,
             location = formItems.location,
-            zipCode = formItems.zipCode,
+            //zipCode = formItems.zipCode,
             mobile = formItems.mobile,
             province = formItems.province,
             city = formItems.city,
             districts = formItems.districts,
             message = formItems.message,
-            regexZip = /^([0-9]{3,6})$/,
+            //regexZip = /^([0-9]{3,6})$/,
             regexMobile = /(^0?(1[358][0-9]{9})$)|(^(\d{3,4}-)?\d{7,8}$)/;
 
 
@@ -176,14 +160,6 @@ $(function(){
         }
         type=='update'?location.siblings('p').remove():location.siblings("span").remove();
 
-        if (!zipCode.val() || !regexZip.test(zipCode.val())) {
-            type=='add'? zipCode.siblings("span").remove():zipCode.siblings("span").remove();
-            message.text("请输入正确的邮政编码");
-            zipCode.after(message.clone());
-            zipCode.focus();
-            return false;
-        }
-        type=='add'? zipCode.siblings("span").remove():zipCode.siblings("span").remove();
 
         if (!mobile.val() || !regexMobile.test(mobile.val())) {
             type=='add'?mobile.siblings("span").remove():mobile.siblings("p").remove();
@@ -209,8 +185,6 @@ $(function(){
                 "<p class='phone'>"+data.mobile+"</p></div><div class='edit-address'><span class='edit btn' data-id="+data.id+">修改</span><span class='delete btn' data-id="+data.id+">删除</span></div><span class='current-ico' style='display: none'></span></li>";
         }
     }
-
-
 
     //添加地址
     function saveForm(type,formId){
@@ -262,8 +236,6 @@ $(function(){
 
     }
 
-
-
     //删除地址
     $('.select-address').delegate(' .delete','click',function(e){
         var addressId = $(this).attr('data-id'),item = $(this).parents('li'),that = $(this);
@@ -305,8 +277,6 @@ $(function(){
 
     });
 
-
-
     //list页面添加
     $('.select-address').delegate(' .add','click',function(){
 
@@ -318,7 +288,7 @@ $(function(){
             content:html,
             lock:true,
             width:650,
-            height: 450
+            height: 400
         });
 
         var form = $('.add-form');
@@ -354,10 +324,6 @@ $(function(){
                     '           </li>' +
                     '       </div>' +
                     '       <div class="form-item">' +
-                    '           <label><b>*</b>邮政编码：</label>' +
-                    '           <input type="text" name="zipCode" class="text" value="' + getData.zipCode + '">' +
-                    '       </div>' +
-                    '       <div class="form-item">' +
                     '           <label><b>*</b>联系电话：</label>' +
                     '           <input type="text" name="mobile" class="text" value="' + getData.mobile + '">' +
                     '       </div>' +
@@ -384,10 +350,6 @@ $(function(){
                 '           <label><b>*</b>街道地址：</label>' +
                 '           <input type="text" name="location" class="text location"  value="">' +
                 '           </li>' +
-                '       </div>' +
-                '       <div class="form-item">' +
-                '           <label><b>*</b>邮政编码：</label>' +
-                '           <input type="text" name="zipCode" class="text" value="">' +
                 '       </div>' +
                 '       <div class="form-item">' +
                 '           <label><b>*</b>联系电话：</label>' +
@@ -423,7 +385,7 @@ $(function(){
                         content:html,
                         lock:true,
                         width:650,
-                        height: 450
+                        height: 400
                     });
 
                     //设置省市区
@@ -434,7 +396,6 @@ $(function(){
                         districts: getData.area || null
                     });
                     //绑定 blur focus事件
-                    console.log(obj.$close);
                     formItemEvent('update', form ,obj.$close);
 
                 }
@@ -513,7 +474,6 @@ $(function(){
             }
         });
     }
-
 
     //提交订单
     $('#order-submit-btn').click(function(){

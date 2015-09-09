@@ -1,9 +1,7 @@
 /**
  * Created by lein on 2015/5/14.
  */
-
 $(function(){
-
 
     $(".address-list").delegate("li", "hover", function(){
         $(this).toggleClass("highLight");
@@ -28,7 +26,6 @@ $(function(){
             element: form,
             name: form.find("input[name='name']"),
             location: form.find("input[name='location']"),
-            zipCode: form.find("input[name='zipCode']"),
             mobile: form.find("input[name='mobile']"),
             province: form.find('select[name=province]'),
             city: form.find('select[name=city]'),
@@ -44,12 +41,8 @@ $(function(){
             form = formItems.element,
             name = formItems.name,
             location = formItems.location,
-            zipCode = formItems.zipCode,
             mobile = formItems.mobile,
-            message = formItems.message,
-            regexZipCode = /^([0-9]{3,6})$/,
             regexMobile = /(^0?(1[358][0-9]{9})$)|(^(\d{3,4}-)?\d{7,8}$)/;
-
 
         name.blur(function () {
             if (!name.val() || name.val().length < 2||name.val().length >20) {
@@ -68,17 +61,6 @@ $(function(){
                 location.after(message.clone());
             } else {
                 type=='add'?location.siblings("span").remove():location.siblings('p').remove();
-            }
-        });
-
-        zipCode.blur(function () {
-            if (!zipCode.val() || !regexZipCode.test(zipCode.val())) {
-                type=='add'?zipCode.siblings("span").remove():zipCode.siblings('p').remove();
-                message.text("请输入正确的邮政编码");
-                zipCode.after(message.clone());
-            } else {
-                type=='add'?zipCode.siblings("span").remove():zipCode.siblings('p').remove();
-
             }
         });
 
@@ -118,15 +100,12 @@ $(function(){
         var formItems = getFormItems(type,formId),
             name = formItems.name,
             location = formItems.location,
-            zipCode = formItems.zipCode,
             mobile = formItems.mobile,
             province = formItems.province,
             city = formItems.city,
             districts = formItems.districts,
             message = formItems.message,
-            regexZip = /^([0-9]{3,6})$/,
             regexMobile = /(^0?(1[358][0-9]{9})$)|(^(\d{3,4}-)?\d{7,8}$)/;
-
 
         if (!name.val() || name.val().length < 2) {
             type=='add'?name.siblings("span").remove():name.siblings('p').remove();
@@ -171,15 +150,6 @@ $(function(){
         }
         type=='update'?location.siblings('p').remove():location.siblings("span").remove();
 
-        if (!zipCode.val() || !regexZip.test(zipCode.val())) {
-            type=='add'? zipCode.siblings("span").remove():zipCode.siblings("span").remove();
-            message.text("请输入正确的邮政编码");
-            zipCode.after(message.clone());
-            zipCode.focus();
-            return false;
-        }
-        type=='add'? zipCode.siblings("span").remove():zipCode.siblings("span").remove();
-
         if (!mobile.val() || !regexMobile.test(mobile.val())) {
             type=='add'?mobile.siblings("span").remove():mobile.siblings("p").remove();
             message.text("请输入正确的电话/手机号码");
@@ -204,9 +174,6 @@ $(function(){
                 "<p class='phone'>"+data.mobile+"</p></div><div class='edit-address'><span class='edit btn' data-id="+data.id+">修改</span><span class='delete btn' data-id="+data.id+">删除</span></div><span class='current-ico' style='display: none'></span></li>";
         }
     }
-
-
-
 
     //添加地址
     function saveForm(type,formId){
@@ -256,9 +223,6 @@ $(function(){
         });
 
     }
-
-
-
 
     //删除地址
     $('.address-list').delegate(' .delete','click',function(e){
@@ -341,7 +305,7 @@ $(function(){
             content:html,
             lock:true,
             width:650,
-            height: 450
+            height: 400
         });
 
         var form = $('.add-form');
@@ -378,10 +342,6 @@ $(function(){
                     '           </li>' +
                     '       </div>' +
                     '       <div class="form-item">' +
-                    '           <label><b>*</b>邮政编码：</label>' +
-                    '           <input type="text" name="zipCode" class="text" value="' + getData.zipCode + '">' +
-                    '       </div>' +
-                    '       <div class="form-item">' +
                     '           <label><b>*</b>联系电话：</label>' +
                     '           <input type="text" name="mobile" class="text" value="' + getData.mobile + '">' +
                     '       </div>' +
@@ -410,10 +370,6 @@ $(function(){
                 '           </li>' +
                 '       </div>' +
                 '       <div class="form-item">' +
-                '           <label><b>*</b>邮政编码：</label>' +
-                '           <input type="text" name="zipCode" class="text" value="">' +
-                '       </div>' +
-                '       <div class="form-item">' +
                 '           <label><b>*</b>联系电话：</label>' +
                 '           <input type="text" name="mobile" class="text" value="">' +
                 '       </div>' +
@@ -426,8 +382,6 @@ $(function(){
 
         return html;
     }
-
-
 
     //获取要修改的地址
     $('.address-list').delegate(' .edit','click',function() {
@@ -449,7 +403,7 @@ $(function(){
                         content:html,
                         lock:true,
                         width:650,
-                        height: 450
+                        height: 400
                     });
 
                     //设置省市区
@@ -466,7 +420,6 @@ $(function(){
             }
         });
     });
-
 
     //修改地址
     function updateForm(type,formId,closeBtn){
@@ -514,5 +467,3 @@ $(function(){
     }
 
 });
-
-
