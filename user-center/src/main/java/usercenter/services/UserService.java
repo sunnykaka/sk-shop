@@ -258,7 +258,6 @@ public class UserService {
 
     }
 
-
     /**
      * 直接修改密码
      * @param user
@@ -275,6 +274,27 @@ public class UserService {
         try {
             User userNew = getById(user.getId());
             userNew.setPassword(PasswordHash.createHash(psw.getNewPassword()));
+            generalDao.merge(userNew);
+
+        } catch (GeneralSecurityException e) {
+            Logger.error("创建哈希密码的时候发生错误", e);
+            throw new AppBusinessException("用户修改密码失败");
+        }
+        return user;
+    }
+
+    /**
+     * app直接修改密码
+     * @param user
+     * @param psw
+     * @return
+     */
+    @Transactional
+    public User updatePassword(User user,RecoverPswForm psw){
+
+        try {
+            User userNew = getById(user.getId());
+            userNew.setPassword(PasswordHash.createHash(psw.getPassword()));
             generalDao.merge(userNew);
 
         } catch (GeneralSecurityException e) {

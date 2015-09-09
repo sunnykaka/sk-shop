@@ -17,6 +17,7 @@ import usercenter.models.DesignerPicture;
 import usercenter.models.User;
 import usercenter.services.DesignerCollectService;
 import usercenter.services.DesignerService;
+import usercenter.services.ThemeCollectService;
 import utils.secure.SecuredAction;
 
 import java.util.ArrayList;
@@ -24,16 +25,19 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 关注设计师
+ * 专题收藏
+ * TODO 设计师未改成专题--原因：专题内容未开发完
  */
 @org.springframework.stereotype.Controller
-public class DesignerFavoritesApiController extends BaseController {
+public class ThemeFavoritesApiController extends BaseController {
 
     @Autowired
     private DesignerCollectService designerCollectService;
 
     @Autowired
     private DesignerService designerService;
+
+    private ThemeCollectService themeCollectService;
 
     /**
      * 收藏商品列表

@@ -15,7 +15,7 @@ import usercenter.cache.UserCache;
  */
 public class SmsSender {
 
-    public static int SEND_MESSAGE_MAX_TIMES_IN_DAY = 10;
+    public static int SEND_MESSAGE_MAX_TIMES_IN_DAY = 100;
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 

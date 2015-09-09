@@ -6,6 +6,7 @@ import api.response.user.CityDto;
 import api.response.user.ProvinceDto;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
+import common.utils.FormUtils;
 import common.utils.JsonUtils;
 import common.utils.ParamUtils;
 import common.utils.SQLUtils;
@@ -95,18 +96,18 @@ public class AddressApiController extends BaseController {
                 address.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
                 address.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 address.setMobile(addressF.getMobile());
-                address.setZipCode(addressF.getZipCode());
+                address.setZipCode("");//移动端不需要
 
                 addressService.createAddress(address);
 
-                return ok(JsonUtils.object2Node(AddressDto.build(address)));
+                return noContent();
 
             } catch (AppBusinessException e) {
                 addressForm.reject("errors", e.getMessage());
             }
         }
 
-        throw new AppBusinessException(ErrorCode.Conflict, addressForm.errorsAsJson().toString());
+        throw new AppBusinessException(ErrorCode.Conflict, FormUtils.showErrorInfo(addressForm.errors()));
 
     }
 
@@ -141,18 +142,18 @@ public class AddressApiController extends BaseController {
                 oldAddress.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
                 oldAddress.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 oldAddress.setMobile(addressF.getMobile());
-                oldAddress.setZipCode(addressF.getZipCode());
+                oldAddress.setZipCode("");//移动端不需要
 
                 addressService.updateAddress(oldAddress);
 
-                return ok(JsonUtils.object2Node(AddressDto.build(oldAddress)));
+                return noContent();
 
             } catch (AppBusinessException e) {
                 addressForm.reject("errors", e.getMessage());
             }
         }
 
-        throw new AppBusinessException(ErrorCode.Conflict, addressForm.errorsAsJson().toString());
+        throw new AppBusinessException(ErrorCode.Conflict, FormUtils.showErrorInfo(addressForm.errors()));
     }
 
     /**
@@ -161,13 +162,13 @@ public class AddressApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result del() {
+    public Result del(int id) {
 
         User user = this.currentUser();
-        Address address = addressService.getAddress(ParamUtils.getObjectId(request()), user.getId());
+        Address address = addressService.getAddress(id, user.getId());
 
         if (null == address) {
-            throw new AppBusinessException(ErrorCode.Conflict, "删除送货地址失败");
+            throw new AppBusinessException(ErrorCode.Conflict, "没有该收货地址信息");
         }
 
         address.setDeleted(SQLUtils.SQL_DELETE_TRUE);
@@ -183,13 +184,13 @@ public class AddressApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result defaultAddress() {
+    public Result defaultAddress(int id) {
 
         User user = this.currentUser();
-        Address address = addressService.getAddress(ParamUtils.getObjectId(request()), user.getId());
+        Address address = addressService.getAddress(id, user.getId());
 
         if (null == address) {
-            throw new AppBusinessException(ErrorCode.Conflict, "设置送货地址失败");
+            throw new AppBusinessException(ErrorCode.Conflict, "没有该收货地址信息");
         }
 
         addressService.updateDefaultAddress(address, user.getId());
@@ -203,12 +204,12 @@ public class AddressApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result getAddress(){
+    public Result getAddress(int id){
         User user = this.currentUser();
         Address address = addressService.getAddress(ParamUtils.getObjectId(request()), user.getId());
 
         if (null == address) {
-            throw new AppBusinessException(ErrorCode.Conflict, "获取地址失败");
+            throw new AppBusinessException(ErrorCode.Conflict, "没有该收货地址信息");
         }
 
         return ok(JsonUtils.object2Node(AddressDto.build(address)));

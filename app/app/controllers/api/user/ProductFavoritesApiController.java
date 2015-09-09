@@ -78,14 +78,14 @@ public class ProductFavoritesApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result del() {
+    public Result del(int id) {
 
         User user = this.currentUser();
 
         try {
-            productCollectService.deleteMyProductCollect(ParamUtils.getObjectId(request()), user.getId());
+            productCollectService.deleteMyProductCollect(id, user.getId());
         }catch (AppBusinessException e){
-            throw new AppBusinessException(ErrorCode.Conflict, "删除失败");
+            throw new AppBusinessException(ErrorCode.Conflict, "没有该资源，操作失败");
         }
 
         return noContent();
