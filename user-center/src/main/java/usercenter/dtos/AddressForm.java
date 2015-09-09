@@ -46,11 +46,6 @@ public class AddressForm {
     @Constraints.Pattern(value = RegExpUtils.PHONE_REG_EXP, message = "请输入正确的手机号码")
     private String mobile;
 
-    /**
-     * 邮编
-     */
-    private String zipCode;
-
     public Integer getId() {
         return id;
     }
@@ -105,13 +100,5 @@ public class AddressForm {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
     }
 }

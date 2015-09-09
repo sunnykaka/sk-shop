@@ -75,7 +75,7 @@ public class Address implements EntityClass<Integer>,TableTimeData {
     /**
      * 邮编
      */
-    private String zipCode;
+    private String zipCode = "";
 
     /**
      * 是否是缺省地址

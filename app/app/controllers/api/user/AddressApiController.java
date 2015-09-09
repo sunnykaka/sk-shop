@@ -96,7 +96,6 @@ public class AddressApiController extends BaseController {
                 address.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
                 address.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 address.setMobile(addressF.getMobile());
-                address.setZipCode("");//移动端不需要
 
                 addressService.createAddress(address);
 
@@ -142,7 +141,6 @@ public class AddressApiController extends BaseController {
                 oldAddress.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
                 oldAddress.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 oldAddress.setMobile(addressF.getMobile());
-                oldAddress.setZipCode("");//移动端不需要
 
                 addressService.updateAddress(oldAddress);
 
