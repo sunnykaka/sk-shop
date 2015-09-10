@@ -1,0 +1,233 @@
+@(mapName:Map[Integer,String],mapPrice:Map[Integer,String])
+
+@import productcenter.models.Seo;
+
+@main(new Seo("Federico D'Angelo：酷感&硬朗,一种新式的果敢风采","一向精于裁剪和缝制的Federico D'angelo，以廓型为基点，独具硬挺线条，拆解，解构，缝制和移位，与夺目的色彩相碰撞。","刚柔相济，舒适飒爽，酷感硬朗"))() {
+
+} {
+    <style>
+    .federico-activity{}
+    .federico-activity h2{font-size: 18px;}
+    .federico-activity-header{position: relative;margin: 0 auto;height: 609px;overflow: hidden;}
+    .federico-activity-header-top{position:absolute;width: 100%;height: 609px;background: url('@routes.Assets.versioned("images/activity/federico/header-top.jpg")');background-position: 50% 50%;text-align:center;}
+    .federico-activity .pro-box{width: 1130px;margin: 0 auto 40px;padding: 34px;border: 1px solid #ccc;}
+    .federico-activity-header-content{padding-top: 26px; padding-bottom: 45px;border-bottom: 2px dotted #ccc;margin-bottom: 35px;}
+    .federico-activity-header-content .sec-title{color: #000;margin-bottom: 28px;}
+    .federico-activity-header-content .logo{width: 250px;height: 256px;margin: 0 auto; padding-bottom: 18px;}
+    .federico-activity-header-content h2{width:80px; margin: 0 auto 15px; padding-bottom: 6px; text-align: center;border-bottom: 4px solid #ccc;}
+    .federico-activity-header-content p,.floor p{text-align: center;line-height: 34px;font-size: 14px;margin-bottom: 25px;}
+    .federico-activity-header-content .thr-para{}
+    .federico-activity .floor{margin-bottom: 58px;}
+
+    .federico-activity .price{text-align: center; margin-bottom: 18px;}
+    .federico-activity .price span{background: #66343f;padding: 5px;color: #fff;font-size: 22px;line-height: 22px;}
+    .federico-activity-header-content .img-box{height: 432px;margin-bottom: 25px;}
+    .federico-activity-header-content .img{height: 409px;width: 587px;margin: 0 auto 25px;}
+
+    .federico-activity-header-content .img-list{width: 1250px;}
+    .federico-activity-header-content .img-list li{float: left;width: 288px;height: 272px;margin-right: 15px;}
+    .federico-activity-header-content .img-list img{display: block;}
+    /*floor1*/
+    .federico-activity-floor-1  .header-img{width: 190px;height: 140px;margin: 0 auto 25px;}
+    .federico-activity-floor-1  .pro-box-left{float: left;}
+    .federico-activity-floor-1  .pro-box-right{width: 313px;float: right;margin-right: 127px;_display:inline;}
+    .federico-activity-floor-1  .pro-box-right h3{width: 230px;margin: 22px auto 18px;}
+    .federico-activity-floor-1  .pro-box-right p{font-size: 12px;line-height: 30px;margin-bottom: 45px;}
+    .federico-activity-floor-1 .pro-img,.federico-activity-floor-2 .pro-img,.federico-activity-floor-3 .pro-img{width: 249px;height: 377px; margin: 0 auto;}
+    .federico-activity-floor-1 .pro-list a,.federico-activity-floor-2 .pro-list a,.federico-activity-floor-3 .pro-list a{position: relative;display: block;float: left;width: 577px;}
+    .federico-activity-floor-1 .pro-list .first,.federico-activity-floor-2 .pro-list .first,.federico-activity-floor-3 .pro-list .first{width: 581px;margin-right: 40px;}
+    .federico-activity-floor-1 .pro-list span,.federico-activity-floor-2 .pro-list span,.federico-activity-floor-3 .pro-list span{position: absolute; font-size: 22px;color: #663440;right: 20px; top: 40%;}
+    /*floor2*/
+    .federico-activity-floor-2  .header-img{width: 300px;height: 167px;margin: 0 auto 25px;}
+    .federico-activity-floor-2  .pro-box-left{float: right;}
+    .federico-activity-floor-2  .pro-box-right{width: 313px;float: right;margin-right: 127px;_display:inline;}
+    .federico-activity-floor-2  .pro-box-right h3{width: 190px;margin: 10px auto 18px;}
+    .federico-activity-floor-2  .pro-box-right p{font-size: 12px;line-height: 30px;margin-bottom: 45px;}
+    .federico-activity-floor-2 .pro-img{width: 249px;height: 377px; margin: 0 auto;}
+    /*floor3*/
+    .federico-activity-floor-3  .header-img{width: 251px;height: 131px;margin: 0 auto 25px;}
+    .federico-activity-floor-3  .pro-box-left{float: left;}
+    .federico-activity-floor-3  .pro-box-right{width: 313px;float: right;margin-right: 127px;_display:inline;}
+    .federico-activity-floor-3  .pro-box-right h3{width: 230px;margin: 10px auto 18px;}
+    .federico-activity-floor-3  .pro-box-right p{font-size: 12px;line-height: 30px;margin-bottom: 45px;}
+    .federico-activity-floor-3 .pro-img{width: 249px;height: 377px; margin: 0 auto;}
+
+    .federico-activity .bottom-img {width: 868px;height: 383px;margin: 0 auto 30px; position: relative;}
+    .federico-activity .bottom-img p{position: absolute;top: 120px;text-align: center; line-height: 34px;font-size: 14px;width: 240px;left: 50%;margin-left: -120px;}
+    .federico-activity .go-index{display: block;width: 90px;margin: 0 auto 30px auto;text-align: center;font-size: 18px;padding: 8px 60px;cursor: pointer;color: #000;border: 2px solid #000;}
+    </style>
+    <!--federico-->
+    <div class="federico-activity">
+        <div class="federico-activity-header">
+            <div class="federico-activity-header-top" title="酷感，硬朗，一种新式的果敢风采"></div>
+        </div>
+        <div class="federico-activity-content width1200">
+            <div class="federico-activity-header-content">
+                <div class="logo">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/logo.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="federico" width="205" height="256" />
+                </div>
+                <p class="sec-title">[ 国籍：意大利　品牌风格：旨意展示出一种勇敢的新式风采 ]</p>
+                <h2>关于品牌</h2>
+                <p class="thr-para">
+                    Federico D'angelo是一个来自意大利的时装设计师的同名品牌<br/>
+                    以圣马克广场的守护神作为商标，寓意本品牌对品质<br/>
+                    生产和设计的坚持与捍卫。设计师将建筑设计学应用到服装裁剪工艺里<br/>
+                    并通过强调质感和注重细节来体现其非凡的工艺。
+                </p>
+                <div class="img-box">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/header-content-imgbox-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="796" height="432"/>
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/header-content-imgbox-2.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" height="432" width="397"/>
+                </div>
+                <h2>新季灵感</h2>
+                <p>
+                    Diego Velasquez的名画《Inncoent X》<br/>
+                    给Federico D'angelo带来了<br/>
+                    2015年秋冬Federico D'angelo的灵感源泉。<br/>
+                    设计的创想将三个角色的人物（商人，贵族，神父）<br/>
+                    的特质融入到服装的设计中<br/>
+                    使得女性散发着都市风情与休闲魅力<br/>
+                    体现出女性的优雅与独立。
+                </p>
+                <div class="img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/header-content-imgbox-3.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="587" height="409"/>
+                </div>
+                <p>
+                    如果你觉得T台秀场总是有点华而不实<br/>
+                    那么Federico D'angelo这季的新衣就完全从实用角度出发<br/>
+                    给你一个温暖酷毙的冬日。<br/>
+                    一向精于裁剪和缝制的Federico D'angelo，以廓型为基点<br/>
+                    独具特色的经典硬挺线条，重新拆解，解构，缝制和移位<br/>
+                    与夺目的色彩相碰撞<br/>
+                    赋予女性新的独立与优雅气质。
+                </p>
+                <ul class="img-list clearfix">
+                    <li><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/header-imglist-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="288" height="272"/></li>
+                    <li><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/header-imglist-2.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="288" height="272"/></li>
+                    <li><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/header-imglist-3.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="288" height="272"/></li>
+                    <li><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/header-imglist-4.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="288" height="272"/></li>
+                </ul>
+            </div>
+                <!-- floor1-->
+            <div class="federico-activity-floor-1 floor">
+                <div class="header-img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-1-header-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="190" height="140"/>
+                </div>
+                <p>
+                    拼接是本季秀场最大亮点，这不仅体现在酷酷的飞行员夹克上<br/>
+                    还有带点摩登感的拼接抹胸裙，可谓气势爆棚！<br/>
+                    除了拼接之外，硬朗的廓型、红，紫，墨绿为主色调结合皮质面料的大量运用<br/>
+                    让女性多了一份硬朗与个性，同时带有时尚色彩<br/>
+                    而且整体呈繁复的搭配风格，与现今简约当道的现状对抗<br/>
+                    十足酷感与硬朗的女性形象！
+                </p>
+                <div class="floor-1-pro pro-box clearfix">
+                    <div class="pro-box-left">
+                        <a href="http://www.fashiongeeker.com/product/69" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-1-pro-box-left.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="569" height="718"/></a>
+                    </div>
+                    <div class="pro-box-right">
+                        <h3><a href="http://www.fashiongeeker.com/product/69" target="_blank">@mapName.get(69)</a></h3>
+                        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/dress.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="313" height="59" style="margin-bottom: 18px;"/>
+                        <div class="price"><a href="http://www.fashiongeeker.com/product/69" target="_blank"><span>￥@mapPrice.get(69)</span></a></div>
+                        <p>
+                            两种静谧的色彩，极尽知性与性感的魅力优雅<br/>
+                            或许不是倾国倾城,但那种骨子里散发出来的<br/>
+                            女人味总是让人怦然心动
+                        </p>
+                        <div class="pro-img">
+                            <a href="http://www.fashiongeeker.com/product/69" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-1-pro-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="249" height="377"/></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pro-list clearfix">
+                    <a class="first" href="http://www.fashiongeeker.com/product/27" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-1-pro-list-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="581" height="750"/><span>￥@mapPrice.get(27)</span></a>
+                    <a href="http://www.fashiongeeker.com/product/15" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-1-pro-list-2.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="577" height="750" /><span>￥@mapPrice.get(15)</span></a>
+                </div>
+            </div>
+                <!--end floor1-->
+                <!-- floor2-->
+            <div class="federico-activity-floor-2 floor">
+                <div class="header-img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-2-header-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="300" height="167"/>
+                </div>
+                <p>
+                    高级羊毛呢与羊毛皮革结合，打造出精美的“闪耀廓形”<br/>
+                    突出女人外刚内柔的特性，搭配颇有女人味的尖头高跟鞋或是极具中性特征的矮靴<br/>
+                    两种截然不同的鞋履风格，最终表露出的着装特点相吻合<br/>
+                    女人时而柔和时而硬朗刚强。
+                </p>
+                <div class="floor-1-pro pro-box clearfix">
+                    <div class="pro-box-left">
+                        <a href="http://www.fashiongeeker.com/product/53" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-2-pro-box-left.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="569" height="718"/></a>
+                    </div>
+                    <div class="pro-box-right">
+                        <h3><a href="http://www.fashiongeeker.com/product/53" target="_blank">@mapName.get(53)</a></h3>
+                        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/dress.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="313" height="59" style="margin-bottom: 18px;"/>
+                        <div class="price"><a href="http://www.fashiongeeker.com/product/53" target="_blank"><span>￥@mapPrice.get(53)</span></a></div>
+                        <p>
+                            欧美的摩登皮裙，不曾退却的时尚潮流！<br/>
+                            设计师永远在扑捉创意，经过巧妙的设计手法<br/>
+                            搭配背部欧根纱，以及丝质肩带和隐形拉链<br/>
+                            不失皮裙的狂野，又体现欧根纱的唯美
+                        </p>
+                        <div class="pro-img">
+                            <a href="http://www.fashiongeeker.com/product/53" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-2-pro-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="249" height="377"/></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pro-list clearfix">
+                    <a class="first" href="http://www.fashiongeeker.com/product/21" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-2-pro-list-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="581" height="750"/><span>￥@mapPrice.get(21)</span></a>
+                    <a href="http://www.fashiongeeker.com/product/11" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-2-pro-list-2.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="582" height="750" /><span>￥@mapPrice.get(11)</span></a>
+                </div>
+            </div>
+                <!-- end floor2-->
+                <!-- floor3-->
+            <div class="federico-activity-floor-3 floor">
+                <div class="header-img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-3-header-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="251" height="131"/>
+                </div>
+                <p>
+                    或许女人也可以颠覆一下，高级羊毛与羊皮拼接的抹胸小礼服<br/>
+                    展现完美曲线的同时，又不失高贵气质的服装理念<br/>
+                    带着一种独一无二的时尚品味。
+                </p>
+                <div class="floor-1-pro pro-box clearfix">
+                    <div class="pro-box-left">
+                        <a href="http://www.fashiongeeker.com/product/63" target="_blank"><img src="@routes.Assets.versioned("images/grey.gif")" class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/floor-3-pro-box-left.jpg")" alt="" width="569" height="718"/></a>
+                    </div>
+                    <div class="pro-box-right">
+                        <h3><a href="http://www.fashiongeeker.com/product/63" target="_blank">@mapName.get(63)</a></h3>
+                        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/dress.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="313" height="59" style="margin-bottom: 18px;"/>
+                        <div class="price"><a href="http://www.fashiongeeker.com/product/63" target="_blank"><span>￥@mapPrice.get(63)</span></a></div>
+                        <p>
+                            皮革与性感的激情碰撞，冷艳姿态，无懈可击<br/>
+                            稍厚的材质，绝佳的版型，无论单穿or内搭<br/>
+                            在派对上，都是一道瞩目的风景线<br/>
+                            让性感来得更直接和猛烈吧
+                        </p>
+                        <div class="pro-img">
+                            <a href="http://www.fashiongeeker.com/product/63" target="_blank"><img class="lazy" src="@routes.Assets.versioned("images/grey.gif")" data-original="@routes.Assets.versioned("images/activity/federico/floor-3-pro-img.jpg")" alt="" width="249" height="377"/></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pro-list clearfix">
+                    <a class="first" href="http://www.fashiongeeker.com/product/57" target="_blank"><img class="lazy" src="@routes.Assets.versioned("images/grey.gif")" data-original="@routes.Assets.versioned("images/activity/federico/floor-3-pro-list-1.jpg")" alt="" width="581" height="750"/><span>￥@mapPrice.get(57)</span></a>
+                    <a href="http://www.fashiongeeker.com/product/67" target="_blank"><img class="lazy" src="@routes.Assets.versioned("images/grey.gif")" data-original="@routes.Assets.versioned("images/activity/federico/floor-3-pro-list-2.jpg")" alt="" width="577" height="750" /><span>￥@mapPrice.get(67)</span></a>
+                </div>
+            </div>
+                <!-- end floor3-->
+            <div class="bottom-img">
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/federico/bottom-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="868" height="383"/>
+                <p>
+                    一种新式的果敢风采<br/>
+                    带来对女性的全新认识与了解<br/>
+                    刚柔相济，舒适飒爽，酷感硬朗<br/>
+                    为探寻自我而穿衣，为宠爱自我而放飞<br/>
+                    成就更加美好，更加魅力的你！<br/>
+                    ------ END ------
+                </p>
+            </div>
+            <a href="http://www.fashiongeeker.com/" class="go-index">返回首页</a>
+        </div>
+    </div>
+    <!--end federico-->
+}

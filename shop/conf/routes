@@ -165,6 +165,7 @@ GET         /activity/bianxingji                        @controllers.activity.Ac
 GET         /activity/fashion                           @controllers.activity.ActivityController.fashion()
 GET         /activity/member                            @controllers.activity.ActivityController.toMember()
 GET         /activity/loukong                           @controllers.activity.ActivityController.loukong()
+GET         /activity/federico                          @controllers.activity.ActivityController.federico()
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
