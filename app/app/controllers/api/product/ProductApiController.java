@@ -52,7 +52,7 @@ public class ProductApiController extends BaseController {
 //            }
 //        }
 
-        ProductDetailDto productDetailDto = productDetailApiService.showDetail(productId, null);
+        ProductDetailDto productDetailDto = productDetailApiService.showDetail(productId, null, currentUser());
 
         return ok(JsonUtils.object2Node(productDetailDto));
     }

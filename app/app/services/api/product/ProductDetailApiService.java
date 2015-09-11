@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import productcenter.dtos.ProductDetailBase;
 import productcenter.services.ProductDetailBaseService;
 import productcenter.services.ProductService;
+import usercenter.models.User;
 
 /**
  * Created by liubin on 15-8-3.
@@ -23,9 +24,9 @@ public class ProductDetailApiService {
     ProductDetailBaseService productDetailBaseService;
 
     @Transactional(readOnly = true)
-    public ProductDetailDto showDetail(int productId, Integer skuId) {
+    public ProductDetailDto showDetail(int productId, Integer skuId, User user) {
 
-        ProductDetailBase base = productDetailBaseService.showDetail(productId, skuId);
+        ProductDetailBase base = productDetailBaseService.showDetail(productId, skuId, user);
         if(base == null) {
             throw new AppBusinessException(ErrorCode.NotFound, "没有找到您请求的商品信息");
         }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import productcenter.dtos.ProductDetailBase;
 import productcenter.services.ProductDetailBaseService;
 import productcenter.services.SeoService;
+import usercenter.models.User;
 
 import java.util.stream.IntStream;
 
@@ -26,10 +27,10 @@ public class ProductDetailService {
     private SeoService seoService;
 
 
-    public ProductDetail showDetail(int productId, Integer skuId) {
+    public ProductDetail showDetail(int productId, Integer skuId, User user) {
 
         ProductDetail productDetail = new ProductDetail();
-        ProductDetailBase productDetailBase = productDetailBaseService.showDetail(productId, skuId);
+        ProductDetailBase productDetailBase = productDetailBaseService.showDetail(productId, skuId, user);
         int[] counts = valuationService.countValuationGroupByPoint(productDetailBase.getProduct().getId());
 
         productDetail.setBase(productDetailBase);
