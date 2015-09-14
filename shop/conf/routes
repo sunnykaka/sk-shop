@@ -3,172 +3,172 @@
 # ~~~~
 
 # Home page
-GET         /                                           @controllers.Application.index
-GET         /preview                                    @controllers.Application.preview
-POST        /preview/userLike                           @controllers.Application.userLikeExhibition(exhibitionId:Int, phone)
-GET         /designers                                  @controllers.Application.designers(currPage:Int ?= 1)
-GET         /designers4more                             @controllers.Application.designers4More(currPage:Int ?= 1)
-GET         /designerProd                               @controllers.Application.designerProd(dId:Int)
-GET         /about                                      @controllers.Application.about
-GET         /robots.txt                                 @controllers.Application.robots
-GET         /products                                   @controllers.product.ProductController.list(pageNo:Int ?=1,navId:Int ?= -1,st:Int ?=0 )
+GET         /                                                     @controllers.Application.index
+GET         /preview                                              @controllers.Application.preview
+POST        /preview/userLike                                     @controllers.Application.userLikeExhibition(exhibitionId:Int, phone)
+GET         /designers                                            @controllers.Application.designers(currPage:Int ?= 1)
+GET         /designers4more                                       @controllers.Application.designers4More(currPage:Int ?= 1)
+GET         /designerProd                                         @controllers.Application.designerProd(dId:Int)
+GET         /about                                                @controllers.Application.about
+GET         /robots.txt                                           @controllers.Application.robots
+GET         /products                                             @controllers.product.ProductController.list(pageNo:Int ?=1,navId:Int ?= -1,st:Int ?=0 )
 
 
 # user
-GET         /register                                   @controllers.user.LoginController.registerPage
-POST        /register                                   @controllers.user.LoginController.register
-GET         /login                                      @controllers.user.LoginController.loginPage
-POST        /login                                      @controllers.user.LoginController.login
-GET         /login/wx                                   @controllers.user.LoginController.weixinLogin
-GET         /login/wx/callback                          @controllers.user.LoginController.weixinLoginCallback(code ?= null, state ?= null)
-GET         /login/weibo                                @controllers.user.LoginController.weiboLogin
-GET         /login/weibo/callback                       @controllers.user.LoginController.weiboLoginCallback(code ?= null, state ?= null, error ?= null, error_code ?= null)
-GET         /login/qq                                   @controllers.user.LoginController.qqLogin
-GET         /login/qq/callback                          @controllers.user.LoginController.qqLoginCallback(code ?= null, state ?= null, msg ?= null)
+GET         /register                                             @controllers.user.LoginController.registerPage
+POST        /register                                             @controllers.user.LoginController.register
+GET         /login                                                @controllers.user.LoginController.loginPage
+POST        /login                                                @controllers.user.LoginController.login
+GET         /login/wx                                             @controllers.user.LoginController.weixinLogin
+GET         /login/wx/callback                                    @controllers.user.LoginController.weixinLoginCallback(code ?= null, state ?= null)
+GET         /login/weibo                                          @controllers.user.LoginController.weiboLogin
+GET         /login/weibo/callback                                 @controllers.user.LoginController.weiboLoginCallback(code ?= null, state ?= null, error ?= null, error_code ?= null)
+GET         /login/qq                                             @controllers.user.LoginController.qqLogin
+GET         /login/qq/callback                                    @controllers.user.LoginController.qqLoginCallback(code ?= null, state ?= null, msg ?= null)
 
-GET         /logout                                     @controllers.user.LoginController.logout
-POST        /user/phone/get_code                        @controllers.user.LoginController.requestPhoneCode(phone)
-GET         /user/phone/exist                           @controllers.user.LoginController.isPhoneExist(phone)
-GET         /user/username/exist                        @controllers.user.LoginController.isUsernameExist(username)
-GET         /user/order                                 @controllers.Application.myOrder
+GET         /logout                                               @controllers.user.LoginController.logout
+POST        /user/phone/get_code                                  @controllers.user.LoginController.requestPhoneCode(phone)
+GET         /user/phone/exist                                     @controllers.user.LoginController.isPhoneExist(phone)
+GET         /user/username/exist                                  @controllers.user.LoginController.isUsernameExist(username)
+GET         /user/order                                           @controllers.Application.myOrder
 #fake openid provider
-GET         /wx/connect/qrconnect                       @controllers.user.FakeOpenIDProviderController.wxConnect(appid ?= null, redirect_uri ?= null, response_type ?= null, scope ?= null, state ?= null)
-GET         /wx/sns/oauth2/access_token                 @controllers.user.FakeOpenIDProviderController.wxGetAccessToken(appid ?= null, secret ?= null, code ?= null, grant_type ?= null)
-GET         /wx/sns/userinfo                            @controllers.user.FakeOpenIDProviderController.wxGetUserInfo(access_token ?= null, openid ?= null)
-GET         /weibo/authorize                            @controllers.user.FakeOpenIDProviderController.weiboConnect(client_id ?= null, redirect_uri ?= null, response_type ?= null, state ?= null)
-POST        /weibo/oauth2/access_token                  @controllers.user.FakeOpenIDProviderController.weiboGetAccessToken(client_id ?= null, client_secret ?= null, code ?= null, grant_type ?= null, redirect_uri ?= null)
-GET         /weibo/2/users/show.json                    @controllers.user.FakeOpenIDProviderController.weiboGetUserInfo(access_token ?= null, uid ?= null)
-GET         /qq/oauth2.0/authorize                      @controllers.user.FakeOpenIDProviderController.qqConnect(client_id ?= null, redirect_uri ?= null, response_type ?= null, state ?= null)
-GET         /qq/oauth2.0/token                          @controllers.user.FakeOpenIDProviderController.qqGetAccessToken(client_id ?= null, client_secret ?= null, code ?= null, grant_type ?= null, redirect_uri ?= null)
-GET         /qq/oauth2.0/me                             @controllers.user.FakeOpenIDProviderController.qqGetUserInfo(access_token ?= null)
-GET         /qq/user/get_user_info                      @controllers.user.FakeOpenIDProviderController.qqGetUserDetailInfo(oauth_consumer_key ?= null, access_token ?= null, openid ?= null, format ?= null)
+GET         /wx/connect/qrconnect                                 @controllers.user.FakeOpenIDProviderController.wxConnect(appid ?= null, redirect_uri ?= null, response_type ?= null, scope ?= null, state ?= null)
+GET         /wx/sns/oauth2/access_token                           @controllers.user.FakeOpenIDProviderController.wxGetAccessToken(appid ?= null, secret ?= null, code ?= null, grant_type ?= null)
+GET         /wx/sns/userinfo                                      @controllers.user.FakeOpenIDProviderController.wxGetUserInfo(access_token ?= null, openid ?= null)
+GET         /weibo/authorize                                      @controllers.user.FakeOpenIDProviderController.weiboConnect(client_id ?= null, redirect_uri ?= null, response_type ?= null, state ?= null)
+POST        /weibo/oauth2/access_token                            @controllers.user.FakeOpenIDProviderController.weiboGetAccessToken(client_id ?= null, client_secret ?= null, code ?= null, grant_type ?= null, redirect_uri ?= null)
+GET         /weibo/2/users/show.json                              @controllers.user.FakeOpenIDProviderController.weiboGetUserInfo(access_token ?= null, uid ?= null)
+GET         /qq/oauth2.0/authorize                                @controllers.user.FakeOpenIDProviderController.qqConnect(client_id ?= null, redirect_uri ?= null, response_type ?= null, state ?= null)
+GET         /qq/oauth2.0/token                                    @controllers.user.FakeOpenIDProviderController.qqGetAccessToken(client_id ?= null, client_secret ?= null, code ?= null, grant_type ?= null, redirect_uri ?= null)
+GET         /qq/oauth2.0/me                                       @controllers.user.FakeOpenIDProviderController.qqGetUserInfo(access_token ?= null)
+GET         /qq/user/get_user_info                                @controllers.user.FakeOpenIDProviderController.qqGetUserDetailInfo(oauth_consumer_key ?= null, access_token ?= null, openid ?= null, format ?= null)
 
 
 
 
 
 # my favorites
-GET         /my/favorites/product                       @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
-POST        /my/favorites/product/del                   @controllers.user.ProductFavoritesController.del(productId:Int)
-POST        /my/favorites/product/add                   @controllers.user.ProductFavoritesController.add(productId:Int)
-GET         /my/favorites/designer                      @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
-POST        /my/favorites/designer/del                  @controllers.user.DesignerFavoritesController.del(designerId:Int)
-POST        /my/favorites/designer/add                  @controllers.user.DesignerFavoritesController.add(designerId:Int)
+GET         /my/favorites/product                                 @controllers.user.ProductFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
+POST        /my/favorites/product/del                             @controllers.user.ProductFavoritesController.del(productId:Int)
+POST        /my/favorites/product/add                             @controllers.user.ProductFavoritesController.add(productId:Int)
+GET         /my/favorites/designer                                @controllers.user.DesignerFavoritesController.index(pageNo:Int ?= 1,pageSize:Int ?= 10)
+POST        /my/favorites/designer/del                            @controllers.user.DesignerFavoritesController.del(designerId:Int)
+POST        /my/favorites/designer/add                            @controllers.user.DesignerFavoritesController.add(designerId:Int)
 # my address
-GET         /my/address                                 @controllers.user.AddressController.index()
-GET         /my/address/list                            @controllers.user.AddressController.list()
-GET         /my/address/province                        @controllers.user.AddressController.queryProvince()
-GET         /my/address/city                            @controllers.user.AddressController.queryCity(code)
-GET         /my/address/area                            @controllers.user.AddressController.queryArea(code)
-POST        /my/address/add                             @controllers.user.AddressController.add()
-POST        /my/address/update                          @controllers.user.AddressController.update()
-POST        /my/address/del                             @controllers.user.AddressController.del(addressId:Int)
-POST        /my/address/defaultAddress                  @controllers.user.AddressController.defaultAddress(addressId:Int)
-GET         /my/address/query                           @controllers.user.AddressController.getAddress(addressId:Int)
+GET         /my/address                                           @controllers.user.AddressController.index()
+GET         /my/address/list                                      @controllers.user.AddressController.list()
+GET         /my/address/province                                  @controllers.user.AddressController.queryProvince()
+GET         /my/address/city                                      @controllers.user.AddressController.queryCity(code)
+GET         /my/address/area                                      @controllers.user.AddressController.queryArea(code)
+POST        /my/address/add                                       @controllers.user.AddressController.add()
+POST        /my/address/update                                    @controllers.user.AddressController.update()
+POST        /my/address/del                                       @controllers.user.AddressController.del(addressId:Int)
+POST        /my/address/defaultAddress                            @controllers.user.AddressController.defaultAddress(addressId:Int)
+GET         /my/address/query                                     @controllers.user.AddressController.getAddress(addressId:Int)
 # myValuation
-POST        /my/valuation/add                           @controllers.user.MyValuationController.add()
-GET         /my/valuation/find                          @controllers.user.MyValuationController.findValuation(orderItemId:Long)
+POST        /my/valuation/add                                     @controllers.user.MyValuationController.add()
+GET         /my/valuation/find                                    @controllers.user.MyValuationController.findValuation(orderItemId:Long)
 # my data
-GET         /my/data                                    @controllers.user.MyDataController.index()
-POST        /my/data/update                             @controllers.user.MyDataController.update()
+GET         /my/data                                              @controllers.user.MyDataController.index()
+POST        /my/data/update                                       @controllers.user.MyDataController.update()
 # security
-GET         /my/security/index                          @controllers.user.MySecurityController.index()
-POST        /my/security/phone/check                    @controllers.user.MySecurityController.checkPhone(phone)
+GET         /my/security/index                                    @controllers.user.MySecurityController.index()
+POST        /my/security/phone/check                              @controllers.user.MySecurityController.checkPhone(phone)
 #     设置密码
 #GET         /my/security/psw/setting              @controllers.user.MySecurityController.newPasswordIndex()
 #POST        /my/security/psw/setting              @controllers.user.MySecurityController.newPasswordDo()
 #     修改密码
-GET         /my/security/psw/index                      @controllers.user.MySecurityController.changePasswordIndex()
-POST        /my/security/psw/new                        @controllers.user.MySecurityController.changePasswordNew()
-GET         /my/security/psw/do                         @controllers.user.MySecurityController.changePasswordDo()
-POST        /my/security/psw/end                        @controllers.user.MySecurityController.changePasswordEnd()
-GET         /my/security/psw/ok                         @controllers.user.MySecurityController.changePasswordOk()
+GET         /my/security/psw/index                                @controllers.user.MySecurityController.changePasswordIndex()
+POST        /my/security/psw/new                                  @controllers.user.MySecurityController.changePasswordNew()
+GET         /my/security/psw/do                                   @controllers.user.MySecurityController.changePasswordDo()
+POST        /my/security/psw/end                                  @controllers.user.MySecurityController.changePasswordEnd()
+GET         /my/security/psw/ok                                   @controllers.user.MySecurityController.changePasswordOk()
 #     修改手机
-GET         /my/security/phone/index                    @controllers.user.MySecurityController.changePhoneIndex()
-POST        /my/security/phone/new                      @controllers.user.MySecurityController.changePhoneNew()
-GET         /my/security/phone/do                       @controllers.user.MySecurityController.changePhoneDo()
-POST        /my/security/phone/end                      @controllers.user.MySecurityController.changePhoneEnd()
-GET         /my/security/phone/ok                       @controllers.user.MySecurityController.changePhoneOk()
+GET         /my/security/phone/index                              @controllers.user.MySecurityController.changePhoneIndex()
+POST        /my/security/phone/new                                @controllers.user.MySecurityController.changePhoneNew()
+GET         /my/security/phone/do                                 @controllers.user.MySecurityController.changePhoneDo()
+POST        /my/security/phone/end                                @controllers.user.MySecurityController.changePhoneEnd()
+GET         /my/security/phone/ok                                 @controllers.user.MySecurityController.changePhoneOk()
 #     修改邮箱
-GET         /my/security/email/index                    @controllers.user.MySecurityController.changeEmailIndex()
-POST        /my/security/email/new                      @controllers.user.MySecurityController.changeEmailNew()
-GET         /my/security/email/do                       @controllers.user.MySecurityController.changeEmailDo()
-POST        /my/security/email/end                      @controllers.user.MySecurityController.changeEmailEnd()
-GET         /my/security/email/ok                       @controllers.user.MySecurityController.changeEmailOk(userId:Int)
+GET         /my/security/email/index                              @controllers.user.MySecurityController.changeEmailIndex()
+POST        /my/security/email/new                                @controllers.user.MySecurityController.changeEmailNew()
+GET         /my/security/email/do                                 @controllers.user.MySecurityController.changeEmailDo()
+POST        /my/security/email/end                                @controllers.user.MySecurityController.changeEmailEnd()
+GET         /my/security/email/ok                                 @controllers.user.MySecurityController.changeEmailOk(userId:Int)
 #     绑定手机
-GET         /my/security/bindPhone/index                @controllers.user.MySecurityController.bindPhoneIndex()
-POST        /my/security/bindPhone/index                @controllers.user.MySecurityController.bindPhoneDo()
+GET         /my/security/bindPhone/index                          @controllers.user.MySecurityController.bindPhoneIndex()
+POST        /my/security/bindPhone/index                          @controllers.user.MySecurityController.bindPhoneDo()
 # recover
-GET         /recover/index                              @controllers.user.RecoverController.recoverIndex()
-POST        /recover/checkPhone                         @controllers.user.RecoverController.recoverCheckPhone()
-GET         /recover/sms                                @controllers.user.RecoverController.recoverSMSHtml()
-POST        /recover/checkSms                           @controllers.user.RecoverController.recoverCheckSMS()
-GET         /recover/psw                                @controllers.user.RecoverController.recoverPswHtml()
-POST        /recover/pswDo                              @controllers.user.RecoverController.recoverPswDo()
-GET         /recover/pswOk                              @controllers.user.RecoverController.recoverPswOk()
+GET         /recover/index                                        @controllers.user.RecoverController.recoverIndex()
+POST        /recover/checkPhone                                   @controllers.user.RecoverController.recoverCheckPhone()
+GET         /recover/sms                                          @controllers.user.RecoverController.recoverSMSHtml()
+POST        /recover/checkSms                                     @controllers.user.RecoverController.recoverCheckSMS()
+GET         /recover/psw                                          @controllers.user.RecoverController.recoverPswHtml()
+POST        /recover/pswDo                                        @controllers.user.RecoverController.recoverPswDo()
+GET         /recover/pswOk                                        @controllers.user.RecoverController.recoverPswOk()
 # image code
-GET         /image/code                                 @controllers.user.ImageController.randomImageCode()
-GET         /image/checkCode                            @controllers.user.ImageController.checkImageCode(imageCode)
+GET         /image/code                                           @controllers.user.ImageController.randomImageCode()
+GET         /image/checkCode                                      @controllers.user.ImageController.checkImageCode(imageCode)
 # 下发手机短信
-POST        /user/phone/sendSMS                         @controllers.user.SendSMSController.sendSMS(phone)
+POST        /user/phone/sendSMS                                   @controllers.user.SendSMSController.sendSMS(phone)
 # 订单管理
-GET         /my/order                                   @controllers.user.MyOrderController.index(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 10)
-GET         /my/order/info                              @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0,queryType:Int ?= 0,pageNo:Int ?= 1)
-POST        /my/order/cancel                            @controllers.user.MyOrderController.orderCancel(orderId:Int ?= 0,cancelType:Int ?= 0)
-GET         /my/order/receiving                         @controllers.user.MyOrderController.orderReceiving(orderId:Int ?= 0)
-GET         /my/backApply                               @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
-POST        /my/back/submit                             @controllers.user.MyOrderController.backApplySubmit()
-GET         /my/appraise                                @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)
-GET         /my/back                                    @controllers.user.MyOrderController.backIndex(pageNo:Int ?= 1,pageSize:Int ?= 10)
-GET         /my/back/info                               @controllers.user.MyOrderController.backContent(backId:Int ?= 0,pageNo:Int ?= 1)
-POST        /my/back/cancel                             @controllers.user.MyOrderController.backCancel(backId:Int ?= 0)
+GET         /my/order                                             @controllers.user.MyOrderController.index(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 10)
+GET         /my/order/info                                        @controllers.user.MyOrderController.orderContent(orderId:Int ?= 0,queryType:Int ?= 0,pageNo:Int ?= 1)
+POST        /my/order/cancel                                      @controllers.user.MyOrderController.orderCancel(orderId:Int ?= 0,cancelType:Int ?= 0)
+GET         /my/order/receiving                                   @controllers.user.MyOrderController.orderReceiving(orderId:Int ?= 0)
+GET         /my/backApply                                         @controllers.user.MyOrderController.backApply(orderId:Int ?= 0)
+POST        /my/back/submit                                       @controllers.user.MyOrderController.backApplySubmit()
+GET         /my/appraise                                          @controllers.user.MyOrderController.orderAppraise(orderId:Int ?= 0)
+GET         /my/back                                              @controllers.user.MyOrderController.backIndex(pageNo:Int ?= 1,pageSize:Int ?= 10)
+GET         /my/back/info                                         @controllers.user.MyOrderController.backContent(backId:Int ?= 0,pageNo:Int ?= 1)
+POST        /my/back/cancel                                       @controllers.user.MyOrderController.backCancel(backId:Int ?= 0)
 
 #购物车
-GET         /cart/getSkuStorage                         @controllers.shop.CartController.getSkuStorage(skuId:Int)
-GET         /cart/getUserCartItemNum                    @controllers.shop.CartController.getUserCartItemNum()
-GET         /cart/addSkuToCartAddNum                    @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
-GET         /cart/addSkuToCartReplaceNum                @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
-GET         /cart/showCart                              @controllers.shop.CartController.showCart()
-GET         /cart/deleteCartItem                        @controllers.shop.CartController.deleteCartItem(cartItemId:Int)
-GET         /cart/selCartItemProcess                    @controllers.shop.CartController.selCartItemProcess(selCartItems:String)
-GET         /cart/chooseAddress                         @controllers.shop.CartController.chooseAddress(selCartItems:String)
-GET         /cart/verifyPromptlyPayData                 @controllers.shop.CartController.verifyPromptlyPayData(skuId:Int, number:Int)
-GET         /cart/promptlyPayChooseAddress              @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
+GET         /cart/getSkuStorage                                   @controllers.shop.CartController.getSkuStorage(skuId:Int)
+GET         /cart/getUserCartItemNum                              @controllers.shop.CartController.getUserCartItemNum()
+GET         /cart/addSkuToCartAddNum                              @controllers.shop.CartController.addSkuToCartAddNum(skuId:Int, number:Int)
+GET         /cart/addSkuToCartReplaceNum                          @controllers.shop.CartController.addSkuToCartReplaceNum(skuId:Int, number:Int)
+GET         /cart/showCart                                        @controllers.shop.CartController.showCart()
+GET         /cart/deleteCartItem                                  @controllers.shop.CartController.deleteCartItem(cartItemId:Int)
+GET         /cart/selCartItemProcess                              @controllers.shop.CartController.selCartItemProcess(selCartItems:String)
+GET         /cart/chooseAddress                                   @controllers.shop.CartController.chooseAddress(selCartItems:String)
+GET         /cart/verifyPromptlyPayData                           @controllers.shop.CartController.verifyPromptlyPayData(skuId:Int, number:Int)
+GET         /cart/promptlyPayChooseAddress                        @controllers.shop.CartController.promptlyPayChooseAddress(skuId:Int, number:Int)
 
 #订单
-GET         /order/testPay                              @controllers.shop.OrderAndPayController.testPay()
-GET         /order/submitOrder                          @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
-GET         /order/toOrderPlay                          @controllers.shop.OrderAndPayController.toOrderPlay(orderIds:String)
-GET         /order/submitTradeOrder                     @controllers.shop.OrderAndPayController.submitTradeOrder(payType:String,payMethod:String,payOrg:String,orderIds:String)
+GET         /order/testPay                                        @controllers.shop.OrderAndPayController.testPay()
+GET         /order/submitOrder                                    @controllers.shop.OrderAndPayController.submitOrder(selItems:String,addressId:Int,isPromptlyPay:Boolean)
+GET         /order/toOrderPlay                                    @controllers.shop.OrderAndPayController.toOrderPlay(orderIds:String)
+GET         /order/submitTradeOrder                               @controllers.shop.OrderAndPayController.submitTradeOrder(payType:String,payMethod:String,payOrg:String,orderIds:String)
 #GET         /order/toPayOrder                           @controllers.shop.OrderAndPayController.toPayOrder(payMethod:String,payOrg:String,orderIds:String,tradeNo:String)
 
 #支付
-GET         /payOrder/normalReturn                      @controllers.shop.OrderPayCallBackController.normalReturn
-POST        /payOrder/normalReturn                      @controllers.shop.OrderPayCallBackController.normalReturn
-GET         /payOrder/notifyReturn                      @controllers.shop.OrderPayCallBackController.notifyReturn
-POST        /payOrder/notifyReturn                      @controllers.shop.OrderPayCallBackController.notifyReturn
-GET         /payOrder/checkPayState                     @controllers.shop.OrderPayCallBackController.checkPayState(tradeNo:String)
-GET         /payOrder/generateAliPayPayReturnUrl        @controllers.shop.OrderPayCallBackController.generateAliPayPayReturnUrl(tradeNo:String)
+GET         /payOrder/normalReturn                                @controllers.shop.OrderPayCallBackController.normalReturn
+POST        /payOrder/normalReturn                                @controllers.shop.OrderPayCallBackController.normalReturn
+GET         /payOrder/notifyReturn                                @controllers.shop.OrderPayCallBackController.notifyReturn
+POST        /payOrder/notifyReturn                                @controllers.shop.OrderPayCallBackController.notifyReturn
+GET         /payOrder/checkPayState                               @controllers.shop.OrderPayCallBackController.checkPayState(tradeNo:String)
+GET         /payOrder/generateAliPayPayReturnUrl                  @controllers.shop.OrderPayCallBackController.generateAliPayPayReturnUrl(tradeNo:String)
 
 #product
-GET         /product/valuations                         @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
-GET         /product/:id                                @controllers.product.ProductController.detail(id)
+GET         /product/valuations                                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
+GET         /product/:id                                          @controllers.product.ProductController.detail(id)
 
 #help
-GET         /help/:name                                 @controllers.help.HelpCenterController.index(name)
+GET         /help/:name                                           @controllers.help.HelpCenterController.index(name)
 
 #意见反馈
-POST        /feedback/submitFeedback                    @controllers.user.FeedbackController.submitFeedback
+POST        /feedback/submitFeedback                              @controllers.user.FeedbackController.submitFeedback
 
 #activity 活动页面
-GET         /activity/bianxingji                        @controllers.activity.ActivityController.bianxingji()
-GET         /activity/fashion                           @controllers.activity.ActivityController.fashion()
-GET         /activity/member                            @controllers.activity.ActivityController.toMember()
-GET         /activity/loukong                           @controllers.activity.ActivityController.loukong()
-GET         /activity/federico                          @controllers.activity.ActivityController.federico()
+GET         /activity/bianxingji                                  @controllers.activity.ActivityController.bianxingji()
+GET         /activity/fashion                                     @controllers.activity.ActivityController.fashion()
+GET         /activity/member                                      @controllers.activity.ActivityController.toMember()
+GET         /activity/loukong                                     @controllers.activity.ActivityController.loukong()
+GET         /activity/federico                                    @controllers.activity.ActivityController.federico()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
-GET         /google364d7dcf8709c4e5.html                controllers.Assets.at(path="/public", file="google364d7dcf8709c4e5.html")
-GET         /sitemap.xml                                controllers.Assets.at(path="/public", file="sitemap.xml")
+GET         /assets/*file                                         controllers.Assets.versioned(path="/public", file: Asset)
+GET         /google364d7dcf8709c4e5.html                          controllers.Assets.at(path="/public", file="google364d7dcf8709c4e5.html")
+GET         /loaderio-6df48daa7c473467ab247676e717bbca.txt        controllers.Assets.at(path="/public", file="loaderio-6df48daa7c473467ab247676e717bbca.txt")
 
