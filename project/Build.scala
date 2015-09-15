@@ -35,23 +35,12 @@ object ApplicationBuild extends Build {
     ).
     dependsOn(common).dependsOn(product).dependsOn(user)
 
-/*
-  lazy val admin = (project in file("admin")).
-    enablePlugins(play.PlayJava).
+  lazy val cms = (project in file("cms-center")).
     settings(Commons.settings: _*).
     settings(
-      libraryDependencies ++= adminDependencies,
-      sourceGenerators in Compile += task {
-        val dir: File = (sourceManaged in Compile).value / "controllers"
-        val dirs = Seq(dir / "ref", dir / "javascript")
-        dirs.foreach(_.mkdirs)
-        Seq[File]()
-      },
-      unmanagedSourceDirectories in Compile += (sourceManaged in Compile).value
-//      unmanagedSourceDirectories in Compile += baseDirectory.value / "target" / "scala-2.11" / "src_managed" / "main"
-    ).dependsOn(common % "test->test;compile->compile").
-      dependsOn(user).dependsOn(product).dependsOn(order)
-*/
+      libraryDependencies ++= cmsDependencies
+    ).
+    dependsOn(common).dependsOn(product).dependsOn(user).dependsOn(order)
 
   lazy val shop = webProject("shop", shopDependencies)
 

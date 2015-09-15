@@ -48,6 +48,8 @@ object Dependencies {
 
   val orderDependencies: Seq[ModuleID] = Seq("jdom" % "jdom" % "1.0")
 
+  val cmsDependencies: Seq[ModuleID] = Seq()
+
   val adminDependencies: Seq[ModuleID] = Seq("mysql" % "mysql-connector-java" % mysqlConnectorVersion)
 
   val shopDependencies: Seq[ModuleID] = adminDependencies
