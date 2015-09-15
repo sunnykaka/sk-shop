@@ -1,24 +1,16 @@
 package api.response.shop;
 
-import ordercenter.models.TradeItem;
+import ordercenter.models.CartItem;
+import productcenter.models.StockKeepingUnit;
 
 /**
- * 购买条目，一个sku一个对应的物理商品
- * 表示一个购物项，如果没有cartId，则可能是直接购买
- * User: lidujun
- * Date: 2015-08-25
+ * Created by lidujun on 15-8-27.
  */
-public class CartItemDto extends TradeItem {
-
+public class CartItemDto extends TradeItemDto{
     /**
      * 主键id
      */
     private Integer id;
-
-    /**
-     * 购物车id
-     */
-    private int cartId;
 
     /**
      * 是否被选中
@@ -30,32 +22,36 @@ public class CartItemDto extends TradeItem {
      */
     private boolean isDelete = false;
 
+    public CartItemDto buildCartItemDto(CartItem cartItem) {
+        if(cartItem == null)  {
+            return  null;
+        }
+        CartItemDto cartItemDto = new CartItemDto();
+        cartItemDto.setId(cartItem.getId());
+        cartItemDto.setSelected(cartItem.isSelected());
+        cartItemDto.setIsDelete(cartItem.getIsDelete());
 
-    /**
-     * 产品id
-     */
-    protected int productId;
+        //tradeItem
+        cartItemDto.setCustomerId(cartItem.getCustomerId());
+        cartItemDto.setCustomerName(cartItem.getCustomerName());
+        cartItemDto.setProductId(cartItem.getProductId());
+        cartItemDto.setProductName(cartItem.getProductName());
+        cartItemDto.setMainPicture(cartItem.getMainPicture());
 
+        StockKeepingUnit sku = cartItem.getSku();
+        SkuDto skuDto = new SkuDto();
+        cartItemDto.setSku(skuDto.build(sku));
 
-    /**
-     * 产品名称，展示时使用
-     */
-    protected String productName;
+        cartItemDto.setCurUnitPrice(cartItem.getCurUnitPrice());
+        cartItemDto.setNumber(cartItem.getNumber());
+        cartItemDto.setTotalPrice(cartItem.getTotalPrice());
+        cartItemDto.setStockQuantity(cartItem.getStockQuantity());
+        cartItemDto.setTradeMaxNumber(cartItem.getTradeMaxNumber());
+        cartItemDto.setHasStock(cartItem.isHasStock());
+        cartItemDto.setOnline(cartItem.isOnline());
 
-
-
-    /**
-     * 是否有库存，这个字段不保存，是在显示购物车的时候动态从数据库中查询的，这样可以实时查看是否有货
-     */
-    protected boolean hasStock;
-
-    /**
-     * 该商品是否上架：是否上架(0表示未上架, 1表示上架)
-     */
-    protected Boolean online;
-
-
-
+        return cartItemDto;
+    }
 
     public Integer getId() {
         return id;
@@ -63,14 +59,6 @@ public class CartItemDto extends TradeItem {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public int getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
     }
 
     public boolean isSelected() {

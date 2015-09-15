@@ -22,6 +22,9 @@ public class SkuStorage implements EntityClass<Integer> {
      * sku
      */
     private int skuId;
+
+    private StockKeepingUnit sku;
+
     /**
      * 库位编号
      */
@@ -67,6 +70,16 @@ public class SkuStorage implements EntityClass<Integer> {
 
     public void setSkuId(int skuId) {
         this.skuId = skuId;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "skuId", insertable = false, updatable = false, unique = true)
+    public StockKeepingUnit getSku() {
+        return sku;
+    }
+
+    public void setSku(StockKeepingUnit sku) {
+        this.sku = sku;
     }
 
     @Column(name = "productStorageId")

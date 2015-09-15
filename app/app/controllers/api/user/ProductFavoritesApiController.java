@@ -1,7 +1,11 @@
 package controllers.api.user;
 
+import api.response.user.FavoritesDto;
 import common.exceptions.AppBusinessException;
+import common.exceptions.ErrorCode;
 import common.utils.JsonResult;
+import common.utils.JsonUtils;
+import common.utils.ParamUtils;
 import common.utils.page.Page;
 import controllers.BaseController;
 import org.joda.time.DateTime;
@@ -17,6 +21,7 @@ import usercenter.models.User;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,13 +46,14 @@ public class ProductFavoritesApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result index(int pageNo, int pageSize) {
+    public Result list(int pageNo, int pageSize) {
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
 
         Page<ProductCollect> page = new Page(pageNo,pageSize);
+        Page<FavoritesDto> pageDto = new Page(pageNo,pageSize);
         List<ProductCollect> pageProductCollcets = productCollectService.getProductCollectList(Optional.of(page),user.getId());
-
+        List<FavoritesDto> favoritesDtos = new ArrayList<>();
         for(ProductCollect pc:pageProductCollcets){
             Product product = productService.getProductById(pc.getProductId());
             ProductPicture pp = productPictureService.getMinorProductPictureByProductId(pc.getProductId());
@@ -56,33 +62,33 @@ public class ProductFavoritesApiController extends BaseController {
             pc.setProductPic(pp.getPictureUrl());
             pc.setDesignerId(product.getCustomerId());
 
+            favoritesDtos.add(FavoritesDto.build(pc));
+
         }
 
-        page.setResult(pageProductCollcets);
+        pageDto.setResult(favoritesDtos);
 
-        return ok();
+        return ok(JsonUtils.object2Node(pageDto));
 
     }
 
     /**
      * 删除我的收藏商品
      *
-     * @param productId
      * @return
      */
     @SecuredAction
-    public Result del(int productId) {
+    public Result del(int id) {
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
 
         try {
-            productCollectService.deleteMyProductCollect(productId,user.getId());
+            productCollectService.deleteMyProductCollect(id, user.getId());
         }catch (AppBusinessException e){
-            return ok(new JsonResult(false, "删除失败").toNode());
+            throw new AppBusinessException(ErrorCode.Conflict, "没有该资源，操作失败");
         }
 
-
-        return ok(new JsonResult(true, "删除成功").toNode());
+        return noContent();
 
     }
 
@@ -92,19 +98,21 @@ public class ProductFavoritesApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result add(int productId){
+    public Result add(){
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
+
+        int productId = ParamUtils.getObjectId(request());
 
         Product product = productService.getProductById(productId);
         if(null == product){
-            return ok(new JsonResult(false, "收藏的商品找不到").toNode());
+            throw new AppBusinessException(ErrorCode.Conflict, "收藏的商品找不到");
         }
 
         ProductCollect oldProductCollect = productCollectService.getByProductId(productId,user.getId());
 
         if(null != oldProductCollect){
-            return ok(new JsonResult(false, "已收藏该商品").toNode());
+            throw new AppBusinessException(ErrorCode.Conflict, "已收藏该商品");
         }
 
         ProductCollect productCollect = new ProductCollect();
@@ -114,9 +122,9 @@ public class ProductFavoritesApiController extends BaseController {
         productCollect.setCollectTime(DateTime.now());
         productCollectService.createProductCollect(productCollect);
 
-        int count = productCollectService.countProductCollect(productId);
+        //productCollectService.countProductCollect(productId);
 
-        return ok(new JsonResult(true, String.valueOf(count)).toNode());
+        return noContent();
 
     }
 

@@ -12,6 +12,7 @@ import views.html.activity.bianxingji;
 import views.html.activity.member;
 import views.html.activity.fashion;
 import views.html.activity.loukong;
+import views.html.activity.federico;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -138,6 +139,39 @@ public class ActivityController extends Controller {
         }
 
         return ok(loukong.render(mapName, mapPrice));
+    }
+
+    public Result federico() {
+
+        final int[] activityProductId = {69,27,15,53,21,11,63,57,67};
+
+        Map<Integer, String> mapName = new HashMap<>();
+        Map<Integer, String> mapPrice = new HashMap<>();
+        for(int productId:activityProductId){
+            Product product = productService.getProductById(productId);
+
+            if(null == product){
+                mapPrice.put(productId,null);
+                mapName.put(productId,null);
+            }else{
+                //根据判断是否是首发，当前价格要现算
+                mapName.put(productId,product.getName());
+                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                if(null == stockKeepingUnit){
+                    mapPrice.put(productId,null);
+                }else{
+                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    if(isFirstPublish) {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
+                    } else {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getMarketPrice().toString()));
+                    }
+                }
+
+            }
+        }
+
+        return ok(federico.render(mapName, mapPrice));
     }
 
     private String getPositivePrice(String str){

@@ -1,5 +1,7 @@
 package productcenter.dtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import common.utils.Money;
 
 import java.util.List;
@@ -45,8 +47,18 @@ public class SkuInfo {
 
     private boolean defaultSku;
 
-    public SkuInfo(Integer skuId, String skuCode, String barCode, Money price, Money marketPrice,
-                   String skuPropertiesInDb, int stockQuantity, int tradeMaxNumber, List<String> imageList, boolean defaultSku) {
+    @JsonCreator
+    public SkuInfo(
+           @JsonProperty("skuId") Integer skuId,
+           @JsonProperty("skuCode") String skuCode,
+           @JsonProperty("barCode") String barCode,
+           @JsonProperty("price") Money price,
+           @JsonProperty("marketPrice") Money marketPrice,
+           @JsonProperty("skuPropertiesInDb") String skuPropertiesInDb,
+           @JsonProperty("stockQuantity") int stockQuantity,
+           @JsonProperty("tradeMaxNumber") int tradeMaxNumber,
+           @JsonProperty("imageList") List<String> imageList,
+           @JsonProperty("defaultSku") boolean defaultSku) {
         this.skuId = skuId;
         this.skuCode = skuCode;
         this.barCode = barCode;

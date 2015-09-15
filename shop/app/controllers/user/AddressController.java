@@ -132,7 +132,6 @@ public class AddressController extends Controller {
                 address.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
                 address.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 address.setMobile(addressF.getMobile());
-                address.setZipCode(addressF.getZipCode());
 
                 addressService.createAddress(address);
 
@@ -178,7 +177,6 @@ public class AddressController extends Controller {
                 oldAddress.setCity(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getCity())));
                 oldAddress.setArea(StringEscapeUtils.escapeHtml4(StringUtils.trim(addressF.getDistricts())));
                 oldAddress.setMobile(addressF.getMobile());
-                oldAddress.setZipCode(addressF.getZipCode());
 
                 addressService.updateAddress(oldAddress);
 

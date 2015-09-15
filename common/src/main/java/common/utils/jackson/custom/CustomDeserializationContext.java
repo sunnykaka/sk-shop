@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
 import com.fasterxml.jackson.databind.deser.DeserializerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by liubin on 15-4-21.
  */
@@ -17,7 +20,7 @@ public class CustomDeserializationContext extends DefaultDeserializationContext 
     /**
      * 正在解析的属性的类型
      */
-    public JavaType beanType;
+    private List<JavaType> beanTypeList = new ArrayList<>();
 
     /**
      * Default constructor for a blueprint object, which will use the standard
@@ -58,5 +61,12 @@ public class CustomDeserializationContext extends DefaultDeserializationContext 
         return new CustomDeserializationContext(this, factory);
     }
 
+    public void addBeanType(JavaType javaType) {
+        beanTypeList.add(javaType);
+    }
+
+    public List<JavaType> getBeanTypeList() {
+        return beanTypeList;
+    }
 
 }

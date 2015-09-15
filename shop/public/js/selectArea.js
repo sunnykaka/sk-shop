@@ -33,8 +33,7 @@ $(function ($) {
         function addToSelect(element, data, selected) {
             var isSelected,
                 arr = data.data,
-                items = '',
-                code = '';
+                items = '';
 
             if (arr.length > 0) {
                 $.each(arr, function (i) {
@@ -42,12 +41,8 @@ $(function ($) {
                     if (arr[i].name === selected) {
                         isSelected = " selected";
                     }
-
-                    if (element === districts) {
-                        code = ' data-code=' + arr[i].zipCode;
-                    }
                     items += '<option value="' + arr[i].name + '" ' + 'data-id="' +
-                        arr[i].id + '" ' + isSelected + code + '>' + arr[i].name + '</option>';
+                        arr[i].id + '" ' + isSelected + '>' + arr[i].name + '</option>';
                 });
                 element.attr('disabled', false);
             } else {
@@ -128,14 +123,11 @@ $(function ($) {
         });
 
         districts.on('change', function () {
-            var zipCode = self.parents('form').find('input[name=zipCode]'),
-                value = $(this).val(),
+            var value = $(this).val(),
                 selected = $(this).find("option[value='" + value + "']"),
                 code = selected.attr('data-code');
             if (value !== 0) {
-                code == "null"?zipCode.val(""):zipCode.val(code);
                 districts.siblings("span").remove();
-                zipCode.siblings("span").remove();
             }
         });
 

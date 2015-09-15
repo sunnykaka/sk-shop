@@ -369,7 +369,7 @@ public class OrderService {
         if (null == order) {
             throw new AppBusinessException("确认收货失败，无法查询订单");
         }
-        // TODO 确认收货
+        // 确认收货
         try {
             this.updateOrderStateByStrictState(order.getId(), OrderState.Receiving, order.getOrderState());
             for (OrderItem oi : order.getOrderItemList()) {

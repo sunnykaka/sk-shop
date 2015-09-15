@@ -21,9 +21,14 @@ public class TradeItem {
     protected String barCode;
 
     /**
-     * 商家ID
+     * 商家ID（设计师ID）
      */
     protected int customerId;
+
+    /**
+     * 商家名称（设计师名称）
+     */
+    protected String customerName;
 
     /**
      * 库位ID(库存位置)
@@ -134,11 +139,6 @@ public class TradeItem {
         this.online = online;
     }
 
-
-
-
-
-
     public int getSkuId() {
         return skuId;
     }
@@ -161,6 +161,14 @@ public class TradeItem {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getBarCode() {

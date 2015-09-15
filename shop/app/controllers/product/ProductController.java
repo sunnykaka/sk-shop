@@ -17,6 +17,7 @@ import productcenter.models.Product;
 import productcenter.services.ProductListService;
 import productcenter.services.ProductPictureService;
 import services.product.ProductDetailService;
+import usercenter.utils.SessionUtils;
 import utils.Global;
 import views.html.product.detail;
 
@@ -88,7 +89,7 @@ public class ProductController extends Controller {
 //            }
 //        }
 
-        ProductDetail productDetail = productDetailService.showDetail(productId, null);
+        ProductDetail productDetail = productDetailService.showDetail(productId, null, SessionUtils.currentUser());
         if (productDetail == null) {
             return Global.show404();
         }

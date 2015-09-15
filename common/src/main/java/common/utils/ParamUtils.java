@@ -1,6 +1,8 @@
 package common.utils;
 
 
+import common.exceptions.AppBusinessException;
+import common.exceptions.ErrorCode;
 import play.mvc.Http;
 
 import java.util.HashMap;
@@ -18,7 +20,7 @@ public class ParamUtils {
      * @param key
      * @return
      */
-    public static String[] getAllByKey(Http.Request request,String key) {
+    private static String[] getAllByKey(Http.Request request,String key) {
 
         Map<String, String[]> params = request.body().asFormUrlEncoded();
         if(params == null) {
@@ -38,17 +40,39 @@ public class ParamUtils {
      */
     public static String getByKey(Http.Request request,String key) {
 
-        if("GET".equals(request.method())){
-            return request.getQueryString(key);
+        String s = request.getQueryString(key);
+
+        if(org.apache.commons.lang3.StringUtils.isNotBlank(s)) {
+
+            return s;
+        } else {
+
+            String[] result = getAllByKey(request, key);
+
+            if(result.length == 0){
+                return "";
+            }
+
+            return result[0];
         }
 
-        String[] result = getAllByKey(request,key);
+    }
 
-        if(result.length == 0){
-            return "";
+    /**
+     * 单个POST取id参数
+     *
+     * @param request
+     * @return
+     */
+    public static int getObjectId(Http.Request request){
+
+        String objectId = getByKey(request, "id");
+
+        try {
+            return Integer.parseInt(objectId);
+        }catch (Exception e){
+            throw new AppBusinessException(ErrorCode.Conflict, "id传参错误");
         }
-
-        return result[0];
     }
 
 }

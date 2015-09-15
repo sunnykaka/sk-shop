@@ -4,18 +4,12 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.deser.BeanDeserializer;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerBase;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerBuilder;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 import com.fasterxml.jackson.databind.deser.impl.BeanPropertyMap;
 import com.fasterxml.jackson.databind.deser.impl.ObjectIdReader;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.BeanSerializer;
-import com.fasterxml.jackson.databind.ser.BeanSerializerBuilder;
-import com.fasterxml.jackson.databind.ser.impl.ObjectIdWriter;
-import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
 import com.fasterxml.jackson.databind.util.NameTransformer;
 
 import java.io.IOException;
@@ -55,7 +49,7 @@ public class CustomBeanDeserializer extends BeanDeserializer {
     public Object deserialize(JsonParser jp, DeserializationContext ctxt, Object bean) throws IOException, JsonProcessingException {
 
         if(ctxt instanceof CustomDeserializationContext) {
-            ((CustomDeserializationContext)ctxt).beanType = _beanType;
+            ((CustomDeserializationContext)ctxt).addBeanType(_beanType);
         }
 
         return super.deserialize(jp, ctxt, bean);
@@ -65,7 +59,7 @@ public class CustomBeanDeserializer extends BeanDeserializer {
     public Object deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 
         if(ctxt instanceof CustomDeserializationContext) {
-            ((CustomDeserializationContext)ctxt).beanType = _beanType;
+            ((CustomDeserializationContext)ctxt).addBeanType(_beanType);
         }
 
         return super.deserialize(jp, ctxt);

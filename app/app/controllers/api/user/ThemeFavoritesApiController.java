@@ -1,10 +1,10 @@
 package controllers.api.user;
 
-import api.response.user.DesignerFavoritesDto;
+import api.response.user.FavoritesDto;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
-import common.utils.JsonResult;
 import common.utils.JsonUtils;
+import common.utils.ParamUtils;
 import common.utils.page.Page;
 import controllers.BaseController;
 import org.joda.time.DateTime;
@@ -17,7 +17,7 @@ import usercenter.models.DesignerPicture;
 import usercenter.models.User;
 import usercenter.services.DesignerCollectService;
 import usercenter.services.DesignerService;
-import usercenter.utils.SessionUtils;
+import usercenter.services.ThemeCollectService;
 import utils.secure.SecuredAction;
 
 import java.util.ArrayList;
@@ -25,10 +25,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 关注设计师
+ * 专题收藏
+ * TODO 设计师未改成专题--原因：专题内容未开发完
  */
 @org.springframework.stereotype.Controller
-public class DesignerFavoritesApiController extends BaseController {
+public class ThemeFavoritesApiController extends BaseController {
 
     @Autowired
     private DesignerCollectService designerCollectService;
@@ -36,26 +37,28 @@ public class DesignerFavoritesApiController extends BaseController {
     @Autowired
     private DesignerService designerService;
 
+    private ThemeCollectService themeCollectService;
+
     /**
      * 收藏商品列表
      *
      * @return
      */
     @SecuredAction
-    public Result index(int pageNo, int pageSize) {
+    public Result list(int pageNo, int pageSize) {
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
 
         Page<DesignerCollect> page = new Page(pageNo,pageSize);
-        Page<DesignerFavoritesDto> pageDto = new Page(pageNo,pageSize);
+        Page<FavoritesDto> pageDto = new Page(pageNo,pageSize);
         List<DesignerCollect> pageProductCollcet = designerCollectService.getDesignerCollectList(Optional.of(page), user.getId());
-        List<DesignerFavoritesDto> designerFavoritesDtos = new ArrayList<>();
+        List<FavoritesDto> designerFavoritesDtos = new ArrayList<>();
         for(DesignerCollect designerCollect:pageProductCollcet){
             Designer designer = designerService.getDesignerById(designerCollect.getDesignerId());
             DesignerPicture designerPicture = designerService.getDesignerPicByType(designerCollect.getDesignerId(), DesignerPictureType.ListMainPic);
             designerCollect.setDesignerName(designer.getName());
             designerCollect.setDesignerPic(designerPicture.getPictureUrl());
-            designerFavoritesDtos.add(DesignerFavoritesDto.build(designerCollect));
+            designerFavoritesDtos.add(FavoritesDto.build(designerCollect));
         }
         pageDto.setResult(designerFavoritesDtos);
 
@@ -66,16 +69,15 @@ public class DesignerFavoritesApiController extends BaseController {
     /**
      * 删除我的收藏
      *
-     * @param designerId
      * @return
      */
     @SecuredAction
-    public Result del(int designerId) {
+    public Result del() {
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
 
         try {
-            designerCollectService.deleteMyDesignerCollect(designerId, user.getId());
+            designerCollectService.deleteMyDesignerCollect(ParamUtils.getObjectId(request()), user.getId());
         }catch (AppBusinessException e){
             throw new AppBusinessException(ErrorCode.Conflict, "删除失败");
         }
@@ -85,9 +87,11 @@ public class DesignerFavoritesApiController extends BaseController {
     }
 
     @SecuredAction
-    public Result add(int designerId){
+    public Result add(){
 
-        User user = SessionUtils.currentUser();
+        User user = this.currentUser();
+
+        int designerId = ParamUtils.getObjectId(request());
 
         Designer designer = designerService.getDesignerById(designerId);
         if(null == designer){

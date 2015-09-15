@@ -5,21 +5,26 @@ import api.response.user.RefreshTokenResult;
 import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.exceptions.ErrorCode;
+import common.utils.FormUtils;
 import common.utils.JsonUtils;
 import common.utils.ParamUtils;
+import common.utils.RegExpUtils;
 import controllers.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
+import play.mvc.Http;
 import play.mvc.Result;
 import services.api.user.UserApiService;
 import services.api.user.UserTokenProvider;
+import usercenter.cache.RecoverCache;
 import usercenter.domain.SmsSender;
-import usercenter.dtos.LoginForm;
-import usercenter.dtos.RegisterForm;
+import usercenter.dtos.*;
+import usercenter.models.User;
 import usercenter.services.UserService;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @org.springframework.stereotype.Controller
 public class LoginApiController extends BaseController {
@@ -104,6 +109,112 @@ public class LoginApiController extends BaseController {
         }
 
         return ok(JsonUtils.object2Node(refreshTokenResult.get()));
+    }
+
+    /**
+     * 检查手机号码，并下发短信
+     *
+     * @return
+     * @throws AppException
+     */
+    public Result recoverCheckPhone() throws AppException {
+
+        String phone = getStringPhone(request());
+
+        User user = userService.findByPhone(phone);
+
+        if(null == user){
+            throw new AppBusinessException(ErrorCode.UsernameExist);
+        }
+
+        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
+
+        smsSender.sendPhoneVerificationMessage();
+
+        return noContent();
+
+    }
+
+    /**
+     * 验证短信
+     *
+     * @return
+     */
+    public Result recoverCheckSMS(){
+
+        Form<PhoneCodeForm> phoneCodeForm = Form.form(PhoneCodeForm.class).bindFromRequest();
+        if(!phoneCodeForm.hasErrors()) {
+            try {
+                PhoneCodeForm phoneCode = phoneCodeForm.get();
+
+                if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
+                    throw new AppBusinessException(ErrorCode.VerifyCodeError);
+                }
+
+                RecoverCache.setToken(RecoverCache.SECURITY_TOKEN_PHONE_KEY,phoneCode.getPhone(),phoneCode.getPhone());
+                return noContent();
+
+            } catch (AppBusinessException e) {
+                phoneCodeForm.reject("errors", e.getMessage());
+            }
+        }
+
+        throw new AppBusinessException(ErrorCode.InvalidArgument, FormUtils.showErrorInfo(phoneCodeForm.errors()));
+
+    }
+
+    /**
+     * 执行修改密码
+     *
+     * @return
+     */
+    public Result recoverPswDo(){
+        Form<RecoverPswForm> pswForm = Form.form(RecoverPswForm.class).bindFromRequest();
+        if(!pswForm.hasErrors()) {
+            try {
+                RecoverPswForm psw = pswForm.get();
+
+                String phone = RecoverCache.getToken(RecoverCache.SECURITY_TOKEN_PHONE_KEY,psw.getPhone());
+                if(StringUtils.isEmpty(psw.getPhone())){
+                    throw new AppBusinessException(ErrorCode.BadRequest,"校验用户失败，请重新走流程");
+                }
+                if(!psw.getPhone().equals(phone)){
+                    throw new AppBusinessException(ErrorCode.BadRequest,"校验用户失败，请重新走流程");
+                }
+
+                User user = userService.findByPhone(psw.getPhone());
+                if(null == user){
+                    throw new AppBusinessException(ErrorCode.BadRequest,"校验用户失败，请重新走流程");
+                }
+
+                userService.updatePassword(user, psw);
+
+                return noContent();
+
+            } catch (AppBusinessException e) {
+                pswForm.reject("errors", e.getMessage());
+            }
+        }
+
+        throw new AppBusinessException(ErrorCode.InvalidArgument, FormUtils.showErrorInfo(pswForm.errors()));
+    }
+
+    private String getStringPhone(Http.Request request){
+
+        String phone = ParamUtils.getByKey(request, "phone");
+
+        phone = StringUtils.trim(phone);
+
+        if (StringUtils.isEmpty(phone)) {
+            throw new AppBusinessException(ErrorCode.InvalidArgument,"手机不能为空");
+        }
+
+        if(!Pattern.matches(RegExpUtils.PHONE_REG_EXP,phone)){
+            throw new AppBusinessException(ErrorCode.InvalidArgument,"请输入正确的手机号码");
+        }
+
+        return phone;
+
     }
 
 

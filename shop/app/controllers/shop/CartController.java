@@ -199,8 +199,9 @@ public class CartController extends Controller {
 
             if(!isReplace) {
                 List<CartItem> cartItems = null;
+                cart = this.buildUserSimpleCart(curUser.getId());
                 if(cart != null) {
-                   cartItems = cartService.queryCarItemsByCartId(cart.getId());
+                    cartItems = cart.getCartItemList();
                 }
                 if(cartItems == null || cartItems.size() == 0) {
                     return ok(new JsonResult(true,"用户当前购物车为空", 1).toNode());

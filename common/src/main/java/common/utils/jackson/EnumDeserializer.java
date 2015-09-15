@@ -1,12 +1,10 @@
 package common.utils.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import common.models.utils.ViewEnum;
 import common.utils.jackson.custom.CustomDeserializationContext;
 import org.apache.commons.lang3.StringUtils;
@@ -14,8 +12,9 @@ import play.Logger;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -29,10 +28,6 @@ public class EnumDeserializer extends JsonDeserializer<ViewEnum> {
             Logger.error("DeserializationContext的实现类CustomDeserializationContext, 无法反序列化枚举类型");
             return null;
         }
-        /**
-         * 因为使用了CustomerObjectMapper,所以可以得到属性的类型
-         */
-        JavaType beanType = ((CustomDeserializationContext) ctxt).beanType;
 
         JsonNode jsonNode = jp.getCodec().readTree(jp);
         JsonNode nameNode = jsonNode.get("name");
@@ -43,20 +38,33 @@ public class EnumDeserializer extends JsonDeserializer<ViewEnum> {
 
         String name = nameNode.asText();
         String fieldName = ctxt.getParser().getParsingContext().getCurrentName();
+        /**
+         * 因为使用了CustomObjectMapper,所以可以得到属性的类型
+         */
+        List<JavaType> beanTypeList = ((CustomDeserializationContext) ctxt).getBeanTypeList();
 
         try {
-            Field field = beanType.getRawClass().getDeclaredField(fieldName);
-            Class<?> enumType = field.getType();
-            Method method = enumType.getDeclaredMethod("valueOf", String.class);
-            return (ViewEnum)method.invoke(null, name);
+            for(int i=beanTypeList.size()-1; i>=0; i--) {
+                JavaType beanType = beanTypeList.get(i);
+                try {
+                    Field field = beanType.getRawClass().getDeclaredField(fieldName);
+                    Class<?> enumType = field.getType();
+                    Method method = enumType.getDeclaredMethod("valueOf", String.class);
+                    return (ViewEnum)method.invoke(null, name);
 
-        } catch (NoSuchFieldException e) {
-            Logger.error(String.format("反序列化枚举的时候,%s类里没有找到%s属性", beanType.getRawClass().getName(), fieldName));
-            return null;
+                } catch (NoSuchFieldException | NoSuchMethodException | IllegalArgumentException ignore) {
+                }
+            }
+
         } catch (Exception e) {
             Logger.error("反序列化枚举失败", e);
-            return null;
         }
+
+        Logger.error(String.format("反序列化枚举的时候,类列表: %s 里没有找到%s属性",
+                beanTypeList.stream().map(x -> x.getRawClass().getName()).collect(Collectors.toList()).toString(),
+                fieldName));
+
+        return null;
 
     }
 

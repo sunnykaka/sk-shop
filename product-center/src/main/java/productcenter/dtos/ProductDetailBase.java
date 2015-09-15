@@ -9,8 +9,8 @@ import productcenter.constants.SKUState;
 import productcenter.models.*;
 import productcenter.services.*;
 import usercenter.models.DesignerSize;
+import usercenter.models.User;
 import usercenter.services.DesignerService;
-import usercenter.utils.SessionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -141,6 +141,7 @@ public class ProductDetailBase {
 
         private ProductDetailBase productDetailBase;
         private Integer defaultSkuId;
+        private User user;  //可能为null
 
         private ProductPictureService productPictureService = BaseGlobal.ctx.getBean(ProductPictureService.class);
         private ProductService productService = BaseGlobal.ctx.getBean(ProductService.class);
@@ -150,10 +151,11 @@ public class ProductDetailBase {
         private DesignerService designerService = BaseGlobal.ctx.getBean(DesignerService.class);
 
 
-        public static Builder newBuilder(Product product, Integer defaultSkuId) {
+        public static Builder newBuilder(Product product, Integer defaultSkuId, User user) {
             Builder builder = new Builder();
             builder.defaultSkuId = defaultSkuId;
             builder.productDetailBase = new ProductDetailBase(product);
+            builder.user = user;
             return builder;
         }
 
@@ -370,7 +372,7 @@ public class ProductDetailBase {
         public Builder buildFavorites(){
 
             productDetailBase.setFavoritesNum(productCollectService.countProductCollect(productDetailBase.product.getId()));
-            productDetailBase.setFavorites(productCollectService.isFavorites(SessionUtils.currentUser(), productDetailBase.product.getId()));
+            productDetailBase.setFavorites(productCollectService.isFavorites(user, productDetailBase.product.getId()));
 
             return this;
         }
