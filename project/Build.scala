@@ -46,8 +46,7 @@ object ApplicationBuild extends Build {
 
   lazy val app = webProject("app", appDependencies)
 
-  def webProject(name: String, dependencies: Seq[ModuleID]) = {
-    Project(name, file(name)).
+  def webProject(name: String, dependencies: Seq[ModuleID]) = Project(name, file(name)).
     enablePlugins(play.sbt.PlayJava).
     settings(Commons.settings: _*).
     settings(
@@ -61,8 +60,8 @@ object ApplicationBuild extends Build {
       unmanagedSourceDirectories in Compile += (sourceManaged in Compile).value,
       pipelineStages := Seq(digest, gzip)
     ).dependsOn(common % "test->test;compile->compile").
-    dependsOn(user).dependsOn(product).dependsOn(order)
-  }
+    dependsOn(user).dependsOn(product).dependsOn(order).dependsOn(cms)
+
 
   lazy val root = (project in file(".")).
     settings(Commons.settings: _*).
