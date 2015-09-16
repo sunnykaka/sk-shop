@@ -13,6 +13,7 @@ import views.html.activity.member;
 import views.html.activity.fashion;
 import views.html.activity.loukong;
 import views.html.activity.federico;
+import views.html.activity.louise;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -172,6 +173,39 @@ public class ActivityController extends Controller {
         }
 
         return ok(federico.render(mapName, mapPrice));
+    }
+
+    public Result louise() {
+
+        final int[] activityProductId = {387,546,541,341,345,365,369,553,537,531,373,554,407,399,547,363,557,556,539,411,532};
+
+        Map<Integer, String> mapName = new HashMap<>();
+        Map<Integer, String> mapPrice = new HashMap<>();
+        for(int productId:activityProductId){
+            Product product = productService.getProductById(productId);
+
+            if(null == product){
+                mapPrice.put(productId,null);
+                mapName.put(productId,null);
+            }else{
+                //根据判断是否是首发，当前价格要现算
+                mapName.put(productId,product.getName());
+                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                if(null == stockKeepingUnit){
+                    mapPrice.put(productId,null);
+                }else{
+                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    if(isFirstPublish) {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
+                    } else {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getMarketPrice().toString()));
+                    }
+                }
+
+            }
+        }
+
+        return ok(louise.render(mapName, mapPrice));
     }
 
     private String getPositivePrice(String str){
