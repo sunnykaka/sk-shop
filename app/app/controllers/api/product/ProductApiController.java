@@ -1,29 +1,15 @@
 package controllers.api.product;
 
 import api.response.product.ProductDetailDto;
-import api.response.user.LoginResult;
-import api.response.user.RefreshTokenResult;
 import common.exceptions.AppBusinessException;
-import common.exceptions.AppException;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
-import common.utils.ParamUtils;
 import controllers.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import play.data.Form;
 import play.mvc.Result;
 import productcenter.services.ProductService;
 import services.api.product.ProductDetailApiService;
-import services.api.user.UserApiService;
-import services.api.user.UserTokenProvider;
-import usercenter.domain.SmsSender;
-import usercenter.dtos.LoginForm;
-import usercenter.dtos.RegisterForm;
-import usercenter.services.UserService;
-import utils.Global;
-
-import java.util.Optional;
 
 @org.springframework.stereotype.Controller
 public class ProductApiController extends BaseController {
@@ -52,7 +38,7 @@ public class ProductApiController extends BaseController {
 //            }
 //        }
 
-        ProductDetailDto productDetailDto = productDetailApiService.showDetail(productId, null, currentUser());
+        ProductDetailDto productDetailDto = productDetailApiService.showDetail(productId, null, this.currentUser());
 
         return ok(JsonUtils.object2Node(productDetailDto));
     }

@@ -4,11 +4,13 @@ import common.models.utils.EntityClass;
 import common.utils.Money;
 import ordercenter.constants.BizType;
 import ordercenter.payment.alipay.AlipayUtil;
-import ordercenter.payment.constants.*;
+import ordercenter.payment.constants.PayBank;
+import ordercenter.payment.constants.PayChannel;
+import ordercenter.payment.constants.ResponseType;
+import ordercenter.payment.constants.TradeStatus;
 import ordercenter.payment.tenpay.TenpayUtils;
 import ordercenter.util.TradeSequenceUtil;
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.internal.xml.PayloadType;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -121,17 +123,20 @@ public class Trade implements EntityClass<Integer> {
 
     private Integer version;
 
+
     /**
-     * 只用于后台展示
+     * 发起交易的客户端ip地址，不是所有都有
      */
-    private String orderNo;
+    private String clientIp;
+
 
     /**
      * 交易包含的订单
      */
     private List<TradeOrder> tradeOrder;
-//TODO 构造私有化
-//    private Trade(){}
+
+     //TODO 构造私有化
+     //    private Trade(){}
 
     public static class TradeBuilder {
 
@@ -144,7 +149,7 @@ public class Trade implements EntityClass<Integer> {
          * @param payBank     支付银行
          * @return
          */
-        public static Trade createNewTrade(Money payTotalFee, BizType bizType, PayBank payBank) {
+        public static Trade createNewTrade(Money payTotalFee, BizType bizType, PayBank payBank, String clientIp) {
             Trade trade = new Trade();
             //交易号是自动生成
             trade.setTradeNo(TradeSequenceUtil.getTradeNo());
@@ -155,6 +160,7 @@ public class Trade implements EntityClass<Integer> {
             trade.setGmtCreateTime(new DateTime());
             trade.setPayTotalFee(payTotalFee);
             trade.setTradeStatus(TradeStatus.INIT.toString());//状态为新建状态
+            trade.setClientIp(clientIp);
             return trade;
         }
     }
@@ -221,7 +227,6 @@ public class Trade implements EntityClass<Integer> {
                 ", tradeGmtModifyTime=" + tradeGmtModifyTime +
                 ", gmtCreateTime=" + gmtCreateTime +
                 ", gmtModifyTime=" + gmtModifyTime +
-                ", orderNo='" + orderNo + '\'' +
                 ", payRetTotalFee='" + payRetTotalFee + '\'' +
                 ", payCurrency='" + payCurrency + '\'' +
                 '}';
@@ -238,12 +243,12 @@ public class Trade implements EntityClass<Integer> {
     }
 
     @Transient
-    public String getOrderNo() {
-        return orderNo;
+    public String getClientIp() {
+        return clientIp;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
     }
 
     @Transient

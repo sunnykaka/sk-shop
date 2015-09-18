@@ -33,7 +33,7 @@ import java.util.Map;
  * Date: 2015-08-25
  */
 @org.springframework.stereotype.Controller
-public class CartApiController extends BaseController {
+public class AppCartController extends BaseController {
 
     @Autowired
     private CartService cartService;

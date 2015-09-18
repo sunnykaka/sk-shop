@@ -66,7 +66,7 @@ public class OrderAndPayController extends Controller {
      * @return
      */
     public Result testPay() {
-        Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(1L), BizType.Order, PayBank.Alipay);
+        Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(1L), BizType.Order, PayBank.Alipay, null);
         PayRequestHandler handler = PayBank.valueOf(trade.getDefaultbank()).getPayMethod().getPayRequestHandler();
         String form = handler.forwardToPay(trade);
         return ok(orderToPay.render(form));
@@ -281,7 +281,7 @@ public class OrderAndPayController extends Controller {
              * 5.跳转去第三方支付平台付款
              */
             long totalFee = this.getPayMoneyForCent(orderList);
-            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank);
+            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, null);
 
             tradeService.submitTradeOrderProcess(trade.getTradeNo(), orderList, payMethodEnum);
 

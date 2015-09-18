@@ -2,12 +2,22 @@ package controllers.api.shop;
 
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
+import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.JsonUtils;
 import common.utils.Money;
 import controllers.BaseController;
+import controllers.api.shop.payment.AppPayRequestHandler;
+import controllers.api.shop.payment.TenAppPayRequestHandler;
+import ordercenter.constants.BizType;
+import ordercenter.constants.OrderState;
+import ordercenter.constants.TradePayType;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
+import ordercenter.models.Order;
+import ordercenter.models.Trade;
+import ordercenter.payment.constants.PayBank;
+import ordercenter.payment.constants.PayMethod;
 import ordercenter.services.CartService;
 import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
@@ -21,7 +31,6 @@ import usercenter.services.AddressService;
 import utils.secure.SecuredAction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +40,7 @@ import java.util.Map;
  * Date: 2015-08-31
  */
 @org.springframework.stereotype.Controller
-public class OrderAndPayApiController extends BaseController {
+public class AppOrderAndPayController extends BaseController {
 
     @Autowired
     private OrderService orderService;
@@ -57,7 +66,7 @@ public class OrderAndPayApiController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg) {
+    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String clientIp) { //device_info
         Logger.info("进入submitToPay方法，参数：\n"
                 + "isPromptlyPay=" + isPromptlyPay + "selItems=" + selItems + " addressId=" + addressId + " payOrg=" + payOrg);
         String curUserName = "";
@@ -69,6 +78,10 @@ public class OrderAndPayApiController extends BaseController {
 
             if (payOrg == null || payOrg.trim().length() == 0) {
                 return ok(new JsonResult(false, "没有选择支付机构！").toNode());
+            }
+
+            if (clientIp == null || clientIp.trim().length() == 0) {
+                return ok(new JsonResult(false, "客户端IP地址不能为空！").toNode());
             }
 
             User curUser = this.currentUser();
@@ -140,15 +153,75 @@ public class OrderAndPayApiController extends BaseController {
 
             //生成订单、生成配送信息
             String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
-            Map<String,String> retMap = new HashMap();
-            retMap.put("orderIds", orderIds);
-            return ok(JsonUtils.object2Node(retMap));
 
             //去支付（产生交易和支付部分没做）
+            PayBank payBank = PayBank.valueOf(payOrg);
+            PayMethod payMethodEnum = payBank.getPayMethod();
+
+            split = orderIds.split("_");
+            List<Order> orderList = new ArrayList(split.length);
+            for (int i = 0; i < split.length; i++) {
+                int id = Integer.valueOf(split[i]);
+                Order order = orderService.getOrderById(id);
+                if (order == null) {
+                    Logger.error("订单支付出现异常:订单不存在，订单id：" + id);
+                    throw new AppBusinessException(ErrorCode.Conflict, "要支付的订单不存在！");
+                }
+                long orderNo = order.getOrderNo();
+
+                if (!order.getOrderState().waitPay(TradePayType.OnLine)) {
+                    if (order.getOrderState().getName().equals(OrderState.Cancel.getName())) {
+                        Logger.error("订单支付出现异常:" + "订单(" + orderNo + ")已取消，请重新下单！");
+                        throw new AppBusinessException(ErrorCode.Conflict, "订单(" + orderNo + ")已取消，请重新下单！");
+                    } else {
+                        Logger.error("订单支付出现异常:" + "订单(" + orderNo + ")已支付，请勿重复支付！");
+                        throw new AppBusinessException(ErrorCode.Conflict, "订单(" + orderNo + ")已支付，请勿重复支付！");
+                    }
+                }
+                //更新订单
+                order.setAccountType(curUser.getAccountType());
+                order.setPayType(TradePayType.OnLine);
+                order.setPayBank(payBank);
+                order.setUpdateTime(DateUtils.current());
+                orderList.add(order);
+            }
+
+            /*
+             * 1.计算出订单总金额
+             * 2.创建交易
+             * 3.保存tradeOrder信息
+             * 4.创建trade,将交易的表单刷到页面
+             * 5.生成与支付信息，并拼接返回app使用的签名数据
+             */
+            long totalFee = this.getPayMoneyForCent(orderList);
+            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, clientIp);
+            tradeService.submitTradeOrderProcess(trade.getTradeNo(), orderList, payMethodEnum);
+
+            //现在只接入微信就这么写好了
+            AppPayRequestHandler payReq = new TenAppPayRequestHandler();
+            Map<String, String> payInfoMap = payReq.buildPayInfo(trade);
+            if(payInfoMap == null) {
+                throw new AppBusinessException(ErrorCode.Conflict, "微信预支付订单失败，请重试！");
+            }
+            return ok(JsonUtils.object2Node(payInfoMap));
         } catch (Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             throw new AppBusinessException(ErrorCode.Conflict, "生成订单失败，请联系商城客服人员！");
         }
+    }
+
+    /**
+     * 按照支付订单号列表重新计算支付总金额，单位分
+     *
+     * @param orderList
+     * @return
+     */
+    private long getPayMoneyForCent(List<Order> orderList) {
+        Money money = Money.valueOf(0);
+        for (Order order : orderList) {
+            money = money.add(order.getTotalMoney());
+        }
+        return money.getCent();
     }
 
 }

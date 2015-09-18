@@ -140,7 +140,7 @@ public class TenpayUtils {
 
     }
 
-    private static String byteArrayToHexString(byte b[]) {
+    public static String byteArrayToHexString(byte b[]) {
         StringBuilder resultSb = new StringBuilder();
         for (byte aB : b) resultSb.append(byteToHexString(aB));
         return resultSb.toString();
@@ -155,7 +155,7 @@ public class TenpayUtils {
         return hexDigits[d1] + hexDigits[d2];
     }
 
-    private static String MD5Encode(String origin, String charsetname) {
+    public static String MD5Encode(String origin, String charsetname) {
         String resultString = origin;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

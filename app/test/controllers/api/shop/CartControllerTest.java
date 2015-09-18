@@ -94,7 +94,7 @@ public class CartControllerTest extends BaseTest {
         //addSkuToCartAddNum
         Http.RequestBuilder request = new Http.RequestBuilder().
                 method(POST).
-                uri(controllers.api.shop.routes.CartApiController.addSkuToCartAddNum(sku.getSkuId(), 1).url()).
+                uri(controllers.api.shop.routes.AppCartController.addSkuToCartAddNum(sku.getSkuId(), 1).url()).
                 bodyForm(params);
         Result result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
@@ -107,7 +107,7 @@ public class CartControllerTest extends BaseTest {
         //addSkuToCartReplaceNum
         request = new Http.RequestBuilder().
                 method(POST).
-                uri(controllers.api.shop.routes.CartApiController.addSkuToCartReplaceNum(sku.getSkuId(), 1).url()).
+                uri(controllers.api.shop.routes.AppCartController.addSkuToCartReplaceNum(sku.getSkuId(), 1).url()).
                 bodyForm(params);
         result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
@@ -123,7 +123,7 @@ public class CartControllerTest extends BaseTest {
         params.put(UserTokenProvider.ACCESS_TOKEN_KEY, Lists.newArrayList(loginResult.getAccessToken()));
         Http.RequestBuilder request = new Http.RequestBuilder().
                 method(GET).
-                uri(controllers.api.shop.routes.CartApiController.getUserCartItemNum().url() + "?" + UrlUtils.buildQueryString(params));
+                uri(controllers.api.shop.routes.AppCartController.getUserCartItemNum().url() + "?" + UrlUtils.buildQueryString(params));
         Result result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
             assertThat(result.status(), is(CONFLICT));
@@ -138,7 +138,7 @@ public class CartControllerTest extends BaseTest {
         params.put(UserTokenProvider.ACCESS_TOKEN_KEY, Lists.newArrayList(loginResult.getAccessToken()));
         Http.RequestBuilder request = new Http.RequestBuilder().
                 method(GET).
-                uri(controllers.api.shop.routes.CartApiController.showCart().url() + "?" + UrlUtils.buildQueryString(params));
+                uri(controllers.api.shop.routes.AppCartController.showCart().url() + "?" + UrlUtils.buildQueryString(params));
         Result result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
             assertThat(result.status(), is(CONFLICT));
@@ -165,7 +165,7 @@ public class CartControllerTest extends BaseTest {
             params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());
             Http.RequestBuilder request = new Http.RequestBuilder().
                     method(POST).
-                    uri(controllers.api.shop.routes.CartApiController.toBilling(idSb.toString()).url()).  //toBilling("47073")
+                    uri(controllers.api.shop.routes.AppCartController.toBilling(idSb.toString()).url()).  //toBilling("47073")
                     bodyForm(params);
             Result result = routeWithExceptionHandle(request);
             if(result.status() != OK) {
@@ -184,7 +184,7 @@ public class CartControllerTest extends BaseTest {
         params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());
         Http.RequestBuilder request = new Http.RequestBuilder().
                 method(POST).
-                uri(controllers.api.shop.routes.CartApiController.toBillingByPromptlyPay(sku.getSkuId(), 1).url()).
+                uri(controllers.api.shop.routes.AppCartController.toBillingByPromptlyPay(sku.getSkuId(), 1).url()).
                 bodyForm(params);
         Result result = routeWithExceptionHandle(request);
         if(result.status() != OK) {
@@ -212,7 +212,7 @@ public class CartControllerTest extends BaseTest {
             params.put(UserTokenProvider.ACCESS_TOKEN_KEY, Lists.newArrayList(loginResult.getAccessToken()));
             Http.RequestBuilder request = new Http.RequestBuilder().
                     method(DELETE).
-                    uri(controllers.api.shop.routes.CartApiController.deleteCartItem(cartItemId).url() + "&" + UrlUtils.buildQueryString(params)); //47073
+                    uri(controllers.api.shop.routes.AppCartController.deleteCartItem(cartItemId).url() + "&" + UrlUtils.buildQueryString(params)); //47073
             Result result = routeWithExceptionHandle(request);
             assertThat(result.status(), is(NO_CONTENT));
         }
