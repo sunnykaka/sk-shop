@@ -1,5 +1,6 @@
 package api.response.user;
 
+import cmscenter.models.ThemeCollect;
 import productcenter.models.ProductCollect;
 import usercenter.models.DesignerCollect;
 
@@ -39,6 +40,20 @@ public class FavoritesDto {
         favoritesDto.setObjectName(productCollect.getProductName());
         favoritesDto.setObjectPic(productCollect.getProductPic());
         favoritesDto.setId(productCollect.getId());
+
+        return favoritesDto;
+
+    }
+
+    public static FavoritesDto build(ThemeCollect themeCollect){
+
+        if(themeCollect == null){ return null; }
+
+        FavoritesDto favoritesDto = new FavoritesDto();
+        favoritesDto.setObjectId(themeCollect.getThemeId());
+        favoritesDto.setObjectName(themeCollect.getThemeName());
+        favoritesDto.setObjectPic(themeCollect.getThemePic());
+        favoritesDto.setId(themeCollect.getId());
 
         return favoritesDto;
 

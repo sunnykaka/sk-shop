@@ -1,0 +1,125 @@
+package cmscenter.models;
+
+import common.models.utils.EntityClass;
+import common.models.utils.TableTimeData;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
+import javax.persistence.*;
+
+
+/**
+ * Created by Zhb on 2015/9/14.
+ */
+@Table(name = "appThemeContent")
+@Entity
+public class AppThemeContent implements EntityClass<Integer>,TableTimeData {
+
+    private Integer id;
+
+    private String content;
+
+    private int priority;
+
+    private int themeId;
+
+    private String type;
+
+    private Integer height;
+
+    private DateTime createDate;
+
+    private DateTime updateDate;
+
+    private String operator;
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Column(name = "content")
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Column(name = "priority")
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    @Column(name = "themeId")
+    public int getThemeId() {
+        return themeId;
+    }
+
+    public void setThemeId(int themeId) {
+        this.themeId = themeId;
+    }
+
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Column(name = "height")
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    @Column(name = "createTime")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Override
+    public DateTime getCreateDate() {
+        return createDate;
+    }
+
+    @Override
+    public void setCreateDate(DateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    @Column(name = "updateTime")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Override
+    public DateTime getUpdateDate() {
+        return updateDate;
+    }
+
+    @Override
+    public void setUpdateDate(DateTime updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    @Column(name = "operator")
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+}

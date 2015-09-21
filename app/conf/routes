@@ -45,9 +45,9 @@ GET           /address/linkage                        @controllers.api.user.Addr
 GET           /my/favorites/product/list              @controllers.api.user.ProductFavoritesApiController.list(pageNo:Int ?= 1,pageSize:Int ?= 10)
 DELETE        /my/favorites/product/del/:id           @controllers.api.user.ProductFavoritesApiController.del(id:Int)
 POST          /my/favorites/product/add               @controllers.api.user.ProductFavoritesApiController.add()
-GET           /my/favorites/designer/list             @controllers.api.user.ThemeFavoritesApiController.list(pageNo:Int ?= 1,pageSize:Int ?= 10)
-DELETE        /my/favorites/designer/del              @controllers.api.user.ThemeFavoritesApiController.del()
-POST          /my/favorites/designer/add              @controllers.api.user.ThemeFavoritesApiController.add()
+GET           /my/favorites/theme/list                @controllers.api.user.ThemeFavoritesApiController.list(pageNo:Int ?= 1,pageSize:Int ?= 10)
+DELETE        /my/favorites/theme/del/:id             @controllers.api.user.ThemeFavoritesApiController.del(id:Int)
+POST          /my/favorites/theme/add                 @controllers.api.user.ThemeFavoritesApiController.add()
 
 # recover
 POST          /recover/checkPhone                     @controllers.api.user.LoginApiController.recoverCheckPhone()
@@ -58,6 +58,12 @@ POST          /recover/pswDo                          @controllers.api.user.Logi
 GET           /my/order/list                          @controllers.api.user.MyOrderApiController.list(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET           /my/order/:id                           @controllers.api.user.MyOrderApiController.orderInfo(id:Int)
 GET           /my/order/receiving/:id                 @controllers.api.user.MyOrderApiController.orderReceiving(id:Int)
+
+# app cms
+GET           /home/pic                               @controllers.api.shop.ThemeApiController.getAppHomeList()
+GET           /home/theme/new                         @controllers.api.shop.ThemeApiController.getAppThemeHome()
+GET           /home/theme/list                        @controllers.api.shop.ThemeApiController.getAppThemeList(pageNo:Int ?= 1,pageSize:Int ?= 10)
+GET           /home/theme/:id                         @controllers.api.shop.ThemeApiController.getAppTheme(id:Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

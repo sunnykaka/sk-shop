@@ -1,6 +1,7 @@
 package api.response.user;
 
 import ordercenter.models.Logistics;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by Administrator on 2015/9/7.
@@ -15,7 +16,11 @@ public class LogisticsDto {
     /**
      * 省份
      */
-    private String linkage;
+    private String province;
+
+    private String city;
+
+    private String area;
 
     /**
      * 具体位置，到门牌号
@@ -31,10 +36,16 @@ public class LogisticsDto {
         if(null == logistics){ return null;}
 
         LogisticsDto logisticsDto = new LogisticsDto();
-        logisticsDto.setLinkage(logistics.getProvince());
         logisticsDto.setLocation(logistics.getLocation());
         logisticsDto.setMobile(logistics.getMobile());
         logisticsDto.setName(logistics.getName());
+
+        if(StringUtils.isNotEmpty(logistics.getProvince())){
+            String[] str = logistics.getProvince().split(",");
+            logisticsDto.setProvince(StringUtils.isEmpty(str[0])?"":str[0]);
+            logisticsDto.setCity(StringUtils.isEmpty(str[1])?"":str[1]);
+            logisticsDto.setArea(StringUtils.isEmpty(str[2])?"":str[2]);
+        }
 
         return logisticsDto;
     }
@@ -47,12 +58,28 @@ public class LogisticsDto {
         this.name = name;
     }
 
-    public String getLinkage() {
-        return linkage;
+    public String getProvince() {
+        return province;
     }
 
-    public void setLinkage(String linkage) {
-        this.linkage = linkage;
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getLocation() {

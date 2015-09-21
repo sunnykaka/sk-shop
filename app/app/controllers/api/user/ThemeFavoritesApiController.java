@@ -1,6 +1,10 @@
 package controllers.api.user;
 
 import api.response.user.FavoritesDto;
+import cmscenter.models.AppTheme;
+import cmscenter.models.ThemeCollect;
+import cmscenter.services.AppThemeService;
+import cmscenter.services.ThemeCollectService;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
@@ -10,14 +14,7 @@ import controllers.BaseController;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Result;
-import usercenter.constants.DesignerPictureType;
-import usercenter.models.Designer;
-import usercenter.models.DesignerCollect;
-import usercenter.models.DesignerPicture;
-import usercenter.models.User;
-import usercenter.services.DesignerCollectService;
-import usercenter.services.DesignerService;
-import usercenter.services.ThemeCollectService;
+import usercenter.models.*;
 import utils.secure.SecuredAction;
 
 import java.util.ArrayList;
@@ -32,11 +29,9 @@ import java.util.Optional;
 public class ThemeFavoritesApiController extends BaseController {
 
     @Autowired
-    private DesignerCollectService designerCollectService;
+    private AppThemeService appThemeService;
 
     @Autowired
-    private DesignerService designerService;
-
     private ThemeCollectService themeCollectService;
 
     /**
@@ -49,18 +44,17 @@ public class ThemeFavoritesApiController extends BaseController {
 
         User user = this.currentUser();
 
-        Page<DesignerCollect> page = new Page(pageNo,pageSize);
+        Page<ThemeCollect> page = new Page(pageNo,pageSize);
         Page<FavoritesDto> pageDto = new Page(pageNo,pageSize);
-        List<DesignerCollect> pageProductCollcet = designerCollectService.getDesignerCollectList(Optional.of(page), user.getId());
-        List<FavoritesDto> designerFavoritesDtos = new ArrayList<>();
-        for(DesignerCollect designerCollect:pageProductCollcet){
-            Designer designer = designerService.getDesignerById(designerCollect.getDesignerId());
-            DesignerPicture designerPicture = designerService.getDesignerPicByType(designerCollect.getDesignerId(), DesignerPictureType.ListMainPic);
-            designerCollect.setDesignerName(designer.getName());
-            designerCollect.setDesignerPic(designerPicture.getPictureUrl());
-            designerFavoritesDtos.add(FavoritesDto.build(designerCollect));
+        List<ThemeCollect> pageThemeCollect = themeCollectService.getThemeCollectList(Optional.of(page), user.getId());
+        List<FavoritesDto> themeFavoritesDtos = new ArrayList<>();
+        for(ThemeCollect themeCollect:pageThemeCollect){
+            AppTheme appTheme = appThemeService.getAppThemeById(themeCollect.getThemeId());
+            themeCollect.setThemeName(appTheme == null ? "" : appTheme.getName());
+            themeCollect.setThemePic(appTheme == null ? "" : appTheme.getPicUrl());
+            themeFavoritesDtos.add(FavoritesDto.build(themeCollect));
         }
-        pageDto.setResult(designerFavoritesDtos);
+        pageDto.setResult(themeFavoritesDtos);
 
         return ok(JsonUtils.object2Node(pageDto));
 
@@ -71,13 +65,14 @@ public class ThemeFavoritesApiController extends BaseController {
      *
      * @return
      */
-    @SecuredAction
-    public Result del() {
+    public Result del(int themeId) {
 
         User user = this.currentUser();
 
+        String deviceId = ParamUtils.getByKey(request(), "deviceId");
+
         try {
-            designerCollectService.deleteMyDesignerCollect(ParamUtils.getObjectId(request()), user.getId());
+            themeCollectService.deleteThemeCollect(themeId, user, deviceId);
         }catch (AppBusinessException e){
             throw new AppBusinessException(ErrorCode.Conflict, "删除失败");
         }
@@ -86,28 +81,30 @@ public class ThemeFavoritesApiController extends BaseController {
 
     }
 
-    @SecuredAction
     public Result add(){
 
         User user = this.currentUser();
 
-        int designerId = ParamUtils.getObjectId(request());
+        int themeId = ParamUtils.getObjectId(request());
+        String deviceId = ParamUtils.getByKey(request(), "deviceId");
 
-        Designer designer = designerService.getDesignerById(designerId);
-        if(null == designer){
-            throw new AppBusinessException(ErrorCode.Conflict, "该设计师不存在");
+        AppTheme appTheme = appThemeService.getAppThemeById(themeId);
+        if(null == appTheme){
+            throw new AppBusinessException(ErrorCode.Conflict, "该专题不存在");
         }
 
-        DesignerCollect oldDesignerCollect = designerCollectService.getByDesignerId(designerId,user.getId());
-        if(null != oldDesignerCollect){
-            throw new AppBusinessException(ErrorCode.Conflict, "已关注该设计师");
+        ThemeCollect themeCollect = themeCollectService.findMyThemeCollect(themeId, user, deviceId);
+        if(null != themeCollect){
+            throw new AppBusinessException(ErrorCode.Conflict, "已收藏该专题");
         }
 
-        DesignerCollect designerCollect = new DesignerCollect();
-        designerCollect.setDesignerId(designerId);
-        designerCollect.setUserId(user.getId());
-        designerCollect.setCollectTime(DateTime.now());
-        designerCollectService.createDesignerCollect(designerCollect);
+        ThemeCollect newThemeCollect = new ThemeCollect();
+        newThemeCollect.setCollectTime(DateTime.now());
+        newThemeCollect.setThemeId(themeId);
+        newThemeCollect.setDeviceId(deviceId);
+        newThemeCollect.setUserId(user == null ? 0 : user.getId());
+
+        themeCollectService.createThemeCollect(newThemeCollect);
 
         return noContent();
 

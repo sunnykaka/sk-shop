@@ -1,0 +1,147 @@
+@(appThemeDto:cmscenter.dtos.AppThemeDto)
+
+<html lang="zh-CN" dropEffect="none" class="no-js no-auth">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="renderer" content="webkit"/>
+        <title>尚客-@appThemeDto.getName</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <link rel="stylesheet" href="@routes.Assets.versioned("css/appcss.css")"/>
+
+    </head>
+
+    <body class="zhi ">
+        <div class="zg-wrap zu-main clearfix">
+            <div class="zu-main-content">
+                <div class="zu-main-content-inner">
+                    <div class="openinapp-instruction-page" data-open="true">
+                        <div class="inner">
+                            <p class="instruction-title"> 请按照下面的示意图操作打开 <br> 尚客 App </p>
+                            <div class="instructions clearfix">
+                                <div class="instr-left">
+                                    <img src="@routes.Assets.versioned("images/app/android_more.png")"
+                                    srcset="@routes.Assets.versioned("images/app/ios_more@3x.png")"
+                                    class="icon-instruction" width="72" height="72">
+                                    <p class="step">
+                                        第 1 步
+                                    </p>
+                                    <p class="step-content">
+                                        点击该页右上角<br>的「更多」按钮
+                                    </p>
+
+                                </div>
+                                <img src="@routes.Assets.versioned("images/app/android_arrow.png")"
+                                srcset="@routes.Assets.versioned("images/app/ios_arrow@3x.png")" class="icon-middle"
+                                width="11" height="18">
+                                <div class="instr-right">
+                                    <img src="@routes.Assets.versioned("images/app/android_web.png")"
+                                    srcset="@routes.Assets.versioned("images/app/ios_safari@3x.png")"
+                                    class="icon-instruction" width="72" height="72">
+                                    <p class="step">
+                                        第 2 步
+                                    </p>
+                                    <p class="step-content">
+                                        选择在浏览器中打开
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="help-modal modal-footer-banner" style='display:none'>
+            <a href="javascript:void(null)" class="close">
+                <img src="@routes.Assets.versioned("images/app/close.png")" alt="Close"/>
+            </a>
+            <a href="" class="avatar">
+                <img src="@routes.Assets.versioned("images/app/avatar.png")" alt="1"/>
+            </a>
+
+            <div id="floating-banner" class="goto-download">
+                <span>尚客，时尚的极客</span>
+            </div>
+            <a href="/app" class="btn-success goto-download">快来下载吧</a>
+        </div>
+
+        <div class="container" style="display: none;">
+            <div class="top">
+                <a href="/apps"><img src="@routes.Assets.versioned("images/app/logo.png")" alt="Logo"/></a>
+                <a href="http://itunes.apple.com/cn/app/wen-yi-sheng/id551521341?mt=8" id="openApp" >
+                    <img class="app-android goto-app-button" src="@routes.Assets.versioned("images/app/open-btn.png")" alt="Goto app"/>
+                </a>
+            </div>
+                <!-- 标题-->
+            <h1 class="title">
+            @appThemeDto.getName
+            </h1>
+                <!-- 内容-->
+            <div class="content">
+
+            @for(themeContent <- appThemeDto.getAppThemeContentDtoList){
+                @if(themeContent.getType == "FONT"){
+                    <p>@themeContent.getContent</p>
+                }
+                @if(themeContent.getType == "PIC"){
+                    <img src="@themeContent.getContent" alt="" />
+                }
+            }
+            </div>
+                <!-- 底栏-->
+            <div class="author-info">
+            </div>
+        </div>
+
+        <script src="@routes.Assets.versioned("js/zepto.js")"></script>
+
+        <script type='text/javascript'>
+    var Maleskine = {
+        removeFooterBanner: function () {
+            $(".modal-footer-banner").remove();
+        }
+    };
+    //判断是否为微信游览器
+    function is_weixn(){
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    $(document).ready(function () {
+
+        $('#openApp').on('tap',function(){
+            window.location.href =  "http://itunes.apple.com/cn/app/wen-yi-sheng/id551521341?mt=8";
+            var ifr = document.createElement('iframe');
+            ifr.src = 'fashion://@appThemeDto.getId';
+            ifr.style.display = 'none';
+            document.body.appendChild(ifr);
+            window.setTimeout(function(){
+                document.body.removeChild(ifr);
+            },3000)
+        });
+
+
+
+        if(!is_weixn()){
+            $('#openApp').trigger('tap');
+            $('.zu-main').hide();
+            $('.modal-footer-banner').hide();
+            $('.container').hide();
+        }
+
+        $(".modal-footer-banner .close").on("tap", function () {
+            Maleskine.removeFooterBanner();
+        });
+
+        $('.goto-download').on('tap', function () {
+
+        });
+    });
+</script>
+    </body>
+</html>

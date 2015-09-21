@@ -25,7 +25,8 @@ object Dependencies {
     "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" exclude("junit", "junit"),
     "com.fasterxml.jackson.datatype" % "jackson-datatype-hibernate4" % "2.5.4",
     "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.5.4",
-    "com.typesafe.play" %% "play-mailer" % "3.0.1"
+    "com.typesafe.play" %% "play-mailer" % "3.0.1",
+    "com.github.fernandospr" % "javapns-jdk16" % "2.3"
   )
 
   val playDependencies = Seq(

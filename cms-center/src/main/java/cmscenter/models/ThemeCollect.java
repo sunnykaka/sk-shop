@@ -1,4 +1,4 @@
-package usercenter.models;
+package cmscenter.models;
 
 import common.models.utils.EntityClass;
 import common.models.utils.TableTimeData;
@@ -18,6 +18,8 @@ public class ThemeCollect implements EntityClass<Integer>,TableTimeData {
     private Integer id;
 
     private int userId;
+
+    private String deviceId;
 
     private int themeId;
 
@@ -115,6 +117,15 @@ public class ThemeCollect implements EntityClass<Integer>,TableTimeData {
 
     public void setThemeId(int themeId) {
         this.themeId = themeId;
+    }
+
+    @Column(name = "deviceId")
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     @Transient

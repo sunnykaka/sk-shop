@@ -1,0 +1,73 @@
+@(appThemeDto:cmscenter.dtos.AppThemeDto)
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>尚客-@appThemeDto.getName</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="@routes.Assets.versioned("css/appcss.css")"/>
+    </head>
+    <body class="wechat-web reader-day-mode reader-font2">
+
+        <div class="help-modal modal-footer-banner" style='display:none'>
+            <a href="javascript:void(null)" class="close">
+                <img src="@routes.Assets.versioned("images/app/close.png")" alt="Close"/>
+            </a>
+            <a href="" class="avatar">
+                <img src="@routes.Assets.versioned("images/app/avatar.png")" alt="1"/>
+            </a>
+
+            <div id="floating-banner" class="goto-download">
+                <span>尚客，时尚的极客</span>
+            </div>
+            <a href="/app" class="btn-success goto-download">快来下载吧</a>
+        </div>
+
+        <div class="container">
+            <div class="top">
+                <a href="/apps"><img src="@routes.Assets.versioned("images/app/logo.png")" alt="Logo"/></a>
+                <a href = "@controllers.app.routes.AppShowController.download(appThemeDto.getId)" >
+                    <img class="app-android goto-app-button" src="@routes.Assets.versioned("images/app/open-btn.png")" alt="Goto app"/>
+                </a>
+            </div>
+                <!-- 标题-->
+            <h1 class="title">
+                @appThemeDto.getName
+            </h1>
+                <!-- 内容-->
+            <div class="content">
+
+                @for(themeContent <- appThemeDto.getAppThemeContentDtoList){
+                    @if(themeContent.getType == "FONT"){
+                        <p>@themeContent.getContent</p>
+                    }
+                    @if(themeContent.getType == "PIC"){
+                        <img src="@themeContent.getContent" alt="" />
+                    }
+                }
+            </div>
+                <!-- 底栏-->
+            <div class="author-info">
+            </div>
+        </div>
+        <script src="@routes.Assets.versioned("js/zepto.js")"></script>
+        <script type='text/javascript'>
+    var Maleskine = {
+        removeFooterBanner: function () {
+            $(".modal-footer-banner").remove();
+        }
+    };
+    $(document).ready(function () {
+        $('.modal-footer-banner').show();
+        $(".modal-footer-banner .close").on("tap", function () {
+            Maleskine.removeFooterBanner();
+        });
+        $('.goto-download').on('tap', function () {
+
+        });
+    });
+</script>
+
+    </body>
+</html>
