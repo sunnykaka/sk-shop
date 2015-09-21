@@ -166,6 +166,7 @@ GET         /activity/fashion                                     @controllers.a
 GET         /activity/member                                      @controllers.activity.ActivityController.toMember()
 GET         /activity/loukong                                     @controllers.activity.ActivityController.loukong()
 GET         /activity/federico                                    @controllers.activity.ActivityController.federico()
+GET         /activity/louise                                      @controllers.activity.ActivityController.louise()
 
 
 # app show
