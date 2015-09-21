@@ -10,6 +10,7 @@ import productcenter.services.SkuAndStorageService;
 import services.CmsService;
 import views.html.activity.bianxingji;
 import views.html.activity.member;
+import views.html.activity.soap;
 import views.html.activity.fashion;
 import views.html.activity.loukong;
 import views.html.activity.federico;
@@ -37,8 +38,14 @@ public class ActivityController extends Controller {
      * 提交订单-选择支付方式(生成订单)
      * @return
      */
+
     public Result toMember() {
         return ok(member.render());
+    }
+
+
+    public Result toSoap() {
+        return ok(soap.render());
     }
 
     /**

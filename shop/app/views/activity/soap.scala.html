@@ -1,0 +1,92 @@
+@()
+
+@import productcenter.models.Seo;
+
+@main(new Seo("一元即刻购享法国马赛皂-尚客","一元即刻购享一块Maitre Savonitto(法国)的手工马赛皂，天然香料弥漫在有你的空气里，纯净植物油呵护你娇嫩肌肤。","马赛皂，手工皂，一元，限时抢购，尚客"))() {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+    <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
+    <script>
+        $('.get-gift').click(function () {
+            var that = this;
+            $.ajax({
+                type: "get",
+                url: '/cart/verifyPromptlyPayData?skuId=658&number=1',
+                async: false,
+                dataType: 'json',
+                data: {skuId: 2246, number: 1},
+                cache: false,
+                success: function (data) {
+                    if (data.result) {
+                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=658&number=1';
+                    } else {
+                        if (data.message == 'Credentials required') {
+                            createLoginReg();
+                        }
+                        if(data.data == "addForbid"){
+                            $.dialog({
+                                title: '提示',
+                                lock: true,
+                                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
+                                width: 500,
+                                height: 248,
+                                padding: "20",
+                                btn: {
+                                    ok : {
+                                        val : '关闭',
+                                        type : 'red'
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+
+
+        });
+    </script>
+} {
+    <style>
+        .soap{position: relative;margin: 0 auto 50px;height: 606px;overflow: hidden;}
+        .header-top{position:absolute;width: 100%;height: 606px;background: url('@routes.Assets.versioned("images/activity/soap/head-top.jpg")');background-position: 50% 50%;text-align:center;}
+        .soap-floor{width: 1200px;margin: 0 auto;}
+        .soap-floor-2{}
+        .soap-floor-5{position: relative;}
+        .soap-floor-5 .get-gift{
+            position: absolute;width:186px;height:55px;line-height:55px;top: 365px;left: 507px;font-size: 30px;color: #fff;cursor: pointer;
+            text-align: center;background: url('@routes.Assets.versioned("images/activity/soap/btn.jpg")') no-repeat;
+        }
+    </style>
+    <!--soap-->
+    <div class="soap">
+        <div class="header-top" title="马赛皂"></div>
+    </div>
+    <!--soap-floor-1-->
+    <div class="soap-floor soap-floor-1">
+        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/soap/floor-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" width="1200" height="1270" alt="马赛皂"/>
+    </div>
+    <!--end soap-floor-1-->
+    <!--soap-floor-2-->
+    <div class="soap-floor soap-floor-2">
+        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/soap/floor-2.jpg")" src="@routes.Assets.versioned("images/grey.gif")" width="1200" height="1145" alt="马赛皂"/>
+    </div>
+    <!--end soap-floor-2-->
+    <!--soap-floor-3-->
+    <div class="soap-floor soap-floor-3">
+        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/soap/floor-3.jpg")" src="@routes.Assets.versioned("images/grey.gif")" width="1200" height="1495" alt="马赛皂"/>
+    </div>
+    <!--end soap-floor-3-->
+    <!--soap-floor-4-->
+    <div class="soap-floor soap-floor-4">
+        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/soap/floor-4.jpg")" src="@routes.Assets.versioned("images/grey.gif")" width="1200" height="641" alt="马赛皂"/>
+    </div>
+    <!--end soap-floor-4-->
+    <!--soap-floor-5-->
+    <div class="soap-floor soap-floor-5">
+        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/soap/floor-5.jpg")" src="@routes.Assets.versioned("images/grey.gif")" width="1200" height="806" alt="马赛皂"/>
+        <span class="get-gift"></span>
+    </div>
+    <!--end soap-floor-5-->
+    <!--end soap-->
+}

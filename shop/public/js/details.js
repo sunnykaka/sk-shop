@@ -31,7 +31,7 @@ $(function () {
         var aIndex = $('.imgIndex a'),len = aIndex.size();
         var index =  aIndex.index($('.imgIndex .active'));
         index--;
-        index<=0? index = (len-1) : index;
+        index<0? index = (len-1) : index;
         invoke(index);
     });
 
