@@ -27,7 +27,12 @@ FG.tip = function (ele, id, msg, x, y, timer) {
         };
 
     if (getId.length > 0) {
-        getId.hide();
+        getId.remove();
+        
+        getId = $("<div>" + msg + "</div>")
+            .attr("id", id)
+            .addClass("com_tip");
+        $("body").append(getId);
     } else {
         getId = $("<div>" + msg + "</div>")
             .attr("id", id)
