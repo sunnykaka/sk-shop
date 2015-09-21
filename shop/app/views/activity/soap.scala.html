@@ -11,14 +11,14 @@
             var that = this;
             $.ajax({
                 type: "get",
-                url: '/cart/verifyPromptlyPayData?skuId=658&number=1',
+                url: '/cart/verifyPromptlyPayData?skuId=2957&number=1',
                 async: false,
                 dataType: 'json',
                 data: {skuId: 2246, number: 1},
                 cache: false,
                 success: function (data) {
                     if (data.result) {
-                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=658&number=1';
+                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=2957&number=1';
                     } else {
                         if (data.message == 'Credentials required') {
                             createLoginReg();
