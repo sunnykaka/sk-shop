@@ -68,6 +68,9 @@ public class OrderPayCallBackAppController extends BaseController {
                     }
                 }
             }
+        } catch (AppBusinessException e) {
+            Logger.error("-----------检查支付情况出现异常，其订单交易号：" + tradeNo, e);
+            throw e;
         } catch (Exception e) {
             Logger.error("-----------检查支付情况出现异常，其订单交易号：" + tradeNo, e);
             throw new AppBusinessException(ErrorCode.Conflict, "检查支付情况出现异常，请联系商城客服人员！");
