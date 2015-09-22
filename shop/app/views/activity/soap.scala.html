@@ -25,14 +25,14 @@
                         }
                         if(data.data == "addForbid"){
                             if(data.message =='已售罄'){
-                                data.message = "上午10:00准时开抢";
+                                data.message = "每天上午10:00准时开抢<br/>如抢完请隔天上午再约哟<br/>活动时间:2015.9.21-2015.9.25";
                             }
                             $.dialog({
                                 title: '提示',
                                 lock: true,
                                 content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
                                 width: 500,
-                                height: 248,
+                                height: 288,
                                 padding: "20",
                                 btn: {
                                     ok : {
