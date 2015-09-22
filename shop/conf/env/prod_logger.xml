@@ -42,27 +42,68 @@
     </appender>
 
 
-    <logger name="play" level="INFO" />
-    <logger name="application" level="DEBUG" />
+    <appender name="alipayTrade_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/home/admin/log/sk/alipayTrade.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Daily rollover with compression -->
+            <fileNamePattern>/home/admin/log/sk/alipayTrade-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %C{0} in %thread %n%message%n%xException%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="tenpayTrade_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/home/admin/log/sk/tenpayTrade.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Daily rollover with compression -->
+            <fileNamePattern>/home/admin/log/sk/tenpayTrade-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %C{0} in %thread %n%message%n%xException%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="play" level="INFO"/>
+    <logger name="application" level="DEBUG"/>
 
     <!-- additivity=false ensures access log data only goes to the access log -->
     <logger name="access" level="INFO" additivity="false">
-        <appender-ref ref="ACCESS_FILE" />
+        <appender-ref ref="ACCESS_FILE"/>
     </logger>
 
     <logger name="ordercenter.payment" level="INFO">
-        <appender-ref ref="TRADE_FILE" />
+        <appender-ref ref="TRADE_FILE"/>
     </logger>
     <logger name="controllers.shop.OrderAndPayController" level="INFO">
-        <appender-ref ref="TRADE_FILE" />
+        <appender-ref ref="TRADE_FILE"/>
     </logger>
     <logger name="ordercenter.services.OrderPayCallbackProcess" level="INFO">
-        <appender-ref ref="TRADE_FILE" />
+        <appender-ref ref="TRADE_FILE"/>
+    </logger>
+
+
+    <!-- 财付通的交易日志 -->
+    <logger name="tenpayTrade" level="INFO">
+        <appender-ref ref="tenpayTrade_file"/>
+    </logger>
+
+    <!-- 支付宝的交易日志 -->
+    <logger name="alipayTrade" level="INFO">
+        <appender-ref ref="alipayTrade_file"/>
+    </logger>
+
+    <logger name="TradeReturn" level="INFO">
+        <appender-ref ref="TRADE_FILE"/>
     </logger>
 
     <root level="INFO">
         <appender-ref ref="FILE"/>
-        <appender-ref ref="TRADE_FILE"/>
     </root>
 
 </configuration>
