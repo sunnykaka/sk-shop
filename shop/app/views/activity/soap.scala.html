@@ -24,6 +24,9 @@
                             createLoginReg();
                         }
                         if(data.data == "addForbid"){
+                            if(data.message =='已售罄'){
+                                data.message = "上午10:00准时开抢";
+                            }
                             $.dialog({
                                 title: '提示',
                                 lock: true,
