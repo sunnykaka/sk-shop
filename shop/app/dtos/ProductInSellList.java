@@ -4,6 +4,7 @@ import common.utils.Money;
 import models.CmsExhibition;
 import models.ExhibitionStatus;
 import productcenter.constants.SKUState;
+import productcenter.constants.SaleStatus;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 import productcenter.models.StockKeepingUnit;
@@ -104,7 +105,7 @@ public class ProductInSellList {
             this.productInSellList = new ProductInSellList();
             this.productId = product.getId();
             this.productInSellList.product = product;
-            buildPicture().buildPriceAndStatus();
+            buildPicture().buildPriceAndStatus(product);
             return productInSellList;
         }
 
@@ -125,17 +126,17 @@ public class ProductInSellList {
          *
          * @return
          */
-        protected Builder buildPriceAndStatus() {
+        protected Builder buildPriceAndStatus(Product product) {
 
             /**
              * 读取商品的状态
              */
-            Optional<CmsExhibition> exhibition = cmsService.findExhibitionWithProdId(this.productId);
-            ExhibitionStatus status = ExhibitionStatus.OVER; //默认是正常售卖
-            if (exhibition.isPresent()) {
-                status = exhibition.get().getStatus();
-            }
-            this.productInSellList.status = status.toString();
+//            Optional<CmsExhibition> exhibition = cmsService.findExhibitionWithProdId(this.productId);
+//            ExhibitionStatus status = ExhibitionStatus.OVER; //默认是正常售卖
+//            if (exhibition.isPresent()) {
+//                status = exhibition.get().getStatus();
+//            }
+            this.productInSellList.status = product.getSaleStatus();
 
             /**
              * 取最便宜的的SKU
@@ -145,7 +146,7 @@ public class ProductInSellList {
             /**
              * 首发就读首发价，其余状态都读正常售卖价
              */
-            if (status.equals(ExhibitionStatus.SELLING)) {
+            if (product.getSaleStatus().equals(SaleStatus.FIRSTSELL)) {
                 this.productInSellList.price = mostCheapSku.getPrice();
             } else {
                 this.productInSellList.price = mostCheapSku.getMarketPrice();

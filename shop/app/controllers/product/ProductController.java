@@ -49,11 +49,12 @@ public class ProductController extends Controller {
      * @param navId
      * @return
      */
-    public Result list(int pageNo, int navId,int st) {
+    public Result list(int pageNo, int navId,int st,String status) {
         Page<Product> page = new Page(pageNo, 12);
         ProductQueryVO queryVO = new ProductQueryVO();
         queryVO.setNavigateId(navId);
         queryVO.setSt(st);
+        queryVO.setSaleStatus(status);
         List<Product> products = productListService.productList(Optional.of(page), queryVO);
 
 

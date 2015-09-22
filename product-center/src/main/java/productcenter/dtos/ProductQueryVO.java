@@ -15,6 +15,19 @@ public class ProductQueryVO {
      */
     private Integer st;
 
+    /**
+     * 销售状态
+     */
+    private String saleStatus;
+
+
+    public String getSaleStatus() {
+        return saleStatus;
+    }
+
+    public void setSaleStatus(String saleStatus) {
+        this.saleStatus = saleStatus;
+    }
 
     public Integer getNavigateId() {
         return navigateId;

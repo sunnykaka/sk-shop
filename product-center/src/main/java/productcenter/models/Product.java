@@ -137,6 +137,8 @@ public class Product implements EntityClass<Integer>, OperableData {
      */
     private Integer designerSizeId;
 
+    private String saleStatus;
+
     /**
      * 一个商品对应一个或者多个SKU对象,一个SKU对应一个物理单品
      */
@@ -225,6 +227,17 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+
+    @Basic
+    @Column(name="saleStatus")
+    public String getSaleStatus() {
+        return saleStatus;
+    }
+
+    public void setSaleStatus(String saleStatus) {
+        this.saleStatus = saleStatus;
     }
 
     @Column(name = "productCode")

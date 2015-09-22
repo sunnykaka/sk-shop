@@ -1,6 +1,7 @@
 package productcenter.services;
 
 import common.services.GeneralDao;
+import common.utils.StringUtils;
 import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,17 @@ public class ProductListService {
         StringBuilder jpql = new StringBuilder("select o from Product o where o.isDelete= 0 and o.online = 1 ");
         Integer navId = query.getNavigateId();
         Integer storageFilter = query.getSt();
+        String saleStatus = query.getSaleStatus();
         Map<String, Object> queryParams = new HashMap<>();
+
+        /**
+         * 销售状态
+         */
+        if (!org.apache.commons.lang3.StringUtils.isBlank(saleStatus)) {
+            jpql.append(" and o.saleStatus= :saleStatus ");
+            queryParams.put("saleStatus", saleStatus);
+        }
+
         if (storageFilter != null && storageFilter == 1) {
             jpql.append("  and id in ( select distinct sk.productId from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and sk.skuState= 'NORMAL' and ss.stockQuantity >0 ) ");
         }
