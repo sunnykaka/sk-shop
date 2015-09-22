@@ -48,7 +48,8 @@ public class PayResponseHandler {
 
     //TODO 要不要从构造函数中移出？ 还有整个支付过程中异常处理，以及必要的日志记录
     public PayResponseHandler(Request request) {
-        TRADE_RETURN_LOGGER.info("第三方平台返回数据：" + request.queryString());
+        Map<String, String[]> requestParam = buildOriginParam(request);
+        TRADE_RETURN_LOGGER.info("第三方平台返回数据：" + requestParam);
 
         /**
          * 先从回调参数中取出交易号，并查出对应出交易记录
@@ -69,25 +70,46 @@ public class PayResponseHandler {
          */
         completeTrade(request);
         this.callBackHandlerClass = BizType.valueOf(tradeInfo.getBizType()).getHandlerClass();
-        this.backParams = buildParam(request);
+        this.backParams = buildParam(requestParam);
     }
 
 
     /**
-     * 从Request中提取参数信息，用于返回数据的参数校验
+     * 从Request中提取原始参数信息
      *
      * @param request
      * @return
      */
-    private Map<String, String> buildParam(Request request) {
+    private Map<String, String[]> buildOriginParam(Request request) {
+        /**
+         * BUG修复：notify请求回来的通知时，获取不到参数，原因是play框架的request获取get和post参数的API不统一，不像HttpServletRequest
+         * 1.正常return回来的请求是用get方式
+         * 2.notify通知用的是POST请求
+         */
+        Map<String, String[]> requestParams = request.queryString();
+        if (requestParams == null || requestParams.size() == 0) {
+            if ("POST".equalsIgnoreCase(request.method())) {
+                requestParams = request.body().asFormUrlEncoded();
+            }
+        }
+        return requestParams;
+    }
+
+
+    /**
+     * 将原始参数按不同的支付渠道组合
+     *
+     * @param requestParams
+     * @return
+     */
+    private Map<String, String> buildParam(Map<String, String[]> requestParams) {
 
         Map<String, String> params = new HashMap<String, String>();
-        Map requestParams = request.queryString();
 
         //获取支付宝GET过来反馈信息
         for (Object oName : requestParams.keySet()) {
             String name = (String) oName;
-            String[] values = (String[]) requestParams.get(name);
+            String[] values = requestParams.get(name);
             String valueStr = "";
             /**
              * 只处理了支付宝和非支付宝（目前是财付通）的情况，
