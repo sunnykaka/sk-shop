@@ -28,8 +28,8 @@ POST          /app/cart/toBillingByPromptlyPay        @controllers.api.shop.AppC
 
 #支付
 POST          /app/pay/submitToPay                    @controllers.api.shop.AppOrderAndPayController.submitToPay(isPromptlyPay:Boolean, selItems:String, addressId:Int, payOrg:String, clientIp:String)
-GET           /app/pay/payNotify                      @controllers.api.shop.OrderPayCallBackAppController.payNotify
-POST          /app/pay/payNotify                      @controllers.api.shop.OrderPayCallBackAppController.payNotify
+GET           /app/pay/weiXinPayNotify                @controllers.api.shop.OrderPayCallBackAppController.weiXinPayNotify
+POST          /app/pay/weiXinPayNotify                @controllers.api.shop.OrderPayCallBackAppController.weiXinPayNotify
 POST          /app/pay/checkPayState                  @controllers.api.shop.OrderPayCallBackAppController.checkPayState(tradeNo:String)
 
 # 我的地址

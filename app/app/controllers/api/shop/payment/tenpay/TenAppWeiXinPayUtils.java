@@ -1,4 +1,4 @@
-package controllers.api.shop.payment;
+package controllers.api.shop.payment.tenpay;
 
 import ordercenter.models.Trade;
 import ordercenter.payment.tenpay.TenpayUtils;
@@ -21,7 +21,7 @@ import java.util.*;
  * @version 1.0
  * @since 15-09-07
  */
-public class AppTenpayUtils {
+public class TenAppWeiXinPayUtils {
 
     public static final String PAY_GATEWAY = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
@@ -45,31 +45,6 @@ public class AppTenpayUtils {
         }
     }
 
-    public static void main(String[] args) {
-        SortedMap<String, String> params = new TreeMap<String, String>();
-        params.put("appid","wx56f8a533542cb7d7");
-        params.put("bank_type","CFT");
-        params.put("cash_fee","1");
-        params.put("fee_type","CNY");
-
-        params.put("is_subscribe","N");
-        params.put("mch_id","1265042301");
-        params.put("nonce_str","cfe8504bda37b575c70ee1a8276f3486");
-        params.put("openid", "oHUz9v7_spkO8QnuGkn77CLn8KJo");
-
-
-        params.put("out_trade_no", "144281442213810798");
-        params.put("result_code", "SUCCESS");
-        params.put("return_code", "SUCCESS");
-        params.put("time_end", "20150914145721");
-        params.put("total_fee", "1");
-        params.put("trade_type", "APP");
-        params.put("transaction_id", "1001290291201509140877435712");
-
-
-        System.out.println("--------sign----------: " + buildSign(params));
-    }
-
     public static String buildSign(Map<String, String> params) {
         StringBuilder sb = new StringBuilder();
         Set es = params.entrySet();
@@ -82,7 +57,7 @@ public class AppTenpayUtils {
                 sb.append(k + "=" + v + "&");
             }
         }
-        sb.append("key=" + AppTenpayUtils.KEY);
+        sb.append("key=" + TenAppWeiXinPayUtils.KEY);
         Logger.info("-----------key:" + sb.toString());
         return TenpayUtils.MD5Encode(sb.toString(), null).toUpperCase();
     }
@@ -110,7 +85,7 @@ public class AppTenpayUtils {
     public static Map<String,String> buildAppSign(Map<String,String> xmlMap) {
         SortedMap<String, String> params = new TreeMap<String, String>();
         params.put("appid",xmlMap.get("appid"));
-        params.put("noncestr",AppTenpayUtils.genNonceStr());
+        params.put("noncestr", TenAppWeiXinPayUtils.genNonceStr());
         params.put("package", "Sign=WXPay");
         params.put("partnerid", xmlMap.get("mch_id"));
         params.put("prepayid", xmlMap.get("prepay_id"));
@@ -204,18 +179,18 @@ public class AppTenpayUtils {
     public static Map<String, String> searchPayResult(Trade trade) {
         Map<String, String> param = new TreeMap();
         //公众账号ID
-        param.put("appid", AppTenpayUtils.APPID);
+        param.put("appid", TenAppWeiXinPayUtils.APPID);
         // 商户号
-        param.put("mch_id", AppTenpayUtils.MCH_ID);
+        param.put("mch_id", TenAppWeiXinPayUtils.MCH_ID);
 
         param.put("transaction_id", trade.getOuterTradeNo());
 
         //随机字符串
-        param.put("nonce_str", AppTenpayUtils.genNonceStr());
+        param.put("nonce_str", TenAppWeiXinPayUtils.genNonceStr());
 
-        param.put("sign", AppTenpayUtils.buildSign(param));
+        param.put("sign", TenAppWeiXinPayUtils.buildSign(param));
 
-        String paramStr = AppTenpayUtils.map2Xml(param); //xml字符
+        String paramStr = TenAppWeiXinPayUtils.map2Xml(param); //xml字符
 
         String url = String.format("https://api.mch.weixin.qq.com/pay/orderquery");
 
@@ -224,11 +199,11 @@ public class AppTenpayUtils {
         String content = new String(buf);
         Logger.info("查询订单支付返回内容: " + content);
 
-        Map<String,String> xmlMap= AppTenpayUtils.xml2map(content);
+        Map<String,String> xmlMap= TenAppWeiXinPayUtils.xml2map(content);
         if("SUCCESS".equalsIgnoreCase(xmlMap.get("return_code"))
                 &&  "SUCCESS".equalsIgnoreCase(xmlMap.get("result_code"))) {
             //签名验证
-            if(AppTenpayUtils.verify(xmlMap)) {
+            if(TenAppWeiXinPayUtils.verify(xmlMap)) {
                 return xmlMap;
             } else {
                 return null;
@@ -238,6 +213,29 @@ public class AppTenpayUtils {
             Logger.info("错误代码描述:" + xmlMap.get("err_code_des"));
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        SortedMap<String, String> params = new TreeMap<String, String>();
+        params.put("appid","wx56f8a533542cb7d7");
+        params.put("bank_type","CFT");
+        params.put("cash_fee","1");
+        params.put("fee_type","CNY");
+
+        params.put("is_subscribe","N");
+        params.put("mch_id","1265042301");
+        params.put("nonce_str","cfe8504bda37b575c70ee1a8276f3486");
+        params.put("openid", "oHUz9v7_spkO8QnuGkn77CLn8KJo");
+
+        params.put("out_trade_no", "144281442213810798");
+        params.put("result_code", "SUCCESS");
+        params.put("return_code", "SUCCESS");
+        params.put("time_end", "20150914145721");
+        params.put("total_fee", "1");
+        params.put("trade_type", "APP");
+        params.put("transaction_id", "1001290291201509140877435712");
+
+        System.out.println("--------sign----------: " + buildSign(params));
     }
 
 }
