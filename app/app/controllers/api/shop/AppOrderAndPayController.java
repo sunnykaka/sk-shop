@@ -8,7 +8,7 @@ import common.utils.JsonUtils;
 import common.utils.Money;
 import controllers.BaseController;
 import controllers.api.shop.payment.AppPayRequestHandler;
-import controllers.api.shop.payment.TenAppPayRequestHandler;
+import controllers.api.shop.payment.tenpay.AppWeiXinPayRequestHandler;
 import ordercenter.constants.BizType;
 import ordercenter.constants.OrderState;
 import ordercenter.constants.TradePayType;
@@ -198,12 +198,24 @@ public class AppOrderAndPayController extends BaseController {
             tradeService.submitTradeOrderProcess(trade.getTradeNo(), orderList, payMethodEnum);
 
             //现在只接入微信就这么写好了
-            AppPayRequestHandler payReq = new TenAppPayRequestHandler();
+            AppPayRequestHandler payReq = null;
+
+            if("WXSM".equalsIgnoreCase(payOrg)) {
+                payReq = new AppWeiXinPayRequestHandler();
+            }
+
+            if(payReq == null) {
+                throw new AppBusinessException(ErrorCode.Conflict, "不支持此种支付类型！");
+            }
+
             Map<String, String> payInfoMap = payReq.buildPayInfo(trade);
             if(payInfoMap == null) {
                 throw new AppBusinessException(ErrorCode.Conflict, "微信预支付订单失败，请重试！");
             }
             return ok(JsonUtils.object2Node(payInfoMap));
+        } catch (AppBusinessException e) {
+            Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
+            throw e;
         } catch (Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             throw new AppBusinessException(ErrorCode.Conflict, "生成订单失败，请联系商城客服人员！");

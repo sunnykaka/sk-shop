@@ -1,4 +1,4 @@
-package controllers.api.shop.payment;
+package controllers.api.shop.payment.tenpay;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -29,6 +29,11 @@ import java.net.UnknownHostException;
 import java.security.*;
 import java.security.cert.X509Certificate;
 
+/**
+ * 做IOS app微信支付时封装的，如果未来在其它地方使用它需要修改请一定要保证微信支付不出现问题
+ * User: lidujun
+ * Date: 2015-09-22
+ */
 public class TenPayHttpClientUtil {
 
 	public static byte[] httpPost(String url, String entity) {
