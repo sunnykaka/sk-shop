@@ -3,6 +3,7 @@ package ordercenter.models;
 import common.models.utils.EntityClass;
 import common.utils.DateUtils;
 import common.utils.Money;
+import ordercenter.constants.Client;
 import ordercenter.constants.TradePayType;
 import ordercenter.constants.OrderState;
 import ordercenter.payment.constants.PayBank;
@@ -225,6 +226,11 @@ public class Order implements EntityClass<Integer>, Cloneable {
      */
     private boolean sendPayRemind = false;
 
+    /**
+     * 客户端，默认是浏览器
+     */
+    private Client client = Client.Browser;
+
     @Override
     public String toString() {
         return "Order{" +
@@ -311,8 +317,6 @@ public class Order implements EntityClass<Integer>, Cloneable {
         this.storageId = storageId;
     }
 
-
-
     @Transient
     public String getStorageName() {
         return storageName;
@@ -321,8 +325,6 @@ public class Order implements EntityClass<Integer>, Cloneable {
     public void setStorageName(String storageName) {
         this.storageName = storageName;
     }
-
-
 
     @Column(name = "customerId")
     @Basic
@@ -658,5 +660,15 @@ public class Order implements EntityClass<Integer>, Cloneable {
 
     public void setSendPayRemind(boolean sendPayRemind) {
         this.sendPayRemind = sendPayRemind;
+    }
+
+    @Column(name = "client")
+    @Enumerated(EnumType.STRING)
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
