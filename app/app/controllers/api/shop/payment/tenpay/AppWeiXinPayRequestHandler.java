@@ -1,7 +1,8 @@
-package controllers.api.shop.payment;
+package controllers.api.shop.payment.tenpay;
 
 
 import common.utils.play.BaseGlobal;
+import controllers.api.shop.payment.AppPayRequestHandler;
 import ordercenter.models.Trade;
 import ordercenter.services.TradeService;
 import org.springframework.util.Assert;
@@ -15,7 +16,12 @@ import java.util.TreeMap;
  * User: lidujun
  * Date: 2015-09-07
  */
-public class TenAppPayRequestHandler extends AppPayRequestHandler {
+public class AppWeiXinPayRequestHandler extends AppPayRequestHandler {
+
+    /**
+     * 默认的notify url
+     */
+    private String DEFAULT_NOTIFY_URL_KEY = "payment.weiXinnotifyUrl";
 
     /**
      * 根据交易信息构建支付信息的map
@@ -33,7 +39,7 @@ public class TenAppPayRequestHandler extends AppPayRequestHandler {
         TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
         tradeService.createOrUpdateTrade(trade);
 
-        String paramStr = AppTenpayUtils.map2Xml(payParams); //xml字符
+        String paramStr = TenAppWeiXinPayUtils.map2Xml(payParams); //xml字符
 
         String url = String.format(getPaymentURL());
 
@@ -42,12 +48,12 @@ public class TenAppPayRequestHandler extends AppPayRequestHandler {
         String content = new String(buf);
         Logger.info("预支付返回内容: " + content);
 
-        Map<String,String> xmlMap= AppTenpayUtils.xml2map(content);
+        Map<String,String> xmlMap= TenAppWeiXinPayUtils.xml2map(content);
         if(xmlMap != null &&  "SUCCESS".equalsIgnoreCase(xmlMap.get("return_code"))
                 &&  "SUCCESS".equalsIgnoreCase(xmlMap.get("result_code"))) {
             //签名验证
-            if(AppTenpayUtils.verify(xmlMap)) {
-                Map retMap = AppTenpayUtils.buildAppSign(xmlMap);
+            if(TenAppWeiXinPayUtils.verify(xmlMap)) {
+                Map retMap = TenAppWeiXinPayUtils.buildAppSign(xmlMap);
                 retMap.put("out_trade_no", trade.getTradeNo());
                 return retMap;
             } else {
@@ -59,22 +65,22 @@ public class TenAppPayRequestHandler extends AppPayRequestHandler {
 
     @Override
     protected String getPaymentURL() {
-        return AppTenpayUtils.PAY_GATEWAY;
+        return TenAppWeiXinPayUtils.PAY_GATEWAY;
     }
 
     @Override
     protected void doSign(Map<String, String> params) {
         //签名结果与签名方式加入请求提交参数组中
-        params.put("sign", AppTenpayUtils.buildSign(params));
+        params.put("sign", TenAppWeiXinPayUtils.buildSign(params));
     }
 
     @Override
     protected Map<String, String> buildPayParam(Trade trade) {
         Map<String, String> param = new TreeMap();
         //公众账号ID
-        param.put("appid", AppTenpayUtils.APPID);
+        param.put("appid", TenAppWeiXinPayUtils.APPID);
         // 商户号
-        param.put("mch_id", AppTenpayUtils.MCH_ID);
+        param.put("mch_id", TenAppWeiXinPayUtils.MCH_ID);
 
         //商客交易号
         String out_trade_no = trade.getTradeNo();
@@ -100,7 +106,7 @@ public class TenAppPayRequestHandler extends AppPayRequestHandler {
         param.put("trade_type", "APP");
 
         //随机字符串
-        param.put("nonce_str", AppTenpayUtils.genNonceStr());
+        param.put("nonce_str", TenAppWeiXinPayUtils.genNonceStr());
 
         //notify处理的Url
         String notifyUrl = cfg.getString(DEFAULT_NOTIFY_URL_KEY);

@@ -1,0 +1,348 @@
+@(mapName:Map[Integer,String],mapPrice:Map[Integer,String])
+
+@import productcenter.models.Seo;
+
+@main(new Seo("Louise Damas：用浪漫寻觅小确幸","精致细腻的轮廓来打动内心，首饰细节设计包含着对生活的点点滴滴的热爱。","Louise Damas，纯手工首饰，独立设计师，文艺，尚客"))() {
+
+} {
+    <style>
+    .louise-activity{}
+    .federico-activity h2{font-size: 18px;}
+    .louise-activity-header{position: relative;margin: 0 auto 30px;height: 600px;overflow: hidden;}
+    .louise-activity-header-top{position:absolute;width: 100%;height: 600px;background: url('@routes.Assets.versioned("images/activity/Louise/header-top.jpg")');background-position: 50% 50%;text-align:center;}
+
+    /*brand-info*/
+    .brand-intro h2{width: 380px;height: 137px; margin:0 auto;background: url('@routes.Assets.versioned("images/activity/Louise/brand-intro.jpg")'); text-indent: -9999px;}
+    .brand-intro .img {width: 600px; margin: 0 auto 46px; height: 467px;
+    overflow: hidden;}
+    .brand-intro .brand-intro-con{height:1050px;width: 1200px;background: url("@routes.Assets.versioned("images/activity/Louise/brand-intro-con.jpg")") no-repeat; margin-bottom: 40px; }
+    .brand-intro .brand-intro-con h3{font-size: 18px;line-height: 18px;padding:90px 0 30px 0;text-align: center;}
+    .brand-intro .brand-intro-con p{text-align: center;line-height: 200%;margin: 0 auto 30px;}
+    .brand-intro .brand-intro-con .con-img{width: 989px;height: 468px;margin: 0 auto;overflow: hidden;}
+    .brand-intro .brand-intro-con .con-bottom{width: 989px;height: 137px;margin: 0 auto;background: url("@routes.Assets.versioned("images/activity/Louise/brand-intro-bottom.jpg")") no-repeat;}
+    .brand-intro .brand-intro-con .con-bottom p{text-align: center;padding-top: 60px;}
+
+    .floor{width: 100%;}
+    .floor-1{background: #eff0f7;padding: 56px 0;}
+    .floor-1 .left-pro,.floor-1 .right-pro{width: 440px; float: left;}
+    .floor-1 .center{height: 790px;width: 260px;margin: 0 30px;float: left;background: #fff url("@routes.Assets.versioned("images/activity/Louise/floor-1-center-bg.jpg")") no-repeat 0 410px; }
+    .floor-1 .center h3,.floor-1 .center h4{font-size: 18px;line-height: 18px;color:#7a7ea4;text-align: center;padding: 10px 0;}
+    .floor-1 .center h3{padding-top: 200px;}
+    .floor-1 .center img{display: block;padding: 16px 0;}
+    .floor-1 .center p{text-align: center;line-height: 200%;color:#7a7ea4;}
+    .floor-1 ul{}
+    .floor-1 ul li{width: 440px;overflow: hidden;height: 380px;}
+    .floor-1 ul li img{display: block;}
+    .floor-1 ul .first{margin-bottom:30px; }
+    .floor-1 ul li p{height: 50px;line-height: 50px;background:#fff;text-align: center;color: #7a7ea4;}
+    .floor-1 ul li .pro-name{padding-right: 18px;}
+
+    .floor-2{background: #fff;padding: 56px 0;}
+    .floor-2-inner ul{width: 1250px; height: 790px;overflow: hidden;}
+    .floor-2-inner li{float: left;width: 380px;height: 380px;margin-right:30px; margin-bottom: 30px;}
+    .floor-2 ul li img{display: block;}
+    .floor-2 ul li p{height: 50px;line-height: 50px;background:#fbf8f8;text-align: center;color: #b08a4e;}
+    .floor-2 ul li .pro-name{padding-right: 18px;}
+    .floor-2 ul li img{display: block;}
+
+
+    .floor-3{background: #ffeded;padding: 56px 0;}
+    .floor-3-inner ul{width: 1250px; height: 790px;overflow: hidden;}
+    .floor-3-inner li{float: left;width: 380px;height: 380px;margin-right:30px; margin-bottom: 30px;}
+    .floor-3 ul li img{display: block;}
+    .floor-3 ul li p{height: 50px;line-height: 50px;background:#fbf8f8;text-align: center;color: #d78282;}
+    .floor-3 ul .small{width: 278px;}
+    .floor-3 ul .big{width: 585px;}
+    .floor-3 ul li .pro-name{padding-right: 18px;}
+    .floor-3 ul li img{display: block;}
+
+    .floor-4{background: #fff;padding: 56px 0;}
+    .floor-4-inner ul{width: 1250px; height: 790px;overflow: hidden;}
+    .floor-4-inner li{float: left;width: 380px;height: 380px;margin-right:30px; margin-bottom: 30px;}
+    .floor-4 ul li img{display: block;}
+    .floor-4 ul li p{height: 50px;line-height: 50px;background:#fbf8f8;text-align: center;color: #d29872;}
+    .floor-4 ul .big{width: 586px;}
+    .floor-4 ul li .pro-name{padding-right: 18px;}
+    .floor-4 ul li img{display: block;}
+
+    .floor-5{background: #f5eff6;padding: 56px 0;}
+    .floor-5 .left-title{width:260px;float: left; height: 790px;background: #fff;margin-right: 30px;}
+    .floor-5 .left-title h3,.floor-5 .left-title h4{font-size: 18px;line-height: 18px;color:#927197;text-align: center;padding: 10px 0;}
+    .floor-5 .left-title h3{padding-top: 300px;}
+    .floor-5 .left-title p{text-align: center;line-height: 200%;color: #927197;}
+
+    .floor-5-inner ul{width: 910px;float: left; height: 790px;overflow: hidden;}
+    .floor-5-inner li{float: left;width: 440px;height: 380px;margin-right:30px; margin-bottom: 30px;}
+    .floor-5 ul li img{display: block;}
+    .floor-5 ul li p{height: 50px;line-height: 50px;background:#fbf8f8;text-align: center;color: #927197;}
+    .floor-5 ul li .pro-name{padding-right: 18px;}
+    .floor-5 ul li img{display: block;}
+    .floor-5-inner .noRight{margin-right: 0;}
+
+    .louise-bottom{position: relative;height: 930px;}
+    .louise-bottom img{position: absolute;top: 60px;left: 50%;margin-left: -300px;z-index: 100;}
+    .louise-bottom .text-box{position: absolute;top: 430px;width: 1170px;border: 15px solid #f1f1f1;left:50%;margin-left: -600px;text-align: center;padding: 40px 0;
+    line-height: 200%;
+    }
+    .louise-bottom .back-home{position: absolute;width:200px;left:50%;margin-left:-100px;text-align:left;bottom: 80px;font-size: 14px;line-height: 160%;}
+    .louise-bottom .back-home a{display:block;padding-left: 50px;background: url("@routes.Assets.versioned("images/activity/Louise/back-home.jpg")") no-repeat 0 center;}
+    .louise-bottom .back-home a:hover{color: #fd2049;}
+    </style>
+    <!--louise-->
+    <div class="louise-activity">
+        <div class="louise-activity-header">
+            <div class="louise-activity-header-top" title="酷感，硬朗，一种新式的果敢风采"></div>
+        </div>
+            <!-- brand intro-->
+        <div class="brand-intro width1200">
+            <h2>品牌简介</h2>
+            <div class="img">
+                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/brand-intro-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="600" height="467"/>
+            </div>
+            <div class="brand-intro-con">
+                <h3>用浪漫寻觅小确幸</h3>
+                <p>
+                    巴黎女年轻设计师 Louise Damas，<br/>
+                    一个才华横溢，热爱生活，喜欢阅读，爱好文艺的女青年。<br/>
+                    自从爱上首饰之后，便开启了浪漫且文艺之旅。<br/>
+                    从Lolita 到 Phèdre，再到 Célimène 的文学作品中，无限的灵感与奇妙的意想<br/>
+                    使得 Louise Damas 品牌创造了一个完整的新族群——城市气质女诗人。<br/>
+                    　　　　　　　　　　　　　　　--------文学是灵感的无限源泉。
+                </p>
+                <p>
+                    没有夸张的造型，没有刺目的色彩 <br/>
+                    而是精致细腻的轮廓来打动内心，首饰细节设计包含着对生活的点点滴滴的热爱<br/>
+                    以及一种不会过于完美的亲和力。<br/>
+                    简约而时尚，华丽却不失风度。
+                </p>
+                <div class="con-img">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/brand-intro-img-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="989" height="468"/>
+                </div>
+                <div class="con-bottom">
+                    <p>
+                        金丝缠绕发丝，半宝石，珍珠，铜和水晶在 Louise Damas 的手上绽放出别样的光芒<br/>
+                        更与设计师的小宇宙交织在一起。<br/>
+                        来吧！一起去感受浪漫和文艺的细节之美！
+                    </p>
+                </div>
+            </div>
+        </div>
+            <!-- foor-1-->
+        <div class="floor floor-1">
+            <div class="floor-1-inner width1200">
+                <div class="left-pro">
+                    <ul>
+                        <li class="pro-387 first">
+                            <a href="http://www.fashiongeeker.com/product/387" target="_blank">
+                                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/387.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330"/>
+                                <p><span class="pro-name">@mapName.get(387)</span><span class="product-price">￥@mapPrice.get(387)</span></p>
+                            </a>
+                        </li>
+                        <li class="pro-546">
+                            <a href="http://www.fashiongeeker.com/product/546" target="_blank">
+                                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/546.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330"/>
+                                <p><span class="pro-name">@mapName.get(546)</span><span class="product-price">￥@mapPrice.get(546)</span></p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                    <!-- center-->
+                <div class="center">
+                    <h3>Chloé克洛伊系列</h3>
+                    <h4>点“晶”之美</h4>
+                    <img src="@routes.Assets.versioned("images/activity/Louise/floor-1-center-line.jpg")" alt="" width="260" height="15"/>
+                    <p>
+                        黄铜镀金与施华洛世奇<br/>
+                        剔透水滴型<br/>
+                        点缀微小细节的浪漫
+                    </p>
+                </div>
+                    <!-- right-->
+                <div class="right-pro">
+                    <ul>
+                        <li class="pro-541 first">
+                            <a href="http://www.fashiongeeker.com/product/541" target="_blank">
+                                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/541.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330"/>
+                                <p><span class="pro-name">@mapName.get(541)</span><span class="product-price">￥@mapPrice.get(541)</span></p>
+                            </a>
+                        </li>
+                        <li class="pro-341">
+                            <a href="http://www.fashiongeeker.com/product/341" target="_blank">
+                                <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/341.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330"/>
+                                <p><span class="pro-name">@mapName.get(341)</span><span class="product-price">￥@mapPrice.get(341)</span></p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+            <!-- floor-2-->
+        <div class="floor floor-2">
+            <div class="floor-2-inner width1200">
+                <ul>
+                    <li>
+                        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/floor-2-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="380"/>
+                    </li>
+                    <li class="pro-345">
+                        <a href="http://www.fashiongeeker.com/product/345" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/345.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(345)</span><span class="product-price">￥@mapPrice.get(345)</span></p>
+                        </a>
+                    </li>
+                    <li class="pro-365">
+                        <a href="http://www.fashiongeeker.com/product/365" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/365.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(365)</span><span class="product-price">￥@mapPrice.get(365)</span></p>
+                        </a>
+                    </li>
+                    <li class="pro-369">
+                        <a href="http://www.fashiongeeker.com/product/369" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/369.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(369)</span><span class="product-price">￥@mapPrice.get(369)</span></p>
+                        </a>
+                    </li>
+                    <li class="pro-553">
+                        <a href="http://www.fashiongeeker.com/product/553" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/553.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(553)</span><span class="product-price">￥@mapPrice.get(553)</span></p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.fashiongeeker.com/product/343" target="_blank"><img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/floor-2-2.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="380"/></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+            <!-- floor-3-->
+        <div class="floor floor-3">
+            <div class="floor-3-inner width1200">
+                <ul>
+                    <li class="pro-537">
+                        <a href="http://www.fashiongeeker.com/product/537" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/537.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(537)</span><span class="product-price">￥@mapPrice.get(537)</span></p>
+                        </a>
+                    </li>
+                    <li class="pro-531">
+                        <a href="http://www.fashiongeeker.com/product/531" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/531.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(531)</span><span class="product-price">￥@mapPrice.get(531)</span></p>
+                        </a>
+                    </li>
+                    <li class="pro-373">
+                        <a href="http://www.fashiongeeker.com/product/373" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/373.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(373)</span><span class="product-price">￥@mapPrice.get(373)</span></p>
+                        </a>
+                    </li>
+                    <li class="small pro-554">
+                        <a href="http://www.fashiongeeker.com/product/554" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/554.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="278" height="329" />
+                            <p style="width:278px;"><span class="pro-name">@mapName.get(554)</span><span class="product-price">￥@mapPrice.get(554)</span></p>
+                        </a>
+                    </li>
+                    <li class="small pro-407">
+                        <a href="http://www.fashiongeeker.com/product/407" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/407.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="278" height="329" />
+                            <p style="width:278px;"><span class="pro-name">@mapName.get(407)</span><span class="product-price">￥@mapPrice.get(407)</span></p>
+                        </a>
+                    </li>
+                    <li class="big">
+                        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/floor-3-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="585" height="380"/>
+                    </li>
+                </ul>
+            </div>
+        </div>
+            <!-- floor4-->
+        <div class="floor floor-4">
+            <div class="floor-4-inner width1200">
+                <ul>
+                    <li class="pro-399">
+                        <a href="http://www.fashiongeeker.com/product/399" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/399.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(399)</span><span class="product-price">￥@mapPrice.get(399)</span></p>
+                        </a>
+                    </li>
+                    <li >
+                        <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/floor-4-1.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="380"/>
+                    </li>
+                    <li class="pro-547">
+                        <a href="http://www.fashiongeeker.com/product/547" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/547.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="380" height="330" />
+                            <p><span class="pro-name">@mapName.get(547)</span><span class="product-price">￥@mapPrice.get(547)</span></p>
+                        </a>
+                    </li>
+                    <li class="big pro-363">
+                        <a href="http://www.fashiongeeker.com/product/363" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/363.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="586" height="330" />
+                            <p><span class="pro-name">@mapName.get(363)</span><span class="product-price">￥@mapPrice.get(363)</span></p>
+                        </a>
+                    </li>
+                    <li class="big pro-557">
+                        <a href="http://www.fashiongeeker.com/product/557" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/557.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="586" height="330" />
+                            <p><span class="pro-name">@mapName.get(557)</span><span class="product-price">￥@mapPrice.get(557)</span></p>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+            <!-- floor5-->
+        <div class="floor floor-5">
+            <div class="floor-5-inner width1200">
+                <div class="left-title">
+                    <h3>Paquita帕基塔系列</h3>
+                    <h4>重复之尚</h4>
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/floor-5-1.jpg")"  src="@routes.Assets.versioned("images/grey.gif")" alt="" width="260" height="136"/>
+                    <p>
+                        多条项链交织、重复、差异 <br/>
+                        浪漫 美不可言
+                    </p>
+                </div>
+                <ul class="clearfix">
+                    <li class="pro-556">
+                        <a href="http://www.fashiongeeker.com/product/556" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/556.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330" />
+                            <p><span class="pro-name">@mapName.get(556)</span><span class="product-price">￥@mapPrice.get(556)</span></p>
+                        </a>
+                    </li>
+                    <li class="noRight pro-539">
+                        <a href="http://www.fashiongeeker.com/product/539" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/539.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330" />
+                            <p><span class="pro-name">@mapName.get(539)</span><span class="product-price">￥@mapPrice.get(539)</span></p>
+                        </a>
+                    </li>
+                    <li class="pro-411">
+                        <a href="http://www.fashiongeeker.com/product/411" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/411.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330" />
+                            <p><span class="pro-name">@mapName.get(411)</span><span class="product-price">￥@mapPrice.get(411)</span></p>
+                        </a>
+                    </li>
+                    <li class="noRight pro-532">
+                        <a href="http://www.fashiongeeker.com/product/532" target="_blank">
+                            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/532.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="440" height="330" />
+                            <p><span class="pro-name">@mapName.get(532)</span><span class="product-price">￥@mapPrice.get(532)</span></p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+            <!-- louise-bottom-->
+        <div class="louise-bottom">
+            <img class="lazy" data-original="@routes.Assets.versioned("images/activity/Louise/bottom-img.jpg")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="600" height="400;"/>
+            <div class="text-box">
+                平凡光阴，用心去体味。<br/>
+                一个简单的戒指，或是带点小色彩的项链，或是玲珑精致的耳坠<br/>
+                或是一款富有情调的手链……<br/>
+                用微小而美的东西，点缀心情，玩味时尚<br/>
+                活出独一无二的品味人生。<br/>
+                <br/>
+                ————尚客————
+            </div>
+            <p class="back-home"><a href="http://www.fashiongeeker.com/">返回首页<br/>BACK TO THE HOME</a></p>
+        </div>
+    </div>
+    <!--end louise-->
+}

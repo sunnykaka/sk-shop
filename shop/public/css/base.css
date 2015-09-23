@@ -588,7 +588,7 @@ table .pro{width: 360px;}
 .detail-inner .Collocation .collacation-list .second{padding-left: 100px;}
 .detail-inner .Collocation .collacation-list .pro-btn{width: 90px;padding: 4px 8px;text-align:center;margin:8px auto 0;border: 1px solid #cccccc;}
 .detail-inner .Collocation .collacation-list .pro-btn:hover{border: 1px solid #000;}
-.detail-inner .container{margin-bottom: 32px;display: none;}
+.detail-inner .container{margin-bottom: 32px;}
 .product-info-table{width: 803px;overflow: hidden;}
 .product-info-table td{padding: 8px 10px;width: 50%;vertical-align: top;}
 .detail-inner .img-list{width: 803px;  overflow: hidden;}
