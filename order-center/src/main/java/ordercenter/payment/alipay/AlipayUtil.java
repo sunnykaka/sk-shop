@@ -28,7 +28,7 @@ public class AlipayUtil {
     public static String key = "gglao8w452xjt9tw2wi5u4hd3u2dujil";
 
     // 签约支付宝账号或卖家收款支付宝帐户
-    public static String seller_email = "zhifubao@yezaoshu.com";
+    public static String seller_email = "zhifubao@fashiongeeker.com";
 
     // 字符编码格式 目前支持 gbk 或 utf-8
     public static String input_charset = "UTF-8";
