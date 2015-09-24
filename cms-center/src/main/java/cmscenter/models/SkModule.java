@@ -8,6 +8,8 @@ import java.util.List;
 /**
  * Created by amoszhou on 15/9/17.
  */
+@Entity
+@Table(name = "cms_module")
 public class SkModule implements EntityClass<Integer> {
 
     private Integer id;
@@ -20,7 +22,7 @@ public class SkModule implements EntityClass<Integer> {
 
     private Integer itemCount;
 
-    @Transient
+
     private List<SkContent> contents;
 
 
@@ -77,6 +79,7 @@ public class SkModule implements EntityClass<Integer> {
         this.itemCount = itemCount;
     }
 
+    @Transient
     public List<SkContent> getContents() {
         return contents;
     }

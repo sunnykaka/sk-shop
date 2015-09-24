@@ -1,5 +1,7 @@
 package controllers;
 
+import cmscenter.models.SkModule;
+import cmscenter.services.SkCmsService;
 import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
@@ -36,6 +38,9 @@ public class Application extends Controller {
 
 
     @Autowired
+    private SkCmsService skCmsService;
+
+    @Autowired
     private CmsService cmsService;
 
     @Autowired
@@ -59,32 +64,37 @@ public class Application extends Controller {
      * @return
      */
     public Result index() {
-        List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.SELLING);
-        List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.SELLING);
-        List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.SELLING);
-        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE_DOUBLE, 1, ExhibitionStatus.SELLING);
 
-        CmsExhibition doubleExhibition = null;
+        List<SkModule> modules = skCmsService.buildModuleAndContent();
 
-        if (floor3Double != null && floor3Double.size()>0) {
-            doubleExhibition = floor3Double.get(0);
-        }
+        return ok(index.render(SessionUtils.currentUser(), modules));
 
-        Map<String, List<CmsExhibition>> exhibtionMap = new HashMap<>();
-        exhibtionMap.put(ExhibitionPosition.FLOOR_ONE, floor1);
-        exhibtionMap.put(ExhibitionPosition.FLOOR_TWO, floor2);
-        exhibtionMap.put(ExhibitionPosition.FLOOR_THREE, floor3);
-
-
-        List<CmsContent> contents = cmsService.allContents();
-
-        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
-        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).findFirst().get();
-        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).findFirst().get();
-
-        int size = sliderBoxs.size() > 3? 3 : sliderBoxs.size();
-
-        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0,size)));
+//        List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.SELLING);
+//        List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.SELLING);
+//        List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.SELLING);
+//        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE_DOUBLE, 1, ExhibitionStatus.SELLING);
+//
+//        CmsExhibition doubleExhibition = null;
+//
+//        if (floor3Double != null && floor3Double.size() > 0) {
+//            doubleExhibition = floor3Double.get(0);
+//        }
+//
+//        Map<String, List<CmsExhibition>> exhibtionMap = new HashMap<>();
+//        exhibtionMap.put(ExhibitionPosition.FLOOR_ONE, floor1);
+//        exhibtionMap.put(ExhibitionPosition.FLOOR_TWO, floor2);
+//        exhibtionMap.put(ExhibitionPosition.FLOOR_THREE, floor3);
+//
+//
+//        List<CmsContent> contents = cmsService.allContents();
+//
+//        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
+//        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).findFirst().get();
+//        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).findFirst().get();
+//
+//        int size = sliderBoxs.size() > 3 ? 3 : sliderBoxs.size();
+//
+//        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0, size)));
     }
 
 
@@ -122,7 +132,7 @@ public class Application extends Controller {
 
         CmsExhibition doubleExhibition = null;
 
-        if (floor3Double != null && floor3Double.size()>0) {
+        if (floor3Double != null && floor3Double.size() > 0) {
             doubleExhibition = floor3Double.get(0);
         }
 
@@ -156,11 +166,11 @@ public class Application extends Controller {
         /**
          * 1.获取设计师信息，并校验设计师是否存在
          */
-        List<DesignerView> designers = designerService.designerById(dId,null);
+        List<DesignerView> designers = designerService.designerById(dId, null);
         DesignerView designer = null;
         if (designers != null) {
             designer = designers.get(0);
-            designer.setFavorites(designerCollectService.isFavorites(user,dId));
+            designer.setFavorites(designerCollectService.isFavorites(user, dId));
         } else {
             /**
              * 如果设计师不存在，则去404
@@ -248,18 +258,18 @@ public class Application extends Controller {
      * @return
      */
     public Result designers(int currPage) {
-        Page  page = new Page(currPage,8);
-        List<DesignerView> list = designerService.designerById(null,page);
+        Page page = new Page(currPage, 8);
+        List<DesignerView> list = designerService.designerById(null, page);
         List<CmsContent> contents = cmsService.allContents();
         CmsContent content = contents.stream().filter(co -> co.getPosition().equals(CmsPosition.DESIGNER_LIST_LOGO)).findFirst().get();
         Integer count = designerService.allOnlineDesignerCount();
-        return ok(designers.render(content,list,count));
+        return ok(designers.render(content, list, count));
     }
 
     public Result designers4More(int currPage) {
-        Page  page = new Page(currPage,8);
+        Page page = new Page(currPage, 8);
         List<DesignerView> list = designerService.designerById(null, page);
-        return ok(new JsonResult(true,"",list).toNode());
+        return ok(new JsonResult(true, "", list).toNode());
     }
 
 

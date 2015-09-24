@@ -4,14 +4,13 @@ import cmscenter.models.SkContent;
 import cmscenter.models.SkExhibition;
 import cmscenter.models.SkModule;
 import common.services.GeneralDao;
+import common.utils.page.Page;
+import common.utils.page.PageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by amoszhou on 15/9/18.
@@ -36,52 +35,68 @@ public class SkCmsService {
         /**
          * 1.查出所有module 并按照优先级降序排序
          */
-        List<SkModule> moduleList = generalDao.findAll(SkModule.class);
-        moduleList.sort((m1, m2) -> {
-            if (m1.getPriority() > m2.getPriority()) {
-                return 1;
-            } else if (m1.getPriority() == m2.getPriority()) {
-                return 0;
-            }
-            return -1;
-        });
+
+        String query = " from SkModule order by priority desc ";
+        List<SkModule> moduleList = generalDao.query(query, Optional.empty(), new HashMap<>());
+//        moduleList.sort((m1, m2) -> {
+//            if (m1.getPriority() > m2.getPriority()) {
+//                return 1;
+//            } else if (m1.getPriority() == m2.getPriority()) {
+//                return 0;
+//            }
+//            return -1;
+//        });
 
         /**
          * 每个模块里面的content按优先级倒序来排，并且只取指定个数，放到module中。
          */
-        String jpql = " from SkContent where moduleId =:moduleId order by priority desc limit :count";
+        String jpql = " from SkContent where moduleId =:moduleId order by priority desc ";
         for (SkModule module : moduleList) {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("moduleId", module.getId());
-            params.put("count", module.getItemCount());
-            List<SkContent> list = generalDao.query(jpql, Optional.empty(), params);
-            module.setContents(list);
+            List<SkContent> list = generalDao.query(jpql, Optional.of(new Page<>(1, module.getItemCount())), params);
+            if (list != null && list.size() > 0) {
+                module.setContents(list);
+            }
         }
+
+        /**
+         * 删除没有内容的模块
+         */
+        Iterator<SkModule> it = moduleList.iterator();
+        while (it.hasNext()) {
+            if (it.next().getContents() == null) {
+                it.remove();
+            }
+        }
+
         return moduleList;
     }
 
 
     /**
      * 活动列表
+     *
      * @return
      */
     @Transactional(readOnly = true)
-    public List<SkExhibition> allExhibition(){
+    public List<SkExhibition> allExhibition() {
         return generalDao.findAll(SkExhibition.class);
     }
 
 
     /**
      * 查询具体的某个活动
+     *
      * @param id
      * @return
      */
     @Transactional(readOnly = true)
-    public Optional<SkExhibition> exhibitionById(Integer id){
+    public Optional<SkExhibition> exhibitionById(Integer id) {
         String jpql = " from SkExhibition where id = :id";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", id);
-        List<SkExhibition> list = generalDao.query(jpql,Optional.empty(),params);
+        List<SkExhibition> list = generalDao.query(jpql, Optional.empty(), params);
         if (list != null && list.size() > 0) {
             return Optional.of(list.get(0));
         }

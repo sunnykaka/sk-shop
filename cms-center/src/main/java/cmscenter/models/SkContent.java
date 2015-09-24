@@ -53,6 +53,8 @@ public class SkContent implements EntityClass<Integer> {
 
     private Integer moduleId;
 
+    private Integer picSize;
+
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -144,5 +146,15 @@ public class SkContent implements EntityClass<Integer> {
 
     public void setModuleId(Integer moduleId) {
         this.moduleId = moduleId;
+    }
+
+    @Basic
+    @Column(name = "picSize")
+    public Integer getPicSize() {
+        return picSize;
+    }
+
+    public void setPicSize(Integer picSize) {
+        this.picSize = picSize;
     }
 }

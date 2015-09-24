@@ -4,8 +4,8 @@
 
 # Home page
 GET         /                                                     @controllers.Application.index
-GET         /preview                                              @controllers.Application.preview
-POST        /preview/userLike                                     @controllers.Application.userLikeExhibition(exhibitionId:Int, phone)
+#GET         /preview                                              @controllers.Application.preview
+#POST        /preview/userLike                                     @controllers.Application.userLikeExhibition(exhibitionId:Int, phone)
 GET         /designers                                            @controllers.Application.designers(currPage:Int ?= 1)
 GET         /designers4more                                       @controllers.Application.designers4More(currPage:Int ?= 1)
 GET         /designerProd                                         @controllers.Application.designerProd(dId:Int)

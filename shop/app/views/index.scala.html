@@ -1,102 +1,116 @@
-@(user: usercenter.models.User, sellingMap: Map[String, List[CmsExhibition]], doubleEx: CmsExhibition, font1: models.CmsContent, font2: models.CmsContent, sliderBoxs: List[models.CmsContent])
+@(user: usercenter.models.User, modules: List[cmscenter.models.SkModule])
 
 @import common.utils.DateUtils
 @import dtos.ExhibitionPosition
 @import productcenter.models.Seo
 
-@displayExhibition(exhibition: models.CmsExhibition) = {
+@displayExhibition(content: cmscenter.models.SkContent) = {
     <li>
-            <div class="img">
-                <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)"><img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction" width="590" height="275"/></a>
-                <div class="time">
-                    <div class="cover"></div>
+        <div class="img">
+            <a target="_blank" href="@content.getLink"><img class="lazy" data-original="@content.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getTitle" width="590" height="275"/></a>
+            <div class="time">
+                <div class="cover"></div>
+                @if(content.getEndTime != null) {
                     <span class="time-text">
-                    还剩 <i class="icon iconfont">&#xe605;</i>
-                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                        还剩 <i class="icon iconfont">&#xe605;</i>
+                        <span class="time-detail" value="@DateUtils.printDateTime(content.getEndTime())">@DateUtils.printDateTime(content.getEndTime())</span>
                         <span class="over-text">结束</span>
                     </span>
-                </div>
+                }
             </div>
-            <div class="title">
-                <img  class="lazy"   data-original="@exhibition.getDesignerLogo" src="@routes.Assets.versioned("images/grey.gif")"  alt="@exhibition.getIntroduction" height="60"/>
-                <p><span class="designer">@exhibition.getIntroduction</span></p>
-            </div>
+        </div>
+        <div class="title">
+            <img class="lazy" data-original="@content.getBackPic" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getTitle" height="60"/>
+            <p><span class="designer">@content.getTitle</span></p>
+        </div>
     </li>
 }
 
 
-@main(new Seo(Messages("index.title"),Messages("seo.description"),Messages("seo.Keywords")))("index") {
+@main(new Seo(Messages("index.title"), Messages("seo.description"), Messages("seo.Keywords")))("index") {
     <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
     <script src="@routes.Assets.versioned("js/index.js")"></script>
 
 } {
-<div id="container">
-    <!--slider-box-->
-    <div class="slider-box">
-        <div class="slider-box-inner">
-            <div class="slider-box-img">
-                @for((content,index) <- sliderBoxs.zipWithIndex) {
+    <div id="container">
+            <!--slider-box-->
+        @if(modules.size >= 1) {
+            <div class="slider-box">
+                <div class="slider-box-inner">
+                    <div class="slider-box-img">
+                    @for((content, index) <- modules(0).getContents.zipWithIndex) {
 
-                <div class="item" style="z-index:@{sliderBoxs.size-index};background-image:url(@content.getContent); background-position: 50% 50%;">
-                    <a target="_blank" @if(content.getLink !=null && content.getLink != ""){ href="@content.getLink"} hidefocus="true" style="outline: none;" alt="@content.getTitle">
+                        <div class="item" style="z-index : @{
+                            modules(0).getContents.size - index
+                        };background-image:url(@content.getPic); background-position: 50% 50%;">
+                        <a target="_blank" @if(content.getLink != null && content.getLink != "") {
+                            href="@content.getLink"
+                        } hidefocus="true" style="outline : none ;" alt="@content.getTitle">
                     </a>
-                </div>
-                }
-            </div>
-            <div class="sliderBullets">
-                <ul class="clearfix">
-                    @for((content,index) <- sliderBoxs.zipWithIndex) {
-                       <li>
-                           <a target="_blank" href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline:none;">
-                               <img class="lazy" src="@content.getContent" alt="@content.getTitle" width="390" height="103"/>
-                           </a>
-                           <div class="cover"></div>
-                       </li>
+                    </div>
                     }
-                </ul>
-            </div>
-            <div class="sliderArrows" style="z-index: 11;">
-                <div>
-                    <a href="javascript:void(0)" class="png_bg prev" style="display: block;"></a>
-                    <a href="javascript:void(0)" class="png_bg next" style="display: block;"></a>
+                </div>
+                <div class="sliderBullets">
+                    <ul class="clearfix">
+                    @for((content, index) <- modules(0).getContents.zipWithIndex) {
+                        <li>
+                            <a target="_blank" href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline : none ;">
+                                <img class="lazy" src="@content.getPic" alt="@content.getTitle" width="390" height="103"/>
+                            </a>
+                            <div class="cover"></div>
+                        </li>
+                    }
+                    </ul>
+                </div>
+                <div class="sliderArrows" style="z-index : 11 ;">
+                    <div>
+                        <a href="javascript:void(0)" class="png_bg prev" style="display : block ;"></a>
+                        <a href="javascript:void(0)" class="png_bg next" style="display : block ;"></a>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
+
     <!--end slider-box-->
 
 
     <!--start-fashion first-->
-    <div class="start-fashion">
-        <div class="start-fashion-inner width1200">
-            <h2>全球首发　限量发售</h2>
-            <p class="info">独一无二的品味，独一无二的你。</p>
-            <ul class="clearfix">
-            @if(sellingMap.get(ExhibitionPosition.FLOOR_ONE) != null) {
-                @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_ONE)) {
-                    @displayExhibition(exhibition)
+    @if(modules.size >= 2) {
+        <div class="start-fashion">
+            <div class="start-fashion-inner width1200">
+                @if(modules(1).getName != null) {
+                    <h2>@modules(1).getName</h2>
                 }
-            }
-            </ul>
+                @if(modules(1).getDescription != null) {
+                    <p class="info">@modules(1).getDescription </p>
+                }
+                <ul class="clearfix">
+                @for(content <- modules(1).getContents) {
+                    @displayExhibition(content)
+                }
+                </ul>
+            </div>
         </div>
-    </div>
+    }
     <!--end start-fashion-->
-    <!--fashion-box-->
-    <div class="fashion-box">
-        <div class="fashion-box-inner width1200">
-            @if(font1 != null) {
-                <h2>@font1.getTitle</h2>
-                <p class="en-info">@Html(font1.getContent)</p>
 
-            }
-            <ul class="clearfix">
-            @if(sellingMap.get(ExhibitionPosition.FLOOR_TWO) != null) {
-                @for(exhibition <- sellingMap.get(ExhibitionPosition.FLOOR_TWO)) {
+
+    <!--fashion-box-->
+    @if(modules.size >= 3) {
+
+        <div class="fashion-box">
+            <div class="fashion-box-inner width1200">
+                <h2>@modules(2).getName</h2>
+                <p class="en-info">@Html(modules(2).getDescription)</p>
+
+                <ul class="clearfix">
+                @for(exhibition <- modules(2).getContents) {
                     <li>
-                        <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                            <img class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction" width="390" height="240" />
+                        <a target="_blank" href="@exhibition.getLink">
+                            <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getTitle" width="390" height="240" />
                             <div class="info">
-                                <p><span class="designer">@exhibition.getIntroduction</span></p>
+                                <p><span class="designer">@exhibition.getTitle</span></p>
                                 <div class="time">
                                     <span class="time-text">
                                         <i class="icon iconfont">&#xe605;</i>
@@ -108,95 +122,53 @@
                         </a>
                     </li>
                 }
-            }
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
+    }
     <!--end fashion-box -->
+
+
     <!--empty-box-->
-    <div class="empty-box">
-        <div class="empty-box-inner width1200">
 
-            @if(font2 != null) {
-                <h2>@font2.getTitle</h2>
-                <p class="info">@Html(font2.getContent)</p>
-            }
+    @if(modules.size >= 4) {
+        <div class="empty-box">
+            <div class="empty-box-inner width1200">
 
-            <ul class="clearfix">
+                <h2>@modules(3).getName</h2>
+                <p class="info">@Html(modules(3).getDescription)</p>
 
-                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null) {
-
-                    @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(0, 4)) {
-                        <li class="">
-                            <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" width="291" height="437"   alt="@exhibition.getIntroduction"/>
-                            </a>
-                            <div class="title">
-                                <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                                <div class="cover"></div>
-                                <div class="time">
-                                    <span class="time-text">
-                                        <i class="icon iconfont">&#xe605;</i>
-                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                        <span class="over-text">结束</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </li>
-                    }
-                }
-
-                @if(doubleEx != null) {
-                    <li class="double">
-                        <a target="_blank" href="@routes.Application.designerProd(doubleEx.getDesignerId)">
-                            <img class="lazy"  data-original="@doubleEx.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@doubleEx.getIntroduction)" width="594" height="437"/>
+                <ul class="clearfix">
+                @for(exhibition <- modules(3).getContents) {
+                    <li @if(exhibition.getPicSize == 2){class="double"}>
+                        <a target="_blank" href="@exhibition.getLink">
+                            <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" @if(exhibition.getPicSize == 2){width="594"}else{width="291"} height="437" alt="@exhibition.getTitle"/>
                         </a>
                         <div class="title">
-                            <p><span class="designer">@doubleEx.getIntroduction()</span></p>
+                            <p><span class="designer">@exhibition.getTitle</span></p>
                             <div class="cover"></div>
                             <div class="time">
                                 <span class="time-text">
                                     <i class="icon iconfont">&#xe605;</i>
-                                    <span class="time-detail" value="@DateUtils.printDateTime(doubleEx.getEndTime())">@DateUtils.printDateTime(doubleEx.getEndTime())</span>
+                                    <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
                                     <span class="over-text">结束</span>
                                 </span>
                             </div>
                         </div>
                     </li>
                 }
-
-                @if(sellingMap.get(ExhibitionPosition.FLOOR_THREE) != null ) {
-
-                    @for(exhibition <- (sellingMap.get(ExhibitionPosition.FLOOR_THREE)).slice(4, 6)) {
-                        <li class="">
-                            <a target="_blank" href="@routes.Application.designerProd(exhibition.getDesignerId)">
-                                <img  class="lazy"   data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getIntroduction()" width="291" height="437"/>
-                            </a>
-                            <div class="title">
-                                <div class="cover"></div>
-                                <p><span class="designer">@exhibition.getIntroduction()</span></p>
-                                <div class="time">
-                                    <span class="time-text">
-                                        <i class="icon iconfont">&#xe605;</i>
-                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                        <span class="over-text"> 结束</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </li>
-                    }
-                }
-
-            </ul>
+                </ul>
+            </div>
         </div>
+    }
     </div>
-</div>
     <!--siderbar-->
     <ul class="sider-bar" id="cart">
-        <li class="cart" title="购物车"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="cart" title="购物车"><span id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">
+            0</span></li>
         <li class="like-product"><a title="喜欢商品" href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
-        <li class="like-designer"><a title="喜欢设计师"  href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
-        <li class="fan-kui"><a title="意见反馈"  href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
+        <li class="like-designer"><a title="喜欢设计师" href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+        <li class="fan-kui"><a title="意见反馈" href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
         <li class="go-top" title="返回顶部"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
 
     </ul>
