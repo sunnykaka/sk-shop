@@ -204,13 +204,12 @@ public class AppCartController extends BaseController {
                 retMap.put("itemTotalNum", number);
             }
             return ok(JsonUtils.object2Node(retMap));
+        } catch (AppBusinessException e) {
+            Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
+            throw e;
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
-            if(!isReplace) {
-                throw new AppBusinessException(ErrorCode.Conflict, "加入购物车失败，请联系商城客服人员");
-            } else {
-                throw new AppBusinessException(ErrorCode.Conflict, "购物车操作失败，请联系商城客服人员");
-            }
+            throw new AppBusinessException(ErrorCode.Conflict, "购物车操作失败，请联系商城客服人员");
         }
     }
 
@@ -323,6 +322,9 @@ public class AppCartController extends BaseController {
             //retMap.put("addressList", addressList);
             retMap.put("defaultAddress", defaultAddress);
             return ok(JsonUtils.object2Node(retMap));
+        } catch (AppBusinessException e) {
+            Logger.warn("去结算-选择邮递地址发生异常:", e);
+            throw e;
         } catch (Exception e) {
             Logger.warn("去结算-选择邮递地址发生异常:", e);
             throw new AppBusinessException(ErrorCode.Conflict, "去结算发生异常，请联系商城客服人员");
@@ -383,6 +385,9 @@ public class AppCartController extends BaseController {
             //retMap.put("addressList", addressList);
             retMap.put("defaultAddress", defaultAddress);
             return ok(JsonUtils.object2Node(retMap));
+        } catch (AppBusinessException e) {
+            Logger.error("sku[" + skuId + "]数量为[" + number + "]立即支付出现异常:", e);
+            throw e;
         } catch (Exception e) {
             Logger.error("sku[" + skuId + "]数量为[" + number + "]立即支付出现异常:", e);
             throw new AppBusinessException(ErrorCode.Conflict, "立即支付失败，请联系商城客服人员！");
