@@ -177,8 +177,6 @@ public class AppCartController extends BaseController {
             if (addNumber > maxStockNum) {
                 if(maxStockNum < maxCanBuyNum) {
                     maxCanBuyNum = maxStockNum;
-                } else {
-                    maxCanBuyNum = maxStockNum;
                 }
                 throw new AppBusinessException(ErrorCode.Conflict, "超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件");
             }
