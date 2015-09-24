@@ -188,8 +188,6 @@ public class CartController extends Controller {
             if (addNumber > maxStockNum) {
                 if(maxStockNum < maxCanBuyNum) {
                     maxCanBuyNum = maxStockNum;
-                } else {
-                    maxCanBuyNum = maxStockNum;
                 }
                 retMap.put("maxCanBuyNum", maxCanBuyNum);
                 return ok(new JsonResult(false,"超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());

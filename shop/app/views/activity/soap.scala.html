@@ -11,25 +11,28 @@
             var that = this;
             $.ajax({
                 type: "get",
-                url: '/cart/verifyPromptlyPayData?skuId=658&number=1',
+                url: '/cart/verifyPromptlyPayData?skuId=2957&number=1',
                 async: false,
                 dataType: 'json',
                 data: {skuId: 2246, number: 1},
                 cache: false,
                 success: function (data) {
                     if (data.result) {
-                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=658&number=1';
+                        window.location.href = '/cart/promptlyPayChooseAddress?skuId=2957&number=1';
                     } else {
                         if (data.message == 'Credentials required') {
                             createLoginReg();
                         }
                         if(data.data == "addForbid"){
+                            if(data.message =='已售罄'){
+                                data.message = "每天上午10:00准时开抢<br/>如抢完请隔天上午再约哟<br/>活动时间:2015.9.21-2015.9.25";
+                            }
                             $.dialog({
                                 title: '提示',
                                 lock: true,
                                 content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
                                 width: 500,
-                                height: 248,
+                                height: 288,
                                 padding: "20",
                                 btn: {
                                     ok : {

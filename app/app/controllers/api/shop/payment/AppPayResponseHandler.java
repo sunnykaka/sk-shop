@@ -1,20 +1,14 @@
 package controllers.api.shop.payment;
 
-import common.utils.DateUtils;
 import common.utils.play.BaseGlobal;
-import ordercenter.constants.BizType;
 import ordercenter.models.Trade;
 import ordercenter.payment.CallBackResult;
 import ordercenter.payment.PayCallback;
 import ordercenter.payment.constants.ResponseType;
 import ordercenter.payment.constants.TradeStatus;
 import ordercenter.services.TradeService;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.StaleObjectStateException;
-import org.joda.time.DateTime;
 import play.Logger;
-
-import java.util.Map;
 
 /**
  * App支付成功处理类(此处现在只考虑了微信支付)
@@ -24,61 +18,24 @@ import java.util.Map;
 public class AppPayResponseHandler {
 
     /**
-     * 交易信息
-     */
-    private Trade trade;
-    /**
      * 送过去的交易回调处理类
      */
-    private Class<PayCallback> callBackHandlerClass;
+    protected Class<PayCallback> callBackHandlerClass;
 
     /**
-     * 交易服务
+     * 交易信息
      */
-    private TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
+    protected Trade trade;
 
     /**
      * 交易在第三方支付平台返回来之前的状态
      */
-    private TradeStatus statusBeforeBack;
+    protected TradeStatus statusBeforeBack;
 
     /**
-     * 其它方式初始化数据
-     * @param param
+     * 交易服务
      */
-    public AppPayResponseHandler(Map<String, String> param) {
-        //先从回调参数中取出交易号，并查出对应出交易记录
-        String tradeNo = param.get("out_trade_no");
-        if (StringUtils.isBlank(tradeNo)) {
-            throw new IllegalArgumentException("交易不存在");
-        }
-        trade = tradeService.getTradeByTradeNo(tradeNo);
-        if (trade == null) {
-            throw new IllegalArgumentException("交易不存在");
-        }
-        statusBeforeBack = TradeStatus.valueOf(trade.getTradeStatus());
-
-        //trade.setNotifyId("");
-        trade.setNotifyType(param.get("trade_type")); //trade_type
-        trade.setDefaultbank(param.get("bank_type"));
-        trade.setTradeGmtCreateTime(DateUtils.parse(param.get("time_end"), DateUtils.SIMPLE_DATE_TIME_FORMAT_STR));
-        //trade.setOuterBuyerAccount(""); 财付通没有这个字段，无法返回
-        //trade.setOuterBuyerId("");
-
-        // 第三方平台交易号
-        trade.setOuterTradeNo(param.get("transaction_id"));
-
-        trade.setGmtModifyTime(new DateTime());
-        trade.setPayCurrency(param.get("fee_type"));
-        trade.setPayRetTotalFee(param.get("total_fee"));
-
-        //查询订单
-        Map<String, String> payResult = AppTenpayUtils.searchPayResult(trade);
-        if(payResult != null && "SUCCESS".equalsIgnoreCase(payResult.get("trade_state"))) {
-            trade.setTradeStatus(TradeStatus.TRADE_SUCCESS.name());
-        }
-        this.callBackHandlerClass = BizType.valueOf(trade.getBizType()).getHandlerClass();
-    }
+    protected TradeService tradeService = BaseGlobal.ctx.getBean(TradeService.class);
 
     /**
      * 回调业务处理
@@ -122,5 +79,30 @@ public class AppPayResponseHandler {
         }
         result.setResult(true);
         return result;
+    }
+
+
+    public Class<PayCallback> getCallBackHandlerClass() {
+        return callBackHandlerClass;
+    }
+
+    public void setCallBackHandlerClass(Class<PayCallback> callBackHandlerClass) {
+        this.callBackHandlerClass = callBackHandlerClass;
+    }
+
+    public Trade getTrade() {
+        return trade;
+    }
+
+    public void setTrade(Trade trade) {
+        this.trade = trade;
+    }
+
+    public TradeStatus getStatusBeforeBack() {
+        return statusBeforeBack;
+    }
+
+    public void setStatusBeforeBack(TradeStatus statusBeforeBack) {
+        this.statusBeforeBack = statusBeforeBack;
     }
 }

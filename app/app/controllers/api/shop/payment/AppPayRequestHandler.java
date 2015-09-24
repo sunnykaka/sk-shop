@@ -18,11 +18,6 @@ public abstract class AppPayRequestHandler {
     protected static Configuration cfg = Play.application().configuration();
 
     /**
-     * 默认的notify url
-     */
-    protected static final String DEFAULT_NOTIFY_URL_KEY = "payment.notifyUrl";
-
-    /**
      * 根据交易信息构建支付信息的map
      *
      * @param trade

@@ -8,6 +8,7 @@ import common.utils.DateUtils;
 import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.constants.CancelOrderType;
+import ordercenter.constants.Client;
 import ordercenter.constants.OrderState;
 import ordercenter.models.*;
 import ordercenter.util.OrderNumberUtil;
@@ -554,7 +555,7 @@ public class OrderService {
         return  logistics;
     }
 
-    public String submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address) {
+    public String submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address, Client client) {
         //将购物车项创建成订单项
         List<CartItem> cartItemList = cart.getCartItemList();
 
@@ -593,6 +594,7 @@ public class OrderService {
             order.setIsDelete(false);
             order.setBrush(false);
             order.setSendPayRemind(false);
+            order.setClient(client);
             this.createOrder(order);
 
             int orderId = order.getId();
