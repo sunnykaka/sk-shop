@@ -6,6 +6,7 @@ import cmscenter.dtos.AppThemeDto;
 import cmscenter.dtos.AppThemeSimpleDto;
 import cmscenter.models.AppHome;
 import cmscenter.models.AppTheme;
+import cmscenter.models.DeviceToken;
 import cmscenter.services.AppThemeService;
 import cmscenter.services.ThemeCollectService;
 import common.exceptions.AppBusinessException;
@@ -14,6 +15,7 @@ import common.utils.JsonUtils;
 import common.utils.ParamUtils;
 import common.utils.page.Page;
 import controllers.BaseController;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Result;
 import productcenter.services.ProductPictureService;
@@ -106,6 +108,25 @@ public class ThemeApiController extends BaseController {
         pageDto.setResult(appThemeSimpleDtos);
 
         return ok(JsonUtils.object2Node(pageDto));
+
+    }
+
+    public Result saveDeviceToken(){
+
+        String token = ParamUtils.getByKey(request(),"token");
+        if(null != token){
+            token = token.replace(" ","");
+            if(null != token && token.length() == 64){
+
+                DeviceToken deviceToken = appThemeService.findBytoken(token);
+                if(null == deviceToken){
+                    appThemeService.saveDeviceToken(new DeviceToken(token,DeviceToken.BADGE_DEFAULT_INT));
+                }
+
+            }
+        }
+
+        return noContent();
 
     }
 

@@ -3,6 +3,7 @@ package cmscenter.services;
 import cmscenter.models.AppHome;
 import cmscenter.models.AppTheme;
 import cmscenter.models.AppThemeContent;
+import cmscenter.models.DeviceToken;
 import common.services.GeneralDao;
 import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class AppThemeService {
     @Transactional(readOnly = true)
     public List<AppTheme> findAppThemePageList(Optional<Page<AppTheme>> page){
 
-        String jpql = "select a from AppTheme a where 1=1 and isDelete=false order by a.startTime desc";
+        String jpql = "select a from AppTheme a where 1=1 and isDelete=false and online=true order by a.startTime desc";
         Map<String, Object> queryParams = new HashMap<>();
 
         return generalDao.query(jpql, page, queryParams);
@@ -45,7 +46,7 @@ public class AppThemeService {
     @Transactional(readOnly = true)
     public List<AppThemeContent> getAppThemeContentByThemeId(int themeId){
 
-        String jpql = "select a from AppThemeContent a where 1=1 and a.themeId=:themeId order by a.priority asc";
+        String jpql = "select a from AppThemeContent a where 1=1 and a.themeId=:themeId order by a.priority desc";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("themeId", themeId);
 
@@ -70,6 +71,30 @@ public class AppThemeService {
         }else{
             return appThemeContent.getContent();
         }
+
+    }
+
+    @Transactional()
+    public void saveDeviceToken(DeviceToken deviceToken){
+
+        generalDao.persist(deviceToken);
+
+    }
+
+    @Transactional(readOnly = true)
+    public DeviceToken findBytoken(String token){
+
+        String jpql = "select pc from DeviceToken pc where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and pc.token = :token ";
+        queryParams.put("token", token);
+
+        List<DeviceToken> valueList = generalDao.query(jpql, Optional.empty(), queryParams);
+        if (valueList != null && valueList.size() > 0) {
+            return valueList.get(0);
+        }
+
+        return null;
 
     }
 
