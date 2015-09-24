@@ -14,7 +14,7 @@ import usercenter.services.FeedbackService;
 import usercenter.utils.SessionUtils;
 
 /**
- * 友情链接Controller
+ * 意见反馈 Controller
  * User: lidujun
  * Date: 2015-07-28
  */
