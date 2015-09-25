@@ -22,6 +22,7 @@ import ordercenter.payment.constants.PayMethod;
 import ordercenter.services.CartService;
 import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.mvc.Result;
@@ -69,7 +70,7 @@ public class AppOrderAndPayController extends BaseController {
     @SecuredAction
     public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String clientIp, String client) { //device_info
         Logger.info("进入submitToPay方法，参数：\n"
-                + "isPromptlyPay=" + isPromptlyPay + "selItems=" + selItems + " addressId=" + addressId + " payOrg=" + payOrg);
+                + "isPromptlyPay=" + isPromptlyPay + "selItems=" + selItems + " addressId=" + addressId + " payOrg=" + payOrg + " clientIp=" + clientIp + " client=" + client);
         String curUserName = "";
         Cart cart = null;
         try {
@@ -223,6 +224,121 @@ public class AppOrderAndPayController extends BaseController {
         } catch (Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             throw new AppBusinessException(ErrorCode.Conflict, "生成订单失败，请联系商城客服人员！");
+        }
+    }
+
+    /**
+     * 订单支付
+     * @param orderIds 订单id
+     * @param addressId 用户选择的寄送地址
+     * @param payOrg 支付机构
+     * @return
+     */
+    @SecuredAction
+    public Result myOrderToPay(String orderIds, int addressId, String payOrg,String clientIp, String client) { //device_info
+        Logger.info("进入myOrderToPay方法，参数：\n"
+                + "orderIds=" + orderIds + " addressId=" + addressId + " payOrg=" + payOrg + " clientIp=" + clientIp + " client=" + client);
+        String curUserName = "";
+        try {
+            if (orderIds == null || orderIds.trim().length() == 0) {
+                throw new AppBusinessException(ErrorCode.Conflict, "需要支付的订单为空！");
+            }
+
+            if (payOrg == null || payOrg.trim().length() == 0) {
+                throw new AppBusinessException(ErrorCode.Conflict, "没有选择支付机构！");
+            }
+
+            if (clientIp == null || clientIp.trim().length() == 0) {
+                throw new AppBusinessException(ErrorCode.Conflict, "客户端IP地址不能为空！");
+            }
+
+            User curUser = this.currentUser();
+            curUserName = curUser.getUserName();
+
+            String[] split = orderIds.split("_");
+            Integer[] idList = new Integer[split.length];
+            for (int i = 0; i < split.length; i++) {
+                if (!NumberUtils.isNumber(split[i])) {
+                    Logger.error("订单支付出现异常:" + "订单号" + split[i] + "错误！");
+                    throw new AppBusinessException(ErrorCode.Conflict, "订单号" + split[i] + "错误！");
+                } else {
+                    idList[i] = Integer.valueOf(split[i]);
+                }
+            }
+
+            PayBank payBank = PayBank.valueOf(payOrg);
+            PayMethod payMethodEnum = payBank.getPayMethod();
+
+            List<Order> orderList = new ArrayList<Order>(idList.length);
+
+            for (int id : idList) {
+                Order order = orderService.getOrderById(id);
+                if (order == null) {
+                    Logger.error("订单支付出现异常:订单不存在，订单id：" + id);
+                    throw new AppBusinessException(ErrorCode.Conflict, "要支付的订单不存在！");
+                }
+                long orderNo = order.getOrderNo();
+
+                if (!order.getOrderState().waitPay(TradePayType.OnLine)) {
+                    if (order.getOrderState().getName().equals(OrderState.Cancel.getName())) {
+                        Logger.error("订单支付出现异常:" + "订单(" + orderNo + ")已取消，请重新下单！");
+                        throw new AppBusinessException(ErrorCode.Conflict, "订单(" + orderNo + ")已取消，请重新下单！");
+                    } else {
+                        Logger.error("订单支付出现异常:" + "订单(" + orderNo + ")已支付，请勿重复支付！");
+                        throw new AppBusinessException(ErrorCode.Conflict, "订单(" + orderNo + ")已支付，请勿重复支付！");
+                    }
+                }
+
+                //更新订单
+                order.setAccountType(curUser.getAccountType());
+                order.setPayType(TradePayType.OnLine);
+                order.setPayBank(payBank);
+                order.setUpdateTime(DateUtils.current());
+                orderList.add(order);
+            }
+
+            Logger.info("校验订单信息通过，开始创建交易相关信息");
+
+            //邮寄地址
+            Address address = addressService.getAddress(addressId, curUser.getId());
+            if (address == null) {
+                throw new AppBusinessException(ErrorCode.Conflict, "您选择的订单寄送地址已经被修改，在系统中不存在！");
+            }
+            Client clientParam = Client.valueOf(client);
+
+            /*
+             * 1.计算出订单总金额
+             * 2.创建交易
+             * 3.保存tradeOrder信息
+             * 4.创建trade,将交易的表单刷到页面
+             * 5.生成与支付信息，并拼接返回app使用的签名数据
+             */
+            long totalFee = this.getPayMoneyForCent(orderList);
+            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, clientIp, clientParam);
+            tradeService.submitTradeOrderProcess(trade.getTradeNo(), orderList, payMethodEnum);
+
+            //现在只接入微信就这么写好了
+            AppPayRequestHandler payReq = null;
+
+            if("WXSM".equalsIgnoreCase(payOrg)) {
+                payReq = new AppWeiXinPayRequestHandler();
+            }
+
+            if(payReq == null) {
+                throw new AppBusinessException(ErrorCode.Conflict, "不支持此种支付类型！");
+            }
+
+            Map<String, String> payInfoMap = payReq.buildPayInfo(trade);
+            if(payInfoMap == null) {
+                throw new AppBusinessException(ErrorCode.Conflict, "微信预支付订单失败，请重试！");
+            }
+            return ok(JsonUtils.object2Node(payInfoMap));
+        } catch (AppBusinessException e) {
+            Logger.error(curUserName + "提交订单支付出现异常，信息：" , e);
+            throw e;
+        } catch (Exception e) {
+            Logger.error(curUserName + "提交订单支付出现异常，信息：", e);
+            throw new AppBusinessException(ErrorCode.Conflict, "提交订单支付失败，请联系商城客服人员！");
         }
     }
 
