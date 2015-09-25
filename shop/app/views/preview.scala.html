@@ -78,8 +78,11 @@
 
         //专场开始提醒
         $('.remind-btn').click(function(){
+
         var id = $(this).attr('exhibition-id'),phoneNum = $(this).siblings('input').val(),that = $(this),likeOjb = that.siblings('.like').find('.like-num');
+
         var liObj = that.parents('li');
+
         var diffX = (parseInt(liObj.width())-402)/2,diffY = (parseInt(liObj.height())-182)/2;
 
             $.ajax({

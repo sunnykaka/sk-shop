@@ -4,6 +4,7 @@ import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.Money;
 import ordercenter.constants.BizType;
+import ordercenter.constants.Client;
 import ordercenter.constants.OrderState;
 import ordercenter.constants.TradePayType;
 import ordercenter.models.Cart;
@@ -66,7 +67,7 @@ public class OrderAndPayController extends Controller {
      * @return
      */
     public Result testPay() {
-        Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(1L), BizType.Order, PayBank.Alipay, null);
+        Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(1L), BizType.Order, PayBank.Alipay, null, Client.Browser);
         PayRequestHandler handler = PayBank.valueOf(trade.getDefaultbank()).getPayMethod().getPayRequestHandler();
         String form = handler.forwardToPay(trade);
         return ok(orderToPay.render(form));
@@ -157,7 +158,7 @@ public class OrderAndPayController extends Controller {
             }
 
             //生成订单相关信息
-            String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
+            String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address, Client.Browser);
             return ok(new JsonResult(true, "生成订单成功", orderIds).toNode());
         } catch (Exception e) {
             Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
@@ -281,7 +282,7 @@ public class OrderAndPayController extends Controller {
              * 5.跳转去第三方支付平台付款
              */
             long totalFee = this.getPayMoneyForCent(orderList);
-            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, null);
+            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, null, Client.Browser);
 
             tradeService.submitTradeOrderProcess(trade.getTradeNo(), orderList, payMethodEnum);
 

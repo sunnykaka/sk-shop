@@ -10,6 +10,7 @@ import controllers.BaseController;
 import controllers.api.shop.payment.AppPayRequestHandler;
 import controllers.api.shop.payment.tenpay.AppWeiXinPayRequestHandler;
 import ordercenter.constants.BizType;
+import ordercenter.constants.Client;
 import ordercenter.constants.OrderState;
 import ordercenter.constants.TradePayType;
 import ordercenter.models.Cart;
@@ -66,7 +67,7 @@ public class AppOrderAndPayController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String clientIp) { //device_info
+    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String clientIp, String client) { //device_info
         Logger.info("进入submitToPay方法，参数：\n"
                 + "isPromptlyPay=" + isPromptlyPay + "selItems=" + selItems + " addressId=" + addressId + " payOrg=" + payOrg);
         String curUserName = "";
@@ -151,8 +152,11 @@ public class AppOrderAndPayController extends BaseController {
                 throw new AppBusinessException(ErrorCode.Conflict, "您选择的订单寄送地址已经被修改，在系统中不存在！");
             }
 
+
+            Client clientParam = Client.valueOf(client);
+
             //生成订单、生成配送信息
-            String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address);
+            String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address, clientParam);
 
             //去支付（产生交易和支付部分没做）
             PayBank payBank = PayBank.valueOf(payOrg);
@@ -194,7 +198,7 @@ public class AppOrderAndPayController extends BaseController {
              * 5.生成与支付信息，并拼接返回app使用的签名数据
              */
             long totalFee = this.getPayMoneyForCent(orderList);
-            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, clientIp);
+            Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, clientIp, clientParam);
             tradeService.submitTradeOrderProcess(trade.getTradeNo(), orderList, payMethodEnum);
 
             //现在只接入微信就这么写好了

@@ -86,6 +86,7 @@ public class ThemeCollectService {
     }
 
     /**
+     * 
      * 查询专题是否有收藏
      *
      * @param themeId

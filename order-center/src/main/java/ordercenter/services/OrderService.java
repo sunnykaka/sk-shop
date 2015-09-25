@@ -8,6 +8,7 @@ import common.utils.DateUtils;
 import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.constants.CancelOrderType;
+import ordercenter.constants.Client;
 import ordercenter.constants.OrderState;
 import ordercenter.models.*;
 import ordercenter.util.OrderNumberUtil;
@@ -64,17 +65,24 @@ public class OrderService {
      * @return
      */
     public boolean isBackGoods(Order order){
-        int days = Days.daysBetween(order.getCreateTime(), new DateTime(order.getMilliDate())).getDays();
-        if(order.getOrderState().getName().equals(OrderState.Receiving.getName()) && days <= 7 ){
 
-            List<BackGoods> backGoodsList = backGoodsService.getBackGoodsByOrderId(order.getId());
+        if(order.getOrderState().getName().equals(OrderState.Receiving.getName())){
 
-            for(BackGoods backGoods:backGoodsList){
-                if(!backGoods.getBackState().checkCanNotCancelForUser()){
-                    return false;
+            long timeDifference = DateUtils.current().getMillis() - order.getUpdateTime().getMillis();
+
+            if(timeDifference < 7 * 24 * 60 * 60 * 1000 ){
+
+                List<BackGoods> backGoodsList = backGoodsService.getBackGoodsByOrderId(order.getId());
+
+                for(BackGoods backGoods:backGoodsList){
+                    if(!backGoods.getBackState().isCancelForUser()){
+                        return false;
+                    }
                 }
+                return true;
+            }else {
+                return false;
             }
-            return true;
         }else{
             return false;
         }
@@ -554,7 +562,7 @@ public class OrderService {
         return  logistics;
     }
 
-    public String submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address) {
+    public String submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address, Client client) {
         //将购物车项创建成订单项
         List<CartItem> cartItemList = cart.getCartItemList();
 
@@ -593,6 +601,7 @@ public class OrderService {
             order.setIsDelete(false);
             order.setBrush(false);
             order.setSendPayRemind(false);
+            order.setClient(client);
             this.createOrder(order);
 
             int orderId = order.getId();

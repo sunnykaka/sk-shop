@@ -332,7 +332,7 @@ public class CartService {
 
 
 
-
+////////////////////////////把CartProcess类拷贝到CartService/////////////////////////////////////////////////////
 
 
     /**
@@ -448,7 +448,7 @@ public class CartService {
                 }
             }
 
-            //根据判断是否是首发，当前价格要现算
+            //根据判断是否是首发，当前价格要现算(这个地方需要改一下) ldj
             boolean isFirstPublish = false;//cmsService.onFirstPublish(cartItem.getProductId());
             if(isFirstPublish) {
                 cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2015/9/6.
+ * Created by Zhb on 2015/9/6.
  */
 public class OrderInfoDto {
 

@@ -3,6 +3,7 @@ package ordercenter.models;
 import common.models.utils.EntityClass;
 import common.utils.Money;
 import ordercenter.constants.BizType;
+import ordercenter.constants.Client;
 import ordercenter.payment.alipay.AlipayUtil;
 import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayChannel;
@@ -129,6 +130,11 @@ public class Trade implements EntityClass<Integer> {
      */
     private String clientIp;
 
+    /**
+     * 客户端，默认是浏览器
+     */
+    private Client client = Client.Browser;
+
 
     /**
      * 交易包含的订单
@@ -149,7 +155,7 @@ public class Trade implements EntityClass<Integer> {
          * @param payBank     支付银行
          * @return
          */
-        public static Trade createNewTrade(Money payTotalFee, BizType bizType, PayBank payBank, String clientIp) {
+        public static Trade createNewTrade(Money payTotalFee, BizType bizType, PayBank payBank, String clientIp, Client client) {
             Trade trade = new Trade();
             //交易号是自动生成
             trade.setTradeNo(TradeSequenceUtil.getTradeNo());
@@ -161,6 +167,7 @@ public class Trade implements EntityClass<Integer> {
             trade.setPayTotalFee(payTotalFee);
             trade.setTradeStatus(TradeStatus.INIT.toString());//状态为新建状态
             trade.setClientIp(clientIp);
+            trade.setClient(client);
             return trade;
         }
     }
@@ -450,6 +457,16 @@ public class Trade implements EntityClass<Integer> {
 
     public void setPayCurrency(String payCurrency) {
         this.payCurrency = payCurrency;
+    }
+
+    @Column(name = "client")
+    @Enumerated(EnumType.STRING)
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
 

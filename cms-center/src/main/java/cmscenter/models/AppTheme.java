@@ -36,6 +36,8 @@ public class AppTheme implements EntityClass<Integer>,TableTimeData {
 
     private boolean delete;
 
+    private boolean online;
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override
@@ -143,5 +145,14 @@ public class AppTheme implements EntityClass<Integer>,TableTimeData {
 
     public void setDelete(boolean delete) {
         this.delete = delete;
+    }
+
+    @Column(name = "online")
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 }
