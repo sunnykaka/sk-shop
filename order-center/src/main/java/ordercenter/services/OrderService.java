@@ -65,17 +65,24 @@ public class OrderService {
      * @return
      */
     public boolean isBackGoods(Order order){
-        int days = Days.daysBetween(order.getCreateTime(), new DateTime(order.getMilliDate())).getDays();
-        if(order.getOrderState().getName().equals(OrderState.Receiving.getName()) && days <= 7 ){
 
-            List<BackGoods> backGoodsList = backGoodsService.getBackGoodsByOrderId(order.getId());
+        if(order.getOrderState().getName().equals(OrderState.Receiving.getName())){
 
-            for(BackGoods backGoods:backGoodsList){
-                if(!backGoods.getBackState().checkCanNotCancelForUser()){
-                    return false;
+            long timeDifference = DateUtils.current().getMillis() - order.getUpdateTime().getMillis();
+
+            if(timeDifference < 7 * 24 * 60 * 60 * 1000 ){
+
+                List<BackGoods> backGoodsList = backGoodsService.getBackGoodsByOrderId(order.getId());
+
+                for(BackGoods backGoods:backGoodsList){
+                    if(!backGoods.getBackState().isCancelForUser()){
+                        return false;
+                    }
                 }
+                return true;
+            }else {
+                return false;
             }
-            return true;
         }else{
             return false;
         }

@@ -80,6 +80,16 @@ public enum BackGoodsState implements ViewEnum {
     }
 
     /**
+     * 判断用户当前流程中是否可以申请退货
+     *
+     * @return true 可以
+     *         false 不可以
+     */
+    public boolean isCancelForUser(){
+        return this == Cancel;
+    }
+
+    /**
      * 退货单类型, 已发货 或 未发货(系统及客服线下的判断)
      */
     public enum BackGoodsType {

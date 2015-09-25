@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class LogisticsDto {
 
+    private int addressId;
+
     /**
      * 收获人姓名
      */
@@ -39,6 +41,7 @@ public class LogisticsDto {
         logisticsDto.setLocation(logistics.getLocation());
         logisticsDto.setMobile(logistics.getMobile());
         logisticsDto.setName(logistics.getName());
+        logisticsDto.setAddressId(logistics.getAddressId());
 
         if(StringUtils.isNotEmpty(logistics.getProvince())){
             String[] str = logistics.getProvince().split(",");
@@ -98,4 +101,11 @@ public class LogisticsDto {
         this.mobile = mobile;
     }
 
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
 }

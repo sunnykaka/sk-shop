@@ -44,6 +44,9 @@ POST          /my/address/defaultAddress/:id          @controllers.api.user.Addr
 GET           /my/address/query/:id                   @controllers.api.user.AddressApiController.getAddress(id:Int)
 GET           /address/linkage                        @controllers.api.user.AddressApiController.getProvinceCityInfo()
 
+# my data
+GET           /my/data                                @controllers.api.user.MyDataApiController.index()
+
 # my favorites
 GET           /my/favorites/product/list              @controllers.api.user.ProductFavoritesApiController.list(pageNo:Int ?= 1,pageSize:Int ?= 10)
 DELETE        /my/favorites/product/del/:id           @controllers.api.user.ProductFavoritesApiController.del(id:Int)
