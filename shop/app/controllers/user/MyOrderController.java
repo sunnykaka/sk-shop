@@ -4,6 +4,7 @@ import common.exceptions.AppBusinessException;
 import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;
+import ordercenter.constants.CancelOrderType;
 import ordercenter.dtos.BackApplyForm;
 import ordercenter.models.*;
 import ordercenter.services.BackGoodsService;
@@ -141,7 +142,8 @@ public class MyOrderController extends Controller {
     public Result orderCancel(int orderId,int type) {
 
         User user = SessionUtils.currentUser();
-        orderService.cancelOrder(orderId, user.getId(), type);
+        Order order = orderService.getOrderById(orderId, user.getId());
+        orderService.cancelOrder(order, CancelOrderType.getByIndex(type));
 
         return ok(new JsonResult(true, "取消成功").toNode());
 

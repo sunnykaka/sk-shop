@@ -77,4 +77,12 @@ public enum OrderState implements ViewEnum {
     public boolean waitPay(TradePayType payType) {
         return this == Create && payType == TradePayType.OnLine;
     }
+
+    /**
+     * 未发送的订单都能取消
+     * @return
+     */
+    public boolean canCancel() {
+        return Create == this || Pay == this || Confirm == this || Print == this || Verify == this;
+    }
 }

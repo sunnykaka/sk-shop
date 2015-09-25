@@ -280,30 +280,34 @@ public class OrderService {
     /**
      * 取消订单
      *
-     * @param orderId
-     * @param userId
+     * @param order
      */
-    public void cancelOrder(int orderId, int userId, int type) { //ldj  后续可能会改
-        Order order = getOrderById(orderId, userId);
+    public void cancelOrder(Order order, CancelOrderType type) { //ldj  后续可能会改
         if (null == order) {
             throw new AppBusinessException("取消订单失败，无法查询订单");
         }
 
-        // TODO 取消订单
-        try {
-            int count = this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel,order.getOrderState());
-            if(count == 1) {
-                for (OrderItem oi : order.getOrderItemList()) {
-                    this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
-                    //增加库存
-                    skuAndStorageService.addSkuStock(oi.getSkuId(), oi.getNumber());
-                }
-                order.setOrderState(OrderState.Cancel);
-                this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), CancelOrderType.getName(type)));
-            }
-        } catch (AppBusinessException a) {
-            throw new AppBusinessException("取消订单失败");
+        if(OrderState.Cancel.equals(order.getOrderState())) {
+            return;
         }
+        if(!order.getOrderState().canCancel()) {
+            throw new AppBusinessException(String.format("无法取消订单，订单[订单号='%s']状态现在为: %s",
+                    order.getOrderNo(), order.getOrderState().getValue()));
+        }
+
+        order.setOrderState(OrderState.Cancel);
+        DateTime now = DateUtils.current();
+        order.setEndDate(now);
+        order.setUpdateTime(now);
+        generalDao.persist(order);
+        this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), type.getName()));
+
+        for (OrderItem oi : order.getOrderItemList()) {
+            this.updateOrderItemStateByStrictState(oi.getId(), OrderState.Cancel, oi.getOrderState());
+            //增加库存
+            skuAndStorageService.addSkuStock(oi.getSkuId(), oi.getNumber());
+        }
+
     }
 
     /**
@@ -322,16 +326,10 @@ public class OrderService {
                     continue;
                 }
 
-                int count = this.updateOrderStateByStrictState(order.getId(), OrderState.Cancel, order.getOrderState());
-                if(count == 1) {
-                    List<OrderItem> orderItemList = this.queryOrderItemsByOrderId(order.getId());
-                    for(OrderItem orderItem : orderItemList) {
-                        this.updateOrderItemStateByStrictState(orderItem.getId(), OrderState.Cancel, orderItem.getOrderState());
-                        //增加库存
-                        skuAndStorageService.addSkuStock(orderItem.getSkuId(), orderItem.getNumber());
-                    }
-                    order.setOrderState(OrderState.Cancel);
-                    this.createOrderStateHistory(new OrderStateHistory(order, "系统", OrderState.Cancel.getLogMsg(), CancelOrderType.Sys.getName()));
+                try {
+                    cancelOrder(order, CancelOrderType.Sys);
+                } catch (AppBusinessException e) {
+                    Logger.error("系统定时任务取消超时订单的时候发生错误: " + e.getMessage());
                 }
             }
         }

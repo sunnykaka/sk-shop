@@ -33,13 +33,13 @@ public enum CancelOrderType {
         this.index = index;
     }
     // 普通方法
-    public static String getName(int index) {
+    public static CancelOrderType getByIndex(int index) {
         for (CancelOrderType c : CancelOrderType.values()) {
             if (c.getIndex() == index) {
-                return c.name;
+                return c;
             }
         }
-        return CancelOrderType.Other.getName();
+        return CancelOrderType.Other;
     }
     // get set 方法
     public String getName() {
