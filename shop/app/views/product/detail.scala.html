@@ -100,8 +100,8 @@
                                     @if(index % 2 == 0) {
                                         <tr class="clearfix">
                                         }
-                                    <td><div style="width : 80 px ; float : left ;">@spec.getName
-                                        ：</div> <div style="width : 250 px ; float : left ; line-height : 22 px ;">@spec.getValue</div>
+                                    <td><div style="width : 80px ; float : left ;">@spec.getName
+                                        ：</div> <div style="width : 250px ; float : left ; @if(index % 2 == 0) {line-height : 22px;}else{line-height : 20px;}">@spec.getValue</div>
                                     </td>
                                     @if(index % 2 != 0) {
                                     </tr>
