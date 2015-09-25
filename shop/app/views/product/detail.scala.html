@@ -1,4 +1,4 @@
-@(pd: dtos.ProductDetail,imgsNum: Integer)
+@(pd: dtos.ProductDetail, imgsNum: Integer)
 
 @import common.utils.DateUtils
 @import common.utils.JsonUtils._
@@ -11,7 +11,8 @@
     <script src="@routes.Assets.versioned("js/tpl.js")"></script>
     <script src="@routes.Assets.versioned("js/jquery.fly.min.js")"></script>
     <!--[if lte IE 9]>
-    <script src="@routes.Assets.versioned("js/requestAnimationFrame.js")"></script>
+    <script src="        @routes.Assets.versioned("js/requestAnimationFrame.js")
+    "></script>
     <![endif]-->
     <script type="text/template" id="demo">
     <#
@@ -53,7 +54,8 @@
                         @if(pd.getBase.getProduct.getCustomer.getIsDelete || !pd.getBase.getProduct.getCustomer.getIsPublished) {
                             <li>设计师品牌：@pd.getBase.getProduct.getCustomer.getName</li>
                         } else {
-                            <li><a  href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">设计师品牌：@pd.getBase.getProduct.getCustomer.getName</a></li>
+                            <li><a href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">
+                                设计师品牌：@pd.getBase.getProduct.getCustomer.getName</a></li>
                         }
                         <li>&gt;</li>
                         <li>@pd.getBase.getProduct.getName </li>
@@ -61,58 +63,61 @@
                 </div>
                 <div class="info">
                     <h2>@pd.getBase.getProduct.getName </h2>
-                    <h3><a target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">设计师：@pd.getBase.getProduct.getCustomer.getName</a> </h3>
+                    <h3><a target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">
+                        设计师：@pd.getBase.getProduct.getCustomer.getName</a> </h3>
                     <p>@pd.getBase.getProduct.getDescription </p>
                 </div>
                 <div class="video">
-                    @if(isNotBlank(pd.getBase.getProduct.getVideo)) {
-                        <embed wmode="transparent" src="@Html(pd.getBase.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
-                    } else {
-                        @if(pd.getBase.getProductPictureList.size() > 0){
-                            <img class="lazy" id="bigPic" width="803" height="536" src="@pd.getBase.getProductPictureList.get(0).getPictureUrl" alt="@pd.getBase.getProduct.getName"/>
-                            @if(pd.getBase.getProductPictureList.size() > 1){
-                                <div class="imgIndex">
-                                @for( (pic,index) <- pd.getBase.getProductPictureList.zipWithIndex ){
-                                    <a rel="@index" bigImg="@pic.getPictureUrl"></a>
-                                }
-                                </div>
-                                <div class="sliderBtn"><a class="prev"><i class="icon iconfont">&#xe616;</i></a><a class="next"><i class="icon iconfont">&#xe615;</i></a></div>
+                @if(isNotBlank(pd.getBase.getProduct.getVideo)) {
+                    <embed wmode="transparent" src="@Html(pd.getBase.getProduct.getVideo)" allowFullScreen="true" quality="high" width="803" height="536" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+                } else {
+                    @if(pd.getBase.getProductPictureList.size() > 0) {
+                        <img class="lazy" id="bigPic" width="803" height="536" src="@pd.getBase.getProductPictureList.get(0).getPictureUrl" alt="@pd.getBase.getProduct.getName"/>
+                        @if(pd.getBase.getProductPictureList.size() > 1) {
+                            <div class="imgIndex">
+                            @for((pic, index) <- pd.getBase.getProductPictureList.zipWithIndex) {
+                                <a rel="@index" bigImg="@pic.getPictureUrl"></a>
                             }
-                        } else {
-                            <img width="803" height="536" src="@routes.Assets.versioned("images/detail/1.jpg")" alt="@pd.getBase.getProduct.getName"/>
+                            </div>
+                            <div class="sliderBtn"><a class="prev"><i class="icon iconfont">&#xe616;</i></a><a class="next"><i class="icon iconfont">&#xe615;</i></a></div>
                         }
+                    } else {
+                        <img width="803" height="536" src="@routes.Assets.versioned("images/detail/1.jpg")" alt="@pd.getBase.getProduct.getName"/>
                     }
+                }
                 </div>
                 <div class="img-list">
                     @*<div class="open-detail" id="openDetail">*@
-                        @*<p>点击查看详情 <span class="ico"></span></p>*@
+                    @*<p>点击查看详情 <span class="ico"></span></p>*@
                     @*</div>*@
 
                     <div class="container">
-                        @if(pd.getBase.getSpecList.size > 0){
+                        @if(pd.getBase.getSpecList.size > 0) {
                             <div class="product-info">
                                 <h3>产品说明 Product Description <span class="icon iconfont arc">&#xe612;</span></h3>
                                 <table class="product-info-table">
-                                @for((spec,index) <- pd.getBase.getSpecList.zipWithIndex) {
-                                    @if(index%2== 0){
+                                @for((spec, index) <- pd.getBase.getSpecList.zipWithIndex) {
+                                    @if(index % 2 == 0) {
                                         <tr class="clearfix">
-                                    }
-                                    <td><div style="width: 80px; float:left;">@spec.getName：</div><div style="width: 250px;float:left;line-height: 22px;">@spec.getValue</div></td>
-                                    @if(index%2 != 0){
-                                        </tr>
+                                        }
+                                    <td><div style="width : 80 px ; float : left ;">@spec.getName
+                                        ：</div> <div style="width : 250 px ; float : left ; line-height : 22 px ;">@spec.getValue</div>
+                                    </td>
+                                    @if(index % 2 != 0) {
+                                    </tr>
                                     }
                                 }
                                 </table>
                             </div>
                         }
                         <div class="img-con">
-                            @if(pd.getBase.getHtmlList.nonEmpty) {
-                                @if(null != pd.getBase.getHtmlList.get(0).getContent && !"".equals(pd.getBase.getHtmlList.get(0).getContent)){
-                                    @Html(pd.getBase.getHtmlList.get(0).getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>","<img src='$1' />"))
-                                }else{
-                                    @Html(pd.getBase.getHtmlList.get(0).getContent)
-                                }
+                        @if(pd.getBase.getHtmlList.nonEmpty) {
+                            @if(null != pd.getBase.getHtmlList.get(0).getContent && !"".equals(pd.getBase.getHtmlList.get(0).getContent)) {
+                                @Html(pd.getBase.getHtmlList.get(0).getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>", "<img src='$1' />"))
+                            } else {
+                                @Html(pd.getBase.getHtmlList.get(0).getContent)
                             }
+                        }
                         </div>
 
                             <!--搭配-->
@@ -130,7 +135,7 @@
                                     </p>
                                 }
                                 <ul class="clearfix collacation-list">
-                                @for((product,index) <- pd.getBase.getMatchProductList.zipWithIndex) {
+                                @for((product, index) <- pd.getBase.getMatchProductList.zipWithIndex) {
                                     @if(index < 3) {
                                         @if(pd.getBase.getMatchProductList.size == 1) {
                                             <li class="first">
@@ -145,9 +150,9 @@
                                                 <li>
                                                 }
                                         }
-                                        <a href="/product/@product.getId" target="_blank"><img  class="lazy"  data-original="@product.getMainPic" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="240" height="392"/></a>
+                                        <a href="/product/@product.getId" target="_blank"><img class="lazy" data-original="@product.getMainPic" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="240" height="392"/></a>
                                         <h4 title="@product.getName">@product.getName</h4>
-                                        <a href="/product/@product.getId"  class="pro-btn" target="_blank">SHOP NOW</a>
+                                        <a href="/product/@product.getId" class="pro-btn" target="_blank">SHOP NOW</a>
                                     </li>
                                     }
                                 }
@@ -173,7 +178,7 @@
 
                         </div>
                         @*<div class="hide-detail" id="hideDetail">*@
-                            @*<p>隐藏商品详情 <span class="ico"></span></p>*@
+                        @*<p>隐藏商品详情 <span class="ico"></span></p>*@
                         @*</div>*@
                     </div>
 
@@ -181,98 +186,146 @@
             </div>
             <div id="right-fixed" class="right" >
                 <div class="debut-img">
-                    <img class="lazy" src="@routes.Assets.versioned("images/debut/"+imgsNum+".jpg")" width="373" height="226" alt="全球首发"/>
+                    <img class="lazy" src="@routes.Assets.versioned("images/debut/" + imgsNum + ".jpg")" width="373" height="226" alt="全球首发"/>
                 </div>
-            <div id="debut-box">
-                <div class="debut-info clearfix">
-                    @if(pd.getBase.isInExhibition) {
-                        <div class="debut-info-left">
-                            <p>首发价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
-                            <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">结束</span></span></p>
-                        </div>
-                        <div class="debut-info-right">
-                            <p>售卖价:￥<span class="market-price"  id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
-                                <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
-                        </div>
-                    } else {
-                        <div class="debut-info-left">
-                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
-                        </div>
-                        <div class="debut-info-right">
-                            <p>首发价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getPrice </span><i class="iconfont">&#xe610;</i>
-                                <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
-                        </div>
-                    }
-                </div>
-                @if(pd.getBase.getSkuCandidateList.nonEmpty) {
-                    <div class="detail-size-color" id="choose-sku">
-                    @if(pd.getBase.getDesignerSize != null){<span class="show-size-btn" id="show-size">尺码小帮手</span>}
-                    @for(sc <- pd.getBase.getSkuCandidateList) {
-                        <dl class="clearfix">
-                            <dt>@sc.getSkuProp.getValue：</dt>
-                            @for(sv <- sc.getSkuValueList) {
-                                <dd class="sku" data="@sv.getPidvid">@sv.getValue</dd>
-                            }
-                        </dl>
-                    }
-                    </div>
-                }
-                <div class="detail-quantity">
-                    <dt>数　量：</dt>
-                    <dd>
-                        <div class="amount" id="amount">
-                            <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
-                            <input type="text" size="3" maxlength="3" class="text-number" id="buy-number" value="1">
-                            <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
-                        </div>
-                    </dd>
-                </div>
-                @if(!pd.getBase.getProduct.isOnline) {
-                    <div class="detail-btn">
-                        <span class="btn soldOut">商品已下架</span>
-                    </div>
-                } else {
-                    @if(pd.getBase.getDefaultSku.getStockQuantity <= 0) {
-                        <div class="detail-btn">
-                            <a href="javascript:void(0);" class="btn addToOrder disabled">商品已售罄</a>
-                        </div>
-                    } else {
-                        <div class="detail-btn">
-                            <div class="btn-wrap">
-                                <span  class="btn addToOrder loading-before" id="addToOrder">立即购买</span>
-                                <span  class="btn addToOrder loading-after"><i class="loading-btn"></i>处理中...</span>
+                <div id="debut-box">
+                    <div class="debut-info clearfix">
+                        @if(pd.getBase.getProduct.getSaleStatus == "FIRSTSELL") {
+                                <!-- 首发 -->
+                            <div class="debut-info-left">
+                                <p>首发价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                                <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
+                                    首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
+                                    结束</span></span></p>
                             </div>
-                        <a href="javascript:;" class="btn addToCart" id="addToCart">加入购物车</a>
+                            <div class="debut-info-right">
+                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
+                                    <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                            </div>
+                        }
+
+                        @if(pd.getBase.getProduct.getSaleStatus == "PLANSELL") {
+                                <!-- 首发 -->
+                            <div class="debut-info-left">
+                                <p>首发价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                            </div>
+                            <div class="debut-info-right">
+                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
+                                    <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                            </div>
+                        }
+
+                        @if(pd.getBase.getProduct.getSaleStatus == "PRESELL") {
+                                <!-- 预售 -->
+                            <div class="debut-info-left">
+                                <p>预售价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                                <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
+                                    预售还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
+                                    结束</span></span></p>
+                            </div>
+                            <div class="debut-info-right">
+                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
+                                    <span class="info-tip">此商品为下季新款，到货时间以设计师为准！</span></p>
+                            </div>
+                        }
+
+                        @if(pd.getBase.getProduct.getSaleStatus == "HOTSELL") {
+                                <!-- 热卖 -->
+                            <div class="debut-info-left">
+                                <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
+                            </div>
+                            <div class="debut-info-right">
+                                <p>首发价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getPrice </span><i class="iconfont">&#xe610;</i>
+                                    <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                            </div>
+                        }
+                    </div>
+                    @if(pd.getBase.getSkuCandidateList.nonEmpty) {
+                        <div class="detail-size-color" id="choose-sku">
+                            @if(pd.getBase.getDesignerSize != null) {
+                                <span class="show-size-btn" id="show-size">尺码小帮手</span>
+                            }
+                            @for(sc <- pd.getBase.getSkuCandidateList) {
+                                <dl class="clearfix">
+                                    <dt>@sc.getSkuProp.getValue：</dt>
+                                    @for(sv <- sc.getSkuValueList) {
+                                        <dd class="sku" data="@sv.getPidvid">@sv.getValue</dd>
+                                    }
+                                </dl>
+                            }
                         </div>
                     }
-                }
-                <div class="detail-like">
-                    @if(!pd.getBase.getProduct.getCustomer.getIsDelete && pd.getBase.getProduct.getCustomer.getIsPublished) {
-                        <span class="about-designer"><a target="_blank" target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">查看@pd.getBase.getProduct.getCustomer.getName 主页</a></span>
+                    <div class="detail-quantity">
+                        <dt>数　量：</dt>
+                        <dd>
+                            <div class="amount" id="amount">
+                                <a href="javascript:void(0);" class="btn-sub"><span>-</span></a>
+                                <input type="text" size="3" maxlength="3" class="text-number" id="buy-number" value="1">
+                                <a href="javascript:void(0);" class="btn-add"><span>+</span></a>
+                            </div>
+                        </dd>
+                    </div>
+
+                    @if(pd.getBase.getProduct.getSaleStatus == "PLANSELL") {
+                        <div class="detail-btn">
+                            <span class="btn remind loading-before">开售提醒</span>
+                        </div>
+                    } else {
+                        @if(!pd.getBase.getProduct.isOnline) {
+                            <div class="detail-btn">
+                                <span class="btn soldOut">商品已下架</span>
+                            </div>
+                        } else {
+                            @if(pd.getBase.getDefaultSku.getStockQuantity <= 0) {
+                                <div class="detail-btn">
+                                    <a href="javascript:void(0);" class="btn addToOrder disabled">商品已售罄</a>
+                                </div>
+                            } else {
+                                <div class="detail-btn">
+                                    <div class="btn-wrap">
+                                        <span class="btn addToOrder loading-before" id="addToOrder">立即购买</span>
+                                        <span class="btn addToOrder loading-after"><i class="loading-btn"></i>处理中...</span>
+                                    </div>
+                                    <a href="javascript:;" class="btn addToCart" id="addToCart">加入购物车</a>
+                                    @if(pd.getBase.getProduct.getSaleStatus == "PRESELL") {
+                                        <p>* 此商品为下季新款，到货时间以设计师为准！</p>
+                                    }
+                                </div>
+                            }
+                        }
                     }
-                    <span class="like @if(pd.getBase.isFavorites){current}" data-id="@pd.getBase.getProduct.getId">
-                        <i class="iconfont shi" @if(!pd.getBase.isFavorites){style="display: none;"}>&#xe603;</i>
-                        <i class="iconfont kong" @if(pd.getBase.isFavorites){style="display: none;"}>&#xe602;</i>
-                        <span class="like-text">@if(pd.getBase.isFavorites){ @pd.getBase.getFavoritesNum }else{我喜欢}</span></span>
+                    <div class="detail-like">
+                        @if(!pd.getBase.getProduct.getCustomer.getIsDelete && pd.getBase.getProduct.getCustomer.getIsPublished) {
+                            <span class="about-designer"><a target="_blank" target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">
+                                查看@pd.getBase.getProduct.getCustomer.getName 主页</a></span>
+                        }
+                        <span class="like @if(pd.getBase.isFavorites) {current}" data-id="@pd.getBase.getProduct.getId">
+                            <i class="iconfont shi" @if(!pd.getBase.isFavorites) {
+                                style="display: none;"}>&#xe603;</i>
+                            <i class="iconfont kong" @if(pd.getBase.isFavorites) {
+                                style="display: none;"}>&#xe602;</i>
+                            <span class="like-text">@if(pd.getBase.isFavorites) {
+                                @pd.getBase.getFavoritesNum
+                            } else {我喜欢}</span></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-    @if(pd.getBase.getDesignerSize != null){
-        <div id="size-detail" style="display: none;">
+    @if(pd.getBase.getDesignerSize != null) {
+        <div id="size-detail" style="display : none ;">
             <div class="size-detail-inner">
                 <div class="size-detail-header">
                     <h4>尺码小帮手 <span class="line">|</span> <span>让穿衣更简单！</span></h4>
                 </div>
                 <div class="size-detail-table">
-                    @Html(pd.getBase.getDesignerSize.getContent)
+                @Html(pd.getBase.getDesignerSize.getContent)
                 </div>
-                @if(pd.getBase.getProduct.getModelInfo != null && !"".eq(pd.getBase.getProduct.getModelInfo)){
-                    <div class="model-info clearfix" style="width: 100%;">
-                        <div style="float: left;">模特信息：</div>
-                        <div style="float: left"><p style="">@Html(pd.getBase.getProduct.getModelInfo) </p></div>
+                @if(pd.getBase.getProduct.getModelInfo != null && !"".eq(pd.getBase.getProduct.getModelInfo)) {
+                    <div class="model-info clearfix" style="width : 100 % ;">
+                        <div style="float : left ;">模特信息：</div>
+                        <div style="float : left"><p style="">@Html(pd.getBase.getProduct.getModelInfo) </p></div>
                     </div>
                 }
 
@@ -288,12 +341,21 @@
         </div>
     }
 
+    <!-- 开售提醒 -->
+    <div class='remind-info' id='remind-info'>
+        <div class="remind-info-inner">
+            <p>手机号码：<input type='text' class='phone-number' placeholder='请输入手机号码'><span class='red'>*</span></p>
+            <span class='remind-btn' exhibition-id='@pd.getBase.getProduct.getId'>开售提醒</span>
+        </div>
+    </div>
+
     <!--siderbar-->
     <ul class="sider-bar" id="cart">
-        <li class="cart" title="购物车"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="cart" title="购物车"><span id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">
+            0</span></li>
         <li class="like-product"><a title="喜欢商品" href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
-        <li class="like-designer"><a title="喜欢设计师"  href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
-        <li class="fan-kui"><a title="意见反馈"  href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
+        <li class="like-designer"><a title="喜欢设计师" href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+        <li class="fan-kui"><a title="意见反馈" href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
         <li class="go-top" title="返回顶部"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
     </ul>
     <!--end sideebar-->

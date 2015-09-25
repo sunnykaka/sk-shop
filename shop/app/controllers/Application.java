@@ -16,6 +16,7 @@ import models.ExhibitionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
+import productcenter.constants.SaleStatus;
 import productcenter.models.Product;
 import productcenter.services.ProductCollectService;
 import productcenter.services.ProductPictureService;
@@ -66,91 +67,7 @@ public class Application extends Controller {
     public Result index() {
 
         List<SkModule> modules = skCmsService.buildModuleAndContent();
-
         return ok(index.render(SessionUtils.currentUser(), modules));
-
-//        List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.SELLING);
-//        List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.SELLING);
-//        List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.SELLING);
-//        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE_DOUBLE, 1, ExhibitionStatus.SELLING);
-//
-//        CmsExhibition doubleExhibition = null;
-//
-//        if (floor3Double != null && floor3Double.size() > 0) {
-//            doubleExhibition = floor3Double.get(0);
-//        }
-//
-//        Map<String, List<CmsExhibition>> exhibtionMap = new HashMap<>();
-//        exhibtionMap.put(ExhibitionPosition.FLOOR_ONE, floor1);
-//        exhibtionMap.put(ExhibitionPosition.FLOOR_TWO, floor2);
-//        exhibtionMap.put(ExhibitionPosition.FLOOR_THREE, floor3);
-//
-//
-//        List<CmsContent> contents = cmsService.allContents();
-//
-//        List<CmsContent> sliderBoxs = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.SLIDER_BOX)).collect(toList());
-//        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_1)).findFirst().get();
-//        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.INDEX_FONT_2)).findFirst().get();
-//
-//        int size = sliderBoxs.size() > 3 ? 3 : sliderBoxs.size();
-//
-//        return ok(index.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, sliderBoxs.subList(0, size)));
-    }
-
-
-    private void checkExhibitionContent(List<CmsExhibition> list) {
-        /**
-         * 内容是满的
-         */
-        if (list.size() == 14) {
-            return;
-        }
-        int count = 1;
-        List<Integer> missPositionIndex = new ArrayList<>(14);
-        for (CmsExhibition ex : list) {
-            if (ex.getPositionIndex() == count) {
-                continue;
-            }
-            list.add(cmsService.findExhibitionByPosition(count));
-            count++;
-        }
-
-
-    }
-
-
-    /**
-     * 预告
-     *
-     * @return
-     */
-    public Result preview() {
-        List<CmsExhibition> floor1 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_ONE, 4, ExhibitionStatus.PREPARE);
-        List<CmsExhibition> floor2 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_TWO, 3, ExhibitionStatus.PREPARE);
-        List<CmsExhibition> floor3 = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE, 6, ExhibitionStatus.PREPARE);
-        List<CmsExhibition> floor3Double = cmsService.queryExhibitionByPosition(ExhibitionPosition.FLOOR_THREE_DOUBLE, 1, ExhibitionStatus.PREPARE);
-
-        CmsExhibition doubleExhibition = null;
-
-        if (floor3Double != null && floor3Double.size() > 0) {
-            doubleExhibition = floor3Double.get(0);
-        }
-
-        Map<String, List<CmsExhibition>> exhibtionMap = new HashMap<>();
-        exhibtionMap.put(ExhibitionPosition.FLOOR_ONE, floor1);
-        exhibtionMap.put(ExhibitionPosition.FLOOR_TWO, floor2);
-        exhibtionMap.put(ExhibitionPosition.FLOOR_THREE, floor3);
-
-
-        List<CmsContent> contents = cmsService.allContents();
-
-        CmsContent logImg = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_SLIDER_BOX)).findFirst().get();
-        CmsContent font1 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_1)).findFirst().get();
-        CmsContent font2 = contents.stream().filter(content -> content.getPosition().equals(CmsPosition.PREVIEW_FONT_2)).findFirst().get();
-
-//        int size = sliderBoxs.size() > 1? 1 : sliderBoxs.size();
-
-        return ok(preview.render(SessionUtils.currentUser(), exhibtionMap, doubleExhibition, font1, font2, logImg));
     }
 
 
@@ -178,7 +95,6 @@ public class Application extends Controller {
             return notFound();
         }
 
-        List<CmsExhibition> exhibitions = cmsService.findExhibitionByDesigner(dId);
         List<Product> products = productService.products4Designer(dId);
 
         /**
@@ -188,67 +104,53 @@ public class Application extends Controller {
             ProductInfo info = new ProductInfo();
             info.setProduct(prod);
             info.setMainPic(productPictureService.getMinorProductPictureByProductId(prod.getId()));
-            Optional<CmsExhibition> optional = cmsService.findExhibitionWithProdId(prod.getId());
+//            Optional<CmsExhibition> optional = cmsService.findExhibitionWithProdId(prod.getId());
             info.setFavorites(productCollectService.isFavorites(user, prod.getId()));
             info.setFavoritesNum(productCollectService.countProductCollect(prod.getId()));
-            if (optional.isPresent()) {
-                info.setCmsExhibition(optional.get());
-            }
+//            if (optional.isPresent()) {
+//                info.setCmsExhibition(optional.get());
+//            }
             return info;
         }).collect(toList());
 
+//        /**
+//         * 如果设计师没有专场，那所有的商品直接展示为正常售卖
+//         */
+//        if (exhibitions == null || exhibitions.size() < 1) {
+//            return ok(product_list.render(SessionUtils.currentUser(), designer, null, null, productList));
+//        }
+
         /**
-         * 如果设计师没有专场，那所有的商品直接展示为正常售卖
+         * 首发
          */
-        if (exhibitions == null || exhibitions.size() < 1) {
-            return ok(product_list.render(SessionUtils.currentUser(), designer, null, null, productList));
-        }
+        List<ProductInfo> sellProds = productList.stream().filter(prod ->
+                        prod.getProduct().getSaleStatus().equals(SaleStatus.FIRSTSELL.toString())
+        ).collect(toList());
 
-        List<ProductInfo> sellProds = productList.stream().filter(prod -> {
-            CmsExhibition ex = prod.getCmsExhibition();
-            if (ex == null) {
-                return false;
-            }
-            return ex.getStatus().equals(ExhibitionStatus.SELLING);
-        }).collect(toList());
+        /**
+         * 预售
+         */
+        List<ProductInfo> preProds = productList.stream().filter(prod ->
+                        prod.getProduct().getSaleStatus().equals(SaleStatus.PRESELL.toString())
+        ).collect(toList());
+
+        /**
+         * 热卖
+         */
+        List<ProductInfo> normalProds = productList.stream().filter(prod ->
+                        prod.getProduct().getSaleStatus().equals(SaleStatus.HOTSELL.toString())
+        ).collect(toList());
 
 
-        List<ProductInfo> preProds = productList.stream().filter(prod -> {
-            CmsExhibition ex = prod.getCmsExhibition();
-            if (ex == null) {
-                return false;
-            }
-            return ex.getStatus().equals(ExhibitionStatus.PREPARE);
-        }).collect(toList());
+        /**
+         * 即将开售
+         */
+        List<ProductInfo> planProds = productList.stream().filter(prod ->
+                        prod.getProduct().getSaleStatus().equals(SaleStatus.PLANSELL.toString())
+        ).collect(toList());
 
-        List<ProductInfo> normalProds = productList.stream().filter(prod -> {
-            CmsExhibition ex = prod.getCmsExhibition();
-            if (ex == null) {
-                return true;
-            }
-            return ex.getStatus().equals(ExhibitionStatus.OVER);
-        }).collect(toList());
 
-//        /**
-//         * 先拿到预告的专场，再查询专场的产品的id
-//         */
-//        List<Integer> preIds = exhibitions.stream().filter(ex -> ex.getStatus().equals(ExhibitionStatus.PREPARE)).map(ex -> ex.getId()).collect(toList());
-//        List<CmsExbitionItem> items = cmsService.queryItemListByExbId(preIds);
-//        Set<Integer> preProdIds = items.stream().map(item -> item.getProdId()).collect(toSet());
-//
-//        /**
-//         * 首发中的商品ID
-//         */
-//        List<Integer> sellIds = exhibitions.stream().filter(ex -> ex.getStatus().equals(ExhibitionStatus.PREPARE)).map(ex -> ex.getId()).collect(toList());
-//        List<CmsExbitionItem> items2 = cmsService.queryItemListByExbId(sellIds);
-//        Set<Integer> sellProdIds = items2.stream().map(item -> item.getProdId()).collect(toSet());
-//
-//
-//        List<Product> preProds = products.stream().filter(prod -> preProdIds.contains(prod.getId())).collect(toList());
-//        List<Product> sellProds = products.stream().filter(prod -> sellProdIds.contains(prod.getId())).collect(toList());
-//        List<Product> normalProds = products.stream().filter(prod -> !sellProdIds.contains(prod.getId()) && !preProdIds.contains(prod.getId())).collect(toList());
-
-        return ok(product_list.render(SessionUtils.currentUser(), designer, sellProds, preProds, normalProds));
+        return ok(product_list.render(SessionUtils.currentUser(), designer, sellProds, preProds, normalProds,planProds));
     }
 
 
@@ -260,10 +162,10 @@ public class Application extends Controller {
     public Result designers(int currPage) {
         Page page = new Page(currPage, 8);
         List<DesignerView> list = designerService.designerById(null, page);
-        List<CmsContent> contents = cmsService.allContents();
-        CmsContent content = contents.stream().filter(co -> co.getPosition().equals(CmsPosition.DESIGNER_LIST_LOGO)).findFirst().get();
+//        List<CmsContent> contents = cmsService.allContents();
+//        CmsContent content = contents.stream().filter(co -> co.getPosition().equals(CmsPosition.DESIGNER_LIST_LOGO)).findFirst().get();
         Integer count = designerService.allOnlineDesignerCount();
-        return ok(designers.render(content, list, count));
+        return ok(designers.render(list, count));
     }
 
     public Result designers4More(int currPage) {
@@ -283,11 +185,11 @@ public class Application extends Controller {
 
     }
 
-    public Result userLikeExhibition(Integer exhibitionId, String phone) {
+    public Result userLikeExhibition(Integer prodId, String phone) {
         User user = SessionUtils.currentUser();
         Optional<Integer> userId = user == null ? Optional.empty() : Optional.of(user.getId());
         try {
-            cmsService.userLikeExhibition(exhibitionId, phone, userId);
+            cmsService.userLikeExhibition(prodId, phone, userId);
             return ok(new JsonResult(true).toNode());
         } catch (AppBusinessException e) {
             return ok(new JsonResult(false, e.getMessage()).toNode());

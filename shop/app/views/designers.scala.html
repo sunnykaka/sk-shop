@@ -1,4 +1,4 @@
-@(content:models.CmsContent,designerList: List[usercenter.dtos.DesignerView],count:Integer)
+@(designerList: List[usercenter.dtos.DesignerView],count:Integer)
 
 @import productcenter.models.Seo;
 @main(new Seo(Messages("title.designers"),Messages("seo.description"),Messages("seo.Keywords")))("designer") {
@@ -79,7 +79,7 @@ $(function(){
                 </ul>
             </div>
             <div class="top-img">
-                <img class="lazy" src="@content.getContent" alt="@content.getContent" width="1200px" height="416px"/>
+                <img class="lazy" src="http://imgs.fashiongeeker.com/7/168AC5E9D6804CA899A5D2BCA0CCB584.jpg" alt="设计并不重要，重要的是你自己" width="1200px" height="416px"/>
             </div>
             <div class="designer-list-title">
                 <h2>所有设计师</h2>

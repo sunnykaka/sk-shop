@@ -200,9 +200,8 @@ public class CmsService {
             cmsExhibitionFans.setUserId(userId.get());
         }
         generalDao.persist(cmsExhibitionFans);
-
-        String sql = "update cms_exhibition set baseLike = baseLike + 1 where id = ?1 ";
-        generalDao.getEm().createNativeQuery(sql).setParameter(1, exhibitionId).executeUpdate();
+//        String sql = "update cms_exhibition set baseLike = baseLike + 1 where id = ?1 ";
+//        generalDao.getEm().createNativeQuery(sql).setParameter(1, exhibitionId).executeUpdate();
 
     }
 

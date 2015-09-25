@@ -202,11 +202,11 @@ public class ProductDetailBase {
 
             Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(new DateTime(list.get(0).getTime())) : Optional.empty();
             if(exhibitionEndTime.isPresent()) {
-                productDetailBase.isInExhibition = true;
+//                productDetailBase.isInExhibition = true;
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
 
-            } else {
-                productDetailBase.isInExhibition = false;
+//            } else {
+//                productDetailBase.isInExhibition = false;
             }
 
             return this;

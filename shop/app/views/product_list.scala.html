@@ -1,4 +1,4 @@
-@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo])
+@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo],planProds: List[dtos.ProductInfo] )
 
 @import common.utils.DateUtils
 @import productcenter.models.Seo;
@@ -122,6 +122,38 @@
                     </div>
                 </div>
             </div>
+
+
+            @if(planProds!= null && planProds.size >0) {
+            <div class="brand-start-fashion">
+                <h3>即将开售</h3>
+                <ul class="clearfix">
+                @for((prod,index) <- planProds.zipWithIndex) {
+                    <li>
+                        <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                        @if(index<=3){
+                            <img  alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display: block;"/>
+                        }else{
+                            <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display: block;"/>
+                        }
+                        </a>
+                        <div class="cover">
+                            <div class="design-cover"></div>
+                            <div class="info">
+                                <p class="name">@prod.getProduct.getName</p>
+                            </div>
+                        </div>
+                    </li>
+                }
+                </ul>
+            </div>
+        }
+
+
+
+
+
+
             @if(sellingList!= null && sellingList.size >0) {
                 <div class="brand-start-fashion">
                     <h3>正在首发</h3>
@@ -150,7 +182,7 @@
 
             @if(previewList != null && previewList.size >0) {
                 <div class="ready-online">
-                    <h3>即将上线</h3>
+                    <h3>预售商品</h3>
                     <ul class="clearfix">
 
                     @for(prod <- previewList) {
