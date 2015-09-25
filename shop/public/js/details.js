@@ -777,4 +777,42 @@ $(function () {
         }
     }
 
+    //开售提醒
+    $('.remind').on('click',function(){
+        $.dialog({
+            title:"上线通知我",
+            lock:true,
+            content: $('#remind-info').html(),
+            width: 500,
+            height:240,
+            padding: "20px",
+            show:function(){
+                //提交开售提醒
+                $('.i-content .remind-btn').on('click',function(){
+                    var id =$(this).attr('exhibition-id'),phoneNum = $('.i-content .phone-number').val(),that=this;
+                    $.ajax({
+                        url:'/preview/userLike?prodId='+id+'&phone='+phoneNum,
+                        type:'post',
+                        data:{prodId:id,phone:phoneNum},
+                        success:function(data){
+                            if(data.result){
+                                $(that).parents('.remind-info-inner').remove();
+                                $('.i-content').append('<p class="book-success">订阅成功</p>');
+                            }else{
+                                if($(that).siblings('p').hasClass('error')){
+                                    $('.error').remove();
+                                    $(that).parent().append('<p class="error">*'+data.message+'</p>');
+                                }else{
+                                    $(that).parent().append('<p class="error">*'+data.message+'</p>');
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    });
+
+
+
 });
