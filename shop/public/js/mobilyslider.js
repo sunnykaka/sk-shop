@@ -87,7 +87,8 @@
                         })
                     }, fade: function () {
                         sets.animationStart.call(this);
-                        bullet.removeClass('current').eq(step).addClass('current');
+                        slider.zindex.trigger();
+                        bullet.removeClass("active").eq(step).addClass("active");
                         item.stop(true, true).fadeOut(sets.animationSpeed).eq(step).fadeIn(sets.animationSpeed, function () {
                             sets.animationComplete.call(this)
                         })
@@ -128,9 +129,10 @@
                         if (sets.bullets) {
                             setTimeout(function () {
                                 slider.bullets.update()
-                            }, sets.animationSpeed + 300)
+                            }, sets.animationSpeed)
                         }
                     }, sets.autoplaySpeed)
+
                 }, pause: function () {
                     clearInterval(play)
                 }, bullets: {
@@ -143,14 +145,11 @@
                             }
                         }else{
                             bullets = $t.find(".sliderBullets");
-                            //bulletsLi = $t.find(".sliderBullets a");
                         }
                     }, trigger: function () {
-
                         bullet = bullets.find("a");
                         bullet.eq(0).addClass('current');
                         bullet.eq(0).addClass("active");
-
                         bullet.hover(function(){
                             var rel = $(this).attr('rel');
                             active = bullet.filter(".active").attr("rel");
@@ -170,7 +169,6 @@
                                         break
                                 }
                             }
-                            bullet.removeClass('current').eq(step).addClass('current');
                             bullet.removeClass("active").eq(step).addClass("active");
                         },function(){
 
@@ -194,15 +192,11 @@
                                         break
                                 }
                             }
-                            bullet.parent("li").removeClass('current');
-                            bullet.removeClass("active");
-                            b.addClass("active");
-                            b.parent('li').addClass('current');
+                            bullet.removeClass("active").eq(step).addClass("active");
                             return false
                         });
                     }, update: function () {
-                        bullet.removeClass("active").eq(step).addClass("active");
-
+                        //bullet.removeClass("active").eq(step).addClass("active");
                     }
                 }, arrows: {
                     create: function () {

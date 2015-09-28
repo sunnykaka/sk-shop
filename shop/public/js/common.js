@@ -230,7 +230,7 @@ $(window).on('resize load',function(){
         $('.sliderArrows div').css('width','1200');
     }else{
         $('#cart').removeClass('small-sider');
-        $('.sliderArrows div').css('width','90%');
+        $('.sliderArrows div').css('width','80%');
     }
 
     var sUserAgent = navigator.userAgent,

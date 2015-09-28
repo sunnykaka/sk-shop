@@ -35,7 +35,7 @@ $(function(){
         transition:'fade',
         animationSpeed:1000,
         autoplay: true,
-        autoplaySpeed:6000,
+        autoplaySpeed:5000,
         pauseOnHover:true,
         bullets:true,
         arrows:true,
@@ -65,8 +65,13 @@ $(function(){
 
             }else{
                 var str = "已结束！";
-                //$(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
-                obj.parent('.time-text').html('').text(str);
+                if(obj.parents('.preview').size()>0){
+                    obj.parent('.time-text').html('').text("已开始！");
+                }else{
+                    obj.parent('.time-text').html('').text(str);
+                }
+
+
             }
             obj.text(str);
         });
