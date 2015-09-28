@@ -70,7 +70,6 @@ $(function () {
 
             }else{
                 var str = "已结束！";
-                //$(".time-detail:contains(结束)").siblings('.over-text').fadeOut();
                 obj.parent('.time-text').html('').text(str);
             }
             obj.text(str);
@@ -538,7 +537,7 @@ $(function () {
                     //设置价格
                     if (len == _skuAttrNum) {
                         _price = currentSku.marketPrice;
-                        if(inExhibition){ //判断是否是首发
+                        if(saleStatus == "FIRSTSELL" || saleStatus == "PRESELL"){ //判断是否是首发
                             if ($("#start-price").length) {
                                 $("#start-price").html(currentSku.price);
                             }
@@ -629,7 +628,25 @@ $(function () {
                     } else {
                         if (data.message == 'Credentials required') {
                             createLoginReg();
+                        }else{
+                            $.dialog({
+                                title: '提示',
+                                lock: true,
+                                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>'+data.message+'</p></div>',
+                                width: 500,
+                                height: 248,
+                                padding: "20",
+                                btn: {
+                                    ok : {
+                                        val : '关闭',
+                                        type : 'red'
+                                    }
+                                }
+                            });
                         }
+
+
+
                         $(that).parent('.btn-wrap').removeClass('loading');
                     }
                 }

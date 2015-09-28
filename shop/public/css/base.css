@@ -631,11 +631,11 @@ table .pro{width: 360px;}
 .detail-inner .debut-img{width: 373px;height: 226px;margin:58px 0 23px 0; }
 .detail-inner #debut-box{width: 373px;overflow: hidden;}
 .debut-info,.detail-size-color{padding-bottom: 32px;border-bottom: 1px solid #e5e5e5;*height:1%;}
-.debut-info .debut-info-left{float: left;width:200px;}
+.debut-info .debut-info-left{float: left;width:226px;}
 .debut-info-left p{line-height: 34px;font-size: 12px;}
 .debut-info-left .start-price{color: #FF2D54;font-size: 20px;}
 .debut-info-left .debut-time i{margin-right: 4px;font-size: 16px;}
-.debut-info .debut-info-right{float: right;width:173px;position: relative;}
+.debut-info .debut-info-right{float: right;width:140px;position: relative;}
 .debut-info-right p i{color: #7B7B7B;cursor: pointer;}
 .debut-info-right p i:hover{color:#4a4947;}
 .debut-info-right .market-price{  cursor: pointer;text-decoration: line-through;padding-right: 36px;line-height: 34px;height: 34px;}
