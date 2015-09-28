@@ -36,7 +36,7 @@
 
     var productOnline = @pd.getBase.getProduct.isOnline;
 
-    var inExhibition = @pd.getBase.isInExhibition;
+    var saleStatus = "@pd.getBase.getProduct.getSaleStatus";
 
     var productId = @pd.getBase.getProduct.getId;
 
@@ -199,8 +199,7 @@
                                     结束</span></span></p>
                             </div>
                             <div class="debut-info-right">
-                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
-                                    <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
                             </div>
                         }
 
@@ -210,8 +209,7 @@
                                 <p>首发价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
                             </div>
                             <div class="debut-info-right">
-                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
-                                    <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
                             </div>
                         }
 
@@ -224,8 +222,7 @@
                                     结束</span></span></p>
                             </div>
                             <div class="debut-info-right">
-                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span><i class="iconfont">&#xe610;</i>
-                                    <span class="info-tip">此商品为下季新款，到货时间以设计师为准！</span></p>
+                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
                             </div>
                         }
 
@@ -235,8 +232,18 @@
                                 <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
                             </div>
                             <div class="debut-info-right">
-                                <p>首发价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getPrice </span><i class="iconfont">&#xe610;</i>
-                                    <span class="info-tip">首发期间的商品采用首发价，每天都有设计师首发哦！</span></p>
+                                <p>首发价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                            </div>
+                        }
+
+
+                        @if(!pd.getBase.getProduct.isOnline) {
+                                <!-- 下架 -->
+                            <div class="debut-info-left">
+                                <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
+                            </div>
+                            <div class="debut-info-right">
+                                <p>首发价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getPrice </span></p>
                             </div>
                         }
                     </div>

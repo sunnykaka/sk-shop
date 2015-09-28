@@ -6,6 +6,7 @@ import common.utils.play.BaseGlobal;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import productcenter.constants.SKUState;
+import productcenter.constants.SaleStatus;
 import productcenter.models.*;
 import productcenter.services.*;
 import usercenter.models.DesignerSize;
@@ -161,6 +162,7 @@ public class ProductDetailBase {
 
         /**
          * 读取产品描述与图片
+         *
          * @return
          */
         public Builder buildProductDetail() {
@@ -169,9 +171,9 @@ public class ProductDetailBase {
             List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(productDetailBase.product.getId());
             //productDetail.productPictureList.addAll(productPictures);
             //需求变动。改为多主图轮播
-            if(!productPictures.isEmpty()) {
+            if (!productPictures.isEmpty()) {
                 List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMainPic).collect(Collectors.toList());
-                if(!collect.isEmpty()) {
+                if (!collect.isEmpty()) {
                     //productDetail.productPicture = collect.get(0);
                     productDetailBase.productPictureList.addAll(collect);
                 }
@@ -192,6 +194,7 @@ public class ProductDetailBase {
 
         /**
          * 读取CMS相关
+         *
          * @return
          */
         public Builder buildCms() {
@@ -201,8 +204,9 @@ public class ProductDetailBase {
             List<java.sql.Timestamp> list = BaseGlobal.ctx.getBean(GeneralDao.class).getEm().createNativeQuery(sql).setParameter(1, productDetailBase.product.getId()).getResultList();
 
             Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(new DateTime(list.get(0).getTime())) : Optional.empty();
-            if(exhibitionEndTime.isPresent()) {
-//                productDetailBase.isInExhibition = true;
+
+            if (exhibitionEndTime.isPresent()) {
+                productDetailBase.isInExhibition = productDetailBase.product.getSaleStatus().equals(SaleStatus.FIRSTSELL);
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
 
 //            } else {
@@ -214,6 +218,7 @@ public class ProductDetailBase {
 
         /**
          * 读取sku相关
+         *
          * @return
          */
         public Builder buildSku() {
@@ -221,12 +226,12 @@ public class ProductDetailBase {
             //构造skuDetailList
             List<SkuDetail> skuDetailList =
                     skuAndStorageService.querySkuListByProductId(productDetailBase.product.getId()).
-                    stream().
-                    filter(sku -> sku.getSkuState() == SKUState.NORMAL || sku.getId().equals(defaultSkuId)).
-                    map(sku -> SkuDetail.Builder.newBuilder(sku).buildSku().build()).
-                    collect(Collectors.toList());
+                            stream().
+                            filter(sku -> sku.getSkuState() == SKUState.NORMAL || sku.getId().equals(defaultSkuId)).
+                            map(sku -> SkuDetail.Builder.newBuilder(sku).buildSku().build()).
+                            collect(Collectors.toList());
 
-            if(skuDetailList.isEmpty()) {
+            if (skuDetailList.isEmpty()) {
                 play.Logger.warn(String.format("商品[id=%d]无有效的sku", productDetailBase.product.getId()));
                 throw new AppBusinessException("您请求的商品没有找到, 请看看其他的吧");
             }
@@ -262,7 +267,7 @@ public class ProductDetailBase {
 
             //填充skuPropertyMap
             skuDetailList.stream().flatMap(skuDetail ->
-                skuDetail.getSku().getSkuProperties().stream()
+                            skuDetail.getSku().getSkuProperties().stream()
             ).forEach(skuProperty -> {
                 valueIdSet.add(skuProperty.getValueId());
                 skuPropertyMap.compute(skuProperty.getPropertyId(), (k, v) -> {
@@ -297,12 +302,12 @@ public class ProductDetailBase {
                 SkuCandidate.SkuProp skuProp = new SkuCandidate.SkuProp(k, randomSkuProperty.getPropertyName(), propertyPriorityMap.getOrDefault(k, 0));
                 Set<SkuCandidate.SkuValue> skuValueSet =
                         v.stream().
-                        map(skuProperty -> new SkuCandidate.SkuValue(
-                                skuProperty.getValueId(),
-                                skuProperty.getPropertyValue(),
-                                skuProperty.getPidvid(),
-                                propertyValuePriorityMap.getOrDefault(String.format("%d,%d", k, skuProperty.getValueId()), 0))).
-                        collect(Collectors.toSet());
+                                map(skuProperty -> new SkuCandidate.SkuValue(
+                                        skuProperty.getValueId(),
+                                        skuProperty.getPropertyValue(),
+                                        skuProperty.getPidvid(),
+                                        propertyValuePriorityMap.getOrDefault(String.format("%d,%d", k, skuProperty.getValueId()), 0))).
+                                collect(Collectors.toSet());
 
                 skuCandidateList.add(new SkuCandidate(skuProp, new ArrayList<>(skuValueSet)));
             });
@@ -310,7 +315,7 @@ public class ProductDetailBase {
             //为skuCandidateList排序, 按priority排序
             skuCandidateList.sort((o1, o2) -> new Integer(o1.getSkuProp().getPriority()).compareTo(o2.getSkuProp().getPriority()));
             skuCandidateList.forEach(skuCandidate ->
-                    skuCandidate.getSkuValueList().sort((o1, o2) -> new Integer(o1.getPriority()).compareTo(o2.getPriority()))
+                            skuCandidate.getSkuValueList().sort((o1, o2) -> new Integer(o1.getPriority()).compareTo(o2.getPriority()))
             );
 
             productDetailBase.skuCandidateList = skuCandidateList;
@@ -320,31 +325,32 @@ public class ProductDetailBase {
 
         /**
          * 读取默认sku信息
+         *
          * @return
          */
         public Builder buildDefaultSku() {
 
-            if(!productDetailBase.skuMap.isEmpty()) {
+            if (!productDetailBase.skuMap.isEmpty()) {
                 Optional<SkuInfo> defaultSku = Optional.empty();
-                if(defaultSkuId != null) {
+                if (defaultSkuId != null) {
                     //前端请求的时候带了skuId
                     defaultSku = productDetailBase.skuMap.values().stream().
                             filter(skuInfo -> skuInfo.getSkuId().equals(defaultSkuId)).findFirst();
                 }
-                if(!defaultSku.isPresent()) {
+                if (!defaultSku.isPresent()) {
                     //查找defaultSku为true的sku
                     defaultSku = productDetailBase.skuMap.values().stream().
                             filter(SkuInfo::isDefaultSku).findFirst();
 
                 }
-                if(!defaultSku.isPresent()) {
+                if (!defaultSku.isPresent()) {
                     //查找价格最低的sku
                     //查找库存数量大于0, 并且价格最低的sku
                     Optional<SkuInfo> min = productDetailBase.skuMap.values().stream().
                             filter(skuInfo -> skuInfo.getStockQuantity() > 0).
                             min(minSkuPriceComparator());
                     //如果min不存在，代表库存数量都为0，直接找价格最低的sku
-                    if(!min.isPresent()) {
+                    if (!min.isPresent()) {
                         min = productDetailBase.skuMap.values().stream().
                                 min(minSkuPriceComparator());
                     }
@@ -369,7 +375,7 @@ public class ProductDetailBase {
             };
         }
 
-        public Builder buildFavorites(){
+        public Builder buildFavorites() {
 
             productDetailBase.setFavoritesNum(productCollectService.countProductCollect(productDetailBase.product.getId()));
             productDetailBase.setFavorites(productCollectService.isFavorites(user, productDetailBase.product.getId()));
@@ -379,16 +385,17 @@ public class ProductDetailBase {
 
         /**
          * 搭配产品（商品）
+         *
          * @return
          */
         public Builder buildMatchProductList() {
             List<Product> matchProjectList = productService.queryMatchProductList(productDetailBase.product.getId());
-            for(Product product : matchProjectList) { //先这样，以后再优化
-               //读取副图
+            for (Product product : matchProjectList) { //先这样，以后再优化
+                //读取副图
                 List<ProductPicture> productPictures = productPictureService.queryProductPicturesByProductId(product.getId());
-                if(!productPictures.isEmpty()) {
+                if (!productPictures.isEmpty()) {
                     List<ProductPicture> collect = productPictures.stream().filter(ProductPicture::isMinorPic).collect(Collectors.toList());
-                    if(!collect.isEmpty()) {
+                    if (!collect.isEmpty()) {
                         product.setMainPic(collect.get(0).getPictureUrl());
                     }
                 }

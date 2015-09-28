@@ -60,8 +60,8 @@
                 </div>
                 <div class="sliderArrows" style="z-index : 11 ;">
                     <div>
-                        <a href="javascript:void(0)" class="png_bg prev" style="display : block ;"></a>
-                        <a href="javascript:void(0)" class="png_bg next" style="display : block ;"></a>
+                        <a href="javascript:void(0)" class="png_bg prev" style="display : block ;"><i class="icon iconfont">&#xe616;</i></a>
+                        <a href="javascript:void(0)" class="png_bg next" style="display : block ;"><i class="icon iconfont">&#xe615;</i></a>
                     </div>
                 </div>
             </div>
@@ -76,10 +76,10 @@
         <div class="start-fashion">
             <div class="start-fashion-inner width1200">
                 @if(modules(1).getName != null) {
-                    <h2>@modules(1).getName</h2>
+                    <h2>@Html(modules(1).getName)</h2>
                 }
                 @if(modules(1).getDescription != null) {
-                    <p class="info">@modules(1).getDescription </p>
+                    <p class="info">@Html(modules(1).getDescription) </p>
                 }
                 <ul class="clearfix">
                 @for(content <- modules(1).getContents) {
@@ -97,7 +97,7 @@
 
         <div class="fashion-box">
             <div class="fashion-box-inner width1200">
-                <h2>@modules(2).getName</h2>
+                <h2>@Html(modules(2).getName)</h2>
                 <p class="en-info">@Html(modules(2).getDescription)</p>
 
                 <ul class="clearfix">
@@ -131,7 +131,7 @@
         <div class="empty-box">
             <div class="empty-box-inner width1200">
 
-                <h2>@modules(3).getName</h2>
+                <h2>@Html(modules(3).getName)</h2>
                 <p class="info">@Html(modules(3).getDescription)</p>
 
                 <ul class="clearfix">
@@ -168,7 +168,7 @@
 
         <div class="fashion-box preview">
             <div class="fashion-box-inner width1200">
-                <h2>@modules(4).getName</h2>
+                <h2>@Html(modules(4).getName)</h2>
                 <p class="en-info">@Html(modules(4).getDescription)</p>
 
                 <ul class="clearfix">
@@ -179,10 +179,10 @@
                             <div class="info">
                                 <p><span class="designer">@exhibition.getTitle</span></p>
                                 <div class="time">
-                                    <span class="time-text">
+                                    <span class="time-text">开始时间：
                                         <i class="icon iconfont">&#xe605;</i>
-                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                        <span class="over-text">结束</span>
+                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getStartTime)">@exhibition.getStartTime()</span>
+                                        @*<span class="over-text">开始</span>*@
                                     </span>
                                 </div>
                             </div>

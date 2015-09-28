@@ -1,13 +1,13 @@
-@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo],planProds: List[dtos.ProductInfo] )
+@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo], planProds: List[dtos.ProductInfo])
 
 @import common.utils.DateUtils
 @import productcenter.models.Seo;
 
-@main(new Seo(designer.getName + Messages("title.product.list"),"尚客"+ designer.getName +"专场，全球首发，限量发售，限时抢购！",designer.getName + "," + Messages("seo.Keywords")))() {
-<script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
-<script src="@routes.Assets.versioned("js/login-reg.js")"></script>
-<script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
-<script>
+@main(new Seo(designer.getName + Messages("title.product.list"), "尚客" + designer.getName + "专场，全球首发，限量发售，限时抢购！", designer.getName + "," + Messages("seo.Keywords")))() {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
+    <script>
     $(function(){
 
        $('.brand-start-fashion li,.ready-online li,.hot-sale li').hover(function(){
@@ -96,147 +96,145 @@
 
 
 } {
-<div id="container">
-    <div class="designer-brand">
-        <div class="designer-brand-inner width1200">
-            <div class="bread-nav">
-                <ul class="clearfix">
-                    <li><a href="@controllers.routes.Application.index()">首页</a></li>
-                    <li>&gt;</li>
-                    <li><a href="@controllers.routes.Application.designers()">设计师</a></li>
-                    <li>&gt;</li>
-                    <li>@designer.getName</li>
-                </ul>
-            </div>
-            <div class="top-con">
-                <img  alt="@designer.getName"  src="@designer.getStorePic" width="439px" height="370px"/>
-                <div class="designer-con">
-                    <div class="designer-con-title">
-                        <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites){hasFocus}" id="designerFocus" data-id="@designer.getId">
-                            <i class="iconfont shi"  @if(!designer.isFavorites){style="display: none;"}>&#xe613;</i> <i class="iconfont kong" @if(designer.isFavorites){style="display: none;"}>&#xe601;</i>
-                            <span class="focus-text">@if(designer.isFavorites){已}关注</span></span>
-                        </h2>
-                    </div>
-                    <div class="designer-con-content">
-                   <p> @designer.getDescription</p>
-                    </div>
+    <div id="container">
+        <div class="designer-brand">
+            <div class="designer-brand-inner width1200">
+                <div class="bread-nav">
+                    <ul class="clearfix">
+                        <li><a href="@controllers.routes.Application.index()">首页</a></li>
+                        <li>&gt;</li>
+                        <li><a href="@controllers.routes.Application.designers()">设计师</a></li>
+                        <li>&gt;</li>
+                        <li>@designer.getName</li>
+                    </ul>
                 </div>
-            </div>
-
-
-            @if(planProds!= null && planProds.size >0) {
-            <div class="brand-start-fashion">
-                <h3>即将开售</h3>
-                <ul class="clearfix">
-                @for((prod,index) <- planProds.zipWithIndex) {
-                    <li>
-                        <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                        @if(index<=3){
-                            <img  alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display: block;"/>
-                        }else{
-                            <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display: block;"/>
-                        }
-                        </a>
-                        <div class="cover">
-                            <div class="design-cover"></div>
-                            <div class="info">
-                                <p class="name">@prod.getProduct.getName</p>
-                            </div>
+                <div class="top-con">
+                    <img alt="@designer.getName" src="@designer.getStorePic" width="439px" height="370px"/>
+                    <div class="designer-con">
+                        <div class="designer-con-title">
+                            <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites) {hasFocus}" id="designerFocus" data-id="@designer.getId">
+                                <i class="iconfont shi" @if(!designer.isFavorites) {
+                                    style="display: none;"}>&#xe613;</i> <i class="iconfont kong" @if(designer.isFavorites) {
+                                style="display: none;"}>&#xe601;</i>
+                                <span class="focus-text">@if(designer.isFavorites) {已}关注</span></span>
+                            </h2>
                         </div>
-                    </li>
-                }
-                </ul>
-            </div>
-        }
+                        <div class="designer-con-content">
+                            <p> @designer.getDescription</p>
+                        </div>
+                    </div>
+                </div>
 
 
-
-
-
-
-            @if(sellingList!= null && sellingList.size >0) {
-                <div class="brand-start-fashion">
-                    <h3>正在首发</h3>
-                    <ul class="clearfix">
-                    @for((prod,index) <- sellingList.zipWithIndex) {
-                        <li>
-                            <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                @if(index<=3){
-                                    <img  alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display: block;"/>
-                                }else{
-                                    <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display: block;"/>
+                @if(sellingList != null && sellingList.size > 0) {
+                    <div class="brand-start-fashion">
+                        <h3>正在首发</h3>
+                        <ul class="clearfix">
+                        @for((prod, index) <- sellingList.zipWithIndex) {
+                            <li>
+                                <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                                @if(index <= 3) {
+                                    <img alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display : block ;"/>
+                                } else {
+                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
                                 }
-                            </a>
-                            <div class="cover">
-                                <div class="design-cover"></div>
-                                <div class="info">
-                                    <p class="name">@prod.getProduct.getName</p>
+                                </a>
+                                <div class="cover">
+                                    <div class="design-cover"></div>
+                                    <div class="info">
+                                        <p class="name">@prod.getProduct.getName</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    }
-                    </ul>
-                </div>
-            }
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                }
 
 
-            @if(previewList != null && previewList.size >0) {
-                <div class="ready-online">
-                    <h3>预售商品</h3>
-                    <ul class="clearfix">
+                @if(previewList != null && previewList.size > 0) {
+                    <div class="ready-online">
+                        <h3>预售商品</h3>
+                        <ul class="clearfix">
 
-                    @for(prod <- previewList) {
-                        <li>
-                            <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
-                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"  style="display: block;"/>
-                            </a>
-                            <div class="cover">
-                                <div class="design-cover"></div>
-                                <div class="info">
-                                    <p class="name">@prod.getProduct.getName</p>
+                        @for(prod <- previewList) {
+                            <li>
+                                <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
+                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
+                                </a>
+                                <div class="cover">
+                                    <div class="design-cover"></div>
+                                    <div class="info">
+                                        <p class="name">@prod.getProduct.getName</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    }
+                            </li>
+                        }
 
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
 
-            }
+                }
 
 
-            @if(normalList != null && normalList.size >0 ) {
-                <div class="hot-sale">
-                    <h3>热销产品</h3>
-                    <ul class="clearfix">
+                @if(normalList != null && normalList.size > 0) {
+                    <div class="hot-sale">
+                        <h3>热销产品</h3>
+                        <ul class="clearfix">
 
-                    @for(prod <- normalList) {
-                        <li>
-                            <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                <img class="lazy"   data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462"  style="display: block;"/>
-                            </a>
-                            <div class="cover">
-                                <div class="design-cover"></div>
-                                <div class="info">
-                                    <p class="name">@prod.getProduct.getName</p>
+                        @for(prod <- normalList) {
+                            <li>
+                                <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
+                                </a>
+                                <div class="cover">
+                                    <div class="design-cover"></div>
+                                    <div class="info">
+                                        <p class="name">@prod.getProduct.getName</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    }
+                            </li>
+                        }
 
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
+                }
 
-            }
+
+                @if(planProds != null && planProds.size > 0) {
+                    <div class="brand-start-fashion">
+                        <h3>即将开售</h3>
+                        <ul class="clearfix">
+                        @for((prod, index) <- planProds.zipWithIndex) {
+                            <li>
+                                <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                                @if(index <= 3) {
+                                    <img alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display : block ;"/>
+                                } else {
+                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
+                                }
+                                </a>
+                                <div class="cover">
+                                    <div class="design-cover"></div>
+                                    <div class="info">
+                                        <p class="name">@prod.getProduct.getName</p>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-</div>
     <!--siderbar-->
     <ul class="sider-bar" id="cart">
-        <li class="cart" title="购物车"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
+        <li class="cart" title="购物车"><span id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">
+            0</span></li>
         <li class="like-product"><a title="喜欢商品" href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
-        <li class="like-designer"><a title="喜欢设计师"  href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
-        <li class="fan-kui"><a title="意见反馈"  href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
+        <li class="like-designer"><a title="喜欢设计师" href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
+        <li class="fan-kui"><a title="意见反馈" href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
         <li class="go-top" title="返回顶部"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
     </ul>
     <!--end sideebar-->

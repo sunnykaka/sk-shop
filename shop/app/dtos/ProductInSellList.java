@@ -146,7 +146,7 @@ public class ProductInSellList {
             /**
              * 首发就读首发价，其余状态都读正常售卖价
              */
-            if (product.getSaleStatus().equals(SaleStatus.FIRSTSELL)) {
+            if (product.getSaleStatus().equals(SaleStatus.FIRSTSELL.toString())) {
                 this.productInSellList.price = mostCheapSku.getPrice();
             } else {
                 this.productInSellList.price = mostCheapSku.getMarketPrice();

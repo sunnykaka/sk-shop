@@ -108,10 +108,12 @@
                             <div class="products-list-hd-left left">
                                 <ul class="clearfix">
 
-                                    <li @if(queryVO.getSt == null) {class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, status = queryVO.getSaleStatus)">
+                                    <li @if(queryVO.getSt == null || queryVO.getSt != 1) {
+                                        class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, status = queryVO.getSaleStatus)">
                                         全部</a></li>
 
-                                    <li @if(queryVO.getSt != null && queryVO.getSt == 1) {class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1, status = queryVO.getSaleStatus)">
+                                    <li @if(queryVO.getSt != null && queryVO.getSt == 1) {
+                                        class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1, status = queryVO.getSaleStatus)">
                                         只显示有货商品</a></li>
                                 </ul>
                             </div>
