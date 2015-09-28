@@ -8,19 +8,22 @@
     <li>
         <div class="img">
             <a target="_blank" href="@content.getLink"><img class="lazy" data-original="@content.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getTitle" width="590" height="275"/></a>
-            <div class="time">
-                <div class="cover"></div>
-                @if(content.getEndTime != null) {
+            @if(content.getEndTime != null) {
+                <div class="time">
+                    <div class="cover"></div>
                     <span class="time-text">
                         还剩 <i class="icon iconfont">&#xe605;</i>
                         <span class="time-detail" value="@DateUtils.printDateTime(content.getEndTime())">@DateUtils.printDateTime(content.getEndTime())</span>
                         <span class="over-text">结束</span>
                     </span>
-                }
-            </div>
+
+                </div>
+            }
         </div>
         <div class="title">
+        @if(content.getBackPic != null && content.getBackPic !="" ) {
             <img class="lazy" data-original="@content.getBackPic" src="@routes.Assets.versioned("images/grey.gif")" alt="@content.getTitle" height="60"/>
+        }
             <p><span class="designer">@content.getTitle</span></p>
         </div>
     </li>
@@ -51,16 +54,9 @@
                     }
                 </div>
                 <div class="sliderBullets">
-                    <ul class="clearfix">
                     @for((content, index) <- modules(0).getContents.zipWithIndex) {
-                        <li>
-                            <a target="_blank" href="javascript:void(0);" rel="@index" class="" hidefocus="true" style="outline : none ;">
-                                <img class="lazy" src="@content.getPic" alt="@content.getTitle" width="390" height="103"/>
-                            </a>
-                            <div class="cover"></div>
-                        </li>
+                        <a rel="@index"></a>
                     }
-                    </ul>
                 </div>
                 <div class="sliderArrows" style="z-index : 11 ;">
                     <div>
@@ -111,13 +107,13 @@
                             <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getTitle" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getTitle</span></p>
-                                <div class="time">
-                                    <span class="time-text">
-                                        <i class="icon iconfont">&#xe605;</i>
-                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                        <span class="over-text">结束</span>
-                                    </span>
-                                </div>
+                                @*<div class="time">*@
+                                    @*<span class="time-text">*@
+                                        @*<i class="icon iconfont">&#xe605;</i>*@
+                                        @*<span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>*@
+                                        @*<span class="over-text">结束</span>*@
+                                    @*</span>*@
+                                @*</div>*@
                             </div>
                         </a>
                     </li>
@@ -140,21 +136,57 @@
 
                 <ul class="clearfix">
                 @for(exhibition <- modules(3).getContents) {
-                    <li @if(exhibition.getPicSize == 2){class="double"}>
+                    <li @if(exhibition.getPicSize == 2) {
+                        class="double"}>
                         <a target="_blank" href="@exhibition.getLink">
-                            <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" @if(exhibition.getPicSize == 2){width="594"}else{width="291"} height="437" alt="@exhibition.getTitle"/>
+                            <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" @if(exhibition.getPicSize == 2) {
+                                width="594"
+                            } else {
+                                width="291"
+                            } height="437" alt="@exhibition.getTitle"/>
                         </a>
                         <div class="title">
                             <p><span class="designer">@exhibition.getTitle</span></p>
                             <div class="cover"></div>
-                            <div class="time">
-                                <span class="time-text">
-                                    <i class="icon iconfont">&#xe605;</i>
-                                    <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
-                                    <span class="over-text">结束</span>
-                                </span>
-                            </div>
+                            @*<div class="time">*@
+                                @*<span class="time-text">*@
+                                    @*<i class="icon iconfont">&#xe605;</i>*@
+                                    @*<span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>*@
+                                    @*<span class="over-text">结束</span>*@
+                                @*</span>*@
+                            @*</div>*@
                         </div>
+                    </li>
+                }
+                </ul>
+            </div>
+        </div>
+    }
+
+
+    @if(modules.size >= 5) {
+
+        <div class="fashion-box preview">
+            <div class="fashion-box-inner width1200">
+                <h2>@modules(4).getName</h2>
+                <p class="en-info">@Html(modules(4).getDescription)</p>
+
+                <ul class="clearfix">
+                @for(exhibition <- modules(4).getContents) {
+                    <li>
+                        <a target="_blank" href="@exhibition.getLink">
+                            <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getTitle" width="390" height="182" />
+                            <div class="info">
+                                <p><span class="designer">@exhibition.getTitle</span></p>
+                                <div class="time">
+                                    <span class="time-text">
+                                        <i class="icon iconfont">&#xe605;</i>
+                                        <span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>
+                                        <span class="over-text">结束</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
                     </li>
                 }
                 </ul>
