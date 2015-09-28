@@ -22,7 +22,7 @@ public class AppThemeDto {
 
     private Integer id;
 
-    private DateTime startTime;
+    private String startTime;
 
     private int themeNo;
 
@@ -45,7 +45,7 @@ public class AppThemeDto {
         AppThemeDto appThemeDto = new AppThemeDto();
         appThemeDto.setId(appTheme.getId());
         appThemeDto.setName(appTheme.getName());
-        appThemeDto.setStartTime(appTheme.getStartTime());
+        appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
         appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
@@ -75,7 +75,7 @@ public class AppThemeDto {
         AppThemeDto appThemeDto = new AppThemeDto();
         appThemeDto.setId(appTheme.getId());
         appThemeDto.setName(appTheme.getName());
-        appThemeDto.setStartTime(appTheme.getStartTime());
+        appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
         List<AppThemeContent> appThemeContentList = appThemeService.getAppThemeContentByThemeId(appTheme.getId());
@@ -102,11 +102,11 @@ public class AppThemeDto {
         this.id = id;
     }
 
-    public DateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 

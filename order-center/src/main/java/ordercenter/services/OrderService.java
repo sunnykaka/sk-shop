@@ -297,8 +297,8 @@ public class OrderService {
 
         order.setOrderState(OrderState.Cancel);
         DateTime now = DateUtils.current();
-        order.setEndDate(now);
         order.setUpdateTime(now);
+        order.setEndDate(now);
         generalDao.persist(order);
         this.createOrderStateHistory(new OrderStateHistory(order, OrderState.Cancel.getLogMsg(), type.getName()));
 

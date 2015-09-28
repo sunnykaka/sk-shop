@@ -17,13 +17,7 @@ public class UserDateHomeDto {
         UserDateHomeDto userDateHomeDto = new UserDateHomeDto();
 
         userDateHomeDto.setMobile(userData.getUser().getPhone());
-
-        if(StringUtils.isEmpty(userData.getName())){
-            userDateHomeDto.setName(userData.getUser().getUserName());
-        }else{
-            userDateHomeDto.setName(userData.getName());
-        }
-
+        userDateHomeDto.setName(userData.getUser().getUserName());
 
         return userDateHomeDto;
 

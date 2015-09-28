@@ -24,6 +24,7 @@ public enum ErrorCode implements ViewEnum {
     EmailExist(409, "邮箱已存在"),
     Conflict(409, "请求的资源发生冲突"),
     VerifyCodeError(409, "验证码输入错误"),
+    OperationError(409, "操作失败"),
 
     InternalError(500, "服务器内部错误");
 

@@ -64,7 +64,7 @@ POST          /recover/pswDo                          @controllers.api.user.Logi
 # my order
 GET           /my/order/list                          @controllers.api.user.MyOrderApiController.list(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET           /my/order/:id                           @controllers.api.user.MyOrderApiController.orderInfo(id:Int)
-GET           /my/order/receiving/:id                 @controllers.api.user.MyOrderApiController.orderReceiving(id:Int)
+POST          /my/order/receiving/:id                 @controllers.api.user.MyOrderApiController.orderReceiving(id:Int)
 
 # app cms
 GET           /home/pic                               @controllers.api.shop.ThemeApiController.getAppHomeList()
