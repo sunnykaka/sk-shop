@@ -72,7 +72,7 @@
 
                         item.stop(true, true).eq(step).animate({left: sign + "=" + w}, sets.animationSpeed, function () {
                             slider.zindex.trigger();
-                            bulletsLi.removeClass('current').eq(step).addClass('current');
+                            bullet.removeClass('current').eq(step).addClass('current');
                         }).animate({left: 0}, sets.animationSpeed + 200, function () {
                             sets.animationComplete.call(this)
                         })
@@ -81,13 +81,13 @@
 
                         item.stop(true, true).eq(step).animate({top: sign + "=" + h}, sets.animationSpeed, function () {
                             slider.zindex.trigger();
-                            bulletsLi.removeClass('current').eq(step).addClass('current');
+                            bullet.removeClass('current').eq(step).addClass('current');
                         }).animate({top: 0}, sets.animationSpeed + 200, function () {
                             sets.animationComplete.call(this)
                         })
                     }, fade: function () {
                         sets.animationStart.call(this);
-                        bulletsLi.removeClass('current').eq(step).addClass('current');
+                        bullet.removeClass('current').eq(step).addClass('current');
                         item.stop(true, true).fadeOut(sets.animationSpeed).eq(step).fadeIn(sets.animationSpeed, function () {
                             sets.animationComplete.call(this)
                         })
@@ -143,16 +143,16 @@
                             }
                         }else{
                             bullets = $t.find(".sliderBullets");
-                            bulletsLi = $t.find(".sliderBullets li");
+                            //bulletsLi = $t.find(".sliderBullets a");
                         }
                     }, trigger: function () {
 
                         bullet = bullets.find("a");
-                        bulletsLi.eq(0).addClass('current');
+                        bullet.eq(0).addClass('current');
                         bullet.eq(0).addClass("active");
 
-                        bulletsLi.hover(function(){
-                            var rel = $(this).find('a').attr('rel');
+                        bullet.hover(function(){
+                            var rel = $(this).attr('rel');
                             active = bullet.filter(".active").attr("rel");
                             step = rel;
                             sign = rel > active ? "+" : "-";
@@ -170,7 +170,7 @@
                                         break
                                 }
                             }
-                            bulletsLi.removeClass('current').eq(step).addClass('current');
+                            bullet.removeClass('current').eq(step).addClass('current');
                             bullet.removeClass("active").eq(step).addClass("active");
                         },function(){
 
