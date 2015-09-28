@@ -3,7 +3,7 @@
  */
 $(function(){
     $('.empty-box li').hover(function(){
-        $(".title", this).stop().animate({top:"367px"},{queue:false,duration:100});
+        $(".title", this).stop().animate({top:"377px"},{queue:false,duration:100});
     },function(){
         $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
     });

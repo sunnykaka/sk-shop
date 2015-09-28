@@ -154,7 +154,7 @@ table .pro{width: 360px;}
 .empty-box-inner .double .time{width: 594px;color: #000;}
 .start-fashion-inner .img .time .cover,.empty-box-inner .title .cover{position:absolute;opacity: .5;filter:alpha(opacity=50);top: 0;left: 0; z-index: -1;}
 .start-fashion-inner .img .time .cover{width:290px;height:34px;border-radius: 20px;background: #000;}
-.empty-box-inner .title .cover{width: 291px;height: 70px;background: #fff;opacity: .7;filter:alpha(opacity=70);}
+.empty-box-inner .title .cover{width: 291px;height: 60px;background: #fff;opacity: .7;filter:alpha(opacity=70);}
 .empty-box-inner .double .cover{width: 594px; }
 .start-fashion-inner .img .time i{font-size: 16px;margin:0 4px;}
 .start-fashion-inner .img .time-detail{margin:  0 8px;}
@@ -193,12 +193,14 @@ table .pro{width: 360px;}
 .fashion-box .en-info,.fashion-box .cn-info{font-size: 14px;}
 .fashion-box .cn-info,.fashion-box .en-info{margin-bottom: 50px;  line-height: 240%;text-align: center;}
 .fashion-box img{display: block;}
-.fashion-box-inner li{float: left;margin: 0 4px 20px;position:relative;width: 390px;height:310px;
+.fashion-box-inner li{float: left;margin: 0 4px 20px;position:relative;width: 390px;height:300px;
     overflow: hidden;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
 .preview .fashion-box-inner li{height:252px;}
 .fashion-box-inner li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
-.fashion-box-inner .info{height: 70px;background: #fff;width: 390px;}
-.fashion-box-inner .info p{text-align: center;padding: 8px 0;}
+.fashion-box-inner .info{height: 60px;background: #fff;width: 390px;}
+.preview .fashion-box-inner .info{height: 70px;}
+.fashion-box-inner .info p{text-align: center;padding: 20px 0;}
+.preview .fashion-box-inner .info p{text-align: center;padding: 8px 0;}
 .fashion-box-inner .preview-info p{padding: 23px 0;}
 .fashion-box-inner .designer{margin: 0 8px;}
 .fashion-box-inner .time{padding-top: 4px;}
@@ -235,7 +237,7 @@ table .pro{width: 360px;}
 .empty-box-inner li:hover{box-shadow: 4px 4px 20px #b4b2b2;}
 .empty-box-inner .double{width: 590px;height: 437px;overflow: hidden}
 .empty-box-inner img{display: block;}
-.empty-box-inner .title{position: absolute;top: 437px;width: 291px;padding: 10px 0;height: 50px;z-index: 10;}
+.empty-box-inner .title{position: absolute;top: 437px;width: 291px;padding: 20px 0;height: 50px;z-index: 10;}
 .empty-box-inner .title p{padding: 3px 0;}
 .empty-box-inner .preview-info p{padding: 23px 0}
 .empty-box-inner .double .title{width: 594px;}
