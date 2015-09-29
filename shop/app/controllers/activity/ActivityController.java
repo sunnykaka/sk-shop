@@ -69,7 +69,7 @@ public class ActivityController extends Controller {
                 if(null == stockKeepingUnit){
                     map.put(productId,null);
                 }else{
-                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    boolean isFirstPublish = cmsService.useFirstSellPrice(product.getId());
                     if(isFirstPublish) {
                         map.put(productId, getPositivePrice(stockKeepingUnit.getPrice().toString()));
                     } else {
@@ -102,7 +102,7 @@ public class ActivityController extends Controller {
                 if(null == stockKeepingUnit){
                     mapPrice.put(productId,null);
                 }else{
-                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    boolean isFirstPublish = cmsService.useFirstSellPrice(product.getId());
                     if(isFirstPublish) {
                         mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
                     } else {
@@ -135,7 +135,7 @@ public class ActivityController extends Controller {
                 if(null == stockKeepingUnit){
                     mapPrice.put(productId,null);
                 }else{
-                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    boolean isFirstPublish = cmsService.useFirstSellPrice(product.getId());
                     if(isFirstPublish) {
                         mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
                     } else {
@@ -168,7 +168,7 @@ public class ActivityController extends Controller {
                 if(null == stockKeepingUnit){
                     mapPrice.put(productId,null);
                 }else{
-                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    boolean isFirstPublish = cmsService.useFirstSellPrice(product.getId());
                     if(isFirstPublish) {
                         mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
                     } else {
@@ -201,7 +201,7 @@ public class ActivityController extends Controller {
                 if(null == stockKeepingUnit){
                     mapPrice.put(productId,null);
                 }else{
-                    boolean isFirstPublish = cmsService.onFirstPublish(product.getId());
+                    boolean isFirstPublish = cmsService.useFirstSellPrice(product.getId());
                     if(isFirstPublish) {
                         mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
                     } else {

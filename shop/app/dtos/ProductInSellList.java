@@ -138,15 +138,30 @@ public class ProductInSellList {
 //            }
             this.productInSellList.status = product.getSaleStatus();
 
-            /**
-             * 取最便宜的的SKU
-             */
 
-            StockKeepingUnit mostCheapSku = skuAndStorageService.querySkuByProductIdPriceSmall(this.productId);
+            /**
+             * 获取默认的sku
+             */
+            List<StockKeepingUnit> skuLit = skuAndStorageService.querySkuListByProductId(this.productId);
+
+            Optional<StockKeepingUnit> defaultSku = skuLit.stream().filter(sku -> sku.isDefaultSku()).findFirst();
+
+            StockKeepingUnit mostCheapSku = null;
+
+            /**
+             * 如果有default sku就读取default sku的价格，否则取最便宜的的SKU
+             */
+            if (!defaultSku.isPresent()) {
+                mostCheapSku = skuAndStorageService.querySkuByProductIdPriceSmall(this.productId);
+            } else {
+                mostCheapSku = defaultSku.get();
+            }
+
+
             /**
              * 首发就读首发价，其余状态都读正常售卖价
              */
-            if (product.getSaleStatus().equals(SaleStatus.FIRSTSELL.toString())) {
+            if (cmsService.useFirstSellPrice(this.productId)) {
                 this.productInSellList.price = mostCheapSku.getPrice();
             } else {
                 this.productInSellList.price = mostCheapSku.getMarketPrice();

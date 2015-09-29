@@ -49,6 +49,7 @@ public class CartProcess {
     /**
      * 将Cart对象构建完整，包含整个购物车界面展示需要的东东。
      * 需要界面展示时使用
+     *
      * @param userId
      * @return
      */
@@ -60,9 +61,9 @@ public class CartProcess {
             cart.setCartItemList(cartItems);
             //合计价格
             Money totalMoney = Money.valueOf(0);
-            if(cartItems != null && cartItems.size() > 0) {
+            if (cartItems != null && cartItems.size() > 0) {
                 for (CartItem cartItem : cartItems) {
-                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem,true));
+                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem, true));
                 }
             }
             cart.setTotalMoney(totalMoney);
@@ -73,6 +74,7 @@ public class CartProcess {
     /**
      * 将Cart对象构建完整，仅只包含用户选中的购物车项
      * 需要界面展示时使用
+     *
      * @param userId
      * @return
      */
@@ -84,7 +86,7 @@ public class CartProcess {
             cart.setCartItemList(cartItems);
             //合计价格
             Money totalMoney = Money.valueOf(0);
-            if(cartItems != null && cartItems.size() > 0) {
+            if (cartItems != null && cartItems.size() > 0) {
                 for (CartItem cartItem : cartItems) {
                     totalMoney = totalMoney.add(this.setCartItemValues(cartItem));
                 }
@@ -96,6 +98,7 @@ public class CartProcess {
 
     /**
      * 设置订单项的各个需要的属性值
+     *
      * @param cartItem
      */
     @Transactional
@@ -105,6 +108,7 @@ public class CartProcess {
 
     /**
      * 设置订单项的各个需要的属性值
+     *
      * @param cartItem
      * @param isForShowCart 是否是购物车展示界面
      */
@@ -122,7 +126,7 @@ public class CartProcess {
             cartItem.setBarCode(stockKeepingUnit.getBarCode());
 
             Product product = productService.getProductById(stockKeepingUnit.getProductId());
-            if(product != null) {
+            if (product != null) {
                 cartItem.setProductId(product.getId());
                 cartItem.setProductName(product.getName());
                 cartItem.setCategoryId(product.getCategoryId());
@@ -135,7 +139,7 @@ public class CartProcess {
 
             //设置库存信息
             SkuStorage skuStorage = skuAndStorageService.getSkuStorage(stockKeepingUnit.getId());
-            if(skuStorage != null) {
+            if (skuStorage != null) {
                 int maxStockNum = skuStorage.getStockQuantity();
                 cartItem.setStockQuantity(maxStockNum);
                 if (maxStockNum > 0) {
@@ -153,23 +157,23 @@ public class CartProcess {
             }
 
             //根据判断是否是首发，当前价格要现算
-            //boolean isFirstPublish = cmsService.onFirstPublish(cartItem.getProductId());
-            boolean isFirstPublish = false;
-            if(product != null && product.getSaleStatus() != null) {
-                isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
-            }
+            boolean isFirstPublish = cmsService.useFirstSellPrice(cartItem.getProductId());
+//            boolean isFirstPublish = false;
+//            if(product != null && product.getSaleStatus() != null) {
+//                isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
+//            }
 
-            if(isFirstPublish) {
+            if (isFirstPublish) {
                 cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
             } else {
                 cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
             }
 
             Money itemTotalMoney = cartItem.getCurUnitPrice().multiply(cartItem.getNumber());
-            if(isForShowCart) {
-               if(!cartItem.isOnline() || !cartItem.isHasStock()) {
-                   itemTotalMoney = Money.valueOf(0);
-               }
+            if (isForShowCart) {
+                if (!cartItem.isOnline() || !cartItem.isHasStock()) {
+                    itemTotalMoney = Money.valueOf(0);
+                }
             }
 
             cartItem.setTotalPrice(itemTotalMoney);
@@ -178,7 +182,7 @@ public class CartProcess {
 
         } else {
             try {
-                Logger.warn("构建购物车时发现sku被删除:" + + cartItem.getSkuId() + " : " + cartItem.getCartId());
+                Logger.warn("构建购物车时发现sku被删除:" + +cartItem.getSkuId() + " : " + cartItem.getCartId());
                 cartService.deleteCartItemById(cartItem.getId());
             } catch (Exception e) {
                 Logger.warn("构建购物车删除sku失败:" + cartItem.getSkuId() + " : " + cartItem.getCartId());
@@ -189,12 +193,13 @@ public class CartProcess {
 
     /**
      * 按照支付订单号列表重新计算支付总金额
+     *
      * @param cartItemList
      * @return
      */
     public Money calculateTotalMoney(List<CartItem> cartItemList) {
         Money totalMoney = Money.valueOf(0);
-        for(CartItem cartItem : cartItemList) {
+        for (CartItem cartItem : cartItemList) {
             totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
         }
         return totalMoney;

@@ -7,11 +7,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import play.test.WithApplication;
 import services.CmsService;
 import utils.Global;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +32,9 @@ public class CmsTest extends BaseTest {
     @Ignore
     public void testProdOnPublish() {
 
-        Boolean result = cmsService.onFirstPublish(2184);
+        Boolean result = cmsService.useFirstSellPrice(2184);
         Assert.assertTrue(result);
-        Assert.assertFalse(cmsService.onFirstPublish(2186));
+        Assert.assertFalse(cmsService.useFirstSellPrice(2186));
 
     }
 

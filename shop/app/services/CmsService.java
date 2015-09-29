@@ -13,6 +13,9 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import productcenter.constants.SaleStatus;
+import productcenter.models.Product;
+import productcenter.services.ProductService;
 import usercenter.domain.SmsSender;
 import views.html.template.sms.exhibistionStartRemind;
 
@@ -35,6 +38,8 @@ public class CmsService {
     @Autowired
     private ConstService constService;
 
+    @Autowired
+    private ProductService productService;
 
     /**
      * 首发专场的读取
@@ -65,6 +70,7 @@ public class CmsService {
 
     /**
      * 根据位置，数量，还有状态查询
+     *
      * @param positionName
      * @param size
      * @param status
@@ -170,8 +176,10 @@ public class CmsService {
      * @return
      */
     @Transactional(readOnly = true)
-    public boolean onFirstPublish(int prodId) {
-        return findExhibitionWithProdId(prodId).isPresent();
+    public boolean useFirstSellPrice(int prodId) {
+        Product product = productService.getProductById(prodId);
+        String saleStatus = product.getSaleStatus();
+        return saleStatus.equals(SaleStatus.PLANSELL.toString()) || saleStatus.equals(SaleStatus.FIRSTSELL.toString()) || saleStatus.equals(SaleStatus.PRESELL.toString());
     }
 
     @Transactional(readOnly = true)
@@ -186,17 +194,17 @@ public class CmsService {
 
     @Transactional
     public void userLikeExhibition(Integer exhibitionId, String phone, Optional<Integer> userId) {
-        if(!RegExpUtils.isPhone(phone)) {
+        if (!RegExpUtils.isPhone(phone)) {
             throw new AppBusinessException("手机号格式不正确");
         }
-        if(findCmsExhibitionFans(exhibitionId, phone).isPresent()) {
+        if (findCmsExhibitionFans(exhibitionId, phone).isPresent()) {
             throw new AppBusinessException("您已开启提醒");
         }
         CmsExhibitionFans cmsExhibitionFans = new CmsExhibitionFans();
         cmsExhibitionFans.setCreateTime(DateUtils.current());
         cmsExhibitionFans.setExhibitionId(exhibitionId);
         cmsExhibitionFans.setPhone(phone);
-        if(userId.isPresent()) {
+        if (userId.isPresent()) {
             cmsExhibitionFans.setUserId(userId.get());
         }
         generalDao.persist(cmsExhibitionFans);
@@ -209,8 +217,8 @@ public class CmsService {
     public Optional<CmsExhibitionFans> findCmsExhibitionFans(Integer exhibitionId, String phone) {
         String hql = "select cef from CmsExhibitionFans cef where cef.exhibitionId = :exhibitionId and cef.phone = :phone ";
         Map<String, Object> params = new HashMap<String, Object>() {{
-           put("exhibitionId", exhibitionId);
-           put("phone", phone);
+            put("exhibitionId", exhibitionId);
+            put("phone", phone);
         }};
         List<CmsExhibitionFans> query = generalDao.query(hql, Optional.empty(), params);
         return query.isEmpty() ? Optional.empty() : Optional.of(query.get(0));
@@ -219,6 +227,7 @@ public class CmsService {
 
     /**
      * 根据开始时间范围查找专场
+     *
      * @param beginTimeStart
      * @param beginTimeEnd
      * @return
@@ -257,13 +266,13 @@ public class CmsService {
             String message = exhibistionStartRemind.render(introduction, hourOfDay).body();
 
             List<CmsExhibitionFans> cmsExhibitionFansList = findUnprocessedExhibitionFans(exhibition.getId());
-            if(cmsExhibitionFansList.isEmpty()) return;
+            if (cmsExhibitionFansList.isEmpty()) return;
             List<String> phoneList = cmsExhibitionFansList.stream().map(CmsExhibitionFans::getPhone).collect(Collectors.toList());
 
-            if(play.Logger.isInfoEnabled()) {
+            if (play.Logger.isInfoEnabled()) {
                 play.Logger.info(String.format("批量发送专场提醒短信, 短信内容: %s, 发送手机号: %s", message, phoneList.toString()));
             }
-            if(SmsUtils.sendSms(phoneList.toArray(new String[phoneList.size()]), message)) {
+            if (SmsUtils.sendSms(phoneList.toArray(new String[phoneList.size()]), message)) {
                 updateExhibitionFansProcessed(cmsExhibitionFansList);
             }
 
@@ -273,10 +282,11 @@ public class CmsService {
 
     /**
      * 批量修改CmsExhibitionFans的processed为true
+     *
      * @param cmsExhibitionFansList
      */
     private void updateExhibitionFansProcessed(List<CmsExhibitionFans> cmsExhibitionFansList) {
-        if(cmsExhibitionFansList.isEmpty()) return;
+        if (cmsExhibitionFansList.isEmpty()) return;
         Integer[] idArray = cmsExhibitionFansList.stream().map(CmsExhibitionFans::getId).collect(Collectors.toList()).toArray(new Integer[cmsExhibitionFansList.size()]);
         int count = batchUpdateProcessed(idArray, ids -> {
             StringBuilder hql = new StringBuilder("update CmsExhibitionFans set processed=true where id in( ");
@@ -291,7 +301,7 @@ public class CmsService {
             return generalDao.update(hql.toString(), params);
         });
 
-        if(count != idArray.length) {
+        if (count != idArray.length) {
             play.Logger.error(String.format("批量更新CmsExhibitionFans的processed字段的时候出错,传进来的id数量[%d],修改成功的数量[%d], id列表[%s]", idArray.length, count, Arrays.toString(idArray)));
         }
 
@@ -299,17 +309,17 @@ public class CmsService {
 
 
     private int batchUpdateProcessed(Integer[] ids, BatchUpdateProcessedTask task) {
-        if(ids == null || ids.length == 0) return 0;
+        if (ids == null || ids.length == 0) return 0;
         //一次执行sql更新的最大数量不超过20
         int maxLength = 20;
-        if(ids.length <= maxLength) {
+        if (ids.length <= maxLength) {
             return task.run(ids);
         }
         int count = 0;
-        for(int i=0; i<=(ids.length / maxLength); i++) {
+        for (int i = 0; i <= (ids.length / maxLength); i++) {
             int start = i * maxLength;
             int end = Math.min(start + maxLength, ids.length);
-            if(start == end) continue;
+            if (start == end) continue;
             count += task.run(Arrays.copyOfRange(ids, start, end));
         }
         return count;
