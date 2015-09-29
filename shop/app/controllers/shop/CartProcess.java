@@ -153,8 +153,11 @@ public class CartProcess {
             }
 
             //根据判断是否是首发，当前价格要现算
-//            boolean isFirstPublish = cmsService.onFirstPublish(cartItem.getProductId());
-            boolean isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
+            //boolean isFirstPublish = cmsService.onFirstPublish(cartItem.getProductId());
+            boolean isFirstPublish = false;
+            if(product != null && product.getSaleStatus() != null) {
+                isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
+            }
 
             if(isFirstPublish) {
                 cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());

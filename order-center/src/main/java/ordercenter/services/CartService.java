@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import productcenter.constants.SaleStatus;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 import productcenter.models.SkuStorage;
@@ -449,7 +450,11 @@ public class CartService {
             }
 
             //根据判断是否是首发，当前价格要现算(这个地方需要改一下) ldj
-            boolean isFirstPublish = false;//cmsService.onFirstPublish(cartItem.getProductId());
+            //boolean isFirstPublish = false;//cmsService.onFirstPublish(cartItem.getProductId());
+            boolean isFirstPublish = false;
+            if(product != null && product.getSaleStatus() != null) {
+                isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
+            }
             if(isFirstPublish) {
                 cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
             } else {
