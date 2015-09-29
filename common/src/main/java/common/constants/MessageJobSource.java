@@ -13,7 +13,8 @@ public enum MessageJobSource implements ViewEnum {
     PAY_REMINDER("支付提醒"),
     CHANGE_EMAIL("修改邮箱"),
     ORDER_PAY_REMIND("订单催付"),
-    REFUND_ORDER_MONEY("退款通知");
+    REFUND_ORDER_MONEY("退款通知"),
+    PRODUCT_REMIND_NOTIFY("商品订阅");
 
     public String value;
 
