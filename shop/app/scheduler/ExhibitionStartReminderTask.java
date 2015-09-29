@@ -20,9 +20,9 @@ public class ExhibitionStartReminderTask extends SchedulerTask {
     @Override
     protected void doRun() {
 
-        CmsService cmsService = Global.ctx.getBean(CmsService.class);
+//        CmsService cmsService = Global.ctx.getBean(CmsService.class);
 
-        cmsService.remindExhibitionStart();
+//        cmsService.remindExhibitionStart();
 
 
     }
