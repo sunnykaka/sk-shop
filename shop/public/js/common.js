@@ -227,10 +227,12 @@ $(window).on('resize load',function(){
 
     if($(window).width()<=1300){
         $('#cart').addClass('small-sider');
-        $('.sliderArrows div').css('width','1200');
+        $('.slider-box-inner .sliderArrows .prev').css('left','2%');
+        $('.slider-box-inner .sliderArrows .next').css('right','2%');
     }else{
         $('#cart').removeClass('small-sider');
-        $('.sliderArrows div').css('width','80%');
+        $('.slider-box-inner .sliderArrows .prev').css('left','10%');
+        $('.slider-box-inner .sliderArrows .next').css('right','10%');
     }
 
     var sUserAgent = navigator.userAgent,
