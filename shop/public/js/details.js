@@ -537,7 +537,7 @@ $(function () {
                     //设置价格
                     if (len == _skuAttrNum) {
                         _price = currentSku.marketPrice;
-                        if(saleStatus == "FIRSTSELL" || saleStatus == "PRESELL"){ //判断是否是首发
+                        if(saleStatus == "FIRSTSELL" || saleStatus == "PRESELL" || saleStatus == "PLANSELL"){ //判断是否是首发
                             if ($("#start-price").length) {
                                 $("#start-price").html(currentSku.price);
                             }
