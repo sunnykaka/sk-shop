@@ -804,6 +804,11 @@ $(function () {
             height:240,
             padding: "20px",
             show:function(){
+                $('.i-content .phone-number').on('keydown',function(evt){
+                   if(evt.keyCode == 13){
+                       $('.i-content .remind-btn').click();
+                   }
+                });
                 //提交开售提醒
                 $('.i-content .remind-btn').on('click',function(){
                     var id =$(this).attr('exhibition-id'),phoneNum = $('.i-content .phone-number').val(),that=this;
@@ -816,6 +821,7 @@ $(function () {
                                 $(that).parents('.remind-info-inner').remove();
                                 $('.i-content').append('<p class="book-success">订阅成功</p>');
                             }else{
+                                $('.i-content .phone-number').focus();
                                 if($(that).siblings('p').hasClass('error')){
                                     $('.error').remove();
                                     $(that).parent().append('<p class="error">*'+data.message+'</p>');
