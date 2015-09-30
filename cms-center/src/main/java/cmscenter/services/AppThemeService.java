@@ -57,7 +57,7 @@ public class AppThemeService {
     @Transactional(readOnly = true)
     public String getAppThemeContentFristFont(int themeId){
 
-        String jpql = "select a from AppThemeContent a where 1=1 and a.type='FONT' and a.themeId=:themeId order by a.priority asc";
+        String jpql = "select a from AppThemeContent a where 1=1 and a.type='FONT' and a.themeId=:themeId order by a.priority desc";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("themeId", themeId);
 
