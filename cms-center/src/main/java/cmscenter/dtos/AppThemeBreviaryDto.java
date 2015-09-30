@@ -13,7 +13,7 @@ public class AppThemeBreviaryDto {
 
     private Integer id;
 
-    private DateTime startTime;
+    private String startTime;
 
     private int themeNo;
 
@@ -34,7 +34,7 @@ public class AppThemeBreviaryDto {
         AppThemeBreviaryDto appThemeDto = new AppThemeBreviaryDto();
         appThemeDto.setId(appTheme.getId());
         appThemeDto.setName(appTheme.getName());
-        appThemeDto.setStartTime(appTheme.getStartTime());
+        appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
         appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
@@ -54,11 +54,11 @@ public class AppThemeBreviaryDto {
         this.id = id;
     }
 
-    public DateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
