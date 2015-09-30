@@ -14,7 +14,6 @@ import ordercenter.models.*;
 import ordercenter.util.OrderNumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -351,7 +350,7 @@ public class OrderService {
                     continue;
                 }
                 //发送短信
-                String tipMsg = "短信内容：亲爱的会员，您抢到的商品尚未支付，仍为您保留30分钟，因库存紧张，请及时支付！";
+                String tipMsg = "亲爱的会员，您抢到的商品尚未支付，仍为您保留30分钟，因库存紧张，请及时支付！";
 
                 Logistics logistics = getLogisticsByOrderId(order.getId());
                 if(logistics != null && logistics.getMobile() != null && logistics.getMobile().trim().length() > 0) {
