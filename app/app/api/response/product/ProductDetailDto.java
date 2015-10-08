@@ -19,7 +19,7 @@ public class ProductDetailDto {
 
     private List<String> htmlList;
 
-    private Map<String, String> specMap;
+    private List<ProductSpecDto> specList;
 
     private DesignerSizeDto designerSize;
 
@@ -61,12 +61,12 @@ public class ProductDetailDto {
         this.htmlList = htmlList;
     }
 
-    public Map<String, String> getSpecMap() {
-        return specMap;
+    public List<ProductSpecDto> getSpecList() {
+        return specList;
     }
 
-    public void setSpecMap(Map<String, String> specMap) {
-        this.specMap = specMap;
+    public void setSpecList(List<ProductSpecDto> specList) {
+        this.specList = specList;
     }
 
     public DesignerSizeDto getDesignerSize() {
@@ -145,13 +145,18 @@ public class ProductDetailDto {
         productDetailDto.setProduct(ProductDto.build(base.getProduct()));
         productDetailDto.setSkuCandidateList(base.getSkuCandidateList());
         productDetailDto.setSkuMap(base.getSkuMap());
-        productDetailDto.setSpecMap(base.getSpecList().
-                stream().
-                collect(Collectors.toMap(
-                        ProductSpec::getName,
-                        ProductSpec::getValue
-                ))
-        );
+//        productDetailDto.setSpecMap(base.getSpecList().
+//                stream().
+//                collect(Collectors.toMap(
+//                        ProductSpec::getName,
+//                        ProductSpec::getValue
+//                ))
+//        );
+        List<ProductSpecDto> specList = new ArrayList<>();
+        for(ProductSpec productSpec:base.getSpecList()){
+            specList.add(ProductSpecDto.build(productSpec));
+        }
+        productDetailDto.setSpecList(specList);
 
         return productDetailDto;
     }
