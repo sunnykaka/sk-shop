@@ -15,6 +15,7 @@ import views.html.activity.fashion;
 import views.html.activity.loukong;
 import views.html.activity.federico;
 import views.html.activity.louise;
+import views.html.activity.earlyAutumn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -213,6 +214,39 @@ public class ActivityController extends Controller {
         }
 
         return ok(louise.render(mapName, mapPrice));
+    }
+
+    public Result earlyAutumn() {
+
+        final int[] activityProductId = {569,229,573,133,574,27,225,231,223};
+
+        Map<Integer, String> mapName = new HashMap<>();
+        Map<Integer, String> mapPrice = new HashMap<>();
+        for(int productId:activityProductId){
+            Product product = productService.getProductById(productId);
+
+            if(null == product){
+                mapPrice.put(productId,null);
+                mapName.put(productId,null);
+            }else{
+                //根据判断是否是首发，当前价格要现算
+                mapName.put(productId,product.getName());
+                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                if(null == stockKeepingUnit){
+                    mapPrice.put(productId,null);
+                }else{
+                    boolean isFirstPublish = cmsService.useFirstSellPrice(product.getId());
+                    if(isFirstPublish) {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getPrice().toString()));
+                    } else {
+                        mapPrice.put(productId,getPositivePrice(stockKeepingUnit.getMarketPrice().toString()));
+                    }
+                }
+
+            }
+        }
+
+        return ok(earlyAutumn.render(mapName, mapPrice));
     }
 
     private String getPositivePrice(String str){
