@@ -124,7 +124,7 @@ public class LoginApiController extends BaseController {
         User user = userService.findByPhone(phone);
 
         if(null == user){
-            throw new AppBusinessException(ErrorCode.UsernameExist);
+            throw new AppBusinessException(ErrorCode.UsernameExist,"用户不存在");
         }
 
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
