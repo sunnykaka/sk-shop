@@ -173,7 +173,7 @@ ul li ul {
 /* 文章标题*/
 .title {
     margin-bottom: 20px;
-    padding-top: 10px;
+    padding-top: 20px;
     word-break: break-word;
     font-size: 16px;
     text-align: center;
@@ -203,6 +203,7 @@ a {
     max-width: 100%
 }
 
+
 .content p {
     margin: 0 0 20px 0;
     padding-top: 20px;
@@ -211,7 +212,8 @@ a {
     white-space: pre-wrap;
     line-height: 180%;
 }
-
+.content p img{
+    padding: 15px 0;}
 
 
 
