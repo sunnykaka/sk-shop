@@ -28,6 +28,9 @@ public class AppTheme implements EntityClass<Integer>,TableTimeData {
 
     private String products;
 
+    /** 摘要 */
+    private String digest;
+
     private DateTime createDate;
 
     private DateTime updateDate;
@@ -99,6 +102,15 @@ public class AppTheme implements EntityClass<Integer>,TableTimeData {
     @Column(name = "products")
     public String getProducts() {
         return products;
+    }
+
+    @Column(name = "digest")
+    public String getDigest() {
+        return digest;
+    }
+
+    public void setDigest(String digest) {
+        this.digest = digest;
     }
 
     public void setProducts(String products) {

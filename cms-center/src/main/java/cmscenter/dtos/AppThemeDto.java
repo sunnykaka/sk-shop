@@ -32,9 +32,11 @@ public class AppThemeDto {
 
     private String name;
 
-    private boolean isFavorites = false;
+    private String digest;
 
-    private List<AppThemeContentDto> appThemeContentDtoList = new ArrayList<>();
+    private String content;
+
+    private boolean isFavorites = false;
 
     private List<ProductSimpleDto> productSimpleDtoList = new ArrayList<>();
 
@@ -48,7 +50,10 @@ public class AppThemeDto {
         appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
-        appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
+        appThemeDto.setDigest(appTheme.getDigest());
+        if (null != user || StringUtils.isNotEmpty(deviceId)){
+            appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
+        }
         appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getId()));
 
         if(StringUtils.isNotEmpty(appTheme.getProducts())){
@@ -62,36 +67,24 @@ public class AppThemeDto {
             }
         }
 
-        List<AppThemeContent> appThemeContentList = appThemeService.getAppThemeContentByThemeId(appTheme.getId());
-        for(AppThemeContent appThemeContent:appThemeContentList){
-            appThemeDto.addAppThemeContentDto(AppThemeContentDto.build(appThemeContent));
-        }
-
         return appThemeDto;
 
     }
 
-    public static AppThemeDto build(AppTheme appTheme,AppThemeService appThemeService){
+    public static AppThemeDto build(AppTheme appTheme,AppThemeService appThemeService) {
         AppThemeDto appThemeDto = new AppThemeDto();
         appThemeDto.setId(appTheme.getId());
         appThemeDto.setName(appTheme.getName());
         appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
-        List<AppThemeContent> appThemeContentList = appThemeService.getAppThemeContentByThemeId(appTheme.getId());
-        for(AppThemeContent appThemeContent:appThemeContentList){
-            appThemeDto.addAppThemeContentDto(AppThemeContentDto.build(appThemeContent));
-        }
+        appThemeDto.setDigest(appTheme.getDigest());
 
         return appThemeDto;
     }
 
     public void addProductSimpleDto(ProductSimpleDto productSimpleDto){
         productSimpleDtoList.add(productSimpleDto);
-    }
-
-    public void addAppThemeContentDto(AppThemeContentDto appThemeContentDto){
-        appThemeContentDtoList.add(appThemeContentDto);
     }
 
     public Integer getId() {
@@ -150,12 +143,20 @@ public class AppThemeDto {
         this.isFavorites = isFavorites;
     }
 
-    public List<AppThemeContentDto> getAppThemeContentDtoList() {
-        return appThemeContentDtoList;
+    public String getDigest() {
+        return digest;
     }
 
-    public void setAppThemeContentDtoList(List<AppThemeContentDto> appThemeContentDtoList) {
-        this.appThemeContentDtoList = appThemeContentDtoList;
+    public void setDigest(String digest) {
+        this.digest = digest;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public List<ProductSimpleDto> getProductSimpleDtoList() {

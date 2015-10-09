@@ -15,11 +15,8 @@ import common.utils.JsonUtils;
 import common.utils.ParamUtils;
 import common.utils.page.Page;
 import controllers.BaseController;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Result;
-import productcenter.services.ProductPictureService;
-import productcenter.services.ProductService;
 import usercenter.models.User;
 
 import java.util.ArrayList;
@@ -37,12 +34,6 @@ public class ThemeApiController extends BaseController {
 
     @Autowired
     private ThemeCollectService themeCollectService;
-
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private ProductPictureService productPictureService;
 
     public static final int APP_THEME_NUM = 7;
 
@@ -73,7 +64,7 @@ public class ThemeApiController extends BaseController {
             throw new AppBusinessException(ErrorCode.Conflict, "没有该专题信息");
         }
 
-        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService,themeCollectService,productService,productPictureService,user,deviceId);
+        AppThemeBreviaryDto appThemeDto = AppThemeBreviaryDto.build(appTheme,themeCollectService,user,deviceId);
 
         return ok(JsonUtils.object2Node(appThemeDto));
     }
@@ -88,7 +79,7 @@ public class ThemeApiController extends BaseController {
         List<AppTheme> appThemeList = appThemeService.findAppThemePageList(Optional.of(page));
         List<AppThemeBreviaryDto> appThemeDtos = new ArrayList<>();
         for(AppTheme appTheme:appThemeList){
-            appThemeDtos.add(AppThemeBreviaryDto.build(appTheme,themeCollectService,appThemeService,user,deviceId));
+            appThemeDtos.add(AppThemeBreviaryDto.build(appTheme,themeCollectService,user,deviceId));
         }
 
         return ok(JsonUtils.object2Node(appThemeDtos));

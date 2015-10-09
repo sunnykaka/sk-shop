@@ -172,6 +172,7 @@ GET         /activity/earlyAutumn                                 @controllers.a
 
 
 # app show
+GET         /app/theme/:id                                        @controllers.app.AppShowController.appThemeDesc(id:Int)
 GET         /app/share/theme/:id                                  @controllers.app.AppShowController.appTheme(id:Int)
 GET         /app/theme/download/:id                               @controllers.app.AppShowController.download(id:Int)
 

@@ -81,14 +81,8 @@
                 <!-- 内容-->
             <div class="content">
 
-            @for(themeContent <- appThemeDto.getAppThemeContentDtoList){
-                @if(themeContent.getType == "FONT"){
-                    <p>@themeContent.getContent</p>
-                }
-                @if(themeContent.getType == "PIC"){
-                    <img src="@themeContent.getContent" alt="" />
-                }
-            }
+
+
             </div>
                 <!-- 底栏-->
             <div class="author-info">

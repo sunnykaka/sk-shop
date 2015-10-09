@@ -504,6 +504,9 @@ public class UserService {
 
         try {
             if(user != null) {
+                if(StringUtils.isEmpty(user.getPassword())){
+                    return null;
+                }
                 if(PasswordHash.validatePassword(password, user.getPassword())) {
                     return user;
                 }
