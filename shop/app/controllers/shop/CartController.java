@@ -47,9 +47,6 @@ public class CartController extends Controller {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private CartProcess cartProcess;
-
     /**
      * 获取库存信息，用于前端数据验证(最大购买数限制、和库存)
      * @param skuId
@@ -229,7 +226,7 @@ public class CartController extends Controller {
     public Result showCart(){
         try {
             User curUser = SessionUtils.currentUser();
-            Cart cart = cartProcess.buildUserCart(curUser.getId());
+            Cart cart = cartService.buildUserCart(curUser.getId());
             return ok(showCart.render(cart));
         } catch (Exception e) {
             Logger.error("进入我的购物车发生异常:", e);
@@ -275,7 +272,7 @@ public class CartController extends Controller {
 
         try {
             User curUser = SessionUtils.currentUser();
-            Cart cart = cartProcess.buildUserCart(curUser.getId());
+            Cart cart = cartService.buildUserCart(curUser.getId());
             String errMsg = "对不起您没有购买任何商品，不能前去支付！";
             if (cart == null) {
                 Logger.warn("购物车对象为null的时候进入了填写订单页面:"  + curUser);
@@ -325,7 +322,7 @@ public class CartController extends Controller {
             selCartItems = selCartItems.replaceAll("_", ",");
         }
         User curUser = SessionUtils.currentUser();
-        Cart cart = cartProcess.buildUserCartBySelItem(curUser.getId(), selCartItems);
+        Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItems);
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
         return ok(chooseAddress.render(selCartItems, addressList, cart,false));
     }
@@ -380,7 +377,7 @@ public class CartController extends Controller {
         cartItem.setNumber(number);
 
         Money totalMoney = Money.valueOf(0);
-        totalMoney = cartProcess.setCartItemValues(cartItem);
+        totalMoney = cartService.setCartItemValues(cartItem);
 
         cart.setTotalMoney(totalMoney);
         List<CartItem> cartItemList = new ArrayList<CartItem>();

@@ -14,6 +14,7 @@ import ordercenter.models.Trade;
 import ordercenter.payment.PayRequestHandler;
 import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayMethod;
+import ordercenter.services.CartService;
 import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -57,7 +58,7 @@ public class OrderAndPayController extends Controller {
     TradeService tradeService;
 
     @Autowired
-    CartProcess cartProcess;
+    CartService cartService;
 
     private static final Logger.ALogger tradeLogger = Logger.of("tradeRequest");
 
@@ -119,7 +120,7 @@ public class OrderAndPayController extends Controller {
                 cartItem.setNumber(number);
 
                 Money totalMoney = Money.valueOf(0);
-                totalMoney = cartProcess.setCartItemValues(cartItem);
+                totalMoney = cartService.setCartItemValues(cartItem);
                 cart.setTotalMoney(totalMoney);
 
                 List<CartItem> cartItemList = new ArrayList<CartItem>();
@@ -136,7 +137,7 @@ public class OrderAndPayController extends Controller {
                     Logger.warn("解析传递到后台的选中购物车项id发生异常", e);
                     return ok(new JsonResult(false, "选中的购物车商品有问题，请核对一下").toNode());
                 }
-                cart = cartProcess.buildUserCartBySelItem(curUser.getId(), selItems);
+                cart = cartService.buildUserCartBySelItem(curUser.getId(), selItems);
             }
 
             if (cart == null || cart.getCartItemList().size() == 0) {
