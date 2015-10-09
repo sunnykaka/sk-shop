@@ -78,7 +78,7 @@ public class AppThemeDto {
         appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
-        appThemeDto.setDigest(appTheme.getDigest());
+        appThemeDto.setContent(appThemeService.getAppThemeContentByThemeId(appTheme.getId()));
 
         return appThemeDto;
     }
