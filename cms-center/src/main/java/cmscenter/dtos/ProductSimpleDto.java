@@ -18,7 +18,7 @@ public class ProductSimpleDto {
 
         ProductSimpleDto productSimpleDto = new ProductSimpleDto();
         productSimpleDto.setProductId(product.getId());
-        productSimpleDto.setProductName(StringUtils.subTextString(product.getName(), 46));
+        productSimpleDto.setProductName(product.getName());
         productSimpleDto.setProductUrl(url);
 
         return productSimpleDto;

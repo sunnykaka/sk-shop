@@ -5,6 +5,7 @@ import productcenter.dtos.ProductDetailBase;
 import productcenter.dtos.SkuCandidate;
 import productcenter.dtos.SkuInfo;
 import productcenter.models.Html;
+import productcenter.models.ProductPicture;
 import productcenter.models.ProductSpec;
 
 import java.util.*;
@@ -44,6 +45,7 @@ public class ProductDetailDto {
     //默认SKU
     protected SkuInfo defaultSku;
 
+    protected List<String> productPictureList = new ArrayList<>();
 
     public ProductDto getProduct() {
         return product;
@@ -133,6 +135,14 @@ public class ProductDetailDto {
         this.defaultSku = defaultSku;
     }
 
+    public List<String> getProductPictureList() {
+        return productPictureList;
+    }
+
+    public void setProductPictureList(List<String> productPictureList) {
+        this.productPictureList = productPictureList;
+    }
+
     public static ProductDetailDto build(ProductDetailBase base) {
         ProductDetailDto productDetailDto = new ProductDetailDto();
         productDetailDto.setDefaultSku(base.getDefaultSku());
@@ -145,6 +155,7 @@ public class ProductDetailDto {
         productDetailDto.setProduct(ProductDto.build(base.getProduct()));
         productDetailDto.setSkuCandidateList(base.getSkuCandidateList());
         productDetailDto.setSkuMap(base.getSkuMap());
+        productDetailDto.setProductPictureList(base.getProductPictureList().stream().map(ProductPicture::getPictureUrl).collect(Collectors.toList()));
 //        productDetailDto.setSpecMap(base.getSpecList().
 //                stream().
 //                collect(Collectors.toMap(
