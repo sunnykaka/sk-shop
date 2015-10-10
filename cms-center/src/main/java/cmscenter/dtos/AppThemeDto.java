@@ -62,7 +62,7 @@ public class AppThemeDto {
                 Product product = productService.getProductById(Integer.parseInt(productId));
                 if(product != null){
                     ProductPicture productPicture = productPictureService.getMinorProductPictureByProductId(product.getId());
-                    appThemeDto.addProductSimpleDto(new ProductSimpleDto(product.getId(), product.getName(),productPicture ==null?"":productPicture.getPictureUrl()));
+                    appThemeDto.addProductSimpleDto(ProductSimpleDto.build(product,productPicture ==null?"":productPicture.getPictureUrl()));
                 }
             }
         }
@@ -166,4 +166,5 @@ public class AppThemeDto {
     public void setProductSimpleDtoList(List<ProductSimpleDto> productSimpleDtoList) {
         this.productSimpleDtoList = productSimpleDtoList;
     }
+
 }

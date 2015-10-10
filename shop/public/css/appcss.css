@@ -212,9 +212,12 @@ a {
     white-space: pre-wrap;
     line-height: 180%;
 }
-.content p img{
-    padding: 15px 0;}
-
+.content p img,.content div img{
+    padding: 15px 0;
+}
+.content .product img{
+    padding: 0;
+}
 
 
 .share a {
