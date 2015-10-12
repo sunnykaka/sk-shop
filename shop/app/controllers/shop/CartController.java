@@ -54,13 +54,8 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result getSkuStorage(int skuId) {
-        try {
-            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
-            return ok(new JsonResult(true,"sku当前库存信息", skuStorage).toNode());
-        } catch (final Exception e) {
-            Logger.error("获取sku当前库存信息出现异常:", e);
-            return ok(new JsonResult(false,"获取sku当前库存信息出现异常").toNode());
-        }
+        SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
+        return ok(new JsonResult(true,"sku当前库存信息", skuStorage).toNode());
     }
 
     /**
@@ -198,12 +193,11 @@ public class CartController extends Controller {
                 if(cart != null) {
                     cartItems = cart.getCartItemList();
                 }
-                if(cartItems == null || cartItems.size() == 0) {
-                    return ok(new JsonResult(true,"用户当前购物车为空", 1).toNode());
-                }
                 int totalNum = 0;
-                for(CartItem cartItem : cartItems) {
-                    totalNum += cartItem.getNumber();
+                if(cartItems != null) {
+                    for(CartItem cartItem : cartItems) {
+                        totalNum += cartItem.getNumber();
+                    }
                 }
                 retMap.put("itemTotalNum", totalNum);
             }
