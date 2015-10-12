@@ -7,6 +7,7 @@ import common.utils.page.Page;
 import ordercenter.models.Valuation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
+import play.Logger;
 import play.mvc.Http;
 import play.mvc.Result;
 
@@ -32,7 +33,7 @@ public class ProductControllerTest extends BaseTest {
 
         Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId, null).url());
         Result result = route(request);
-        System.out.println(contentAsString(result));
+        Logger.debug(" ProductController.valuations result: " + contentAsString(result));
         assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
