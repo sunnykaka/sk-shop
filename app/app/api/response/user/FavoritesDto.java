@@ -50,7 +50,7 @@ public class FavoritesDto {
         if(themeCollect == null){ return null; }
 
         FavoritesDto favoritesDto = new FavoritesDto();
-        favoritesDto.setObjectId(themeCollect.getThemeId());
+        favoritesDto.setObjectId(themeCollect.getThemeNo());
         favoritesDto.setObjectName(themeCollect.getThemeName());
         favoritesDto.setObjectPic(themeCollect.getThemePic());
         favoritesDto.setId(themeCollect.getId());

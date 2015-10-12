@@ -48,7 +48,7 @@ public class ThemeFavoritesApiController extends BaseController {
         List<ThemeCollect> pageThemeCollect = themeCollectService.getThemeCollectList(Optional.of(page), user.getId());
         List<FavoritesDto> themeFavoritesDtos = new ArrayList<>();
         for(ThemeCollect themeCollect:pageThemeCollect){
-            AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeCollect.getThemeId());
+            AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeCollect.getThemeNo());
             themeCollect.setThemeName(appTheme == null ? "" : appTheme.getName());
             themeCollect.setThemePic(appTheme == null ? "" : appTheme.getPicUrl());
             themeFavoritesDtos.add(FavoritesDto.build(themeCollect));
@@ -99,7 +99,7 @@ public class ThemeFavoritesApiController extends BaseController {
 
         ThemeCollect newThemeCollect = new ThemeCollect();
         newThemeCollect.setCollectTime(DateTime.now());
-        newThemeCollect.setThemeId(themeNo);
+        newThemeCollect.setThemeNo(themeNo);
         newThemeCollect.setDeviceId(deviceId);
         newThemeCollect.setUserId(user == null ? 0 : user.getId());
 
