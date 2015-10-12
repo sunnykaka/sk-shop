@@ -741,6 +741,10 @@ For phone and tablet devices
     font-size:24px;
     font-weight:400
 }
+@media (min-width:1366px) {
+    .container {max-width: 640px;}
+}
+
 @media (max-width:767px) {
     .guidev2-dialog .header h2 {
         margin-top:7vh
