@@ -54,7 +54,7 @@ public class AppThemeDto {
         if (null != user || StringUtils.isNotEmpty(deviceId)){
             appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
         }
-        appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getId()));
+        appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getThemeNo()));
 
         if(StringUtils.isNotEmpty(appTheme.getProducts())){
             String[] productIds = appTheme.getProducts().split(",");
