@@ -44,6 +44,23 @@ public class AppThemeService {
     }
 
     @Transactional(readOnly = true)
+    public AppTheme getAppThemeByThemeNo(int themeNo){
+
+        String jpql = "select a from AppTheme a where 1=1 and a.themeNo=:themeNo";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("themeNo", themeNo);
+
+        List<AppTheme> appThemeList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        AppTheme appTheme = null;
+        if(appThemeList != null && appThemeList.size() > 0){
+            appTheme = appThemeList.get(0);
+        }
+
+        return appTheme;
+
+    }
+
+    @Transactional(readOnly = true)
     public String getAppThemeContentByThemeId(int themeId){
 
         String jpql = "select a from AppThemeContent a where 1=1 and a.themeId=:themeId";

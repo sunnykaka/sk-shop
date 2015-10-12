@@ -72,17 +72,16 @@ public class ThemeCollectService {
      * @return
      */
     public ThemeCollect findMyThemeCollect(int themeId,User user,String deviceId){
-        ThemeCollect themeCollect = null;
 
         if(user != null){
-            themeCollect = getByThemeId(themeId,user.getId());
+            return getByThemeId(themeId,user.getId());
         }
 
-        if(themeCollect == null && StringUtils.isNotEmpty(deviceId)){
-            themeCollect = getByThemeId(themeId,deviceId);
+        if(StringUtils.isNotEmpty(deviceId)){
+            return getByThemeId(themeId,deviceId);
         }
 
-        return themeCollect;
+        return null;
     }
 
     /**
