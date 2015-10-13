@@ -171,14 +171,14 @@ public class AppCartController extends BaseController {
             Map<String,Integer> retMap = new HashMap<String,Integer>();
 
             if (addNumber > maxCanBuyNum) {
-                throw new AppBusinessException(ErrorCode.Conflict, "超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件");
+                throw new AppBusinessException(ErrorCode.Conflict, "最多能够购买" + maxCanBuyNum +"件");
             }
 
             if (addNumber > maxStockNum) {
                 if(maxStockNum < maxCanBuyNum) {
                     maxCanBuyNum = maxStockNum;
                 }
-                throw new AppBusinessException(ErrorCode.Conflict, "超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件");
+                throw new AppBusinessException(ErrorCode.Conflict, "最多能够购买" + maxCanBuyNum +"件");
             }
 
             createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
