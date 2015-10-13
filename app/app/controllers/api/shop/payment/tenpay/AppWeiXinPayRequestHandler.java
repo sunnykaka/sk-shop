@@ -85,7 +85,7 @@ public class AppWeiXinPayRequestHandler extends AppPayRequestHandler {
         //商客交易号
         String out_trade_no = trade.getTradeNo();
         //订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
-        String subject = "sk-" + out_trade_no;
+        String subject = "尚客-" + out_trade_no;
         //商品描述
         param.put("body", subject);
 
