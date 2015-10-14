@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.Money;
-import common.utils.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import productcenter.constants.SKUState;
 import productcenter.constants.StoreStrategy;
 import productcenter.models.*;
 import productcenter.util.PidVid;
-import productcenter.util.PidVidJsonUtil;
 import usercenter.models.Designer;
 import usercenter.models.DesignerSize;
 import usercenter.services.NationService;
@@ -204,8 +202,8 @@ public class ProductTestDataService {
 
             SkuStorage skuStorage = new SkuStorage();
             skuStorage.setSkuId(sku.getId());
-            skuStorage.setStockQuantity(1);
-            skuStorage.setTradeMaxNumber(1);
+            skuStorage.setStockQuantity(10);
+            skuStorage.setTradeMaxNumber(10);
             generalDao.persist(skuStorage);
         }
 

@@ -58,7 +58,13 @@ public class AppShowController extends Controller {
     public Result download(int themeNo) {
 
         AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeNo);
-        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService);
+
+        if(appTheme == null){
+            throw new AppBusinessException(ErrorCode.Conflict, "没有该专题信息");
+        }
+
+        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService,themeCollectService,productService,productPictureService,null,null);
+
 
         return ok(appShowDownload.render(appThemeDto));
     }

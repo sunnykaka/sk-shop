@@ -1,6 +1,7 @@
 package common.services;
 
 import base.BaseTest;
+import base.DbTest;
 import common.utils.DateUtils;
 import common.utils.Money;
 import ordercenter.constants.PlatformType;
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * Created by liubin on 15-4-2.
  */
-public class GeneralDaoTest extends BaseTest{
+public class GeneralDaoTest extends BaseTest implements DbTest{
 
 
     void prepareTestObjects(int size, int itemSize) {

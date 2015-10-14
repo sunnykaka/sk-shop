@@ -24,7 +24,6 @@ public class ProductServiceTest extends BaseTest {
 
     @Before
     public void setUp() {
-        super.startPlay();
         productService = Global.ctx.getBean(ProductService.class);
     }
 

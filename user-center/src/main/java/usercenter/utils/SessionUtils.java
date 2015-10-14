@@ -116,11 +116,11 @@ public class SessionUtils {
     }
 
 
-    private static String buildCredentials(Integer userId) throws AppException {
+    public static String buildCredentials(Integer userId) throws AppException {
         return EncryptUtil.encrypt(String.valueOf(userId));
     }
 
-    private static Integer getUserFromCredentials(String credentials){
+    public static Integer getUserFromCredentials(String credentials){
         if(StringUtils.isBlank(credentials)) return null;
         try {
             return Integer.parseInt(EncryptUtil.decrypt(credentials));
