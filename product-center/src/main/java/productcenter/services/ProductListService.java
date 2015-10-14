@@ -92,9 +92,9 @@ public class ProductListService {
             queryParams.put("saleStatus", saleStatus);
         }
 
-        if (storageFilter != null && storageFilter == 1) {
-            jpql.append("  and id in ( select distinct sk.productId from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and sk.skuState= 'NORMAL' and ss.stockQuantity >0 ) ");
-        }
+//        if (storageFilter != null && storageFilter == 1) {
+//            jpql.append("  and id in ( select distinct sk.productId from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and sk.skuState= 'NORMAL' and ss.stockQuantity >0 ) ");
+//        }
 
         //根据类目查询
         if (navId != null && navId.intValue() != -1) {
