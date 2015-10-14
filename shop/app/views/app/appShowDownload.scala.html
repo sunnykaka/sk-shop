@@ -52,51 +52,16 @@
                 </div>
             </div>
         </div>
-
-        <div class="help-modal modal-footer-banner" style='display:none'>
-            <a href="javascript:void(null)" class="close">
-                <img src="@routes.Assets.versioned("images/app/close.png")" alt="Close"/>
-            </a>
-            <a href="" class="avatar">
-                <img src="@routes.Assets.versioned("images/app/avatar.png")" alt="1"/>
-            </a>
-
-            <div id="floating-banner" class="goto-download">
-                <span>尚客，时尚的极客</span>
-            </div>
-            <a href="/app" class="btn-success goto-download">快来下载吧</a>
+        <div style="display: none;">
+            <a href="http://itunes.apple.com/cn/app/wen-yi-sheng/id551521341?mt=8" id="openApp"></a>
         </div>
 
-        <div class="container" style="display: none;">
-            <div class="top">
-                <a href="/apps"><img src="@routes.Assets.versioned("images/app/logo.png")" alt="Logo"/></a>
-                <a href="http://itunes.apple.com/cn/app/wen-yi-sheng/id551521341?mt=8" id="openApp" >
-                    <img class="app-android goto-app-button" src="@routes.Assets.versioned("images/app/open-btn.png")" alt="Goto app"/>
-                </a>
-            </div>
-                <!-- 标题-->
-            <h1 class="title">
-            @appThemeDto.getName
-            </h1>
-                <!-- 内容-->
-            <div class="content">
 
-
-
-            </div>
-                <!-- 底栏-->
-            <div class="author-info">
-            </div>
-        </div>
 
         <script src="@routes.Assets.versioned("js/zepto.js")"></script>
 
         <script type='text/javascript'>
-    var Maleskine = {
-        removeFooterBanner: function () {
-            $(".modal-footer-banner").remove();
-        }
-    };
+
     //判断是否为微信游览器
     function is_weixn(){
         var ua = navigator.userAgent.toLowerCase();
@@ -106,17 +71,32 @@
             return false;
         }
     }
+
+
+
     $(document).ready(function () {
 
         $('#openApp').on('tap',function(){
-            window.location.href =  "http://itunes.apple.com/cn/app/wen-yi-sheng/id551521341?mt=8";
-            var ifr = document.createElement('iframe');
-            ifr.src = 'fashion://@appThemeDto.getId';
-            ifr.style.display = 'none';
-            document.body.appendChild(ifr);
-            window.setTimeout(function(){
-                document.body.removeChild(ifr);
-            },3000)
+
+
+            //window.location.href =  "http://itunes.apple.com/cn/app/wen-yi-sheng/id551521341?mt=8";
+            //var ifr = document.createElement('iframe');
+            //ifr.src = 'fashion://@appThemeDto.getThemeNo';
+            //ifr.style.display = 'none';
+            //document.body.appendChild(ifr);
+
+            //window.setTimeout(function(){
+               // document.body.removeChild(ifr);
+           // },3000)
+          // location.href = 'fashion://@@appThemeDto.getThemeNo';
+           // setTimeout(function() {
+              //  location.href = 'http://itunes.apple.com/cn/app/wen-yi-sheng/id551521341?mt=8';
+           // }, 1000);
+//            setTimeout(function() {
+//                location.reload();
+//            }, 1000);
+
+
         });
 
 
@@ -124,17 +104,10 @@
         if(!is_weixn()){
             $('#openApp').trigger('tap');
             $('.zu-main').hide();
-            $('.modal-footer-banner').hide();
-            $('.container').hide();
         }
 
-        $(".modal-footer-banner .close").on("tap", function () {
-            Maleskine.removeFooterBanner();
-        });
 
-        $('.goto-download').on('tap', function () {
 
-        });
     });
 </script>
     </body>
