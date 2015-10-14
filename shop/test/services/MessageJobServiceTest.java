@@ -1,6 +1,7 @@
 package services;
 
 import base.BaseTest;
+import base.DbTest;
 import common.constants.MessageJobSource;
 import common.models.MessageJob;
 import common.services.MessageJobService;
@@ -27,7 +28,7 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class MessageJobServiceTest extends BaseTest {
+public class MessageJobServiceTest extends BaseTest implements DbTest {
 
 
     @Test

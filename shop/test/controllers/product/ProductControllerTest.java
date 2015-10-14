@@ -1,12 +1,14 @@
 package controllers.product;
 
 import base.BaseTest;
+import base.DbTest;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;
 import ordercenter.models.Valuation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
+import play.Logger;
 import play.mvc.Http;
 import play.mvc.Result;
 
@@ -20,7 +22,7 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class ProductControllerTest extends BaseTest {
+public class ProductControllerTest extends BaseTest implements DbTest {
 
     @Test
     public void testListProductValuations() throws Exception {
@@ -32,7 +34,7 @@ public class ProductControllerTest extends BaseTest {
 
         Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId, null).url());
         Result result = route(request);
-        System.out.println(contentAsString(result));
+        Logger.debug(" ProductController.valuations result: " + contentAsString(result));
         assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
