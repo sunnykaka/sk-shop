@@ -34,17 +34,17 @@ public class AppShowController extends Controller {
     @Autowired
     private ProductPictureService productPictureService;
 
-    public Result appTheme(int themeId) {
+    public Result appTheme(int themeNo) {
 
-        AppTheme appTheme = appThemeService.getAppThemeById(themeId);
+        AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeNo);
         AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService);
 
         return ok(appShowTheme.render(appThemeDto));
     }
 
-    public Result appThemeDesc(int themeId) {
+    public Result appThemeDesc(int themeNo) {
 
-        AppTheme appTheme = appThemeService.getAppThemeById(themeId);
+        AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeNo);
 
         if(appTheme == null){
             throw new AppBusinessException(ErrorCode.Conflict, "没有该专题信息");
@@ -55,10 +55,16 @@ public class AppShowController extends Controller {
         return ok(appThemeDesc.render(appThemeDto));
     }
 
-    public Result download(int themeId) {
+    public Result download(int themeNo) {
 
-        AppTheme appTheme = appThemeService.getAppThemeById(themeId);
-        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService);
+        AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeNo);
+
+        if(appTheme == null){
+            throw new AppBusinessException(ErrorCode.Conflict, "没有该专题信息");
+        }
+
+        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService,themeCollectService,productService,productPictureService,null,null);
+
 
         return ok(appShowDownload.render(appThemeDto));
     }

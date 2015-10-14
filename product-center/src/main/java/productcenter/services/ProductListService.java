@@ -107,6 +107,7 @@ public class ProductListService {
             jpql.append(" and o.categoryId in (:cateIds) ");
             queryParams.put("cateIds", allCateIds);
         }
+        jpql.append(" order by saleStatus asc,id desc ");
         return generalDao.query(jpql.toString(), page, queryParams);
     }
 }

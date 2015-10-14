@@ -38,7 +38,6 @@ public class ProductPictureService {
      * @return
      */
     public ProductPicture getProductPictureById(int id) {
-        play.Logger.info("------ProductPictureService getProductPictureById begin exe-----------" + id);
         return generalDao.get(ProductPicture.class, id);
     }
 
@@ -48,7 +47,6 @@ public class ProductPictureService {
      * @return
      */
     public List<ProductPicture> queryProductPicturesByProductId(int productId) {
-        play.Logger.info("------ProductPictureService queryProductPicturesByProductId begin exe-----------" + productId);
 
         String jpql = "select o from ProductPicture o where 1=1 and o.productId=:productId order by o.number, o.name";
         Map<String, Object> queryParams = new HashMap<>();
@@ -62,7 +60,6 @@ public class ProductPictureService {
      * @return
      */
     public List<ProductPicture> queryProductPicturesBySkuId(String skuId) {
-        play.Logger.info("------ProductPictureService queryProductPicturesBySkuId begin exe-----------" + skuId);
 
         String jpql = "select o from ProductPicture o where 1=1 and o.skuId like concat('%,', :skuId, ',%')";
         Map<String, Object> queryParams = new HashMap<>();
@@ -72,7 +69,6 @@ public class ProductPictureService {
     }
 
     public ProductPicture getMainProductPictureByProductId(int productId) {
-        play.Logger.info("------ProductPictureService getMainProductPictureByProductId begin exe-----------" + productId);
 
         String jpql = "select o from ProductPicture o where 1=1 and o.mainPic=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();
@@ -87,7 +83,6 @@ public class ProductPictureService {
     }
 
     public ProductPicture getMinorProductPictureByProductId(int productId) {
-        play.Logger.info("------ProductPictureService getMinorProductPictureByProductId begin exe-----------" + productId);
 
         String jpql = "select o from ProductPicture o where 1=1 and o.minorPic=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();

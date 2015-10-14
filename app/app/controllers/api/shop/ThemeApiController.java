@@ -54,11 +54,11 @@ public class ThemeApiController extends BaseController {
 
     }
 
-    public Result getAppTheme(int themeId){
+    public Result getAppTheme(int themeNo){
         User user = this.currentUser();
         String deviceId = ParamUtils.getByKey(request(), "deviceId");
 
-        AppTheme appTheme = appThemeService.getAppThemeById(themeId);
+        AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeNo);
 
         if(appTheme == null){
             throw new AppBusinessException(ErrorCode.Conflict, "没有该专题信息");

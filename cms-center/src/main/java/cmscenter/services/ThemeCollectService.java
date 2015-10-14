@@ -66,36 +66,35 @@ public class ThemeCollectService {
     /**
      * 查询我收藏的专题记录
      *
-     * @param themeId
+     * @param themeNo
      * @param user
      * @param deviceId
      * @return
      */
-    public ThemeCollect findMyThemeCollect(int themeId,User user,String deviceId){
-        ThemeCollect themeCollect = null;
+    public ThemeCollect findMyThemeCollect(int themeNo,User user,String deviceId){
 
         if(user != null){
-            themeCollect = getByThemeId(themeId,user.getId());
+            return getByThemeId(themeNo,user.getId());
         }
 
-        if(themeCollect == null && StringUtils.isNotEmpty(deviceId)){
-            themeCollect = getByThemeId(themeId,deviceId);
+        if(StringUtils.isNotEmpty(deviceId)){
+            return getByThemeId(themeNo,deviceId);
         }
 
-        return themeCollect;
+        return null;
     }
 
     /**
      * 
      * 查询专题是否有收藏
      *
-     * @param themeId
+     * @param themeNo
      * @param user
      * @param deviceId
      * @return
      */
-    public boolean isFavorites(int themeId,User user,String deviceId){
-        ThemeCollect themeCollect = findMyThemeCollect(themeId, user, deviceId);
+    public boolean isFavorites(int themeNo,User user,String deviceId){
+        ThemeCollect themeCollect = findMyThemeCollect(themeNo, user, deviceId);
         if(themeCollect != null){
             return true;
         }
@@ -105,17 +104,17 @@ public class ThemeCollectService {
     /**
      * 查询我的收藏记录
      *
-     * @param themeId
+     * @param themeNo
      * @param userId
      * @return
      */
     @Transactional(readOnly = true)
-    public ThemeCollect getByThemeId(int themeId,int userId){
+    public ThemeCollect getByThemeId(int themeNo,int userId){
 
         String jpql = "select pc from ThemeCollect pc where 1=1 and pc.deleted=false ";
         Map<String, Object> queryParams = new HashMap<>();
-        jpql += " and pc.themeId = :themeId ";
-        queryParams.put("themeId", themeId);
+        jpql += " and pc.themeNo = :themeNo ";
+        queryParams.put("themeNo", themeNo);
 
         jpql += " and pc.userId = :userId ";
         queryParams.put("userId", userId);
@@ -131,17 +130,17 @@ public class ThemeCollectService {
     /**
      * 查询我的收藏记录
      *
-     * @param themeId
+     * @param themeNo
      * @param deviceId
      * @return
      */
     @Transactional(readOnly = true)
-    public ThemeCollect getByThemeId(int themeId,String deviceId){
+    public ThemeCollect getByThemeId(int themeNo,String deviceId){
 
         String jpql = "select pc from ThemeCollect pc where 1=1 and pc.deleted=false ";
         Map<String, Object> queryParams = new HashMap<>();
-        jpql += " and pc.themeId = :themeId ";
-        queryParams.put("themeId", themeId);
+        jpql += " and pc.themeNo = :themeNo ";
+        queryParams.put("themeNo", themeNo);
 
         jpql += " and pc.deviceId = :deviceId ";
         queryParams.put("deviceId", deviceId);
@@ -178,17 +177,17 @@ public class ThemeCollectService {
     /**
      * 统计收藏的专题
      *
-     * @param themeId
+     * @param themeNo
      * @return
      */
     @Transactional(readOnly = true)
-    public int countThemeCollect(int themeId){
+    public int countThemeCollect(int themeNo){
 
         String jpql = "select dc from ThemeCollect dc where 1=1 and dc.deleted=false";
         Map<String, Object> queryParams = new HashMap<>();
 
-        jpql += " and dc.themeId = :themeId ";
-        queryParams.put("themeId", themeId);
+        jpql += " and dc.themeNo = :themeNo ";
+        queryParams.put("themeNo", themeNo);
 
         return generalDAO.query(jpql, Optional.<Page<DesignerCollect>>empty(), queryParams).size();
     }

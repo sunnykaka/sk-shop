@@ -471,7 +471,7 @@ input::-webkit-input-placeholder {
 
 .modal-footer-banner .close {
     position: absolute;
-    top: 22px;
+    top: 26px;
     right: 0;
     width: 24px;
     height: 24px;
@@ -549,6 +549,7 @@ input::-webkit-input-placeholder {
 .help-modal .btn-success {
     position: relative;
     top: 6px;
+    right:10px;
     float: right;
     width: 90px;
     height: 29px;
@@ -741,6 +742,10 @@ For phone and tablet devices
     font-size:24px;
     font-weight:400
 }
+@media (min-width:1200px) {
+    .container {max-width: 640px;}
+}
+
 @media (max-width:767px) {
     .guidev2-dialog .header h2 {
         margin-top:7vh

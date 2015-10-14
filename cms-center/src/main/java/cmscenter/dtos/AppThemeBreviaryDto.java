@@ -36,8 +36,8 @@ public class AppThemeBreviaryDto {
         appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
-        appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
-        appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getId()));
+        appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getThemeNo(),user,deviceId));
+        appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getThemeNo()));
 
         appThemeDto.setDigest(appTheme.getDigest());
 
