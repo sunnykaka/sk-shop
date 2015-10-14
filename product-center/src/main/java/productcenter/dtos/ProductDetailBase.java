@@ -338,7 +338,7 @@ public class ProductDetailBase {
                 if (!defaultSku.isPresent()) {
                     //查找defaultSku为true的sku
                     defaultSku = productDetailBase.skuMap.values().stream().
-                            filter(SkuInfo::isDefaultSku).findFirst();
+                            filter(sku -> sku.isDefaultSku() && sku.getStockQuantity() > 0).findFirst();
 
                 }
                 if (!defaultSku.isPresent()) {
