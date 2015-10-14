@@ -4,23 +4,25 @@ import api.response.user.LoginResult;
 import api.response.user.UserDataDto;
 import api.response.user.UserDto;
 import base.DbTest;
-import common.exceptions.AppException;
-import common.utils.DateUtils;
+import common.utils.JsonUtils;
 import play.mvc.Http;
 import play.mvc.Result;
+import services.api.user.UserTokenProvider;
 import usercenter.cache.UserCache;
 import usercenter.constants.MarketChannel;
 import usercenter.domain.SmsSender;
-import usercenter.utils.SessionUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static common.utils.TestUtils.UserRegisterInfo;
+import static common.utils.TestUtils.mockUserRegisterInfo;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static play.test.Helpers.NO_CONTENT;
 import static play.test.Helpers.POST;
+import static play.test.Helpers.contentAsString;
+
 
 /**
 * 注册登录测试接口
@@ -112,21 +114,26 @@ public interface LoginApiTest extends DbTest {
     }
 
     /**
-     * 向request中加入用户session信息，如果request需要访问登录保护的功能，则需要先调用这个方法
+     * 向request中加入accessToken信息，如果request需要访问登录保护的功能，则在调用route之前需要调用这个方法
      * @param request
-     * @param userId
+     * @param accessToken
      * @return
      */
-    default Http.RequestBuilder wrapLoginInfo(Http.RequestBuilder request, Integer userId) {
-        try {
-            return request.session(SessionUtils.SESSION_CREDENTIALS, SessionUtils.buildCredentials(userId)).
-                    session(SessionUtils.SESSION_REQUEST_TIME, String.valueOf(DateUtils.current().getMillis()));
-        } catch (AppException e) {
-            throw new RuntimeException(e);
-        }
+    default Http.RequestBuilder wrapLoginInfo(Http.RequestBuilder request, String accessToken) {
+
+        String uri = request.uri();
+        uri += uri.contains("?") ? "&" : "?";
+        uri += String.format("%s=%s", UserTokenProvider.ACCESS_TOKEN_KEY, accessToken);
+        return request.uri(uri);
 
     }
 
+    /**
+     * 校验登录
+     * @param phone
+     * @param username
+     * @param loginResult
+     */
     default void assertLoginResultValid(String phone, String username, LoginResult loginResult) {
         assertThat(loginResult.getAccessToken(), notNullValue());
         assertThat(loginResult.getRefreshToken(), notNullValue());
@@ -143,6 +150,19 @@ public interface LoginApiTest extends DbTest {
         assertThat(userDataDto.getName(), nullValue());
 
     }
+
+    /**
+     * 创建一个用户
+     * @return
+     */
+    default LoginResult mockUser() {
+        UserRegisterInfo userRegisterInfo = mockUserRegisterInfo();
+        Result result = registerUser(userRegisterInfo);
+        LoginResult loginResult = JsonUtils.json2Object(contentAsString(result), LoginResult.class);
+        assertLoginResultValid(userRegisterInfo.phone, userRegisterInfo.username, loginResult);
+        return loginResult;
+    }
+
 
 
 }

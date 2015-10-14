@@ -19,10 +19,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static play.test.Helpers.contentAsString;
 
 /**
+ * 如果测试类要访问数据库，可以实现这个接口
  * Created by liubin on 15-10-14.
  */
 public interface DbTest {
 
+    /**
+     * 在一个数据库事务中执行参数传递的逻辑
+     * @param callback
+     * @param <T>
+     * @return
+     */
     default <T> T doInTransaction(EntityManagerCallback<T> callback) {
         EntityManagerFactory emf = BaseGlobal.ctx.getBean(EntityManagerFactory.class);
         EntityManager em = emf.createEntityManager();
@@ -48,6 +55,12 @@ public interface DbTest {
 
     }
 
+    /**
+     * 在一个数据库事务中执行参数传递的逻辑, 同时GeneralDao当做回调参数传递
+     * @param callback
+     * @param <T>
+     * @return
+     */
     default <T> T doInTransactionWithGeneralDao(GeneralDaoCallback<T> callback) {
         return doInTransaction(em -> {
             GeneralDao generalDao = new GeneralDao(em);

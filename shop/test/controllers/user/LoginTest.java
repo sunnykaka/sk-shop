@@ -109,7 +109,7 @@ public interface LoginTest extends DbTest {
     }
 
     /**
-     * 向request中加入用户session信息，如果request需要访问登录保护的功能，则需要先调用这个方法
+     * 向request中加入用户session信息，如果request需要访问登录保护的功能，则在调用route之前需要调用这个方法
      * @param request
      * @param userId
      * @return

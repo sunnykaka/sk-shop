@@ -10,9 +10,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
-import usercenter.cache.UserCache;
-import usercenter.constants.MarketChannel;
-import usercenter.domain.SmsSender;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -196,60 +193,6 @@ public class LoginApiControllerTest extends BaseTest implements DbTest, LoginApi
 
 
     }
-
-    public Result login(String username, String password) {
-        Map<String, String> params = new HashMap<>();
-        if(username != null) {
-            params.put("passport", username);
-        }
-        if(password != null) {
-            params.put("password", password);
-        }
-        params.put("channel", MarketChannel.iOS.getValue());
-
-        Http.RequestBuilder request = new Http.RequestBuilder().
-                method(POST).
-                uri(routes.LoginApiController.login().url()).
-                bodyForm(params);
-        return routeWithExceptionHandle(request);
-    }
-
-
-    public Result registerUser(String phone, String username, String password) {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("phone", phone);
-
-        Http.RequestBuilder request = new Http.RequestBuilder().
-                method(POST).
-                uri(routes.LoginApiController.requestPhoneCode().url()).
-                bodyForm(params);
-
-        Result result = routeWithExceptionHandle(request);
-        assertThat(result.status(), is(NO_CONTENT));
-
-        String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
-        assertThat(verificationCode, notNullValue());
-        assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
-
-        if(username != null) {
-            params.put("username", username);
-        }
-        if(password != null) {
-            params.put("password", password);
-        }
-        params.put("phone", phone);
-        params.put("verificationCode", verificationCode);
-        params.put("channel", MarketChannel.iOS.getValue());
-
-        request = new Http.RequestBuilder().
-                method(POST).
-                uri(routes.LoginApiController.register().url()).
-                bodyForm(params);
-        result = routeWithExceptionHandle(request);
-        return result;
-    }
-
 
 
 }

@@ -5,7 +5,7 @@ import base.BaseTest;
 import base.DbTest;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
-import controllers.api.user.LoginApiControllerTest;
+import controllers.api.user.LoginApiTest;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -22,7 +22,7 @@ import static common.utils.TestUtils.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class TestApiControllerTest extends BaseTest implements DbTest {
+public class TestApiControllerTest extends BaseTest implements DbTest, LoginApiTest {
 
     @Test
     public void testRequestPublicResourceSuccess() throws Exception {
@@ -64,10 +64,9 @@ public class TestApiControllerTest extends BaseTest implements DbTest {
         String username = userRegisterInfo.username;
         String password = userRegisterInfo.password;
 
-        LoginApiControllerTest loginApiControllerTest = new LoginApiControllerTest();
-        Result result = loginApiControllerTest.registerUser(phone, username, password);
+        Result result = registerUser(phone, username, password);
         LoginResult loginResult = JsonUtils.json2Object(contentAsString(result), LoginResult.class);
-        loginApiControllerTest.assertLoginResultValid(phone, username, loginResult);
+        assertLoginResultValid(phone, username, loginResult);
 
         Map<String, String> params = new HashMap<>();
         params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());
