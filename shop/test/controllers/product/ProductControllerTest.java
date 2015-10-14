@@ -1,6 +1,7 @@
 package controllers.product;
 
 import base.BaseTest;
+import base.DbTest;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;
@@ -21,7 +22,7 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class ProductControllerTest extends BaseTest {
+public class ProductControllerTest extends BaseTest implements DbTest {
 
     @Test
     public void testListProductValuations() throws Exception {

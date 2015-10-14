@@ -21,7 +21,6 @@ public class ProductPictureServiceTest extends BaseTest {
 
     @Before
     public void setUp() {
-        super.startPlay();
         productPictureService = Global.ctx.getBean(ProductPictureService.class);
     }
 

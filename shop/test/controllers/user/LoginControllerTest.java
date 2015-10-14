@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static play.test.Helpers.*;
-
+import static common.utils.TestUtils.*;
 
 /**
  * Created by liubin on 15-4-2.

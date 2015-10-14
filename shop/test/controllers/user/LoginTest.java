@@ -1,9 +1,9 @@
 package controllers.user;
 
+import base.DbTest;
 import common.exceptions.AppException;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
-import org.apache.commons.lang3.RandomStringUtils;
 import play.mvc.Http;
 import play.mvc.Result;
 import usercenter.cache.UserCache;
@@ -21,6 +21,7 @@ import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.POST;
 import static play.test.Helpers.contentAsString;
 import static play.test.Helpers.route;
+import static common.utils.TestUtils.*;
 
 /**
  * 注册登录测试接口
@@ -28,7 +29,7 @@ import static play.test.Helpers.route;
  *
  * Created by liubin on 15-10-12.
  */
-public interface LoginTest {
+public interface LoginTest extends DbTest {
 
     /**
      * 注册
@@ -124,18 +125,6 @@ public interface LoginTest {
     }
 
     /**
-     * 创建一个虚拟用户信息
-     * @return
-     */
-    default UserRegisterInfo mockUserRegisterInfo() {
-        String phone = "1" + RandomStringUtils.randomNumeric(10);
-        String username = RandomStringUtils.randomAlphabetic(10);
-        String password = RandomStringUtils.randomAlphabetic(10);
-
-        return new UserRegisterInfo(phone, username, password);
-    }
-
-    /**
      * 创建一个用户
      * @return
      */
@@ -145,16 +134,4 @@ public interface LoginTest {
         return login(userRegisterInfo);
     }
 
-
-    public static class UserRegisterInfo {
-        public String phone;
-        public String username;
-        public String password;
-
-        public UserRegisterInfo(String phone, String username, String password) {
-            this.phone = phone;
-            this.username = username;
-            this.password = password;
-        }
-    }
 }

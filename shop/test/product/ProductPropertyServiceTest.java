@@ -22,7 +22,6 @@ public class ProductPropertyServiceTest extends WithApplication {
 
     @Before
     public void setUp() {
-        super.startPlay();
         productPropertyService = Global.ctx.getBean(ProductPropertyService.class);
     }
 

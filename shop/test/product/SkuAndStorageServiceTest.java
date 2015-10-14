@@ -21,7 +21,6 @@ public class SkuAndStorageServiceTest extends BaseTest {
 
     @Before
     public void setUp() {
-        super.startPlay();
         skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
     }
 

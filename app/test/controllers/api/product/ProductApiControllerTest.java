@@ -5,6 +5,7 @@ import api.response.product.ProductDetailDto;
 import api.response.product.ProductDto;
 import api.response.user.DesignerDto;
 import base.BaseTest;
+import base.DbTest;
 import common.utils.JsonUtils;
 import org.junit.Test;
 import play.mvc.Http;
@@ -29,7 +30,7 @@ import static play.test.Helpers.contentAsString;
 /**
  * Created by liubin on 15-4-2.
  */
-public class ProductApiControllerTest extends BaseTest{
+public class ProductApiControllerTest extends BaseTest implements DbTest{
 
     @Test
     public void testRequestProductDetailSuccess() throws Exception {
