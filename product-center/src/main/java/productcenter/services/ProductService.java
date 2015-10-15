@@ -1,12 +1,14 @@
 package productcenter.services;
 
 import common.services.GeneralDao;
+import common.utils.Money;
 import common.utils.page.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import productcenter.constants.ProductTagType;
+import productcenter.constants.SaleStatus;
 import productcenter.constants.StoreStrategy;
 import productcenter.models.Html;
 import productcenter.models.Product;
@@ -31,6 +33,7 @@ public class ProductService {
 
     /**
      * 获取所有产品，不包括已经删除的产品
+     *
      * @return
      */
     public List<Product> queryAllProducts() {
@@ -45,6 +48,7 @@ public class ProductService {
 
     /**
      * 通过产品主键id获取产品
+     *
      * @param id
      * @return
      */
@@ -56,6 +60,7 @@ public class ProductService {
 
     /**
      * 通过产品code获取产品
+     *
      * @param productCode
      * @return
      */
@@ -68,7 +73,7 @@ public class ProductService {
 
         List<Product> list = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
         Product product = null;
-        if(list != null && list.size() > 0) {
+        if (list != null && list.size() > 0) {
             product = list.get(0);
         }
         return product;
@@ -79,66 +84,66 @@ public class ProductService {
      * 可以按照name和enName进行模糊查询
      * 可以传入categoryId、客户（设计师）customerId、品牌brandId、库存策略StoreStrategy、该商品是否上架online、产品标签ProductTagType
      */
-    public List<Product> queryProductPageListWithPage(Optional<Page<Product>> page, Product param){
+    public List<Product> queryProductPageListWithPage(Optional<Page<Product>> page, Product param) {
         play.Logger.info("--------ProductService getOrderList begin exe-----------" + page + "\n" + param);
 
         String jpql = "select o from Product o where 1=1 and o.isDelete=:isDelete";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("isDelete", false);
 
-        if(param != null) {
+        if (param != null) {
             //名称
             String name = param.getName();
-            if(StringUtils.isNotEmpty(name)) {
+            if (StringUtils.isNotEmpty(name)) {
                 jpql += " and o.name like :name ";
                 queryParams.put("name", "%" + name + "%");
             }
 
             //英文名称
             String enName = param.getEnName();
-            if(StringUtils.isNotEmpty(enName)) {
+            if (StringUtils.isNotEmpty(enName)) {
                 jpql += " and o.enName like :enName ";
                 queryParams.put("enName", "%" + enName + "%");
             }
 
             //后台目录
             Integer categoryId = param.getCategoryId();
-            if(categoryId != null && categoryId != 0) {
+            if (categoryId != null && categoryId != 0) {
                 jpql += " and o.categoryId = :categoryId ";
                 queryParams.put("categoryId", categoryId);
             }
 
             //客户（设计师）id
             Integer customerId = param.getCustomerId();
-            if(customerId != null && customerId != 0) {
+            if (customerId != null && customerId != 0) {
                 jpql += " and o.customerId = :customerId ";
                 queryParams.put("customerId", customerId);
             }
 
             //品牌
             Integer brandId = param.getBrandId();
-            if(brandId != null && brandId != 0) {
+            if (brandId != null && brandId != 0) {
                 jpql += " and o.brandId = :brandId ";
                 queryParams.put("brandId", brandId);
             }
 
             //库存策略
             StoreStrategy storeStrategy = param.getStoreStrategy();
-            if(storeStrategy != null) {
+            if (storeStrategy != null) {
                 jpql += " and o.storeStrategy = :storeStrategy ";
                 queryParams.put("storeStrategy", storeStrategy);
             }
 
             //该商品是否上架
             Boolean online = param.isOnline();
-            if(online != null) {
+            if (online != null) {
                 jpql += " and o.online = :online ";
                 queryParams.put("online", online);
             }
 
             //产品标签
             ProductTagType tagType = param.getTagType();
-            if(tagType != null) {
+            if (tagType != null) {
                 jpql += " and o.tagType = :tagType ";
                 queryParams.put("tagType", tagType);
             }
@@ -150,6 +155,7 @@ public class ProductService {
 
     /**
      * 查询商品描述
+     *
      * @param productId
      * @return
      */
@@ -165,6 +171,7 @@ public class ProductService {
 
     /**
      * 查询商品说明
+     *
      * @param productId
      * @return
      */
@@ -179,6 +186,7 @@ public class ProductService {
 
     /**
      * 查询某个设计师下面所有的商品
+     *
      * @param designerId
      * @return
      */
@@ -190,6 +198,7 @@ public class ProductService {
 
     /**
      * 查询商品搭配商品列表
+     *
      * @param productId
      * @return
      */
@@ -197,5 +206,32 @@ public class ProductService {
         String sql = "select a.* from product a,RecommendProduct b where a.id=b.recommendProductId and b.productId =? and b.recommendType ='MATCH' and a.isDelete =0 and a.online=1 order by b.priority desc";
         return generalDao.getEm().createNativeQuery(sql, Product.class).setParameter(1, productId).getResultList();
     }
+
+    /**
+     * check一个商品是正在首发中
+     *
+     * @param prodId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public boolean useFirstSellPrice(int prodId) {
+        Product product = this.getProductById(prodId);
+        return useFirstSellPrice(product);
+    }
+
+
+    /**
+     * 是否采用首发价
+     * @param product
+     * @return
+     */
+    private boolean useFirstSellPrice(Product product) {
+        if (product == null) {
+            return false;
+        }
+        String saleStatus = product.getSaleStatus();
+        return saleStatus.equals(SaleStatus.PLANSELL.toString()) || saleStatus.equals(SaleStatus.FIRSTSELL.toString()) || saleStatus.equals(SaleStatus.PRESELL.toString());
+    }
+
 
 }
