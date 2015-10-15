@@ -1,5 +1,8 @@
 package cmscenter.dtos;
 
+import common.utils.StringUtils;
+import productcenter.models.Product;
+
 /**
  * Created by Administrator on 2015/9/15.
  */
@@ -11,10 +14,15 @@ public class ProductSimpleDto {
 
     private String productName;
 
-    public ProductSimpleDto(int productId,String productName,String productUrl){
-        this.productId = productId;
-        this.productName = productName;
-        this.productUrl = productUrl;
+    public static ProductSimpleDto build(Product product,String url){
+
+        ProductSimpleDto productSimpleDto = new ProductSimpleDto();
+        productSimpleDto.setProductId(product.getId());
+        productSimpleDto.setProductName(product.getName());
+        productSimpleDto.setProductUrl(url);
+
+        return productSimpleDto;
+
     }
 
     public Integer getProductId() {

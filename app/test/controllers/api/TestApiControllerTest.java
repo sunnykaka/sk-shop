@@ -2,10 +2,10 @@ package controllers.api;
 
 import api.response.user.LoginResult;
 import base.BaseTest;
+import base.DbTest;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
-import controllers.api.user.LoginApiControllerTest;
-import org.apache.commons.lang3.RandomStringUtils;
+import controllers.api.user.LoginApiTest;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -17,12 +17,12 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static play.test.Helpers.*;
-
+import static common.utils.TestUtils.*;
 
 /**
  * Created by liubin on 15-4-2.
  */
-public class TestApiControllerTest extends BaseTest {
+public class TestApiControllerTest extends BaseTest implements DbTest, LoginApiTest {
 
     @Test
     public void testRequestPublicResourceSuccess() throws Exception {
@@ -59,14 +59,14 @@ public class TestApiControllerTest extends BaseTest {
     @Test
     public void testRequestProtectedResourceSuccess() throws Exception {
 
-        String phone = "1" + RandomStringUtils.randomNumeric(10);
-        String username = RandomStringUtils.randomAlphabetic(10);
-        String password = RandomStringUtils.randomAlphabetic(10);
+        UserRegisterInfo userRegisterInfo = mockUserRegisterInfo();
+        String phone = userRegisterInfo.phone;
+        String username = userRegisterInfo.username;
+        String password = userRegisterInfo.password;
 
-        LoginApiControllerTest loginApiControllerTest = new LoginApiControllerTest();
-        Result result = loginApiControllerTest.registerUser(phone, username, password);
+        Result result = registerUser(phone, username, password);
         LoginResult loginResult = JsonUtils.json2Object(contentAsString(result), LoginResult.class);
-        loginApiControllerTest.assertLoginResultValid(phone, username, loginResult);
+        assertLoginResultValid(phone, username, loginResult);
 
         Map<String, String> params = new HashMap<>();
         params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());

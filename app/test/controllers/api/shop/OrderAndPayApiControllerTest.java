@@ -2,8 +2,9 @@ package controllers.api.shop;
 
 import api.response.user.LoginResult;
 import base.BaseTest;
+import base.DbTest;
 import common.utils.JsonUtils;
-import controllers.api.user.LoginApiControllerTest;
+import controllers.api.user.LoginApiTest;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -22,11 +23,11 @@ import static play.test.Helpers.contentAsString;
 /**
  * Created by lidujun on 15-9-1.
  */
-public class OrderAndPayApiControllerTest extends BaseTest {
+public class OrderAndPayApiControllerTest extends BaseTest implements DbTest, LoginApiTest {
     //有些数据如sku等会发生变化，在测试时需要手工调整一下
     @Test
     public void testSubmitToPay() throws Exception { //(boolean isPromptlyPay, String selItems, int addressId, String payOrg)
-        Result result = new LoginApiControllerTest().login("1234567890", "1234567890");
+        Result result = login("1234567890", "1234567890");
         if(result.status() == OK) {
             LoginResult loginResult = JsonUtils.json2Object(contentAsString(result), LoginResult.class);
 

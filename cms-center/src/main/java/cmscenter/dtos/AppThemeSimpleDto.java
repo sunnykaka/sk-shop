@@ -12,6 +12,8 @@ public class AppThemeSimpleDto {
 
     private String name;
 
+    private int themeNo;
+
     private String picUrl;
 
     public static AppThemeSimpleDto build(AppTheme appTheme){
@@ -20,6 +22,7 @@ public class AppThemeSimpleDto {
         appThemeSimpleDto.setId(appTheme.getId());
         appThemeSimpleDto.setName(appTheme.getName());
         appThemeSimpleDto.setPicUrl(appTheme.getPicUrl());
+        appThemeSimpleDto.setThemeNo(appTheme.getThemeNo());
 
         return appThemeSimpleDto;
     }
@@ -46,5 +49,13 @@ public class AppThemeSimpleDto {
 
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
+    }
+
+    public int getThemeNo() {
+        return themeNo;
+    }
+
+    public void setThemeNo(int themeNo) {
+        this.themeNo = themeNo;
     }
 }

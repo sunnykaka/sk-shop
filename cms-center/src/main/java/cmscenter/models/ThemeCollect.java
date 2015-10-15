@@ -21,7 +21,7 @@ public class ThemeCollect implements EntityClass<Integer>,TableTimeData {
 
     private String deviceId;
 
-    private int themeId;
+    private int themeNo;
 
     /** 软删 */
     private boolean deleted;
@@ -40,9 +40,9 @@ public class ThemeCollect implements EntityClass<Integer>,TableTimeData {
         this.collectTime = DateUtils.current();
     }
 
-    public ThemeCollect(int userId, int themeId){
+    public ThemeCollect(int userId, int themeNo){
         this.userId = userId;
-        this.themeId = themeId;
+        this.themeNo = themeNo;
         this.collectTime = DateUtils.current();
     }
 
@@ -110,13 +110,13 @@ public class ThemeCollect implements EntityClass<Integer>,TableTimeData {
         this.updateDate = updateDate;
     }
 
-    @Column(name = "themeId")
-    public int getThemeId() {
-        return themeId;
+    @Column(name = "themeNo")
+    public int getThemeNo() {
+        return themeNo;
     }
 
-    public void setThemeId(int themeId) {
-        this.themeId = themeId;
+    public void setThemeNo(int themeNo) {
+        this.themeNo = themeNo;
     }
 
     @Column(name = "deviceId")

@@ -1,0 +1,54 @@
+@(appThemeDto:cmscenter.dtos.AppThemeDto)
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>尚客-@appThemeDto.getName</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="@routes.Assets.versioned("css/appcss.css")"/>
+        <style>
+        div,figure{box-sizing: border-box;}
+        figure{width: 48%;float: left;margin: 15px 0;}
+        figure:nth-child(odd){margin-right: 4%;}
+        .product{overflow: hidden;}
+        .product .product_title{font-size: 0.8em;text-align: center;width: 100%;overflow: hidden;white-space: nowrap;
+        text-overflow: ellipsis;}
+        .content p {padding: 0;margin: 0;text-indent: 0; line-height :180% ; white-space: normal;}
+        .container .more{width: 80%;text-align:center;border: 1px solid #ccc;padding: 5px;margin: 10px auto 0;}
+        .container{padding: 0 15px 20px;}
+        </style>
+    </head>
+    <body class="wechat-web reader-day-mode reader-font2">
+
+        <div class="container">
+                <!-- 标题-->
+            <h1 class="title">
+                @appThemeDto.getName
+            </h1>
+                <!-- 内容-->
+            <div class="content">
+
+                @Html(appThemeDto.getContent)
+
+                    <!-- 产品列表-->
+                <div class="product">
+                    @for(product <- appThemeDto.getProductSimpleDtoList){
+                        <figure>
+                            <img src="@product.getProductUrl" proid="@product.getProductId">
+                            <figcaption>
+                                <div class="product_title">
+                                    @product.getProductName
+                                </div>
+                            </figcaption>
+                        </figure>
+                    }
+                </div>
+
+            </div>
+            @*<p class="more">查看更多专题</p>*@
+        </div>
+
+
+    </body>
+</html>

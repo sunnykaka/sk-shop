@@ -8,27 +8,13 @@ import cmscenter.models.AppThemeContent;
  */
 public class AppThemeContentDto {
 
-    private String type;
-
     private String content;
-
-    private Integer height;
 
     public static AppThemeContentDto build(AppThemeContent appThemeContent){
         AppThemeContentDto appThemeContentDto = new AppThemeContentDto();
         appThemeContentDto.setContent(appThemeContent.getContent());
-        appThemeContentDto.setType(appThemeContent.getType());
-        appThemeContentDto.setHeight(appThemeContent.getHeight());
 
         return appThemeContentDto;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getContent() {
@@ -37,13 +23,5 @@ public class AppThemeContentDto {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
     }
 }

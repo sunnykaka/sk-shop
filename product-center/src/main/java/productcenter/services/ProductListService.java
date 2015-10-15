@@ -92,9 +92,9 @@ public class ProductListService {
             queryParams.put("saleStatus", saleStatus);
         }
 
-        if (storageFilter != null && storageFilter == 1) {
-            jpql.append("  and id in ( select distinct sk.productId from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and sk.skuState= 'NORMAL' and ss.stockQuantity >0 ) ");
-        }
+//        if (storageFilter != null && storageFilter == 1) {
+//            jpql.append("  and id in ( select distinct sk.productId from StockKeepingUnit sk , SkuStorage ss where sk.id = ss.skuId and sk.skuState= 'NORMAL' and ss.stockQuantity >0 ) ");
+//        }
 
         //根据类目查询
         if (navId != null && navId.intValue() != -1) {
@@ -107,6 +107,7 @@ public class ProductListService {
             jpql.append(" and o.categoryId in (:cateIds) ");
             queryParams.put("cateIds", allCateIds);
         }
+        jpql.append(" order by saleStatus asc,id desc ");
         return generalDao.query(jpql.toString(), page, queryParams);
     }
 }

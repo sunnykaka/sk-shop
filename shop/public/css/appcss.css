@@ -173,7 +173,7 @@ ul li ul {
 /* 文章标题*/
 .title {
     margin-bottom: 20px;
-    padding-top: 10px;
+    padding-top: 20px;
     word-break: break-word;
     font-size: 16px;
     text-align: center;
@@ -203,6 +203,7 @@ a {
     max-width: 100%
 }
 
+
 .content p {
     margin: 0 0 20px 0;
     padding-top: 20px;
@@ -211,8 +212,12 @@ a {
     white-space: pre-wrap;
     line-height: 180%;
 }
-
-
+.content p img,.content div img{
+    padding: 15px 0;
+}
+.content .product img{
+    padding: 0;
+}
 
 
 .share a {
@@ -466,7 +471,7 @@ input::-webkit-input-placeholder {
 
 .modal-footer-banner .close {
     position: absolute;
-    top: 22px;
+    top: 26px;
     right: 0;
     width: 24px;
     height: 24px;
@@ -544,6 +549,7 @@ input::-webkit-input-placeholder {
 .help-modal .btn-success {
     position: relative;
     top: 6px;
+    right:10px;
     float: right;
     width: 90px;
     height: 29px;
@@ -736,6 +742,10 @@ For phone and tablet devices
     font-size:24px;
     font-weight:400
 }
+@media (min-width:1200px) {
+    .container {max-width: 640px;}
+}
+
 @media (max-width:767px) {
     .guidev2-dialog .header h2 {
         margin-top:7vh
@@ -924,3 +934,5 @@ kbd {
     font-size:12px;
     color:#666
 }
+
+.content p {padding: 0;margin: 0;text-indent: 0; line-height :180% ; white-space: normal;}

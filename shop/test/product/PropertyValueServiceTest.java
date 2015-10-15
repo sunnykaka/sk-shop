@@ -22,7 +22,6 @@ public class PropertyValueServiceTest extends BaseTest {
 
     @Before
     public void setUp() {
-        super.startPlay();
         propertyAndValueService = Global.ctx.getBean(PropertyAndValueService.class);
     }
 

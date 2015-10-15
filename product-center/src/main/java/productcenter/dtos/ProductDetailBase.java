@@ -33,7 +33,7 @@ public class ProductDetailBase {
 
     protected DesignerSize designerSize;
 
-    //CMS相关
+    //是否首发或者预售
     protected boolean isInExhibition;
 
     //是否收藏
@@ -206,11 +206,9 @@ public class ProductDetailBase {
             Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(new DateTime(list.get(0).getTime())) : Optional.empty();
 
             if (exhibitionEndTime.isPresent()) {
-                productDetailBase.isInExhibition = productDetailBase.product.getSaleStatus().equals(SaleStatus.FIRSTSELL);
+                productDetailBase.isInExhibition = productDetailBase.product.getSaleStatus().equals(SaleStatus.FIRSTSELL.toString()) ||
+                        productDetailBase.product.getSaleStatus().equals(SaleStatus.PLANSELL.toString());
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
-
-//            } else {
-//                productDetailBase.isInExhibition = false;
             }
 
             return this;
@@ -340,7 +338,7 @@ public class ProductDetailBase {
                 if (!defaultSku.isPresent()) {
                     //查找defaultSku为true的sku
                     defaultSku = productDetailBase.skuMap.values().stream().
-                            filter(SkuInfo::isDefaultSku).findFirst();
+                            filter(sku -> sku.isDefaultSku() && sku.getStockQuantity() > 0).findFirst();
 
                 }
                 if (!defaultSku.isPresent()) {

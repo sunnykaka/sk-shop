@@ -23,12 +23,11 @@ public class AppThemeBreviaryDto {
 
     private String name;
 
-    private String content;
+    private String digest;
 
     private boolean isFavorites = false;
 
-    public static AppThemeBreviaryDto build(AppTheme appTheme,
-                                    ThemeCollectService themeCollectService,AppThemeService appThemeService,
+    public static AppThemeBreviaryDto build(AppTheme appTheme,ThemeCollectService themeCollectService,
                                     User user,String deviceId){
 
         AppThemeBreviaryDto appThemeDto = new AppThemeBreviaryDto();
@@ -37,10 +36,10 @@ public class AppThemeBreviaryDto {
         appThemeDto.setStartTime(appTheme.getStartTime().toString("yyyy-MM-dd"));
         appThemeDto.setPicUrl(appTheme.getPicUrl());
         appThemeDto.setThemeNo(appTheme.getThemeNo());
-        appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
-        appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getId()));
+        appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getThemeNo(),user,deviceId));
+        appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getThemeNo()));
 
-        appThemeDto.setContent(appThemeService.getAppThemeContentFristFont(appTheme.getId()));
+        appThemeDto.setDigest(appTheme.getDigest());
 
         return appThemeDto;
 
@@ -94,12 +93,12 @@ public class AppThemeBreviaryDto {
         this.name = name;
     }
 
-    public String getContent() {
-        return content;
+    public String getDigest() {
+        return digest;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDigest(String digest) {
+        this.digest = digest;
     }
 
     public boolean isFavorites() {

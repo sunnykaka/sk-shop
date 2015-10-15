@@ -5,6 +5,7 @@ import productcenter.dtos.ProductDetailBase;
 import productcenter.dtos.SkuCandidate;
 import productcenter.dtos.SkuInfo;
 import productcenter.models.Html;
+import productcenter.models.ProductPicture;
 import productcenter.models.ProductSpec;
 
 import java.util.*;
@@ -19,7 +20,7 @@ public class ProductDetailDto {
 
     private List<String> htmlList;
 
-    private Map<String, String> specMap;
+    private List<ProductSpecDto> specList;
 
     private DesignerSizeDto designerSize;
 
@@ -44,6 +45,7 @@ public class ProductDetailDto {
     //默认SKU
     protected SkuInfo defaultSku;
 
+    protected List<String> productPictureList = new ArrayList<>();
 
     public ProductDto getProduct() {
         return product;
@@ -61,12 +63,12 @@ public class ProductDetailDto {
         this.htmlList = htmlList;
     }
 
-    public Map<String, String> getSpecMap() {
-        return specMap;
+    public List<ProductSpecDto> getSpecList() {
+        return specList;
     }
 
-    public void setSpecMap(Map<String, String> specMap) {
-        this.specMap = specMap;
+    public void setSpecList(List<ProductSpecDto> specList) {
+        this.specList = specList;
     }
 
     public DesignerSizeDto getDesignerSize() {
@@ -133,6 +135,14 @@ public class ProductDetailDto {
         this.defaultSku = defaultSku;
     }
 
+    public List<String> getProductPictureList() {
+        return productPictureList;
+    }
+
+    public void setProductPictureList(List<String> productPictureList) {
+        this.productPictureList = productPictureList;
+    }
+
     public static ProductDetailDto build(ProductDetailBase base) {
         ProductDetailDto productDetailDto = new ProductDetailDto();
         productDetailDto.setDefaultSku(base.getDefaultSku());
@@ -145,13 +155,19 @@ public class ProductDetailDto {
         productDetailDto.setProduct(ProductDto.build(base.getProduct()));
         productDetailDto.setSkuCandidateList(base.getSkuCandidateList());
         productDetailDto.setSkuMap(base.getSkuMap());
-        productDetailDto.setSpecMap(base.getSpecList().
-                stream().
-                collect(Collectors.toMap(
-                        ProductSpec::getName,
-                        ProductSpec::getValue
-                ))
-        );
+        productDetailDto.setProductPictureList(base.getProductPictureList().stream().map(ProductPicture::getPictureUrl).collect(Collectors.toList()));
+//        productDetailDto.setSpecMap(base.getSpecList().
+//                stream().
+//                collect(Collectors.toMap(
+//                        ProductSpec::getName,
+//                        ProductSpec::getValue
+//                ))
+//        );
+        List<ProductSpecDto> specList = new ArrayList<>();
+        for(ProductSpec productSpec:base.getSpecList()){
+            specList.add(ProductSpecDto.build(productSpec));
+        }
+        productDetailDto.setSpecList(specList);
 
         return productDetailDto;
     }

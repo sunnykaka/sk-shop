@@ -12,7 +12,7 @@ public enum ErrorCode implements ViewEnum {
     InvalidArgument(400, "请求的参数不正确"),
 
     MissAccessToken(401, "请求缺少AccessToken"),
-    InvalidAccessToken(401, "无效或已过期的AccessToken"),
+    InvalidAccessToken(401, "请重新登录"),
     Unauthorized(401, "无权访问"),
 
     Forbidden(403, "禁止访问"),

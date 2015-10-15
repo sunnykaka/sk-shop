@@ -25,10 +25,14 @@ public class OrderItemDto {
 
     private String totalPrice;
 
+    private String curUnitPrice;
+
     /**
      * 购买数量
      */
     private int number;
+
+    private int productId;
 
     private List<SkuProperty> properties = new ArrayList<>();
 
@@ -42,6 +46,8 @@ public class OrderItemDto {
         orderItemDto.setProductName(orderItem.getProductName());
         orderItemDto.setTotalPrice(orderItem.getTotalPrice().getAmountWithBigDecimal().toString());
         orderItemDto.setProperties(orderItem.getProperties());
+        orderItemDto.setProductId(orderItem.getProductId());
+        orderItemDto.setCurUnitPrice(orderItem.getCurUnitPrice().getAmountWithBigDecimal().toString());
 
         return orderItemDto;
     }
@@ -78,6 +84,14 @@ public class OrderItemDto {
         this.totalPrice = totalPrice;
     }
 
+    public String getCurUnitPrice() {
+        return curUnitPrice;
+    }
+
+    public void setCurUnitPrice(String curUnitPrice) {
+        this.curUnitPrice = curUnitPrice;
+    }
+
     public int getNumber() {
         return number;
     }
@@ -92,5 +106,13 @@ public class OrderItemDto {
 
     public void setProperties(List<SkuProperty> properties) {
         this.properties = properties;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 }

@@ -462,13 +462,13 @@ public class CartService {
             }
 
             Money itemTotalMoney = cartItem.getCurUnitPrice().multiply(cartItem.getNumber());
+
+            cartItem.setTotalPrice(itemTotalMoney);
             if(isForShowCart) {
                 if(!cartItem.isOnline() || !cartItem.isHasStock()) {
                     itemTotalMoney = Money.valueOf(0);
                 }
             }
-
-            cartItem.setTotalPrice(itemTotalMoney);
 
             totalMoney = totalMoney.add(itemTotalMoney);
 

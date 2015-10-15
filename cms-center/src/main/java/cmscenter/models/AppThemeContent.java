@@ -19,13 +19,7 @@ public class AppThemeContent implements EntityClass<Integer>,TableTimeData {
 
     private String content;
 
-    private int priority;
-
     private int themeId;
-
-    private String type;
-
-    private Integer height;
 
     private DateTime createDate;
 
@@ -54,15 +48,6 @@ public class AppThemeContent implements EntityClass<Integer>,TableTimeData {
         this.content = content;
     }
 
-    @Column(name = "priority")
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
     @Column(name = "themeId")
     public int getThemeId() {
         return themeId;
@@ -70,24 +55,6 @@ public class AppThemeContent implements EntityClass<Integer>,TableTimeData {
 
     public void setThemeId(int themeId) {
         this.themeId = themeId;
-    }
-
-    @Column(name = "type")
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Column(name = "height")
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
     }
 
     @Column(name = "createTime")

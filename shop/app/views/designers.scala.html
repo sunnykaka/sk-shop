@@ -42,7 +42,7 @@ $(function(){
         $.ajax({
             url:'/designers4more?currPage='+id,
             success:function(response){
-                 $(this).attr('disabled',null);
+                 $(that).attr('disabled',null);
                 var html =  tpl('#demo', response);
                 if(response.data.length<8){
                     $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(500,function(){
@@ -60,7 +60,6 @@ $(function(){
                      that.fadeOut();
                     }
                 }
-                $(this).attr('disabled',null);
             }
         });
     });

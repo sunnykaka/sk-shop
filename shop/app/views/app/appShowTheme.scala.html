@@ -21,16 +21,11 @@
             <div id="floating-banner" class="goto-download">
                 <span>尚客，时尚的极客</span>
             </div>
-            <a href="/app" class="btn-success goto-download">快来下载吧</a>
+            <a href="javascript:void(null)" class="btn-success goto-download">快来下载吧</a>
         </div>
 
         <div class="container">
-            <div class="top">
-                <a href="/apps"><img src="@routes.Assets.versioned("images/app/logo.png")" alt="Logo"/></a>
-                <a href = "@controllers.app.routes.AppShowController.download(appThemeDto.getId)" >
-                    <img class="app-android goto-app-button" src="@routes.Assets.versioned("images/app/open-btn.png")" alt="Goto app"/>
-                </a>
-            </div>
+
                 <!-- 标题-->
             <h1 class="title">
                 @appThemeDto.getName
@@ -38,14 +33,8 @@
                 <!-- 内容-->
             <div class="content">
 
-                @for(themeContent <- appThemeDto.getAppThemeContentDtoList){
-                    @if(themeContent.getType == "FONT"){
-                        <p>@themeContent.getContent</p>
-                    }
-                    @if(themeContent.getType == "PIC"){
-                        <img src="@themeContent.getContent" alt="" />
-                    }
-                }
+                @Html(appThemeDto.getContent)
+
             </div>
                 <!-- 底栏-->
             <div class="author-info">
@@ -59,13 +48,33 @@
         }
     };
     $(document).ready(function () {
-        $('.modal-footer-banner').show();
+
+     var browser = {
+        versions: function () {
+
+
         $(".modal-footer-banner .close").on("tap", function () {
             Maleskine.removeFooterBanner();
         });
-        $('.goto-download').on('tap', function () {
 
-        });
+            var u = navigator.userAgent, app = navigator.appVersion;
+            return { //移动终端浏览器版本信息
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+                iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                };
+            }(),
+    };
+
+    if (browser.versions.android) {
+       $('.btn-success').hide();
+
+    }
+    $('.modal-footer-banner').show();
+    $('.goto-download').on('tap', function () {
+
+    });
     });
 </script>
 
