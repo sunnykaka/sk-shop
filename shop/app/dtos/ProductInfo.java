@@ -1,6 +1,5 @@
 package dtos;
 
-import models.CmsExhibition;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 
@@ -13,7 +12,6 @@ public class ProductInfo {
 
     private ProductPicture mainPic;
 
-    private CmsExhibition cmsExhibition;
 
     /** 是否收藏 */
     private boolean isFavorites;
@@ -37,13 +35,6 @@ public class ProductInfo {
         this.mainPic = mainPic;
     }
 
-    public CmsExhibition getCmsExhibition() {
-        return cmsExhibition;
-    }
-
-    public void setCmsExhibition(CmsExhibition cmsExhibition) {
-        this.cmsExhibition = cmsExhibition;
-    }
 
     public boolean isFavorites() {
         return isFavorites;

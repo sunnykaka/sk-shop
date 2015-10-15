@@ -1,23 +1,16 @@
 package dtos;
 
 import common.utils.Money;
-import models.CmsExhibition;
-import models.ExhibitionStatus;
-import productcenter.constants.SKUState;
-import productcenter.constants.SaleStatus;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 import productcenter.models.StockKeepingUnit;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
-import services.CmsService;
 import utils.Global;
 
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Created by amoszhou on 15/7/20.
@@ -93,7 +86,6 @@ public class ProductInSellList {
         private ProductPictureService productPictureService = Global.ctx.getBean(ProductPictureService.class);
         private ProductService productService = Global.ctx.getBean(ProductService.class);
         private SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
-        private CmsService cmsService = Global.ctx.getBean(CmsService.class);
 
         public static Builder getInstance() {
             Builder builder = new Builder();
