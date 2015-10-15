@@ -2,21 +2,30 @@ package controllers.api.shop;
 
 import api.response.shop.CartDto;
 import api.response.shop.CartItemDto;
+import api.response.shop.SkuDto;
+import api.response.shop.SkuPropertyDto;
 import api.response.user.LoginResult;
 import base.BaseTest;
+import com.google.common.collect.Lists;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
 import controllers.api.user.LoginApiTest;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import play.Logger;
 import play.mvc.Http;
 import play.mvc.Result;
 import productcenter.models.Product;
+import productcenter.models.SkuProperty;
+import productcenter.models.SkuStorage;
 import productcenter.models.StockKeepingUnit;
+import productcenter.services.ProductService;
 import productcenter.services.ProductTestDataService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
@@ -40,11 +49,13 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
 
     private CartService cartService;
     private UserService userService;
+    private SkuAndStorageService skuAndStorageService;
 
     @Before
     public void setUp() throws Exception {
         cartService = Global.ctx.getBean(CartService.class);
         userService = Global.ctx.getBean(UserService.class);
+        skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
     }
 
     @Test
@@ -135,23 +146,13 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         assertThat(result.status(), is(OK));
         map = JsonUtils.json2Object(contentAsString(result), Map.class);
         assertThat(map.get("cart"), notNullValue());
-        CartDto cartDto = JsonUtils.json2Object(contentAsString(result), CartDto.class);
-        assertThat(cartDto.getCartItemList(), notNullValue());
-        assertThat(cartDto.getCartItemList().size(), not(0));
-        for(CartItemDto cartItemDto : cartDto.getCartItemList()) {
-            assertThat(cartItemDto.getCustomerId(), is(product.getCustomerId()));
-            assertThat(cartItemDto.getCustomerName(), is(product.getCustomer().getName()));
-            assertThat(cartItemDto.getProductId(), is(product.getId()));
-            assertThat(cartItemDto.getProductName(), is(product.getName()));
-//            assertThat(cartItemDto.getCurUnitPrice(), is(product.getName()));
-            assertThat(cartItemDto.getNumber() > 0, is(true));
-//            assertThat(cartItemDto.getTotalPrice(), is(product.getName()));
 
-        }
-
+        CartDto cartDto = JsonUtils.json2Object(JsonUtils.object2Json(map.get("cart")), CartDto.class);
+        assertCartDtoMatches(cartDto, Lists.newArrayList(sku));
 
 
     }
+
 
 
     private Result testAddSkuToCartAddNum(StockKeepingUnit sku, int stockQuantity, LoginResult loginResult) {
@@ -172,6 +173,53 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         return result;
     }
 
+    public static void assertCartDtoMatches(CartDto cartDto, List<StockKeepingUnit> skuList) {
+        SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
+        ProductService productService = Global.ctx.getBean(ProductService.class);
 
+        assertThat(cartDto.getCartItemList(), notNullValue());
+        assertThat(cartDto.getCartItemList().size(), is(skuList.size()));
+
+        for(int i = 0; i < cartDto.getCartItemList().size(); i++) {
+            CartItemDto cartItemDto = cartDto.getCartItemList().get(i);
+            StockKeepingUnit sku = skuList.get(i);
+            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(sku.getId());
+            Product product = productService.getProductById(sku.getProductId());
+
+            assertThat(cartItemDto.getCustomerId(), is(product.getCustomerId()));
+            assertThat(cartItemDto.getCustomerName(), is(product.getCustomer().getName()));
+            assertThat(cartItemDto.getProductId(), is(product.getId()));
+            assertThat(cartItemDto.getProductName(), is(product.getName()));
+//            assertThat(cartItemDto.getCurUnitPrice(), is(product.getName()));
+            assertThat(cartItemDto.getNumber() > 0, is(true));
+            assertThat(cartItemDto.getOnline(), is(product.isOnline()));
+            assertThat(cartItemDto.isSelected(), is(true));
+            assertThat(cartItemDto.isDelete(), is(false));
+//            assertThat(cartItemDto.getTotalPrice(), is(product.getName()));
+
+            assertThat(cartItemDto.getStockQuantity(), is(skuStorage.getStockQuantity()));
+            assertThat(cartItemDto.getTradeMaxNumber(), is(skuStorage.getTradeMaxNumber()));
+            assertThat(cartItemDto.isHasStock(), is(skuStorage.getStockQuantity() > 0));
+
+            SkuDto skuDto = cartItemDto.getSku();
+            assertThat(skuDto, notNullValue());
+            assertThat(skuDto.getId(), is(sku.getId()));
+
+            List<SkuPropertyDto> skuPropertyDtoList = skuDto.getSkuProperties();
+            assertThat(skuPropertyDtoList.size(), is(sku.getSkuProperties().size()));
+            for (int j = 0; j < skuPropertyDtoList.size(); j++) {
+                SkuPropertyDto skuPropertyDto = skuPropertyDtoList.get(j);
+                SkuProperty skuProperty = sku.getSkuProperties().get(j);
+
+                assertThat(skuPropertyDto.getPidvid(), is(skuProperty.getPidvid()));
+                assertThat(skuPropertyDto.getPropertyId(), is(skuProperty.getPropertyId()));
+                assertThat(skuPropertyDto.getPropertyName(), is(skuProperty.getPropertyName()));
+                assertThat(skuPropertyDto.getPropertyValue(), is(skuProperty.getPropertyValue()));
+                assertThat(skuPropertyDto.getSkuId(), is(skuProperty.getSkuId()));
+                assertThat(skuPropertyDto.getValueId(), is(skuProperty.getValueId()));
+            }
+
+        }
+    }
 
 }
