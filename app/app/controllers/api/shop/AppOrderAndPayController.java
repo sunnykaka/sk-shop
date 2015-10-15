@@ -118,11 +118,11 @@ public class AppOrderAndPayController extends BaseController {
                 Money totalMoney = cartService.setCartItemValues(cartItem);
                 cart.setTotalMoney(totalMoney);
 
-                List<CartItem> cartItemList = new ArrayList();
+                List<CartItem> cartItemList = new ArrayList<>();
                 cartItemList.add(cartItem);
                 cart.setCartItemList(cartItemList);
             } else {
-                List<Integer> selCartItemIdList = new ArrayList();
+                List<Integer> selCartItemIdList = new ArrayList<>();
                 try {
                     split = selItems.split(",");
                     for (int i = 0; i < split.length; i++) {

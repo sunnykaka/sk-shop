@@ -52,35 +52,19 @@ public class AppCartController extends BaseController {
      * @return
      */
     public Result getUserCartItemNum() {
-        Logger.info("进入getUserCartItemNum方法");
-        try {
-            User curUser = this.currentUser();
-            Map<String,Integer> totalNumMap = new HashMap();
-            if(curUser == null || curUser.getId() <= 0) {
-                totalNumMap.put("totalNum", 0);
-                return ok(JsonUtils.object2Node(totalNumMap));
-            } else {
-                Cart cart = cartService.getCartByUserId(curUser.getId());
-                if(cart == null) {
-                    totalNumMap.put("totalNum", 0);
-                    return ok(JsonUtils.object2Node(totalNumMap));
-                }
-                List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
-                if(cartItems == null || cartItems.size() == 0) {
-                    totalNumMap.put("totalNum", 0);
-                    return ok(JsonUtils.object2Node(totalNumMap));
-                }
-                int totalNum = 0;
-                for(CartItem cartItem : cartItems) {
-                    totalNum += cartItem.getNumber();
-                }
-                totalNumMap.put("totalNum", totalNum);
-                return ok(JsonUtils.object2Node(totalNumMap));
+
+        int totalNum = 0;
+        User user = this.currentUser();
+        if(user != null) {
+            Cart cart = cartService.getCartByUserId(user.getId());
+            if(cart != null) {
+                totalNum = cart.calcTotalNum();
             }
-        } catch (final Exception e) {
-            Logger.error("获取用户购物车信息失败，出现异常:", e);
-            throw new AppBusinessException(ErrorCode.Conflict, "获取用户购物车信息失败！");
         }
+
+        Map<String,Integer> totalNumMap = new HashMap<>();
+        totalNumMap.put("totalNum", totalNum);
+        return ok(JsonUtils.object2Node(totalNumMap));
     }
 
     /**
@@ -149,11 +133,11 @@ public class AppCartController extends BaseController {
             }
 
             User curUser = this.currentUser();
-            Cart cart = this.buildUserSimpleCart(curUser.getId());
+            Cart cart = cartService.getCartByUserId(curUser.getId());
             int addNumber = number;
             if(!isReplace) {
                 if (cart != null) {
-                    for (CartItem cartItem : cart.getValidCartItemList()) {
+                    for (CartItem cartItem : cart.getCartItemList()) {
                         if (cartItem.getSkuId() == skuId) {
                             addNumber = number + cartItem.getNumber();
                             break;
@@ -183,7 +167,7 @@ public class AppCartController extends BaseController {
 
             if(!isReplace) {
                 List<CartItem> cartItems = null;
-                cart = this.buildUserSimpleCart(curUser.getId());
+                cart = cartService.getCartByUserId(curUser.getId());
                 if(cart != null) {
                    //cartItems = cartService.queryCarItemsByCartId(cart.getId());
                     cartItems = cart.getCartItemList();
@@ -367,7 +351,7 @@ public class AppCartController extends BaseController {
             Money totalMoney = cartService.setCartItemValues(cartItem);
 
             cart.setTotalMoney(totalMoney);
-            List<CartItem> cartItemList = new ArrayList<CartItem>();
+            List<CartItem> cartItemList = new ArrayList<>();
             cartItemList.add(cartItem);
             cart.setCartItemList(cartItemList);
 
@@ -389,22 +373,6 @@ public class AppCartController extends BaseController {
     }
 
     /**
-     * 将Cart对象构建完整，仅只包含购物车和购物车项，其它关联对象都没有包含进来。
-     * 非界面展示时候使用
-     * @param userId
-     * @return
-     */
-    private Cart buildUserSimpleCart(int userId) {
-        Logger.info("进入buildUserSimpleCart方法，参数：userId=" + userId);
-        Cart cart = cartService.getCartByUserId(userId);
-        if (cart != null) {
-            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
-            cart.setCartItemList(cartItems);
-        }
-        return cart;
-    }
-
-    /**
      * 用户购物车操作方法
      * @param userId
      * @param skuId
@@ -414,7 +382,7 @@ public class AppCartController extends BaseController {
      */
     private void createOrUpdateUserCart(int userId, int skuId, int number, boolean isReplace) {
         Logger.info("进入createOrUpdateUserCart方法，参数：userId=" + userId + " skuId=" + skuId + " number=" + number + " isReplace=" + isReplace);
-        Cart cart = this.buildUserSimpleCart(userId);
+        Cart cart = cartService.getCartByUserId(userId);
         if(cart == null) {
             cartService.initCartByUserId(userId, skuId, number);
         } else {

@@ -129,8 +129,7 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         Integer cartItemId = doInTransactionWithGeneralDao(generalDao -> {
             User user = userService.findByPhone(loginResult.getUser().getPhone());
             Cart cart = cartService.getCartByUserId(user.getId());
-            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
-            return cartItems.get(0).getId();
+            return cart.getCartItemList().get(0).getId();
         });
 
         //请求结算接口

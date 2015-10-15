@@ -62,9 +62,13 @@ public class Cart implements EntityClass<Integer> {
         this.totalMoney = totalMoney;
     }
 
+    /**
+     * 得到有效的(未删除)的购物车项
+     * @return
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart")
     public List<CartItem> getCartItemList() {
-        return cartItemList;
+        return cartItemList.stream().filter(x -> !x.getIsDelete()).collect(Collectors.toList());
     }
 
     public void setCartItemList(List<CartItem> cartItemList) {
@@ -124,21 +128,17 @@ public class Cart implements EntityClass<Integer> {
         this.createDate = createDate;
     }
 
+    /**
+     * 计算购物车中商品总数量
+     * @return
+     */
     public int calcTotalNum() {
         int totalNum = 0;
-        for(CartItem cartItem : getValidCartItemList()) {
+        for(CartItem cartItem : getCartItemList()) {
             totalNum += cartItem.getNumber();
         }
         return totalNum;
     }
 
-    /**
-     * 得到有效的(未删除)的购物车项
-     * @return
-     */
-    @Transient
-    public List<CartItem> getValidCartItemList() {
-        return cartItemList.stream().filter(x -> !x.getIsDelete()).collect(Collectors.toList());
-    }
 
 }

@@ -22,6 +22,9 @@ public enum ErrorCode implements ViewEnum {
     UsernameExist(409, "用户名已存在"),
     PhoneExist(409, "手机已存在"),
     EmailExist(409, "邮箱已存在"),
+
+    SkuNotAvailable(409, "商品已下架或已售罄"),
+
     Conflict(409, "请求的资源发生冲突"),
     VerifyCodeError(409, "验证码输入错误"),
     OperationError(409, "操作失败"),

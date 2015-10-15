@@ -139,13 +139,11 @@ public class CartController extends Controller {
             }
 
             User curUser = SessionUtils.currentUser();
-            Cart cart = this.buildUserSimpleCart(curUser.getId());
+            Cart cart = cartService.getCartByUserId(curUser.getId());
             int addNumber = number;
             if(!isReplace) {
                 if (cart != null) {
-                    List<CartItem> cartItemList = cart.getCartItemList();
-                    cart.setCartItemList(cartItemList);
-                    for (CartItem cartItem : cartItemList) {
+                    for (CartItem cartItem : cart.getCartItemList()) {
                         if (cartItem.getSkuId() == skuId) {
                             addNumber = number + cartItem.getNumber();
                             break;
@@ -177,7 +175,7 @@ public class CartController extends Controller {
 
             if(!isReplace) {
                 List<CartItem> cartItems = null;
-                cart = this.buildUserSimpleCart(curUser.getId());
+                cart = cartService.getCartByUserId(curUser.getId());
                 if(cart != null) {
                     cartItems = cart.getCartItemList();
                 }
@@ -379,27 +377,12 @@ public class CartController extends Controller {
      * @return
      */
     private void createOrUpdateUserCart(int userId, int skuId, int number, boolean isReplace) {
-        Cart cart = this.buildUserSimpleCart(userId);
+        Cart cart = cartService.getCartByUserId(userId);
         if(cart == null) {
             cartService.initCartByUserId(userId, skuId, number);
         } else {
             cartService.addSkuToCart(cart, skuId, number, isReplace);
         }
-    }
-
-    /**
-     * 将Cart对象构建完整，仅只包含购物车和购物车项，其它关联对象都没有包含进来。
-     * 非界面展示时候使用
-     * @param userId
-     * @return
-     */
-    private Cart buildUserSimpleCart(int userId) {
-        Cart cart = cartService.getCartByUserId(userId);
-        if (cart != null) {
-            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
-            cart.setCartItemList(cartItems);
-        }
-        return cart;
     }
 
 }

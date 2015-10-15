@@ -1,5 +1,7 @@
 package ordercenter.services;
 
+import common.exceptions.AppBusinessException;
+import common.exceptions.ErrorCode;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.Money;
@@ -243,41 +245,6 @@ public class CartService {
     }
 
     /**
-     * 通过购物车主键id获取购物车项，不包括已经删除的购物项
-     *
-     * @param cartId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<CartItem> queryCarItemsByCartId(int cartId) {
-        play.Logger.info("--------CartService queryAllProducts begin exe-----------");
-
-        String jpql = "select o from CartItem o where 1=1 and o.isDelete=:isDelete and o.cartId=:cartId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("isDelete", false);
-        queryParams.put("cartId", cartId);
-        return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
-    }
-
-    /**
-     * 通过购物车主键id获取购物车项，不包括已经删除的购物项
-     *
-     * @param cartId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<CartItem> queryUserSelCarItemsByCartId(int cartId) {
-        play.Logger.info("--------CartService queryAllProducts begin exe-----------");
-
-        String jpql = "select o from CartItem o where 1=1 and o.isDelete=:isDelete and selected=:selected and o.cartId=:cartId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("isDelete", false);
-        queryParams.put("selected", true);
-        queryParams.put("cartId", cartId);
-        return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
-    }
-
-    /**
      * 通过购物车主键id，和选中的购物车项id获取购物车项，不包括已经删除的购物项
      *
      * @param cartId
@@ -336,14 +303,10 @@ public class CartService {
     public Cart buildUserCart(int userId) {
         Cart cart = this.getCartByUserId(userId);
         if (cart != null) {
-            List<CartItem> cartItems = this.queryCarItemsByCartId(cart.getId());
-            cart.setCartItemList(cartItems);
             //合计价格
             Money totalMoney = Money.valueOf(0);
-            if (cartItems != null && cartItems.size() > 0) {
-                for (CartItem cartItem : cartItems) {
-                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem, true));
-                }
+            for (CartItem cartItem : cart.getCartItemList()) {
+                totalMoney = totalMoney.add(this.setCartItemValues(cartItem, true));
             }
             cart.setTotalMoney(totalMoney);
         }
@@ -481,19 +444,67 @@ public class CartService {
         return totalMoney;
     }
 
-    /**
-     * 按照支付订单号列表重新计算支付总金额
-     *
-     * @param cartItemList
-     * @return
-     */
-    public Money calculateTotalMoney(List<CartItem> cartItemList) {
-        Money totalMoney = Money.valueOf(0);
-        for (CartItem cartItem : cartItemList) {
-            totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
-        }
-        return totalMoney;
-    }
-
+//    @Transactional
+//    public void addSkuToCart(Integer userId, int skuId, int number, boolean isReplace) {
+//
+//        Cart cart = getCartByUserId(userId);
+//
+//        if (number < 1) {
+//            throw new AppBusinessException(ErrorCode.Conflict, "添加商品到购物车失败, 添加的数量必须大于或等于1");
+//        }
+//
+//        if (!skuService.isSkuUsable(skuId)) {
+//            throw new AppBusinessException(ErrorCode.SkuNotAvailable);
+//        }
+//
+//        int skuBuyNumber = number;
+//        if(!isReplace) {
+//            if (cart != null) {
+//                for (CartItem cartItem : cart.getCartItemList()) {
+//                    if (cartItem.getSkuId() == skuId) {
+//                        addNumber = number + cartItem.getNumber();
+//                        break;
+//                    }
+//                }
+//            }
+//        }else {
+//            addNumber = number;
+//        }
+//
+//        int maxCanBuyNum = skuStorage.getTradeMaxNumber();
+//
+//        Map<String,Integer> retMap = new HashMap<String,Integer>();
+//
+//        if (addNumber > maxCanBuyNum) {
+//            retMap.put("maxCanBuyNum", maxCanBuyNum);
+//            return ok(new JsonResult(false,"超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
+//        }
+//
+//        if (addNumber > maxStockNum) {
+//            if(maxStockNum < maxCanBuyNum) {
+//                maxCanBuyNum = maxStockNum;
+//            }
+//            retMap.put("maxCanBuyNum", maxCanBuyNum);
+//            return ok(new JsonResult(false,"超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
+//        }
+//
+//        createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
+//
+//        if(!isReplace) {
+//            List<CartItem> cartItems = null;
+//            cart = cartService.getCartByUserId(curUser.getId());
+//            if(cart != null) {
+//                cartItems = cart.getCartItemList();
+//            }
+//            int totalNum = 0;
+//            if(cartItems != null) {
+//                for(CartItem cartItem : cartItems) {
+//                    totalNum += cartItem.getNumber();
+//                }
+//            }
+//            retMap.put("itemTotalNum", totalNum);
+//        }
+//        return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", retMap).toNode());
+//    }
 
 }

@@ -567,7 +567,7 @@ public class OrderService {
         for(CartItem cartItem : cartItemList) {
             List<CartItem> designerCartItemList = designerCartItemListMap.get(cartItem.getCustomerId());
             if(designerCartItemList == null) {
-                designerCartItemList = new ArrayList<CartItem>();
+                designerCartItemList = new ArrayList<>();
             }
             designerCartItemList.add(cartItem);
             designerCartItemListMap.put(cartItem.getCustomerId(), designerCartItemList);

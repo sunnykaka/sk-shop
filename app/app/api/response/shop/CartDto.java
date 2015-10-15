@@ -4,7 +4,6 @@ import common.utils.Money;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ public class CartDto {
         cartDto.setId(cart.getId());
         cartDto.setTotalMoney(cart.getTotalMoney());
 
-        List<CartItem> cartItemList = cart.getValidCartItemList();
+        List<CartItem> cartItemList = cart.getCartItemList();
         if(!cartItemList.isEmpty()) {
             List<CartItemDto> cartItemDtoList = cartItemList.stream().
                     map(CartItemDto::buildCartItemDto).collect(Collectors.toList());
