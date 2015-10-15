@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
-import productcenter.constants.SaleStatus;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 import productcenter.models.SkuStorage;
@@ -45,9 +44,6 @@ public class CartService {
     private ProductService productService;
 
     @Autowired
-    private SkuAndStorageService skuAndStorageService;
-
-    @Autowired
     private ProductPictureService pictureService;
 
     @Autowired
@@ -57,16 +53,11 @@ public class CartService {
     //private CmsService cmsService;
 
 
-
-
-
-
     /**
      * 向购物车中加入Sku商品
      *
      * @param skuId
      * @param cart
-     *
      */
     public void addSkuToCart(Cart cart, int skuId, int number, boolean isReplace) {
         List<CartItem> cartItemList = cart.getCartItemList();
@@ -74,7 +65,7 @@ public class CartService {
         //判断购物车中是否加入过这个商品，如果加过则只改数量
         for (CartItem cartItem : cartItemList) {
             if (cartItem.getSkuId() == skuId) {
-                if(isReplace) {
+                if (isReplace) {
                     cartItem.setNumber(number);
                 } else {
                     cartItem.setNumber(cartItem.getNumber() + number);
@@ -95,6 +86,7 @@ public class CartService {
 
     /**
      * 通过跟踪号id初始化购物车和购物车项
+     *
      * @param trackId 预留 跟踪id，现在登陆才可以加入购物车，暂时用不上
      * @param skuId
      * @param number
@@ -111,6 +103,7 @@ public class CartService {
 
     /**
      * 通过用户id初始化购物车和购物车项
+     *
      * @param userId
      * @param skuId
      * @param number
@@ -128,6 +121,7 @@ public class CartService {
 
     /**
      * 创建购物车
+     *
      * @param cart
      */
     public void createCart(Cart cart) {
@@ -137,6 +131,7 @@ public class CartService {
 
     /**
      * 更新购物车内容
+     *
      * @param cart
      */
     public void updateCart(Cart cart) {
@@ -146,6 +141,7 @@ public class CartService {
 
     /**
      * 通过购物车id删除购物车
+     *
      * @param cartId
      */
     public void deleteCart(int cartId) {
@@ -155,6 +151,7 @@ public class CartService {
 
     /**
      * 通过购物车id获取购物车
+     *
      * @param cartId
      * @return
      */
@@ -172,6 +169,7 @@ public class CartService {
 
     /**
      * 通过cookie等跟踪id获取购物车
+     *
      * @param trackId
      * @return
      */
@@ -184,7 +182,7 @@ public class CartService {
 
         Cart cart = null;
         List<Cart> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
-        if(itemList != null && itemList.size() > 0) {
+        if (itemList != null && itemList.size() > 0) {
             cart = itemList.get(0);
         }
         return cart;
@@ -192,6 +190,7 @@ public class CartService {
 
     /**
      * 通过用户id获取用户购物车
+     *
      * @param userId
      * @return
      */
@@ -205,17 +204,18 @@ public class CartService {
 
         Cart cart = null;
         List<Cart> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
-        if(itemList != null && itemList.size() > 0) {
+        if (itemList != null && itemList.size() > 0) {
             cart = itemList.get(0);
         }
         return cart;
     }
 
 
-
     //////////////////////////////购物车项////////////////////////////////////////////////
+
     /**
      * 创建购物车项
+     *
      * @param cartItem
      */
     public void createCartItem(CartItem cartItem) {
@@ -224,6 +224,7 @@ public class CartService {
 
     /**
      * 更新购物车项
+     *
      * @param cartItem
      */
     public void updateCartItem(CartItem cartItem) {
@@ -232,16 +233,18 @@ public class CartService {
 
     /**
      * 更新购物车项
+     *
      * @param cartItemList
      */
     public void updateCartItemList(List<CartItem> cartItemList) {
-        for(CartItem cartItem : cartItemList) {
+        for (CartItem cartItem : cartItemList) {
             updateCartItem(cartItem);
         }
     }
 
     /**
      * 通过购物车主键id获取购物车项，不包括已经删除的购物项
+     *
      * @param cartId
      * @return
      */
@@ -258,6 +261,7 @@ public class CartService {
 
     /**
      * 通过购物车主键id获取购物车项，不包括已经删除的购物项
+     *
      * @param cartId
      * @return
      */
@@ -275,6 +279,7 @@ public class CartService {
 
     /**
      * 通过购物车主键id，和选中的购物车项id获取购物车项，不包括已经删除的购物项
+     *
      * @param cartId
      * @return
      */
@@ -290,6 +295,7 @@ public class CartService {
 
     /**
      * 通过cartId来删除购物车项，只删除支付时选中的购物车项(假删除)
+     *
      * @param cartId
      */
     public void deleteSelectCartItemBySelIds(int cartId, String selItems) {
@@ -304,6 +310,7 @@ public class CartService {
 
     /**
      * 通过skuId和cartId组合来删除购物车项
+     *
      * @param cartItemId
      */
     public void deleteCartItemById(int cartItemId) {
@@ -315,30 +322,13 @@ public class CartService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ////////////////////////////把CartProcess类拷贝到CartService/////////////////////////////////////////////////////
 
 
     /**
      * 将Cart对象构建完整，包含整个购物车界面展示需要的东东。
      * 需要界面展示时使用
+     *
      * @param userId
      * @return
      */
@@ -350,9 +340,9 @@ public class CartService {
             cart.setCartItemList(cartItems);
             //合计价格
             Money totalMoney = Money.valueOf(0);
-            if(cartItems != null && cartItems.size() > 0) {
+            if (cartItems != null && cartItems.size() > 0) {
                 for (CartItem cartItem : cartItems) {
-                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem,true));
+                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem, true));
                 }
             }
             cart.setTotalMoney(totalMoney);
@@ -363,6 +353,7 @@ public class CartService {
     /**
      * 将Cart对象构建完整，仅只包含用户选中的购物车项
      * 需要界面展示时使用
+     *
      * @param userId
      * @return
      */
@@ -374,7 +365,7 @@ public class CartService {
             cart.setCartItemList(cartItems);
             //合计价格
             Money totalMoney = Money.valueOf(0);
-            if(cartItems != null && cartItems.size() > 0) {
+            if (cartItems != null && cartItems.size() > 0) {
                 for (CartItem cartItem : cartItems) {
                     totalMoney = totalMoney.add(this.setCartItemValues(cartItem));
                 }
@@ -386,6 +377,7 @@ public class CartService {
 
     /**
      * 设置订单项的各个需要的属性值
+     *
      * @param cartItem
      */
     @Transactional
@@ -395,6 +387,7 @@ public class CartService {
 
     /**
      * 设置订单项的各个需要的属性值
+     *
      * @param cartItem
      * @param isForShowCart 是否是购物车展示界面
      */
@@ -415,13 +408,13 @@ public class CartService {
             cartItem.setBarCode(stockKeepingUnit.getBarCode());
 
             Product product = productService.getProductById(stockKeepingUnit.getProductId());
-            if(product != null) {
+            if (product != null) {
                 cartItem.setProductId(product.getId());
                 cartItem.setProductName(product.getName());
                 cartItem.setCategoryId(product.getCategoryId());
                 cartItem.setCustomerId(product.getCustomerId());
                 Designer designer = product.getCustomer();
-                if(designer != null) {
+                if (designer != null) {
                     cartItem.setCustomerName(designer.getName());
                 }
             }
@@ -431,8 +424,8 @@ public class CartService {
             cartItem.setMainPicture(picture.getPictureUrl());
 
             //设置库存信息
-            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(stockKeepingUnit.getId());
-            if(skuStorage != null) {
+            SkuStorage skuStorage = skuService.getSkuStorage(stockKeepingUnit.getId());
+            if (skuStorage != null) {
                 int maxStockNum = skuStorage.getStockQuantity();
                 cartItem.setStockQuantity(maxStockNum);
                 if (maxStockNum > 0) {
@@ -451,21 +444,26 @@ public class CartService {
 
             //根据判断是否是首发，当前价格要现算(这个地方需要改一下) ldj
             //boolean isFirstPublish = false;//cmsService.onFirstPublish(cartItem.getProductId());
-            boolean isFirstPublish = false;
-            if(product != null && product.getSaleStatus() != null) {
-                isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
-            }
-            if(isFirstPublish) {
-                cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
-            } else {
-                cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
-            }
+//            boolean isFirstPublish = false;
+//            if(product != null && product.getSaleStatus() != null) {
+//                isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
+//            }
+//            if(isFirstPublish) {
+//                cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
+//            } else {
+//                cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
+//            }
+            /**
+             * 获取当前售价，首发，预售，即将开售则采用首发价
+             * 其它的则采用市场价
+             */
+            cartItem.setCurUnitPrice(skuService.getSkuCurrentPrice(stockKeepingUnit.getId()));
 
             Money itemTotalMoney = cartItem.getCurUnitPrice().multiply(cartItem.getNumber());
 
             cartItem.setTotalPrice(itemTotalMoney);
-            if(isForShowCart) {
-                if(!cartItem.isOnline() || !cartItem.isHasStock()) {
+            if (isForShowCart) {
+                if (!cartItem.isOnline() || !cartItem.isHasStock()) {
                     itemTotalMoney = Money.valueOf(0);
                 }
             }
@@ -485,26 +483,17 @@ public class CartService {
 
     /**
      * 按照支付订单号列表重新计算支付总金额
+     *
      * @param cartItemList
      * @return
      */
     public Money calculateTotalMoney(List<CartItem> cartItemList) {
         Money totalMoney = Money.valueOf(0);
-        for(CartItem cartItem : cartItemList) {
+        for (CartItem cartItem : cartItemList) {
             totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
         }
         return totalMoney;
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }

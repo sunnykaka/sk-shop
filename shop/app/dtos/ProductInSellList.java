@@ -161,7 +161,7 @@ public class ProductInSellList {
             /**
              * 首发就读首发价，其余状态都读正常售卖价
              */
-            if (cmsService.useFirstSellPrice(this.productId)) {
+            if (productService.useFirstSellPrice(this.productId)) {
                 this.productInSellList.price = mostCheapSku.getPrice();
             } else {
                 this.productInSellList.price = mostCheapSku.getMarketPrice();

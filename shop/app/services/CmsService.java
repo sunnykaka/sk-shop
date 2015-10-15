@@ -169,18 +169,18 @@ public class CmsService {
     }
 
 
-    /**
-     * check一个商品是正在首发中
-     *
-     * @param prodId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public boolean useFirstSellPrice(int prodId) {
-        Product product = productService.getProductById(prodId);
-        String saleStatus = product.getSaleStatus();
-        return saleStatus.equals(SaleStatus.PLANSELL.toString()) || saleStatus.equals(SaleStatus.FIRSTSELL.toString()) || saleStatus.equals(SaleStatus.PRESELL.toString());
-    }
+//    /**
+//     * check一个商品是正在首发中
+//     * 迁移至productService中
+//     * @param prodId
+//     * @return
+//     */
+//    @Transactional(readOnly = true)
+//    public boolean useFirstSellPrice(int prodId) {
+//        Product product = productService.getProductById(prodId);
+//        String saleStatus = product.getSaleStatus();
+//        return saleStatus.equals(SaleStatus.PLANSELL.toString()) || saleStatus.equals(SaleStatus.FIRSTSELL.toString()) || saleStatus.equals(SaleStatus.PRESELL.toString());
+//    }
 
     @Transactional(readOnly = true)
     public Optional<CmsExhibition> findExhibitionWithProdId(int prodId) {

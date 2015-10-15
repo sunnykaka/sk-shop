@@ -206,8 +206,7 @@ public class ProductDetailBase {
             Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(new DateTime(list.get(0).getTime())) : Optional.empty();
 
             if (exhibitionEndTime.isPresent()) {
-                productDetailBase.isInExhibition = productDetailBase.product.getSaleStatus().equals(SaleStatus.FIRSTSELL.toString()) ||
-                        productDetailBase.product.getSaleStatus().equals(SaleStatus.PLANSELL.toString());
+                productDetailBase.isInExhibition = productService.useFirstSellPrice(productDetailBase.product.getId());
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
             }
 

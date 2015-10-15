@@ -32,9 +32,9 @@ public class CmsTest extends BaseTest {
     @Ignore
     public void testProdOnPublish() {
 
-        Boolean result = cmsService.useFirstSellPrice(2184);
-        Assert.assertTrue(result);
-        Assert.assertFalse(cmsService.useFirstSellPrice(2186));
+//        Boolean result = cmsService.useFirstSellPrice(2184);
+//        Assert.assertTrue(result);
+//        Assert.assertFalse(cmsService.useFirstSellPrice(2186));
 
     }
 
