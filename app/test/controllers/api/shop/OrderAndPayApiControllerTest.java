@@ -37,7 +37,7 @@ public class OrderAndPayApiControllerTest extends BaseTest implements DbTest, Lo
             params.put(UserTokenProvider.ACCESS_TOKEN_KEY, loginResult.getAccessToken());
             Http.RequestBuilder request = new Http.RequestBuilder().
                     method(POST).
-                    uri(controllers.api.shop.routes.AppOrderAndPayController.submitToPay(false, "47772,47773", 96, "Alipay", "", "IOSApp").url()).
+                    uri(controllers.api.shop.routes.AppOrderAndPayController.submitToPay(false, "47772,47773", 96, "Alipay","IOSApp").url()).
                     bodyForm(params);
             result = routeWithExceptionHandle(request);
             if(result.status() != OK) {
