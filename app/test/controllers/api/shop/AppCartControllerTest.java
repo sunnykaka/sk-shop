@@ -148,41 +148,38 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         assertThat(result.status(), is(OK));
         map = JsonUtils.json2Object(contentAsString(result), Map.class);
         assertThat(map.get("cart"), notNullValue());
-
         CartDto cartDto = JsonUtils.json2Object(JsonUtils.object2Json(map.get("cart")), CartDto.class);
         assertCartDtoMatches(cartDto, Lists.newArrayList(sku));
 
     }
 
-//    @Test
-//    public void testToBillingByPromptlyPay() {
-//
-//        ProductTestDataService productTestDataService = Global.ctx.getBean(ProductTestDataService.class);
-//        SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
-//
-//        Product product = productTestDataService.initProduct();
-//        List<StockKeepingUnit> stockKeepingUnits = skuAndStorageService.querySkuListByProductId(product.getId());
-//        StockKeepingUnit sku = stockKeepingUnits.get(0);
-//        int stockQuantity = skuAndStorageService.getSkuStorage(sku.getId()).getStockQuantity();
-//
-//        LoginResult loginResult = mockUser();
-//
-//
-//        //请求结算接口
-//        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(
-//                routes.AppCartController.toBillingByPromptlyPay(sku.getId(), stockQuantity).url());
-//        request = wrapLoginInfo(request, loginResult.getAccessToken());
-//        result = routeWithExceptionHandle(request);
-//        Logger.debug(" AppCartController.toBilling result: " + contentAsString(result));
-//        assertThat(result.status(), is(OK));
-//        map = JsonUtils.json2Object(contentAsString(result), Map.class);
-//        assertThat(map.get("cart"), notNullValue());
-//
-//        CartDto cartDto = JsonUtils.json2Object(JsonUtils.object2Json(map.get("cart")), CartDto.class);
-//        assertCartDtoMatches(cartDto, Lists.newArrayList(sku));
-//
-//    }
+    @Test
+    public void testToBillingByPromptlyPay() {
 
+        ProductTestDataService productTestDataService = Global.ctx.getBean(ProductTestDataService.class);
+        SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
+
+        Product product = productTestDataService.initProduct();
+        List<StockKeepingUnit> stockKeepingUnits = skuAndStorageService.querySkuListByProductId(product.getId());
+        StockKeepingUnit sku = stockKeepingUnits.get(0);
+        int stockQuantity = skuAndStorageService.getSkuStorage(sku.getId()).getStockQuantity();
+
+        LoginResult loginResult = mockUser();
+
+
+        //请求结算接口
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(
+                routes.AppCartController.toBillingByPromptlyPay(sku.getId(), stockQuantity).url());
+        request = wrapLoginInfo(request, loginResult.getAccessToken());
+        Result result = routeWithExceptionHandle(request);
+        Logger.debug(" AppCartController.toBillingByPromptlyPay result: " + contentAsString(result));
+        assertThat(result.status(), is(OK));
+        Map<String, Object> map = JsonUtils.json2Object(contentAsString(result), Map.class);
+        assertThat(map.get("cart"), notNullValue());
+        CartDto cartDto = JsonUtils.json2Object(JsonUtils.object2Json(map.get("cart")), CartDto.class);
+        assertCartDtoMatches(cartDto, Lists.newArrayList(sku));
+
+    }
 
 
     private Result testAddSkuToCartAddNum(StockKeepingUnit sku, int stockQuantity, LoginResult loginResult) {

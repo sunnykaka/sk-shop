@@ -366,6 +366,7 @@ public class AppCartController extends BaseController {
             CartItem cartItem = new CartItem();
             cartItem.setSkuId(skuId);
             cartItem.setNumber(number);
+            cartItem.setSelected(true);
 
             Money totalMoney = cartService.setCartItemValues(cartItem);
 
