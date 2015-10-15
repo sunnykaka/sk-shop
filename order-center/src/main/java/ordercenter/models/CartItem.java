@@ -1,5 +1,6 @@
 package ordercenter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.models.utils.EntityClass;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class CartItem extends TradeItem implements EntityClass<Integer> {
      */
     private int cartId;
 
+    @JsonIgnore
+    private Cart cart;
+
     /**
      * 是否被选中
      */
@@ -33,17 +37,6 @@ public class CartItem extends TradeItem implements EntityClass<Integer> {
      * 是否被删除
      */
     private boolean isDelete = false;
-
-    @Override
-    public String toString() {
-        return "CartItem{" +
-                "id=" + id +
-                ", cartId=" + cartId +
-                ", skuId=" + skuId +
-                ", selected=" + selected +
-                ", isDelete=" + isDelete +
-                "} " + super.toString();
-    }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -112,4 +105,13 @@ public class CartItem extends TradeItem implements EntityClass<Integer> {
         this.isDelete = isDelete;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cartId", insertable = false, updatable = false)
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }

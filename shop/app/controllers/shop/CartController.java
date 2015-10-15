@@ -63,29 +63,17 @@ public class CartController extends Controller {
      * @return
      */
     public Result getUserCartItemNum() {
-        try {
-            User curUser = SessionUtils.currentUser();
-            if(curUser == null || curUser.getId() <= 0) {
-                return ok(new JsonResult(true,"用户没有登陆", 0).toNode());
-            } else {
-                Cart cart = cartService.getCartByUserId(curUser.getId());
-                if(cart == null) {
-                    return ok(new JsonResult(true,"用户还没在系统购买过东西", 0).toNode());
-                }
-                List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
-                if(cartItems == null || cartItems.size() == 0) {
-                    return ok(new JsonResult(true,"用户当前购物车为空", 0).toNode());
-                }
-                int totalNum = 0;
-                for(CartItem cartItem : cartItems) {
-                    totalNum += cartItem.getNumber();
-                }
-                return ok(new JsonResult(true, "用户购买了东西", totalNum).toNode());
+
+        int totalNum = 0;
+        User user = SessionUtils.currentUser();
+        if(user != null) {
+            Cart cart = cartService.getCartByUserId(user.getId());
+            if(cart != null) {
+                totalNum = cart.calcTotalNum();
             }
-        } catch (final Exception e) {
-            Logger.error("获取用户购物车信息出现异常:", e);
-            return ok(new JsonResult(false,"获取用户购物车信息出现异常").toNode());
         }
+
+        return ok(new JsonResult(true, "", totalNum).toNode());
     }
 
     /**

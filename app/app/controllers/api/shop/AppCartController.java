@@ -153,9 +153,7 @@ public class AppCartController extends BaseController {
             int addNumber = number;
             if(!isReplace) {
                 if (cart != null) {
-                    List<CartItem> cartItemList = cart.getCartItemList();
-                    cart.setCartItemList(cartItemList);
-                    for (CartItem cartItem : cartItemList) {
+                    for (CartItem cartItem : cart.getValidCartItemList()) {
                         if (cartItem.getSkuId() == skuId) {
                             addNumber = number + cartItem.getNumber();
                             break;
@@ -225,8 +223,7 @@ public class AppCartController extends BaseController {
         try {
             User curUser = this.currentUser();
             Cart cart = cartService.buildUserCart(curUser.getId());
-            CartDto cartDto = new CartDto();
-            return ok(JsonUtils.object2Node(cartDto.buildUserCart(cart)));
+            return ok(JsonUtils.object2Node(CartDto.buildUserCart(cart)));
         } catch (Exception e) {
             Logger.error("进入我的购物车发生异常:", e);
             throw new AppBusinessException(ErrorCode.Conflict, "进入我的购物车发生异常，请联系商城客服人员");
@@ -314,9 +311,8 @@ public class AppCartController extends BaseController {
             //List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
             Address defaultAddress = addressService.queryDefaultAddress(curUser.getId());
 
-            Map<String, Object> retMap = new HashMap();
-            CartDto cartDto = new CartDto();
-            retMap.put("cart",cartDto.buildUserCart(cart));
+            Map<String, Object> retMap = new HashMap<>();
+            retMap.put("cart",CartDto.buildUserCart(cart));
             //retMap.put("addressList", addressList);
             retMap.put("defaultAddress", defaultAddress);
             return ok(JsonUtils.object2Node(retMap));
@@ -378,9 +374,8 @@ public class AppCartController extends BaseController {
             //List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
             Address defaultAddress = addressService.queryDefaultAddress(curUser.getId());
 
-            Map<String, Object> retMap = new HashMap();
-            CartDto cartDto = new CartDto();
-            retMap.put("cart", cartDto.buildUserCart(cart));
+            Map<String, Object> retMap = new HashMap<>();
+            retMap.put("cart", CartDto.buildUserCart(cart));
             //retMap.put("addressList", addressList);
             retMap.put("defaultAddress", defaultAddress);
             return ok(JsonUtils.object2Node(retMap));

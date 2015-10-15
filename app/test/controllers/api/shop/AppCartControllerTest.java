@@ -14,9 +14,6 @@ import controllers.api.user.LoginApiTest;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import play.Logger;
@@ -38,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static play.test.Helpers.*;
@@ -51,13 +47,11 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
 
     private CartService cartService;
     private UserService userService;
-    private SkuAndStorageService skuAndStorageService;
 
     @Before
     public void setUp() throws Exception {
         cartService = Global.ctx.getBean(CartService.class);
         userService = Global.ctx.getBean(UserService.class);
-        skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
     }
 
     @Test
