@@ -9,6 +9,7 @@ import base.BaseTest;
 import com.google.common.collect.Lists;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
+import common.utils.Money;
 import controllers.api.user.LoginApiTest;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
@@ -29,6 +30,7 @@ import productcenter.services.ProductService;
 import productcenter.services.ProductTestDataService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
+import usercenter.services.DesignerService;
 import usercenter.services.UserService;
 import utils.Global;
 
@@ -142,7 +144,7 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
                 routes.AppCartController.toBilling(String.valueOf(cartItemId)).url());
         request = wrapLoginInfo(request, loginResult.getAccessToken());
         result = routeWithExceptionHandle(request);
-        Logger.debug(" AppCartController.selCartItemProcess result: " + contentAsString(result));
+        Logger.debug(" AppCartController.toBilling result: " + contentAsString(result));
         assertThat(result.status(), is(OK));
         map = JsonUtils.json2Object(contentAsString(result), Map.class);
         assertThat(map.get("cart"), notNullValue());
@@ -150,8 +152,36 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         CartDto cartDto = JsonUtils.json2Object(JsonUtils.object2Json(map.get("cart")), CartDto.class);
         assertCartDtoMatches(cartDto, Lists.newArrayList(sku));
 
-
     }
+
+//    @Test
+//    public void testToBillingByPromptlyPay() {
+//
+//        ProductTestDataService productTestDataService = Global.ctx.getBean(ProductTestDataService.class);
+//        SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
+//
+//        Product product = productTestDataService.initProduct();
+//        List<StockKeepingUnit> stockKeepingUnits = skuAndStorageService.querySkuListByProductId(product.getId());
+//        StockKeepingUnit sku = stockKeepingUnits.get(0);
+//        int stockQuantity = skuAndStorageService.getSkuStorage(sku.getId()).getStockQuantity();
+//
+//        LoginResult loginResult = mockUser();
+//
+//
+//        //请求结算接口
+//        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(
+//                routes.AppCartController.toBillingByPromptlyPay(sku.getId(), stockQuantity).url());
+//        request = wrapLoginInfo(request, loginResult.getAccessToken());
+//        result = routeWithExceptionHandle(request);
+//        Logger.debug(" AppCartController.toBilling result: " + contentAsString(result));
+//        assertThat(result.status(), is(OK));
+//        map = JsonUtils.json2Object(contentAsString(result), Map.class);
+//        assertThat(map.get("cart"), notNullValue());
+//
+//        CartDto cartDto = JsonUtils.json2Object(JsonUtils.object2Json(map.get("cart")), CartDto.class);
+//        assertCartDtoMatches(cartDto, Lists.newArrayList(sku));
+//
+//    }
 
 
 
@@ -176,9 +206,11 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
     public static void assertCartDtoMatches(CartDto cartDto, List<StockKeepingUnit> skuList) {
         SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
         ProductService productService = Global.ctx.getBean(ProductService.class);
+        DesignerService designerService = Global.ctx.getBean(DesignerService.class);
 
         assertThat(cartDto.getCartItemList(), notNullValue());
         assertThat(cartDto.getCartItemList().size(), is(skuList.size()));
+        Money totalMoney = Money.valueOf(0d);
 
         for(int i = 0; i < cartDto.getCartItemList().size(); i++) {
             CartItemDto cartItemDto = cartDto.getCartItemList().get(i);
@@ -187,15 +219,16 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
             Product product = productService.getProductById(sku.getProductId());
 
             assertThat(cartItemDto.getCustomerId(), is(product.getCustomerId()));
-            assertThat(cartItemDto.getCustomerName(), is(product.getCustomer().getName()));
+            assertThat(cartItemDto.getCustomerName(), is(designerService.getDesignerById(product.getCustomerId()).getName()));
             assertThat(cartItemDto.getProductId(), is(product.getId()));
             assertThat(cartItemDto.getProductName(), is(product.getName()));
-//            assertThat(cartItemDto.getCurUnitPrice(), is(product.getName()));
             assertThat(cartItemDto.getNumber() > 0, is(true));
+            assertThat(cartItemDto.getCurUnitPrice(), is(skuAndStorageService.getSkuCurrentPrice(sku.getId())));
+            assertThat(cartItemDto.getTotalPrice(), is(cartItemDto.getCurUnitPrice().multiply(cartItemDto.getNumber())));
+            totalMoney = totalMoney.add(cartItemDto.getTotalPrice());
             assertThat(cartItemDto.getOnline(), is(product.isOnline()));
             assertThat(cartItemDto.isSelected(), is(true));
             assertThat(cartItemDto.isDelete(), is(false));
-//            assertThat(cartItemDto.getTotalPrice(), is(product.getName()));
 
             assertThat(cartItemDto.getStockQuantity(), is(skuStorage.getStockQuantity()));
             assertThat(cartItemDto.getTradeMaxNumber(), is(skuStorage.getTradeMaxNumber()));
@@ -220,6 +253,8 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
             }
 
         }
+
+        assertThat(totalMoney, is(cartDto.getTotalMoney()));
     }
 
 }
