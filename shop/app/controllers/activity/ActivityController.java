@@ -7,7 +7,6 @@ import productcenter.models.Product;
 import productcenter.models.StockKeepingUnit;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
-import services.CmsService;
 import views.html.activity.bianxingji;
 import views.html.activity.member;
 import views.html.activity.soap;
@@ -30,10 +29,7 @@ public class ActivityController extends Controller {
     private ProductService productService;
 
     @Autowired
-    private CmsService cmsService;
-
-    @Autowired
-    private SkuAndStorageService skuSeervice;
+    private SkuAndStorageService skuService;
 
     /**
      * 提交订单-选择支付方式(生成订单)
@@ -67,11 +63,11 @@ public class ActivityController extends Controller {
                 map.put(productId, null);
             } else {
                 //根据判断是否是首发，当前价格要现算
-                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
                 if (null == stockKeepingUnit) {
                     map.put(productId, null);
                 } else {
-                    map.put(productId, skuSeervice.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
+                    map.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
                 }
 
             }
@@ -95,11 +91,11 @@ public class ActivityController extends Controller {
             } else {
                 //根据判断是否是首发，当前价格要现算
                 mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
                 if (null == stockKeepingUnit) {
                     mapPrice.put(productId, null);
                 } else {
-                    mapPrice.put(productId, skuSeervice.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
+                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
                 }
 
             }
@@ -123,11 +119,11 @@ public class ActivityController extends Controller {
             } else {
                 //根据判断是否是首发，当前价格要现算
                 mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
                 if (null == stockKeepingUnit) {
                     mapPrice.put(productId, null);
                 } else {
-                    mapPrice.put(productId, skuSeervice.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
+                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
                 }
 
             }
@@ -151,11 +147,11 @@ public class ActivityController extends Controller {
             } else {
                 //根据判断是否是首发，当前价格要现算
                 mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
                 if (null == stockKeepingUnit) {
                     mapPrice.put(productId, null);
                 } else {
-                    mapPrice.put(productId, skuSeervice.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
+                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
                 }
 
             }
@@ -179,11 +175,11 @@ public class ActivityController extends Controller {
             } else {
                 //根据判断是否是首发，当前价格要现算
                 mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
                 if (null == stockKeepingUnit) {
                     mapPrice.put(productId, null);
                 } else {
-                    mapPrice.put(productId, skuSeervice.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
+                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
                 }
 
             }
@@ -207,11 +203,11 @@ public class ActivityController extends Controller {
             } else {
                 //根据判断是否是首发，当前价格要现算
                 mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuSeervice.querySkuByProductIdPriceSmall(productId);
+                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
                 if (null == stockKeepingUnit) {
                     mapPrice.put(productId, null);
                 } else {
-                    mapPrice.put(productId, skuSeervice.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
+                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
                 }
 
             }

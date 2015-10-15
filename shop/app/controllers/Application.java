@@ -21,7 +21,6 @@ import productcenter.models.Product;
 import productcenter.services.ProductCollectService;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
-import services.CmsService;
 import usercenter.dtos.DesignerView;
 import usercenter.models.User;
 import usercenter.services.DesignerCollectService;
@@ -41,8 +40,6 @@ public class Application extends Controller {
     @Autowired
     private SkCmsService skCmsService;
 
-    @Autowired
-    private CmsService cmsService;
 
     @Autowired
     private DesignerService designerService;
@@ -189,7 +186,7 @@ public class Application extends Controller {
         User user = SessionUtils.currentUser();
         Optional<Integer> userId = user == null ? Optional.empty() : Optional.of(user.getId());
         try {
-            cmsService.userLikeExhibition(prodId, phone, userId);
+//            cmsService.userLikeExhibition(prodId, phone, userId);
             return ok(new JsonResult(true).toNode());
         } catch (AppBusinessException e) {
             return ok(new JsonResult(false, e.getMessage()).toNode());
