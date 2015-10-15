@@ -5,6 +5,10 @@ import base.BaseTest;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
 import controllers.api.user.LoginApiTest;
+import ordercenter.models.Cart;
+import ordercenter.models.CartItem;
+import ordercenter.services.CartService;
+import org.junit.Before;
 import org.junit.Test;
 import play.Logger;
 import play.mvc.Http;
@@ -13,6 +17,8 @@ import productcenter.models.Product;
 import productcenter.models.StockKeepingUnit;
 import productcenter.services.ProductTestDataService;
 import productcenter.services.SkuAndStorageService;
+import usercenter.models.User;
+import usercenter.services.UserService;
 import utils.Global;
 
 import java.util.List;
@@ -28,6 +34,15 @@ import static play.test.Helpers.*;
  * Created by liubin on 15-4-2.
  */
 public class AppCartControllerTest extends BaseTest implements LoginApiTest {
+
+    private CartService cartService;
+    private UserService userService;
+
+    @Before
+    public void setUp() throws Exception {
+        cartService = Global.ctx.getBean(CartService.class);
+        userService = Global.ctx.getBean(UserService.class);
+    }
 
     @Test
     public void testGetUserCartItemNum() {
@@ -80,6 +95,54 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         assertResultAsError(result, ErrorCode.Conflict);
 
     }
+
+//    @Test
+//    public void testToBilling() {
+//
+//        ProductTestDataService productTestDataService = Global.ctx.getBean(ProductTestDataService.class);
+//        SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
+//
+//        Product product = productTestDataService.initProduct();
+//        List<StockKeepingUnit> stockKeepingUnits = skuAndStorageService.querySkuListByProductId(product.getId());
+//        StockKeepingUnit sku = stockKeepingUnits.get(0);
+//        int stockQuantity = skuAndStorageService.getSkuStorage(sku.getId()).getStockQuantity();
+//
+//        LoginResult loginResult = mockUser();
+//
+//        //加入产品到购物车
+//        Result result = testAddSkuToCartAddNum(sku, stockQuantity, loginResult);
+//        assertThat(result.status(), is(OK));
+//        Map<String, Object> map = JsonUtils.json2Object(contentAsString(result), Map.class);
+//        assertThat(map, notNullValue());
+//        assertThat(map.get("itemTotalNum"), is(stockQuantity));
+//
+//        Integer cartItemId = doInTransactionWithGeneralDao(generalDao -> {
+//            User user = userService.findByPhone(loginResult.getUser().getPhone());
+//            Cart cart = cartService.getCartByUserId(user.getId());
+//            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
+//            return cartItems.get(0).getId();
+//        });
+//
+//        //请求结算接口
+//        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(
+//                routes.AppCartController.toBilling(String.valueOf(cartItemId)).url());
+//        request = wrapLoginInfo(request, loginResult.getAccessToken());
+//        result = routeWithExceptionHandle(request);
+//        Logger.debug(" AppCartController.selCartItemProcess result: " + contentAsString(result));
+//
+//
+//
+//        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.AppCartController.getUserCartItemNum().url());
+//        request = wrapLoginInfo(request, loginResult.getAccessToken());
+//        Result result = routeWithExceptionHandle(request);
+//        Logger.debug(" CartController.getUserCartItemNum result: " + contentAsString(result));
+//        assertThat(result.status(), is(OK));
+//        Map<String, Object> map = JsonUtils.json2Object(contentAsString(result), Map.class);
+//        assertThat(map, notNullValue());
+//        assertThat(map.get("totalNum"), is(0));
+//
+//    }
+
 
     private Result testAddSkuToCartAddNum(StockKeepingUnit sku, int stockQuantity, LoginResult loginResult) {
         Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(
