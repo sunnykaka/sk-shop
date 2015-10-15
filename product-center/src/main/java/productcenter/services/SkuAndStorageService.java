@@ -1,6 +1,7 @@
 package productcenter.services;
 
 import common.services.GeneralDao;
+import common.utils.Money;
 import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -189,6 +190,7 @@ public class SkuAndStorageService {
 
     /**
      * 查询商品有效SKU的总库存
+     *
      * @param prodId
      * @return
      */
@@ -262,6 +264,7 @@ public class SkuAndStorageService {
 
     /**
      * 分析销售属性,得到skuPropertiesInDbList集合
+     *
      * @param sell
      * @return
      */
@@ -303,9 +306,9 @@ public class SkuAndStorageService {
     @Transactional
     public void deleteSkuByProductId(int productId) {
         List<StockKeepingUnit> skuList = querySkuListByProductId(productId);
-        for(StockKeepingUnit sku : skuList) {
+        for (StockKeepingUnit sku : skuList) {
             SkuStorage skuStorage = getSkuStorage(sku.getId());
-            if(skuStorage != null) {
+            if (skuStorage != null) {
                 generalDao.remove(skuStorage);
             }
 
@@ -320,5 +323,20 @@ public class SkuAndStorageService {
         return generalDao.query(jpql, Optional.empty(), params);
     }
 
+
+    /**
+     * 判断当前SKU当前的价格，会根据销售状态，是否首发，预售
+     * @param skuId
+     * @return
+     */
+    public Money getSkuCurrentPrice(int skuId) {
+        StockKeepingUnit sku = this.getStockKeepingUnitById(skuId);
+        Integer prodId = sku.getProductId();
+        if (productService.useFirstSellPrice(prodId)) {
+            return sku.getPrice();
+        }
+        return sku.getMarketPrice();
+
+    }
 
 }

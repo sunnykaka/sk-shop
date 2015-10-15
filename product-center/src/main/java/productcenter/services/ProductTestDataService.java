@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
-import productcenter.constants.ProductTagType;
-import productcenter.constants.PropertyType;
-import productcenter.constants.SKUState;
-import productcenter.constants.StoreStrategy;
+import productcenter.constants.*;
 import productcenter.models.*;
 import productcenter.util.PidVid;
 import usercenter.models.Designer;
@@ -94,6 +91,7 @@ public class ProductTestDataService {
         product.setStoreStrategy(StoreStrategy.PayStrategy);
         product.setTagType(ProductTagType.DEFAULT);
         product.setIsDelete(false);
+        product.setSaleStatus(SaleStatus.HOTSELL.name());
 
         generalDao.persist(product);
 

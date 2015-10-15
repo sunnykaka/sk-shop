@@ -6,13 +6,7 @@ import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
 import common.utils.play.BaseGlobal;
-import dtos.CmsPosition;
-import dtos.ExhibitionPosition;
 import dtos.ProductInfo;
-import models.CmsContent;
-import models.CmsExbitionItem;
-import models.CmsExhibition;
-import models.ExhibitionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -21,7 +15,6 @@ import productcenter.models.Product;
 import productcenter.services.ProductCollectService;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
-import services.CmsService;
 import usercenter.dtos.DesignerView;
 import usercenter.models.User;
 import usercenter.services.DesignerCollectService;
@@ -41,8 +34,6 @@ public class Application extends Controller {
     @Autowired
     private SkCmsService skCmsService;
 
-    @Autowired
-    private CmsService cmsService;
 
     @Autowired
     private DesignerService designerService;
@@ -189,7 +180,7 @@ public class Application extends Controller {
         User user = SessionUtils.currentUser();
         Optional<Integer> userId = user == null ? Optional.empty() : Optional.of(user.getId());
         try {
-            cmsService.userLikeExhibition(prodId, phone, userId);
+//            cmsService.userLikeExhibition(prodId, phone, userId);
             return ok(new JsonResult(true).toNode());
         } catch (AppBusinessException e) {
             return ok(new JsonResult(false, e.getMessage()).toNode());
