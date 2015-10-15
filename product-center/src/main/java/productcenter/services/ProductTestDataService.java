@@ -68,6 +68,7 @@ public class ProductTestDataService {
 
         Designer designer = initDesigner();
         product.setCustomerId(designer.getId());
+        product.setCustomer(designer);
         Value value = propertyAndValueService.getValueByName(designer.getName());
         product.setBrandId(value.getId());
 

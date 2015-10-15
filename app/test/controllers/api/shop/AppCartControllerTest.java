@@ -139,6 +139,13 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         assertThat(cartDto.getCartItemList(), notNullValue());
         assertThat(cartDto.getCartItemList().size(), not(0));
         for(CartItemDto cartItemDto : cartDto.getCartItemList()) {
+            assertThat(cartItemDto.getCustomerId(), is(product.getCustomerId()));
+            assertThat(cartItemDto.getCustomerName(), is(product.getCustomer().getName()));
+            assertThat(cartItemDto.getProductId(), is(product.getId()));
+            assertThat(cartItemDto.getProductName(), is(product.getName()));
+//            assertThat(cartItemDto.getCurUnitPrice(), is(product.getName()));
+            assertThat(cartItemDto.getNumber() > 0, is(true));
+//            assertThat(cartItemDto.getTotalPrice(), is(product.getName()));
 
         }
 
