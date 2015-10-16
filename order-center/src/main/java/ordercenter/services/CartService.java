@@ -457,7 +457,7 @@ public class CartService {
              * 获取当前售价，首发，预售，即将开售则采用首发价
              * 其它的则采用市场价
              */
-            cartItem.setCurUnitPrice(skuService.getSkuCurrentPrice(stockKeepingUnit.getId()));
+            cartItem.setCurUnitPrice(skuService.getSkuCurrentPrice(stockKeepingUnit));
 
             Money itemTotalMoney = cartItem.getCurUnitPrice().multiply(cartItem.getNumber());
 
