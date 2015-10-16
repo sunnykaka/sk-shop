@@ -1,18 +1,15 @@
 package controllers.shop;
 
+import com.google.common.collect.Lists;
 import common.utils.JsonResult;
-import common.utils.Money;
+import ordercenter.excepiton.CartException;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
-import productcenter.models.Product;
 import productcenter.models.SkuStorage;
-import productcenter.models.StockKeepingUnit;
-import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 import usercenter.models.address.Address;
@@ -22,10 +19,10 @@ import utils.secure.SecuredAction;
 import views.html.shop.chooseAddress;
 import views.html.shop.showCart;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 购物车Controller
@@ -43,9 +40,6 @@ public class CartController extends Controller {
 
     @Autowired
     private AddressService addressService;
-
-    @Autowired
-    private ProductService productService;
 
     /**
      * 获取库存信息，用于前端数据验证(最大购买数限制、和库存)
@@ -87,7 +81,8 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result addSkuToCartAddNum(int skuId, int number) {
-        return this.addSkuToCart(skuId, number,false);
+
+        return this.addSkuToCart(skuId, number, false);
     }
 
     /**
@@ -101,7 +96,8 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result addSkuToCartReplaceNum(int skuId, int number) {
-        return this.addSkuToCart(skuId, number,true);
+
+        return this.addSkuToCart(skuId, number, true);
     }
 
     /**
@@ -114,83 +110,18 @@ public class CartController extends Controller {
      * @return
      */
     private Result addSkuToCart(int skuId, int number, boolean isReplace){
+        Map<String, Object> result = new HashMap<>();
         try {
-            if (number < 1) {
-                return ok(new JsonResult(false, "购买数量不能小于1！").toNode());
+            int totalNum = cartService.addSkuToCart(SessionUtils.currentUser().getId(), skuId, number, isReplace);
+            result.put("itemTotalNum", totalNum);
+
+            return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", result).toNode());
+        } catch (CartException e) {
+            if(e.getMaxCanBuyNum() != null) {
+                result.put("maxCanBuyNum", e.getMaxCanBuyNum());
             }
 
-            //sku所属商品是否下架或被移除
-            boolean flag = false;
-            StockKeepingUnit sku = skuAndStorageService.getStockKeepingUnitById(skuId);
-            if (sku != null && sku.canBuy()) {
-                Product product = productService.getProductById(sku.getProductId());
-                if ((!product.getIsDelete()) && product.isOnline()) {
-                    flag = true;
-                }
-            }
-            if (!flag) {
-                return ok(new JsonResult(false, "商品已下架或已售罄！","addForbid").toNode());
-            }
-
-            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
-            int maxStockNum = skuStorage.getStockQuantity();
-            if (maxStockNum <= 0) {
-                return ok(new JsonResult(false,"已售罄","addForbid").toNode());
-            }
-
-            User curUser = SessionUtils.currentUser();
-            Cart cart = cartService.getCartByUserId(curUser.getId());
-            int addNumber = number;
-            if(!isReplace) {
-                if (cart != null) {
-                    for (CartItem cartItem : cart.getCartItemList()) {
-                        if (cartItem.getSkuId() == skuId) {
-                            addNumber = number + cartItem.getNumber();
-                            break;
-                        }
-                    }
-                }
-            }else {
-                addNumber = number;
-            }
-
-            int maxCanBuyNum = skuStorage.getTradeMaxNumber();
-
-            Map<String,Integer> retMap = new HashMap<String,Integer>();
-
-            if (addNumber > maxCanBuyNum) {
-                retMap.put("maxCanBuyNum", maxCanBuyNum);
-                return ok(new JsonResult(false,"超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
-            }
-
-            if (addNumber > maxStockNum) {
-                if(maxStockNum < maxCanBuyNum) {
-                    maxCanBuyNum = maxStockNum;
-                }
-                retMap.put("maxCanBuyNum", maxCanBuyNum);
-                return ok(new JsonResult(false,"超过最大购买商品数量,最多能够购买" + maxCanBuyNum +"件,购物车中已有" + (addNumber - number) + "件该商品", retMap).toNode());
-            }
-
-            createOrUpdateUserCart(curUser.getId(), skuId, number, isReplace);
-
-            if(!isReplace) {
-                List<CartItem> cartItems = null;
-                cart = cartService.getCartByUserId(curUser.getId());
-                if(cart != null) {
-                    cartItems = cart.getCartItemList();
-                }
-                int totalNum = 0;
-                if(cartItems != null) {
-                    for(CartItem cartItem : cartItems) {
-                        totalNum += cartItem.getNumber();
-                    }
-                }
-                retMap.put("itemTotalNum", totalNum);
-            }
-            return ok(new JsonResult(true, "购物车成功添加" + number + "件该商品", retMap).toNode());
-        } catch (Exception e) {
-            Logger.error("sku[" + skuId + "]数量为[" + number + "]添加购物车时出现异常:", e);
-            return ok(new JsonResult(false,"加入购物车时服务器发生异常，请联系商城客服人员").toNode());
+            return ok(new JsonResult(false, e.getMessage(), result).toNode());
         }
     }
 
@@ -204,14 +135,9 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result showCart(){
-        try {
-            User curUser = SessionUtils.currentUser();
-            Cart cart = cartService.buildUserCart(curUser.getId());
-            return ok(showCart.render(cart));
-        } catch (Exception e) {
-            Logger.error("进入我的购物车发生异常:", e);
-            return ok(new JsonResult(false,"进入我的购物车发生异常，请联系商城客服人员").toNode());
-        }
+        User user = SessionUtils.currentUser();
+        Cart cart = cartService.buildUserCart(user.getId());
+        return ok(showCart.render(cart));
     }
 
     /**
@@ -221,13 +147,8 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result deleteCartItem(int cartItemId) {
-        try {
-            cartService.deleteCartItemById(cartItemId);
-            return ok(new JsonResult(true,"删除成功").toNode());
-        } catch (Exception e) {
-            Logger.error("删除购物车失败:", e);
-            return ok(new JsonResult(false,"删除失败").toNode());
-        }
+        cartService.deleteCartItemById(cartItemId);
+        return ok(new JsonResult(true,"删除成功").toNode());
     }
 
     /**
@@ -236,60 +157,20 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result selCartItemProcess(String selCartItems) {
-        if(selCartItems == null || selCartItems.trim().length() == 0) {
-            return ok(new JsonResult(false,"去结算项为空！").toNode());
-        }
-        List<Integer>cartItemIdlist = new ArrayList<Integer>();
         try {
-            String[] split = selCartItems.split("_");
-            for (int i = 0; i < split.length; i++) {
-                cartItemIdlist.add(Integer.valueOf(split[i]));
-            }
-        } catch (Exception e) {
-            Logger.warn("解析传递到后台的选中购物车项id发生异常", e);
-            return ok(new JsonResult(false, "选中的购物车商品有问题，请核对一下").toNode());
-        }
 
-        try {
-            User curUser = SessionUtils.currentUser();
-            Cart cart = cartService.buildUserCart(curUser.getId());
-            String errMsg = "对不起您没有购买任何商品，不能前去支付！";
-            if (cart == null) {
-                Logger.warn("购物车对象为null的时候进入了填写订单页面:"  + curUser);
-                return ok(new JsonResult(false,errMsg).toNode());
-            }
-            List<CartItem> cartItemList = cart.getCartItemList();
-            if (cartItemList.size() == 0) {
-                Logger.warn("购物车对象为null的时候进入了填写订单页面:" + curUser);
-                return ok(new JsonResult(false,errMsg).toNode());
-            }
+            User user = SessionUtils.currentUser();
 
-            List<CartItem> selCartItemList = new ArrayList<CartItem>();
-            for (CartItem cartItem : cartItemList) {
-                cartItem.setSelected(false);
-                if(!cartItemIdlist.contains(cartItem.getId())) {
-                    continue;
-                }
-                if(!cartItem.isHasStock()) {
-                    return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已售罄").toNode());
-                }
-                if(!cartItem.isOnline()) {
-                    return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "已下架").toNode());
-                }
+            Cart cart = cartService.buildUserCart(user.getId());
 
-                if(cartItem.getStockQuantity() < cartItem.getNumber()) {
-                    return ok(new JsonResult(false,"商品" + cartItem.getProductName() + "购买数量超过了库存数，库存只有" + cartItem.getStockQuantity() + "个").toNode());
-                }
-                cartItem.setSelected(true);
-                selCartItemList.add(cartItem);
-            }
-            //更新购物车是否选中
-            cartService.updateCartItemList(selCartItemList);
+            cartService.selectCartItems(cart, selCartItems);
+
             return ok(new JsonResult(true,"选中购物车项选中状态更新成功").toNode());
-        } catch (Exception e) {
-            Logger.warn("去结算-选择邮递地址发生异常:", e);
-            return ok(new JsonResult(false,"去结算发生异常，请联系商城客服人员").toNode());
+
+        } catch (CartException e) {
+            return ok(new JsonResult(false, e.getMessage()).toNode());
         }
+
     }
 
     /**
@@ -298,11 +179,10 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result chooseAddress(String selCartItems) {
-        if(selCartItems.contains("_")) {
-            selCartItems = selCartItems.replaceAll("_", ",");
-        }
+        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split(",")).stream().
+                map(Integer::parseInt).collect(Collectors.toList());
         User curUser = SessionUtils.currentUser();
-        Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItems);
+        Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
         return ok(chooseAddress.render(selCartItems, addressList, cart,false));
     }
@@ -314,32 +194,12 @@ public class CartController extends Controller {
     @SecuredAction
     public Result verifyPromptlyPayData(int skuId, int number) {
         try {
-            if (number < 1) {
-                return ok(new JsonResult(false, "购买数量不能小于1！").toNode());
-            }
+            cartService.verifySkuToBuy(skuId, number, number);
 
-            //sku所属商品是否下架或被移除
-            boolean flag = false;
-            StockKeepingUnit sku = skuAndStorageService.getStockKeepingUnitById(skuId);
-            if (sku != null && sku.canBuy()) {
-                Product product = productService.getProductById(sku.getProductId());
-                if ((!product.getIsDelete()) && product.isOnline()) {
-                    flag = true;
-                }
-            }
-            if (!flag) {
-                return ok(new JsonResult(false, "商品已下架或已售罄！","addForbid").toNode());
-            }
-
-            SkuStorage skuStorage = skuAndStorageService.getSkuStorage(skuId);
-            int maxStockNum = skuStorage.getStockQuantity();
-            if (maxStockNum <= 0) {
-                return ok(new JsonResult(false,"已售罄","addForbid").toNode());
-            }
             return ok(new JsonResult(true).toNode());
-        } catch (Exception e) {
-            Logger.error("sku[" + skuId + "]数量为[" + number + "]立即支付出现异常:", e);
-            return ok(new JsonResult(false,"立即支付失败，请联系商城客服人员！").toNode());
+        } catch (CartException e) {
+
+            return ok(new JsonResult(false, e.getMessage()).toNode());
         }
     }
 
@@ -351,38 +211,11 @@ public class CartController extends Controller {
     public Result promptlyPayChooseAddress(int skuId, int number) {
         User curUser = SessionUtils.currentUser();
 
-        Cart cart = new Cart();
-        CartItem cartItem = new CartItem();
-        cartItem.setSkuId(skuId);
-        cartItem.setNumber(number);
-
-        Money totalMoney = Money.valueOf(0);
-        totalMoney = cartService.setCartItemValues(cartItem);
-
-        cart.setTotalMoney(totalMoney);
-        List<CartItem> cartItemList = new ArrayList<CartItem>();
-        cartItemList.add(cartItem);
-        cart.setCartItemList(cartItemList);
+        Cart cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
         return ok(chooseAddress.render(skuId + ":" + number, addressList, cart,true));
     }
 
-    /**
-     * 用户购物车操作方法
-     * @param userId
-     * @param skuId
-     * @param number
-     * @param isReplace
-     * @return
-     */
-    private void createOrUpdateUserCart(int userId, int skuId, int number, boolean isReplace) {
-        Cart cart = cartService.getCartByUserId(userId);
-        if(cart == null) {
-            cartService.initCartByUserId(userId, skuId, number);
-        } else {
-            cartService.addSkuToCart(cart, skuId, number, isReplace);
-        }
-    }
 
 }

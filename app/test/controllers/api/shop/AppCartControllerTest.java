@@ -12,7 +12,6 @@ import common.utils.JsonUtils;
 import common.utils.Money;
 import controllers.api.user.LoginApiTest;
 import ordercenter.models.Cart;
-import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
 import org.junit.Before;
 import org.junit.Test;
@@ -126,7 +125,7 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
         assertThat(map, notNullValue());
         assertThat(map.get("itemTotalNum"), is(stockQuantity));
 
-        Integer cartItemId = doInTransactionWithGeneralDao(generalDao -> {
+        Integer cartItemId = doInSingleSession(generalDao -> {
             User user = userService.findByPhone(loginResult.getUser().getPhone());
             Cart cart = cartService.getCartByUserId(user.getId());
             return cart.getCartItemList().get(0).getId();

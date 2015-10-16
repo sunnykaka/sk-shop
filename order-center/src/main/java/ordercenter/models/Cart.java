@@ -46,6 +46,7 @@ public class Cart implements EntityClass<Integer> {
      */
     private Money totalMoney;
 
+
     /**
      * 商品条目
      */
@@ -68,7 +69,7 @@ public class Cart implements EntityClass<Integer> {
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart")
     public List<CartItem> getCartItemList() {
-        return cartItemList.stream().filter(x -> !x.getIsDelete()).collect(Collectors.toList());
+        return cartItemList;
     }
 
     public void setCartItemList(List<CartItem> cartItemList) {
@@ -129,16 +130,49 @@ public class Cart implements EntityClass<Integer> {
     }
 
     /**
+     * 得到未删除的购物车项
+     * @return
+     */
+    @Transient
+    public List<CartItem> getNotDeleteCartItemList() {
+        return cartItemList.stream().filter(x -> !x.getIsDelete()).collect(Collectors.toList());
+    }
+
+
+    /**
      * 计算购物车中商品总数量
      * @return
      */
     public int calcTotalNum() {
         int totalNum = 0;
-        for(CartItem cartItem : getCartItemList()) {
+        for(CartItem cartItem : getNotDeleteCartItemList()) {
             totalNum += cartItem.getNumber();
         }
         return totalNum;
     }
 
+    /**
+     * 计算购物车中商品金额合计
+     * @return
+     */
+    public Money calcTotalMoney() {
+        Money totalMoney = Money.valueOf(0);
+        for(CartItem cartItem : getNotDeleteCartItemList()) {
+            if (cartItem.isOnline() == null || (cartItem.isOnline() && cartItem.isHasStock())) {
+                totalMoney = totalMoney.add(cartItem.getTotalPrice());
+            }
+        }
+        return totalMoney;
+    }
 
+    /**
+     * 过滤购物车项, 只留下选中的项
+     * @param selCartItemIdList
+     */
+    public void filterSelectedCartItem(List<Integer> selCartItemIdList) {
+
+        this.cartItemList = this.cartItemList.stream().
+                filter(selCartItemIdList::contains).collect(Collectors.toList());
+
+    }
 }

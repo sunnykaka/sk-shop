@@ -3,7 +3,6 @@ package controllers.api.user;
 import api.response.user.LoginResult;
 import api.response.user.RefreshTokenResult;
 import base.BaseTest;
-import base.DbTest;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,7 +22,7 @@ import static common.utils.TestUtils.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class LoginApiControllerTest extends BaseTest implements DbTest, LoginApiTest{
+public class LoginApiControllerTest extends BaseTest implements LoginApiTest{
 
     @Test
     public void testRegisterSuccess() throws Exception {

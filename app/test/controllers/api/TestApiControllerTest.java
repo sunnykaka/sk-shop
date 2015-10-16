@@ -2,7 +2,6 @@ package controllers.api;
 
 import api.response.user.LoginResult;
 import base.BaseTest;
-import base.DbTest;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
 import controllers.api.user.LoginApiTest;
@@ -22,7 +21,7 @@ import static common.utils.TestUtils.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class TestApiControllerTest extends BaseTest implements DbTest, LoginApiTest {
+public class TestApiControllerTest extends BaseTest implements LoginApiTest {
 
     @Test
     public void testRequestPublicResourceSuccess() throws Exception {

@@ -1,5 +1,6 @@
 package controllers.shop;
 
+import com.google.common.collect.Lists;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.Money;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -114,38 +116,20 @@ public class OrderAndPayController extends Controller {
                     return ok(new JsonResult(false, "至少要购买1件商品！").toNode());
                 }
 
-                cart = new Cart();
-                CartItem cartItem = new CartItem();
-                cartItem.setSkuId(skuId);
-                cartItem.setNumber(number);
+                cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
-                Money totalMoney = Money.valueOf(0);
-                totalMoney = cartService.setCartItemValues(cartItem);
-                cart.setTotalMoney(totalMoney);
-
-                List<CartItem> cartItemList = new ArrayList<CartItem>();
-                cartItemList.add(cartItem);
-                cart.setCartItemList(cartItemList);
             } else {
-                List<Integer> selCartItemIdList = new ArrayList<Integer>();
-                try {
-                    split = selItems.split(",");
-                    for (int i = 0; i < split.length; i++) {
-                        selCartItemIdList.add(Integer.valueOf(split[i]));
-                    }
-                } catch (Exception e) {
-                    Logger.warn("解析传递到后台的选中购物车项id发生异常", e);
-                    return ok(new JsonResult(false, "选中的购物车商品有问题，请核对一下").toNode());
-                }
-                cart = cartService.buildUserCartBySelItem(curUser.getId(), selItems);
+                List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split(",")).stream().
+                        map(Integer::parseInt).collect(Collectors.toList());
+                cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
             }
 
-            if (cart == null || cart.getCartItemList().size() == 0) {
+            if (cart == null || cart.getNotDeleteCartItemList().size() == 0) {
                 return ok(new JsonResult(false, "订单为空").toNode());
             }
 
             //库存校验
-            for (CartItem cartItem : cart.getCartItemList()) {
+            for (CartItem cartItem : cart.getNotDeleteCartItemList()) {
                 if (!skuAndStorageService.isSkuUsable(cartItem.getSkuId())) {
                     Logger.warn("商品：" + cartItem.getProductName() + "已售罄或已下架或已移除，不能再购买");
                     return ok(new JsonResult(false, "商品：" + cartItem.getProductName() + "已售罄或已下架，不能再购买").toNode());

@@ -2,6 +2,7 @@ package ordercenter.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.models.utils.EntityClass;
+import common.utils.Money;
 
 import javax.persistence.*;
 
@@ -114,4 +115,15 @@ public class CartItem extends TradeItem implements EntityClass<Integer> {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+
+    /**
+     * 计算购物车项金额合计
+     * @return
+     */
+    public Money calTotalPrice() {
+        Money totalPrice = getCurUnitPrice().multiply(getNumber());
+        setTotalPrice(totalPrice);
+        return totalPrice;
+    }
+
 }

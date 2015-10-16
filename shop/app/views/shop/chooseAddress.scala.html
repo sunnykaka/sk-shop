@@ -105,7 +105,7 @@
 
 
 
-        @if(cart == null || cart.getCartItemList == null || cart.getCartItemList.size() == 0) {
+        @if(cart == null || cart.getNotDeleteCartItemList == null || cart.getNotDeleteCartItemList.size() == 0) {
         <div class="mycart-empty">
             <p><i class="iconfont">&#xe606;</i>购物车里空空如也，赶紧去 <a href="index.html">逛逛吧></a></p>
         </div>
@@ -128,7 +128,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for(cartItem <- cart.getCartItemList) {
+                    @for(cartItem <- cart.getNotDeleteCartItemList) {
                     <tr>
                         <td>
                             <a href="@controllers.product.routes.ProductController.detail(cartItem.getProductId.toString)" target="_blank" >

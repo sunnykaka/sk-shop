@@ -5,7 +5,7 @@ import api.response.product.ProductDetailDto;
 import api.response.product.ProductDto;
 import api.response.user.DesignerDto;
 import base.BaseTest;
-import base.DbTest;
+import common.utils.test.DbTest;
 import common.utils.JsonUtils;
 import org.junit.Test;
 import play.mvc.Http;

@@ -84,25 +84,23 @@ public class SkuAndStorageService {
      * @return
      */
     public boolean isSkuUsable(int skuId) {
-        boolean flag = false;
+        boolean usable = false;
         //sku所属商品是否下架
         StockKeepingUnit sku = this.getStockKeepingUnitById(skuId);
         if (sku != null && sku.canBuy()) {
             Product product = productService.getProductById(sku.getProductId());
-            if ((!product.getIsDelete()) && product.isOnline()) {
-                flag = true;
+            if (!product.getIsDelete() && product.isOnline()) {
+                usable = true;
             }
         }
         //sku是否有库存
-        if (flag) {
+        if (usable) {
             SkuStorage skuStorage = this.getSkuStorage(skuId);
             if (skuStorage != null) {
-                flag = skuStorage.getStockQuantity() > 0;
-            } else {
-                flag = false;
+                usable = skuStorage.getStockQuantity() > 0;
             }
         }
-        return flag;
+        return usable;
     }
 
     /**

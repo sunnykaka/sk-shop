@@ -561,7 +561,7 @@ public class OrderService {
 
     public String submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address, Client client) {
         //将购物车项创建成订单项
-        List<CartItem> cartItemList = cart.getCartItemList();
+        List<CartItem> cartItemList = cart.getNotDeleteCartItemList();
 
         Map<Integer, List<CartItem>> designerCartItemListMap = new HashMap<Integer, List<CartItem>>();
         for(CartItem cartItem : cartItemList) {

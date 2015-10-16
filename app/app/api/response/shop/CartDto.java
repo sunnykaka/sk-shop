@@ -38,7 +38,7 @@ public class CartDto {
         cartDto.setId(cart.getId());
         cartDto.setTotalMoney(cart.getTotalMoney());
 
-        List<CartItem> cartItemList = cart.getCartItemList();
+        List<CartItem> cartItemList = cart.getNotDeleteCartItemList();
         if(!cartItemList.isEmpty()) {
             List<CartItemDto> cartItemDtoList = cartItemList.stream().
                     map(CartItemDto::buildCartItemDto).collect(Collectors.toList());

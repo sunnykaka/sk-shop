@@ -1,7 +1,7 @@
 package services;
 
 import base.BaseTest;
-import base.DbTest;
+import common.utils.test.DbTest;
 import common.constants.MessageJobSource;
 import common.models.MessageJob;
 import common.services.MessageJobService;

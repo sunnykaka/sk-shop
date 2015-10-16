@@ -1,6 +1,6 @@
 package controllers.user;
 
-import base.DbTest;
+import common.utils.test.DbTest;
 import common.exceptions.AppException;
 import common.utils.DateUtils;
 import common.utils.JsonResult;

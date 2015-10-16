@@ -3,7 +3,8 @@ package controllers.api.user;
 import api.response.user.LoginResult;
 import api.response.user.UserDataDto;
 import api.response.user.UserDto;
-import base.DbTest;
+import base.BaseTest;
+import common.utils.test.DbTest;
 import common.utils.JsonUtils;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -55,7 +56,7 @@ public interface LoginApiTest extends DbTest {
                 uri(routes.LoginApiController.requestPhoneCode().url()).
                 bodyForm(params);
 
-        Result result = routeWithExceptionHandle(request);
+        Result result = BaseTest.routeWithExceptionHandle(request);
         assertThat(result.status(), is(NO_CONTENT));
 
         String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
@@ -76,7 +77,7 @@ public interface LoginApiTest extends DbTest {
                 method(POST).
                 uri(routes.LoginApiController.register().url()).
                 bodyForm(params);
-        result = routeWithExceptionHandle(request);
+        result = BaseTest.routeWithExceptionHandle(request);
         return result;
 
     }
@@ -110,7 +111,7 @@ public interface LoginApiTest extends DbTest {
                 method(POST).
                 uri(routes.LoginApiController.login().url()).
                 bodyForm(params);
-        return routeWithExceptionHandle(request);
+        return BaseTest.routeWithExceptionHandle(request);
     }
 
     /**
