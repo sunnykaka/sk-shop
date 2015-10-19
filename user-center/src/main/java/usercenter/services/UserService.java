@@ -102,7 +102,7 @@ public class UserService {
         if(isPhoneExist(registerForm.getPhone(), Optional.empty())) {
             throw new AppBusinessException(ErrorCode.PhoneExist, "手机已存在");
         }
-        if(!new SmsSender(registerForm.getPhone(), SmsSender.Usage.REGISTER).verifyCode(registerForm.getVerificationCode())) {
+        if(!new SmsSender(registerForm.getPhone(), registerIP, SmsSender.Usage.REGISTER).verifyCode(registerForm.getVerificationCode())) {
             throw new AppBusinessException(ErrorCode.InvalidArgument, "校验码验证失败");
         }
 
@@ -342,9 +342,9 @@ public class UserService {
      * @return
      */
     @Transactional
-    public User updatePhone(User user,PhoneCodeForm phoneCode){
+    public User updatePhone(User user, PhoneCodeForm phoneCode, String ip){
 
-        if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.BIND).verifyCode(phoneCode.getVerificationCode())) {
+        if(!new SmsSender(phoneCode.getPhone(), ip, SmsSender.Usage.BIND).verifyCode(phoneCode.getVerificationCode())) {
             throw new AppBusinessException(ErrorCode.InvalidArgument, "校验码验证失败");
         }
 

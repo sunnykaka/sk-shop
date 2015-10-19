@@ -5,8 +5,10 @@ import common.exceptions.AppException;
 import common.exceptions.ErrorCode;
 import common.utils.RegExpUtils;
 import common.utils.SmsUtils;
+import common.utils.play.BaseGlobal;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import play.Logger;
 import play.twirl.api.Content;
 import usercenter.cache.UserCache;
 
@@ -19,32 +21,48 @@ public class SmsSender {
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 
+    public static String SECURITY_CODE = "pzmlJGvQHdry7ZLv";
+
     public static final String PHONE_VERIFICATION_CODE_MESSAGE_FORMAT = "您的短信验证码是%s，两小时内有效。";
 
 
     private String phone;
+    private String ip;
     private Usage usage;
 
-    public SmsSender(String phone, Usage usage) {
+    public SmsSender(String phone, String ip, Usage usage) {
         this.phone = phone;
         this.usage = usage;
+        this.ip = ip;
     }
 
     public String getPhone() {
         return phone;
     }
 
+    public String getIp() {
+        return ip;
+    }
 
     /**
      * 根据手机生成短信验证码
      * @return
      */
     private String generatePhoneVerificationCode() {
-        //判断一天之内是不是发送过5次了
+        //判断一天之内是不是发送过10次了
         int count = UserCache.getMessageSendTimesInDay(phone, usage);
         if (count >= SEND_MESSAGE_MAX_TIMES_IN_DAY) {
             return null;
         }
+
+//        //判断IP发送数量达到上限
+//        if(BaseGlobal.isProd()) {
+//            count = UserCache.getMessageSendIpCountInDay(ip, usage);
+//            if (count >= SEND_MESSAGE_MAX_TIMES_IN_DAY) {
+//                return null;
+//            }
+//        }
+
 
         //生成验证码
         String verificationCode = generateCode();
@@ -66,12 +84,16 @@ public class SmsSender {
         boolean success = SmsUtils.sendSms(phone, message);
         if(success) {
             UserCache.setMessageSendTimesInDay(phone, usage);
+//            UserCache.addMessageSendIpCountInDay(ip, usage);
         }
 
         return success;
     }
 
     public void sendPhoneVerificationMessage() throws AppException {
+
+        Logger.debug(String.format("发送短信请求IP[%s], phone[%s]", ip, phone));
+
         if(!RegExpUtils.isPhone(phone)) {
             throw new AppException(ErrorCode.InvalidArgument, "请输入有效的手机号码");
         }

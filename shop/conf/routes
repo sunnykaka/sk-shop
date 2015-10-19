@@ -27,7 +27,7 @@ GET         /login/qq                                             @controllers.u
 GET         /login/qq/callback                                    @controllers.user.LoginController.qqLoginCallback(code ?= null, state ?= null, msg ?= null)
 
 GET         /logout                                               @controllers.user.LoginController.logout
-POST        /user/phone/get_code                                  @controllers.user.LoginController.requestPhoneCode(phone)
+POST        /user/phone/get_code                                  @controllers.user.LoginController.requestPhoneCode(phone, code)
 GET         /user/phone/exist                                     @controllers.user.LoginController.isPhoneExist(phone)
 GET         /user/username/exist                                  @controllers.user.LoginController.isUsernameExist(username)
 GET         /user/order                                           @controllers.Application.myOrder

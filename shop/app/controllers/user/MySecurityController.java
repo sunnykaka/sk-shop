@@ -81,7 +81,7 @@ public class MySecurityController extends Controller {
         if (!phoneCodeForm.hasErrors()) {
             try {
 
-                SessionUtils.updateCurrentUser(userService.updatePhone(user, phoneCodeForm.get()));
+                SessionUtils.updateCurrentUser(userService.updatePhone(user, phoneCodeForm.get(), request().remoteAddress()));
 
                 return ok(bindPhoneDo.render());
 
@@ -159,7 +159,7 @@ public class MySecurityController extends Controller {
             try {
                 CodeForm code = codeForm.get();
 
-                if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
+                if (!new SmsSender(user.getPhone(), request().remoteAddress(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
                     throw new AppBusinessException("校验码验证失败");
                 }
 
@@ -243,7 +243,7 @@ public class MySecurityController extends Controller {
                     throw new AppBusinessException("身份验证已失效，无法继续操作");
                 }
 
-                SessionUtils.updateCurrentUser(userService.updatePhone(user, phoneCodeForm.get()));
+                SessionUtils.updateCurrentUser(userService.updatePhone(user, phoneCodeForm.get(), request().remoteAddress()));
                 SecurityCache.removeToken(SecurityCache.SECURITY_TOKEN_PHONE_KEY, user.getPhone());
                 return ok(new JsonResult(true, null, routes.MySecurityController.changePhoneOk().url()).toNode());
 
@@ -296,7 +296,7 @@ public class MySecurityController extends Controller {
         if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
+                if (!new SmsSender(user.getPhone(), request().remoteAddress(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
                     throw new AppBusinessException("校验码验证失败");
                 }
 
@@ -402,7 +402,7 @@ public class MySecurityController extends Controller {
         if (!codeForm.hasErrors()) {
             try {
                 CodeForm code = codeForm.get();
-                if (!new SmsSender(user.getPhone(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
+                if (!new SmsSender(user.getPhone(), request().remoteAddress(), SmsSender.Usage.BIND).verifyCode(code.getVerificationCode())) {
                     throw new AppBusinessException("校验码验证失败");
                 }
 

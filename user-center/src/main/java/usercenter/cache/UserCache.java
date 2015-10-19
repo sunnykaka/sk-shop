@@ -1,11 +1,15 @@
 package usercenter.cache;
 
+import com.google.common.collect.Sets;
 import common.utils.DateUtils;
 import common.utils.RedisUtils;
 import common.utils.play.BaseGlobal;
+import org.apache.commons.lang3.StringUtils;
 import play.cache.CacheApi;
 import usercenter.domain.SmsSender;
 import usercenter.models.User;
+
+import java.util.Set;
 
 /**
  * Created by liubin on 15-4-27.
@@ -15,6 +19,8 @@ public class UserCache {
     private static CacheApi cacheApi() {
         return BaseGlobal.injector.instanceOf(CacheApi.class);
     }
+
+    public static Set<String> UNLIMITED_IP_SET = Sets.newHashSet("localhost", "127.0.0.1");
 
     public static void setUserInSession(User user, int expiration) {
 
@@ -49,6 +55,36 @@ public class UserCache {
         });
 
     }
+
+//    public static void addMessageSendIpCountInDay(String ip, SmsSender.Usage usage) {
+//
+//        if(StringUtils.isNoneBlank(ip) && !UNLIMITED_IP_SET.contains(ip)) {
+//            RedisUtils.withJedisClient(jedis -> {
+//                jedis.incr(RedisUtils.buildKey("message_send_ip", ip, usage.toString(), toadyInString()));
+//                return null;
+//            });
+//        }
+//
+//    }
+//
+//    public static int getMessageSendIpCountInDay(String ip, SmsSender.Usage usage) {
+//
+//        if(StringUtils.isBlank(ip)) {
+//            return 0;
+//        }
+//
+//        String count = RedisUtils.withJedisClient(jedis ->
+//            jedis.get(RedisUtils.buildKey("message_send_ip", ip, usage.toString(), toadyInString()))
+//        );
+//        if(count == null) {
+//            return 0;
+//        } else {
+//            return Integer.parseInt(count);
+//        }
+//
+//    }
+
+
 
     public static String getPhoneVerificationCode(String phone, SmsSender.Usage usage) {
         return (String)cacheApi().get(RedisUtils.buildKey("register_phone", phone, usage.toString()));
