@@ -69,9 +69,7 @@ public class LoginApiController extends BaseController {
 
     public Result requestPhoneCode() throws AppException {
         String phone = ParamUtils.getByKey(request(), "phone");
-        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
-
-        Logger.debug("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone);
+        SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
 
         smsSender.sendPhoneVerificationMessage();
 
@@ -130,9 +128,7 @@ public class LoginApiController extends BaseController {
             throw new AppBusinessException(ErrorCode.UsernameExist,"用户不存在");
         }
 
-        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
-
-        Logger.debug("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone);
+        SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
 
         smsSender.sendPhoneVerificationMessage();
 
@@ -152,7 +148,7 @@ public class LoginApiController extends BaseController {
             try {
                 PhoneCodeForm phoneCode = phoneCodeForm.get();
 
-                if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
+                if(!new SmsSender(phoneCode.getPhone(), request().remoteAddress(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
                     throw new AppBusinessException(ErrorCode.VerifyCodeError);
                 }
 

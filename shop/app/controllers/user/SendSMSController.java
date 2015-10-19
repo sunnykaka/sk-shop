@@ -17,9 +17,7 @@ public class SendSMSController extends Controller {
 
     public Result sendSMS(String phone) {
 
-        Logger.debug("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone);
-
-        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.BIND);
+        SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.BIND);
         try {
             smsSender.sendPhoneVerificationMessage();
         } catch (AppException e) {
