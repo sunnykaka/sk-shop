@@ -1,5 +1,6 @@
 package controllers.activity;
 
+import common.utils.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -24,6 +25,22 @@ import java.util.Map;
  */
 @org.springframework.stereotype.Controller
 public class ActivityController extends Controller {
+
+    private static final String MAP_KEY_NAME = "name";
+    private static final String MAP_KEY_PRICE = "price";
+
+    /** 变型记 */
+    protected static final int[] BIANXINGJI_PRODUCT_IDS = {483, 217, 119, 407, 141, 215, 255, 147, 249, 127, 113, 123, 237, 115, 257, 107, 259, 111, 175, 155, 475, 165, 171, 471};
+    /** 5件最具风格单品，轻松掌握时尚流行 */
+    protected static final int[] FASHION_PRODUCT_IDS = {385, 403, 405, 425, 421, 21, 27, 117, 133, 251, 115, 233, 441, 169, 239, 389, 443, 387, 391, 395, 399, 401};
+    /** 镂空美学 */
+    protected static final int[] LOUKONG_PRODUCT_IDS = {119, 69, 241, 257, 243, 105, 135, 99};
+    /** 酷感&硬朗 */
+    protected static final int[] FEDERICO_PRODUCT_IDS = {69, 27, 15, 53, 21, 11, 63, 57, 67};
+    /** 用浪漫寻觅小确幸 */
+    protected static final int[] LOUISE_PRODUCT_IDS = {387, 546, 541, 341, 345, 365, 369, 553, 537, 531, 373, 554, 407, 399, 547, 363, 557, 556, 539, 411, 532};
+    /** 静美如秋，吸睛新品 */
+    protected static final int[] EARLYAUTUMN_PRODUCT_IDS = {569, 229, 573, 133, 574, 27, 225, 231, 223};
 
     @Autowired
     private ProductService productService;
@@ -53,171 +70,78 @@ public class ActivityController extends Controller {
      */
     public Result bianxingji() {
 
-        final int[] activityProductId = {483, 217, 119, 407, 141, 215, 255, 147, 249, 127, 113, 123, 237, 115, 257, 107, 259, 111, 175, 155, 475, 165, 171, 471};
+        Map<String,Map<Integer,String>> map = activityMap(BIANXINGJI_PRODUCT_IDS);
 
-        Map<Integer, String> map = new HashMap<>();
-        for (int productId : activityProductId) {
-            Product product = productService.getProductById(productId);
-
-            if (null == product) {
-                map.put(productId, null);
-            } else {
-                //根据判断是否是首发，当前价格要现算
-                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
-                if (null == stockKeepingUnit) {
-                    map.put(productId, null);
-                } else {
-                    map.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
-                }
-
-            }
-        }
-
-        return ok(bianxingji.render(map));
+        return ok(bianxingji.render(map.get(MAP_KEY_PRICE)));
     }
 
     public Result fashion() {
 
-        final int[] activityProductId = {385, 403, 405, 425, 421, 21, 27, 117, 133, 251, 115, 233, 441, 169, 239, 389, 443, 387, 391, 395, 399, 401};
+        Map<String,Map<Integer,String>> map = activityMap(FASHION_PRODUCT_IDS);
 
-        Map<Integer, String> mapName = new HashMap<>();
-        Map<Integer, String> mapPrice = new HashMap<>();
-        for (int productId : activityProductId) {
-            Product product = productService.getProductById(productId);
-
-            if (null == product) {
-                mapPrice.put(productId, null);
-                mapName.put(productId, null);
-            } else {
-                //根据判断是否是首发，当前价格要现算
-                mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
-                if (null == stockKeepingUnit) {
-                    mapPrice.put(productId, null);
-                } else {
-                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
-                }
-
-            }
-        }
-
-        return ok(fashion.render(mapName, mapPrice));
+        return ok(fashion.render(map.get(MAP_KEY_NAME), map.get(MAP_KEY_PRICE)));
     }
 
     public Result loukong() {
 
-        final int[] activityProductId = {119, 69, 241, 257, 243, 105, 135, 99};
+        Map<String,Map<Integer,String>> map = activityMap(LOUKONG_PRODUCT_IDS);
 
-        Map<Integer, String> mapName = new HashMap<>();
-        Map<Integer, String> mapPrice = new HashMap<>();
-        for (int productId : activityProductId) {
-            Product product = productService.getProductById(productId);
-
-            if (null == product) {
-                mapPrice.put(productId, null);
-                mapName.put(productId, null);
-            } else {
-                //根据判断是否是首发，当前价格要现算
-                mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
-                if (null == stockKeepingUnit) {
-                    mapPrice.put(productId, null);
-                } else {
-                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
-                }
-
-            }
-        }
-
-        return ok(loukong.render(mapName, mapPrice));
+        return ok(loukong.render(map.get(MAP_KEY_NAME), map.get(MAP_KEY_PRICE)));
     }
 
     public Result federico() {
 
-        final int[] activityProductId = {69, 27, 15, 53, 21, 11, 63, 57, 67};
+        Map<String,Map<Integer,String>> map = activityMap(FEDERICO_PRODUCT_IDS);
 
-        Map<Integer, String> mapName = new HashMap<>();
-        Map<Integer, String> mapPrice = new HashMap<>();
-        for (int productId : activityProductId) {
-            Product product = productService.getProductById(productId);
+        return ok(federico.render(map.get(MAP_KEY_NAME), map.get(MAP_KEY_PRICE)));
 
-            if (null == product) {
-                mapPrice.put(productId, null);
-                mapName.put(productId, null);
-            } else {
-                //根据判断是否是首发，当前价格要现算
-                mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
-                if (null == stockKeepingUnit) {
-                    mapPrice.put(productId, null);
-                } else {
-                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
-                }
-
-            }
-        }
-
-        return ok(federico.render(mapName, mapPrice));
     }
 
     public Result louise() {
 
-        final int[] activityProductId = {387, 546, 541, 341, 345, 365, 369, 553, 537, 531, 373, 554, 407, 399, 547, 363, 557, 556, 539, 411, 532};
+        Map<String,Map<Integer,String>> map = activityMap(LOUISE_PRODUCT_IDS);
 
-        Map<Integer, String> mapName = new HashMap<>();
-        Map<Integer, String> mapPrice = new HashMap<>();
-        for (int productId : activityProductId) {
-            Product product = productService.getProductById(productId);
-
-            if (null == product) {
-                mapPrice.put(productId, null);
-                mapName.put(productId, null);
-            } else {
-                //根据判断是否是首发，当前价格要现算
-                mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
-                if (null == stockKeepingUnit) {
-                    mapPrice.put(productId, null);
-                } else {
-                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
-                }
-
-            }
-        }
-
-        return ok(louise.render(mapName, mapPrice));
+        return ok(louise.render(map.get(MAP_KEY_NAME), map.get(MAP_KEY_PRICE)));
     }
 
     public Result earlyAutumn() {
 
-        final int[] activityProductId = {569, 229, 573, 133, 574, 27, 225, 231, 223};
+        Map<String,Map<Integer,String>> map = activityMap(EARLYAUTUMN_PRODUCT_IDS);
+
+        return ok(earlyAutumn.render(map.get(MAP_KEY_NAME), map.get(MAP_KEY_PRICE)));
+    }
+
+    /**
+     * 获取商品名字列表、价格列表 (返回取key中的‘name’，‘price’)
+     *
+     * @param activityProductId 活动id
+     * @return map
+     */
+    public Map<String,Map<Integer,String>> activityMap(int[] activityProductId){
+        Map<String,Map<Integer,String>> map = new HashMap<>();
 
         Map<Integer, String> mapName = new HashMap<>();
         Map<Integer, String> mapPrice = new HashMap<>();
+
         for (int productId : activityProductId) {
             Product product = productService.getProductById(productId);
 
             if (null == product) {
-                mapPrice.put(productId, null);
                 mapName.put(productId, null);
+                mapPrice.put(productId, null);
             } else {
                 //根据判断是否是首发，当前价格要现算
                 mapName.put(productId, product.getName());
-                StockKeepingUnit stockKeepingUnit = skuService.querySkuByProductIdPriceSmall(productId);
-                if (null == stockKeepingUnit) {
-                    mapPrice.put(productId, null);
-                } else {
-                    mapPrice.put(productId, skuService.getSkuCurrentPrice(stockKeepingUnit.getId()).toString());
-                }
-
+                StockKeepingUnit sku = skuService.querySkuByProductIdPriceSmall(productId);
+                Money money = skuService.getSkuCurrentPrice(sku);
+                mapPrice.put(productId, money.equals(Money.valueOf(0)) ? null : money.toString());
             }
         }
 
-        return ok(earlyAutumn.render(mapName, mapPrice));
-    }
+        map.put(MAP_KEY_NAME, mapName);
+        map.put(MAP_KEY_PRICE, mapPrice);
+        return map;
 
-    private String getPositivePrice(String str) {
-        return str.split("\\.")[0];
     }
 
 }

@@ -324,11 +324,14 @@ public class SkuAndStorageService {
 
     /**
      * 判断当前SKU当前的价格，会根据销售状态，是否首发，预售
-     * @param skuId
+     * @param sku
      * @return
      */
-    public Money getSkuCurrentPrice(int skuId) {
-        StockKeepingUnit sku = this.getStockKeepingUnitById(skuId);
+    public Money getSkuCurrentPrice(StockKeepingUnit sku) {
+        if(null == sku){
+            return Money.valueOf(0);
+        }
+
         Integer prodId = sku.getProductId();
         if (productService.useFirstSellPrice(prodId)) {
             return sku.getPrice();

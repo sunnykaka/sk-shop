@@ -70,7 +70,8 @@ public class AppOrderAndPayController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String clientIp, String client) { //device_info
+    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String client) { //device_info
+        String clientIp = request().remoteAddress();
         Logger.info("进入submitToPay方法，参数：\n"
                 + "isPromptlyPay=" + isPromptlyPay + "selItems=" + selItems + " addressId=" + addressId + " payOrg=" + payOrg + " clientIp=" + clientIp + " client=" + client);
         String curUserName = "";
@@ -220,7 +221,8 @@ public class AppOrderAndPayController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result myOrderToPay(String orderIds, int addressId, String payOrg,String clientIp, String client) { //device_info
+    public Result myOrderToPay(String orderIds, int addressId, String payOrg,String client) { //device_info
+        String clientIp = request().remoteAddress();
         Logger.info("进入myOrderToPay方法，参数：\n"
                 + "orderIds=" + orderIds + " addressId=" + addressId + " payOrg=" + payOrg + " clientIp=" + clientIp + " client=" + client);
         String curUserName = "";
