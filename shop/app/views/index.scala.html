@@ -35,7 +35,7 @@
 
 } {
     <div id="container">
-            <!--slider-box-->
+            <!--flexslider-box-->
         @if(modules.size >= 1) {
             <div class="flexslider">
                 <ul class="slides">
@@ -47,36 +47,9 @@
                     </li>
                 }
                 </ul>
-                <div class="slider-box-inner" style="display: none;">
-                    <div class="slider-box-img">
-                    @for((content, index) <- modules(0).getContents.zipWithIndex) {
-
-                        <div class="item" style="z-index : @{
-                            modules(0).getContents.size - index
-                        };background-image:url(@content.getPic); background-position: 50% 50%;">
-                        <a target="_blank" @if(content.getLink != null && content.getLink != "") {
-                            href="@content.getLink"
-                        } hidefocus="true" style="outline : none ;" alt="@content.getTitle">
-                    </a>
-                    </div>
-                    }
-                </div>
-                <div class="sliderBullets">
-                @for((content, index) <- modules(0).getContents.zipWithIndex) {
-                    <a rel="@index"></a>
-                }
-                </div>
-                <div class="sliderArrows" style="z-index : 11 ;">
-                    <div>
-                        <a href="javascript:void(0)" class="png_bg prev" style="display : block ;"><i class="icon iconfont">&#xe616;</i></a>
-                        <a href="javascript:void(0)" class="png_bg next" style="display : block ;"><i class="icon iconfont">&#xe615;</i></a>
-                    </div>
-                </div>
+            }
             </div>
-        }
-    </div>
-
-    <!--end slider-box-->
+    <!--end flexslider-box-->
 
 
     <!--start-fashion first-->
