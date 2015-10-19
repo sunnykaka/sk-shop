@@ -101,7 +101,7 @@ public class LoginController extends Controller {
     public Result requestPhoneCode(String phone, String code) {
 
         if(!SmsSender.SECURITY_CODE.equals(code)) {
-            return ok(new JsonResult(false, "非法的请求").toNode());
+            return ok(new JsonResult(true, "非法的请求").toNode());
         }
 
         SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
