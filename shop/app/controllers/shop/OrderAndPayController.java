@@ -1,6 +1,7 @@
 package controllers.shop;
 
 import com.google.common.collect.Lists;
+import common.exceptions.AppBusinessException;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.Money;
@@ -108,13 +109,7 @@ public class OrderAndPayController extends Controller {
                     return ok(new JsonResult(false, "立即购买商品有问题，请核对一下").toNode());
                 }
 
-                if (skuId <= 0) {
-                    return ok(new JsonResult(false, "在系统中找不到商品！").toNode());
-                }
-
-                if (number <= 0) {
-                    return ok(new JsonResult(false, "至少要购买1件商品！").toNode());
-                }
+                cartService.verifySkuToBuy(skuId, number, number);
 
                 cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
@@ -122,18 +117,7 @@ public class OrderAndPayController extends Controller {
                 List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split(",")).stream().
                         map(Integer::parseInt).collect(Collectors.toList());
                 cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
-            }
-
-            if (cart == null || cart.getNotDeleteCartItemList().size() == 0) {
-                return ok(new JsonResult(false, "订单为空").toNode());
-            }
-
-            //库存校验
-            for (CartItem cartItem : cart.getNotDeleteCartItemList()) {
-                if (!skuAndStorageService.isSkuUsable(cartItem.getSkuId())) {
-                    Logger.warn("商品：" + cartItem.getProductName() + "已售罄或已下架或已移除，不能再购买");
-                    return ok(new JsonResult(false, "商品：" + cartItem.getProductName() + "已售罄或已下架，不能再购买").toNode());
-                }
+                cartService.verifyCart(cart, selCartItemIdList);
             }
 
             //邮寄地址
@@ -145,8 +129,10 @@ public class OrderAndPayController extends Controller {
             //生成订单相关信息
             String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address, Client.Browser);
             return ok(new JsonResult(true, "生成订单成功", orderIds).toNode());
+        } catch (AppBusinessException e) {
+            return ok(new JsonResult(false, e.getMessage()).toNode());
         } catch (Exception e) {
-            Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
+            Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常", e);
             return ok(new JsonResult(false, "生成订单失败，请联系商城客服人员！").toNode());
         }
     }

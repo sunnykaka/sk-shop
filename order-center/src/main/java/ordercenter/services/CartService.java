@@ -88,8 +88,6 @@ public class CartService {
      */
     @Transactional
     public void deleteSelectCartItemBySelIds(int cartId, String selItems) {
-        play.Logger.info("--------CartService deleteSelectCartItemBySelIds begin exe-----------" + cartId + " : " + selItems);
-
         String jpql = "update CartItem v set v.isDelete=:isDelete where v.id in(" + selItems + ") and cartId=:cartId ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("isDelete", true);
@@ -347,6 +345,11 @@ public class CartService {
      */
     @Transactional(readOnly = true)
     public void verifySkuToBuy(int skuId, int number, int skuBuyNumber) {
+
+        if (skuId <= 0) {
+            throw new CartException(ErrorCode.Conflict, "无法找到商品信息");
+        }
+
         if (number < 1) {
             throw new CartException(ErrorCode.Conflict, "添加商品到购物车失败, 添加的数量必须大于或等于1");
         }
@@ -373,7 +376,8 @@ public class CartService {
      * @param selCartItemIdList
      * @throws CartException
      */
-    private void verifyCart(Cart cart, List<Integer> selCartItemIdList) {
+    @Transactional(readOnly = true)
+    public void verifyCart(Cart cart, List<Integer> selCartItemIdList) {
         if (cart == null || cart.getNotDeleteCartItemList().isEmpty()) {
             throw new CartException(ErrorCode.Conflict, "您的购物车为空，请先选择商品");
         }
