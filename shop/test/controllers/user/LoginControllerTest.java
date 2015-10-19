@@ -42,7 +42,7 @@ public class LoginControllerTest extends BaseTest implements LoginTest {
         String username = RandomStringUtils.randomAlphabetic(1);
         String password = RandomStringUtils.randomAlphabetic(10);
 
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone, SmsSender.SECURITY_CODE).url());
         Result result = route(request);
         assertThat(result.status(), is(OK));
         assertThat(result.contentType(), is("application/json"));
@@ -76,7 +76,7 @@ public class LoginControllerTest extends BaseTest implements LoginTest {
         String username = userRegisterInfo.username;
         String password = userRegisterInfo.password;
 
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone, SmsSender.SECURITY_CODE).url());
 
         Result result = route(request);
         assertThat(result.status(), is(OK));
@@ -173,14 +173,14 @@ public class LoginControllerTest extends BaseTest implements LoginTest {
 
         String phone = "1" + RandomStringUtils.randomNumeric(10);
         for (int i = 0; i < SmsSender.SEND_MESSAGE_MAX_TIMES_IN_DAY; i++) {
-            Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
+            Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone, SmsSender.SECURITY_CODE).url());
             Result result = route(request);
             assertThat(result.status(), is(OK));
             assertThat(result.contentType(), is("application/json"));
             assertThat(contentAsString(result), containsString("true"));
 
         }
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone, SmsSender.SECURITY_CODE).url());
 
         Result result = route(request);
         assertThat(result.status(), is(OK));

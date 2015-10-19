@@ -46,7 +46,7 @@ public interface LoginTest extends DbTest {
      * @param password
      */
     default void registerUser(String phone, String username, String password) {
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone, SmsSender.SECURITY_CODE).url());
 
         Result result = route(request);
         assertThat(result.status(), is(OK));

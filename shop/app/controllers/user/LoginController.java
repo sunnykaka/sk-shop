@@ -100,7 +100,7 @@ public class LoginController extends Controller {
 
     public Result requestPhoneCode(String phone, String code) {
 
-        if(!"pzmlJGvQHdry7ZLv".equals(code)) {
+        if(!SmsSender.SECURITY_CODE.equals(code)) {
             return ok(new JsonResult(false, "非法的请求").toNode());
         }
 
