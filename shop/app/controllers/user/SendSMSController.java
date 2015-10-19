@@ -2,6 +2,7 @@ package controllers.user;
 
 import common.exceptions.AppException;
 import common.utils.JsonResult;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import usercenter.domain.SmsSender;
@@ -15,6 +16,8 @@ import usercenter.domain.SmsSender;
 public class SendSMSController extends Controller {
 
     public Result sendSMS(String phone) {
+
+        Logger.debug("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone);
 
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.BIND);
         try {

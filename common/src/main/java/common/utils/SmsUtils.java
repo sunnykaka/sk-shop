@@ -29,8 +29,10 @@ public class SmsUtils {
         Preconditions.checkArgument(StringUtils.isNotBlank(content), "短信未发送, 内容不能为空");
 
         boolean mock = Play.application().configuration().getBoolean("sms.mock");
-        if(mock) {
-            play.Logger.info(String.format("mock环境不发送真实短信 收信手机:[%s], 短信内容:[%s]", Arrays.toString(phones), content));
+//        if(mock) {
+//            play.Logger.info(String.format("mock环境不发送真实短信 收信手机:[%s], 短信内容:[%s]", Arrays.toString(phones), content));
+        if(true) {
+            play.Logger.info(String.format("暂时不发送真实短信 收信手机:[%s], 短信内容:[%s]", Arrays.toString(phones), content));
 
         } else {
             if(play.Logger.isDebugEnabled()) {

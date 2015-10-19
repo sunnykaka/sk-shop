@@ -12,6 +12,7 @@ import common.utils.RegExpUtils;
 import controllers.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -69,6 +70,8 @@ public class LoginApiController extends BaseController {
     public Result requestPhoneCode() throws AppException {
         String phone = ParamUtils.getByKey(request(), "phone");
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
+
+        Logger.debug("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone);
 
         smsSender.sendPhoneVerificationMessage();
 
@@ -128,6 +131,8 @@ public class LoginApiController extends BaseController {
         }
 
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
+
+        Logger.debug("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone);
 
         smsSender.sendPhoneVerificationMessage();
 

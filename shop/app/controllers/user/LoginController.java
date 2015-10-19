@@ -99,6 +99,9 @@ public class LoginController extends Controller {
     }
 
     public Result requestPhoneCode(String phone) {
+
+        Logger.debug("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone);
+
         SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
         try {
             smsSender.sendPhoneVerificationMessage();
