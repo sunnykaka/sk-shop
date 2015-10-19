@@ -56,33 +56,33 @@ public class UserCache {
 
     }
 
-    public static void addMessageSendIpCountInDay(String ip, SmsSender.Usage usage) {
-
-        if(StringUtils.isNoneBlank(ip) && !UNLIMITED_IP_SET.contains(ip)) {
-            RedisUtils.withJedisClient(jedis -> {
-                jedis.incr(RedisUtils.buildKey("message_send_ip", ip, usage.toString(), toadyInString()));
-                return null;
-            });
-        }
-
-    }
-
-    public static int getMessageSendIpCountInDay(String ip, SmsSender.Usage usage) {
-
-        if(StringUtils.isBlank(ip)) {
-            return 0;
-        }
-
-        String count = RedisUtils.withJedisClient(jedis ->
-            jedis.get(RedisUtils.buildKey("message_send_ip", ip, usage.toString(), toadyInString()))
-        );
-        if(count == null) {
-            return 0;
-        } else {
-            return Integer.parseInt(count);
-        }
-
-    }
+//    public static void addMessageSendIpCountInDay(String ip, SmsSender.Usage usage) {
+//
+//        if(StringUtils.isNoneBlank(ip) && !UNLIMITED_IP_SET.contains(ip)) {
+//            RedisUtils.withJedisClient(jedis -> {
+//                jedis.incr(RedisUtils.buildKey("message_send_ip", ip, usage.toString(), toadyInString()));
+//                return null;
+//            });
+//        }
+//
+//    }
+//
+//    public static int getMessageSendIpCountInDay(String ip, SmsSender.Usage usage) {
+//
+//        if(StringUtils.isBlank(ip)) {
+//            return 0;
+//        }
+//
+//        String count = RedisUtils.withJedisClient(jedis ->
+//            jedis.get(RedisUtils.buildKey("message_send_ip", ip, usage.toString(), toadyInString()))
+//        );
+//        if(count == null) {
+//            return 0;
+//        } else {
+//            return Integer.parseInt(count);
+//        }
+//
+//    }
 
 
 

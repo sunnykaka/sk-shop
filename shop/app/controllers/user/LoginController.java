@@ -98,9 +98,11 @@ public class LoginController extends Controller {
 
     }
 
-    public Result requestPhoneCode(String phone) {
+    public Result requestPhoneCode(String phone, String code) {
 
-        Logger.debug(String.format("发送短信请求IP[%s], phone[%s]", request().remoteAddress(), phone));
+        if(!"pzmlJGvQHdry7ZLv".equals(code)) {
+            return ok(new JsonResult(false, "非法的请求").toNode());
+        }
 
         SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
         try {

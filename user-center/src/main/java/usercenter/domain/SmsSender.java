@@ -53,13 +53,13 @@ public class SmsSender {
             return null;
         }
 
-        //判断IP发送数量达到上限
-        if(BaseGlobal.isProd()) {
-            count = UserCache.getMessageSendIpCountInDay(ip, usage);
-            if (count >= SEND_MESSAGE_MAX_TIMES_IN_DAY) {
-                return null;
-            }
-        }
+//        //判断IP发送数量达到上限
+//        if(BaseGlobal.isProd()) {
+//            count = UserCache.getMessageSendIpCountInDay(ip, usage);
+//            if (count >= SEND_MESSAGE_MAX_TIMES_IN_DAY) {
+//                return null;
+//            }
+//        }
 
 
         //生成验证码
@@ -82,7 +82,7 @@ public class SmsSender {
         boolean success = SmsUtils.sendSms(phone, message);
         if(success) {
             UserCache.setMessageSendTimesInDay(phone, usage);
-            UserCache.addMessageSendIpCountInDay(ip, usage);
+//            UserCache.addMessageSendIpCountInDay(ip, usage);
         }
 
         return success;
