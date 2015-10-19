@@ -1,6 +1,5 @@
 package usercenter.domain;
 
-import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.exceptions.ErrorCode;
 import common.utils.RegExpUtils;
@@ -9,7 +8,6 @@ import common.utils.play.BaseGlobal;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import play.Logger;
-import play.twirl.api.Content;
 import usercenter.cache.UserCache;
 
 /**
@@ -18,6 +16,7 @@ import usercenter.cache.UserCache;
 public class SmsSender {
 
     public static int SEND_MESSAGE_MAX_TIMES_IN_DAY = 10;
+    public static int ALL_SEND_MESSAGE_MAX_TIMES_IN_DAY = 1000;
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 
@@ -63,6 +62,13 @@ public class SmsSender {
 //            }
 //        }
 
+        //判断IP发送数量达到上限
+        if(BaseGlobal.isProd()) {
+            count = UserCache.getAllMessageSendTimesInDay(usage);
+            if (count >= ALL_SEND_MESSAGE_MAX_TIMES_IN_DAY) {
+                return null;
+            }
+        }
 
         //生成验证码
         String verificationCode = generateCode();
@@ -83,8 +89,9 @@ public class SmsSender {
 
         boolean success = SmsUtils.sendSms(phone, message);
         if(success) {
-            UserCache.setMessageSendTimesInDay(phone, usage);
-//            UserCache.addMessageSendIpCountInDay(ip, usage);
+            UserCache.incrMessageSendTimesInDay(phone, usage);
+//            UserCache.incrMessageSendIpCountInDay(ip, usage);
+            UserCache.incrAllMessageSendTimesInDay(usage);
         }
 
         return success;
