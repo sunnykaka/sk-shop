@@ -88,10 +88,11 @@
             evt.preventDefault();
             fun(getCodeBtn);
             //根据手机号码获取验证码
+            var randomCodeStr = randomCode();
             $.ajax({
                 type: 'POST',
                 async: false,
-                url: '/user/phone/get_code?phone='+phoneNum,
+                url: '/user/phone/get_code?phone='+phoneNum+"&code="+randomCodeStr,
                 data: {
                     phone: phoneNum
                 },

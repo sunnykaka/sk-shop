@@ -30,15 +30,24 @@
 
 
 @main(new Seo(Messages("index.title"), Messages("seo.description"), Messages("seo.Keywords")))("index") {
-    <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.flexslider-min.js")"></script>
     <script src="@routes.Assets.versioned("js/index.js")"></script>
 
 } {
     <div id="container">
             <!--slider-box-->
         @if(modules.size >= 1) {
-            <div class="slider-box">
-                <div class="slider-box-inner">
+            <div class="flexslider">
+                <ul class="slides">
+                @for((content, index) <- modules(0).getContents.zipWithIndex) {
+                    <li  style="height:501px;background-image: url(@content.getPic); background-position: 50% 50%;">
+                        <a target="_blank" @if(content.getLink != null && content.getLink != "") {
+                        href="@content.getLink"
+                        } alt="@content.getTitle"></a>
+                    </li>
+                }
+                </ul>
+                <div class="slider-box-inner" style="display: none;">
                     <div class="slider-box-img">
                     @for((content, index) <- modules(0).getContents.zipWithIndex) {
 
@@ -106,13 +115,7 @@
                             <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getTitle" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getTitle</span></p>
-                                @*<div class="time">*@
-                                @*<span class="time-text">*@
-                                @*<i class="icon iconfont">&#xe605;</i>*@
-                                @*<span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>*@
-                                @*<span class="over-text">结束</span>*@
-                                @*</span>*@
-                                @*</div>*@
+
                             </div>
                         </a>
                     </li>
@@ -147,13 +150,6 @@
                         <div class="title">
                             <p><span class="designer">@exhibition.getTitle</span></p>
                             <div class="cover"></div>
-                            @*<div class="time">*@
-                            @*<span class="time-text">*@
-                            @*<i class="icon iconfont">&#xe605;</i>*@
-                            @*<span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>*@
-                            @*<span class="over-text">结束</span>*@
-                            @*</span>*@
-                            @*</div>*@
                         </div>
                     </li>
                 }

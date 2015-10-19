@@ -222,22 +222,27 @@ function fixedcart(obj, scopeObj) {
     });
 }
 
+//生成随机验证码
+function randomCode(){
+    var arr = [109,119,106,105,71,68,115,78,69,97,111,118,52,87,73,115],str = '';
+    for(var i in arr){str += String.fromCharCode(arr[i] + 3);}
+    return str;
+}
 //判断窗口宽度
 $(window).on('resize load',function(){
 
     if($(window).width()<=1300){
         $('#cart').addClass('small-sider');
-        $('.slider-box-inner .sliderArrows .prev').css('left','2%');
-        $('.slider-box-inner .sliderArrows .next').css('right','2%');
+        $('.flex-direction-nav .flex-prev').css('left','2%');
+        $('.flex-direction-nav .flex-next').css('right','2%');
     }else{
         $('#cart').removeClass('small-sider');
-        $('.slider-box-inner .sliderArrows .prev').css('left','10%');
-        $('.slider-box-inner .sliderArrows .next').css('right','10%');
+        $('.flex-direction-nav .flex-prev').css('left','10%');
+        $('.flex-direction-nav .flex-next').css('right','10%');
     }
 
     var sUserAgent = navigator.userAgent,
         mobileAgents = ['Windows CE', 'iPod', 'Symbian', 'iPhone', 'BlackBerry', 'Android', 'Windows Phone'];
-
 
     for (var i = 0, len = mobileAgents.length; i < len; i++) {
         if (sUserAgent.indexOf(mobileAgents[i]) !== -1) {

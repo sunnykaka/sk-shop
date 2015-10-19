@@ -21,31 +21,17 @@ $(function(){
 
     //固定购物车
     fixedcart($('#cart'), $('#container'));
-
     //点击购物车，进入购物车页面
     $('#cart-quantity-btn').click(function () {
         window.location.href = "/cart/showCart";
     });
 
-
-    //轮播
-    $('.slider-box-inner').mobilyslider({
-        content:'.slider-box-img',
-        children:'div',
-        transition:'fade',
-        animationSpeed:1000,
-        autoplay: true,
-        autoplaySpeed:5000,
-        pauseOnHover:true,
-        bullets:true,
-        arrows:true,
-        arrowsHide:true,
-        prev:'prev',
-        next:'next',
-        animationStart: function(){},
-        animationComplete: function(){}
-    });
-
+    $(function() {
+        $(".flexslider").flexslider({
+            pauseOnHover:true,
+            touch: false
+        });
+    })
 
     setInterval(function(){
         $(".time-detail:not(:contains(已结束))").each(function(){
@@ -70,8 +56,6 @@ $(function(){
                 }else{
                     obj.parent('.time-text').html('').text(str);
                 }
-
-
             }
             obj.text(str);
         });
