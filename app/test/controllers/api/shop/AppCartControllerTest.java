@@ -212,7 +212,7 @@ public class AppCartControllerTest extends BaseTest implements LoginApiTest {
             assertThat(cartItemDto.getProductId(), is(product.getId()));
             assertThat(cartItemDto.getProductName(), is(product.getName()));
             assertThat(cartItemDto.getNumber() > 0, is(true));
-            assertThat(cartItemDto.getCurUnitPrice(), is(skuAndStorageService.getSkuCurrentPrice(sku.getId())));
+            assertThat(cartItemDto.getCurUnitPrice(), is(skuAndStorageService.getSkuCurrentPrice(sku)));
             assertThat(cartItemDto.getTotalPrice(), is(cartItemDto.getCurUnitPrice().multiply(cartItemDto.getNumber())));
             totalMoney = totalMoney.add(cartItemDto.getTotalPrice());
             assertThat(cartItemDto.getOnline(), is(product.isOnline()));

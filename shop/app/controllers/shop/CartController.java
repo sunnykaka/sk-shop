@@ -179,7 +179,7 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result chooseAddress(String selCartItems) {
-        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split(",")).stream().
+        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split("_")).stream().
                 map(Integer::parseInt).collect(Collectors.toList());
         User curUser = SessionUtils.currentUser();
         Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);

@@ -585,10 +585,9 @@ public class OrderService {
             order.setUserName(user.getUserName());
 
             List<CartItem> designerCartItemList = designerCartItemListMap.get(designerId);
-            Money totalMoney = Money.valueOf(0);
-            for(CartItem cartItem : designerCartItemList) {
-                totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
-            }
+            Money totalMoney = designerCartItemList.stream().
+                    map(CartItem::calTotalPrice).
+                    reduce(Money.valueOf(0d), Money::add);
             order.setTotalMoney(totalMoney);
 
             order.setOrderState(OrderState.Create);

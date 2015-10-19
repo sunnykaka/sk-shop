@@ -306,7 +306,7 @@ public class CartService {
             throw new CartException(ErrorCode.Conflict, "请先选择购物车中的商品");
         }
 
-        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split(",")).stream().
+        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split("_")).stream().
                 map(Integer::parseInt).collect(Collectors.toList());
 
         verifyCart(cart, selCartItemIdList);
