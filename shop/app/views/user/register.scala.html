@@ -1,4 +1,4 @@
-@()
+@(code: String)
 
 @import productcenter.models.Seo;
 
@@ -16,6 +16,7 @@
             <h2>用户注册</h2>
             <form class="reg-form" id="reg-form" >
                 <div class="item-row reg-username">
+                    <input type="hidden" id="r_code" name="r_code" value="@code"/>
                     <label for="username">请输入用户名</label>
                     <input type="text" id="username" name="username" class="form-text username" autocomplete="off"/>
                     <span class="errormsg" id="errormsg-username"></span>
