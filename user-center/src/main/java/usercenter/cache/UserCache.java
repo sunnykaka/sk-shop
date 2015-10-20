@@ -1,15 +1,15 @@
 package usercenter.cache;
 
 import com.google.common.collect.Sets;
-import common.utils.DateUtils;
 import common.utils.RedisUtils;
 import common.utils.play.BaseGlobal;
-import org.apache.commons.lang3.StringUtils;
 import play.cache.CacheApi;
 import usercenter.domain.SmsSender;
 import usercenter.models.User;
 
 import java.util.Set;
+
+import static common.utils.DateUtils.toadyInString;
 
 /**
  * Created by liubin on 15-4-27.
@@ -116,12 +116,6 @@ public class UserCache {
     public static void setPhoneVerificationCode(String phone, SmsSender.Usage usage, String value, int expiration) {
         cacheApi().set(RedisUtils.buildKey("register_phone", phone, usage.toString()), value, expiration);
     }
-
-    private static String toadyInString() {
-        return DateUtils.print(DateUtils.current(), "yyyyMMdd");
-    }
-
-
 
 
 }

@@ -5,8 +5,6 @@ import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.FormUtils;
 import common.utils.JsonResult;
-import common.utils.RegExpUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.data.Form;
@@ -24,7 +22,6 @@ import usercenter.services.UserService;
 import usercenter.utils.SessionUtils;
 import views.html.user.login;
 import views.html.user.register;
-import views.html.user.openIDCallback;
 
 import java.util.Optional;
 
@@ -34,9 +31,10 @@ public class LoginController extends Controller {
     @Autowired
     UserService userService;
 
-    public Result registerPage() {
+    public Result registerPage() throws AppException {
 
-        return ok(register.render());
+        String code = SmsSender.putSecurityCode(session());
+        return ok(register.render(code));
 
     }
 
@@ -100,7 +98,8 @@ public class LoginController extends Controller {
 
     public Result requestPhoneCode(String phone, String code) {
 
-        if(!SmsSender.SECURITY_CODE.equals(code)) {
+        if(!SmsSender.isSecurityCodeValid(session(), code)) {
+            // 请求验证码之前没有请求register页面，不发送验证码，直接返回true，欺骗恶意请求者
             return ok(new JsonResult(true).toNode());
         }
 
@@ -145,10 +144,10 @@ public class LoginController extends Controller {
             return redirect(routes.LoginController.loginPage());
 
         } finally {
-                stopwatch.stop();
-                Logger.info("微信回调任务运行结束, 耗时: " + stopwatch.toString());
-            }
+            stopwatch.stop();
+            Logger.info("微信回调任务运行结束, 耗时: " + stopwatch.toString());
         }
+    }
 
     public Result weiboLogin() {
 

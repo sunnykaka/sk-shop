@@ -1,8 +1,10 @@
 package controllers.user;
 
 import base.DbTest;
+import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.DateUtils;
+import common.utils.EncryptUtil;
 import common.utils.JsonResult;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -12,16 +14,15 @@ import usercenter.utils.SessionUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static common.utils.TestUtils.UserRegisterInfo;
+import static common.utils.TestUtils.mockUserRegisterInfo;
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static play.mvc.Http.Status.OK;
-import static play.test.Helpers.POST;
-import static play.test.Helpers.contentAsString;
-import static play.test.Helpers.route;
-import static common.utils.TestUtils.*;
+import static play.test.Helpers.*;
 
 /**
  * 注册登录测试接口
@@ -46,7 +47,8 @@ public interface LoginTest extends DbTest {
      * @param password
      */
     default void registerUser(String phone, String username, String password) {
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone, SmsSender.SECURITY_CODE).url());
+
+        Http.RequestBuilder request = createRequestPhoneCodeRequest(phone);
 
         Result result = route(request);
         assertThat(result.status(), is(OK));
@@ -73,6 +75,39 @@ public interface LoginTest extends DbTest {
         assertThat(jsonResult.getMessage(), is(nullValue()));
 
     }
+
+    /**
+     * 请求注册页面，得到访问短信接口需要的校验码
+     * @return
+     */
+    default String requestSmsSecurityCode() {
+        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.LoginController.registerPage().url());
+        Result result = route(request);
+        assertThat(result.status(), is(OK));
+        String html = contentAsString(result);
+        Pattern pattern = Pattern.compile(".*name=\"r_code\" value=\"(\\w+)\".*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(html);
+        if(!matcher.matches()) {
+            throw new AssertionError("注册页面没有返回r_code, html: " + html);
+        }
+        String code = matcher.group(1);
+        assertThat(code, notNullValue());
+        return code;
+    }
+
+    default Http.RequestBuilder createRequestPhoneCodeRequest(String phone) {
+
+        String code = requestSmsSecurityCode();
+
+        try {
+            return new Http.RequestBuilder().method(POST).
+                    uri(routes.LoginController.requestPhoneCode(phone, code).url()).
+                    session(SmsSender.SECURITY_CODE_KEY, EncryptUtil.encrypt(code));
+        } catch (AppException e) {
+            throw new AppBusinessException(e);
+        }
+    }
+
 
     /**
      * 登录
