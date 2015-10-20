@@ -28,7 +28,14 @@ public class DesignerView {
      */
     private String storePic;
 
-    /** 是否收藏 */
+    /**
+     * 店铺页的LOGO大图
+     */
+    private String storeLogoPic;
+
+    /**
+     * 是否收藏
+     */
     private boolean isFavorites;
 
     public String getStorePic() {
@@ -95,4 +102,11 @@ public class DesignerView {
         this.isFavorites = isFavorites;
     }
 
+    public String getStoreLogoPic() {
+        return storeLogoPic;
+    }
+
+    public void setStoreLogoPic(String storeLogoPic) {
+        this.storeLogoPic = storeLogoPic;
+    }
 }

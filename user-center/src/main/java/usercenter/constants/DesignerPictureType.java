@@ -11,7 +11,8 @@ public enum DesignerPictureType implements ViewEnum {
     IndexLogoSmallPic("Logo小图","120*60"),
     ListLogoBigPic("Logo大图","289*60"),
     ListMainPic("主图","289*460"),
-    StorePic("店铺首图","439*370");
+    StorePic("店铺首图","439*370"),
+    StoreLogoPic("店铺页LOGO图", "1903");
 
     public String value;
 
