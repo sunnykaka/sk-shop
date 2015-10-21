@@ -21,6 +21,6 @@ public class DesignerTest  extends BaseTest {
 
     @Test
     public void testFindAllDesigner(){
-        designerService.designerById(null,null);
+        designerService.designerByPriority(null);
     }
 }
