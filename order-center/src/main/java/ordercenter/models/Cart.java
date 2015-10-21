@@ -172,7 +172,7 @@ public class Cart implements EntityClass<Integer> {
     public void filterSelectedCartItem(List<Integer> selCartItemIdList) {
 
         this.cartItemList = this.cartItemList.stream().
-                filter(selCartItemIdList::contains).collect(Collectors.toList());
+                filter(cartItem -> selCartItemIdList.contains(cartItem.getId())).collect(Collectors.toList());
 
     }
 }

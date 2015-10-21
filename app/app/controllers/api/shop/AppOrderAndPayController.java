@@ -90,14 +90,13 @@ public class AppOrderAndPayController extends BaseController {
             }
 
             User curUser = this.currentUser();
-            curUserName = curUser.getUserName();
+            List<Integer> selCartItemIdList = null;
 
-            String[] split = null;
             if (isPromptlyPay) {  //立即购买
                 int skuId = 0;
                 int number = 0;
                 try {
-                    split = selItems.split(":");
+                    String[] split = selItems.split(":");
                     skuId = Integer.valueOf(split[0]);
                     number = Integer.valueOf(split[1]);
                 } catch (Exception e) {
@@ -116,7 +115,7 @@ public class AppOrderAndPayController extends BaseController {
                 cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
             } else {
-                List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split(",")).stream().
+                selCartItemIdList = Lists.newArrayList(selItems.split(",")).stream().
                         map(Integer::parseInt).collect(Collectors.toList());
                 cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
             }
@@ -143,7 +142,7 @@ public class AppOrderAndPayController extends BaseController {
             Client clientParam = Client.valueOf(client);
 
             //生成订单、生成配送信息
-            String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address, clientParam);
+            String orderIds = orderService.submitOrderProcess(selCartItemIdList, curUser, cart, address, clientParam);
 
             //去支付（产生交易和支付部分没做）
             PayBank payBank = PayBank.valueOf(payOrg);
@@ -205,10 +204,10 @@ public class AppOrderAndPayController extends BaseController {
             }
             return ok(JsonUtils.object2Node(payInfoMap));
         } catch (AppBusinessException e) {
-            Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
+            Logger.error("提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             throw e;
         } catch (Exception e) {
-            Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
+            Logger.error("提交的订单在生成订单的过程中出现异常，其购物车信息：" + cart, e);
             throw new AppBusinessException(ErrorCode.Conflict, "生成订单失败，请联系商城客服人员！");
         }
     }

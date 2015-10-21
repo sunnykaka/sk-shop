@@ -94,14 +94,13 @@ public class OrderAndPayController extends Controller {
             }
 
             User curUser = SessionUtils.currentUser();
-            curUserName = curUser.getUserName();
+            List<Integer> selCartItemIdList = null;
 
-            String[] split = null;
             if (isPromptlyPay) {  //立即购买
                 int skuId = 0;
                 int number = 0;
                 try {
-                    split = selItems.split(":");
+                    String[] split = selItems.split(":");
                     skuId = Integer.valueOf(split[0]);
                     number = Integer.valueOf(split[1]);
                 } catch (Exception e) {
@@ -114,7 +113,7 @@ public class OrderAndPayController extends Controller {
                 cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
             } else {
-                List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split(",")).stream().
+                selCartItemIdList = Lists.newArrayList(selItems.split("_")).stream().
                         map(Integer::parseInt).collect(Collectors.toList());
                 cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
                 cartService.verifyCart(cart, selCartItemIdList);
@@ -127,12 +126,12 @@ public class OrderAndPayController extends Controller {
             }
 
             //生成订单相关信息
-            String orderIds = orderService.submitOrderProcess(selItems, isPromptlyPay, curUser, cart, address, Client.Browser);
+            String orderIds = orderService.submitOrderProcess(selCartItemIdList, curUser, cart, address, Client.Browser);
             return ok(new JsonResult(true, "生成订单成功", orderIds).toNode());
         } catch (AppBusinessException e) {
             return ok(new JsonResult(false, e.getMessage()).toNode());
         } catch (Exception e) {
-            Logger.error(curUserName + "提交的订单在生成订单的过程中出现异常", e);
+            Logger.error("提交的订单在生成订单的过程中出现异常", e);
             return ok(new JsonResult(false, "生成订单失败，请联系商城客服人员！").toNode());
         }
     }
