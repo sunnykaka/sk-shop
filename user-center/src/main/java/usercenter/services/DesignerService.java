@@ -78,14 +78,55 @@ public class DesignerService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<DesignerView> designerById(Integer id, Page page) {
-        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic,t2.StoreLogoPic from customer as t1 left JOIN" +
+    public List<DesignerView> designerById(Integer id) {
+        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic,t2.StoreLogoPic, t1.content from customer as t1 left JOIN" +
                 " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
                 "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
                 "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic , max(if(picType='StoreLogoPic',pictureUrl,NULL )) as StoreLogoPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete=0 and t1.isPublished = 1 ";
-        if (id != null) {
-            sql += " and t1.id = " + id;
+        sql += " and t1.id = " + id;
+        sql += " order by t1.priority desc, id desc  ";
+        List list = generalDAO.getEm().createNativeQuery(sql).getResultList();
+        List<DesignerView> result = new ArrayList<>();
+        for (Object obj : list) {
+            Object[] designer = (Object[]) obj;
+            DesignerView dv = new DesignerView();
+            dv.setId((Integer) designer[0]);
+            dv.setName(designer[1].toString());
+
+            if (designer[2] != null) {
+                dv.setDescription(designer[2].toString());
+            }
+            /**
+             * 防止有些设计师，没有设置主图
+             */
+            if (designer[3] != null) {
+                dv.setStorePic(designer[3].toString());
+            }
+            if (designer[4] != null) {
+                dv.setMainPic(designer[4].toString());
+            }
+            if (designer[5] != null) {
+                dv.setBrandPic(designer[5].toString());
+            }
+            if (designer[6] != null) {
+                dv.setStoreLogoPic(designer[6].toString());
+            }
+            if (designer[7] != null) {
+                dv.setContent(designer[7].toString());
+            }
+            result.add(dv);
+
         }
+        return result;
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<DesignerView> designerByPriority(Page page) {
+        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
+                " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
+                "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
+                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete=0 and t1.isPublished = 1 ";
         sql += " order by t1.priority desc, id desc  ";
         if (page != null) {
             sql += " limit " + page.getStart() + " , " + page.getLimit();
@@ -113,14 +154,12 @@ public class DesignerService {
             if (designer[5] != null) {
                 dv.setBrandPic(designer[5].toString());
             }
-            if (designer[6] != null) {
-                dv.setStoreLogoPic(designer[6].toString());
-            }
             result.add(dv);
 
         }
         return result;
     }
+
 
     /**
      * 根据ID查询

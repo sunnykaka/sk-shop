@@ -13,6 +13,8 @@ public class DesignerView {
 
     private String description;
 
+    private String content;
+
     /**
      * 设计师列表页主图
      */
@@ -108,5 +110,13 @@ public class DesignerView {
 
     public void setStoreLogoPic(String storeLogoPic) {
         this.storeLogoPic = storeLogoPic;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

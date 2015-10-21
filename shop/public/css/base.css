@@ -872,6 +872,7 @@ table .pro{width: 360px;}
 .designer-list .designer-list-con .more:hover,.detail-inner .img-list .open-detail:hover,.detail-inner .img-list .hide-detail:hover{border-color: #000;color:#000;}
 /*end designer-list*/
 /*designer-brand*/
+#shopContent{width:1200px;margin: 0 auto;}
 .designer-brand{margin-bottom: 100px;}
 .designer-brand-inner .top-con{height: 370px;overflow: hidden;margin-bottom: 20px;}
 .designer-brand-inner .top-con img{ float: left;margin-right: 30px;}

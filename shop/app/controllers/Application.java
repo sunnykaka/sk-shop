@@ -74,7 +74,7 @@ public class Application extends Controller {
         /**
          * 1.获取设计师信息，并校验设计师是否存在
          */
-        List<DesignerView> designers = designerService.designerById(dId, null);
+        List<DesignerView> designers = designerService.designerById(dId);
         DesignerView designer = null;
         if (designers != null) {
             designer = designers.get(0);
@@ -152,7 +152,7 @@ public class Application extends Controller {
      */
     public Result designers(int currPage) {
         Page page = new Page(currPage, 8);
-        List<DesignerView> list = designerService.designerById(null, page);
+        List<DesignerView> list = designerService.designerByPriority(page);
 //        List<CmsContent> contents = cmsService.allContents();
 //        CmsContent content = contents.stream().filter(co -> co.getPosition().equals(CmsPosition.DESIGNER_LIST_LOGO)).findFirst().get();
         Integer count = designerService.allOnlineDesignerCount();
@@ -161,7 +161,7 @@ public class Application extends Controller {
 
     public Result designers4More(int currPage) {
         Page page = new Page(currPage, 8);
-        List<DesignerView> list = designerService.designerById(null, page);
+        List<DesignerView> list = designerService.designerByPriority(page);
         return ok(new JsonResult(true, "", list).toNode());
     }
 
