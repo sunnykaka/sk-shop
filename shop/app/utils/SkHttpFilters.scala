@@ -19,7 +19,7 @@ class SkHttpFilters @Inject() (
   val filters = {
     var seq = Seq[EssentialFilter]()
     if(configuration.getBoolean("kamon.statsEnable").getOrElse(false)) {
-      seq = Seq(kamonRequestFilter) ++ seq
+      seq = seq :+ kamonRequestFilter
     }
     seq
   }

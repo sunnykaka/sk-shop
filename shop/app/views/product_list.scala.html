@@ -97,34 +97,38 @@
 
 } {
     <div id="container">
+        @if(designer.getStoreLogoPic != null && designer.getStoreLogoPic != "") {
+            <div style="height: 501px;background: url(@designer.getStoreLogoPic) repeat 50% 50%"></div>
+        }
         <div class="designer-brand">
             <div class="designer-brand-inner width1200">
-                <div class="bread-nav">
-                    <ul class="clearfix">
-                        <li><a href="@controllers.routes.Application.index()">首页</a></li>
-                        <li>&gt;</li>
-                        <li><a href="@controllers.routes.Application.designers()">设计师</a></li>
-                        <li>&gt;</li>
-                        <li>@designer.getName</li>
-                    </ul>
-                </div>
-                <div class="top-con">
-                    <img alt="@designer.getName" src="@designer.getStorePic" width="439px" height="370px"/>
-                    <div class="designer-con">
-                        <div class="designer-con-title">
-                            <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites) {hasFocus}" id="designerFocus" data-id="@designer.getId">
-                                <i class="iconfont shi" @if(!designer.isFavorites) {
-                                    style="display: none;"}>&#xe613;</i> <i class="iconfont kong" @if(designer.isFavorites) {
-                                style="display: none;"}>&#xe601;</i>
-                                <span class="focus-text">@if(designer.isFavorites) {已}关注</span></span>
-                            </h2>
-                        </div>
-                        <div class="designer-con-content">
-                            <p> @designer.getDescription</p>
+                @if(designer.getStoreLogoPic == null || designer.getStoreLogoPic == "") {
+                    <div class="bread-nav">
+                        <ul class="clearfix">
+                            <li><a href="@controllers.routes.Application.index()">首页</a></li>
+                            <li>&gt;</li>
+                            <li><a href="@controllers.routes.Application.designers()">设计师</a></li>
+                            <li>&gt;</li>
+                            <li>@designer.getName</li>
+                        </ul>
+                    </div>
+                    <div class="top-con">
+                        <img alt="@designer.getName" src="@designer.getStorePic" width="439px" height="370px"/>
+                        <div class="designer-con">
+                            <div class="designer-con-title">
+                                <h2><span>@designer.getName</span> <span class="focus @if(designer.isFavorites) {hasFocus}" id="designerFocus" data-id="@designer.getId">
+                                    <i class="iconfont shi" @if(!designer.isFavorites) {
+                                        style="display: none;"}>&#xe613;</i> <i class="iconfont kong" @if(designer.isFavorites) {
+                                    style="display: none;"}>&#xe601;</i>
+                                    <span class="focus-text">@if(designer.isFavorites) {已}关注</span></span>
+                                </h2>
+                            </div>
+                            <div class="designer-con-content">
+                                <p> @designer.getDescription</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
+                }
 
                 @if(sellingList != null && sellingList.size > 0) {
                     <div class="brand-start-fashion">
@@ -151,7 +155,6 @@
                     </div>
                 }
 
-
                 @if(previewList != null && previewList.size > 0) {
                     <div class="ready-online">
                         <h3>预售商品</h3>
@@ -176,7 +179,6 @@
 
                 }
 
-
                 @if(normalList != null && normalList.size > 0) {
                     <div class="hot-sale">
                         <h3>热销产品</h3>
@@ -199,7 +201,6 @@
                         </ul>
                     </div>
                 }
-
 
                 @if(planProds != null && planProds.size > 0) {
                     <div class="brand-start-fashion">

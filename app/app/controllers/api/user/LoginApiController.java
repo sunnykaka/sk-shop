@@ -12,6 +12,7 @@ import common.utils.RegExpUtils;
 import controllers.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -68,7 +69,7 @@ public class LoginApiController extends BaseController {
 
     public Result requestPhoneCode() throws AppException {
         String phone = ParamUtils.getByKey(request(), "phone");
-        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
+        SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
 
         smsSender.sendPhoneVerificationMessage();
 
@@ -127,7 +128,7 @@ public class LoginApiController extends BaseController {
             throw new AppBusinessException(ErrorCode.UsernameExist,"用户不存在");
         }
 
-        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
+        SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
 
         smsSender.sendPhoneVerificationMessage();
 
@@ -147,7 +148,7 @@ public class LoginApiController extends BaseController {
             try {
                 PhoneCodeForm phoneCode = phoneCodeForm.get();
 
-                if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
+                if(!new SmsSender(phoneCode.getPhone(), request().remoteAddress(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
                     throw new AppBusinessException(ErrorCode.VerifyCodeError);
                 }
 

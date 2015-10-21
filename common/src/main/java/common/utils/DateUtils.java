@@ -105,4 +105,9 @@ public class DateUtils {
 
     }
 
+    public static String toadyInString() {
+        return DateUtils.print(DateUtils.current(), "yyyyMMdd");
+    }
+
+
 }

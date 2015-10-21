@@ -34,10 +34,10 @@ public class DesignerService {
      */
     @Transactional(readOnly = true)
     public List<DesignerView> lastCreateDesigner(int count) {
-        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
+        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic,t2.StoreLogoPic from customer as t1 left JOIN" +
                 " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
                 "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
-                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete =0 and t1.isPublished = 1 order by id desc limit ?1";
+                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic,max(if(picType='StoreLogoPic',pictureUrl,NULL )) as StoreLogoPic  from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete =0 and t1.isPublished = 1 order by id desc limit ?1";
         List list = generalDAO.getEm().createNativeQuery(sql).setParameter(1, count).getResultList();
         List<DesignerView> result = new ArrayList<>();
         for (Object obj : list) {
@@ -61,6 +61,9 @@ public class DesignerService {
             if (designer[5] != null) {
                 dv.setBrandPic(designer[5].toString());
             }
+            if (designer[6] != null) {
+                dv.setStoreLogoPic(designer[6].toString());
+            }
 
             result.add(dv);
 
@@ -76,10 +79,10 @@ public class DesignerService {
      */
     @Transactional(readOnly = true)
     public List<DesignerView> designerById(Integer id, Page page) {
-        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
+        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic,t2.StoreLogoPic from customer as t1 left JOIN" +
                 " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
                 "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
-                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete=0 and t1.isPublished = 1 ";
+                "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic , max(if(picType='StoreLogoPic',pictureUrl,NULL )) as StoreLogoPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete=0 and t1.isPublished = 1 ";
         if (id != null) {
             sql += " and t1.id = " + id;
         }
@@ -110,7 +113,9 @@ public class DesignerService {
             if (designer[5] != null) {
                 dv.setBrandPic(designer[5].toString());
             }
-
+            if (designer[6] != null) {
+                dv.setStoreLogoPic(designer[6].toString());
+            }
             result.add(dv);
 
         }

@@ -30,44 +30,26 @@
 
 
 @main(new Seo(Messages("index.title"), Messages("seo.description"), Messages("seo.Keywords")))("index") {
-    <script src="@routes.Assets.versioned("js/mobilyslider.js")"></script>
+    <script src="@routes.Assets.versioned("js/jquery.flexslider-min.js")"></script>
     <script src="@routes.Assets.versioned("js/index.js")"></script>
 
 } {
     <div id="container">
-            <!--slider-box-->
+            <!--flexslider-box-->
         @if(modules.size >= 1) {
-            <div class="slider-box">
-                <div class="slider-box-inner">
-                    <div class="slider-box-img">
-                    @for((content, index) <- modules(0).getContents.zipWithIndex) {
-
-                        <div class="item" style="z-index : @{
-                            modules(0).getContents.size - index
-                        };background-image:url(@content.getPic); background-position: 50% 50%;">
-                        <a target="_blank" @if(content.getLink != null && content.getLink != "") {
-                            href="@content.getLink"
-                        } hidefocus="true" style="outline : none ;" alt="@content.getTitle">
-                    </a>
-                    </div>
-                    }
-                </div>
-                <div class="sliderBullets">
+            <div class="flexslider">
+                <ul class="slides">
                 @for((content, index) <- modules(0).getContents.zipWithIndex) {
-                    <a rel="@index"></a>
+                    <li  style="height:501px;background-image: url(@content.getPic); background-position: 50% 50%;">
+                        <a target="_blank" @if(content.getLink != null && content.getLink != "") {
+                        href="@content.getLink"
+                        } alt="@content.getTitle"></a>
+                    </li>
                 }
-                </div>
-                <div class="sliderArrows" style="z-index : 11 ;">
-                    <div>
-                        <a href="javascript:void(0)" class="png_bg prev" style="display : block ;"><i class="icon iconfont">&#xe616;</i></a>
-                        <a href="javascript:void(0)" class="png_bg next" style="display : block ;"><i class="icon iconfont">&#xe615;</i></a>
-                    </div>
-                </div>
+                </ul>
+            }
             </div>
-        }
-    </div>
-
-    <!--end slider-box-->
+    <!--end flexslider-box-->
 
 
     <!--start-fashion first-->
@@ -106,13 +88,7 @@
                             <img class="lazy" data-original="@exhibition.getPic()" src="@routes.Assets.versioned("images/grey.gif")" alt="@exhibition.getTitle" width="390" height="240" />
                             <div class="info">
                                 <p><span class="designer">@exhibition.getTitle</span></p>
-                                @*<div class="time">*@
-                                @*<span class="time-text">*@
-                                @*<i class="icon iconfont">&#xe605;</i>*@
-                                @*<span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>*@
-                                @*<span class="over-text">结束</span>*@
-                                @*</span>*@
-                                @*</div>*@
+
                             </div>
                         </a>
                     </li>
@@ -147,13 +123,6 @@
                         <div class="title">
                             <p><span class="designer">@exhibition.getTitle</span></p>
                             <div class="cover"></div>
-                            @*<div class="time">*@
-                            @*<span class="time-text">*@
-                            @*<i class="icon iconfont">&#xe605;</i>*@
-                            @*<span class="time-detail" value="@DateUtils.printDateTime(exhibition.getEndTime())">@DateUtils.printDateTime(exhibition.getEndTime())</span>*@
-                            @*<span class="over-text">结束</span>*@
-                            @*</span>*@
-                            @*</div>*@
                         </div>
                     </li>
                 }

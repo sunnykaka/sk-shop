@@ -42,15 +42,7 @@ public class LoginControllerTest extends BaseTest implements LoginTest {
         String username = RandomStringUtils.randomAlphabetic(1);
         String password = RandomStringUtils.randomAlphabetic(10);
 
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
-        Result result = route(request);
-        assertThat(result.status(), is(OK));
-        assertThat(result.contentType(), is("application/json"));
-        assertThat(contentAsString(result), containsString("true"));
-
-        String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
-        assertThat(verificationCode, notNullValue());
-        assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
+        String verificationCode = requestPhoneCode(phone);
 
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
@@ -58,8 +50,8 @@ public class LoginControllerTest extends BaseTest implements LoginTest {
         params.put("phone", phone);
         params.put("verificationCode", verificationCode);
 
-        request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
-        result = route(request);
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
+        Result result = route(request);
         assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(false));
@@ -76,25 +68,14 @@ public class LoginControllerTest extends BaseTest implements LoginTest {
         String username = userRegisterInfo.username;
         String password = userRegisterInfo.password;
 
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
-
-        Result result = route(request);
-        assertThat(result.status(), is(OK));
-        assertThat(result.contentType(), is("application/json"));
-        assertThat(contentAsString(result), containsString("true"));
-
-        String verificationCode = UserCache.getPhoneVerificationCode(phone, SmsSender.Usage.REGISTER);
-        assertThat(verificationCode, notNullValue());
-        assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
-
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
         params.put("password", password);
         params.put("phone", phone);
         params.put("verificationCode", "foobar");
 
-        request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
-        result = route(request);
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
+        Result result = route(request);
         assertThat(result.status(), is(OK));
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(false));
@@ -173,14 +154,14 @@ public class LoginControllerTest extends BaseTest implements LoginTest {
 
         String phone = "1" + RandomStringUtils.randomNumeric(10);
         for (int i = 0; i < SmsSender.SEND_MESSAGE_MAX_TIMES_IN_DAY; i++) {
-            Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
+            Http.RequestBuilder request = createPhoneCodeRequest(phone);
             Result result = route(request);
             assertThat(result.status(), is(OK));
             assertThat(result.contentType(), is("application/json"));
             assertThat(contentAsString(result), containsString("true"));
 
         }
-        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone).url());
+        Http.RequestBuilder request = createPhoneCodeRequest(phone);
 
         Result result = route(request);
         assertThat(result.status(), is(OK));

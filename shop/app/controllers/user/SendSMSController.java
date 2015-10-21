@@ -2,6 +2,7 @@ package controllers.user;
 
 import common.exceptions.AppException;
 import common.utils.JsonResult;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import usercenter.domain.SmsSender;
@@ -16,7 +17,7 @@ public class SendSMSController extends Controller {
 
     public Result sendSMS(String phone) {
 
-        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.BIND);
+        SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.BIND);
         try {
             smsSender.sendPhoneVerificationMessage();
         } catch (AppException e) {

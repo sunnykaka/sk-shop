@@ -98,8 +98,14 @@ public class LoginController extends Controller {
 
     }
 
-    public Result requestPhoneCode(String phone) {
-        SmsSender smsSender = new SmsSender(phone, SmsSender.Usage.REGISTER);
+    public Result requestPhoneCode(String phone, String code) {
+
+        if(!SmsSender.SECURITY_CODE.equals(code)) {
+            //客戶端沒有传递简单的校验码，可能是恶意请求，直接返回true，迷惑对面
+            return ok(new JsonResult(true).toNode());
+        }
+
+        SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
         try {
             smsSender.sendPhoneVerificationMessage();
         } catch (AppException e) {

@@ -103,7 +103,7 @@ public class RecoverController extends Controller {
             try {
                 PhoneCodeForm phoneCode = phoneCodeForm.get();
 
-                if(!new SmsSender(phoneCode.getPhone(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
+                if(!new SmsSender(phoneCode.getPhone(), request().remoteAddress(), SmsSender.Usage.REGISTER).verifyCode(phoneCode.getVerificationCode())) {
                     throw new AppBusinessException("校验码验证失败");
                 }
 
