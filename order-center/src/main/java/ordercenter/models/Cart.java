@@ -1,12 +1,15 @@
 package ordercenter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.models.utils.EntityClass;
 import common.utils.Money;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 购物车对象
@@ -43,10 +46,12 @@ public class Cart implements EntityClass<Integer> {
      */
     private Money totalMoney;
 
+
     /**
      * 商品条目
      */
-    private List<CartItem> cartItemList;
+    @JsonIgnore
+    private List<CartItem> cartItemList = new ArrayList<>(0);
 
 
     @Transient
@@ -58,7 +63,11 @@ public class Cart implements EntityClass<Integer> {
         this.totalMoney = totalMoney;
     }
 
-    @Transient
+    /**
+     * 得到有效的(未删除)的购物车项
+     * @return
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart")
     public List<CartItem> getCartItemList() {
         return cartItemList;
     }
@@ -76,18 +85,6 @@ public class Cart implements EntityClass<Integer> {
 
     public Cart(String trackId) {
         this.trackId = trackId;
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", trackId='" + trackId + '\'' +
-                ", createDate=" + createDate +
-                ", totalMoney=" + totalMoney +
-                ", cartItemList=" + cartItemList +
-                '}';
     }
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -130,5 +127,52 @@ public class Cart implements EntityClass<Integer> {
 
     public void setCreateDate(DateTime createDate) {
         this.createDate = createDate;
+    }
+
+    /**
+     * 得到未删除的购物车项
+     * @return
+     */
+    @Transient
+    public List<CartItem> getNotDeleteCartItemList() {
+        return cartItemList.stream().filter(x -> !x.getIsDelete()).collect(Collectors.toList());
+    }
+
+
+    /**
+     * 计算购物车中商品总数量
+     * @return
+     */
+    public int calcTotalNum() {
+        int totalNum = 0;
+        for(CartItem cartItem : getNotDeleteCartItemList()) {
+            totalNum += cartItem.getNumber();
+        }
+        return totalNum;
+    }
+
+    /**
+     * 计算购物车中商品金额合计
+     * @return
+     */
+    public Money calcTotalMoney() {
+        Money totalMoney = Money.valueOf(0);
+        for(CartItem cartItem : getNotDeleteCartItemList()) {
+            if (cartItem.isOnline() == null || (cartItem.isOnline() && cartItem.isHasStock())) {
+                totalMoney = totalMoney.add(cartItem.getTotalPrice());
+            }
+        }
+        return totalMoney;
+    }
+
+    /**
+     * 过滤购物车项, 只留下选中的项
+     * @param selCartItemIdList
+     */
+    public void filterSelectedCartItem(List<Integer> selCartItemIdList) {
+
+        this.cartItemList = this.cartItemList.stream().
+                filter(cartItem -> selCartItemIdList.contains(cartItem.getId())).collect(Collectors.toList());
+
     }
 }

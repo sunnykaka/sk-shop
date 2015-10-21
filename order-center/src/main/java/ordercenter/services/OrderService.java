@@ -559,15 +559,15 @@ public class OrderService {
         return  logistics;
     }
 
-    public String submitOrderProcess(String selItems, boolean isPromptlyPay, User user, Cart cart, Address address, Client client) {
+    public String submitOrderProcess(List<Integer> selCartItemIdList, User user, Cart cart, Address address, Client client) {
         //将购物车项创建成订单项
-        List<CartItem> cartItemList = cart.getCartItemList();
+        List<CartItem> cartItemList = cart.getNotDeleteCartItemList();
 
         Map<Integer, List<CartItem>> designerCartItemListMap = new HashMap<Integer, List<CartItem>>();
         for(CartItem cartItem : cartItemList) {
             List<CartItem> designerCartItemList = designerCartItemListMap.get(cartItem.getCustomerId());
             if(designerCartItemList == null) {
-                designerCartItemList = new ArrayList<CartItem>();
+                designerCartItemList = new ArrayList<>();
             }
             designerCartItemList.add(cartItem);
             designerCartItemListMap.put(cartItem.getCustomerId(), designerCartItemList);
@@ -585,10 +585,9 @@ public class OrderService {
             order.setUserName(user.getUserName());
 
             List<CartItem> designerCartItemList = designerCartItemListMap.get(designerId);
-            Money totalMoney = Money.valueOf(0);
-            for(CartItem cartItem : designerCartItemList) {
-                totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
-            }
+            Money totalMoney = designerCartItemList.stream().
+                    map(CartItem::calTotalPrice).
+                    reduce(Money.valueOf(0d), Money::add);
             order.setTotalMoney(totalMoney);
 
             order.setOrderState(OrderState.Create);
@@ -640,8 +639,8 @@ public class OrderService {
             this.createLogistics(logistics);
 
             //非立即购买，需要清除用户购物车项
-            if(!isPromptlyPay) {
-                cartService.deleteSelectCartItemBySelIds(cart.getId(),selItems);
+            if(selCartItemIdList != null) {
+                selCartItemIdList.forEach(cartService::deleteCartItemById);
             }
         }
         return orderIdSb.toString();

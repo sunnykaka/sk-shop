@@ -4,8 +4,8 @@ import common.utils.Money;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 购物车对象
@@ -29,7 +29,7 @@ public class CartDto {
      */
     private List<CartItemDto> cartItemList;
 
-    public CartDto buildUserCart(Cart cart) {
+    public static CartDto buildUserCart(Cart cart) {
         if(cart == null)  {
             return  null;
         }
@@ -38,13 +38,10 @@ public class CartDto {
         cartDto.setId(cart.getId());
         cartDto.setTotalMoney(cart.getTotalMoney());
 
-        List<CartItem> cartItemList = cart.getCartItemList();
-        if(cartItemList != null) {
-            List<CartItemDto> cartItemDtoList = new ArrayList();
-            for(CartItem item : cartItemList) {
-                CartItemDto dto = new CartItemDto();
-                cartItemDtoList.add(dto.buildCartItemDto(item));
-            }
+        List<CartItem> cartItemList = cart.getNotDeleteCartItemList();
+        if(!cartItemList.isEmpty()) {
+            List<CartItemDto> cartItemDtoList = cartItemList.stream().
+                    map(CartItemDto::buildCartItemDto).collect(Collectors.toList());
             cartDto.setCartItemList(cartItemDtoList);
         }
         return cartDto;

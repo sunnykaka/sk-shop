@@ -1,7 +1,7 @@
 package controllers.product;
 
 import base.BaseTest;
-import base.DbTest;
+import common.utils.test.DbTest;
 import common.utils.DateUtils;
 import common.utils.JsonResult;
 import common.utils.page.Page;

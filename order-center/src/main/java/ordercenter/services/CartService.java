@@ -1,9 +1,11 @@
 package ordercenter.services;
 
+import com.google.common.collect.Lists;
+import common.exceptions.ErrorCode;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.Money;
-import common.utils.page.Page;
+import ordercenter.excepiton.CartException;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,12 @@ import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.Designer;
-import usercenter.services.DesignerService;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 购物Service
@@ -31,7 +33,6 @@ import java.util.Optional;
  * Date: 2015-04-29
  */
 @Service
-@Transactional
 public class CartService {
 
     @Autowired
@@ -46,108 +47,6 @@ public class CartService {
     @Autowired
     private ProductPictureService pictureService;
 
-    @Autowired
-    private DesignerService designerService;
-
-    //@Autowired
-    //private CmsService cmsService;
-
-
-    /**
-     * 向购物车中加入Sku商品
-     *
-     * @param skuId
-     * @param cart
-     */
-    public void addSkuToCart(Cart cart, int skuId, int number, boolean isReplace) {
-        List<CartItem> cartItemList = cart.getCartItemList();
-        boolean hasAdded = false;
-        //判断购物车中是否加入过这个商品，如果加过则只改数量
-        for (CartItem cartItem : cartItemList) {
-            if (cartItem.getSkuId() == skuId) {
-                if (isReplace) {
-                    cartItem.setNumber(number);
-                } else {
-                    cartItem.setNumber(cartItem.getNumber() + number);
-                }
-                this.updateCartItem(cartItem);
-                hasAdded = true;
-                break;
-            }
-        }
-        if (!hasAdded) {
-            CartItem cartItem = new CartItem();
-            cartItem.setSkuId(skuId);
-            cartItem.setCartId(cart.getId());
-            cartItem.setNumber(number);
-            this.createCartItem(cartItem);
-        }
-    }
-
-    /**
-     * 通过跟踪号id初始化购物车和购物车项
-     *
-     * @param trackId 预留 跟踪id，现在登陆才可以加入购物车，暂时用不上
-     * @param skuId
-     * @param number
-     */
-    public void initCartByTrackId(String trackId, int skuId, int number) {
-        Cart cart = new Cart(trackId);
-        this.createCart(cart);
-        CartItem cartItem = new CartItem();
-        cartItem.setSkuId(skuId);
-        cartItem.setCartId(cart.getId());
-        cartItem.setNumber(number);
-        this.createCartItem(cartItem);
-    }
-
-    /**
-     * 通过用户id初始化购物车和购物车项
-     *
-     * @param userId
-     * @param skuId
-     * @param number
-     */
-    public void initCartByUserId(int userId, int skuId, int number) {
-        Cart cart = new Cart(userId);
-        cart.setCreateDate(DateUtils.current());
-        this.createCart(cart);
-        CartItem cartItem = new CartItem();
-        cartItem.setSkuId(skuId);
-        cartItem.setCartId(cart.getId());
-        cartItem.setNumber(number);
-        this.createCartItem(cartItem);
-    }
-
-    /**
-     * 创建购物车
-     *
-     * @param cart
-     */
-    public void createCart(Cart cart) {
-        play.Logger.info("--------CartService createCart begin exe-----------" + cart);
-        generalDao.persist(cart);
-    }
-
-    /**
-     * 更新购物车内容
-     *
-     * @param cart
-     */
-    public void updateCart(Cart cart) {
-        play.Logger.info("--------CartService updateCart begin exe-----------" + cart);
-        generalDao.merge(cart);
-    }
-
-    /**
-     * 通过购物车id删除购物车
-     *
-     * @param cartId
-     */
-    public void deleteCart(int cartId) {
-        play.Logger.info("--------CartService deleteCart real delete  begin exe-----------" + cartId);
-        generalDao.removeById(Cart.class, cartId);
-    }
 
     /**
      * 通过购物车id获取购物车
@@ -157,35 +56,7 @@ public class CartService {
      */
     @Transactional(readOnly = true)
     public Cart getCart(int cartId) {
-        play.Logger.info("--------CartService getCart begin exe-----------" + cartId);
-        Cart cart = generalDao.get(Cart.class, cartId);
-        return cart;
-    }
-
-    @Transactional(readOnly = true)
-    private String getSelectAllCartSql() {
-        return "select v from Cart v where 1=1 ";
-    }
-
-    /**
-     * 通过cookie等跟踪id获取购物车
-     *
-     * @param trackId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public Cart getCartByTrackId(String trackId) {
-        String jpql = getSelectAllCartSql();
-        Map<String, Object> queryParams = new HashMap<>();
-        jpql += " and v.trackId = :trackId ";
-        queryParams.put("trackId", trackId);
-
-        Cart cart = null;
-        List<Cart> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
-        if (itemList != null && itemList.size() > 0) {
-            cart = itemList.get(0);
-        }
-        return cart;
+        return generalDao.get(Cart.class, cartId);
     }
 
     /**
@@ -194,113 +65,29 @@ public class CartService {
      * @param userId
      * @return
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Cart getCartByUserId(int userId) {
-        String jpql = getSelectAllCartSql();
+        String jpql = "select c from Cart c where c.userId = :userId ";
         Map<String, Object> queryParams = new HashMap<>();
 
-        jpql += " and v.userId = :userId ";
         queryParams.put("userId", userId);
 
-        Cart cart = null;
-        List<Cart> itemList = generalDao.query(jpql, Optional.ofNullable(null), queryParams);
-        if (itemList != null && itemList.size() > 0) {
-            cart = itemList.get(0);
-        }
-        return cart;
-    }
-
-
-    //////////////////////////////购物车项////////////////////////////////////////////////
-
-    /**
-     * 创建购物车项
-     *
-     * @param cartItem
-     */
-    public void createCartItem(CartItem cartItem) {
-        generalDao.persist(cartItem);
-    }
-
-    /**
-     * 更新购物车项
-     *
-     * @param cartItem
-     */
-    public void updateCartItem(CartItem cartItem) {
-        generalDao.merge(cartItem);
-    }
-
-    /**
-     * 更新购物车项
-     *
-     * @param cartItemList
-     */
-    public void updateCartItemList(List<CartItem> cartItemList) {
-        for (CartItem cartItem : cartItemList) {
-            updateCartItem(cartItem);
+        List<Cart> itemList = generalDao.query(jpql, Optional.empty(), queryParams);
+        if (itemList.isEmpty()) {
+            return null;
+        } else {
+            return itemList.get(0);
         }
     }
 
-    /**
-     * 通过购物车主键id获取购物车项，不包括已经删除的购物项
-     *
-     * @param cartId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<CartItem> queryCarItemsByCartId(int cartId) {
-        play.Logger.info("--------CartService queryAllProducts begin exe-----------");
-
-        String jpql = "select o from CartItem o where 1=1 and o.isDelete=:isDelete and o.cartId=:cartId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("isDelete", false);
-        queryParams.put("cartId", cartId);
-        return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
-    }
-
-    /**
-     * 通过购物车主键id获取购物车项，不包括已经删除的购物项
-     *
-     * @param cartId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<CartItem> queryUserSelCarItemsByCartId(int cartId) {
-        play.Logger.info("--------CartService queryAllProducts begin exe-----------");
-
-        String jpql = "select o from CartItem o where 1=1 and o.isDelete=:isDelete and selected=:selected and o.cartId=:cartId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("isDelete", false);
-        queryParams.put("selected", true);
-        queryParams.put("cartId", cartId);
-        return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
-    }
-
-    /**
-     * 通过购物车主键id，和选中的购物车项id获取购物车项，不包括已经删除的购物项
-     *
-     * @param cartId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<CartItem> queryUserSelCarItemsByIds(int cartId, String cartItems) {
-        play.Logger.info("--------CartService queryUserSelCarItemsByIds begin exe-----------");
-
-        String jpql = "select o from CartItem o where 1=1 and o.id in(" + cartItems + ") and o.cartId=:cartId";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("cartId", cartId);
-        return generalDao.query(jpql, Optional.<Page<CartItem>>empty(), queryParams);
-    }
 
     /**
      * 通过cartId来删除购物车项，只删除支付时选中的购物车项(假删除)
      *
      * @param cartId
      */
+    @Transactional
     public void deleteSelectCartItemBySelIds(int cartId, String selItems) {
-        play.Logger.info("--------CartService deleteSelectCartItemBySelIds begin exe-----------" + cartId + " : " + selItems);
-
         String jpql = "update CartItem v set v.isDelete=:isDelete where v.id in(" + selItems + ") and cartId=:cartId ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("isDelete", true);
@@ -313,16 +100,25 @@ public class CartService {
      *
      * @param cartItemId
      */
+    @Transactional
     public void deleteCartItemById(int cartItemId) {
-        String jpql = "update CartItem v set v.isDelete=:isDelete where v.id=:cartItemId ";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("isDelete", true);
-        queryParams.put("cartItemId", cartItemId);
-        generalDao.update(jpql, queryParams);
+        CartItem cartItem = getCartItem(cartItemId);
+        if(cartItem != null) {
+            cartItem.setIsDelete(true);
+            generalDao.persist(cartItem);
+        }
     }
 
-
-////////////////////////////把CartProcess类拷贝到CartService/////////////////////////////////////////////////////
+    /**
+     * 通过id获取购物车项
+     *
+     * @param cartItemId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public CartItem getCartItem(Integer cartItemId) {
+        return generalDao.get(CartItem.class, cartItemId);
+    }
 
 
     /**
@@ -336,16 +132,7 @@ public class CartService {
     public Cart buildUserCart(int userId) {
         Cart cart = this.getCartByUserId(userId);
         if (cart != null) {
-            List<CartItem> cartItems = this.queryCarItemsByCartId(cart.getId());
-            cart.setCartItemList(cartItems);
-            //合计价格
-            Money totalMoney = Money.valueOf(0);
-            if (cartItems != null && cartItems.size() > 0) {
-                for (CartItem cartItem : cartItems) {
-                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem, true));
-                }
-            }
-            cart.setTotalMoney(totalMoney);
+            fillCartItemValues(cart);
         }
         return cart;
     }
@@ -358,141 +145,267 @@ public class CartService {
      * @return
      */
     @Transactional
-    public Cart buildUserCartBySelItem(int userId, String selCartItems) {
+    public Cart buildUserCartBySelItem(int userId, List<Integer> selCartItemIdList) {
         Cart cart = this.getCartByUserId(userId);
         if (cart != null) {
-            List<CartItem> cartItems = this.queryUserSelCarItemsByIds(cart.getId(), selCartItems);
-            cart.setCartItemList(cartItems);
-            //合计价格
-            Money totalMoney = Money.valueOf(0);
-            if (cartItems != null && cartItems.size() > 0) {
-                for (CartItem cartItem : cartItems) {
-                    totalMoney = totalMoney.add(this.setCartItemValues(cartItem));
-                }
-            }
-            cart.setTotalMoney(totalMoney);
+            cart.filterSelectedCartItem(selCartItemIdList);
+            fillCartItemValues(cart);
         }
         return cart;
     }
 
-    /**
-     * 设置订单项的各个需要的属性值
-     *
-     * @param cartItem
-     */
-    @Transactional
-    public Money setCartItemValues(CartItem cartItem) {
-        return setCartItemValues(cartItem, false);
-    }
 
     /**
      * 设置订单项的各个需要的属性值
      *
-     * @param cartItem
-     * @param isForShowCart 是否是购物车展示界面
+     * @param cart
      */
-    @Transactional
-    public Money setCartItemValues(CartItem cartItem, boolean isForShowCart) {
-        Money totalMoney = Money.valueOf(0);
+    private void fillCartItemValues(Cart cart) {
 
-        cartItem.setCurUnitPrice(Money.valueOf(0));
-        cartItem.setOnline(false);
-        cartItem.setHasStock(false);
-        cartItem.setStockQuantity(0);
-        cartItem.setTradeMaxNumber(0);
-        cartItem.setCustomerName("");
+        for(CartItem cartItem : cart.getNotDeleteCartItemList()) {
 
-        StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
-        if (stockKeepingUnit != null) {
-            cartItem.setSku(stockKeepingUnit);
-            cartItem.setBarCode(stockKeepingUnit.getBarCode());
+            cartItem.setCurUnitPrice(Money.valueOf(0));
+            cartItem.setOnline(false);
+            cartItem.setHasStock(false);
+            cartItem.setStockQuantity(0);
+            cartItem.setTradeMaxNumber(0);
+            cartItem.setCustomerName("");
 
-            Product product = productService.getProductById(stockKeepingUnit.getProductId());
-            if (product != null) {
-                cartItem.setProductId(product.getId());
-                cartItem.setProductName(product.getName());
-                cartItem.setCategoryId(product.getCategoryId());
-                cartItem.setCustomerId(product.getCustomerId());
-                Designer designer = product.getCustomer();
-                if (designer != null) {
-                    cartItem.setCustomerName(designer.getName());
+            StockKeepingUnit stockKeepingUnit = skuService.getStockKeepingUnitById(cartItem.getSkuId());
+            if (stockKeepingUnit != null) {
+                cartItem.setSku(stockKeepingUnit);
+                cartItem.setBarCode(stockKeepingUnit.getBarCode());
+
+                Product product = productService.getProductById(stockKeepingUnit.getProductId());
+                if (product != null) {
+                    cartItem.setProductId(product.getId());
+                    cartItem.setProductName(product.getName());
+                    cartItem.setCategoryId(product.getCategoryId());
+                    cartItem.setCustomerId(product.getCustomerId());
+                    Designer designer = product.getCustomer();
+                    if (designer != null) {
+                        cartItem.setCustomerName(designer.getName());
+                    }
                 }
-            }
 
-            //图片
-            ProductPicture picture = pictureService.getMinorProductPictureByProductId(stockKeepingUnit.getProductId());
-            cartItem.setMainPicture(picture.getPictureUrl());
+                //图片
+                ProductPicture picture = pictureService.getMinorProductPictureByProductId(stockKeepingUnit.getProductId());
+                cartItem.setMainPicture(picture.getPictureUrl());
 
-            //设置库存信息
-            SkuStorage skuStorage = skuService.getSkuStorage(stockKeepingUnit.getId());
-            if (skuStorage != null) {
-                int maxStockNum = skuStorage.getStockQuantity();
-                cartItem.setStockQuantity(maxStockNum);
-                if (maxStockNum > 0) {
-                    cartItem.setHasStock(true);
+                //设置库存信息
+                SkuStorage skuStorage = skuService.getSkuStorage(stockKeepingUnit.getId());
+                if (skuStorage != null) {
+                    int maxStockNum = skuStorage.getStockQuantity();
+                    cartItem.setStockQuantity(maxStockNum);
+                    if (maxStockNum > 0) {
+                        cartItem.setHasStock(true);
+                    }
+                    cartItem.setTradeMaxNumber(skuStorage.getTradeMaxNumber());
+                    cartItem.setStorageId(skuStorage.getId());
                 }
-                cartItem.setTradeMaxNumber(skuStorage.getTradeMaxNumber());
-                cartItem.setStorageId(skuStorage.getId());
-            }
 
-            //sku所属商品是否下架或被移除
-            if (stockKeepingUnit.canBuy()) {
-                if (product != null && (!product.getIsDelete()) && product.isOnline()) {
-                    cartItem.setOnline(true);
+                //sku所属商品是否下架或被移除
+                if (stockKeepingUnit.canBuy()) {
+                    if (product != null && (!product.getIsDelete()) && product.isOnline()) {
+                        cartItem.setOnline(true);
+                    }
                 }
-            }
 
-            //根据判断是否是首发，当前价格要现算(这个地方需要改一下) ldj
-            //boolean isFirstPublish = false;//cmsService.onFirstPublish(cartItem.getProductId());
-//            boolean isFirstPublish = false;
-//            if(product != null && product.getSaleStatus() != null) {
-//                isFirstPublish = product.getSaleStatus().equalsIgnoreCase(SaleStatus.FIRSTSELL.toString());
-//            }
-//            if(isFirstPublish) {
-//                cartItem.setCurUnitPrice(stockKeepingUnit.getPrice());
-//            } else {
-//                cartItem.setCurUnitPrice(stockKeepingUnit.getMarketPrice());
-//            }
-            /**
-             * 获取当前售价，首发，预售，即将开售则采用首发价
-             * 其它的则采用市场价
-             */
-            cartItem.setCurUnitPrice(skuService.getSkuCurrentPrice(stockKeepingUnit));
+                /**
+                 * 获取当前售价，首发，预售，即将开售则采用首发价
+                 * 其它的则采用市场价
+                 */
+                cartItem.setCurUnitPrice(skuService.getSkuCurrentPrice(stockKeepingUnit));
 
-            Money itemTotalMoney = cartItem.getCurUnitPrice().multiply(cartItem.getNumber());
+                cartItem.setTotalPrice(cartItem.calTotalPrice());
 
-            cartItem.setTotalPrice(itemTotalMoney);
-            if (isForShowCart) {
-                if (!cartItem.isOnline() || !cartItem.isHasStock()) {
-                    itemTotalMoney = Money.valueOf(0);
-                }
-            }
-
-            totalMoney = totalMoney.add(itemTotalMoney);
-
-        } else {
-            try {
+            } else {
                 Logger.warn("构建购物车时发现sku被删除:" + +cartItem.getSkuId() + " : " + cartItem.getCartId());
                 this.deleteCartItemById(cartItem.getId());
-            } catch (Exception e) {
-                Logger.warn("构建购物车删除sku失败:" + cartItem.getSkuId() + " : " + cartItem.getCartId());
+            }
+
+        }
+
+        cart.setTotalMoney(cart.calcTotalMoney());
+
+    }
+
+
+    /**
+     * 添加sku到购物车
+     * @param userId
+     * @param skuId
+     * @param number 购买数量
+     * @param isReplace 如果为true， 代表用number替换购物车中sku的数量，否则为叠加
+     * @return
+     */
+    @Transactional
+    public int addSkuToCart(Integer userId, int skuId, int number, boolean isReplace) {
+
+        Cart cart = getCartByUserId(userId);
+
+        int skuBuyNumber = number;
+        if(cart != null && !isReplace) {
+            for (CartItem cartItem : cart.getNotDeleteCartItemList()) {
+                if (cartItem.getSkuId() == skuId) {
+                    skuBuyNumber = number + cartItem.getNumber();
+                    break;
+                }
             }
         }
-        return totalMoney;
+
+        verifySkuToBuy(skuId, number, skuBuyNumber);
+
+        if(cart == null) {
+            cart = new Cart(userId);
+            cart.setCreateDate(DateUtils.current());
+            generalDao.persist(cart);
+
+            CartItem cartItem = new CartItem();
+            cartItem.setSkuId(skuId);
+            cartItem.setCartId(cart.getId());
+            cartItem.setNumber(skuBuyNumber);
+            generalDao.persist(cartItem);
+
+            cart.getCartItemList().add(cartItem);
+
+        } else {
+
+            boolean hasAdded = false;
+            for (CartItem cartItem : cart.getNotDeleteCartItemList()) {
+                if (cartItem.getSkuId() == skuId) {
+                    cartItem.setNumber(skuBuyNumber);
+                    generalDao.persist(cartItem);
+                    hasAdded = true;
+                    break;
+                }
+            }
+            if (!hasAdded) {
+                CartItem cartItem = new CartItem();
+                cartItem.setSkuId(skuId);
+                cartItem.setCartId(cart.getId());
+                cartItem.setNumber(number);
+                generalDao.persist(cartItem);
+
+                cart.getCartItemList().add(cartItem);
+            }
+        }
+
+        return cart.calcTotalNum();
     }
 
     /**
-     * 按照支付订单号列表重新计算支付总金额
-     *
-     * @param cartItemList
+     * 选择购物车中的项
+     * @param cart
+     * @param selCartItems 选中的购物车ID, 多个ID以","分隔
+     */
+    @Transactional
+    public void selectCartItems(Cart cart, String selCartItems) {
+
+        if(selCartItems == null || selCartItems.trim().length() == 0) {
+            throw new CartException(ErrorCode.Conflict, "请先选择购物车中的商品");
+        }
+
+        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split("_")).stream().
+                map(Integer::parseInt).collect(Collectors.toList());
+
+        verifyCart(cart, selCartItemIdList);
+
+        for (CartItem cartItem : cart.getNotDeleteCartItemList()) {
+            cartItem.setSelected(selCartItemIdList.contains(cartItem.getId()));
+            generalDao.persist(cartItem);
+        }
+    }
+
+    /**
+     * 为直接购买构造一个购物车，实际在数据库不存在
+     * @param skuId
+     * @param number
      * @return
      */
-    public Money calculateTotalMoney(List<CartItem> cartItemList) {
-        Money totalMoney = Money.valueOf(0);
-        for (CartItem cartItem : cartItemList) {
-            totalMoney = totalMoney.add(cartItem.getCurUnitPrice().multiply(cartItem.getNumber()));
+    @Transactional
+    public Cart fakeCartForPromptlyPay(int skuId, int number) {
+        Cart cart = new Cart();
+        CartItem cartItem = new CartItem();
+        cartItem.setSkuId(skuId);
+        cartItem.setNumber(number);
+        cartItem.setSelected(true);
+        cart.getCartItemList().add(cartItem);
+
+        fillCartItemValues(cart);
+
+        return cart;
+    }
+
+    /**
+     * 校验添加的sku是否符合购买条件
+     * @param skuId
+     * @param number 添加的数量
+     * @param skuBuyNumber 购物车内该sku总购买数量
+     */
+    @Transactional(readOnly = true)
+    public void verifySkuToBuy(int skuId, int number, int skuBuyNumber) {
+
+        if (skuId <= 0) {
+            throw new CartException(ErrorCode.Conflict, "无法找到商品信息");
         }
-        return totalMoney;
+
+        if (number < 1) {
+            throw new CartException(ErrorCode.Conflict, "添加商品到购物车失败, 添加的数量必须大于或等于1");
+        }
+
+        if (!skuService.isSkuUsable(skuId)) {
+            throw new CartException(ErrorCode.SkuNotAvailable);
+        }
+
+        SkuStorage skuStorage = skuService.getSkuStorage(skuId);
+        int maxCanBuyNum = Math.min(skuStorage.getTradeMaxNumber(), skuStorage.getStockQuantity());
+
+        if (skuBuyNumber > maxCanBuyNum) {
+            CartException ex = new CartException(ErrorCode.Conflict,
+                    String.format("超过最大购买商品数量,最多能够购买%d件", maxCanBuyNum));
+            ex.setMaxCanBuyNum(maxCanBuyNum);
+            throw ex;
+        }
+    }
+
+
+    /**
+     * 校验购物车内的商品是否符合购买条件
+     * @param cart
+     * @param selCartItemIdList
+     * @throws CartException
+     */
+    @Transactional(readOnly = true)
+    public void verifyCart(Cart cart, List<Integer> selCartItemIdList) {
+        if (cart == null || cart.getNotDeleteCartItemList().isEmpty()) {
+            throw new CartException(ErrorCode.Conflict, "您的购物车为空，请先选择商品");
+        }
+
+        if(selCartItemIdList == null || selCartItemIdList.isEmpty()) {
+            throw new CartException(ErrorCode.Conflict, "请先选择购物车中的商品");
+        }
+
+        for (CartItem cartItem : cart.getNotDeleteCartItemList()) {
+            if(selCartItemIdList.contains(cartItem.getId())) {
+                if(!cartItem.isHasStock()) {
+                    throw new CartException(ErrorCode.SkuNotAvailable, "商品" + cartItem.getProductName() + "已售罄");
+                }
+                if(!cartItem.isOnline()) {
+                    throw new CartException(ErrorCode.SkuNotAvailable, "商品" + cartItem.getProductName() + "已下架");
+                }
+                if(cartItem.getNumber() > cartItem.getStockQuantity()) {
+                    throw new CartException(ErrorCode.SkuNotAvailable,
+                            String.format("商品%s购买数量超过了库存数，库存只有%d个",
+                                    cartItem.getProductName(), cartItem.getStockQuantity()));
+                }
+                if(cartItem.getNumber() > cartItem.getTradeMaxNumber()) {
+                    throw new CartException(ErrorCode.SkuNotAvailable,
+                            String.format("商品%s最多只允许购买%d个",
+                                    cartItem.getProductName(), cartItem.getTradeMaxNumber()));
+                }
+            }
+        }
     }
 
 

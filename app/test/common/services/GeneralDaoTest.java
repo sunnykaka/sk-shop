@@ -1,7 +1,7 @@
 package common.services;
 
 import base.BaseTest;
-import base.DbTest;
+import common.utils.test.DbTest;
 import common.utils.DateUtils;
 import common.utils.Money;
 import ordercenter.constants.PlatformType;

@@ -22,7 +22,7 @@ public class CartItemDto extends TradeItemDto{
      */
     private boolean isDelete = false;
 
-    public CartItemDto buildCartItemDto(CartItem cartItem) {
+    public static CartItemDto buildCartItemDto(CartItem cartItem) {
         if(cartItem == null)  {
             return  null;
         }

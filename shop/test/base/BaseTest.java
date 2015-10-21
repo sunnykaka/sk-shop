@@ -3,13 +3,17 @@ package base;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import play.Application;
+import play.Logger;
 import play.api.ApplicationLoader;
 import play.api.ApplicationLoader$;
 import play.api.Environment$;
 import play.api.Mode$;
 import play.core.DefaultWebCommands;
+import play.mvc.Http;
+import play.mvc.Result;
 import play.test.Helpers;
 import scala.Option;
+import utils.Global;
 
 import java.io.File;
 

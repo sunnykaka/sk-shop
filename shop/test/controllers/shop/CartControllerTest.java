@@ -4,7 +4,6 @@ import base.BaseTest;
 import common.utils.JsonResult;
 import controllers.user.LoginTest;
 import ordercenter.models.Cart;
-import ordercenter.models.CartItem;
 import ordercenter.services.CartService;
 import org.junit.Test;
 import play.Logger;
@@ -117,11 +116,10 @@ public class CartControllerTest extends BaseTest implements LoginTest {
         Map data = (Map) jsonResult.getData();
         assertThat(data.get("itemTotalNum"), is(stockQuantity));
 
-        Integer cartItemId = doInTransactionWithGeneralDao(generalDao -> {
+        Integer cartItemId = doInSingleSession(generalDao -> {
             CartService cartService = Global.ctx.getBean(CartService.class);
             Cart cart = cartService.getCartByUserId(userId);
-            List<CartItem> cartItems = cartService.queryCarItemsByCartId(cart.getId());
-            return cartItems.get(0).getId();
+            return cart.getCartItemList().get(0).getId();
         });
 
         //请求结算接口
