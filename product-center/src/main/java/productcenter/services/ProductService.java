@@ -37,8 +37,6 @@ public class ProductService {
      * @return
      */
     public List<Product> queryAllProducts() {
-        play.Logger.info("--------ProductService queryAllProducts begin exe-----------");
-
         String jpql = "select o from Product o where 1=1 and o.isDelete=:isDelete";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("isDelete", false);
@@ -53,7 +51,6 @@ public class ProductService {
      * @return
      */
     public Product getProductById(int id) {
-        play.Logger.info("--------ProductService getProductById begin exe-----------" + id);
         return generalDao.get(Product.class, id);
     }
 

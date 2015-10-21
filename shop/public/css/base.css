@@ -873,6 +873,7 @@ table .pro{width: 360px;}
 /*end designer-list*/
 /*designer-brand*/
 #shopContent{width:1200px;margin: 0 auto;}
+#shopContent img{display: block;}
 .designer-brand{margin-bottom: 100px;}
 .designer-brand-inner .top-con{height: 370px;overflow: hidden;margin-bottom: 20px;}
 .designer-brand-inner .top-con img{ float: left;margin-right: 30px;}

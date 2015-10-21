@@ -6,6 +6,7 @@ import common.exceptions.AppBusinessException;
 import common.utils.JsonResult;
 import common.utils.page.Page;
 import common.utils.play.BaseGlobal;
+import dtos.ProductInSellList;
 import dtos.ProductInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
@@ -91,18 +92,26 @@ public class Application extends Controller {
         /**
          *组装产品相关的信息，包括：产品信息，产品主图，产品如果是首发就活取首发信息
          */
-        List<ProductInfo> productList = products.stream().map(prod -> {
-            ProductInfo info = new ProductInfo();
-            info.setProduct(prod);
-            info.setMainPic(productPictureService.getMinorProductPictureByProductId(prod.getId()));
-//            Optional<CmsExhibition> optional = cmsService.findExhibitionWithProdId(prod.getId());
-            info.setFavorites(productCollectService.isFavorites(user, prod.getId()));
-            info.setFavoritesNum(productCollectService.countProductCollect(prod.getId()));
-//            if (optional.isPresent()) {
-//                info.setCmsExhibition(optional.get());
-//            }
-            return info;
-        }).collect(toList());
+        ProductInSellList.Builder builder = ProductInSellList.Builder.getInstance();
+        List<ProductInSellList> productList = products.stream().map(prod -> builder.buildProdct(prod)).collect(toList());
+
+
+
+        /**
+         *组装产品相关的信息，包括：产品信息，产品主图，产品如果是首发就活取首发信息
+         */
+//        List<ProductInfo> productList = products.stream().map(prod -> {
+//            ProductInfo info = new ProductInfo();
+//            info.setProduct(prod);
+//            info.setMainPic(productPictureService.getMinorProductPictureByProductId(prod.getId()));
+////            Optional<CmsExhibition> optional = cmsService.findExhibitionWithProdId(prod.getId());
+//            info.setFavorites(productCollectService.isFavorites(user, prod.getId()));
+//            info.setFavoritesNum(productCollectService.countProductCollect(prod.getId()));
+////            if (optional.isPresent()) {
+////                info.setCmsExhibition(optional.get());
+////            }
+//            return info;
+//        }).collect(toList());
 
 //        /**
 //         * 如果设计师没有专场，那所有的商品直接展示为正常售卖
@@ -114,21 +123,21 @@ public class Application extends Controller {
         /**
          * 首发
          */
-        List<ProductInfo> sellProds = productList.stream().filter(prod ->
+        List<ProductInSellList> sellProds = productList.stream().filter(prod ->
                         prod.getProduct().getSaleStatus().equals(SaleStatus.FIRSTSELL.toString())
         ).collect(toList());
 
         /**
          * 预售
          */
-        List<ProductInfo> preProds = productList.stream().filter(prod ->
+        List<ProductInSellList> preProds = productList.stream().filter(prod ->
                         prod.getProduct().getSaleStatus().equals(SaleStatus.PRESELL.toString())
         ).collect(toList());
 
         /**
          * 热卖
          */
-        List<ProductInfo> normalProds = productList.stream().filter(prod ->
+        List<ProductInSellList> normalProds = productList.stream().filter(prod ->
                         prod.getProduct().getSaleStatus().equals(SaleStatus.HOTSELL.toString())
         ).collect(toList());
 
@@ -136,7 +145,7 @@ public class Application extends Controller {
         /**
          * 即将开售
          */
-        List<ProductInfo> planProds = productList.stream().filter(prod ->
+        List<ProductInSellList> planProds = productList.stream().filter(prod ->
                         prod.getProduct().getSaleStatus().equals(SaleStatus.PLANSELL.toString())
         ).collect(toList());
 
