@@ -148,7 +148,7 @@ public class AppOrderAndPayController extends BaseController {
             PayBank payBank = PayBank.valueOf(payOrg);
             PayMethod payMethodEnum = payBank.getPayMethod();
 
-            split = orderIds.split("_");
+            String[] split = orderIds.split("_");
             List<Order> orderList = new ArrayList(split.length);
             for (int i = 0; i < split.length; i++) {
                 int id = Integer.valueOf(split[i]);
