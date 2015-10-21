@@ -1,10 +1,8 @@
 package controllers.user;
 
 import base.DbTest;
-import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.DateUtils;
-import common.utils.EncryptUtil;
 import common.utils.JsonResult;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -14,8 +12,6 @@ import usercenter.utils.SessionUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static common.utils.TestUtils.UserRegisterInfo;
 import static common.utils.TestUtils.mockUserRegisterInfo;
@@ -48,7 +44,33 @@ public interface LoginTest extends DbTest {
      */
     default void registerUser(String phone, String username, String password) {
 
-        Http.RequestBuilder request = createRequestPhoneCodeRequest(phone);
+        String verificationCode = requestPhoneCode(phone);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        params.put("password", password);
+        params.put("phone", phone);
+        params.put("verificationCode", verificationCode);
+
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
+        Result result = route(request);
+        assertThat(result.status(), is(OK));
+        assertThat(result.flash().isEmpty(), is(true));
+        JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
+        assertThat(jsonResult.getResult(), is(true));
+        assertThat(jsonResult.getData(), is(notNullValue()));
+        assertThat(jsonResult.getMessage(), is(nullValue()));
+
+    }
+
+    default Http.RequestBuilder createPhoneCodeRequest(String phone) {
+
+        return new Http.RequestBuilder().method(POST).uri(routes.LoginController.requestPhoneCode(phone, SmsSender.SECURITY_CODE).url());
+    }
+
+    default String requestPhoneCode(String phone) {
+
+        Http.RequestBuilder request = createPhoneCodeRequest(phone);
 
         Result result = route(request);
         assertThat(result.status(), is(OK));
@@ -59,54 +81,9 @@ public interface LoginTest extends DbTest {
         assertThat(verificationCode, notNullValue());
         assertThat(verificationCode.length(), is(SmsSender.VERIFICATION_CODE_LENGTH));
 
-        Map<String, String> params = new HashMap<>();
-        params.put("username", username);
-        params.put("password", password);
-        params.put("phone", phone);
-        params.put("verificationCode", verificationCode);
-
-        request = new Http.RequestBuilder().method(POST).uri(routes.LoginController.register().url()).bodyForm(params);
-        result = route(request);
-        assertThat(result.status(), is(OK));
-        assertThat(result.flash().isEmpty(), is(true));
-        JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
-        assertThat(jsonResult.getResult(), is(true));
-        assertThat(jsonResult.getData(), is(notNullValue()));
-        assertThat(jsonResult.getMessage(), is(nullValue()));
-
+        return verificationCode;
     }
 
-    /**
-     * 请求注册页面，得到访问短信接口需要的校验码
-     * @return
-     */
-    default String requestSmsSecurityCode() {
-        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.LoginController.registerPage().url());
-        Result result = route(request);
-        assertThat(result.status(), is(OK));
-        String html = contentAsString(result);
-        Pattern pattern = Pattern.compile(".*name=\"r_code\" value=\"(\\w+)\".*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(html);
-        if(!matcher.matches()) {
-            throw new AssertionError("注册页面没有返回r_code, html: " + html);
-        }
-        String code = matcher.group(1);
-        assertThat(code, notNullValue());
-        return code;
-    }
-
-    default Http.RequestBuilder createRequestPhoneCodeRequest(String phone) {
-
-        String code = requestSmsSecurityCode();
-
-        try {
-            return new Http.RequestBuilder().method(POST).
-                    uri(routes.LoginController.requestPhoneCode(phone, code).url()).
-                    session(SmsSender.SECURITY_CODE_KEY, EncryptUtil.encrypt(code));
-        } catch (AppException e) {
-            throw new AppBusinessException(e);
-        }
-    }
 
 
     /**

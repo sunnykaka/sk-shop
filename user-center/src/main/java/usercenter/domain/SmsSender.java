@@ -25,7 +25,7 @@ public class SmsSender {
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 
-    public static final String SECURITY_CODE_KEY = "registerRequest";
+    public static String SECURITY_CODE = "pzmlJGvQHdry7ZLv";
 
     public static final String PHONE_VERIFICATION_CODE_MESSAGE_FORMAT = "您的短信验证码是%s，两小时内有效。";
 
@@ -172,43 +172,6 @@ public class SmsSender {
             return false;
         }
     }
-
-    /**
-     * 往session里存放短信接口请求安全码
-     * @param session
-     * @return
-     * @throws AppException
-     */
-    public static String putSecurityCode(Map<String, String> session) throws AppException {
-        String code = RandomStringUtils.randomAlphanumeric(8);
-
-        session.put(SECURITY_CODE_KEY, EncryptUtil.encrypt(code));
-
-        return code;
-    }
-
-    /**
-     * 验证session里的短信接口请求安全码是否与传过来的一致
-     * @param session
-     * @param code
-     * @return
-     */
-    public static boolean isSecurityCodeValid(Map<String, String> session, String code) {
-        String encrypted = session.get(SECURITY_CODE_KEY);
-        if(StringUtils.isNoneBlank(code) && StringUtils.isNoneBlank(encrypted)) {
-            try {
-                String expectedCode = EncryptUtil.decrypt(encrypted);
-                if(code.equals(expectedCode)) {
-                    return true;
-                }
-            } catch (AppException e) {
-                Logger.error("", e);
-            }
-        }
-
-        return false;
-    }
-
 
 
     public static enum Usage {

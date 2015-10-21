@@ -5,6 +5,7 @@ import common.utils.Money;
 import common.utils.RegExpUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class PlainTest {
 
     @Test
+    @Ignore
     public void test() {
 
 //        System.out.println("18682000593".matches("^[1][\\d]{10}"));
@@ -43,8 +45,12 @@ public class PlainTest {
 //        Pattern p = Pattern.compile("<[^>]+>刘斌<[^>]+>");
 //        System.out.println(s.matches(p.pattern()));
 
-        String html = "<input type=\"hidden\" id=\"r_code\" name=\"r_code\" value=\"rYNkKDzU\"/>";
-        Pattern pattern = Pattern.compile(".*name=\"r_code\" value=\"(\\w+)\".*");
+        String html = "<div class=\"top\">\n" +
+                "    \n" +
+                "        <span id=\"r_code\" style=\"display: none;\">OR5oSM3fRpUPgKamD2j/rg==</span>\n" +
+                "    \n" +
+                "    <div class=\"top-inner width1200\">";
+        Pattern pattern = Pattern.compile(".*<span id=\"r_code\".*>(.*)</span>.*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
         Matcher matcher = pattern.matcher(html);
         if(!matcher.matches()) {
             throw new AssertionError("注册页面没有返回r_code, html: " + html);
