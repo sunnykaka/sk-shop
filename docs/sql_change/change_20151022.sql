@@ -1,0 +1,1 @@
+ALTER TABLE `boss`.`customer` ADD COLUMN `content` TEXT NULL COMMENT ''
