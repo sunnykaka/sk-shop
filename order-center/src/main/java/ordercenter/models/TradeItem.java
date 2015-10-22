@@ -98,14 +98,6 @@ public class TradeItem {
 
     //protected TradePriceStrategy tradePriceStrategy;
 
-    /**
-     * 小计：获取购物车项总价（这个方法可能没用了）
-     * @return
-     */
-    public Money calculateTotalMoney() {
-        return curUnitPrice.multiply(number);
-    }
-
 
     public int getStockQuantity() {
         return stockQuantity;
@@ -242,4 +234,13 @@ public class TradeItem {
     public void setTotalPrice(Money totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+    /**
+     * 计算购物车项金额合计
+     * @return
+     */
+    public Money calTotalPrice() {
+        return getCurUnitPrice().multiply(getNumber());
+    }
+
 }

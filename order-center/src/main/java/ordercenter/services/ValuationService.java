@@ -42,7 +42,7 @@ public class ValuationService {
 
         OrderItem orderItem = orderService.getOrderItemById(valuation.getOrderItemId());
         orderItem.setAppraise(true);//同步订单项，已评论
-        orderService.updateOrderItem(orderItem);
+        generalDao.persist(orderItem);
 
         //同步订单 ------开始
         Order order = orderService.getOrderById(orderItem.getOrderId(),valuation.getUserId());

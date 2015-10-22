@@ -20,6 +20,7 @@ import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.Designer;
+import usercenter.models.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -408,5 +409,28 @@ public class CartService {
         }
     }
 
+    @Transactional
+    public Cart buildCartForSubmitOrder(User user, String selItems) {
+        Cart cart;
+        if(selItems.contains(":")) {
+            //立即购买
+            String[] split = selItems.split(":");
+            int skuId = Integer.valueOf(split[0]);
+            int number = Integer.valueOf(split[1]);
 
+            verifySkuToBuy(skuId, number, number);
+            cart = fakeCartForPromptlyPay(skuId, number);
+
+        } else {
+            List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split("_")).stream().
+                    map(Integer::parseInt).collect(Collectors.toList());
+            cart = buildUserCartBySelItem(user.getId(), selCartItemIdList);
+            verifyCart(cart, selCartItemIdList);
+
+            //非立即购买，需要清除用户购物车项
+            selCartItemIdList.forEach(this::deleteCartItemById);
+        }
+
+        return cart;
+    }
 }

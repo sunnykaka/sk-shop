@@ -3,13 +3,13 @@ package ordercenter.models;
 import common.models.utils.EntityClass;
 import common.utils.DateUtils;
 import common.utils.Money;
-import ordercenter.constants.Client;
 import ordercenter.constants.TradePayType;
 import ordercenter.constants.OrderState;
 import ordercenter.payment.constants.PayBank;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import usercenter.constants.AccountType;
+import usercenter.constants.MarketChannel;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -229,7 +229,7 @@ public class Order implements EntityClass<Integer>, Cloneable {
     /**
      * 客户端，默认是浏览器
      */
-    private Client client = Client.Browser;
+    private MarketChannel client = MarketChannel.WEB;
 
     @Override
     public String toString() {
@@ -664,11 +664,25 @@ public class Order implements EntityClass<Integer>, Cloneable {
 
     @Column(name = "client")
     @Enumerated(EnumType.STRING)
-    public Client getClient() {
+    public MarketChannel getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(MarketChannel client) {
         this.client = client;
     }
+
+    /**
+     * 计算订单金额合计
+     * @return
+     */
+    public Money calcTotalMoney() {
+        Money totalMoney = Money.valueOf(0);
+        for(OrderItem orderItem : getOrderItemList()) {
+            totalMoney = totalMoney.add(orderItem.calTotalPrice());
+        }
+        return totalMoney;
+    }
+
+
 }

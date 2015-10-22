@@ -1,4 +1,4 @@
-@(resultMap: Map[String, Object])
+@(orderIdsStr: String, totalMoney: common.utils.Money)
 
 @import productcenter.models.Seo;
 @import ordercenter.payment.constants.PayBank;
@@ -154,7 +154,7 @@ $('#pay-money-btn').click(function(){
             </div>
                 <!-- end pay-info -->
             <div class="pay-list">
-                <h3>支付金额：<span class="total-money">￥@resultMap.get("totalMoney")</span></h3>
+                <h3>支付金额：<span class="total-money">￥@totalMoney</span></h3>
                 <div class="default-pay">
                     <ul class="list clearfix">
                         <li paybank= @PayBank.Alipay.toString class="current">
@@ -263,7 +263,7 @@ $('#pay-money-btn').click(function(){
                 </div>
                 <span class="btn pay-money-btn" id="pay-money-btn">立即支付</span>
             </div>
-            <input type="hidden" id="orderIds" name="orderIds" value="@resultMap.get("orderIds")">
+            <input type="hidden" id="orderIds" name="orderIds" value="@orderIdsStr">
         </div>
     </div>
 }

@@ -2,13 +2,12 @@ package ordercenter.services;
 
 import common.constants.MessageJobSource;
 import common.exceptions.AppBusinessException;
+import common.exceptions.ErrorCode;
 import common.services.GeneralDao;
 import common.services.MessageJobService;
 import common.utils.DateUtils;
-import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.constants.CancelOrderType;
-import ordercenter.constants.Client;
 import ordercenter.constants.OrderState;
 import ordercenter.models.*;
 import ordercenter.util.OrderNumberUtil;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
 import productcenter.constants.StoreStrategy;
 import productcenter.services.SkuAndStorageService;
+import usercenter.constants.MarketChannel;
 import usercenter.models.User;
 import usercenter.models.address.Address;
 import usercenter.services.AddressService;
@@ -85,15 +85,6 @@ public class OrderService {
         }else{
             return false;
         }
-    }
-
-    /**
-     * 创建购订单
-     * @param order
-     */
-    public void createOrder(Order order) {
-        Logger.info("--------OrderService createCart begin exe-----------" + order);
-        generalDao.persist(order);
     }
 
     /**
@@ -390,15 +381,6 @@ public class OrderService {
 
     //////////////////////////////订单项/////////////////////////////////////////////
     /**
-     * 创建订单项
-     * @param orderItem
-     */
-    public void createOrderItem(OrderItem orderItem) {
-        Logger.info("--------OrderService createOrderItem begin exe-----------" + orderItem);
-        generalDao.persist(orderItem);
-    }
-
-    /**
      * 根据ID查找订单项
      *
      * @param orderItemId
@@ -406,15 +388,6 @@ public class OrderService {
      */
     public OrderItem getOrderItemById(int orderItemId){
         return generalDao.get(OrderItem.class,orderItemId);
-    }
-
-    /**
-     * 更新订单项
-     * @param orderItem
-     */
-    public void updateOrderItem(OrderItem orderItem) {
-        Logger.info("--------OrderService updateOrderItem begin exe-----------" + orderItem);
-        generalDao.merge(orderItem);
     }
 
     /**
@@ -460,35 +433,12 @@ public class OrderService {
         return generalDao.query(jpql, Optional.<Page<OrderItem>>empty(), queryParams);
     }
 
-    /**
-     * 通过订单项id删除订单项
-     *
-     * @param id
-     */
-    public void deleteOrderItemById(int id) {
-        play.Logger.info("--------OrderService deleteOrderItemById real delete  begin exe-----------" + id);
-        generalDao.removeById(OrderItem.class, id);
-    }
-
-    /**
-     * 通过orderId来删除订单下的所有订单项
-     * @param orderId
-     */
-    public void deleteOrderItemByOrderId(int orderId) {
-        play.Logger.info("--------OrderService deleteOrderById real delete  begin exe-----------" + orderId);
-
-        String jpql = "delete from OrderItem v where orderId=:orderId ";
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("orderId", orderId);
-        generalDao.update(jpql, queryParams);
-    }
 
     ///////////////////////////订单状态历史////////////////////////////////////////////////////////////
     /**
      * 创建订单状态历史
      */
     public void createOrderStateHistory(OrderStateHistory orderStateHistory) {
-        play.Logger.info("--------OrderService createOrderStateHistory begin exe-----------" + orderStateHistory);
         if(orderStateHistory.getOrderState().getName().equals(OrderState.Pay.getName())) {
             deleteCancelOrderStateHistory(orderStateHistory.getOrderId());
         }
@@ -499,7 +449,6 @@ public class OrderService {
      * 删除订单状态历史
      */
     public void deleteCancelOrderStateHistory(int orderId) {
-        play.Logger.info("--------OrderService deleteCancelOrderStateHistory begin exe-----------" + orderId);
         String jpql = "delete from OrderStateHistory where orderId=:orderId and orderState=:orderState";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("orderId", orderId);
@@ -559,7 +508,20 @@ public class OrderService {
         return  logistics;
     }
 
-    public String submitOrderProcess(List<Integer> selCartItemIdList, User user, Cart cart, Address address, Client client) {
+    public List<Integer> submitOrder(User user, String selItems, Integer addressId, MarketChannel channel) {
+
+        if (selItems == null || selItems.trim().length() == 0) {
+            throw new AppBusinessException(ErrorCode.Conflict, "订单为空！");
+        }
+
+        Cart cart = cartService.buildCartForSubmitOrder(user, selItems);
+
+        //邮寄地址
+        Address address = addressService.getAddress(addressId, user.getId());
+        if (address == null) {
+            throw new AppBusinessException(ErrorCode.Conflict, "您选择的订单寄送地址已经被修改，在系统中不存在！");
+        }
+
         //将购物车项创建成订单项
         List<CartItem> cartItemList = cart.getNotDeleteCartItemList();
 
@@ -573,76 +535,72 @@ public class OrderService {
             designerCartItemListMap.put(cartItem.getCustomerId(), designerCartItemList);
         }
 
-        StringBuilder orderIdSb = new StringBuilder();
         Set<Integer> designerIdSet = designerCartItemListMap.keySet();
+        List<Integer> orderIds = new ArrayList<>(designerIdSet.size());
+
         for(int designerId : designerIdSet) {
             //创建订单
-            Order order = new Order();
-            //生成订单号
-            order.setOrderNo(OrderNumberUtil.getOrderNo());
-            order.setAccountType(user.getAccountType());
-            order.setUserId(user.getId());
-            order.setUserName(user.getUserName());
+            Order order = createOrder(user, channel, address, designerCartItemListMap.get(designerId));
+            orderIds.add(order.getId());
 
-            List<CartItem> designerCartItemList = designerCartItemListMap.get(designerId);
-            Money totalMoney = designerCartItemList.stream().
-                    map(CartItem::calTotalPrice).
-                    reduce(Money.valueOf(0d), Money::add);
-            order.setTotalMoney(totalMoney);
-
-            order.setOrderState(OrderState.Create);
-            DateTime curTime = DateUtils.current();
-            order.setCreateTime(curTime);
-            order.setMilliDate(curTime.getMillis());
-            order.setIsDelete(false);
-            order.setBrush(false);
-            order.setSendPayRemind(false);
-            order.setClient(client);
-            this.createOrder(order);
-
-            int orderId = order.getId();
-
-            if(orderIdSb.length() > 0) {
-                orderIdSb.append("_");
-            }
-            orderIdSb.append(orderId);
-
-            for(CartItem item : designerCartItemList) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setOrderId(orderId);
-                orderItem.setSkuId(item.getSkuId());
-                orderItem.setBarCode(item.getBarCode());
-                orderItem.setItemNo(item.getId() + "");
-                orderItem.setProductId(item.getProductId());
-                orderItem.setCategoryId(item.getCategoryId());
-                orderItem.setStorageId(item.getStorageId());
-                orderItem.setCustomerId(item.getCustomerId());
-                orderItem.setProductName(item.getProductName());
-                orderItem.setOrderState(order.getOrderState());
-                orderItem.setStoreStrategy(StoreStrategy.NormalStrategy);
-                orderItem.setNumber(item.getNumber());
-                orderItem.setMainPicture(item.getMainPicture());
-                orderItem.setCurUnitPrice(item.getCurUnitPrice());
-                orderItem.setTotalPrice(item.getTotalPrice());
-                orderItem.setAppraise(false);
-                this.createOrderItem(orderItem);
-                //扣减库存
-                skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
-            }
-
-            //创建订单状态历史
-            this.createOrderStateHistory(new OrderStateHistory(order));
-
-            //创建订单物流-邮寄地址
-            Logistics logistics = new Logistics(address);
-            logistics.setOrderId(orderId);
-            this.createLogistics(logistics);
-
-            //非立即购买，需要清除用户购物车项
-            if(selCartItemIdList != null) {
-                selCartItemIdList.forEach(cartService::deleteCartItemById);
-            }
         }
-        return orderIdSb.toString();
+        return orderIds;
     }
+
+    private Order createOrder(User user, MarketChannel channel, Address address, List<CartItem> cartItemList) {
+
+        Order order = new Order();
+        //生成订单号
+        order.setOrderNo(OrderNumberUtil.getOrderNo());
+        order.setAccountType(user.getAccountType());
+        order.setUserId(user.getId());
+        order.setUserName(user.getUserName());
+
+        order.setOrderState(OrderState.Create);
+        DateTime curTime = DateUtils.current();
+        order.setCreateTime(curTime);
+        order.setMilliDate(curTime.getMillis());
+        order.setIsDelete(false);
+        order.setBrush(false);
+        order.setSendPayRemind(false);
+        order.setClient(channel);
+        generalDao.persist(order);
+
+        for(CartItem item : cartItemList) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(order.getId());
+            orderItem.setSkuId(item.getSkuId());
+            orderItem.setBarCode(item.getBarCode());
+            orderItem.setItemNo(item.getId() + "");
+            orderItem.setProductId(item.getProductId());
+            orderItem.setCategoryId(item.getCategoryId());
+            orderItem.setStorageId(item.getStorageId());
+            orderItem.setCustomerId(item.getCustomerId());
+            orderItem.setProductName(item.getProductName());
+            orderItem.setOrderState(order.getOrderState());
+            orderItem.setStoreStrategy(StoreStrategy.NormalStrategy);
+            orderItem.setNumber(item.getNumber());
+            orderItem.setMainPicture(item.getMainPicture());
+            orderItem.setCurUnitPrice(item.getCurUnitPrice());
+            orderItem.setTotalPrice(item.getTotalPrice());
+            orderItem.setAppraise(false);
+            generalDao.persist(orderItem);
+            //扣减库存
+            skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
+        }
+
+        order.setTotalMoney(order.calcTotalMoney());
+        generalDao.persist(order);
+
+        //创建订单状态历史
+        this.createOrderStateHistory(new OrderStateHistory(order));
+
+        //创建订单物流-邮寄地址
+        Logistics logistics = new Logistics(address);
+        logistics.setOrderId(order.getId());
+        generalDao.persist(logistics);
+
+        return order;
+    }
+
 }

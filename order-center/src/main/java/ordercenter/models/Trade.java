@@ -3,7 +3,6 @@ package ordercenter.models;
 import common.models.utils.EntityClass;
 import common.utils.Money;
 import ordercenter.constants.BizType;
-import ordercenter.constants.Client;
 import ordercenter.payment.alipay.AlipayUtil;
 import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayChannel;
@@ -13,6 +12,7 @@ import ordercenter.payment.tenpay.TenpayUtils;
 import ordercenter.util.TradeSequenceUtil;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import usercenter.constants.MarketChannel;
 
 import javax.persistence.*;
 import java.util.List;
@@ -133,7 +133,7 @@ public class Trade implements EntityClass<Integer> {
     /**
      * 客户端，默认是浏览器
      */
-    private Client client = Client.Browser;
+    private MarketChannel client = MarketChannel.WEB;
 
 
     /**
@@ -155,7 +155,7 @@ public class Trade implements EntityClass<Integer> {
          * @param payBank     支付银行
          * @return
          */
-        public static Trade createNewTrade(Money payTotalFee, BizType bizType, PayBank payBank, String clientIp, Client client) {
+        public static Trade createNewTrade(Money payTotalFee, BizType bizType, PayBank payBank, String clientIp, MarketChannel client) {
             Trade trade = new Trade();
             //交易号是自动生成
             trade.setTradeNo(TradeSequenceUtil.getTradeNo());
@@ -461,11 +461,11 @@ public class Trade implements EntityClass<Integer> {
 
     @Column(name = "client")
     @Enumerated(EnumType.STRING)
-    public Client getClient() {
+    public MarketChannel getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(MarketChannel client) {
         this.client = client;
     }
 }
