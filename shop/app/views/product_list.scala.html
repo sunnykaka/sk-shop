@@ -101,11 +101,6 @@
             <div style="height:501px;background:url(@designer.getStoreLogoPic) repeat 50% 50%"></div>
         }
 
-        @if(designer.getContent != null && designer.getContent != "") {
-            <div id="shopContent">
-            @Html(designer.getContent().replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>", "<img src='$1' />"))
-            </div>
-        }
         <div class="designer-brand">
             <div class="designer-brand-inner width1200">
                 @if(designer.getStoreLogoPic == null || designer.getStoreLogoPic == "") {
@@ -133,6 +128,12 @@
                                 <p> @designer.getDescription</p>
                             </div>
                         </div>
+                    </div>
+                }
+
+                @if(designer.getContent != null && designer.getContent != "") {
+                    <div id="shopContent">
+                    @Html(designer.getContent().replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>", "<img src='$1' />"))
                     </div>
                 }
 
