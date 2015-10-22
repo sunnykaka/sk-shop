@@ -1,4 +1,4 @@
-@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInfo], previewList: List[dtos.ProductInfo], normalList: List[dtos.ProductInfo], planProds: List[dtos.ProductInfo])
+@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInSellList], previewList: List[dtos.ProductInSellList], normalList: List[dtos.ProductInSellList], planProds: List[dtos.ProductInSellList])
 
 @import common.utils.DateUtils
 @import productcenter.models.Seo;
@@ -101,11 +101,6 @@
             <div style="height:501px;background:url(@designer.getStoreLogoPic) repeat 50% 50%"></div>
         }
 
-        @if(designer.getContent != null && designer.getContent != "") {
-            <div id="shopContent">
-            @Html(designer.getContent().replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>", "<img src='$1' />"))
-            </div>
-        }
         <div class="designer-brand">
             <div class="designer-brand-inner width1200">
                 @if(designer.getStoreLogoPic == null || designer.getStoreLogoPic == "") {
@@ -136,6 +131,12 @@
                     </div>
                 }
 
+                @if(designer.getContent != null && designer.getContent != "") {
+                    <div id="shopContent">
+                    @Html(designer.getContent().replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>", "<img src='$1' />"))
+                    </div>
+                }
+
                 @if(sellingList != null && sellingList.size > 0) {
                     <div class="brand-start-fashion">
                         <h3>正在首发</h3>
@@ -143,18 +144,19 @@
                         @for((prod, index) <- sellingList.zipWithIndex) {
                             <li>
                                 <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                @if(index <= 3) {
-                                    <img alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display : block ;"/>
-                                } else {
-                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
-                                }
+                                    <span class="status-selling">首发</span>
+                                    @if(prod.getStorage == 0){
+                                        <span class="sold-out">已售完</span>
+                                    }
+                                    @if(index <= 3) {
+                                        <img alt="@prod.getProduct.getName" src="@prod.getMinorPic.getPictureUrl" width="283" height="462" style="display : block ;"/>
+                                    } else {
+                                        <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
+                                    }
                                 </a>
-                                <div class="cover">
-                                    <div class="design-cover"></div>
-                                    <div class="info">
-                                        <p class="name">@prod.getProduct.getName</p>
-                                    </div>
-                                </div>
+                                <h3>@prod.getProduct.getName</h3>
+                                <h4 class="price">￥@prod.getPrice</h4>
+
                             </li>
                         }
                         </ul>
@@ -169,14 +171,13 @@
                         @for(prod <- previewList) {
                             <li>
                                 <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)" >
-                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
+                                    @if(prod.getStorage == 0){
+                                        <span class="sold-out">已售完</span>
+                                    }
+                                    <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
                                 </a>
-                                <div class="cover">
-                                    <div class="design-cover"></div>
-                                    <div class="info">
-                                        <p class="name">@prod.getProduct.getName</p>
-                                    </div>
-                                </div>
+                                <h3>@prod.getProduct.getName</h3>
+                                <h4 class="price">￥@prod.getPrice</h4>
                             </li>
                         }
 
@@ -193,14 +194,13 @@
                         @for(prod <- normalList) {
                             <li>
                                 <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
+                                    @if(prod.getStorage == 0){
+                                        <span class="sold-out">已售完</span>
+                                    }
+                                    <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
                                 </a>
-                                <div class="cover">
-                                    <div class="design-cover"></div>
-                                    <div class="info">
-                                        <p class="name">@prod.getProduct.getName</p>
-                                    </div>
-                                </div>
+                                <h3>@prod.getProduct.getName</h3>
+                                <h4 class="price">￥@prod.getPrice</h4>
                             </li>
                         }
 
@@ -216,17 +216,13 @@
                             <li>
                                 <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
                                 @if(index <= 3) {
-                                    <img alt="@prod.getProduct.getName" src="@prod.getMainPic.getPictureUrl" width="283" height="462" style="display : block ;"/>
+                                    <img alt="@prod.getProduct.getName" src="@prod.getMinorPic.getPictureUrl" width="283" height="462" style="display : block ;"/>
                                 } else {
-                                    <img class="lazy" data-original="@prod.getMainPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
+                                    <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" alt="@prod.getProduct.getName" src="@routes.Assets.versioned("images/grey.gif")" width="283" height="462" style="display : block ;"/>
                                 }
                                 </a>
-                                <div class="cover">
-                                    <div class="design-cover"></div>
-                                    <div class="info">
-                                        <p class="name">@prod.getProduct.getName</p>
-                                    </div>
-                                </div>
+                                <h3>@prod.getProduct.getName</h3>
+                                <h4 class="price">￥@prod.getPrice</h4>
                             </li>
                         }
                         </ul>
