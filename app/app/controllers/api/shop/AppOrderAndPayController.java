@@ -8,7 +8,6 @@ import controllers.api.shop.payment.AppPayRequestHandler;
 import controllers.api.shop.payment.tenpay.AppWeiXinPayRequestHandler;
 import ordercenter.models.Trade;
 import ordercenter.payment.constants.PayBank;
-import ordercenter.services.CartService;
 import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +42,6 @@ public class AppOrderAndPayController extends BaseController {
 
     @Autowired
     TradeService tradeService;
-
-    @Autowired
-    private CartService cartService;
 
     /**
      * 支付：生成订单、生成配送信息、去支付

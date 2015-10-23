@@ -146,15 +146,6 @@ public class OrderService {
     }
 
     /**
-     * 通过订单id删除订单
-     * @param orderId
-     */
-    public void deleteOrder(int orderId) {
-        Logger.info("--------OrderService deleteCart real delete  begin exe-----------" + orderId);
-        generalDao.removeById(Order.class, orderId);
-    }
-
-    /**
      * 通过订单id获取订单
      * @param orderId
      * @return
@@ -471,14 +462,6 @@ public class OrderService {
     }
 
     //////////////////////////////订单物流-邮寄地址/////////////////////////////////////////////
-    /**
-     * 创建订单物流-邮寄地址
-     * @param logistics
-     */
-    public void createLogistics(Logistics logistics) {
-        Logger.info("--------OrderService createLogistics begin exe-----------" + logistics);
-        generalDao.persist(logistics);
-    }
 
     /**
      * 通过订单获取物流-邮寄地址
@@ -525,7 +508,7 @@ public class OrderService {
         //将购物车项创建成订单项
         List<CartItem> cartItemList = cart.getNotDeleteCartItemList();
 
-        Map<Integer, List<CartItem>> designerCartItemListMap = new HashMap<Integer, List<CartItem>>();
+        Map<Integer, List<CartItem>> designerCartItemListMap = new HashMap<>();
         for(CartItem cartItem : cartItemList) {
             List<CartItem> designerCartItemList = designerCartItemListMap.get(cartItem.getCustomerId());
             if(designerCartItemList == null) {
@@ -540,14 +523,31 @@ public class OrderService {
 
         for(int designerId : designerIdSet) {
             //创建订单
-            Order order = createOrder(user, channel, address, designerCartItemListMap.get(designerId));
+            Order order = createOrder(user, channel, designerId, designerCartItemListMap.get(designerId));
+
+            //扣减库存
+            for(OrderItem orderItem : order.getOrderItemList()) {
+                skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
+            }
+
+            //创建订单状态历史
+            createOrderStateHistory(new OrderStateHistory(order));
+
+            //创建订单物流-邮寄地址
+            Logistics logistics = new Logistics(address);
+            logistics.setOrderId(order.getId());
+            generalDao.persist(logistics);
+
             orderIds.add(order.getId());
 
         }
+
+        cartService.deleteCartItemAfterSubmitOrder(selItems);
+
         return orderIds;
     }
 
-    private Order createOrder(User user, MarketChannel channel, Address address, List<CartItem> cartItemList) {
+    private Order createOrder(User user, MarketChannel channel, int designerId, List<CartItem> cartItemList) {
 
         Order order = new Order();
         //生成订单号
@@ -564,6 +564,7 @@ public class OrderService {
         order.setBrush(false);
         order.setSendPayRemind(false);
         order.setClient(channel);
+        order.setCustomerId(designerId);
         generalDao.persist(order);
 
         for(CartItem item : cartItemList) {
@@ -585,20 +586,12 @@ public class OrderService {
             orderItem.setTotalPrice(item.getTotalPrice());
             orderItem.setAppraise(false);
             generalDao.persist(orderItem);
-            //扣减库存
-            skuAndStorageService.minusSkuStock(orderItem.getSkuId(), orderItem.getNumber());
+            order.getOrderItemList().add(orderItem);
         }
 
         order.setTotalMoney(order.calcTotalMoney());
         generalDao.persist(order);
 
-        //创建订单状态历史
-        this.createOrderStateHistory(new OrderStateHistory(order));
-
-        //创建订单物流-邮寄地址
-        Logistics logistics = new Logistics(address);
-        logistics.setOrderId(order.getId());
-        generalDao.persist(logistics);
 
         return order;
     }

@@ -209,9 +209,9 @@ public class Order implements EntityClass<Integer>, Cloneable {
     private String addressName;
 
     /**
-     * 订单项（还没有做好）
+     * 订单项
      */
-    private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
+    private List<OrderItem> orderItemList = new ArrayList<>(0);
 
     /**
      * 是否可以退款（不入库）

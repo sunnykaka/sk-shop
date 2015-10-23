@@ -427,10 +427,23 @@ public class CartService {
             cart = buildUserCartBySelItem(user.getId(), selCartItemIdList);
             verifyCart(cart, selCartItemIdList);
 
-            //非立即购买，需要清除用户购物车项
-            selCartItemIdList.forEach(this::deleteCartItemById);
         }
 
         return cart;
+    }
+
+    @Transactional
+    public void deleteCartItemAfterSubmitOrder(String selItems) {
+        if(selItems.contains(":")) {
+            //立即购买
+            return;
+        }
+
+        List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split("_")).stream().
+                map(Integer::parseInt).collect(Collectors.toList());
+
+        //非立即购买，需要清除用户购物车项
+        selCartItemIdList.forEach(this::deleteCartItemById);
+
     }
 }
