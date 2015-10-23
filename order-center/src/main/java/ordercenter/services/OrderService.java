@@ -92,7 +92,6 @@ public class OrderService {
      * @param order
      */
     public void updateOrder(Order order) {
-        Logger.info("--------OrderService updateCart begin exe-----------" + order);
         generalDao.merge(order);
     }
 
@@ -102,7 +101,6 @@ public class OrderService {
      * @param orgName
      */
     public void updateOrderPayOrg(Long orderNo, String payType, String orgName) {
-        Logger.info("--------OrderService updateCart begin exe-----------" + orderNo + " : " + orgName);
 
         String jpql = "update Order o set o.payType=:payType, o.payBank=:orgName where o.orderNo=:orderNo";
         Map<String, Object> params = new HashMap<>();
@@ -120,7 +118,6 @@ public class OrderService {
      * @return
      */
     public int updateOrderStateByStrictState(int orderId, OrderState orderState, OrderState previousState) {
-        Logger.info("--------OrderService updateOrderState begin exe-----------" + orderId + " : " + orderState + " : " + previousState);
 
         DateTime curTime = DateUtils.current();
 
@@ -152,7 +149,6 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public Order getOrderById(int orderId) {
-        Logger.info("--------OrderService getCart begin exe-----------" + orderId);
         return generalDao.get(Order.class, orderId);
     }
 
@@ -206,7 +202,6 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public List<Order> getOrderByUserId(Optional<Page<Order>> page, int userId,int querytType) {
-        Logger.info("--------OrderService getOrderByUserId begin exe-----------" + userId + "&type:" + querytType);
         OrderState[] type_1 = {OrderState.Confirm,OrderState.Print,OrderState.Verify,OrderState.Send};
         OrderState[] type_2 = {OrderState.Receiving,OrderState.Success};
 
@@ -239,7 +234,6 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public Order getOrderById(int orderId,int userId) {
-        Logger.info("--------OrderService getCart begin exe-----------" + orderId);
 
         String jpql = "select o from Order o join o.orderItemList oi where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
@@ -295,7 +289,6 @@ public class OrderService {
      *定时器定时取消订单（现在是指定1小时）
      */
     public void timerAutoCancelOrderProcess() {
-        Logger.info("--------OrderService timerAutoCancelOrderProcess begin exe-----------");
         List<Order> orderList = this.getAllOrderListByOrderState(OrderState.Create);
         if(orderList != null && orderList.size() > 0) {
             for(Order order : orderList) {
@@ -320,7 +313,6 @@ public class OrderService {
      *定时器定时提醒支付订单(30分钟)
      */
     public void timerAutoTipPayOrderProcess() {
-        Logger.info("--------OrderService timerAutoTipPayOrderProcess begin exe-----------");
         List<Order> orderList = this.getAllOrderListByOrderState(OrderState.Create);
         if(orderList != null && orderList.size() > 0) {
             for(Order order : orderList) {
@@ -389,8 +381,6 @@ public class OrderService {
      * @return
      */
     public int updateOrderItemStateByStrictState(int orderItemId, OrderState orderState, OrderState previousState) {
-        Logger.info("--------OrderService updateOrderItemStateByStrictState begin exe-----------" + orderItemId + " : " + orderState + " : " + previousState);
-
         DateTime curTime = DateUtils.current();
 
         String jpql = "update OrderItem o set o.orderState=:orderState, o.updateTime =:updateTime ";
@@ -416,8 +406,6 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public List<OrderItem> queryOrderItemsByOrderId(int orderId) {
-        Logger.info("--------OrderService queryOrderItemsByOrderId begin exe-----------" + orderId);
-
         String jpql = "select o from OrderItem o where 1=1 and o.orderId=:orderId";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("orderId", orderId);
@@ -453,8 +441,6 @@ public class OrderService {
      * @return
      */
     public List<OrderStateHistory> getOrderStateHistoryByOrderId(int orderId){
-        Logger.info("--------OrderService queryOrderItemsByOrderId begin exe-----------" + orderId);
-
         String jpql = "select o from OrderStateHistory o where 1=1 and o.orderId=:orderId";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("orderId", orderId);
@@ -470,13 +456,11 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public Logistics getLogisticsById(int logisticsId) {
-        play.Logger.info("--------OrderService getLogisticsById begin exe-----------" + logisticsId);
         return generalDao.get(Logistics.class, logisticsId);
     }
 
     @Transactional(readOnly = true)
     public Logistics getLogisticsByOrderId(int orderId) {
-        play.Logger.info("--------OrderService getLogisticsById begin exe-----------" + orderId);
 
         String jpql = "select l from Logistics l where 1=1 ";
         Map<String, Object> queryParams = new HashMap<>();
@@ -491,24 +475,32 @@ public class OrderService {
         return  logistics;
     }
 
+    /**
+     * 提交订单
+     * @param user
+     * @param selItems 购物车项，如果是立即购买，是"skuId:number"的形式，否则是"cartItemId_cartItemId_..."的形式
+     * @param addressId 地址ID
+     * @param channel 渠道
+     * @return
+     */
     public List<Integer> submitOrder(User user, String selItems, Integer addressId, MarketChannel channel) {
 
         if (selItems == null || selItems.trim().length() == 0) {
             throw new AppBusinessException(ErrorCode.Conflict, "订单为空！");
         }
 
-        Cart cart = cartService.buildCartForSubmitOrder(user, selItems);
+        Cart cart = cartService.buildCartForSubmitOrder(user.getId(), selItems);
 
-        //邮寄地址
+        //送货地址
         Address address = addressService.getAddress(addressId, user.getId());
         if (address == null) {
             throw new AppBusinessException(ErrorCode.Conflict, "您选择的订单寄送地址已经被修改，在系统中不存在！");
         }
 
-        //将购物车项创建成订单项
+        //根据设计师拆单
         List<CartItem> cartItemList = cart.getNotDeleteCartItemList();
 
-        Map<Integer, List<CartItem>> designerCartItemListMap = new HashMap<>();
+        Map<Integer, List<CartItem>> designerCartItemListMap = new LinkedHashMap<>();
         for(CartItem cartItem : cartItemList) {
             List<CartItem> designerCartItemList = designerCartItemListMap.get(cartItem.getCustomerId());
             if(designerCartItemList == null) {
