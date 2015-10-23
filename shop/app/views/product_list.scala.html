@@ -133,7 +133,7 @@
 
                 @if(designer.getContent != null && designer.getContent != "") {
                     <div id="shopContent">
-                    @Html(designer.getContent().replaceAll("<img.*?src=\"(.*?)\".*?>", "<img class='lazy' data-original='$1' src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>", "<img src='$1' />"))
+                    @Html(designer.getContent().replaceAll("^<img.*?src=\"(.*?)\".*?(usemap=\".*?\")?(\\s+alt=\".*?\")?>$", "<img class='lazy' data-original='$1' $2 src='/assets/images/grey.gif' style='display:block;' />").replaceFirst("<img.*?data-original='(.*?)'.*?>", "<img src='$1' />"))
                     </div>
                 }
 
