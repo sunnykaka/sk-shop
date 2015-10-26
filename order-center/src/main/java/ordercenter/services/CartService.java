@@ -364,12 +364,23 @@ public class CartService {
 
         if (skuBuyNumber > maxCanBuyNum) {
             CartException ex = new CartException(ErrorCode.Conflict,
-                    String.format("超过最大购买商品数量,最多能够购买%d件", maxCanBuyNum));
+                    String.format("最多能够购买%d件", maxCanBuyNum));
             ex.setMaxCanBuyNum(maxCanBuyNum);
             throw ex;
         }
     }
 
+    /**
+     * 返回最大购买数
+     *
+     * @param skuId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMaxCanBuyNum(int skuId) {
+        SkuStorage skuStorage = skuService.getSkuStorage(skuId);
+        return Math.min(skuStorage.getTradeMaxNumber(), skuStorage.getStockQuantity());
+    }
 
     /**
      * 校验购物车内的商品是否符合购买条件
@@ -411,7 +422,7 @@ public class CartService {
 
     /**
      * 构建用于提交订单的购物车
-     * @param user
+     * @param userId
      * @param selItems 购物车项，如果是立即购买，是"skuId:number"的形式，否则是"cartItemId_cartItemId_..."的形式
      * @return
      */
