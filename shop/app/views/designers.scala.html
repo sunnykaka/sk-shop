@@ -36,33 +36,40 @@ $(function(){
 
 
      //获取更多设计师
-    $('#more').click(function(){
-        $(this).attr('disabled',true);
-        var id = $(this).attr('data-id'),that = $(this);
-        $.ajax({
-            url:'/designers4more?currPage='+id,
-            success:function(response){
-                 $(that).attr('disabled',null);
-                var html =  tpl('#demo', response);
-                if(response.data.length<8){
-                    $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(500,function(){
-                        $('.designer-list-con ul li').removeClass('add');
-                    });
-                    if($('#totalcount').val()== $('.designer-list-con li').size()){
-                     that.fadeOut();
+
+    var winH = $(window).height(); //页面可视区域高度
+    var i = 2,b = 0,flag = true;//i设置当前页数 b防止重复请求，flag 结束后防止重复请求
+
+     $(window).scroll(function () {
+            var pageH = $(document.body).height();
+            var scrollT = $(window).scrollTop(); //滚动条top
+            var aa = (pageH-winH-scrollT)/winH;
+            if((aa < 0.5) && (i != b) && flag){
+                b = i;
+               $.ajax({
+                    url:'/designers4more?currPage='+i,
+                    success:function(response){
+                        if(response.data.length != 0){
+                           var html =  tpl('#demo', response);
+                           $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(500,function(){
+                                $('.designer-list-con ul li').removeClass('add');
+                           });
+                           i++;
+                        }else{
+                            flag = false;
+                        }
                     }
-                }else{
-                   $('.designer-list-con ul').append(html).find('.add').hide().fadeIn(500,function(){
-                        $('.designer-list-con ul li').removeClass('add');
-                   });
-                   that.attr('data-id',parseInt(id)+1);
-                   if($('#totalcount').val()== $('.designer-list-con li').size()){
-                     that.fadeOut();
-                    }
-                }
+                });
             }
-        });
-    });
+      });
+
+
+
+
+
+
+
+
 
 });
 </script>
@@ -103,10 +110,6 @@ $(function(){
 
                 }
                 </ul>
-                <input type="hidden" name="totalcount" id="totalcount" value="@count" />
-                @if(designerList.size == 8){
-                    <p class="more" id="more" data-id="2">发现更多设计师</p>
-                }
             </div>
         </div>
     </div>
