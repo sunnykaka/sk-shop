@@ -1,5 +1,6 @@
 package controllers.api.shop;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
@@ -68,7 +69,11 @@ public class AppOrderAndPayController extends BaseController {
 
         Map<String, String> payInfoMap = submitToPay(payOrg, clientIp, orderIds);
 
-        return ok(JsonUtils.object2Node(payInfoMap));
+        JsonNode jsonNode = JsonUtils.object2Node(payInfoMap);
+
+        Logger.info("submitToPay方法返回结果：" + jsonNode.toString());
+
+        return ok(jsonNode);
     }
 
     /**
@@ -90,7 +95,11 @@ public class AppOrderAndPayController extends BaseController {
 
         Map<String, String> payInfoMap = submitToPay(payOrg, clientIp, orderIdList);
 
-        return ok(JsonUtils.object2Node(payInfoMap));
+        JsonNode jsonNode = JsonUtils.object2Node(payInfoMap);
+
+        Logger.info("myOrderToPay方法返回结果：" + jsonNode.toString());
+
+        return ok(jsonNode);
 
     }
 
