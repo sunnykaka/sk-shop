@@ -60,6 +60,10 @@ public class AppOrderAndPayController extends BaseController {
 
         MarketChannel channel = MarketChannel.fromLegacyClient(client);
 
+        if(selItems.contains(",")) {
+            selItems = selItems.replaceAll(",", "_");
+        }
+
         List<Integer> orderIds = orderService.submitOrder(currentUser(), selItems, addressId, channel);
 
         Map<String, String> payInfoMap = submitToPay(payOrg, clientIp, orderIds);
