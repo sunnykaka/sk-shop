@@ -2,12 +2,6 @@
  * Created by lein on 2015/6/1.
  */
 $(function(){
-    $('.empty-box li').hover(function(){
-        $(".title", this).stop().animate({top:"377px"},{queue:false,duration:100});
-    },function(){
-        $(".title", this).stop().animate({top:"437px"},{queue:false,duration:300});
-    });
-
     //获取购物车 商品数量
     $.ajax({
         url: '/cart/getUserCartItemNum',
@@ -31,7 +25,7 @@ $(function(){
             pauseOnHover:true,
             touch: false
         });
-    })
+    });
 
     setInterval(function(){
         $(".time-detail:not(:contains(已结束))").each(function(){
@@ -60,7 +54,5 @@ $(function(){
             obj.text(str);
         });
     }, 100); //每个0.1秒执行一次
-
-
 
 });
