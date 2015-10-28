@@ -51,7 +51,6 @@ public class SkuAndStorageService {
      * @return
      */
     public StockKeepingUnit getStockKeepingUnitById(int id) {
-        play.Logger.info("------SkuAndStorageService getStockKeepingUnitById begin exe-----------" + id);
         StockKeepingUnit sku = generalDao.get(StockKeepingUnit.class, id);
         return sku;
     }
@@ -63,7 +62,6 @@ public class SkuAndStorageService {
      * @return
      */
     public StockKeepingUnit querySKUByBarCode(String barCode) {
-        play.Logger.info("------SkuAndStorageService querySKUByBarCode begin exe-----------" + barCode);
 
         String jpql = "select o from StockKeepingUnit o where 1=1 and o.barCode=:barCode";
         Map<String, Object> queryParams = new HashMap<>();
@@ -110,7 +108,6 @@ public class SkuAndStorageService {
      * @return
      */
     public List<StockKeepingUnit> querySkuListByProductId(int productId) {
-        play.Logger.info("------SkuAndStorageService querySKUByProductId begin exe-----------" + productId);
 
         String jpql = "select o from StockKeepingUnit o where 1=1 and o.productId=:productId";
         Map<String, Object> queryParams = new HashMap<>();
@@ -127,7 +124,6 @@ public class SkuAndStorageService {
      * @return
      */
     public StockKeepingUnit querySkuByProductIdPriceSmall(int productId) {
-        play.Logger.info("------SkuAndStorageService querySKUByProductId begin exe-----------" + productId);
 
         String jpql = "select o from StockKeepingUnit o where 1=1 and o.productId=:productId and o.skuState='NORMAL' order by o.marketPrice asc";
         Map<String, Object> queryParams = new HashMap<>();
@@ -171,7 +167,6 @@ public class SkuAndStorageService {
      * @return
      */
     public SkuStorage getSkuStorage(int skuId) {
-        play.Logger.info("------SkuAndStorageService querySKUByBarCode begin exe-----------" + skuId);
 
         String jpql = "select o from SkuStorage o where 1=1 and o.skuId=:skuId";
         Map<String, Object> queryParams = new HashMap<>();
@@ -209,7 +204,6 @@ public class SkuAndStorageService {
      */
     @Transactional
     public boolean minusSkuStock(int skuId, int number) {
-        play.Logger.info("------SkuAndStorageService minusSkuStock begin exe-----------" + skuId + ":" + number);
         EntityManager em = generalDao.getEm();
         Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity - ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
         int count = query.executeUpdate();
@@ -225,7 +219,6 @@ public class SkuAndStorageService {
      */
     @Transactional
     public boolean addSkuStock(int skuId, int number) {
-        play.Logger.info("------SkuAndStorageService addSkuStock begin exe-----------" + skuId + ":" + number);
         EntityManager em = generalDao.getEm();
         Query query = em.createNativeQuery("update SkuStorage set stockQuantity = stockQuantity + ? where skuId=?").setParameter(1, number).setParameter(2, skuId);
         int count = query.executeUpdate();

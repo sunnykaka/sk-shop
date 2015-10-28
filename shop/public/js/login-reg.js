@@ -98,12 +98,12 @@
                 },
                 dataType: "json",
                 success: function (response) {
-                	if(!response.result){
-                		$('#errormsg-phoneNum').text(response.message);
-                		that.attr('disabled',null);
-                		that.text('获取验证码');
-                		clearInterval(timer);
-                	}
+                    if(!response.result){
+                        $('#errormsg-phoneNum').text(response.message);
+                        that.attr('disabled',null);
+                        that.text('获取验证码');
+                        clearInterval(timer);
+                    }
                 }
             });
         });
@@ -228,9 +228,9 @@
 
         RegisterFormValidate.init();
         $('#confirm-pw').keyup(function(evt){
-           if(evt.keyCode == 13){
-               $('#reg-btn').trigger('submit');
-           }
+            if(evt.keyCode == 13){
+                $('#reg-btn').trigger('submit');
+            }
         });
         delayHideLabel(options.items);
     }
@@ -238,22 +238,22 @@
     //登陆
     function login(){
         var options = {
-                form: $('#login-form'),
-                label: true,
-                items: [
-                    {
-                        id: 'loginUser',
-                        //blankText: '手机号/邮箱/用户名',
-                        allowBlank: false,
-                        allowBlankText: '账号不能为空'
-                    },
-                    {
-                        id: 'password',
-                        allowBlank: false,
-                        allowBlankText: '密码不能为空'
-                    }
-                ]
-            }, loginFormValidate = new FG.user.FormValidate(options, function () {
+            form: $('#login-form'),
+            label: true,
+            items: [
+                {
+                    id: 'loginUser',
+                    //blankText: '手机号/邮箱/用户名',
+                    allowBlank: false,
+                    allowBlankText: '账号不能为空'
+                },
+                {
+                    id: 'password',
+                    allowBlank: false,
+                    allowBlankText: '密码不能为空'
+                }
+            ]
+        }, loginFormValidate = new FG.user.FormValidate(options, function () {
             var form = options.form,
                 msgEle = $('#errormsg-password');
 

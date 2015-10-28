@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class PlainTest {
 
     @Test
-    @Ignore
     public void test() {
 
 //        System.out.println("18682000593".matches("^[1][\\d]{10}"));
@@ -45,20 +44,25 @@ public class PlainTest {
 //        Pattern p = Pattern.compile("<[^>]+>刘斌<[^>]+>");
 //        System.out.println(s.matches(p.pattern()));
 
-        String html = "<div class=\"top\">\n" +
-                "    \n" +
-                "        <span id=\"r_code\" style=\"display: none;\">OR5oSM3fRpUPgKamD2j/rg==</span>\n" +
-                "    \n" +
-                "    <div class=\"top-inner width1200\">";
-        Pattern pattern = Pattern.compile(".*<span id=\"r_code\".*>(.*)</span>.*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(html);
-        if(!matcher.matches()) {
-            throw new AssertionError("注册页面没有返回r_code, html: " + html);
-        }
-        String group = matcher.group();
-        System.out.println(group);
-        System.out.println(matcher.group(1));
+//        String html = "<div class=\"top\">\n" +
+//                "    \n" +
+//                "        <span id=\"r_code\" style=\"display: none;\">OR5oSM3fRpUPgKamD2j/rg==</span>\n" +
+//                "    \n" +
+//                "    <div class=\"top-inner width1200\">";
+//        Pattern pattern = Pattern.compile(".*<span id=\"r_code\".*>(.*)</span>.*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+//        Matcher matcher = pattern.matcher(html);
+//        if(!matcher.matches()) {
+//            throw new AssertionError("注册页面没有返回r_code, html: " + html);
+//        }
+//        String group = matcher.group();
+//        System.out.println(group);
+//        System.out.println(matcher.group(1));
 
+        String s = "<img src=\"http://imgs.fashiongeeker.net/9/4B697AAEC8654807B0D9FC8437C2A554.jpg\" border=\"0\" usemap=\"#Map\" alt=\"123\">";
+        String result = s.replaceAll(
+                "^<img.*?src=\"(.*?)\".*?(usemap=\"\\S*?\")?(\\s+alt=\".*?\")?>$",
+                "<img class='lazy' data-origina l='$1' $2 src='/assets/images/grey.gif' style='display:block;' />");
+        System.out.println(result);
     }
 
 }

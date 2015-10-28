@@ -20,6 +20,7 @@ import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.Designer;
+import usercenter.models.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -363,12 +364,23 @@ public class CartService {
 
         if (skuBuyNumber > maxCanBuyNum) {
             CartException ex = new CartException(ErrorCode.Conflict,
-                    String.format("超过最大购买商品数量,最多能够购买%d件", maxCanBuyNum));
+                    String.format("最多能够购买%d件", maxCanBuyNum));
             ex.setMaxCanBuyNum(maxCanBuyNum);
             throw ex;
         }
     }
 
+    /**
+     * 返回最大购买数
+     *
+     * @param skuId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMaxCanBuyNum(int skuId) {
+        SkuStorage skuStorage = skuService.getSkuStorage(skuId);
+        return Math.min(skuStorage.getTradeMaxNumber(), skuStorage.getStockQuantity());
+    }
 
     /**
      * 校验购物车内的商品是否符合购买条件
@@ -408,5 +420,50 @@ public class CartService {
         }
     }
 
+    /**
+     * 构建用于提交订单的购物车
+     * @param userId
+     * @param selItems 购物车项，如果是立即购买，是"skuId:number"的形式，否则是"cartItemId_cartItemId_..."的形式
+     * @return
+     */
+    @Transactional
+    public Cart buildCartForSubmitOrder(Integer userId, String selItems) {
+        Cart cart;
+        if(selItems.contains(":")) {
+            //立即购买
+            String[] split = selItems.split(":");
+            int skuId = Integer.valueOf(split[0]);
+            int number = Integer.valueOf(split[1]);
 
+            verifySkuToBuy(skuId, number, number);
+            cart = fakeCartForPromptlyPay(skuId, number);
+
+        } else {
+            List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split("_")).stream().
+                    map(Integer::parseInt).collect(Collectors.toList());
+            cart = buildUserCartBySelItem(userId, selCartItemIdList);
+            verifyCart(cart, selCartItemIdList);
+
+        }
+
+        return cart;
+    }
+
+    /**
+     * 提交订单后需要清除用户选中的购物车项
+     * @param selItems
+     */
+    @Transactional
+    public void deleteCartItemAfterSubmitOrder(String selItems) {
+        if(selItems.contains(":")) {
+            //立即购买不用清除
+            return;
+        }
+
+        List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split("_")).stream().
+                map(Integer::parseInt).collect(Collectors.toList());
+
+        selCartItemIdList.forEach(this::deleteCartItemById);
+
+    }
 }

@@ -1,10 +1,8 @@
 package controllers.shop;
 
 import base.BaseTest;
+import base.CartTest;
 import common.utils.JsonResult;
-import controllers.user.LoginTest;
-import ordercenter.models.Cart;
-import ordercenter.services.CartService;
 import org.junit.Test;
 import play.Logger;
 import play.mvc.Http;
@@ -27,7 +25,7 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class CartControllerTest extends BaseTest implements LoginTest {
+public class CartControllerTest extends BaseTest implements CartTest {
 
     @Test
     public void testGetUserCartItemNum() {
@@ -109,18 +107,7 @@ public class CartControllerTest extends BaseTest implements LoginTest {
         Integer userId = mockUser();
 
         //加入产品到购物车
-        JsonResult jsonResult = testAddSkuToCartAddNum(sku, stockQuantity, userId);
-        assertThat(jsonResult.getResult(), is(true));
-        assertThat(jsonResult.getData(), is(notNullValue()));
-        assertThat(jsonResult.getMessage(), is(notNullValue()));
-        Map data = (Map) jsonResult.getData();
-        assertThat(data.get("itemTotalNum"), is(stockQuantity));
-
-        Integer cartItemId = doInSingleSession(generalDao -> {
-            CartService cartService = Global.ctx.getBean(CartService.class);
-            Cart cart = cartService.getCartByUserId(userId);
-            return cart.getCartItemList().get(0).getId();
-        });
+        Integer cartItemId = addSkuToCart(sku, stockQuantity, userId);
 
         //请求结算接口
         Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(
@@ -129,10 +116,11 @@ public class CartControllerTest extends BaseTest implements LoginTest {
         Result result = route(request);
         Logger.debug(" CartController.selCartItemProcess result: " + contentAsString(result));
         assertThat(result.status(), is(OK));
-        jsonResult = JsonResult.fromJson(contentAsString(result));
+        JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
 
     }
+
 
     @Test
     public void testVerifyPromptlyPayData() {
@@ -157,26 +145,6 @@ public class CartControllerTest extends BaseTest implements LoginTest {
         JsonResult jsonResult = JsonResult.fromJson(contentAsString(result));
         assertThat(jsonResult.getResult(), is(true));
 
-    }
-
-    private JsonResult testAddSkuToCartAddNum(StockKeepingUnit sku, int stockQuantity, Integer userId) {
-        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(
-                routes.CartController.addSkuToCartAddNum(sku.getId(), stockQuantity).url());
-        request = wrapLoginInfo(request, userId);
-        Result result = route(request);
-        Logger.debug(" CartController.addSkuToCartAddNum result: " + contentAsString(result));
-        assertThat(result.status(), is(OK));
-        return JsonResult.fromJson(contentAsString(result));
-    }
-
-    private JsonResult testReplaceSkuToCartAddNum(StockKeepingUnit sku, int stockQuantity, Integer userId) {
-        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(
-                routes.CartController.addSkuToCartReplaceNum(sku.getId(), stockQuantity).url());
-        request = wrapLoginInfo(request, userId);
-        Result result = route(request);
-        Logger.debug(" CartController.addSkuToCartReplaceNum result: " + contentAsString(result));
-        assertThat(result.status(), is(OK));
-        return JsonResult.fromJson(contentAsString(result));
     }
 
 

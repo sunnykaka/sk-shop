@@ -93,6 +93,7 @@ public class AppCartController extends BaseController {
 
         int totalNum = cartService.addSkuToCart(currentUser().getId(), skuId, number, isReplace);
         result.put("itemTotalNum", totalNum);
+        result.put("maxCanBuyNum",cartService.getMaxCanBuyNum(skuId));
 
         return ok(JsonUtils.object2Node(result));
     }

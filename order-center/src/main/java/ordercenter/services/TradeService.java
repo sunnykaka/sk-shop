@@ -1,21 +1,29 @@
 package ordercenter.services;
 
+import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
+import common.utils.JsonResult;
+import common.utils.Money;
 import ordercenter.constants.BizType;
 import ordercenter.constants.OrderState;
+import ordercenter.constants.TradePayType;
 import ordercenter.constants.TradeType;
 import ordercenter.models.*;
+import ordercenter.payment.constants.PayBank;
 import ordercenter.payment.constants.PayMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import usercenter.constants.MarketChannel;
+import usercenter.models.User;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 交易Service
@@ -26,11 +34,14 @@ import java.util.Optional;
 @Transactional
 public class TradeService {
 
+    private static final Logger.ALogger tradeLogger = Logger.of("tradeRequest");
+
     @Autowired
     private GeneralDao generalDao;
 
     @Autowired
     private OrderService orderService;
+
 
     /**
      * 创建交易记录
@@ -339,5 +350,56 @@ public class TradeService {
                 }
             }
         }
+    }
+
+
+    public Trade submitTradeOrder(User user, List<Integer> orderIds, PayBank payBank, MarketChannel channel, String ip) {
+
+        List<Order> orders = orderIds.stream().map(orderService::getOrderById).collect(Collectors.toList());
+        for(Order order : orders) {
+
+            checkOrderStateToPay(order);
+
+            order.setAccountType(user.getAccountType());
+            order.setPayType(TradePayType.OnLine);
+            order.setPayBank(payBank);
+            order.setUpdateTime(DateUtils.current());
+
+            generalDao.persist(order);
+        }
+
+        tradeLogger.info("校验订单信息通过，开始创建交易相关信息");
+
+        /**
+         * 1.计算出订单总金额
+         * 2.创建交易
+         * 3.保存tradeOrder信息
+         * 4.创建trade,将交易的表单刷到页面
+         * 5.跳转去第三方支付平台付款
+         */
+        long totalFee = orders.stream().map(Order::getTotalMoney).reduce(Money.valueOf(0d), Money::add).getCent();
+
+        Trade trade = Trade.TradeBuilder.createNewTrade(Money.valueOfCent(totalFee), BizType.Order, payBank, ip, channel);
+
+        submitTradeOrderProcess(trade.getTradeNo(), orders, payBank.getPayMethod());
+
+        return trade;
+    }
+
+    private void checkOrderStateToPay(Order order) {
+
+        if (!order.getOrderState().waitPay(TradePayType.OnLine)) {
+
+            tradeLogger.error(String.format("订单[orderNo=%s]支付出现异常，订单状态[%s]",
+                    String.valueOf(order.getOrderNo()), order.getOrderState()));
+
+            if (order.getOrderState().getName().equals(OrderState.Cancel.getName())) {
+                throw new AppBusinessException("订单支付出现异常，该订单已取消，请重新下单！");
+            } else {
+                throw new AppBusinessException("订单支付出现异常，该订单已支付，请勿重复支付！");
+            }
+        }
+
+
     }
 }
