@@ -30,6 +30,10 @@
 
             //分页确定页面
             var maxPage = $("#maxPage").val(),goPageBtn = $('#go-page'),currentLocation = location.href;
+
+            $(".page-text").on("keydown","#page-number",function(event){
+                if(event.keyCode == 13){ goPageBtn.trigger('click')}
+            });
             goPageBtn.on('click',function(){
                  var goPageNum = Number($("#page-number").val());
 
