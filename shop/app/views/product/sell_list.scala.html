@@ -103,86 +103,90 @@
                     </div>
 
                         <!-- 产品容器-->
-                    @*<div class="products-list-con">*@
+                        @*<div class="products-list-con">*@
                         @*<div class="products-list-header clearfix">*@
-                            @*<div class="products-list-hd-left left">*@
-                                @*<ul class="clearfix">*@
+                        @*<div class="products-list-hd-left left">*@
+                        @*<ul class="clearfix">*@
 
-                                    @*<li @if(queryVO.getSt == null || queryVO.getSt != 1) {*@
-                                        @*class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, status = queryVO.getSaleStatus)">*@
-                                        @*全部</a></li>*@
+                        @*<li @if(queryVO.getSt == null || queryVO.getSt != 1) {*@
+                        @*class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, status = queryVO.getSaleStatus)">*@
+                        @*全部</a></li>*@
 
-                                    @*<li @if(queryVO.getSt != null && queryVO.getSt == 1) {*@
-                                        @*class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1, status = queryVO.getSaleStatus)">*@
-                                        @*只显示有货商品</a></li>*@
-                                @*</ul>*@
-                            @*</div>*@
-                            @*@if(pageResult.getResult != null && pageResult.getTotalCount > 0) {*@
-                                @*<div class="products-list-hd-right right">*@
-                                    @*@if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {*@
-                                        @*<a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">*@
-                                            @*下一页</a>*@
-                                    @*} else {*@
-                                        @*<a class="disabled" href="javascript:void(0);">下一页</a>*@
-                                    @*}*@
-
-                                    @*@if(pageResult.getPageNo > 1) {*@
-                                        @*<a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">*@
-                                            @*上一页</a>*@
-                                    @*} else {*@
-                                        @*<a class="disabled" href="javascript:void(0);">上一页</a>*@
-                                    @*}*@
-                                @*</div>*@
-                            @*}*@
+                        @*<li @if(queryVO.getSt != null && queryVO.getSt == 1) {*@
+                        @*class="current" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, 1, status = queryVO.getSaleStatus)">*@
+                        @*只显示有货商品</a></li>*@
+                        @*</ul>*@
                         @*</div>*@
+                    @*@if(pageResult.getResult != null && pageResult.getTotalCount > 0) {*@
+                        @*<div class="products-list-hd-right right">*@
+                        @*@if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {*@
+                            @*<a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">*@
+                            @*下一页</a>*@
+                            @*} else {*@
+                            @*<a class="disabled" href="javascript:void(0);">下一页</a>*@
+                            @*}*@
+                            @*@if(pageResult.getPageNo > 1) {*@
+                    @*<a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">*@
+                    @*上一页</a>*@
+                    @*} else {*@
+                    @*<a class="disabled" href="javascript:void(0);">上一页</a>*@
+                    @*}*@
+                    @*</div>*@
+                    @*}*@
+                    @*</div>*@
 
-                        @if(pageResult.getResult != null && pageResult.getTotalCount > 0) {
-                            <div class="products-list-body">
-                                <ul class="clearfix">
-                                @for(prod <- pageResult.getResult) {
-                                    <li>
-                                        <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
-                                            @if(prod.getStatus.equals("FIRSTSELL")) {
-                                                <span class="status-selling">首发</span>
-                                            }
-                                            @if(prod.getStorage <= 0) {
-                                                <span class="sold-out">已售完</span>
-                                            }
-                                        <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" src="@routes.Assets.versioned("images/grey.gif")" alt="@prod.getProduct.getName" width="283" height="462"/></a>
-                                        <h3>@prod.getProduct.getName</h3>
-                                        <h4 class="price">￥@prod.getPrice</h4>
-                                    </li>
-                                }
-                                </ul>
-                            </div>
-
-                            <div class="products-list-footer">
-                                @if(pageResult.getPageNo > 1) {
-                                    <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
-                                        上一页</a>
-                                } else {
-                                    <a class="disabled" href="javascript:void(0);">
-                                        上一页</a>
-                                }
-
-                                @if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {
-                                    <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
-                                        下一页</a>
-                                } else {
-                                    <a class="disabled" href="javascript:void(0);">
-                                        下一页</a>
-                                }
-
-                            </div>
+                    @if(pageResult.getResult != null && pageResult.getTotalCount > 0) {
+                        <div class="products-list-body">
+                            <ul class="clearfix">
+                            @for(prod <- pageResult.getResult) {
+                                <li>
+                                    <a target="_blank" href="@controllers.product.routes.ProductController.detail(prod.getProduct.getId.toString)">
+                                        @if(prod.getStatus.equals("FIRSTSELL")) {
+                                            <span class="status-selling">首发</span>
+                                        }
+                                        @if(prod.getStorage <= 0) {
+                                            <span class="sold-out">已售完</span>
+                                        }
+                                    <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" src="@routes.Assets.versioned("images/grey.gif")" alt="@prod.getProduct.getName" width="283" height="462"/></a>
+                                    <h3>@prod.getProduct.getName</h3>
+                                    <h4 class="price">￥@prod.getPrice</h4>
+                                </li>
+                            }
+                            </ul>
                         </div>
-                    } else {
 
-                    <div class="mycart-empty">
-                        <p style="text-align: center;"><i class="iconfont" style="padding-right: 8px;">&#xe606;</i>没有符合条件的商品</p>
+                        <!-- 分页部分 -->
+                        @if(pageResult.getTotalPage > 1) {
+                            <div class="products-list-footer">
+                                <a @if(pageResult.getPageNo == 1){class="currentPage"} href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
+                                    1</a>
+                                @if(pageResult.getPageNo >= 5) {
+                                    ...
+                                }
+                                @for(num <- 2 until pageResult.getTotalPage) {
+                                    @if(num >= pageResult.getPageNo - 2 && num <= pageResult.getPageNo + 2) {
+                                        <a @if(pageResult.getPageNo == num){class="currentPage"} href="@controllers.product.routes.ProductController.list(num, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
+                                        @num</a>
+                                    }
+                                }
+                                @if(pageResult.getPageNo < pageResult.getTotalPage - 3) {
+                                    ...
+                                }
+                                <a @if(pageResult.getPageNo == pageResult.getTotalPage){class="currentPage"} href="@controllers.product.routes.ProductController.list(pageResult.getTotalPage, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
+                                @pageResult.getTotalPage</a>
+
+                            </div>
+                        }
                     </div>
-                }
+                } else {
+
+                <div class="mycart-empty">
+                    <p style="text-align : center ;"><i class="iconfont" style="padding-right : 8 px ;">&#xe606;</i>
+                        没有符合条件的商品</p>
                 </div>
+            }
             </div>
+        </div>
         </div>
         <!--end order-manage-->
 
