@@ -233,4 +233,13 @@ public class DesignerService {
     }
 
 
+    /**
+     * 查询所有设计师
+     * @return
+     */
+    public List<Designer> allOnlineDesigner() {
+        String hql = " from Designer where isDelete=0 and isPublished = 1";
+        return generalDAO.query(hql, Optional.empty(), new HashMap<>());
+    }
+
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Created by amoszhou on 15/7/20.
  */
-public class ProductInSellList {
+public class ProductInSellList implements Comparable<ProductInSellList> {
 
     /**
      * 商品基本信息
@@ -65,6 +65,17 @@ public class ProductInSellList {
      * 防止外部直接初始化
      */
     private ProductInSellList() {
+    }
+
+    @Override
+    public int compareTo(ProductInSellList o) {
+        if (this.getStorage() > 0 && o.getStorage() <= 0) {
+            return -1;
+        }
+        if (this.getStorage() <= 0 && o.getStorage() > 0) {
+            return 1;
+        }
+        return 0;
     }
 
     public static class Builder {

@@ -80,9 +80,14 @@ public class ProductListService {
     public List<Product> productList(Optional<Page<Product>> page, ProductQueryVO query) {
         StringBuilder jpql = new StringBuilder("select o from Product o where o.isDelete= 0 and o.online = 1 ");
         Integer navId = query.getNavigateId();
-        Integer storageFilter = query.getSt();
+        Integer designerId = query.getSt();
         String saleStatus = query.getSaleStatus();
         Map<String, Object> queryParams = new HashMap<>();
+
+        if(designerId!=null  && designerId!= -1){
+            jpql.append(" and o.customerId=:customerId ");
+            queryParams.put("customerId",designerId);
+        }
 
         /**
          * 销售状态

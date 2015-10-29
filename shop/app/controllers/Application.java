@@ -96,7 +96,6 @@ public class Application extends Controller {
         List<ProductInSellList> productList = products.stream().map(prod -> builder.buildProdct(prod)).collect(toList());
 
 
-
         /**
          *组装产品相关的信息，包括：产品信息，产品主图，产品如果是首发就活取首发信息
          */
@@ -127,12 +126,16 @@ public class Application extends Controller {
                         prod.getProduct().getSaleStatus().equals(SaleStatus.FIRSTSELL.toString())
         ).collect(toList());
 
+
+
         /**
          * 预售
          */
         List<ProductInSellList> preProds = productList.stream().filter(prod ->
                         prod.getProduct().getSaleStatus().equals(SaleStatus.PRESELL.toString())
         ).collect(toList());
+
+
 
         /**
          * 热卖
@@ -150,7 +153,15 @@ public class Application extends Controller {
         ).collect(toList());
 
 
-        return ok(product_list.render(SessionUtils.currentUser(), designer, sellProds, preProds, normalProds,planProds));
+        /**
+         * 排序，将售完的商品排至最后
+         */
+        Collections.sort(sellProds);
+        Collections.sort(normalProds);
+        Collections.sort(preProds);
+        Collections.sort(planProds);
+
+        return ok(product_list.render(SessionUtils.currentUser(), designer, sellProds, preProds, normalProds, planProds));
     }
 
 

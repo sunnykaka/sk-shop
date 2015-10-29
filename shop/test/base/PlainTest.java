@@ -65,4 +65,25 @@ public class PlainTest {
         System.out.println(result);
     }
 
+
+    @Test
+    public void testSort(){
+        List<Integer> list = new ArrayList<>();
+        list.add(8);
+        list.add(1);
+        list.add(10);
+        list.add(9);
+        list.add(15);
+
+        list.sort((n1,n2)->{
+            if(n1 > n2 ){
+                return 1;
+            }
+            if(n1 < n2){
+                return -1;
+            }
+            return 0;
+        });
+        System.out.println(list);
+    }
 }

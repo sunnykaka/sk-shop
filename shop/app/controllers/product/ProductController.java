@@ -15,8 +15,9 @@ import productcenter.dtos.ProductQueryVO;
 import productcenter.models.NavigateCategory;
 import productcenter.models.Product;
 import productcenter.services.ProductListService;
-import productcenter.services.ProductPictureService;
 import services.product.ProductDetailService;
+import usercenter.models.Designer;
+import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
 import utils.Global;
 import views.html.product.detail;
@@ -39,7 +40,7 @@ public class ProductController extends Controller {
     private ProductListService productListService;
 
     @Autowired
-    private ProductPictureService productPictureService;
+    private DesignerService designerService;
 
 
     /**
@@ -49,7 +50,7 @@ public class ProductController extends Controller {
      * @param navId
      * @return
      */
-    public Result list(int pageNo, int navId,int st,String status) {
+    public Result list(int pageNo, int navId, int st, String status) {
         Page<Product> page = new Page(pageNo, 12);
         ProductQueryVO queryVO = new ProductQueryVO();
         queryVO.setNavigateId(navId);
@@ -69,7 +70,8 @@ public class ProductController extends Controller {
         pageResult.setTotalCount(page.getTotalCount());
         pageResult.setResult(productList);
         List<NavigateCategory> navigateCategories = productListService.navigatesBelow(-1);
-        return ok(views.html.product.sell_list.render(navigateCategories, pageResult,queryVO));
+        List<Designer> designers = designerService.allOnlineDesigner();
+        return ok(views.html.product.sell_list.render(designers,navigateCategories, pageResult, queryVO));
     }
 
     public Result detail(String id) {
@@ -77,7 +79,7 @@ public class ProductController extends Controller {
         String[] array = id.split("-");
         Integer productId = null;
 //        Integer skuId = null;
-        if(!StringUtils.isNumeric(array[0])) {
+        if (!StringUtils.isNumeric(array[0])) {
             return Global.show400();
         } else {
             productId = Integer.parseInt(array[0]);
@@ -95,7 +97,7 @@ public class ProductController extends Controller {
             return Global.show404();
         }
 
-        return ok(detail.render(productDetail,(int)(Math.random()*10)%6+1));
+        return ok(detail.render(productDetail, (int) (Math.random() * 10) % 6 + 1));
     }
 
     public Result valuations(Integer productId, Integer point) {
@@ -103,13 +105,12 @@ public class ProductController extends Controller {
         Page<Valuation> page = PageFactory.getPage(request());
 
         valuationService.findByProduct(Optional.of(page), productId, point);
-        for(Valuation valuation:page.getResult()){
+        for (Valuation valuation : page.getResult()) {
             valuation.setUserName(common.utils.StringUtils.getSecurityName(valuation.getUserName()));
         }
 
         return ok(new JsonResult(true, null, page).toNode());
     }
-
 
 
 }
