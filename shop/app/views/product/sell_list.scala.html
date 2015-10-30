@@ -9,6 +9,20 @@
         </style>
         <script >
         $(function(){
+                var $category = $('.designer li:gt(14)');
+		            $category.hide();
+                    $('.more').click(function(){
+                          if($category.is(":visible")){
+                                $category.hide();
+                                $(this).html('更多<span></span>');
+                          }else{
+                                $category.show();
+                                 $(this).html('收起<span class="pickup"></span>');
+                          }
+                        return false;
+                    });
+
+
              //获取购物车 商品数量
             $.ajax({
                 url: '/cart/getUserCartItemNum',
@@ -47,7 +61,7 @@
                  if(/pageNo/.test(currentLocation)){
                     location.href = currentLocation.replace(/pageNo=(\d+)/,"pageNo="+goPageNum);
                  }else{
-                    if(/navId=/.test(currentLocation)){
+                    if(/navId=/.test(currentLocation) || /st=/.test(currentLocation)){
                        location.href = currentLocation+"&pageNo="+goPageNum;
                     }else{
                        location.href = currentLocation+"?pageNo="+goPageNum;
@@ -81,10 +95,9 @@
                         <!-- 产品分类-->
 
                     <div class="products-category">
-
-
+                        <div class="more">更多<span></span></div>
                         @if(designers != null) {
-                            <div class="products-category-con">
+                            <div class="products-category-con designer">
                                 <div>设计师：</div>
                                 <ul class="clearfix">
                                     <li @if(queryVO.getSt == null || queryVO.getSt.equals(-1)) {
