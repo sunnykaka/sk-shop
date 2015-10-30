@@ -1,9 +1,13 @@
 package cmscenter.services;
 
+import cmscenter.models.CmsExhibitionFans;
 import cmscenter.models.SkContent;
 import cmscenter.models.SkExhibition;
 import cmscenter.models.SkModule;
+import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
+import common.utils.DateUtils;
+import common.utils.RegExpUtils;
 import common.utils.page.Page;
 import common.utils.page.PageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,39 @@ public class SkCmsService {
 
     @Autowired
     private GeneralDao generalDao;
+
+
+    @Transactional
+    public void userLikeExhibition(Integer exhibitionId, String phone, Optional<Integer> userId) {
+        if (!RegExpUtils.isPhone(phone)) {
+            throw new AppBusinessException("手机号格式不正确");
+        }
+
+        if (findCmsExhibitionFans(exhibitionId, phone).isPresent()) {
+            throw new AppBusinessException("您已开启提醒");
+        }
+        CmsExhibitionFans cmsExhibitionFans = new CmsExhibitionFans();
+        cmsExhibitionFans.setCreateTime(DateUtils.current());
+        cmsExhibitionFans.setExhibitionId(exhibitionId);
+        cmsExhibitionFans.setPhone(phone);
+        if (userId.isPresent()) {
+            cmsExhibitionFans.setUserId(userId.get());
+        }
+        generalDao.persist(cmsExhibitionFans);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Optional<CmsExhibitionFans> findCmsExhibitionFans(Integer exhibitionId, String phone) {
+        String hql = "select cef from CmsExhibitionFans cef where cef.exhibitionId = :exhibitionId and cef.phone = :phone ";
+        Map<String, Object> params = new HashMap<String, Object>() {{
+            put("exhibitionId", exhibitionId);
+            put("phone", phone);
+        }};
+        List<CmsExhibitionFans> query = generalDao.query(hql, Optional.empty(), params);
+        return query.isEmpty() ? Optional.empty() : Optional.of(query.get(0));
+
+    }
 
 
     /**

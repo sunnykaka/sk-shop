@@ -127,14 +127,12 @@ public class Application extends Controller {
         ).collect(toList());
 
 
-
         /**
          * 预售
          */
         List<ProductInSellList> preProds = productList.stream().filter(prod ->
                         prod.getProduct().getSaleStatus().equals(SaleStatus.PRESELL.toString())
         ).collect(toList());
-
 
 
         /**
@@ -200,7 +198,7 @@ public class Application extends Controller {
         User user = SessionUtils.currentUser();
         Optional<Integer> userId = user == null ? Optional.empty() : Optional.of(user.getId());
         try {
-//            cmsService.userLikeExhibition(prodId, phone, userId);
+            skCmsService.userLikeExhibition(prodId, phone, userId);
             return ok(new JsonResult(true).toNode());
         } catch (AppBusinessException e) {
             return ok(new JsonResult(false, e.getMessage()).toNode());
