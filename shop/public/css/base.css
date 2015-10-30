@@ -416,8 +416,13 @@ table .pro{width: 360px;}
 /*end order-submit*/
 /*products-list*/
 .products-list{min-height: 870px;margin-bottom: 100px;}
-.products-list .products-category{width: 1138px;border: 1px solid #ccc;padding: 20px 30px 13px 30px;font-size: 14px;margin-bottom: 26px;}
-.products-list .products-category-con{overflow:hidden;}
+.products-list .products-category{width: 1138px;border: 1px solid #ccc;padding: 20px 30px 13px 30px;font-size: 14px;margin-bottom: 26px;position: relative;}
+.products-list .products-category .more{position: absolute;right: 38px;top: 22px;cursor: pointer;color: #FF2D54;}
+.products-list .products-category .more:hover{color: #FF2D54;}
+.products-list .products-category .more span{position: absolute;width:9px;height: 6px;top:6px;left:30px;background: url("../images/more.png") no-repeat -50px 0;}
+.products-list .products-category .more .pickup{background-position: -50px -13px;}
+.products-list .products-category .designer li{*white-space: nowrap;}
+.products-list .products-category-con{overflow:hidden;*margin-bottom:12px;}
 .products-list .products-category-con div{width: 80px;float: left;padding: 3px 0;}
 .products-list .products-category-con  ul{width: 1055px}
 .products-list .products-category-con  ul,.products-list .products-category-con  li,.products-list .products-category-con a{float: left;}
@@ -889,7 +894,7 @@ table .pro{width: 360px;}
 .designer-brand-inner ul{width: 1200px;}
 .designer-brand-inner .designer-con h2 .hasFocus{background-position:5px -1066px;}
 .designer-brand-inner .designer-con-content p{text-indent: 22px;line-height: 180%;}
-.designer-brand-inner .designer-con p{text-indent: 22px;font-size: 14px;margin-bottom: 20px;line-height: 180%;}
+.designer-brand-inner .designer-con p{text-indent: 30px;font-size: 14px;margin-bottom: 20px;line-height: 180%;}
 .designer-brand-inner .brand-start-fashion h3,.designer-brand-inner .ready-online h3,.designer-brand-inner .hot-sale h3{font-weight: normal;padding: 30px 0;}
 .designer-brand-inner .brand-start-fashion li,.designer-brand-inner .ready-online li,.designer-brand-inner .hot-sale li{position:relative;width: 283px;height: 538px;overflow: hidden;position: relative;margin: 0 8px 40px;cursor: pointer;float: left;
     -moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;
