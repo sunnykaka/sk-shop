@@ -9,18 +9,22 @@
         </style>
         <script >
         $(function(){
-                var $category = $('.designer li:gt(14)');
-		            $category.hide();
-                    $('.more').click(function(){
-                          if($category.is(":visible")){
-                                $category.hide();
-                                $(this).html('更多<span></span>');
-                          }else{
-                                $category.show();
-                                 $(this).html('收起<span class="pickup"></span>');
-                          }
-                        return false;
-                    });
+
+            var $category = $('.designer li:gt(14)');
+                $('.more').click(function(){
+                      if($category.is(":hidden")){
+                            $category.show();
+                             $(this).html('收起<span class="pickup"></span>');
+                      }else{
+                            $category.hide();
+                            $(this).html('更多<span></span>');
+                      }
+                    return false;
+                });
+
+                if($('.designer ul .current').index()>14){
+                    $('.more').trigger('click');
+                }
 
 
              //获取购物车 商品数量
@@ -105,9 +109,9 @@
                                         全部设计师</a></li>
                                     @for((des,index)<- designers.zipWithIndex) {
                                         @if(queryVO.getSt.equals(des.getId)) {
-                                            <li class="current" @if(index > 14){ style="display: none;" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, des.getId, status = queryVO.getSaleStatus)">@des.getName</a></li>
+                                            <li class="current" @if(index > 13){ style="display: none;" }><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, des.getId, status = queryVO.getSaleStatus)">@des.getName</a></li>
                                         } else {
-                                            <li @if(index > 14){ style="display: none;"} ><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, des.getId, status = queryVO.getSaleStatus)">@des.getName</a></li>
+                                            <li @if(index > 13){ style="display: none;"} ><a href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, des.getId, status = queryVO.getSaleStatus)">@des.getName</a></li>
                                         }
                                     }
                                 </ul>
