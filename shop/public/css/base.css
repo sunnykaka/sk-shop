@@ -440,11 +440,12 @@ table .pro{width: 360px;}
 .products-list .products-list-header a:hover,.products-list .products-list-footer a:hover{border: 1px solid #000;}
 .products-list .products-list-body{width: 1200px;margin: 26px 0 30px 0;}
 .products-list .products-list-body ul{width: 1300px;}
-.products-list .products-list-body li{float: left;width: 283px;height:538px;margin:0 19px 40px 2px;overflow:hidden;_display:inline;position:relative;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
+.products-list .products-list-body li{float: left;width: 283px;height:542px;margin:0 19px 40px 2px;overflow:hidden;_display:inline;position:relative;-moz-transition:.3s linear;-webkit-transition:.3s linear;-o-transition:.3s linear;transition:.3s linear;}
 .products-list .products-list-body li span{position: absolute;text-align: center;color: #fff;background: url("../images/list-label.png") no-repeat;font-size: 14px;}
 .products-list .products-list-body li .status-selling{width: 38px;height: 52px; right: 34px;line-height: 52px;}
 .products-list .products-list-body li .sold-out{width: 120px;height: 120px;background-position: 0 -66px;top: 50%;left:50%;margin: -104px 0 0 -70px;line-height: 120px;}
-.products-list .products-list-body h3{padding:12px 0 4px 6px;}
+.products-list .products-list-body .brand{font-weight:700;padding-top: 4px;}
+.products-list .products-list-body h3{margin-bottom: 4px;padding-left: 6px;}
 .products-list .products-list-body h3,.products-list .products-list-body h4{width:275px;font-weight: normal;font-size: 14px;}
 .products-list .products-list-body h4{color: #FF2D54;padding: 4px 4px 4px 8px;}
 .products-list .products-list-body a{display:block;width: 283px;margin:0;height:462px;overflow: hidden; }
