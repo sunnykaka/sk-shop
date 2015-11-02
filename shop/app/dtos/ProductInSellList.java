@@ -7,6 +7,8 @@ import productcenter.models.StockKeepingUnit;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
+import usercenter.models.Designer;
+import usercenter.services.DesignerService;
 import utils.Global;
 
 import java.util.List;
@@ -40,6 +42,11 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
 
     private Long storage;
 
+    private String brandName;
+
+    public String getBrandName() {
+        return brandName;
+    }
 
     public Long getStorage() {
         return storage;
@@ -93,22 +100,32 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
          */
         private ProductInSellList productInSellList;
 
+        private volatile List<Designer> list;
+
 
         private ProductPictureService productPictureService = Global.ctx.getBean(ProductPictureService.class);
         private ProductService productService = Global.ctx.getBean(ProductService.class);
         private SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
+        private DesignerService designerService = Global.ctx.getBean(DesignerService.class);
 
         public static Builder getInstance() {
             Builder builder = new Builder();
             return builder;
         }
 
+        public void initDesignerList() {
+            if (list == null)
+                list = designerService.allOnlineDesigner();
+        }
+
 
         public ProductInSellList buildProdct(Product product) {
+            initDesignerList();
             this.productInSellList = new ProductInSellList();
             this.productId = product.getId();
             this.productInSellList.product = product;
             buildPicture().buildPriceAndStatus(product);
+            this.productInSellList.brandName = list.stream().filter(designer -> designer.getId() == product.getCustomerId()).findFirst().get().getName();
             return productInSellList;
         }
 
