@@ -17,6 +17,14 @@ public class FavoritesDto {
 
     private String objectName;
 
+    public FavoritesDto(){}
+
+    public FavoritesDto(int objectId, String objectPic, String objectName){
+        this.objectId = objectId;
+        this.objectPic = objectPic;
+        this.objectName = objectName;
+    }
+
     public static FavoritesDto build(DesignerCollect designerCollect){
 
         if(designerCollect == null){ return null; }

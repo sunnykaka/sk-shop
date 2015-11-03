@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Zhb on 2015/9/15.
@@ -27,10 +24,6 @@ public class AppThemeService {
     @Transactional(readOnly = true)
     public List<AppHome> getAppHomes(){
        return generalDao.findAll(AppHome.class);
-    }
-
-    public AppTheme getAppThemeById(int themeId){
-        return generalDao.get(AppTheme.class, themeId);
     }
 
     @Transactional(readOnly = true)
@@ -57,6 +50,23 @@ public class AppThemeService {
         }
 
         return appTheme;
+
+    }
+
+    /**
+     * 获取最新的一个专题
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public AppTheme getFristAppTheme(){
+
+        Page<AppTheme> page = new Page<>(1,1);
+
+        List<AppTheme> appThemeList = new ArrayList<>();
+        appThemeList.addAll(findAppThemePageList(Optional.of(page)));
+
+        return appThemeList.size() > 0 ? appThemeList.get(0) : null ;
 
     }
 

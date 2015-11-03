@@ -4,7 +4,7 @@ import common.utils.JsonResult;
 import common.utils.page.Page;
 import common.utils.page.PageFactory;
 import dtos.ProductDetail;
-import dtos.ProductInSellList;
+import productcenter.dtos.ProductInSellList;
 import ordercenter.models.Valuation;
 import ordercenter.services.ValuationService;
 import org.apache.commons.lang3.StringUtils;

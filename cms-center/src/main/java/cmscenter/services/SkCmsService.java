@@ -9,10 +9,10 @@ import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.RegExpUtils;
 import common.utils.page.Page;
-import common.utils.page.PageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import usercenter.models.User;
 
 import java.util.*;
 
@@ -56,6 +56,40 @@ public class SkCmsService {
         }};
         List<CmsExhibitionFans> query = generalDao.query(hql, Optional.empty(), params);
         return query.isEmpty() ? Optional.empty() : Optional.of(query.get(0));
+
+    }
+
+    /**
+     * 判断是否订阅
+     *
+     * @param user
+     * @param productId
+     * @return
+     */
+    public boolean isBooked(User user, int productId){
+        if(user == null){
+            return false;
+        }
+        Optional<CmsExhibitionFans> oCef = findCmsExhibitionFans(productId, user.getPhone());
+        return oCef.isPresent();
+    }
+
+    /**
+     * 我的订阅列表
+     *
+     * @param page
+     * @param phone
+     * @param processed
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CmsExhibitionFans> findCmsExhibitionFansByPhone(Optional<Page<CmsExhibitionFans>> page, String phone, boolean processed) {
+        String hql = "select cef from CmsExhibitionFans cef where cef.processed = :processed and cef.phone = :phone order by createTime desc ";
+        Map<String, Object> params = new HashMap<String, Object>() {{
+            put("processed", processed);
+            put("phone", phone);
+        }};
+        return generalDao.query(hql, page, params);
 
     }
 

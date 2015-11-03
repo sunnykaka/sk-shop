@@ -66,12 +66,21 @@ GET           /my/order/list                          @controllers.api.user.MyOr
 GET           /my/order/:id                           @controllers.api.user.MyOrderApiController.orderInfo(id:Int)
 POST          /my/order/receiving/:id                 @controllers.api.user.MyOrderApiController.orderReceiving(id:Int)
 
+# 提示的列表
+GET           /my/reminder/list                       @controllers.api.user.MyDataApiController.getMyReminder(processed:Boolean,pageNo:Int ?= 1,pageSize:Int ?= 10)
+POST          /my/reminder/:productId                 @controllers.api.user.MyDataApiController.setMyReminder(productId:Int)
+
 # app cms
+GET           /home/shop                              @controllers.api.shop.HomeFoucsApiController.homeShop()
 GET           /home/pic                               @controllers.api.shop.ThemeApiController.getAppHomeList()
 GET           /home/theme/new                         @controllers.api.shop.ThemeApiController.getAppThemeHome()
 GET           /home/theme/list                        @controllers.api.shop.ThemeApiController.getAppThemeList(pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET           /home/theme/:id                         @controllers.api.shop.ThemeApiController.getAppTheme(id:Int)
 POST          /home/token                             @controllers.api.shop.ThemeApiController.saveDeviceToken()
+
+
+# app designer shop
+GET           /home/designer/:id                      @controllers.api.shop.DesignerApiController.designerShop(id:Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

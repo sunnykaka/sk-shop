@@ -39,6 +39,9 @@ public class ProductDetailBase {
     //是否收藏
     protected boolean isFavorites = false;
 
+    //是否订阅
+    private boolean isBooked = false;
+
     //收藏数量
     protected int favoritesNum;
 
@@ -94,6 +97,14 @@ public class ProductDetailBase {
 
     public void setFavorites(boolean isFavorites) {
         this.isFavorites = isFavorites;
+    }
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setIsBooked(boolean isBooked) {
+        this.isBooked = isBooked;
     }
 
     public int getFavoritesNum() {

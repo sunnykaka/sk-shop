@@ -30,6 +30,9 @@ public class ProductDetailDto {
     //是否收藏
     private boolean isFavorites = false;
 
+    //是否订阅
+    private boolean isBooked = false;
+
     //收藏数量
     private int favoritesNum;
 
@@ -95,6 +98,14 @@ public class ProductDetailDto {
         this.isFavorites = isFavorites;
     }
 
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setIsBooked(boolean isBooked) {
+        this.isBooked = isBooked;
+    }
+
     public int getFavoritesNum() {
         return favoritesNum;
     }
@@ -149,6 +160,7 @@ public class ProductDetailDto {
         productDetailDto.setDesignerSize(DesignerSizeDto.build(base.getDesignerSize()));
         productDetailDto.setExhibitionEndTime(base.getExhibitionEndTime());
         productDetailDto.setFavorites(base.isFavorites());
+        productDetailDto.setIsBooked(base.isBooked());
         productDetailDto.setFavoritesNum(base.getFavoritesNum());
         productDetailDto.setHtmlList(base.getHtmlList().stream().map(Html::getContent).collect(Collectors.toList()));
         productDetailDto.setInExhibition(base.isInExhibition());

@@ -1,6 +1,7 @@
-package dtos;
+package productcenter.dtos;
 
 import common.utils.Money;
+import common.utils.play.BaseGlobal;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 import productcenter.models.StockKeepingUnit;
@@ -9,7 +10,6 @@ import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.Designer;
 import usercenter.services.DesignerService;
-import utils.Global;
 
 import java.util.List;
 import java.util.Optional;
@@ -103,10 +103,10 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
         private volatile List<Designer> list;
 
 
-        private ProductPictureService productPictureService = Global.ctx.getBean(ProductPictureService.class);
-        private ProductService productService = Global.ctx.getBean(ProductService.class);
-        private SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
-        private DesignerService designerService = Global.ctx.getBean(DesignerService.class);
+        private ProductPictureService productPictureService = BaseGlobal.ctx.getBean(ProductPictureService.class);
+        private ProductService productService = BaseGlobal.ctx.getBean(ProductService.class);
+        private SkuAndStorageService skuAndStorageService = BaseGlobal.ctx.getBean(SkuAndStorageService.class);
+        private DesignerService designerService = BaseGlobal.ctx.getBean(DesignerService.class);
 
         public static Builder getInstance() {
             Builder builder = new Builder();
