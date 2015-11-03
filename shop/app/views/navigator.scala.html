@@ -2,34 +2,61 @@
 
 <div class="header">
     <div class="header-inner width1200">
-        <ul class="nav clearfix">
+        <div class="clearfix">
+            <div class="left">
+                <h1><a   href="@controllers.routes.Application.index()"><img class="lazy" data-original="@routes.Assets.versioned("images/logo-1.png")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="336" height="90"/></a></h1>
+            </div>
+            <div class="right">
+                <div class="app-download">
+                    <img class="lazy" data-original="@routes.Assets.versioned("images/app.png")" src="@routes.Assets.versioned("images/grey.gif")" alt="" width="55" height="55"/>
+                    <p class="pink">尚客APP</p>
+                    <p>扫一扫 立即下载</p>
+                </div>
+                <a href="/cart/showCart"><i class="iconfont" style="padding-right:4px;">&#xe606;</i>购物车 <span class="quantity">0</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="nav-wrap">
+        <ul class="nav width1200 clearfix">
             <li>
                 <a @if("index".equals(name)) {
                     class="current"
-                } href="@controllers.routes.Application.index()">首页<br/> <span>home</span></a>
+                } href="@controllers.routes.Application.index()">首页</a>
+            </li>
+            <li>
+                <a @if("product_first".equals(name)) {
+                    class="current"
+                } href="@controllers.product.routes.ProductController.list(status="FIRSTSELL",m="product_first")">最新</a>
+            </li>
+            <li>
+                <a @if("product_host".equals(name)) {
+                    class="current"
+                } href="@controllers.product.routes.ProductController.list(status="HOTSELL",m="product_host")">最热</a>
+            </li>
+            <li>
+                <a @if("product".equals(name)) {
+                    class="current"
+                } href="@controllers.product.routes.ProductController.list()">所有客品</a>
+            </li>
+            <li>
+                <a @if("product_nav15".equals(name)) {
+                    class="current"
+                } href="@controllers.product.routes.ProductController.list(navId=15,m="product_nav15")">服装</a>
+            </li>
+            <li>
+                <a @if("product_nav16".equals(name)) {
+                    class="current"
+                } href="@controllers.product.routes.ProductController.list(navId=16,m="product_nav16")">配饰</a>
             </li>
             <li>
                 <a @if("designer".equals(name)) {
                     class="current"
-                } href="@controllers.routes.Application.designers()">设计师<br/> <span>designer</span></a>
+                } href="@controllers.routes.Application.designers()">设计师</a>
             </li>
-
-            <li class="logo">
-                <a title="尚客" href="@controllers.routes.Application.index()">fashiongeeker/尚客</a>
-            </li>
-            <li>
-                @*<a @if("preview".equals(name)) {
-                class="current"
-                } href="@controllers.routes.Application.preview()">预告<br/><span>preview</span></a>*@
-                <a @if("product".equals(name)) {
-                    class="current"
-                } href="@controllers.product.routes.ProductController.list()">所有商品<br/> <span>products</span></a>
-            </li>
-
             <li class="last">
                 <a @if("about".equals(name)) {
                     class="current"
-                } href="@controllers.routes.Application.about()">关于我们<br/> <span>about us</span></a>
+                } href="@controllers.routes.Application.about()">关于我们</a>
             </li>
         </ul>
     </div>

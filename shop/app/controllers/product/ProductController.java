@@ -50,7 +50,7 @@ public class ProductController extends Controller {
      * @param navId
      * @return
      */
-    public Result list(int pageNo, int navId, int st, String status) {
+    public Result list(int pageNo, int navId, int st, String status,String m) {
         Page<Product> page = new Page(pageNo, 12);
         ProductQueryVO queryVO = new ProductQueryVO();
         queryVO.setNavigateId(navId);
@@ -71,7 +71,7 @@ public class ProductController extends Controller {
         pageResult.setResult(productList);
         List<NavigateCategory> navigateCategories = productListService.navigatesBelow(-1);
         List<Designer> designers = designerService.allOnlineDesigner();
-        return ok(views.html.product.sell_list.render(designers,navigateCategories, pageResult, queryVO));
+        return ok(views.html.product.sell_list.render(designers,navigateCategories, pageResult, queryVO,m));
     }
 
     public Result detail(String id) {

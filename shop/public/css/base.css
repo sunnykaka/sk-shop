@@ -98,33 +98,37 @@ border: 1px solid transparent;
 /*产品信息宽度*/
 table .pro{width: 360px;}
 /*top*/
-.top{background: #f3f7f6;height:40px;width: 100%;}
-.top .left h1{font-size:12px;line-height: 40px;font-weight: normal;}
-.top .right{margin-top: 10px;}
+.top{background: #f3f7f6;height:30px;width: 100%;}
+.top .left{font-size:12px;line-height: 30px;font-weight: normal;}
+.top .right{margin-top: 6px;}
 .top .right .button{margin-right:15px;}
 .space{padding: 0 4px;}
 .top .logined li{float: left;margin-right: 30px;}
 .top .logined a,.top .logined span{float: left;}
 .top .logined .user-name{}
-.top .logined a:hover,.top #logout:hover{color: #fd2049;}
+.top .logined a:hover,.top #logout:hover{color: #FF2D54;}
 .top #logout{cursor: pointer;}
 /*end top*/
 /*header*/
-.header{height:200px;width: 100%;border-bottom: 1px solid #c6c6c6;}
-.header .nav{margin-left:83px;}
-.header li{float:left;height:60px;margin-top:138px;margin-right:105px;}
-.header li a{float:left;width: 100%;height: 100%;font-size:16px;line-height: 25px;padding:0 20px;text-align: center;
-    text-decoration: none;
+.header{height:130px;width: 100%;}
+.header-inner{height: 90px;}
+.header-inner .right{width: 358px;}
+.header-inner .right .app-download,.header-inner .right .app-download img,.header-inner .right a{float: left;}
+.header-inner .right .app-download img{margin-right: 10px;}
+.header-inner .right .app-download{height: 55px;width: 160px;margin:18px 50px 0 0;}
+.header-inner .right .app-download .pink{color: #ff2d54;padding-top: 8px;margin-bottom: 6px;}
+.header-inner .right a{margin-top: 30px;border: 1px solid #ccc;padding: 4px 12px;}
+.header-inner .right a .quantity{background: #FF2D54;  border-radius: 8px;  padding: 0 8px;  color: #fff;  line-height: 150%;}
+.header-inner .right a:hover{border: 1px solid #000;color: #ff2d54;}
+.header .nav-wrap{width: 100%;height: 40px;background: #000;}
+.header li{float:left;height:40px;width: 133px;}
+.header li a{float:left;width: 100%;height: 100%;font-size:16px;line-height: 40px;text-align: center;
+    text-decoration: none;color: #fff;
 }
-.header li span{font-size: 12px;}
-.header li .current,.header li a:hover{border-bottom:2px solid #FF2D54;}
-.header .last{margin-right: 0;}
-.header .logo{height: 200px;margin-top:0;margin-right:55px;width: 290px;}
-.header .logo a{padding: 0;width: 194px;text-indent: -9999px;background: url("../images/sk-sprite.png") no-repeat;margin-left: 53px;_display:inline;}
-.header .logo a:hover{border-bottom: none;}
+.header li .current,.header li a:hover{background: #FF2D54;}
 /*end header*/
 /*index slider-box*/
-.flexslider{height:501px;margin-bottom: 55px;overflow:hidden; background: #fff; position: relative}
+.flexslider{height:501px;margin-bottom: 16px;overflow:hidden; background: #fff; position: relative}
 .flexslider .slides { zoom: 1; position: relative;  width: 100%;  height: 501px;  overflow: hidden;}
 .flexslider .slides a{display: block;width: 100%;height: 100%;}
 .flex-direction-nav {*height: 0;}
@@ -136,6 +140,7 @@ table .pro{width: 360px;}
 .flexslider:hover .flex-prev {  left: 10%;}
 .flexslider:hover .flex-next {  right: 10%;}
 .flex-direction-nav .flex-disabled { opacity: 0!important; filter:alpha(opacity=0); cursor: default; }
+.btm-img{height: 75px;margin-bottom: 55px;}
 /* Control Nav */
 .flex-control-nav {width: 100%; position: absolute; bottom: 10px; text-align: center;z-index: 100;}
 .flex-control-nav li {margin: 0 6px; display: inline-block; zoom: 1; *display: inline;}

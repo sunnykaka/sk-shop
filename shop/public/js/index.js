@@ -8,7 +8,7 @@ $(function(){
         cache:false,
         success: function (data) {
             if (data.result) {
-                $('#cart-quantity').text(data.data);
+                $('.quantity').text(data.data);
             }
         }
     });

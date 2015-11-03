@@ -11,7 +11,7 @@ GET         /designers4more                                       @controllers.A
 GET         /designerProd                                         @controllers.Application.designerProd(dId:Int)
 GET         /about                                                @controllers.Application.about
 GET         /robots.txt                                           @controllers.Application.robots
-GET         /products                                             @controllers.product.ProductController.list(pageNo:Int ?=1,navId:Int ?= -1,st:Int ?= -1,status ?=null )
+GET         /products                                             @controllers.product.ProductController.list(pageNo:Int ?=1,navId:Int ?= -1,st:Int ?= -1,status ?=null,m ?="product")
 
 
 # user
