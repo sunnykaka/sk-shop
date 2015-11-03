@@ -55,7 +55,7 @@ public class ProductDto {
      */
     private Boolean isDelete;
 
-
+    private String saleStatus;
 
     public Integer getId() {
         return id;
@@ -129,6 +129,13 @@ public class ProductDto {
         this.isDelete = isDelete;
     }
 
+    public String getSaleStatus() {
+        return saleStatus;
+    }
+
+    public void setSaleStatus(String saleStatus) {
+        this.saleStatus = saleStatus;
+    }
 
     public static ProductDto build(Product product) {
         if(product == null) return null;
@@ -142,6 +149,7 @@ public class ProductDto {
         productDto.setOnline(product.isOnline());
         productDto.setProductCode(product.getProductCode());
         productDto.setTagType(product.getTagType());
+        productDto.setSaleStatus(product.getSaleStatus());
 
         return productDto;
     }

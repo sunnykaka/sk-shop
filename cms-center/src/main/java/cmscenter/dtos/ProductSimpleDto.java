@@ -1,10 +1,9 @@
 package cmscenter.dtos;
 
-import common.utils.StringUtils;
 import productcenter.models.Product;
 
 /**
- * Created by Administrator on 2015/9/15.
+ * Created by zhb on 2015/9/15.
  */
 public class ProductSimpleDto {
 

@@ -1,4 +1,5 @@
-@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[dtos.ProductInSellList], previewList: List[dtos.ProductInSellList], normalList: List[dtos.ProductInSellList], planProds: List[dtos.ProductInSellList])
+@import productcenter.dtos.ProductInSellList
+@(user: usercenter.models.User, designer: usercenter.dtos.DesignerView, sellingList: List[ProductInSellList], previewList: List[ProductInSellList], normalList: List[ProductInSellList], planProds: List[ProductInSellList])
 
 @import common.utils.DateUtils
 @import productcenter.models.Seo;

@@ -1,6 +1,7 @@
 package services.api.product;
 
 import api.response.product.ProductDetailDto;
+import cmscenter.services.SkCmsService;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ProductDetailApiService {
     @Autowired
     ProductDetailBaseService productDetailBaseService;
 
+    @Autowired
+    SkCmsService skCmsService;
+
     @Transactional(readOnly = true)
     public ProductDetailDto showDetail(int productId, Integer skuId, User user) {
 
@@ -30,6 +34,7 @@ public class ProductDetailApiService {
         if(base == null) {
             throw new AppBusinessException(ErrorCode.NotFound, "没有找到您请求的商品信息");
         }
+        base.setIsBooked(skCmsService.isBooked(user, productId));
 
         return ProductDetailDto.build(base);
     }
