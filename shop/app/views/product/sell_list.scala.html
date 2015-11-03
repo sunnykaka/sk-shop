@@ -185,6 +185,14 @@
                             <!-- 分页部分 -->
                         @if(pageResult.getTotalPage > 1) {
                             <div class="products-list-footer">
+
+                                @if(pageResult.getPageNo > 1) {
+                                    <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo - 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
+                                        上一页</a>
+                                } else {
+                                    <a class="disabled" href="javascript:void(0);">上一页</a>
+                                }
+
                                 <a @if(pageResult.getPageNo == 1) {
                                     class="currentPage"
                                 } href="@controllers.product.routes.ProductController.list(1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
@@ -207,6 +215,13 @@
                                     class="currentPage"
                                 } href="@controllers.product.routes.ProductController.list(pageResult.getTotalPage, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
                                 @pageResult.getTotalPage</a>
+
+                                @if(pageResult.getTotalPage >= pageResult.getPageNo + 1) {
+                                    <a href="@controllers.product.routes.ProductController.list(pageResult.getPageNo + 1, queryVO.getNavigateId, queryVO.getSt, queryVO.getSaleStatus)">
+                                        下一页</a>
+                                } else {
+                                    <a class="disabled" href="javascript:void(0);">下一页</a>
+                                }
                                 <input type="hidden" id="maxPage" value="@pageResult.getTotalPage" />
                                 <span class="page-text">
                                     到第<input type="text" id="page-number" value="@pageResult.getPageNo"/>
