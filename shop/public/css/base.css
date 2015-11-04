@@ -119,7 +119,7 @@ table .pro{width: 360px;}
 .header-inner .right .app-download .pink{color: #ff2d54;padding-top: 8px;margin-bottom: 6px;}
 .header-inner .right a{margin-top: 30px;border: 1px solid #ccc;padding: 4px 12px;}
 .header-inner .right a .quantity{background: #FF2D54;  border-radius: 8px;  padding: 0 8px;  color: #fff;  line-height: 150%;}
-.header-inner .right a:hover{border: 1px solid #000;color: #ff2d54;}
+.header-inner .right a:hover{color: #ff2d54;}
 .header .nav-wrap{width: 100%;height: 40px;background: #000;}
 .header li{float:left;height:40px;width: 133px;}
 .header li a{float:left;width: 100%;height: 100%;font-size:16px;line-height: 40px;text-align: center;
