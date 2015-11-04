@@ -3,16 +3,6 @@
  */
 $(function () {
     $.scrollTo('#detail', 600);
-    //获取购物车 商品数量
-    $.ajax({
-        url: '/cart/getUserCartItemNum',
-        cache:false,
-        success: function (data) {
-            if (data.result) {
-                $('#cart-quantity').text(data.data);
-            }
-        }
-    });
 
     //索引点击
     $('.imgIndex a').on('click',function(){

@@ -222,6 +222,17 @@ function fixedcart(obj, scopeObj) {
     });
 }
 
+//获取购物车 商品数量
+$.ajax({
+    url: '/cart/getUserCartItemNum',
+    cache:false,
+    success: function (data) {
+        if (data.result) {
+            $('.quantity').text(data.data);
+        }
+    }
+});
+
 //生成随机验证码
 function randomCode(){
     var arr = [109,119,106,105,71,68,115,78,69,97,111,118,52,87,73,115],str = '';
