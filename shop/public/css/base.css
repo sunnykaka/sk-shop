@@ -427,6 +427,7 @@ table .pro{width: 360px;}
 .products-list .products-category .more span{position: absolute;width:9px;height: 6px;top:6px;left:30px;background: url("../images/more.png") no-repeat -50px 0;}
 .products-list .products-category .more .pickup{background-position: -50px -13px;}
 .products-list .products-category .designer li{*white-space: nowrap;}
+.products-list .products-category .designer ul{width: 1004px;overflow: hidden;}
 .products-list .products-category-con{overflow:hidden;*margin-bottom:12px;}
 .products-list .products-category-con div{width: 80px;float: left;padding: 3px 0;}
 .products-list .products-category-con  ul{width: 1055px}
