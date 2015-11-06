@@ -715,7 +715,7 @@ table .pro{width: 360px;}
 .detail-quantity .amount a:hover{text-decoration: none}
 .detail-quantity .amount .btn-sub{border-width:1px;}
 .detail-quantity .amount .text-number{width:43px;background: #fff;font-weight: normal;}
-.detail-btn{height: 38px;padding: 4px 0 40px 0; border-bottom: 1px solid #e5e5e5;overflow:hidden;margin-bottom: 30px;*height:1%;}
+.detail-btn{height: 38px;padding: 4px 0 0 0;overflow:hidden;margin-bottom: 25px;*height:1%;}
 .detail-btn .btn-wrap{width: 130px;height:38px;overflow: hidden;float: left;margin-right:10px;}
 .detail-btn  .loading-after{display:none;width:130px;background: #d0d0d0;color: #fff; position: relative;cursor: not-allowed;}
 .detail-btn  .loading .loading-after{margin-top: -38px;}
@@ -728,7 +728,7 @@ table .pro{width: 360px;}
 .detail-btn .addToCart{background: #fff;color: #000;}
 .detail-btn p{clear: both;padding: 12px 0;}
 .detail-btn .soldOut{background: #ccc;border: none;}
-.detail-like{height: 30px;}
+.detail-like{height: 30px;padding-top: 22px;border-top: 1px solid #e5e5e5;}
 .detail-like .like,.detail-like .about-designer{padding: 3px 12px;border: 1px solid #FF2D54;border-radius: 50px;position: relative;cursor: pointer;color: #fd2049;}
 .detail-like .like{margin-left: 6px;}
 .detail-like i,.detail-like a{color: #fd2049;}
