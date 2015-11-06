@@ -293,9 +293,10 @@
                                         <span class="btn addToOrder loading-after"><i class="loading-btn"></i>处理中...</span>
                                     </div>
                                     <a href="javascript:;" class="btn addToCart" id="addToCart">加入购物车</a>
-                                    @if(pd.getBase.getProduct.getSaleStatus == "PRESELL") {
-                                        <p>* 此商品为下季新款，到货时间以设计师为准！</p>
-                                    }
+                                    @*@if(pd.getBase.getProduct.getSaleStatus == "PRESELL") {*@
+                                        @*<p>* 此商品为下季新款，到货时间以设计师为准！</p>*@
+                                    @*}*@
+                                    <p style="color: #FF2D54;"> @pd.getBase.getProduct.getOnboardInfo</p>
                                 </div>
                             }
                         }

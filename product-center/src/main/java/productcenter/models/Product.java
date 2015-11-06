@@ -132,6 +132,9 @@ public class Product implements EntityClass<Integer>, OperableData {
      */
     private String modelInfo;
 
+
+    private String onboardInfo;
+
     /**
      * 设计师尺码表ID
      */
@@ -445,5 +448,13 @@ public class Product implements EntityClass<Integer>, OperableData {
 
     public void setDesignerSizeId(Integer designerSizeId) {
         this.designerSizeId = designerSizeId;
+    }
+
+    public String getOnboardInfo() {
+        return onboardInfo;
+    }
+
+    public void setOnboardInfo(String onboardInfo) {
+        this.onboardInfo = onboardInfo;
     }
 }
