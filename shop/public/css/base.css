@@ -115,7 +115,7 @@ table .pro{width: 360px;}
 .header-inner .right{width: 358px;}
 .header-inner .right .app-download,.header-inner .right .app-download img,.header-inner .right a{float: left;}
 .header-inner .right .app-download img{margin-right: 10px;}
-.header-inner .right .app-download{height: 55px;width: 160px;margin:18px 50px 0 0;}
+.header-inner .right .app-download{height: 55px;width: 160px;margin:18px 50px 0 0;padding-left: 38px;}
 .header-inner .right .app-download .pink{color: #ff2d54;padding-top: 8px;margin-bottom: 6px;}
 .header-inner .right a{margin-top: 30px;border: 1px solid #ccc;padding: 4px 12px;}
 .header-inner .right a .quantity{background: #FF2D54;  border-radius: 8px;  padding: 0 8px;  color: #fff;  line-height: 150%;}
