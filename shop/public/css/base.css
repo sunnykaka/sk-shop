@@ -102,8 +102,10 @@ table .pro{width: 360px;}
 .top .left{font-size:12px;line-height: 30px;font-weight: normal;}
 .top .right{margin-top: 6px;}
 .top .right .button{margin-right:15px;}
+.top .right .signIn{margin-right: 0;}
 .space{padding: 0 4px;}
 .top .logined li{float: left;margin-right: 30px;}
+.top .logined .last-li{margin-right: 0;}
 .top .logined a,.top .logined span{float: left;}
 .top .logined .user-name{}
 .top .logined a:hover,.top #logout:hover{color: #FF2D54;}
@@ -601,7 +603,7 @@ table .pro{width: 360px;}
 .detail-inner .video .sliderBtn .next {right:0;background-position: -50px 0;}
 .detail-inner .video .sliderBtn .next:hover {  background-position:-50px -50px; opacity:.4; filter:alpha(opacity=40);}
 .detail-inner .Collocation{margin-bottom: 30px;overflow: hidden;}
-.detail-inner .Collocation h3{position:relative;width: 284px;text-align: center;padding: 10px;border-bottom: 1px solid #000;margin: 0 auto 30px;font-weight: normal;font-size: 16px;}
+.detail-inner .Collocation h3{position:relative;width: 290px;text-align: center;padding: 10px;border-bottom: 1px solid #000;margin: 0 auto 30px;font-weight: normal;font-size: 16px;}
 .detail-inner .Collocation h3 span{top: 34px;left: 145px;}
 .detail-inner .Collocation h3.first{text-align: left; margin: 0 0 20px 0;}
 .detail-inner .Collocation .collocation-text,.detail-inner .Collocation .collacation-list h4{text-align: center;line-height: 20px;margin: 20px 0;}
