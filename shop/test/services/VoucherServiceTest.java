@@ -1,32 +1,34 @@
 package services;
 
 import base.BaseTest;
-import base.CartTest;
+import base.VoucherTest;
 import common.utils.DateUtils;
-import common.utils.Money;
-import ordercenter.constants.VoucherStatus;
 import ordercenter.constants.VoucherType;
 import ordercenter.excepiton.VoucherException;
-import ordercenter.models.Voucher;
 import ordercenter.models.VoucherBatch;
-import ordercenter.services.VoucherService;
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 import play.Logger;
-import utils.Global;
 
-import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static java.util.Optional.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 
 /**
  * Created by liubin on 15-4-2.
  */
-public class VoucherServiceTest extends BaseTest implements CartTest {
+public class VoucherServiceTest extends BaseTest implements VoucherTest {
+
+    /**
+     * 测试运行之前将数据库所有的代金券活动状态置为无效
+     */
+    @Before
+    public void init() {
+        setAllVoucherBatchToInvalid();
+    }
 
 
     @Test
@@ -34,98 +36,53 @@ public class VoucherServiceTest extends BaseTest implements CartTest {
 
         Integer userId = mockUser();
 
-        Money voucherAmount = Money.valueOf((new java.util.Random().nextInt(10) + 1) * 0.05d);
         DateTime now = DateUtils.current();
         Optional<Integer> period = of(3);
         Optional<DateTime> deadline = of(now.plusDays(2));
+        int quantity = 3;
 
         //为每种类型都运行测试
         for(VoucherType type : VoucherType.values()) {
             //活动请求，代金券只有有效期没有截止日期
-            VoucherBatch voucherBatch = initVoucherBatch(type, voucherAmount,
-                    now, empty(), period, empty(), empty());
-            assertRequestVouchersSuccess(voucherBatch, userId);
+            VoucherBatch voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            assertRequestVouchersSuccess(voucherBatch, userId, quantity);
+
+            setAllVoucherBatchToInvalid();
 
             //活动请求，代金券有截止日期
-            voucherBatch = initVoucherBatch(type, voucherAmount,
-                    now, empty(), period, deadline, empty());
-            assertRequestVouchersSuccess(voucherBatch, userId);
+            voucherBatch = initVoucherBatch(type, now, empty(), period, deadline, empty());
+            assertRequestVouchersSuccess(voucherBatch, userId, quantity);
 
         }
 
     }
 
-    private VoucherBatch initVoucherBatch(VoucherType type, Money voucherAmount, DateTime startTime, Optional<DateTime> endTime,
-                                          Optional<Integer> period, Optional<DateTime> deadline, Optional<Integer> maxQuantity) {
+    @Test
+    public void testRequestForActivityFail() throws Exception {
 
-        VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
+        Integer userId = mockUser();
 
-        VoucherBatch voucherBatch = new VoucherBatch();
-        voucherBatch.setType(type);
-        voucherBatch.setAmount(voucherAmount);
-        voucherBatch.setStartTime(startTime);
-        if(period.isPresent()) {
-            voucherBatch.setPeriodDay(period.get());
-        }
-        if(deadline.isPresent()) {
-            voucherBatch.setDeadline(deadline.get());
-        }
-        if(endTime.isPresent()) {
-            voucherBatch.setEndTime(endTime.get());
-        }
-        if(maxQuantity.isPresent()) {
-            voucherBatch.setMaxQuantity(maxQuantity.get());
-        }
-        try {
-            voucherService.createVoucherBatch(voucherBatch);
-        } catch (VoucherException e) {
-            Logger.warn(e.getMessage());
-            if(voucherBatch.getId() == null) {
-                //数据库已经存在用户注册代金券活动
-                voucherBatch = voucherService.findValidVoucherBatch(Optional.empty(), VoucherType.FIRE_BY_REGISTER);
+        DateTime now = DateUtils.current();
+        Optional<Integer> period = of(3);
+        int maxQuantity = 1;
+
+        for(VoucherType type : VoucherType.values()) {
+            //代金券最大数量为1, 但是请求2个
+            VoucherBatch voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), of(maxQuantity));
+            boolean exceptionThrown = false;
+            try {
+                requestVoucherByType(type, userId, voucherBatch.getUniqueNo(), maxQuantity + 1);
+            } catch (VoucherException expected) {
+                Logger.debug(expected.getMessage());
+                exceptionThrown = true;
+            }
+            if(!exceptionThrown) {
+                throw new AssertionError("因为请求的代金券数量超过上限，预期抛出VoucherException，但是没有异常抛出");
             }
         }
-
-        //新建的代金券活动状态为无效，手动改为有效
-        voucherService.updateVoucherBatchToValid(voucherBatch.getId());
-
-        return voucherBatch;
     }
 
-    private void assertRequestVouchersSuccess(VoucherBatch voucherBatch, Integer userId) {
 
-        VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
-
-        List<Voucher> voucherList;
-        int quantity = 3;
-        switch (voucherBatch.getType()) {
-            case FIRE_BY_REGISTER: {
-                voucherList = voucherService.requestForRegister(userId, quantity);
-                break;
-            }
-            case RECEIVE_BY_ACTIVITY: {
-                voucherList = voucherService.requestForActivity(of(voucherBatch.getUniqueNo()), userId, quantity);
-                break;
-            }
-            default: {
-                throw new AssertionError("未知的voucher type: " + voucherBatch.getType());
-            }
-        }
-
-        assertThat(voucherList.size(), is(quantity));
-        for(Voucher voucher : voucherList) {
-            assertThat(voucher.getAmount(), is(voucherBatch.getAmount()));
-            if(voucherBatch.getDeadline() != null) {
-                assertThat(DateUtils.isBeforeOrEqualWithDateTruncate(voucher.getDeadline(),
-                        voucherBatch.getDeadline()), is(true));
-            } else {
-                assertThat(DateUtils.isBeforeOrEqualWithDateTruncate(voucher.getDeadline(),
-                        voucherBatch.getStartTime().plusDays(voucherBatch.getPeriodDay())), is(true));
-            }
-            assertThat(voucher.getMinOrderAmount(), is(voucherBatch.getMinOrderAmount()));
-            assertThat(voucher.getStatus(), is(VoucherStatus.UNUSED));
-        }
-    }
 
 
 

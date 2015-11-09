@@ -2,12 +2,19 @@ package services;
 
 import base.BaseTest;
 import base.CartTest;
+import base.VoucherTest;
+import common.utils.DateUtils;
+import common.utils.Money;
 import ordercenter.constants.OrderState;
-import ordercenter.models.CartItem;
-import ordercenter.models.Order;
-import ordercenter.models.OrderItem;
+import ordercenter.constants.VoucherStatus;
+import ordercenter.constants.VoucherType;
+import ordercenter.excepiton.VoucherException;
+import ordercenter.models.*;
 import ordercenter.services.CartService;
 import ordercenter.services.OrderService;
+import ordercenter.services.VoucherService;
+import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 import play.Logger;
 import productcenter.models.Product;
@@ -21,8 +28,11 @@ import utils.Global;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -30,8 +40,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by liubin on 15-4-2.
  */
-public class OrderServiceTest extends BaseTest implements CartTest {
+public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest {
 
+    /**
+     * 测试运行之前将数据库所有的代金券活动状态置为无效
+     */
+    @Before
+    public void init() {
+        setAllVoucherBatchToInvalid();
+    }
 
     @Test
     public void testSubmitOrderSuccess() throws Exception {
@@ -39,24 +56,87 @@ public class OrderServiceTest extends BaseTest implements CartTest {
         Integer userId = mockUser();
 
         //购物车中选中1个产品，数量为1提交订单
-        testSubmitOrder(userId, 1, 1, false);
+        testSubmitOrder(userId, 1, 1, false, null);
 
         //购物车中选中1个产品，数量为2提交订单
-        testSubmitOrder(userId, 1, 2, false);
+        testSubmitOrder(userId, 1, 2, false, null);
 
         //购物车中选中3个产品，每个数量为1提交订单
-        testSubmitOrder(userId, 3, 1, false);
+        testSubmitOrder(userId, 3, 1, false, null);
 
         //购物车中选中3个产品，每个数量为2提交订单
-        testSubmitOrder(userId, 3, 2, false);
+        testSubmitOrder(userId, 3, 2, false, null);
 
         //1个产品，数量为1立即购买
-        testSubmitOrder(userId, 1, 1, true);
+        testSubmitOrder(userId, 1, 1, true, null);
 
         //1个产品，数量为5立即购买
-        testSubmitOrder(userId, 1, 5, true);
+        testSubmitOrder(userId, 1, 5, true, null);
 
     }
+
+    @Test
+    public void testSubmitOrderWithVouchers() throws Exception {
+
+        Integer userId = mockUser();
+
+        DateTime now = DateUtils.current();
+        Optional<Integer> period = of(3);
+        int quantity = 3;
+
+        //为每种类型都运行测试
+        for(VoucherType type : VoucherType.values()) {
+            VoucherBatch voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            List<Voucher> vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
+            //购物车中选中1个产品，数量为1提交订单
+            testSubmitOrder(userId, 1, 1, false, vouchers);
+            setAllVoucherBatchToInvalid();
+
+            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
+            //购物车中选中3个产品，每个数量为2提交订单
+            testSubmitOrder(userId, 3, 2, false, vouchers);
+            setAllVoucherBatchToInvalid();
+
+            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
+            //1个产品，数量为5立即购买
+            testSubmitOrder(userId, 1, 5, true, vouchers);
+            setAllVoucherBatchToInvalid();
+
+
+        }
+    }
+
+    @Test
+    public void testSubmitOrderWithInvalidVouchers() throws Exception {
+
+        Integer userId = mockUser();
+        Integer userId2 = mockUser();
+
+        DateTime now = DateUtils.current();
+        Optional<Integer> period = of(3);
+        int quantity = 3;
+
+        //为每种类型都运行测试
+        for(VoucherType type : VoucherType.values()) {
+            VoucherBatch voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            List<Voucher> vouchers = assertRequestVouchersSuccess(voucherBatch, userId2, quantity);
+            boolean exceptionThrown = false;
+            try {
+                //使用其他人的优惠券
+                testSubmitOrder(userId, 1, 1, false, vouchers);
+            } catch (VoucherException expected) {
+                Logger.debug(expected.getMessage());
+                exceptionThrown = true;
+            }
+            if(!exceptionThrown) {
+                throw new AssertionError("预期抛出VoucherException，但是没有异常抛出");
+            }
+
+        }
+    }
+
 
     /**
      * 测试订单提交
@@ -64,8 +144,9 @@ public class OrderServiceTest extends BaseTest implements CartTest {
      * @param productCount 构造几个产品用于提交订单，每个产品因为属于单独的设计师，会对应一个单独的订单
      * @param addNumber  购物车中的sku添加数量
      * @param isPromptlyPay 是否直接购买，如果为true，productCount需要传1
+     * @param vouchers
      */
-    private void testSubmitOrder(int userId, int productCount, int addNumber, boolean isPromptlyPay) {
+    private void testSubmitOrder(int userId, int productCount, int addNumber, boolean isPromptlyPay, List<Voucher> vouchers) {
 
         Logger.debug(String.format("testSubmitOrder, 参数: userId[%d], productCount[%d], addNumber[%d], isPromptlyPay[%b]",
                 userId, productCount, addNumber, isPromptlyPay));
@@ -79,6 +160,7 @@ public class OrderServiceTest extends BaseTest implements CartTest {
         SkuAndStorageService skuAndStorageService = Global.ctx.getBean(SkuAndStorageService.class);
         UserService userService = Global.ctx.getBean(UserService.class);
         CartService cartService = Global.ctx.getBean(CartService.class);
+        VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
 
         List<Product> products = new ArrayList<>();
         List<StockKeepingUnit> stockKeepingUnits = new ArrayList<>();
@@ -121,13 +203,22 @@ public class OrderServiceTest extends BaseTest implements CartTest {
             selItems = String.join("_", cartItemList.stream().map(String::valueOf).collect(Collectors.toList()));
         }
 
+        //代金券
+        List<String> voucherUniqueNoList = new ArrayList<>();
+        Money voucherAmount = null;
+        if(vouchers != null && !vouchers.isEmpty()) {
+            voucherUniqueNoList = vouchers.stream().map(Voucher::getUniqueNo).collect(Collectors.toList());
+            voucherAmount = vouchers.stream().map(Voucher::getAmount).reduce(Money.valueOf(0d), Money::add);
+        }
+        final Money fVoucherAmount = voucherAmount;
+
         //提交订单
         List<Integer> orderIds = orderService.submitOrder(
                 userService.getById(userId),
                 selItems,
                 mockAddress(userId).getId(),
                 MarketChannel.WEB,
-                null);
+                voucherUniqueNoList);
 
         assertThat(orderIds.isEmpty(), is(false));
         assertThat(orderIds.size(), is(productCount));
@@ -135,10 +226,13 @@ public class OrderServiceTest extends BaseTest implements CartTest {
         doInSingleSession(generalDao -> {
 
             int allOrderItemCount = 0;
+            Money allOrderItemTotalMoney = Money.valueOf(0d);
+            Money allOrderMoney = Money.valueOf(0d);
 
             for (int i = 0; i < orderIds.size(); i++) {
                 //校验订单
                 Order order = orderService.getOrderById(orderIds.get(i));
+                allOrderMoney = allOrderMoney.add(order.calcTotalMoney());
                 Product product = products.get(i);
 
                 assertThat(order.getCustomerId(), is(product.getCustomerId()));
@@ -156,10 +250,28 @@ public class OrderServiceTest extends BaseTest implements CartTest {
                     assertThat(stockQuantityNow, is(stockQuantityBefore - addNumber));
 
                     allOrderItemCount++;
+                    allOrderItemTotalMoney = allOrderItemTotalMoney.add(orderItem.calTotalPrice());
+                }
+
+                if(vouchers != null && !vouchers.isEmpty()) {
+                    List<VoucherUse> voucherUseList = order.getVoucherUseList();
+                    assertThat(voucherUseList.size(), is(vouchers.size()));
                 }
             }
 
             assertThat(allOrderItemCount, is(stockKeepingUnits.size()));
+
+            if(vouchers != null && !vouchers.isEmpty()) {
+
+                //订单金额 = 订单项金额之和 - 代金券金额
+                assertThat(allOrderMoney, is(allOrderItemTotalMoney.subtract(fVoucherAmount)));
+
+                List<Voucher> newVouchers = vouchers.stream().map(v -> voucherService.getVoucher(v.getId())).collect(Collectors.toList());
+                boolean allUsed = newVouchers.stream().allMatch(v -> v.getStatus().equals(VoucherStatus.USED));
+                assertThat(allUsed, is(true));
+                boolean voucherMappedToAllOrder = newVouchers.stream().allMatch(v -> v.getVoucherUseList().size() == orderIds.size());
+                assertThat(voucherMappedToAllOrder, is(true));
+            }
 
             return null;
         });
@@ -171,6 +283,6 @@ public class OrderServiceTest extends BaseTest implements CartTest {
                 assertThat(cartItem.getIsDelete(), is(true));
             }
         }
-    }
 
+    }
 }

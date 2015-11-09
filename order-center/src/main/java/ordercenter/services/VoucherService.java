@@ -203,8 +203,8 @@ public class VoucherService {
         Map<String, Object> params = new HashMap<>();
         for(int i = 0; i < voucherUniqueNoList.size(); i++) {
             String voucherUniqueNo = voucherUniqueNoList.get(i);
-            String key = ":uniqueNo" + i;
-            jpql.append(key).append(",");
+            String key = "uniqueNo" + i;
+            jpql.append(":").append(key).append(",");
             params.put(key, voucherUniqueNo);
         }
         jpql.replace(jpql.length() - 1, jpql.length(), ")");
@@ -215,12 +215,17 @@ public class VoucherService {
     @Transactional
     public void useVoucherForOrder(List<Order> orders, List<Voucher> vouchers) {
 
-        for(Order order : orders) {
-            for(Voucher voucher : vouchers) {
+        for(Voucher voucher : vouchers) {
+
+            voucher.setStatus(VoucherStatus.USED);
+            voucher.setUseTime(DateUtils.current());
+            generalDao.persist(voucher);
+
+            for(Order order : orders) {
                 VoucherUse voucherUse = new VoucherUse();
                 voucherUse.setOrderId(order.getId());
                 voucherUse.setVoucherId(voucher.getId());
-                generalDao.persist(voucher);
+                generalDao.persist(voucherUse);
             }
         }
 
@@ -257,9 +262,20 @@ public class VoucherService {
 
     @Transactional
     public void updateVoucherBatchToValid(int batchId) {
-        VoucherBatch voucherBatch = generalDao.get(VoucherBatch.class, batchId);
+        VoucherBatch voucherBatch = getVoucherBatch(batchId);
         voucherBatch.setStatus(VoucherBatchStatus.VALID);
         generalDao.persist(voucherBatch);
     }
+
+    @Transactional(readOnly = true)
+    public Voucher getVoucher(Integer id) {
+        return generalDao.get(Voucher.class, id);
+    }
+
+    @Transactional(readOnly = true)
+    public VoucherBatch getVoucherBatch(Integer id) {
+        return generalDao.get(VoucherBatch.class, id);
+    }
+
 
 }
