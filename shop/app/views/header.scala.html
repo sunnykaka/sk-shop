@@ -9,8 +9,8 @@
             <div class="logined">
                 @defining(SessionUtils.tryLoadUser()) {user =>
                     @if(user == null) {
-                        <a class="login button" href="@controllers.user.routes.LoginController.loginPage()">登录</a>
-                        <a class="signIn button" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
+                        <a class="button login" href="@controllers.user.routes.LoginController.loginPage()">登录</a>
+                        <a class="button signIn" href="@controllers.user.routes.LoginController.registerPage()">注册</a>
                     } else {
                         <ul class="clearfix">
                             <li>
