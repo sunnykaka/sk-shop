@@ -39,43 +39,24 @@ public class VoucherServiceTest extends BaseTest implements CartTest {
         Optional<Integer> period = of(3);
         Optional<DateTime> deadline = of(now.plusDays(2));
 
-        //活动请求，代金券只有有效期没有截止日期
-        VoucherBatch voucherBatch = initVoucherBatch(VoucherType.RECEIVE_BY_ACTIVITY, voucherAmount,
-                now, empty(), period, empty());
-        assertRequestVouchersSuccess(voucherBatch, userId);
+        //为每种类型都运行测试
+        for(VoucherType type : VoucherType.values()) {
+            //活动请求，代金券只有有效期没有截止日期
+            VoucherBatch voucherBatch = initVoucherBatch(type, voucherAmount,
+                    now, empty(), period, empty(), empty());
+            assertRequestVouchersSuccess(voucherBatch, userId);
 
-        //活动请求，代金券有截止日期
-        voucherBatch = initVoucherBatch(VoucherType.RECEIVE_BY_ACTIVITY, voucherAmount,
-                now, empty(), period, deadline);
-        assertRequestVouchersSuccess(voucherBatch, userId);
+            //活动请求，代金券有截止日期
+            voucherBatch = initVoucherBatch(type, voucherAmount,
+                    now, empty(), period, deadline, empty());
+            assertRequestVouchersSuccess(voucherBatch, userId);
 
-    }
-
-    private void assertRequestVouchersSuccess(VoucherBatch voucherBatch, Integer userId) {
-
-        VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
-
-        List<Voucher> voucherList;
-        int quantity = 3;
-        voucherList = voucherService.requestForActivity(Optional.of(voucherBatch.getUniqueNo()), userId, quantity);
-
-        assertThat(voucherList.size(), is(quantity));
-        for(Voucher voucher : voucherList) {
-            assertThat(voucher.getAmount(), is(voucherBatch.getAmount()));
-            if(voucherBatch.getDeadline() != null) {
-                assertThat(DateUtils.isBeforeOrEqualWithDateTruncate(voucher.getDeadline(),
-                        voucherBatch.getDeadline()), is(true));
-            } else {
-                assertThat(DateUtils.isBeforeOrEqualWithDateTruncate(voucher.getDeadline(),
-                        voucherBatch.getStartTime().plusDays(voucherBatch.getPeriodDay())), is(true));
-            }
-            assertThat(voucher.getMinOrderAmount(), is(voucherBatch.getMinOrderAmount()));
-            assertThat(voucher.getStatus(), is(VoucherStatus.UNUSED));
         }
+
     }
 
-    private VoucherBatch initVoucherBatch(VoucherType type, Money voucherAmount, DateTime startTime,
-                                          Optional<DateTime> endTime, Optional<Integer> period, Optional<DateTime> deadline) {
+    private VoucherBatch initVoucherBatch(VoucherType type, Money voucherAmount, DateTime startTime, Optional<DateTime> endTime,
+                                          Optional<Integer> period, Optional<DateTime> deadline, Optional<Integer> maxQuantity) {
 
         VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
 
@@ -92,6 +73,9 @@ public class VoucherServiceTest extends BaseTest implements CartTest {
         if(endTime.isPresent()) {
             voucherBatch.setEndTime(endTime.get());
         }
+        if(maxQuantity.isPresent()) {
+            voucherBatch.setMaxQuantity(maxQuantity.get());
+        }
         try {
             voucherService.createVoucherBatch(voucherBatch);
         } catch (VoucherException e) {
@@ -107,6 +91,42 @@ public class VoucherServiceTest extends BaseTest implements CartTest {
 
         return voucherBatch;
     }
+
+    private void assertRequestVouchersSuccess(VoucherBatch voucherBatch, Integer userId) {
+
+        VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
+
+        List<Voucher> voucherList;
+        int quantity = 3;
+        switch (voucherBatch.getType()) {
+            case FIRE_BY_REGISTER: {
+                voucherList = voucherService.requestForRegister(userId, quantity);
+                break;
+            }
+            case RECEIVE_BY_ACTIVITY: {
+                voucherList = voucherService.requestForActivity(of(voucherBatch.getUniqueNo()), userId, quantity);
+                break;
+            }
+            default: {
+                throw new AssertionError("未知的voucher type: " + voucherBatch.getType());
+            }
+        }
+
+        assertThat(voucherList.size(), is(quantity));
+        for(Voucher voucher : voucherList) {
+            assertThat(voucher.getAmount(), is(voucherBatch.getAmount()));
+            if(voucherBatch.getDeadline() != null) {
+                assertThat(DateUtils.isBeforeOrEqualWithDateTruncate(voucher.getDeadline(),
+                        voucherBatch.getDeadline()), is(true));
+            } else {
+                assertThat(DateUtils.isBeforeOrEqualWithDateTruncate(voucher.getDeadline(),
+                        voucherBatch.getStartTime().plusDays(voucherBatch.getPeriodDay())), is(true));
+            }
+            assertThat(voucher.getMinOrderAmount(), is(voucherBatch.getMinOrderAmount()));
+            assertThat(voucher.getStatus(), is(VoucherStatus.UNUSED));
+        }
+    }
+
 
 
 }

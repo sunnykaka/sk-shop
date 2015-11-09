@@ -11,9 +11,7 @@ public enum VoucherType implements ViewEnum {
 
     FIRE_BY_REGISTER("用户注册自动赠送"),
 
-    RECEIVE_BY_ACTIVITY("活动页面领取"),
-
-    OFFLINE("线下发放");
+    RECEIVE_BY_ACTIVITY("活动页面领取");
 
     public String value;
 
