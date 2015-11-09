@@ -6,6 +6,7 @@ import common.exceptions.ErrorCode;
 import common.services.GeneralDao;
 import common.services.MessageJobService;
 import common.utils.DateUtils;
+import common.utils.Money;
 import common.utils.page.Page;
 import ordercenter.constants.CancelOrderType;
 import ordercenter.constants.OrderState;
@@ -26,6 +27,7 @@ import usercenter.services.AddressService;
 import usercenter.services.UserService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 订单Service
@@ -56,6 +58,10 @@ public class OrderService {
 
     @Autowired
     AddressService addressService;
+
+    @Autowired
+    VoucherService voucherService;
+
 
     /**
      * 判断是否可以退货申请
@@ -481,9 +487,11 @@ public class OrderService {
      * @param selItems 购物车项，如果是立即购买，是"skuId:number"的形式，否则是"cartItemId_cartItemId_..."的形式
      * @param addressId 地址ID
      * @param channel 渠道
+     * @param vouchers 代金券编号列表
      * @return
      */
-    public List<Integer> submitOrder(User user, String selItems, Integer addressId, MarketChannel channel) {
+    public List<Integer> submitOrder(User user, String selItems, Integer addressId,
+                                     MarketChannel channel, List<String> vouchers) {
 
         if (selItems == null || selItems.trim().length() == 0) {
             throw new AppBusinessException(ErrorCode.Conflict, "订单为空！");
@@ -511,11 +519,38 @@ public class OrderService {
         }
 
         Set<Integer> designerIdSet = designerCartItemListMap.keySet();
-        List<Integer> orderIds = new ArrayList<>(designerIdSet.size());
+        List<Order> orders = new ArrayList<>(designerIdSet.size());
 
         for(int designerId : designerIdSet) {
             //创建订单
             Order order = createOrder(user, channel, designerId, designerCartItemListMap.get(designerId));
+
+            orders.add(order);
+        }
+
+        //计算所有订单金额合计
+        Money totalOrderMoney = orders.stream().map(Order::getTotalMoney).reduce(Money.valueOf(0d), Money::add);
+
+        //根据编码查找可用的代金券
+        List<Voucher> voucherList = voucherService.findVouchersByUniqueNo(vouchers, user.getId(), totalOrderMoney);
+
+        //计算可用的代金券总金额
+        Money totalVoucherMoney = voucherList.stream().map(Voucher::getAmount).reduce(Money.valueOf(0d), Money::add);
+
+        if(totalOrderMoney.getAmount() < totalVoucherMoney.getAmount()) {
+            throw new AppBusinessException(ErrorCode.Conflict, "订单金额不能小于代金券使用金额");
+        }
+
+        for(Order order : orders) {
+
+            //计算分摊到订单的代金券金额
+            if(!voucherList.isEmpty()) {
+                Money splitVoucherMoney = totalVoucherMoney.multiply(order.getTotalMoney().divide(totalOrderMoney).getAmount());
+                order.setVoucherFee(splitVoucherMoney);
+                order.setTotalMoney(order.calcTotalMoney());
+            }
+
+            saveOrder(order);
 
             //扣减库存
             for(OrderItem orderItem : order.getOrderItemList()) {
@@ -530,13 +565,23 @@ public class OrderService {
             logistics.setOrderId(order.getId());
             generalDao.persist(logistics);
 
-            orderIds.add(order.getId());
+        }
 
+        if(!voucherList.isEmpty()) {
+            voucherService.useVoucherForOrder(orders, voucherList);
         }
 
         cartService.deleteCartItemAfterSubmitOrder(selItems);
 
-        return orderIds;
+        return orders.stream().map(Order::getId).collect(Collectors.toList());
+    }
+
+    private void saveOrder(Order order) {
+        generalDao.persist(order);
+        for(OrderItem orderItem : order.getOrderItemList()) {
+            orderItem.setOrderId(order.getId());
+            generalDao.persist(orderItem);
+        }
     }
 
     private Order createOrder(User user, MarketChannel channel, int designerId, List<CartItem> cartItemList) {
@@ -557,11 +602,9 @@ public class OrderService {
         order.setSendPayRemind(false);
         order.setClient(channel);
         order.setCustomerId(designerId);
-        generalDao.persist(order);
 
         for(CartItem item : cartItemList) {
             OrderItem orderItem = new OrderItem();
-            orderItem.setOrderId(order.getId());
             orderItem.setSkuId(item.getSkuId());
             orderItem.setBarCode(item.getBarCode());
             orderItem.setItemNo(item.getId() + "");
@@ -577,13 +620,10 @@ public class OrderService {
             orderItem.setCurUnitPrice(item.getCurUnitPrice());
             orderItem.setTotalPrice(item.getTotalPrice());
             orderItem.setAppraise(false);
-            generalDao.persist(orderItem);
             order.getOrderItemList().add(orderItem);
         }
 
         order.setTotalMoney(order.calcTotalMoney());
-        generalDao.persist(order);
-
 
         return order;
     }

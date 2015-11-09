@@ -9,7 +9,7 @@ import common.models.utils.ViewEnum;
  */
 public enum VoucherStatus implements ViewEnum {
 
-    UNUSE("未使用"),
+    UNUSED("未使用"),
 
     USED("已使用"),
 

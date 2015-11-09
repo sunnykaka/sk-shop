@@ -4,23 +4,27 @@ import common.models.utils.EntityClass;
 import common.models.utils.OperableData;
 import common.utils.Money;
 import ordercenter.constants.VoucherBatchStatus;
+import ordercenter.constants.VoucherStatus;
 import ordercenter.constants.VoucherType;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import usercenter.models.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: liubin
  * Date: 14-11-5
  */
-@Table(name = "voucher_batch")
+@Table(name = "voucher")
 @Entity
 public class Voucher implements EntityClass<Integer>, OperableData {
 
     private Integer id;
 
-    private VoucherBatchStatus status;
+    private VoucherStatus status;
 
     /**
      * 状态
@@ -40,24 +44,9 @@ public class Voucher implements EntityClass<Integer>, OperableData {
 
 
     /**
-     * 开始时间
-     */
-    private DateTime startTime;
-
-    /**
-     * 开始时间，可为空
-     */
-    private DateTime endTime;
-
-    /**
      * 代金券截止日期
      */
     private DateTime deadline;
-
-    /**
-     * 代金券有效期（天），从领取时间算起
-     */
-    private Integer periodDay;
 
     /**
      * 代金券使用的最小订单金额
@@ -65,17 +54,30 @@ public class Voucher implements EntityClass<Integer>, OperableData {
     private Money minOrderAmount = Money.valueOf(0);
 
     /**
-     * 代金券发放数量，为空则无限制
+     * 领取时间
      */
-    private Integer maxQuantity;
-
-
     private DateTime createTime;
 
     /**
-     * 备注
+     * 使用时间
      */
-    private String remark;
+    private DateTime useTime;
+
+    /**
+     * 关联用户
+     */
+    private Integer userId;
+
+    private User user;
+
+    private Integer batchId;
+
+    private VoucherBatch voucherBatch;
+
+    /**
+     * 代金券使用
+     */
+    private List<VoucherUse> voucherUseList = new ArrayList<>(0);
 
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,11 +92,11 @@ public class Voucher implements EntityClass<Integer>, OperableData {
     
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    public VoucherBatchStatus getStatus() {
+    public VoucherStatus getStatus() {
         return status;
     }
 
-    public void setStatus(VoucherBatchStatus status) {
+    public void setStatus(VoucherStatus status) {
         this.status = status;
     }
 
@@ -118,7 +120,7 @@ public class Voucher implements EntityClass<Integer>, OperableData {
         this.amount = amount;
     }
 
-    @Column(name = "unique_no")
+    @Column(name = "uniqueNo")
     public String getUniqueNo() {
         return uniqueNo;
     }
@@ -127,24 +129,14 @@ public class Voucher implements EntityClass<Integer>, OperableData {
         this.uniqueNo = uniqueNo;
     }
 
-    @Column(name = "start_time")
+    @Column(name = "useTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    public DateTime getStartTime() {
-        return startTime;
+    public DateTime getUseTime() {
+        return useTime;
     }
 
-    public void setStartTime(DateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    @Column(name = "end_time")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    public DateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(DateTime endTime) {
-        this.endTime = endTime;
+    public void setUseTime(DateTime useTime) {
+        this.useTime = useTime;
     }
 
     @Column(name = "deadline")
@@ -157,16 +149,7 @@ public class Voucher implements EntityClass<Integer>, OperableData {
         this.deadline = deadline;
     }
 
-    @Column(name = "period_day")
-    public Integer getPeriodDay() {
-        return periodDay;
-    }
-
-    public void setPeriodDay(Integer periodDay) {
-        this.periodDay = periodDay;
-    }
-
-    @Column(name = "min_order_amount")
+    @Column(name = "minOrderAmount")
     @Type(type="common.utils.hibernate.MoneyType")
     public Money getMinOrderAmount() {
         return minOrderAmount;
@@ -176,16 +159,7 @@ public class Voucher implements EntityClass<Integer>, OperableData {
         this.minOrderAmount = minOrderAmount;
     }
 
-    @Column(name = "max_quantity")
-    public Integer getMaxQuantity() {
-        return maxQuantity;
-    }
-
-    public void setMaxQuantity(Integer maxQuantity) {
-        this.maxQuantity = maxQuantity;
-    }
-
-    @Column(name = "create_time")
+    @Column(name = "createTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Override
     public DateTime getCreateTime() {
@@ -197,13 +171,50 @@ public class Voucher implements EntityClass<Integer>, OperableData {
         this.createTime = createTime;
     }
 
-    @Column(name = "remark")
-    public String getRemark() {
-        return remark;
+    @Column(name = "userId")
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Column(name = "batchId")
+    public Integer getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(Integer batchId) {
+        this.batchId = batchId;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "batchId", insertable = false, updatable = false)
+    public VoucherBatch getVoucherBatch() {
+        return voucherBatch;
+    }
+
+    public void setVoucherBatch(VoucherBatch voucherBatch) {
+        this.voucherBatch = voucherBatch;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "voucher")
+    public List<VoucherUse> getVoucherUseList() {
+        return voucherUseList;
+    }
+
+    public void setVoucherUseList(List<VoucherUse> voucherUseList) {
+        this.voucherUseList = voucherUseList;
+    }
 }

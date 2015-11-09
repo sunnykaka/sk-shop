@@ -126,8 +126,8 @@ public class OrderServiceTest extends BaseTest implements CartTest {
                 userService.getById(userId),
                 selItems,
                 mockAddress(userId).getId(),
-                MarketChannel.WEB
-        );
+                MarketChannel.WEB,
+                null);
 
         assertThat(orderIds.isEmpty(), is(false));
         assertThat(orderIds.size(), is(productCount));

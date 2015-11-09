@@ -65,7 +65,7 @@ public class AppOrderAndPayController extends BaseController {
             selItems = selItems.replaceAll(",", "_");
         }
 
-        List<Integer> orderIds = orderService.submitOrder(currentUser(), selItems, addressId, channel);
+        List<Integer> orderIds = orderService.submitOrder(currentUser(), selItems, addressId, channel, null);
 
         Map<String, String> payInfoMap = submitToPay(payOrg, clientIp, orderIds);
 

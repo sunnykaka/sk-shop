@@ -5,7 +5,9 @@ import common.utils.JsonResult;
 import ordercenter.excepiton.CartException;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
+import ordercenter.models.Voucher;
 import ordercenter.services.CartService;
+import ordercenter.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -40,6 +42,10 @@ public class CartController extends Controller {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private VoucherService voucherService;
+
 
     /**
      * 获取库存信息，用于前端数据验证(最大购买数限制、和库存)
@@ -184,7 +190,8 @@ public class CartController extends Controller {
         User curUser = SessionUtils.currentUser();
         Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-        return ok(chooseAddress.render(selCartItems, addressList, cart,false));
+        List<Voucher> voucherList = voucherService.findVouchersByUser(curUser.getId());
+        return ok(chooseAddress.render(selCartItems, addressList, cart, false, voucherList));
     }
 
     /**
@@ -214,7 +221,9 @@ public class CartController extends Controller {
         Cart cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-        return ok(chooseAddress.render(skuId + ":" + number, addressList, cart,true));
+        List<Voucher> voucherList = voucherService.findVouchersByUser(curUser.getId());
+
+        return ok(chooseAddress.render(skuId + ":" + number, addressList, cart, true, voucherList));
     }
 
 

@@ -118,7 +118,7 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.amount = amount;
     }
 
-    @Column(name = "unique_no")
+    @Column(name = "uniqueNo")
     public String getUniqueNo() {
         return uniqueNo;
     }
@@ -127,7 +127,7 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.uniqueNo = uniqueNo;
     }
 
-    @Column(name = "start_time")
+    @Column(name = "startTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getStartTime() {
         return startTime;
@@ -137,7 +137,7 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.startTime = startTime;
     }
 
-    @Column(name = "end_time")
+    @Column(name = "endTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     public DateTime getEndTime() {
         return endTime;
@@ -157,7 +157,7 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.deadline = deadline;
     }
 
-    @Column(name = "period_day")
+    @Column(name = "periodDay")
     public Integer getPeriodDay() {
         return periodDay;
     }
@@ -166,7 +166,7 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.periodDay = periodDay;
     }
 
-    @Column(name = "min_order_amount")
+    @Column(name = "minOrderAmount")
     @Type(type="common.utils.hibernate.MoneyType")
     public Money getMinOrderAmount() {
         return minOrderAmount;
@@ -176,7 +176,7 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.minOrderAmount = minOrderAmount;
     }
 
-    @Column(name = "max_quantity")
+    @Column(name = "maxQuantity")
     public Integer getMaxQuantity() {
         return maxQuantity;
     }
@@ -185,7 +185,7 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.maxQuantity = maxQuantity;
     }
 
-    @Column(name = "create_time")
+    @Column(name = "createTime")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Override
     public DateTime getCreateTime() {
@@ -206,4 +206,9 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.remark = remark;
     }
 
+    public DateTime computeVoucherDeadline(DateTime now) {
+        if(deadline != null) return deadline;
+        else if(periodDay != null) return now.plusDays(periodDay);
+        else return null;
+    }
 }

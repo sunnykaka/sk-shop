@@ -109,5 +109,12 @@ public class DateUtils {
         return DateUtils.print(DateUtils.current(), "yyyyMMdd");
     }
 
+    public static boolean isBeforeOrEqualWithDateTruncate(DateTime dateTime1, DateTime dateTime2) {
+        dateTime1 = dateTime1.withTimeAtStartOfDay();
+        dateTime2 = dateTime2.withTimeAtStartOfDay();
+        return dateTime1.isBefore(dateTime2) || dateTime1.isEqual(dateTime2);
+    }
+
+
 
 }

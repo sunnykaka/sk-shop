@@ -112,6 +112,12 @@ public class Order implements EntityClass<Integer>, Cloneable {
     private Money totalMoney = Money.valueOf(0);
 
     /**
+     * 代金券金额
+     */
+    private Money voucherFee = Money.valueOf(0);
+
+
+    /**
      * 支付银行
      */
     private PayBank payBank;
@@ -230,6 +236,12 @@ public class Order implements EntityClass<Integer>, Cloneable {
      * 客户端，默认是浏览器
      */
     private MarketChannel client = MarketChannel.WEB;
+
+    /**
+     * 代金券使用
+     */
+    private List<VoucherUse> voucherUseList = new ArrayList<>(0);
+
 
     @Override
     public String toString() {
@@ -672,6 +684,25 @@ public class Order implements EntityClass<Integer>, Cloneable {
         this.client = client;
     }
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    public List<VoucherUse> getVoucherUseList() {
+        return voucherUseList;
+    }
+
+    public void setVoucherUseList(List<VoucherUse> voucherUseList) {
+        this.voucherUseList = voucherUseList;
+    }
+
+    @Column(name = "voucherFee")
+    @Type(type="common.utils.hibernate.MoneyType")
+    public Money getVoucherFee() {
+        return voucherFee;
+    }
+
+    public void setVoucherFee(Money voucherFee) {
+        this.voucherFee = voucherFee;
+    }
+
     /**
      * 计算订单金额合计
      * @return
@@ -680,6 +711,10 @@ public class Order implements EntityClass<Integer>, Cloneable {
         Money totalMoney = Money.valueOf(0);
         for(OrderItem orderItem : getOrderItemList()) {
             totalMoney = totalMoney.add(orderItem.calTotalPrice());
+        }
+        totalMoney = totalMoney.subtract(voucherFee);
+        if(totalMoney.getAmount() < 0d) {
+            totalMoney = Money.valueOf(0d);
         }
         return totalMoney;
     }
