@@ -105,9 +105,26 @@ public class DateUtils {
 
     }
 
+    /**
+     * 今天的日期以yyyyMMdd的格式打印
+     * @return
+     */
     public static String toadyInString() {
         return DateUtils.print(DateUtils.current(), "yyyyMMdd");
     }
+
+    /**
+     * 判断两个日期的年月日是否相等
+     * @param dateTime1
+     * @param dateTime2
+     * @return
+     */
+    public static boolean isBeforeOrEqualWithDateTruncate(DateTime dateTime1, DateTime dateTime2) {
+        dateTime1 = dateTime1.withTimeAtStartOfDay();
+        dateTime2 = dateTime2.withTimeAtStartOfDay();
+        return dateTime1.isBefore(dateTime2) || dateTime1.isEqual(dateTime2);
+    }
+
 
 
 }

@@ -1,4 +1,5 @@
-@(selItems:String, addressList:List[usercenter.models.address.Address], cart:ordercenter.models.Cart, isPromptlyPay:Boolean)
+@(selItems: String, addressList: List[usercenter.models.address.Address], cart: ordercenter.models.Cart,
+        isPromptlyPay:Boolean, voucherList: List[ordercenter.models.Voucher])
 
 @import productcenter.models.Seo;
 @main(new Seo(Messages("title.cart"),Messages("seo.description"),Messages("seo.Keywords")))() {

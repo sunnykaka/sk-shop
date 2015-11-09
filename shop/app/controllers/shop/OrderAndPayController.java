@@ -73,10 +73,10 @@ public class OrderAndPayController extends Controller {
      * @return
      */
     @SecuredAction
-    public Result submitOrder(String selItems, int addressId, boolean isPromptlyPay) {
+    public Result submitOrder(String selItems, int addressId, boolean isPromptlyPay, List<String> vouchers) {
 
         //生成订单相关信息
-        List<Integer> orderIds = orderService.submitOrder(SessionUtils.currentUser(), selItems, addressId, MarketChannel.WEB);
+        List<Integer> orderIds = orderService.submitOrder(SessionUtils.currentUser(), selItems, addressId, MarketChannel.WEB, vouchers);
 
         String orderIdsStr = String.join("_", orderIds.stream().map(String::valueOf).collect(Collectors.toList()));
 
