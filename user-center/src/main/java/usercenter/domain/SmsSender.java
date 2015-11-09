@@ -25,7 +25,7 @@ public class SmsSender {
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 
-    public static String SECURITY_CODE = "pzmlJGvQHdry7ZLv";
+    public static String SECURITY_CODE = "Jkfnjbn2zuWvMpBe";
 
     public static final String PHONE_VERIFICATION_CODE_MESSAGE_FORMAT = "您的短信验证码是%s，两小时内有效。";
 
