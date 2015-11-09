@@ -1,7 +1,7 @@
 package cmscenter.services;
 
 import cmscenter.constants.HomeFocusPageType;
-import cmscenter.dtos.AppThemeSimpleDto;
+import cmscenter.dtos.AppThemeDto;
 import cmscenter.dtos.HomePageDto;
 import cmscenter.dtos.ProductDto;
 import cmscenter.models.AppTheme;
@@ -18,6 +18,7 @@ import productcenter.models.StockKeepingUnit;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
+import usercenter.models.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,10 @@ public class HomeFocusService {
     @Autowired
     ProductPictureService productPictureService;
 
-    public HomePageDto build(){
+    @Autowired
+    ThemeCollectService themeCollectService;
+
+    public HomePageDto build(User user, String deviceId){
 
         HomePageDto homePage = new HomePageDto();
 
@@ -55,7 +59,7 @@ public class HomeFocusService {
 
         //最新专题
         AppTheme appTheme = appThemeService.getFristAppTheme();
-        homePage.setAppTheme(AppThemeSimpleDto.build(appTheme));
+        homePage.setAppTheme(AppThemeDto.build(appTheme,themeCollectService,user,deviceId));
 
         //精选图
         List<HomeFocus> selectionList = findHomeFocusByPageType(HomeFocusPageType.selection);

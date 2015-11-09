@@ -81,6 +81,7 @@ POST          /home/token                             @controllers.api.shop.Them
 
 # app designer shop
 GET           /home/designer/:id                      @controllers.api.shop.DesignerApiController.designerShop(id:Int)
+GET           /home/designers                         @controllers.api.shop.DesignerApiController.designerList(pageNo:Int ?= 1,pageSize:Int ?= 10)
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

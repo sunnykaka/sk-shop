@@ -36,6 +36,11 @@ public class DesignerView {
     private String storeLogoPic;
 
     /**
+     * 白底LOGO图
+     */
+    private String whiteBGPic;
+
+    /**
      * 是否收藏
      */
     private boolean isFavorites;
@@ -62,6 +67,14 @@ public class DesignerView {
 
     public void setBrandPic(String brandPic) {
         this.brandPic = brandPic;
+    }
+
+    public String getWhiteBGPic() {
+        return whiteBGPic;
+    }
+
+    public void setWhiteBGPic(String whiteBGPic) {
+        this.whiteBGPic = whiteBGPic;
     }
 
     public Integer getId() {

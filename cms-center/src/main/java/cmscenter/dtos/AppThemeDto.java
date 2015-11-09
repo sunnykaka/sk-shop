@@ -52,7 +52,7 @@ public class AppThemeDto {
         appThemeDto.setThemeNo(appTheme.getThemeNo());
         appThemeDto.setContent(appThemeService.getAppThemeContentByThemeId(appTheme.getId()));
         if (null != user || StringUtils.isNotEmpty(deviceId)){
-            appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getId(),user,deviceId));
+            appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getThemeNo(),user,deviceId));
         }
         appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getThemeNo()));
 
@@ -66,6 +66,30 @@ public class AppThemeDto {
                 }
             }
         }
+
+        return appThemeDto;
+
+    }
+
+    /**
+     * app首页使用
+     *
+     * @param appTheme
+     * @param themeCollectService
+     * @param user
+     * @param deviceId
+     * @return
+     */
+    public static AppThemeDto build(AppTheme appTheme, ThemeCollectService themeCollectService, User user, String deviceId){
+
+        AppThemeDto appThemeDto = new AppThemeDto();
+        appThemeDto.setName(appTheme.getName());
+        appThemeDto.setPicUrl(appTheme.getPicUrl());
+        appThemeDto.setThemeNo(appTheme.getThemeNo());
+        if (null != user || StringUtils.isNotEmpty(deviceId)){
+            appThemeDto.setIsFavorites(themeCollectService.isFavorites(appTheme.getThemeNo(),user,deviceId));
+        }
+        appThemeDto.setNum(appTheme.getBaseNum() + themeCollectService.countThemeCollect(appTheme.getThemeNo()));
 
         return appThemeDto;
 

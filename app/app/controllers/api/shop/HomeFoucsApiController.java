@@ -1,11 +1,12 @@
 package controllers.api.shop;
 
-import cmscenter.dtos.HomePageDto;
 import cmscenter.services.HomeFocusService;
 import common.utils.JsonUtils;
+import common.utils.ParamUtils;
 import controllers.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Result;
+import usercenter.models.User;
 
 /**
  * Created by zhb on 2015/10/29.
@@ -18,7 +19,10 @@ public class HomeFoucsApiController extends BaseController {
 
     public Result homeShop() {
 
-        return ok(JsonUtils.object2Node(homeFoucsService.build()));
+        User user = this.currentUser();
+        String deviceId = ParamUtils.getByKey(request(), "deviceId");
+
+        return ok(JsonUtils.object2Node(homeFoucsService.build(user, deviceId)));
 
     }
 

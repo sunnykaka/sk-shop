@@ -120,12 +120,33 @@ public class DesignerService {
         return result;
     }
 
+    public List<Designer> queryDesignerList(Page<Designer> page){
+        String sql = "SELECT c.id,c.name from customer c JOIN product p ON c.id = p.customerId " +
+                "where p.`online` = 1 and c.isDelete = 0 and c.isPublished = 1 " +
+                "GROUP BY p.customerId ORDER BY c.priority desc";
+        if (page != null) {
+            sql += " limit " + page.getStart() + " , " + page.getLimit();
+        }
+        List list = generalDAO.getEm().createNativeQuery(sql).getResultList();
+
+        List<Designer> result = new ArrayList<>();
+
+        for (Object obj : list) {
+            Object[] designer = (Object[]) obj;
+            Designer dv = new Designer();
+            dv.setId((Integer) designer[0]);
+            dv.setName(designer[1].toString());
+            result.add(dv);
+        }
+        return result;
+    }
 
     @Transactional(readOnly = true)
     public List<DesignerView> designerByPriority(Page page) {
-        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic from customer as t1 left JOIN" +
+        String sql = "select t1.id,t1.name,t1.description,t2.StorePic,t2.ListMainPic,t2.ListLogoBigPic,t2.WhiteBGPic from customer as t1 left JOIN" +
                 " ( select designerId,max(if(picType='StorePic',pictureUrl,NULL )) as StorePic ," +
                 "max(if(picType='ListMainPic',pictureUrl,NULL )) as ListMainPic ," +
+                "max(if(picType='WhiteBGPic',pictureUrl,NULL )) as WhiteBGPic ," +
                 "max(if(picType='ListLogoBigPic',pictureUrl,NULL )) as ListLogoBigPic from  designer_picture group by designerId) AS t2 ON  t2.designerId = t1.id where t1.isDelete=0 and t1.isPublished = 1 ";
         sql += " order by t1.priority desc, id desc  ";
         if (page != null) {

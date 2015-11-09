@@ -2,7 +2,6 @@ package controllers.api.shop;
 
 import cmscenter.dtos.AppHomeDto;
 import cmscenter.dtos.AppThemeBreviaryDto;
-import cmscenter.dtos.AppThemeDto;
 import cmscenter.dtos.AppThemeSimpleDto;
 import cmscenter.models.AppHome;
 import cmscenter.models.AppTheme;

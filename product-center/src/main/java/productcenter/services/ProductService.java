@@ -151,6 +151,22 @@ public class ProductService {
     }
 
     /**
+     * app 设计师列表页展示商品
+     *
+     * @param designerId
+     * @return
+     */
+    public List<Product> queryThreeProduct(int designerId){
+        Page<Product> page = new Page<>(1,3);
+        String jpql = "select o from Product o where 1=1 and o.isDelete=false and o.online=true and o.customerId=:designerId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("designerId", designerId);
+
+        jpql += " order by id desc ";
+        return generalDao.query(jpql, Optional.of(page), queryParams);
+    }
+
+    /**
      * 查询商品描述
      *
      * @param productId

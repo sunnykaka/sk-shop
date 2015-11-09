@@ -12,7 +12,7 @@ public class HomePageDto {
 
     private List<HomeFocusDto> focusList = new ArrayList<>();
 
-    private AppThemeSimpleDto appTheme;
+    private AppThemeDto appTheme;
 
     private List<HomeFocusDto> selectionList= new ArrayList<>();
 
@@ -42,11 +42,11 @@ public class HomePageDto {
         this.focusList = focusList;
     }
 
-    public AppThemeSimpleDto getAppTheme() {
+    public AppThemeDto getAppTheme() {
         return appTheme;
     }
 
-    public void setAppTheme(AppThemeSimpleDto appTheme) {
+    public void setAppTheme(AppThemeDto appTheme) {
         this.appTheme = appTheme;
     }
 
