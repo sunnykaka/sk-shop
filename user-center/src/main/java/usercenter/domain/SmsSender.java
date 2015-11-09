@@ -21,7 +21,7 @@ import java.util.Map;
 public class SmsSender {
 
     public static int SEND_MESSAGE_MAX_TIMES_IN_DAY = 10;
-    public static int ALL_SEND_MESSAGE_MAX_TIMES_IN_DAY = 1000;
+    public static int ALL_SEND_MESSAGE_MAX_TIMES_IN_DAY = 500;
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 
