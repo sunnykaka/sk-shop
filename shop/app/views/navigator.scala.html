@@ -1,17 +1,12 @@
 @(name: String)
 
 <div class="header">
-    <div class="header-inner width1200">
-        <div class="clearfix">
+    <div class="header-inner">
+        <div class="header-wrap clearfix">
             <div class="left">
-                <h1 style="padding-left: 10px;"><a  href="@controllers.routes.Application.index()"><img src="@routes.Assets.versioned("images/logo-1.png")" alt="" width="336" height="90"/></a></h1>
+                <h1><a  href="@controllers.routes.Application.index()"><img src="@routes.Assets.versioned("images/logo-1.png")" alt="" width="336" height="90"/></a></h1>
             </div>
             <div class="right">
-                <div class="app-download">
-                    <img  src="@routes.Assets.versioned("images/app.png")" alt="" width="55" height="55"/>
-                    <p class="pink">尚客iOS APP</p>
-                    <p>扫一扫 立即下载</p>
-                </div>
                 <a href="/cart/showCart"><i class="iconfont" style="padding-right:4px;">&#xe606;</i>购物车 <span class="quantity">0</span></a>
             </div>
         </div>
