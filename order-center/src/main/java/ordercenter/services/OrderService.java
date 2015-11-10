@@ -536,16 +536,26 @@ public class OrderService {
 
         //计算可用的代金券总金额
         Money totalVoucherMoney = voucherList.stream().map(Voucher::getAmount).reduce(Money.valueOf(0d), Money::add);
+        Money cumulativeVoucherMoney = Money.valueOf(0d);
 
         if(totalOrderMoney.getAmount() < totalVoucherMoney.getAmount()) {
             throw new AppBusinessException(ErrorCode.Conflict, "订单金额不能小于代金券使用金额");
         }
 
+        int i = 0;
         for(Order order : orders) {
+            i++;
 
             //计算分摊到订单的代金券金额
             if(!voucherList.isEmpty()) {
-                Money splitVoucherMoney = totalVoucherMoney.multiply(order.getTotalMoney().divide(totalOrderMoney).getAmount());
+                Money splitVoucherMoney;
+                if(i == orders.size()) {
+                    //最后一个订单分摊的优惠券金额为总的减去之前分摊的累加，这样算是为了避免按百分比算加起来不为1的情况
+                    splitVoucherMoney = totalVoucherMoney.subtract(cumulativeVoucherMoney);
+                } else {
+                    splitVoucherMoney = totalVoucherMoney.multiply(order.getTotalMoney().divide(totalOrderMoney).getAmount());
+                    cumulativeVoucherMoney = cumulativeVoucherMoney.add(splitVoucherMoney);
+                }
                 order.setVoucherFee(splitVoucherMoney);
                 order.setTotalMoney(order.calcTotalMoney());
             }

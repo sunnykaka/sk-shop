@@ -208,7 +208,6 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
 
     public DateTime computeVoucherDeadline(DateTime now) {
         if(deadline != null) return deadline;
-        else if(periodDay != null) return now.plusDays(periodDay);
-        else return null;
+        else return now.plusDays(periodDay);
     }
 }
