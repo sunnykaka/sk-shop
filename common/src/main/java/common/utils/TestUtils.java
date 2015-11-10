@@ -14,7 +14,7 @@ public class TestUtils {
     public static UserRegisterInfo mockUserRegisterInfo() {
         String phone = "1" + RandomStringUtils.randomNumeric(10);
         String username = RandomStringUtils.randomAlphabetic(10);
-        String password = RandomStringUtils.randomAlphabetic(10);
+        String password = "111111";
 
         return new UserRegisterInfo(phone, username, password);
     }

@@ -708,16 +708,27 @@ public class Order implements EntityClass<Integer>, Cloneable {
      * @return
      */
     public Money calcTotalMoney() {
-        Money totalMoney = Money.valueOf(0);
-        for(OrderItem orderItem : getOrderItemList()) {
-            totalMoney = totalMoney.add(orderItem.calTotalPrice());
+        Money money = calcItemMoney().subtract(voucherFee);
+        if(money.getAmount() < 0d) {
+            return Money.valueOf(0d);
+        } else {
+            return money;
         }
-        totalMoney = totalMoney.subtract(voucherFee);
-        if(totalMoney.getAmount() < 0d) {
-            totalMoney = Money.valueOf(0d);
-        }
-        return totalMoney;
     }
+
+    /**
+     * 计算商品金额
+     * @return
+     */
+    public Money calcItemMoney() {
+        Money money = getOrderItemList().stream().map(OrderItem::calTotalPrice).reduce(Money.valueOf(0d), Money::add);
+        if(money.getAmount() < 0d) {
+            return Money.valueOf(0d);
+        } else {
+            return money;
+        }
+    }
+
 
 
 }

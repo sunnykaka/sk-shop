@@ -233,6 +233,7 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
                 //校验订单
                 Order order = orderService.getOrderById(orderIds.get(i));
                 allOrderMoney = allOrderMoney.add(order.calcTotalMoney());
+                allOrderItemTotalMoney = allOrderItemTotalMoney.add(order.calcItemMoney());
                 Product product = products.get(i);
 
                 assertThat(order.getCustomerId(), is(product.getCustomerId()));
@@ -250,7 +251,6 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
                     assertThat(stockQuantityNow, is(stockQuantityBefore - addNumber));
 
                     allOrderItemCount++;
-                    allOrderItemTotalMoney = allOrderItemTotalMoney.add(orderItem.calTotalPrice());
                 }
 
                 if(vouchers != null && !vouchers.isEmpty()) {

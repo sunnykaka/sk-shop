@@ -131,6 +131,8 @@ public class UserService {
         userData.setUpdateDate(now);
         generalDao.persist(userData);
 
+        Logger.debug(String.format("用户%s注册成功", user.getUserName()));
+
         return user;
     }
 

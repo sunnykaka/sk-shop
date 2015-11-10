@@ -96,7 +96,7 @@
                             <table class="total">
                                 <tr>
                                     <td>商品总计：</td>
-                                    <td>￥@order.getTotalMoney.getAmountWithBigDecimal</td>
+                                    <td>￥@order.calcItemMoney().getAmountWithBigDecimal</td>
                                 </tr>
                                 <tr>
                                     <td>运费：</td>
@@ -105,6 +105,10 @@
                                 <tr>
                                     <td>关税：</td>
                                     <td>￥0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>代金券：</td>
+                                    <td>- ￥@order.getVoucherFee.getAmountWithBigDecimal</td>
                                 </tr>
                                 <tr>
                                     <td>订单金额：</td>

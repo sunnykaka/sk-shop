@@ -54,8 +54,8 @@ public interface VoucherTest extends LoginTest {
 
         VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
 
-        //测试生成的代金券面额可能为0.05, 0.1, 0.15元, 面额不能太大. 因为产品单价可能是0.5元, 如果代金券数量是3, 面额是0.2, 有可能大于订单价格
-        Money voucherAmount = Money.valueOf((new java.util.Random().nextInt(3) + 1) * 0.05d);
+        //测试生成的代金券面额可能为0.1, 0.2元,  面额不能太大. 因为产品单价可能是0.5元, 如果代金券数量是3, 面额是0.2, 有可能大于订单价格
+        Money voucherAmount = Money.valueOf((new java.util.Random().nextInt(2) + 1) * 0.1d);
 
         VoucherBatch voucherBatch = new VoucherBatch();
         voucherBatch.setType(type);
