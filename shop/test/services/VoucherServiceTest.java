@@ -8,6 +8,7 @@ import ordercenter.excepiton.VoucherException;
 import ordercenter.models.VoucherBatch;
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import play.Logger;
 
@@ -82,6 +83,17 @@ public class VoucherServiceTest extends BaseTest implements VoucherTest {
         }
     }
 
+    @Test
+    @Ignore
+    public void test1() throws Exception {
+
+        DateTime now = DateUtils.current();
+        Optional<Integer> period = of(100);
+        int quantity = 10;
+        VoucherBatch voucherBatch = initVoucherBatch(VoucherType.RECEIVE_BY_ACTIVITY, now, empty(), period, empty(), empty());
+        assertRequestVouchersSuccess(voucherBatch, 9, quantity);
+
+    }
 
 
 
