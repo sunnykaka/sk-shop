@@ -151,7 +151,7 @@ table .pro{width: 360px;}
 .flexslider:hover .flex-prev {  left: 10%;}
 .flexslider:hover .flex-next {  right: 10%;}
 .flex-direction-nav .flex-disabled { opacity: 0!important; filter:alpha(opacity=0); cursor: default; }
-.btm-img{height: 56px;margin-bottom: 30px;border-bottom: 1px solid  #E8E8E8;}
+.btm-img-inner{height: 56px;margin-bottom: 30px;border-bottom: 1px solid  #E8E8E8;}
 .btm-img ul{height: 40px;width: 1200px;}
 .btm-img li{float: left;margin-right: 100px;padding-left: 64px;}
 .btm-img .lastc{;margin-right: 0;}
@@ -750,7 +750,7 @@ table .pro{width: 360px;}
 .detail-btn .addToCart{background: #fff;color: #000;}
 .detail-btn p{clear: both;padding: 12px 0;}
 .detail-btn .soldOut{background: #ccc;border: none;}
-.detail-like{height: 30px;padding-top: 22px;border-top: 1px solid #e5e5e5;}
+.detail-like{height: 30px;padding-top: 22px;border-top: 1px solid #e5e5e5;margin-bottom: 5px;}
 .detail-like .like,.detail-like .about-designer{padding: 3px 12px;border: 1px solid #FF2D54;border-radius: 50px;position: relative;cursor: pointer;color: #fd2049;}
 .detail-like .like{margin-left: 6px;}
 .detail-like i,.detail-like a{color: #fd2049;}
@@ -1085,7 +1085,7 @@ table .pro{width: 360px;}
 /*end footer*/
 .sider-bar{
     position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
-    left: 50%;margin-left: 600px;top: 740px;
+    left: 50%;margin-left: 600px;top: 730px;
 }
 .small-sider{width: 36px;border-top: 3px solid #FF2D54;margin-left: 592px;}
 .sider-bar li{width: 62px;height: 63px;border-bottom: 1px solid #ccc;
