@@ -1,16 +1,20 @@
 package productcenter.dtos;
 
+import common.utils.JsonUtils;
 import common.utils.Money;
 import common.utils.play.BaseGlobal;
+import productcenter.models.LimitTimeDiscount;
 import productcenter.models.Product;
 import productcenter.models.ProductPicture;
 import productcenter.models.StockKeepingUnit;
+import productcenter.services.DiscountService;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.Designer;
 import usercenter.services.DesignerService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +37,8 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
      * 价格（该商品所有sku最低售价）
      */
     private Money price;
+
+    private Money discountPrice;
 
     /**
      * 状态，之所以没有用ExhibitionStatus，是担心以后系统改动时
@@ -66,6 +72,10 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
 
     public String getStatus() {
         return status;
+    }
+
+    public Money getDiscountPrice() {
+        return discountPrice;
     }
 
     /**
@@ -107,6 +117,7 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
         private ProductService productService = BaseGlobal.ctx.getBean(ProductService.class);
         private SkuAndStorageService skuAndStorageService = BaseGlobal.ctx.getBean(SkuAndStorageService.class);
         private DesignerService designerService = BaseGlobal.ctx.getBean(DesignerService.class);
+        private DiscountService discountService = BaseGlobal.ctx.getBean(DiscountService.class);
 
         public static Builder getInstance() {
             Builder builder = new Builder();
@@ -185,6 +196,14 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
                 this.productInSellList.price = mostCheapSku.getPrice();
             } else {
                 this.productInSellList.price = mostCheapSku.getMarketPrice();
+            }
+
+
+            final Integer mostCheapSkuId = mostCheapSku.getId();
+
+            Optional<List<SkuDiscount>> discount = discountService.skuDiscounts(this.productId);
+            if (discount.isPresent()) {
+                this.productInSellList.discountPrice = discount.get().stream().filter(sku -> sku.getSkuId().equals(mostCheapSkuId)).findFirst().get().getSkuMoney();
             }
 
             Long storage = skuAndStorageService.getProductStorage(this.productId);
