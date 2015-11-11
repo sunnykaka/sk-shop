@@ -1,7 +1,14 @@
 package cmscenter.dtos;
 
 
+import common.utils.Money;
 import productcenter.dtos.ProductInSellList;
+import productcenter.models.Product;
+import productcenter.models.ProductPicture;
+import productcenter.models.StockKeepingUnit;
+import productcenter.services.ProductPictureService;
+import productcenter.services.ProductService;
+import productcenter.services.SkuAndStorageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +48,22 @@ public class ProductDto {
 
         return productDtos;
 
+    }
+
+    public static ProductDto getById(int productId, ProductService productService, ProductPictureService productPictureService, SkuAndStorageService skuService){
+
+        Product product = productService.getProductById(productId);
+        ProductPicture productPicture = productPictureService.getMinorProductPictureByProductId(productId);
+        StockKeepingUnit sku = skuService.querySkuByProductIdPriceSmall(productId);
+        Money money = skuService.getSkuCurrentPrice(sku);
+
+        ProductDto productDto = new ProductDto();
+        productDto.setPrice(money.getAmountWithBigDecimal().toString());
+        productDto.setProductId(productId);
+        productDto.setProductName(product.getName());
+        productDto.setProductUrl(productPicture.getPictureUrl());
+
+        return productDto;
     }
 
     public Integer getProductId() {

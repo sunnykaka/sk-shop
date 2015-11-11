@@ -12,8 +12,9 @@
         figure{width: 48%;float: left;margin: 15px 0;}
         figure:nth-child(odd){margin-right: 4%;}
         .product{overflow: hidden;}
-        .product .product_title{font-size: 0.8em;text-align: center;width: 100%;overflow: hidden;white-space: nowrap;
+        .product div{font-size: 0.8em;text-align: center;width: 100%;overflow: hidden;white-space: nowrap;
         text-overflow: ellipsis;}
+        .product .go-details{ width :75%;margin: auto;padding: 3px 0;background: #ff2d54;color: #fff;opacity:.8;}
         .content p {padding: 0;margin: 0;text-indent: 0; line-height :180% ; white-space: normal;}
         .container .more{width: 80%;text-align:center;border: 1px solid #ccc;padding: 5px;margin: 10px auto 0;}
         .container{padding: 0 15px 20px;}
@@ -33,13 +34,18 @@
 
                     <!-- 产品列表-->
                 <div class="product">
-                    @for(product <- appThemeDto.getProductSimpleDtoList){
-                        <figure>
+                    @for(product <- appThemeDto.getProductDtos){
+                        <figure proid="@product.getProductId">
                             <img src="@product.getProductUrl" proid="@product.getProductId">
+
                             <figcaption>
                                 <div class="product_title">
                                     @product.getProductName
                                 </div>
+                                <div class="product_price">
+                                    ￥@product.getPrice
+                                </div>
+                                <div class="go-details" proid="@product.getProductId">立即购买</div>
                             </figcaption>
                         </figure>
                     }

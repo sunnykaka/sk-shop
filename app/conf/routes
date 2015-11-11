@@ -71,7 +71,7 @@ GET           /my/reminder/list                       @controllers.api.user.MyDa
 POST          /my/reminder/:productId                 @controllers.api.user.MyDataApiController.setMyReminder(productId:Int)
 
 # app cms
-GET           /home/shop                              @controllers.api.shop.HomeFoucsApiController.homeShop()
+GET           /home/shop                              @controllers.api.shop.HomeFoucsApiController.homeShop(pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET           /home/pic                               @controllers.api.shop.ThemeApiController.getAppHomeList()
 GET           /home/theme/new                         @controllers.api.shop.ThemeApiController.getAppThemeHome()
 GET           /home/theme/list                        @controllers.api.shop.ThemeApiController.getAppThemeList(pageNo:Int ?= 1,pageSize:Int ?= 10)
