@@ -169,7 +169,16 @@
                                     <img class="lazy" data-original="@prod.getMinorPic.getPictureUrl" src="@routes.Assets.versioned("images/grey.gif")" alt="@prod.getProduct.getName" width="283" height="462"/></a>
                                     <h3 class="brand">@prod.getBrandName</h3>
                                     <h3>@prod.getProduct.getName</h3>
-                                    <h4 class="price">￥@prod.getPrice</h4>
+                                    @if(prod.getDiscountPrice!= null) {
+                                        <h4 class="price">
+                                            <span>@prod.getDiscountPrice</span>
+                                            ￥@prod.getPrice
+                                        </h4>
+                                    }else{
+                                        <h4 class="price">
+                                            ￥@prod.getPrice
+                                        </h4>
+                                    }
                                 </li>
                             }
                             </ul>
