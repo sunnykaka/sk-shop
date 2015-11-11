@@ -171,8 +171,8 @@
                                     <h3>@prod.getProduct.getName</h3>
                                     @if(prod.getDiscountPrice!= null) {
                                         <h4 class="price">
-                                            <span>@prod.getDiscountPrice</span>
-                                            ￥@prod.getPrice
+                                            <b>￥@prod.getDiscountPrice</b>
+                                            <b class="delete-price">￥@prod.getPrice</b>
                                         </h4>
                                     }else{
                                         <h4 class="price">
