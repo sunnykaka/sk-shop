@@ -14,6 +14,7 @@ import play.mvc.Result;
 import play.mvc.Results;
 import productcenter.services.ProductPictureService;
 import productcenter.services.ProductService;
+import productcenter.services.SkuAndStorageService;
 import usercenter.dtos.DesignerView;
 import usercenter.models.User;
 import usercenter.services.DesignerService;
@@ -44,6 +45,9 @@ public class AppShowController extends Controller {
 
     @Autowired
     private DesignerService designerService;
+
+    @Autowired
+    private SkuAndStorageService skuService;
 
     public Result appTheme(int themeNo) {
 
@@ -76,29 +80,13 @@ public class AppShowController extends Controller {
             return Results.notFound(error_404.render("专题不存在", designerViews));
         }
 
-        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService,themeCollectService,productService,productPictureService,null,null);
+        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService,themeCollectService,productService,productPictureService,skuService);
 
         return ok(appThemeDesc.render(appThemeDto));
     }
 
-    public Result download(int themeNo) {
-
-        AppTheme appTheme = appThemeService.getAppThemeByThemeNo(themeNo);
-
-        if(appTheme == null){
-            List<DesignerView> designerViews = new ArrayList<>();
-            try {
-                designerViews = designerService.lastCreateDesigner(4);
-            } catch (Exception e) {
-                Logger.error("", e);
-            }
-            return Results.notFound(error_404.render("专题不存在", designerViews));
-        }
-
-        AppThemeDto appThemeDto = AppThemeDto.build(appTheme,appThemeService,themeCollectService,productService,productPictureService,null,null);
-
-
-        return ok(appShowDownload.render(appThemeDto));
+    public Result download() {
+        return ok(appShowDownload.render());
     }
 
 }

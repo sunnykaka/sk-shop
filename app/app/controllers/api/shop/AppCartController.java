@@ -1,10 +1,13 @@
 package controllers.api.shop;
 
+import api.response.order.VoucherDto;
 import api.response.shop.CartDto;
 import common.utils.JsonUtils;
 import controllers.BaseController;
 import ordercenter.models.Cart;
+import ordercenter.models.Voucher;
 import ordercenter.services.CartService;
+import ordercenter.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Result;
 import usercenter.models.User;
@@ -13,7 +16,9 @@ import usercenter.services.AddressService;
 import utils.secure.SecuredAction;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 购物车Controller
@@ -28,6 +33,9 @@ public class AppCartController extends BaseController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private VoucherService voucherService;
 
 
     /**
@@ -138,10 +146,12 @@ public class AppCartController extends BaseController {
         cartService.selectCartItems(cart, selCartItems);
 
         Address defaultAddress = addressService.queryDefaultAddress(user.getId());
+        List<Voucher> voucherList = voucherService.findVouchersByUser(user.getId());
 
         Map<String, Object> retMap = new HashMap<>();
         retMap.put("cart",CartDto.buildUserCart(cart));
         retMap.put("defaultAddress", defaultAddress);
+        retMap.put("vouchers", voucherList.stream().map(VoucherDto::build).collect(Collectors.toList()));
 
         return ok(JsonUtils.object2Node(retMap));
     }
@@ -155,13 +165,17 @@ public class AppCartController extends BaseController {
 
         cartService.verifySkuToBuy(skuId, number, number);
 
+        User user = currentUser();
+
         Cart cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
-        Address defaultAddress = addressService.queryDefaultAddress(currentUser().getId());
+        Address defaultAddress = addressService.queryDefaultAddress(user.getId());
+        List<Voucher> voucherList = voucherService.findVouchersByUser(user.getId());
 
         Map<String, Object> retMap = new HashMap<>();
         retMap.put("cart", CartDto.buildUserCart(cart));
         retMap.put("defaultAddress", defaultAddress);
+        retMap.put("vouchers", voucherList.stream().map(VoucherDto::build).collect(Collectors.toList()));
 
         return ok(JsonUtils.object2Node(retMap));
     }

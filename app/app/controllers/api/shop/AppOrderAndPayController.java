@@ -53,7 +53,7 @@ public class AppOrderAndPayController extends BaseController {
      * @return
      */
     @SecuredAction
-    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String client) { //device_info
+    public Result submitToPay(boolean isPromptlyPay, String selItems, int addressId, String payOrg,String client, List<String> vouchers) { //device_info
         String clientIp = request().remoteAddress();
 
         Logger.info("进入submitToPay方法，参数：\n"
@@ -65,7 +65,7 @@ public class AppOrderAndPayController extends BaseController {
             selItems = selItems.replaceAll(",", "_");
         }
 
-        List<Integer> orderIds = orderService.submitOrder(currentUser(), selItems, addressId, channel, null);
+        List<Integer> orderIds = orderService.submitOrder(currentUser(), selItems, addressId, channel, vouchers);
 
         Map<String, String> payInfoMap = submitToPay(payOrg, clientIp, orderIds);
 

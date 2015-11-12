@@ -9,6 +9,7 @@ import cmscenter.models.HomeFocus;
 import cmscenter.models.HomeNewProduct;
 import common.services.GeneralDao;
 import common.utils.Money;
+import common.utils.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +21,7 @@ import productcenter.services.ProductService;
 import productcenter.services.SkuAndStorageService;
 import usercenter.models.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by zhb on 2015/10/29.
@@ -49,7 +47,15 @@ public class HomeFocusService {
     @Autowired
     ThemeCollectService themeCollectService;
 
-    public HomePageDto build(User user, String deviceId){
+    /**
+     * 首页生成数据
+     *
+     * @param user
+     * @param deviceId
+     * @param page
+     * @return
+     */
+    public HomePageDto build(User user, String deviceId, Page<HomeNewProduct> page) {
 
         HomePageDto homePage = new HomePageDto();
 
@@ -59,33 +65,39 @@ public class HomeFocusService {
 
         //最新专题
         AppTheme appTheme = appThemeService.getFristAppTheme();
-        homePage.setAppTheme(AppThemeDto.build(appTheme,themeCollectService,user,deviceId));
+        homePage.setAppTheme(AppThemeDto.build(appTheme, themeCollectService, user, deviceId));
 
         //精选图
         List<HomeFocus> selectionList = findHomeFocusByPageType(HomeFocusPageType.selection);
         homePage.addSelectionList(selectionList);
 
         //新品
-        List<HomeNewProduct> newProductList = findHomeNewProductAll();
-        for(HomeNewProduct homeNewProduct:newProductList){
-            Product product = productService.getProductById(homeNewProduct.getProductId());
-            ProductPicture productPicture = productPictureService.getMinorProductPictureByProductId(homeNewProduct.getProductId());
-            StockKeepingUnit sku = skuService.querySkuByProductIdPriceSmall(homeNewProduct.getProductId());
-            Money money = skuService.getSkuCurrentPrice(sku);
-
-            ProductDto productDto = new ProductDto();
-            productDto.setPrice(money.getAmountWithBigDecimal().toString());
-            productDto.setProductId(homeNewProduct.getProductId());
-            productDto.setProductName(product.getName());
-            productDto.setProductUrl(productPicture.getPictureUrl());
-            homePage.addProduct(productDto);
+        List<HomeNewProduct> newProductList = findHomeNewProductAll(page);
+        for (HomeNewProduct homeNewProduct : newProductList) {
+            homePage.addProduct(ProductDto.getById(homeNewProduct.getProductId(), productService, productPictureService, skuService));
         }
 
         return homePage;
     }
 
+    /**
+     * 首页加载新品数据
+     *
+     * @param page
+     * @return
+     */
+    public List<ProductDto> buildProductList(Page<HomeNewProduct> page){
+        List<ProductDto> list = new ArrayList<>();
+        List<HomeNewProduct> newProductList = findHomeNewProductAll(page);
+        for (HomeNewProduct homeNewProduct : newProductList) {
+            list.add(ProductDto.getById(homeNewProduct.getProductId(), productService, productPictureService, skuService));
+        }
+
+        return list;
+    }
+
     @Transactional(readOnly = true)
-    public List<HomeFocus> findHomeFocusByPageType(HomeFocusPageType pageType){
+    public List<HomeFocus> findHomeFocusByPageType(HomeFocusPageType pageType) {
 
         String jpql = "select h from HomeFocus h where 1=1 and h.pageType=:pageType order by h.priority desc";
         Map<String, Object> queryParams = new HashMap<>();
@@ -96,12 +108,12 @@ public class HomeFocusService {
     }
 
     @Transactional(readOnly = true)
-    public List<HomeNewProduct> findHomeNewProductAll(){
+    public List<HomeNewProduct> findHomeNewProductAll(Page<HomeNewProduct> page) {
 
         String jpql = "select h from HomeNewProduct h where 1=1 order by h.priority desc";
         Map<String, Object> queryParams = new HashMap<>();
 
-        return generalDao.query(jpql, Optional.ofNullable(null), queryParams);
+        return generalDao.query(jpql, Optional.of(page), queryParams);
 
     }
 

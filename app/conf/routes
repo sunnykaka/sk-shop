@@ -27,7 +27,7 @@ POST          /app/cart/toBilling                     @controllers.api.shop.AppC
 POST          /app/cart/toBillingByPromptlyPay        @controllers.api.shop.AppCartController.toBillingByPromptlyPay(skuId:Int, number:Int)
 
 #支付
-POST          /app/pay/submitToPay                    @controllers.api.shop.AppOrderAndPayController.submitToPay(isPromptlyPay:Boolean, selItems:String, addressId:Int, payOrg:String, client:String)
+POST          /app/pay/submitToPay                    @controllers.api.shop.AppOrderAndPayController.submitToPay(isPromptlyPay:Boolean, selItems:String, addressId:Int, payOrg:String, client:String, vouchers: java.util.List[String] ?= null)
 POST          /app/pay/myOrderToPay                   @controllers.api.shop.AppOrderAndPayController.myOrderToPay(orderIds:String, addressId:Int, payOrg:String, client:String)
 GET           /app/pay/weiXinPayNotify                @controllers.api.shop.OrderPayCallBackAppController.weiXinPayNotify
 POST          /app/pay/weiXinPayNotify                @controllers.api.shop.OrderPayCallBackAppController.weiXinPayNotify
@@ -71,7 +71,7 @@ GET           /my/reminder/list                       @controllers.api.user.MyDa
 POST          /my/reminder/:productId                 @controllers.api.user.MyDataApiController.setMyReminder(productId:Int)
 
 # app cms
-GET           /home/shop                              @controllers.api.shop.HomeFoucsApiController.homeShop()
+GET           /home/shop                              @controllers.api.shop.HomeFoucsApiController.homeShop(pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET           /home/pic                               @controllers.api.shop.ThemeApiController.getAppHomeList()
 GET           /home/theme/new                         @controllers.api.shop.ThemeApiController.getAppThemeHome()
 GET           /home/theme/list                        @controllers.api.shop.ThemeApiController.getAppThemeList(pageNo:Int ?= 1,pageSize:Int ?= 10)

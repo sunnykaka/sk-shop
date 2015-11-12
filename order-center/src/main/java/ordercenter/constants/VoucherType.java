@@ -9,9 +9,9 @@ import common.models.utils.ViewEnum;
  */
 public enum VoucherType implements ViewEnum {
 
-    FIRE_BY_REGISTER("用户注册自动赠送"),
+    FIRE_BY_REGISTER("注册券"),
 
-    RECEIVE_BY_ACTIVITY("活动页面领取");
+    RECEIVE_BY_ACTIVITY("活动券");
 
     public String value;
 
