@@ -35,7 +35,7 @@ public class DiscountService {
      * @return
      */
     public LimitTimeDiscount findDiscount4Product(Integer productId) {
-        String jpql = " from LimitTimeDiscount where productId = :id and isDelete = 0 ";
+        String jpql = " from LimitTimeDiscount where productId = :id and isDelete = 0 and (endDate>= Now() and Now()>= beginDate) ";
         Map<String, Object> map = new HashMap<>();
         map.put("productId", productId);
         List<LimitTimeDiscount> list = generalDao.getEm().createQuery(jpql, LimitTimeDiscount.class).setParameter("id", productId).getResultList();
