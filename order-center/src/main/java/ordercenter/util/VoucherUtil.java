@@ -1,6 +1,5 @@
 package ordercenter.util;
 
-import ordercenter.models.Voucher;
 import ordercenter.models.VoucherBatch;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -10,11 +9,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class VoucherUtil {
 
     public static String generateVoucherBatchUniqueNo() {
-        return RandomStringUtils.randomAlphanumeric(8).toUpperCase();
+        return RandomStringUtils.randomNumeric(8);
     }
 
     public static String generateVoucherUniqueNo(VoucherBatch voucherBatch) {
-        return String.format("%s-%s", voucherBatch.getUniqueNo(), RandomStringUtils.randomAlphanumeric(8).toUpperCase());
+        return String.format("%s-%s", voucherBatch.getUniqueNo(), RandomStringUtils.randomNumeric(8));
     }
 
 
