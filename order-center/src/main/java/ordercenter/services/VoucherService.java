@@ -1,6 +1,5 @@
 package ordercenter.services;
 
-import common.exceptions.AppBusinessException;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.Money;
@@ -120,7 +119,7 @@ public class VoucherService {
         Map<String, Object> params = new HashMap<>();
         params.put("status", VoucherBatchStatus.VALID);
         params.put("type", type);
-        if(batchUniqueNo.isPresent() && StringUtils.isNoneBlank(batchUniqueNo.get())) {
+        if(batchUniqueNo.isPresent() && StringUtils.isNotBlank(batchUniqueNo.get())) {
             jpql += " and vb.uniqueNo = :uniqueNo";
             params.put("uniqueNo", batchUniqueNo.get());
         }
