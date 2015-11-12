@@ -9,11 +9,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class VoucherUtil {
 
     public static String generateVoucherBatchUniqueNo() {
-        return RandomStringUtils.randomNumeric(8);
+        return RandomStringUtils.randomNumeric(6);
     }
 
     public static String generateVoucherUniqueNo(VoucherBatch voucherBatch) {
-        return String.format("%s-%s", voucherBatch.getUniqueNo(), RandomStringUtils.randomNumeric(8));
+        return String.format("%s-%s", voucherBatch.getUniqueNo(), RandomStringUtils.randomNumeric(6));
     }
 
 
