@@ -51,7 +51,7 @@ public class OrderInfoDto {
         orderInfoDto.setId(order.getId());
         orderInfoDto.setOrderNo(order.getOrderNo());
         orderInfoDto.setExpressPrice(expressMoney.toString());
-        orderInfoDto.setPrice(order.getTotalMoney().getAmountWithBigDecimal().toString());
+        orderInfoDto.setPrice(order.calcItemMoney().getAmountWithBigDecimal().toString());
         orderInfoDto.setLastPrice(order.getTotalMoney().add(expressMoney).getAmountWithBigDecimal().toString());
         orderInfoDto.setValuation(order.isValuation());
         orderInfoDto.setVoucherFee(order.getVoucherFee());
