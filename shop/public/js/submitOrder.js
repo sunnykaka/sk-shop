@@ -3,6 +3,18 @@
  */
 $(function(){
 
+    //使用优惠劵
+    $('.Coupon-Btn').on('click',function(){
+        var curMoney = $(this).parent('td').siblings('.coupon-money').text(), conponVal = $('#couponVal').text();;
+        $(this).parents('tr').addClass('used');
+        //代金劵值
+        $('#couponVal').text((Number(curMoney)+Number(conponVal)).toFixed(2));
+        //总价格
+        $('#actualVal').text((Number($('#actualVal').text()) - Number(curMoney)).toFixed(2));
+       $(this).text('已使用').addClass('used-status');
+        $(this).off('click');
+    });
+
     //地址鼠标移动 事件委托
     $('.select-address').delegate('li','hover',function(evt){
        $(this).toggleClass('highLight');
@@ -496,9 +508,16 @@ $(function(){
         }
 
         var selItems = $('#selItems').val(),isPromptlyPay = $('#isPromptlyPay').val();
+        //获取代金劵编号
+        var couponList = $('tr.used').find('.coupon-uniqueNo'),couponStr = '';
+        if(couponList.size()>0){
+            couponList.each(function(i,item){
+                couponStr += "&vouchers="+$(item).text();
+            });
+        }
         $.ajax({
             type: "get",
-            url: '/order/submitOrder?selItems='+selItems+"&addressId="+addressId+"&isPromptlyPay="+isPromptlyPay,
+            url: '/order/submitOrder?selItems='+selItems+"&addressId="+addressId+"&isPromptlyPay="+isPromptlyPay+couponStr,
             async: false,
             dataType: 'json',
             cache: false,

@@ -94,6 +94,8 @@ $(function(){
                 dataType: 'JSON',
                 success: function (result) {
                     if (result.result) {
+                        //更新购物车数量
+                        $('.quantity').text(result.data.itemTotalNum);
                         //产品单品总价
                         updatePrice(ele,val,price);
                         //总价
@@ -267,6 +269,8 @@ $(function(){
                             dataType: 'json',
                             success: function (data) {
                                 if(data.result){
+                                    //更新购物车
+                                    $('.quantity').text(data.data.itemTotalNum);
                                     that.parents('tr').remove();
                                     if($('.product-list').find('tr').size() == 0){
                                         $('.mycart-list').remove();

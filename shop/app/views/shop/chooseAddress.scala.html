@@ -103,8 +103,36 @@
                     </div>
                 </div>
             }
+        @if(voucherList != null && !voucherList.isEmpty) {
+            <div class="select-voucher">
+                <h3>代金劵</h3>
+                <table>
+                    <tr>
+                        <th>序号</th>
+                        <th>金额</th>
+                        <th>最小订单金额</th>
+                        <th>有效期</th>
+                        <th class="control">操作</th>
+                    </tr>
 
-
+                    @for(voucher <- voucherList) {
+                        <tr>
+                            <td class="coupon-uniqueNo">@voucher.getUniqueNo</td>
+                            <td class="coupon-money">@voucher.getAmount</td>
+                            <td>  @voucher.getMinOrderAmount</td>
+                            <td>  @voucher.getCreateTime  至 @voucher.getDeadline</td>
+                            <td>
+                            @if(voucher.getMinOrderAmount.greaterThan(cart.getTotalMoney)  ){
+                                <span>还差@{voucher.getMinOrderAmount.getAmount()-cart.getTotalMoney.getAmount()}元，去 <a class="goList" href="@controllers.product.routes.ProductController.list()" target="_blank">凑单</a></span>
+                            }else{
+                                <span class="Coupon-Btn">使用</span>
+                            }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
 
         @if(cart == null || cart.getNotDeleteCartItemList == null || cart.getNotDeleteCartItemList.size() == 0) {
         <div class="mycart-empty">
@@ -184,6 +212,11 @@
                     <td></td>
                     <td class="alginRight">￥0.00</td>
                 </tr>
+                <tr class="coupon-row">
+                    <td class="alginLeft">代金劵：</td>
+                    <td></td>
+                    <td class="alginRight" >-￥<span id="couponVal">0.00</span></td>
+                </tr>
                 <tr>
                     <td class="alginLeft">关税：</td>
                     <td></td>
@@ -192,7 +225,7 @@
                 <tr class="last">
                     <td class="alginLeft">应付金额：</td>
                     <td></td>
-                    <td class="actual-pay-money alginRight">￥@cart.getTotalMoney</td>
+                    <td class="actual-pay-money alginRight">￥<span id="actualVal">@cart.getTotalMoney</span></td>
                 </tr>
             </table>
             }

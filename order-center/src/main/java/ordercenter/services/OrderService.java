@@ -538,8 +538,9 @@ public class OrderService {
         Money totalVoucherMoney = voucherList.stream().map(Voucher::getAmount).reduce(Money.valueOf(0d), Money::add);
         Money cumulativeVoucherMoney = Money.valueOf(0d);
 
-        if(totalOrderMoney.getAmount() < totalVoucherMoney.getAmount()) {
-            throw new AppBusinessException(ErrorCode.Conflict, "订单金额不能小于代金券使用金额");
+        if(totalVoucherMoney.getAmount() > totalOrderMoney.getAmount()) {
+            //当代金券使用金额大于订单金额，则使代金券金额等于订单金额
+            totalVoucherMoney = totalOrderMoney;
         }
 
         int i = 0;

@@ -65,6 +65,7 @@ POST          /recover/pswDo                          @controllers.api.user.Logi
 GET           /my/order/list                          @controllers.api.user.MyOrderApiController.list(queryType:Int ?= 0,pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET           /my/order/:id                           @controllers.api.user.MyOrderApiController.orderInfo(id:Int)
 POST          /my/order/receiving/:id                 @controllers.api.user.MyOrderApiController.orderReceiving(id:Int)
+GET           /my/voucher                             @controllers.api.user.MyVoucherApiController.list(status ?= null, pageNo:Int ?= 1, pageSize:Int ?= 10)
 
 # 提示的列表
 GET           /my/reminder/list                       @controllers.api.user.MyDataApiController.getMyReminder(processed:Boolean,pageNo:Int ?= 1,pageSize:Int ?= 10)

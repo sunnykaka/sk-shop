@@ -662,7 +662,7 @@ $(function () {
                 success: function (data) {
                     that.attr('disabled', null);
                     if (data.result) {
-                        $('#cart-quantity').text(data.data.itemTotalNum);
+                        $('.quantity').text(data.data.itemTotalNum);
                         flyer.fly({
                             start: {
                                 left: event.clientX,

@@ -232,7 +232,9 @@ $.ajax({
     cache:false,
     success: function (data) {
         if (data.result) {
-            $('.quantity').text(data.data);
+            setTimeout(function(){
+                $('.quantity').text(data.data);
+            },500);
         }
     }
 });

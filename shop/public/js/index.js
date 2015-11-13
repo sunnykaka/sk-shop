@@ -2,17 +2,6 @@
  * Created by lein on 2015/6/1.
  */
 $(function(){
-    //获取购物车 商品数量
-    $.ajax({
-        url: '/cart/getUserCartItemNum',
-        cache:false,
-        success: function (data) {
-            if (data.result) {
-                $('.quantity').text(data.data);
-            }
-        }
-    });
-
     //固定购物车
     fixedcart($('#cart'), $('#container'));
     //点击购物车，进入购物车页面

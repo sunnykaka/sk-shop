@@ -6,6 +6,9 @@ import ordercenter.constants.VoucherType;
 import ordercenter.models.Voucher;
 import org.joda.time.DateTime;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * User: liubin
  * Date: 14-11-5
@@ -53,6 +56,9 @@ public class VoucherDto{
      */
     private DateTime useTime;
 
+
+    private List<String> orderNoList;
+
     public static VoucherDto build(Voucher voucher) {
         if (null == voucher) {
             return null;
@@ -68,6 +74,9 @@ public class VoucherDto{
         voucherDto.setType(voucher.getType());
         voucherDto.setUniqueNo(voucher.getUniqueNo());
         voucherDto.setUseTime(voucher.getUseTime());
+        List<String> orderNos = voucher.getVoucherUseList().stream()
+                .map(vu -> String.valueOf(vu.getOrder().getOrderNo())).collect(Collectors.toList());
+        voucherDto.setOrderNoList(orderNos);
 
         return voucherDto;
     }
@@ -143,4 +152,13 @@ public class VoucherDto{
     public void setUseTime(DateTime useTime) {
         this.useTime = useTime;
     }
+
+    public List<String> getOrderNoList() {
+        return orderNoList;
+    }
+
+    public void setOrderNoList(List<String> orderNoList) {
+        this.orderNoList = orderNoList;
+    }
+
 }
