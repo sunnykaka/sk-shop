@@ -146,7 +146,7 @@ public class AppCartController extends BaseController {
         cartService.selectCartItems(cart, selCartItems);
 
         Address defaultAddress = addressService.queryDefaultAddress(user.getId());
-        List<Voucher> voucherList = voucherService.findVouchersByUser(user.getId());
+        List<Voucher> voucherList = voucherService.findUserAvailableVouchers(user.getId());
 
         Map<String, Object> retMap = new HashMap<>();
         retMap.put("cart",CartDto.buildUserCart(cart));
@@ -170,7 +170,7 @@ public class AppCartController extends BaseController {
         Cart cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
         Address defaultAddress = addressService.queryDefaultAddress(user.getId());
-        List<Voucher> voucherList = voucherService.findVouchersByUser(user.getId());
+        List<Voucher> voucherList = voucherService.findUserAvailableVouchers(user.getId());
 
         Map<String, Object> retMap = new HashMap<>();
         retMap.put("cart", CartDto.buildUserCart(cart));

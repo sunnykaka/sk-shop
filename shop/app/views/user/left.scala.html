@@ -7,6 +7,7 @@
         <dd @if("order".equals(focus)){class="current"}><a href="@controllers.user.routes.MyOrderController.index()">订单管理</a></dd>
         <dd @if("back".equals(focus)){class="current"}><a href="@controllers.user.routes.MyOrderController.backIndex()">售后服务</a></dd>
         <dd @if("address".equals(focus)){class="current"}><a href="@controllers.user.routes.AddressController.index()">收货地址</a></dd>
+        <dd @if("voucher".equals(focus)){class="current"}><a href="@controllers.user.routes.MyVoucherController.list()">我的代金券</a></dd>
     </dl>
     <dl class="my-favorites">
         <dt>我的收藏</dt>

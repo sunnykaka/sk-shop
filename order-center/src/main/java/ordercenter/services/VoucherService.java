@@ -1,11 +1,14 @@
 package ordercenter.services;
 
+import com.google.common.collect.Lists;
 import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.Money;
+import common.utils.page.Page;
 import ordercenter.constants.VoucherBatchStatus;
 import ordercenter.constants.VoucherStatus;
 import ordercenter.constants.VoucherType;
+import ordercenter.dtos.MyVouchers;
 import ordercenter.excepiton.VoucherException;
 import ordercenter.models.Order;
 import ordercenter.models.Voucher;
@@ -20,6 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.Optional.of;
 
 /**
  * 代金券服务
@@ -112,6 +119,12 @@ public class VoucherService {
         return results.get(0).intValue();
     }
 
+    /**
+     * 
+     * @param batchUniqueNo
+     * @param type
+     * @return
+     */
     @Transactional(readOnly = true)
     public VoucherBatch findValidVoucherBatch(Optional<String> batchUniqueNo, VoucherType type) {
 
@@ -170,6 +183,23 @@ public class VoucherService {
                 break;
             }
         }
+
+        //根据类型统计代金券出现次数
+        Map<VoucherType, Integer> typeCountMap =
+                vouchers.stream().
+                        map(Voucher::getType).
+                        collect(Collectors.toMap(
+                                Function.identity(),
+                                type -> 1,
+                                Math::addExact
+                        ));
+
+        //确保同类型的券只能使用一张
+        Optional<Map.Entry<VoucherType, Integer>> entry = typeCountMap.entrySet().stream().filter(e -> e.getValue() > 1).findFirst();
+        if(entry.isPresent()) {
+            errorMsg = String.format("代金券使用失败, %s使用了%d张", entry.get().getKey().value, entry.get().getValue());
+        }
+
         if(errorMsg != null) {
             throw new VoucherException(errorMsg);
         }
@@ -179,15 +209,15 @@ public class VoucherService {
     }
 
     /**
-     *
+     * 结算页面，查询可用的代金券
      * @param userId
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Voucher> findVouchersByUser(Integer userId) {
+    public List<Voucher> findUserAvailableVouchers(Integer userId) {
 
         String jpql = "select v from Voucher v where v.status = :status and " +
-                "(v.userId is null or v.userId = :userId) ";
+                "(v.userId is null or v.userId = :userId) order by v.amount desc";
         Map<String, Object> params = new HashMap<>();
         params.put("status", VoucherStatus.UNUSED);
         params.put("userId", userId);
@@ -276,5 +306,48 @@ public class VoucherService {
         return generalDao.get(VoucherBatch.class, id);
     }
 
+    @Transactional(readOnly = true)
+    public MyVouchers findByPage(Page<Voucher> page, Integer userId, Optional<VoucherStatus> status) {
 
+        VoucherStatus currentStatus = status.orElse(VoucherStatus.UNUSED);
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("status", currentStatus);
+
+        String jpql = "select v from Voucher v where v.userId = :userId and v.status = :status";
+
+        generalDao.query(jpql, of(page), params);
+
+        //查询其他状态的总条数
+        Map<VoucherStatus, Integer> countMap =
+                Lists.newArrayList(VoucherStatus.values()).stream().collect(Collectors.toMap(
+                        Function.identity(),
+                        s -> {
+                            if (s.equals(currentStatus)) {
+                                return page.getTotalCount();
+                            } else {
+                                return this.count(userId, of(s));
+                            }
+                        }
+                ));
+
+        Map<VoucherStatus, Integer> sortedMap = new TreeMap<>(Enum::compareTo);
+        sortedMap.putAll(countMap);
+
+        return new MyVouchers(page, currentStatus, sortedMap);
+    }
+
+    @Transactional(readOnly = true)
+    public int count(Integer userId, Optional<VoucherStatus> status) {
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("status", status.orElse(VoucherStatus.UNUSED));
+
+        String jpql = "select count(1) from Voucher v where v.userId = :userId and v.status = :status";
+
+        List<Long> query = generalDao.query(jpql, Optional.empty(), params);
+        return query.get(0).intValue();
+
+    }
 }

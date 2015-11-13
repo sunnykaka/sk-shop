@@ -122,6 +122,7 @@ GET         /my/appraise                                          @controllers.u
 GET         /my/back                                              @controllers.user.MyOrderController.backIndex(pageNo:Int ?= 1,pageSize:Int ?= 10)
 GET         /my/back/info                                         @controllers.user.MyOrderController.backContent(backId:Int ?= 0,pageNo:Int ?= 1)
 POST        /my/back/cancel                                       @controllers.user.MyOrderController.backCancel(backId:Int ?= 0)
+GET         /my/voucher                                           @controllers.user.MyVoucherController.list(status ?= null, pageNo:Int ?= 1, pageSize:Int ?= 10)
 
 #购物车
 GET         /cart/getSkuStorage                                   @controllers.shop.CartController.getSkuStorage(skuId:Int)

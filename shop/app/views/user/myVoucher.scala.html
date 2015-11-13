@@ -1,0 +1,134 @@
+@(myVouchers: ordercenter.dtos.MyVouchers)
+@import ordercenter.constants.VoucherStatus
+
+@import common.utils.DateUtils;
+
+@myCenter(Messages("title.my.voucher")) {
+    <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
+    <script>
+        $('table tbody').hover(function(){
+            $(this).addClass('hover').siblings('tbody').removeClass('hover');
+        },function(){
+            $(this).removeClass('hover')
+        });
+
+    </script>
+} {
+
+    <!--order-manage-->
+    <div class="order-manage">
+        <div class="order-manage-inner width1200">
+            <div class="bread-nav">
+                <ul class="clearfix">
+                    @myCenterTop()
+                    <li>我的代金券</li>
+                </ul>
+            </div>
+            <div class="order-manage-container clearfix">
+                @left("voucher")
+                    <!-- order-list -->
+                <div class="all-order-list">
+                    <div class="order-status">
+                        <ul class="clearfix">
+                            @for((status: VoucherStatus, count) <- myVouchers.getCountMap) {
+                                <li @if(status == myVouchers.getCurrentStatus){ class="current" }>
+                                    <a href="@controllers.user.routes.MyVoucherController.list(status.toString)">@{status.value}（@count）</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    @if(myVouchers.getVouchers.getResult.size() > 0){
+                        <div class="order-list">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="">类型</th>
+                                        <th colspan="">编号</th>
+                                        <th colspan="">面额</th>
+                                        @myVouchers.getCurrentStatus match {
+                                            case VoucherStatus.UNUSED => {
+                                                <th colspan="">使用条件</th>
+                                                <th colspan="">有效期</th>
+                                            }
+                                            case VoucherStatus.USED => {
+                                                <th colspan="">使用时间</th>
+                                                <th colspan="">使用的订单号</th>
+                                            }
+                                            case VoucherStatus.OVERDUE => {
+                                                <th colspan="">使用条件</th>
+                                                <th colspan="">过期时间</th>
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+                                @for(voucher <- myVouchers.getVouchers.getResult) {
+                                    <tbody><tr>
+                                        <td>@voucher.getType.value</td>
+                                        <td>@voucher.getUniqueNo</td>
+                                        <td>@voucher.getAmount</td>
+                                        @myVouchers.getCurrentStatus match {
+                                            case VoucherStatus.UNUSED => {
+                                                @if(voucher.getMinOrderAmount.getAmount == 0d) {
+                                                    <td>无限制</td>
+                                                } else {
+                                                    <td>消费满@{voucher.getMinOrderAmount}元可以使用</td>
+                                                }
+                                                <td>截止日期：@DateUtils.printDate(voucher.getDeadline)</td>
+                                            }
+                                            case VoucherStatus.USED => {
+                                                <td>@DateUtils.printDate(voucher.getUseTime)</td>
+                                                <td>
+                                                    @for(order <- voucher.getVoucherUseList.map(_.getOrder)) {
+                                                        <a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)">@order.getOrderNo</a>
+                                                    }
+                                                </td>
+                                            }
+                                            case VoucherStatus.OVERDUE => {
+                                                @if(voucher.getMinOrderAmount.getAmount == 0d) {
+                                                    <td>无限制</td>
+                                                } else {
+                                                    <td>消费满@{voucher.getMinOrderAmount}元可以使用</td>
+                                                }
+                                                <td>@DateUtils.printDate(voucher.getDeadline)</td>
+                                            }
+                                        }
+                                    </tr></tbody>
+                                }
+                            </table>
+
+                            @defining(myVouchers.getVouchers) { page =>
+                                @if(page.getTotalPage > 1){
+                                    <div class="order-page">
+                                        <ul class="clearfix">
+                                            <li>第<span class="current-page">@page.getPageNo</span>/<span class="total-page">@page.getTotalPage</span>页</li>
+                                            @if(page.getPageNo > 1){
+                                                <li><a href="@controllers.user.routes.MyVoucherController.list(myVouchers.getCurrentStatus.toString, page.getPageNo - 1)">上一页</a></li>
+                                            }else{
+                                                <li>上一页</li>
+                                            }
+                                            @if( page.getTotalCount > (page.getPageSize * page.getPageNo) ){
+                                                <li><a href="@controllers.user.routes.MyVoucherController.list(myVouchers.getCurrentStatus.toString, page.getPageNo + 1)">下一页</a></li>
+                                            }else{
+                                                <li>下一页</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }else{
+                        <div class="order-empty">
+                            <p>您没有@{myVouchers.getCurrentStatus.value}的代金券</p>
+                        </div>
+                    }
+
+                </div>
+                    <!-- end order-list-->
+            </div>
+        </div>
+    </div>
+    <!--end order-manage-->
+
+}
+
+

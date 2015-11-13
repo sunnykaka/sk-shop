@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import common.utils.JsonResult;
 import ordercenter.excepiton.CartException;
 import ordercenter.models.Cart;
-import ordercenter.models.CartItem;
 import ordercenter.models.Voucher;
 import ordercenter.services.CartService;
 import ordercenter.services.VoucherService;
@@ -190,7 +189,7 @@ public class CartController extends Controller {
         User curUser = SessionUtils.currentUser();
         Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-        List<Voucher> voucherList = voucherService.findVouchersByUser(curUser.getId());
+        List<Voucher> voucherList = voucherService.findUserAvailableVouchers(curUser.getId());
         return ok(chooseAddress.render(selCartItems, addressList, cart, false, voucherList));
     }
 
@@ -221,7 +220,7 @@ public class CartController extends Controller {
         Cart cart = cartService.fakeCartForPromptlyPay(skuId, number);
 
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);
-        List<Voucher> voucherList = voucherService.findVouchersByUser(curUser.getId());
+        List<Voucher> voucherList = voucherService.findUserAvailableVouchers(curUser.getId());
 
         return ok(chooseAddress.render(skuId + ":" + number, addressList, cart, true, voucherList));
     }

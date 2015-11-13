@@ -82,7 +82,10 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
 
         DateTime now = DateUtils.current();
         Optional<Integer> period = of(3);
-        int quantity = 3;
+        int quantity = 1;
+
+        //这个列表包含各类型的代金券各一张
+        List<Voucher> allTypeVouchers = new ArrayList<>();
 
         //为每种类型都运行测试
         for(VoucherType type : VoucherType.values()) {
@@ -104,8 +107,13 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
             testSubmitOrder(userId, 1, 5, true, vouchers);
             setAllVoucherBatchToInvalid();
 
-
+            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
+            allTypeVouchers.addAll(vouchers);
         }
+
+        //购物车中选中3个产品，每个数量为2提交订单
+        testSubmitOrder(userId, 3, 2, false, allTypeVouchers);
     }
 
     @Test
@@ -122,10 +130,26 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
         for(VoucherType type : VoucherType.values()) {
             VoucherBatch voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
             List<Voucher> vouchers = assertRequestVouchersSuccess(voucherBatch, userId2, quantity);
+            setAllVoucherBatchToInvalid();
             boolean exceptionThrown = false;
             try {
                 //使用其他人的优惠券
                 testSubmitOrder(userId, 1, 1, false, vouchers);
+            } catch (VoucherException expected) {
+                Logger.debug(expected.getMessage());
+                exceptionThrown = true;
+            }
+            if(!exceptionThrown) {
+                throw new AssertionError("预期抛出VoucherException，但是没有异常抛出");
+            }
+
+            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
+            setAllVoucherBatchToInvalid();
+            exceptionThrown = false;
+            try {
+                //同种类型的优惠券使用多张
+                testSubmitOrder(userId, 3, 2, false, vouchers);
             } catch (VoucherException expected) {
                 Logger.debug(expected.getMessage());
                 exceptionThrown = true;
