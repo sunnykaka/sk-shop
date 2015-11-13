@@ -4,7 +4,7 @@ import ordercenter.models.Order;
 import org.joda.time.DateTime;
 
 /**
- * Created by Administrator on 2015/9/6.
+ * Created by zhb on 2015/9/6.
  */
 public class OrderDto {
 

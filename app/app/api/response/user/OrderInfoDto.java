@@ -33,6 +33,11 @@ public class OrderInfoDto {
 
     private String lastPrice;
 
+    /**
+     * 代金券金额
+     */
+    private Money voucherFee = Money.valueOf(0);
+
     private List<OrderItemDto> orderItems = new ArrayList<>();
 
     private int orderStateInt = AppOrderState.Nil.getKey();
@@ -49,6 +54,7 @@ public class OrderInfoDto {
         orderInfoDto.setPrice(order.getTotalMoney().getAmountWithBigDecimal().toString());
         orderInfoDto.setLastPrice(order.getTotalMoney().add(expressMoney).getAmountWithBigDecimal().toString());
         orderInfoDto.setValuation(order.isValuation());
+        orderInfoDto.setVoucherFee(order.getVoucherFee());
         if(null != trade){
             orderInfoDto.setPayBank(order.getPayBank().getValue());
         }
@@ -151,6 +157,14 @@ public class OrderInfoDto {
 
     public void setValuation(boolean valuation) {
         this.valuation = valuation;
+    }
+
+    public Money getVoucherFee() {
+        return voucherFee;
+    }
+
+    public void setVoucherFee(Money voucherFee) {
+        this.voucherFee = voucherFee;
     }
 
     public enum AppOrderState implements ViewEnum {

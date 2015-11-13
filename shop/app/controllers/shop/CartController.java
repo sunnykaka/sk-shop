@@ -153,7 +153,19 @@ public class CartController extends Controller {
     @SecuredAction
     public Result deleteCartItem(int cartItemId) {
         cartService.deleteCartItemById(cartItemId);
-        return ok(new JsonResult(true,"删除成功").toNode());
+
+        int totalNum = 0;
+        User user = SessionUtils.currentUser();
+        if(user != null) {
+            Cart cart = cartService.getCartByUserId(user.getId());
+            if(cart != null) {
+                totalNum = cart.calcTotalNum();
+            }
+        }
+        Map<String,Integer> map = new HashMap<>();
+        map.put("itemTotalNum", totalNum);
+
+        return ok(new JsonResult(true,"删除成功",map).toNode());
     }
 
     /**

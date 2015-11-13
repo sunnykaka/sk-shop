@@ -173,10 +173,9 @@ GET         /activity/earlyAutumn                                 @controllers.a
 
 
 # app show
+GET         /app/theme/download                                   @controllers.app.AppShowController.download()
 GET         /app/theme/:id                                        @controllers.app.AppShowController.appThemeDesc(id:Int)
 GET         /app/share/theme/:id                                  @controllers.app.AppShowController.appTheme(id:Int)
-GET         /app/theme/download                                   @controllers.app.AppShowController.download()
-
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                                         controllers.Assets.versioned(path="/public", file: Asset)
