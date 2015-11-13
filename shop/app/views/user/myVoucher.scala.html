@@ -27,7 +27,7 @@
             <div class="order-manage-container clearfix">
                 @left("voucher")
                     <!-- order-list -->
-                <div class="all-order-list">
+                <div class="all-order-list voucher">
                     <div class="order-status">
                         <ul class="clearfix">
                             @for((status: VoucherStatus, count) <- myVouchers.getCountMap) {
@@ -79,7 +79,7 @@
                                                 <td>@DateUtils.printDate(voucher.getUseTime)</td>
                                                 <td>
                                                     @for(order <- voucher.getVoucherUseList.map(_.getOrder)) {
-                                                        <a href="@controllers.user.routes.MyOrderController.orderContent(order.getId)">@order.getOrderNo</a>
+                                                        <a class="order-details" href="@controllers.user.routes.MyOrderController.orderContent(order.getId)" target="_blank">@order.getOrderNo</a>
                                                     }
                                                 </td>
                                             }
