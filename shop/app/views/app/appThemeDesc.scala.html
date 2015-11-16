@@ -30,13 +30,13 @@
                 <!-- 内容-->
             <div class="content">
 
-                @Html(appThemeDto.getContent)
+                @Html(appThemeDto.getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img data-original='$1' src='/assets/images/grey.gif' />"))
 
                     <!-- 产品列表-->
                 <div class="product">
                     @for(product <- appThemeDto.getProductDtos){
                         <figure proid="@product.getProductId">
-                            <img src="@product.getProductUrl" proid="@product.getProductId">
+                            <img data-original="@product.getProductUrl" proid="@product.getProductId"  src="@routes.Assets.versioned("images/grey.gif")">
 
                             <figcaption>
                                 <div class="product_title">
@@ -55,6 +55,12 @@
             @*<p class="more">查看更多专题</p>*@
         </div>
 
-
+        <script  src="@routes.Assets.versioned("js/jquery.min.js")"></script>
+        <script  src="@routes.Assets.versioned("js/jquery.lazyload.js")"></script>
+        <script >
+             $(function(){
+                $('img').lazyload({effect: "fadeIn"});
+            });
+        </script>
     </body>
 </html>
