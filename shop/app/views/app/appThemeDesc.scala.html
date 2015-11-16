@@ -30,7 +30,7 @@
                 <!-- 内容-->
             <div class="content">
 
-                @Html(appThemeDto.getContent)
+                @Html(appThemeDto.getContent.replaceAll("<img.*?src=\"(.*?)\".*?>", "<img data-original='$1' src='/assets/images/grey.gif' />"))
 
                     <!-- 产品列表-->
                 <div class="product">
