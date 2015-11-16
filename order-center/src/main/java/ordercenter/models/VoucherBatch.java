@@ -206,8 +206,16 @@ public class VoucherBatch implements EntityClass<Integer>, OperableData {
         this.remark = remark;
     }
 
+    /**
+     * 计算代金券的截止时间
+     * @param now
+     * @return
+     */
     public DateTime computeVoucherDeadline(DateTime now) {
-        if(deadline != null) return deadline;
-        else return now.plusDays(periodDay);
+        DateTime endOfDay = deadline;
+        if(endOfDay == null) {
+            endOfDay = now.plusDays(periodDay);
+        }
+        return endOfDay.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
     }
 }

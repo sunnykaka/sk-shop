@@ -110,6 +110,11 @@ public class VoucherService {
         return voucherList;
     }
 
+    /**
+     * 计算活动下的代金券数量
+     * @param voucherBatchId
+     * @return
+     */
     @Transactional(readOnly = true)
     public int countVoucherInBatch(Integer voucherBatchId) {
         String jpql = "select count(v) from Voucher v where v.batchId = :batchId";
@@ -120,7 +125,7 @@ public class VoucherService {
     }
 
     /**
-     * 
+     * 根据编号和类型，查找可用的代金券
      * @param batchUniqueNo
      * @param type
      * @return
@@ -153,7 +158,7 @@ public class VoucherService {
     }
 
     /**
-     *
+     * 根据编号,用户查找代金券
      * @param voucherUniqueNoList
      * @param userId
      * @param totalOrderMoney
@@ -188,11 +193,7 @@ public class VoucherService {
         Map<VoucherType, Integer> typeCountMap =
                 vouchers.stream().
                         map(Voucher::getType).
-                        collect(Collectors.toMap(
-                                Function.identity(),
-                                type -> 1,
-                                Math::addExact
-                        ));
+                        collect(Collectors.toMap(Function.identity(), type -> 1, Math::addExact));
 
         //确保同类型的券只能使用一张
         Optional<Map.Entry<VoucherType, Integer>> entry = typeCountMap.entrySet().stream().filter(e -> e.getValue() > 1).findFirst();
@@ -260,6 +261,10 @@ public class VoucherService {
 
     }
 
+    /**
+     * 创建代金券活动
+     * @param voucherBatch
+     */
     @Transactional
     public void createVoucherBatch(VoucherBatch voucherBatch) {
         if(voucherBatch.getType() == null) {
@@ -275,6 +280,7 @@ public class VoucherService {
             throw new VoucherException("创建代金券活动失败，需要在代金券期限或者有效期中间至少填写一项");
         }
 
+        //校验注册送的活动无重复
         if(voucherBatch.getType().equals(VoucherType.FIRE_BY_REGISTER)) {
             VoucherBatch oldVoucherBatch = findValidVoucherBatch(Optional.empty(), VoucherType.FIRE_BY_REGISTER);
             if(oldVoucherBatch != null) {
@@ -295,6 +301,14 @@ public class VoucherService {
         voucherBatch.setStatus(VoucherBatchStatus.VALID);
         generalDao.persist(voucherBatch);
     }
+
+    @Transactional
+    public void updateVoucherBatchToInvalid(int batchId) {
+        VoucherBatch voucherBatch = getVoucherBatch(batchId);
+        voucherBatch.setStatus(VoucherBatchStatus.INVALID);
+        generalDao.persist(voucherBatch);
+    }
+
 
     @Transactional(readOnly = true)
     public Voucher getVoucher(Integer id) {
@@ -337,6 +351,12 @@ public class VoucherService {
         return new MyVouchers(page, currentStatus, sortedMap);
     }
 
+    /**
+     * 根据用户和状态查询代金券数量
+     * @param userId
+     * @param status
+     * @return
+     */
     @Transactional(readOnly = true)
     public int count(Integer userId, Optional<VoucherStatus> status) {
 
@@ -348,6 +368,48 @@ public class VoucherService {
 
         List<Long> query = generalDao.query(jpql, Optional.empty(), params);
         return query.get(0).intValue();
+
+    }
+
+    /**
+     * 定时器执行，根据时间修改代金券活动和代金券状态
+     */
+    @Transactional
+    public void changeStatus() {
+
+        DateTime now = DateUtils.current();
+
+        //修改代金券活动状态为VALID
+        String jpql = "update VoucherBatch set status = :status1 where status = :status2 and" +
+                " startTime <= :startTime and (endTime > :endTime or endTime is null) ";
+        Map<String, Object> params = new HashMap<>();
+        params.put("status1", VoucherBatchStatus.VALID);
+        params.put("status2", VoucherBatchStatus.INVALID);
+        params.put("startTime", now);
+        params.put("endTime", now);
+        int updateVoucherBatchToValidCount = generalDao.update(jpql, params);
+
+        //修改代金券活动状态为INVALID
+        jpql = "update VoucherBatch set status = :status1 where status = :status2 and" +
+                " (startTime >= :startTime or endTime <= :endTime)";
+        params = new HashMap<>();
+        params.put("status1", VoucherBatchStatus.INVALID);
+        params.put("status2", VoucherBatchStatus.VALID);
+        params.put("startTime", now);
+        params.put("endTime", now);
+        int updateVoucherBatchToInvalidCount = generalDao.update(jpql, params);
+
+        //修改代金券状态为OVERDUE
+        jpql = "update Voucher set status = :status1 where status = :status2 and" +
+                " deadline <= :deadline";
+        params = new HashMap<>();
+        params.put("status1", VoucherStatus.OVERDUE);
+        params.put("status2", VoucherStatus.UNUSED);
+        params.put("deadline", now);
+        int updateVoucherToOverdueCount = generalDao.update(jpql, params);
+
+        Logger.debug(String.format("定时器更新代金券状态: 代金券活动更新为有效数量: %d, 代金券活动更新为无效数量: %d, 代金券更新为过期数量: %d",
+                updateVoucherBatchToValidCount, updateVoucherBatchToInvalidCount, updateVoucherToOverdueCount));
 
     }
 }

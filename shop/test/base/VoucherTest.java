@@ -40,6 +40,28 @@ public interface VoucherTest extends LoginTest {
 
 
     /**
+     * 初始化代金券活动, 同时将其状态置为VALID
+     * @param type
+     * @param startTime
+     * @param endTime
+     * @param period
+     * @param deadline
+     * @param maxQuantity
+     * @return
+     */
+    default VoucherBatch initVoucherBatchWithValid(VoucherType type, DateTime startTime, Optional<DateTime> endTime,
+                                                   Optional<Integer> period, Optional<DateTime> deadline, Optional<Integer> maxQuantity) {
+
+        VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
+
+        VoucherBatch voucherBatch = initVoucherBatch(type, startTime, endTime, period, deadline, maxQuantity);
+        //新建的代金券活动状态为无效，手动改为有效
+        voucherService.updateVoucherBatchToValid(voucherBatch.getId());
+
+        return voucherBatch;
+    }
+
+    /**
      * 初始化代金券活动
      * @param type
      * @param startTime
@@ -75,9 +97,6 @@ public interface VoucherTest extends LoginTest {
         }
 
         voucherService.createVoucherBatch(voucherBatch);
-
-        //新建的代金券活动状态为无效，手动改为有效
-        voucherService.updateVoucherBatchToValid(voucherBatch.getId());
 
         return voucherBatch;
     }

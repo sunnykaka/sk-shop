@@ -89,25 +89,25 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
 
         //为每种类型都运行测试
         for(VoucherType type : VoucherType.values()) {
-            VoucherBatch voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            VoucherBatch voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             List<Voucher> vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             //购物车中选中1个产品，数量为1提交订单
             testSubmitOrder(userId, 1, 1, false, vouchers);
             setAllVoucherBatchToInvalid();
 
-            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             //购物车中选中3个产品，每个数量为2提交订单
             testSubmitOrder(userId, 3, 2, false, vouchers);
             setAllVoucherBatchToInvalid();
 
-            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             //1个产品，数量为5立即购买
             testSubmitOrder(userId, 1, 5, true, vouchers);
             setAllVoucherBatchToInvalid();
 
-            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             allTypeVouchers.addAll(vouchers);
         }
@@ -128,7 +128,7 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
 
         //为每种类型都运行测试
         for(VoucherType type : VoucherType.values()) {
-            VoucherBatch voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            VoucherBatch voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             List<Voucher> vouchers = assertRequestVouchersSuccess(voucherBatch, userId2, quantity);
             setAllVoucherBatchToInvalid();
             boolean exceptionThrown = false;
@@ -143,7 +143,7 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
                 throw new AssertionError("预期抛出VoucherException，但是没有异常抛出");
             }
 
-            voucherBatch = initVoucherBatch(type, now, empty(), period, empty(), empty());
+            voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             setAllVoucherBatchToInvalid();
             exceptionThrown = false;

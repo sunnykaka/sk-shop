@@ -20,6 +20,7 @@ import scala.concurrent.duration.Duration;
 import scheduler.MessageJobExecuteTask;
 import scheduler.PayOrderTipTask;
 import scheduler.SysCancelOrderTask;
+import scheduler.VoucherChangeStatusTask;
 import usercenter.dtos.DesignerView;
 import usercenter.services.DesignerService;
 import views.html.error_400;
@@ -71,6 +72,11 @@ public class Global extends BaseGlobal {
                 of(Duration.create(20, TimeUnit.SECONDS)),
                 of(Duration.create(10, TimeUnit.SECONDS)),
                 MessageJobExecuteTask.getInstance());
+
+        stateCoordinator.addScheduler(
+                of(Duration.create(20, TimeUnit.SECONDS)),
+                of(Duration.create(10, TimeUnit.SECONDS)),
+                VoucherChangeStatusTask.getInstance());
 
         stateCoordinator.start(Akka.system().scheduler(), Akka.system().dispatcher());
     }
