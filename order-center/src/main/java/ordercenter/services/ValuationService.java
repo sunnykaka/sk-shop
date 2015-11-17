@@ -30,8 +30,29 @@ public class ValuationService {
     @Autowired
     private OrderService orderService;
 
+
     /**
-     * 添加评论
+     * 添加评论(用户直接评论)
+     *
+     * @param valuation
+     * @return
+     */
+    public Valuation saveValuation(Valuation valuation){
+        generalDao.persist(valuation);
+        return valuation;
+    }
+
+    /**
+     * 修改
+     * @param valuation
+     * @return
+     */
+    public Valuation updateValuation(Valuation valuation){
+        return generalDao.merge(valuation);
+    }
+
+    /**
+     * 添加评论(购买商品)
      *
      * @param valuation
      * @return
@@ -42,7 +63,7 @@ public class ValuationService {
 
         OrderItem orderItem = orderService.getOrderItemById(valuation.getOrderItemId());
         orderItem.setAppraise(true);//同步订单项，已评论
-        generalDao.persist(orderItem);
+        generalDao.merge(orderItem);
 
         //同步订单 ------开始
         Order order = orderService.getOrderById(orderItem.getOrderId(),valuation.getUserId());
@@ -88,17 +109,31 @@ public class ValuationService {
 
     }
 
+    @Transactional(readOnly = true)
+    public Valuation findValuationById(int userId, int id){
+        String jpql = "select v from Valuation v where 1=1 ";
+        Map<String, Object> queryParams = new HashMap<>();
+        jpql += " and v.id = :id ";
+        queryParams.put("id", id);
+
+        jpql += " and v.userId = :userId ";
+        queryParams.put("userId", userId);
+
+        List<Valuation> valueList = generalDao.query(jpql, Optional.empty(), queryParams);
+        if (valueList != null && valueList.size() > 0) {
+            return valueList.get(0);
+        }
+
+        return null;
+    }
+
 
     @Transactional(readOnly = true)
-    public Optional<Page<Valuation>> findByProduct(Optional<Page<Valuation>> page, int productId, Integer point){
+    public Optional<Page<Valuation>> findByProduct(Optional<Page<Valuation>> page, int productId){
 
         String jpql = "select v from Valuation v where v.productId = :productId ";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
-        if(point != null) {
-            jpql += " and v.point = :point";
-            queryParams.put("point", point);
-        }
 
         generalDao.query(jpql, page, queryParams);
 

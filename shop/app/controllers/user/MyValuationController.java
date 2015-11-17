@@ -13,6 +13,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import productcenter.dtos.ValuationForm;
 import usercenter.models.User;
+import usercenter.services.UserService;
 import usercenter.utils.SessionUtils;
 import utils.secure.SecuredAction;
 import views.html.user.myValuation;
@@ -25,6 +26,9 @@ public class MyValuationController extends Controller {
 
     @Autowired
     private ValuationService valuationService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 添加评论
@@ -68,42 +72,53 @@ public class MyValuationController extends Controller {
 
     }
 
-    /**
-     * 暂时没有用上
-     *
-     * @param orderItemId
-     * @return
-     */
     @SecuredAction
-    public Result findValuation(long orderItemId) {
+    public Result saveValuation() {
 
-        //测试，没有用代码，下次删除 zhenghaobin
-//        int[] a = new int[]{0,1,2};
-//
-//        for(int ia:a){
-//            for(int i=0;i<=20;i++){
-//                Valuation valuation = new Valuation();
-//                valuation.setPoint(ia);
-//                valuation.setOrderItemId(13236);
-//                valuation.setProductId(2206);
-//                valuation.setUserId(14341);
-//                valuation.setUserName("hello");
-//                valuationService.addValuation(valuation);
-//            }
-//        }
+        User user = SessionUtils.currentUser();
 
-//        User user = SessionUtils.currentUser();
-//
-//        Valuation valuation = valuationService.findByOrderItemId(user.getId(),orderItemId);
-//
-//        if(null == valuation){
-//            return ok(new JsonResult(false,"未评价",null).toNode());
-//        }
-//
-//        return ok(new JsonResult(true,"已评价",valuation).toNode());
-        return ok("true");
+        Form<ValuationForm> valuationForm = Form.form(ValuationForm.class).bindFromRequest();
 
+        if(!valuationForm.hasErrors()) {
+            try {
+                ValuationForm valuationF = valuationForm.get();
+
+                Valuation valuation = new Valuation();
+                valuation.setUserId(user.getId());
+                valuation.setUserName(user.getUserName());
+                valuation.setContent(StringEscapeUtils.escapeHtml4(StringUtils.trim(valuationF.getContent())));
+                valuation.setProductId(valuationF.getProductId());
+                if(valuationF.getReplyUserId() != null && valuationF.getReplyUserId() != 0){
+                    valuation.setReplyUserId(valuationF.getReplyUserId());
+                    User replyUser = userService.getById(valuationF.getReplyUserId());
+                    valuation.setReplyUserName(replyUser == null ? "" : replyUser.getUserName());
+                }
+
+                valuationService.saveValuation(valuation);
+
+                return ok(new JsonResult(true,null,valuation).toNode());
+
+            } catch (AppBusinessException e) {
+                valuationForm.reject("errors", e.getMessage());
+            }
+        }
+
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(valuationForm.errors())).toNode());
     }
 
+    @SecuredAction
+    public Result deleteMyValuation(int id) {
+        User user = SessionUtils.currentUser();
+
+        Valuation oldValuation = valuationService.findValuationById(user.getId(), id);
+        if(oldValuation == null){
+            return ok(new JsonResult(false, "没有权限删除").toNode());
+        }
+
+        oldValuation.setDelete(true);
+        valuationService.updateValuation(oldValuation);
+
+        return ok();
+    }
 
 }

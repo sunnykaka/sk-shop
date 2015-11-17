@@ -67,7 +67,9 @@ POST        /my/address/defaultAddress                            @controllers.u
 GET         /my/address/query                                     @controllers.user.AddressController.getAddress(addressId:Int)
 # myValuation
 POST        /my/valuation/add                                     @controllers.user.MyValuationController.add()
-GET         /my/valuation/find                                    @controllers.user.MyValuationController.findValuation(orderItemId:Long)
+POST        /my/valuation/save                                    @controllers.user.MyValuationController.saveValuation()
+POST        /my/valuation/delete/:id                              @controllers.user.MyValuationController.deleteMyValuation(id:Int)
+
 # my data
 GET         /my/data                                              @controllers.user.MyDataController.index()
 POST        /my/data/update                                       @controllers.user.MyDataController.update()
@@ -152,7 +154,7 @@ GET         /payOrder/checkPayState                               @controllers.s
 GET         /payOrder/generateAliPayPayReturnUrl                  @controllers.shop.OrderPayCallBackController.generateAliPayPayReturnUrl(tradeNo:String)
 
 #product
-GET         /product/valuations                                   @controllers.product.ProductController.valuations(id: Int, point: Integer ?= null)
+GET         /product/valuations                                   @controllers.product.ProductController.valuations(id: Int)
 GET         /product/:id                                          @controllers.product.ProductController.detail(id)
 
 #help

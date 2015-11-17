@@ -32,7 +32,7 @@ public class ProductControllerTest extends BaseTest implements DbTest {
         prepareValuations(size, Optional.of(fakeProductId));
 
 
-        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId, null).url());
+        Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId).url());
         Result result = route(request);
         Logger.debug(" ProductController.valuations result: " + contentAsString(result));
         assertThat(result.status(), is(OK));
@@ -49,7 +49,7 @@ public class ProductControllerTest extends BaseTest implements DbTest {
         int allTotal = 0;
 
         for(int i=0; i<3; i++) {
-            request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId, i).url());
+            request = new Http.RequestBuilder().method(GET).uri(routes.ProductController.valuations(fakeProductId).url());
             result = route(request);
             assertThat(result.status(), is(OK));
             jsonResult = JsonResult.fromJson(contentAsString(result));

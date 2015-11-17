@@ -70,6 +70,12 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
      */
     private DateTime appendReplyDate;
 
+    private int replyUserId;
+
+    private String replyUserName;
+
+    private boolean delete;
+
     public static Map<Integer, String> pointName = new HashMap<>();
 
     static {
@@ -257,5 +263,32 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
 
     public void setAppendReplyDate ( DateTime appendReplyDate ) {
         this.appendReplyDate = appendReplyDate;
+    }
+
+    @Column(name = "replyUserId")
+    public int getReplyUserId() {
+        return replyUserId;
+    }
+
+    public void setReplyUserId(int replyUserId) {
+        this.replyUserId = replyUserId;
+    }
+
+    @Column(name = "replyUserName")
+    public String getReplyUserName() {
+        return replyUserName;
+    }
+
+    public void setReplyUserName(String replyUserName) {
+        this.replyUserName = replyUserName;
+    }
+
+    @Column(name = "isDelete")
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 }

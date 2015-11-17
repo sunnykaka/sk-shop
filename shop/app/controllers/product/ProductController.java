@@ -100,11 +100,11 @@ public class ProductController extends Controller {
         return ok(detail.render(productDetail, (int) (Math.random() * 10) % 6 + 1));
     }
 
-    public Result valuations(Integer productId, Integer point) {
+    public Result valuations(Integer productId) {
 
         Page<Valuation> page = PageFactory.getPage(request());
 
-        valuationService.findByProduct(Optional.of(page), productId, point);
+        valuationService.findByProduct(Optional.of(page), productId);
         for (Valuation valuation : page.getResult()) {
             valuation.setUserName(common.utils.StringUtils.getSecurityName(valuation.getUserName()));
         }
