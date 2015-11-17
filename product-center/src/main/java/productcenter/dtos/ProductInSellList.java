@@ -1,6 +1,5 @@
 package productcenter.dtos;
 
-import common.utils.JsonUtils;
 import common.utils.Money;
 import common.utils.play.BaseGlobal;
 import productcenter.models.LimitTimeDiscount;
@@ -14,7 +13,6 @@ import productcenter.services.SkuAndStorageService;
 import usercenter.models.Designer;
 import usercenter.services.DesignerService;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +36,9 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
      */
     private Money price;
 
-    private Money discountPrice;
+    private Money marketPrice;
+
+    private LimitTimeDiscount discount;
 
     /**
      * 状态，之所以没有用ExhibitionStatus，是担心以后系统改动时
@@ -74,8 +74,13 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
         return status;
     }
 
-    public Money getDiscountPrice() {
-        return discountPrice;
+
+    public Money getMarketPrice() {
+        return marketPrice;
+    }
+
+    public LimitTimeDiscount getDiscount() {
+        return discount;
     }
 
     /**
@@ -159,14 +164,6 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
          */
         protected Builder buildPriceAndStatus(Product product) {
 
-            /**
-             * 读取商品的状态
-             */
-//            Optional<CmsExhibition> exhibition = cmsService.findExhibitionWithProdId(this.productId);
-//            ExhibitionStatus status = ExhibitionStatus.OVER; //默认是正常售卖
-//            if (exhibition.isPresent()) {
-//                status = exhibition.get().getStatus();
-//            }
             this.productInSellList.status = product.getSaleStatus();
 
 
@@ -189,22 +186,26 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
             }
 
 
-            /**
-             * 首发就读首发价，其余状态都读正常售卖价
-             */
-            if (productService.useFirstSellPrice(this.productId)) {
-                this.productInSellList.price = mostCheapSku.getPrice();
-            } else {
-                this.productInSellList.price = mostCheapSku.getMarketPrice();
-            }
+//            /**
+//             * 首发就读首发价，其余状态都读正常售卖价
+//             */
+//            if (productService.useFirstSellPrice(this.productId)) {
+//                this.productInSellList.price = mostCheapSku.getPrice();
+//            } else {
+//                this.productInSellList.price = mostCheapSku.getMarketPrice();
+//            }
+
+            this.productInSellList.price = mostCheapSku.getPrice();
+            this.productInSellList.marketPrice = mostCheapSku.getMarketPrice();
 
 
-            final Integer mostCheapSkuId = mostCheapSku.getId();
-
-            Optional<List<SkuDiscount>> discount = discountService.skuDiscounts(this.productId);
-            if (discount.isPresent()) {
-                this.productInSellList.discountPrice = discount.get().stream().filter(sku -> sku.getSkuId().equals(mostCheapSkuId)).findFirst().get().getSkuMoney();
-            }
+            this.productInSellList.discount = discountService.findDiscount4Product(this.productId);
+//
+//            final Integer mostCheapSkuId = mostCheapSku.getId();
+//            Optional<List<SkuDiscount>> discount = discountService.skuDiscounts(this.productId);
+//            if (discount.isPresent()) {
+//                this.productInSellList.discountPrice = discount.get().stream().filter(sku -> sku.getSkuId().equals(mostCheapSkuId)).findFirst().get().getSkuMoney();
+//            }
 
             Long storage = skuAndStorageService.getProductStorage(this.productId);
             this.productInSellList.storage = storage;

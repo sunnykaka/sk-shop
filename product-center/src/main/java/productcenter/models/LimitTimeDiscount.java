@@ -1,10 +1,12 @@
 package productcenter.models;
 
 import common.models.utils.EntityClass;
+import common.utils.Money;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Created by amoszhou on 15/11/9.
@@ -28,6 +30,10 @@ public class LimitTimeDiscount implements EntityClass<Integer> {
     private String skuDetailsJson;
 
     private Integer isDelete;
+
+    private String discountName;
+
+    private String discountTitle;
 
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -104,12 +110,42 @@ public class LimitTimeDiscount implements EntityClass<Integer> {
 
 
     @Basic
-    @Column(name="isDelete")
+    @Column(name = "isDelete")
     public Integer getIsDelete() {
         return isDelete;
     }
 
     public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
+    }
+
+
+    @Basic
+    @Column(name = "discountName")
+    public String getDiscountName() {
+        return discountName;
+    }
+
+    public void setDiscountName(String discountName) {
+        this.discountName = discountName;
+    }
+
+    @Transient
+    public String getDiscountTitle() {
+        /**
+         * 减固定金额
+         */
+        if (this.getDiscountType().equals(DiscountType.Money)) {
+            return "直降";
+        }
+        /**
+         * 按折扣减
+         */
+        BigDecimal discountDouble = new BigDecimal(this.getDiscount()).divide(new BigDecimal(10));
+        return discountDouble.toString() + "折";
+    }
+
+    public void setDiscountTitle(String discountTitle) {
+        this.discountTitle = discountTitle;
     }
 }
