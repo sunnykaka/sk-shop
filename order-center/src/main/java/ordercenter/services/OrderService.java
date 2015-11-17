@@ -38,6 +38,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class OrderService {
 
+    private final Logger.ALogger SCHEDULER_LOGGER = Logger.of("schedulerTask");
+
     @Autowired
     GeneralDao generalDao;
 
@@ -309,7 +311,7 @@ public class OrderService {
                 try {
                     cancelOrder(order, CancelOrderType.Sys);
                 } catch (AppBusinessException e) {
-                    Logger.error("系统定时任务取消超时订单的时候发生错误: " + e.getMessage());
+                    SCHEDULER_LOGGER.error("系统定时任务取消超时订单的时候发生错误: " + e.getMessage());
                 }
             }
         }

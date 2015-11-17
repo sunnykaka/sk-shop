@@ -34,8 +34,11 @@ import static java.util.Optional.of;
 @Service
 public class VoucherService {
 
+    private final Logger.ALogger SCHEDULER_LOGGER = Logger.of("schedulerTask");
+
     @Autowired
     private GeneralDao generalDao;
+
 
     /**
      * 通过活动请求代金券
@@ -408,7 +411,7 @@ public class VoucherService {
         params.put("deadline", now);
         int updateVoucherToOverdueCount = generalDao.update(jpql, params);
 
-        Logger.debug(String.format("定时器更新代金券状态: 代金券活动更新为有效数量: %d, 代金券活动更新为无效数量: %d, 代金券更新为过期数量: %d",
+        SCHEDULER_LOGGER.debug(String.format("定时器更新代金券状态: 代金券活动更新为有效数量: %d, 代金券活动更新为无效数量: %d, 代金券更新为过期数量: %d",
                 updateVoucherBatchToValidCount, updateVoucherBatchToInvalidCount, updateVoucherToOverdueCount));
 
     }

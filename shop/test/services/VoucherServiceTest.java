@@ -3,6 +3,8 @@ package services;
 import base.BaseTest;
 import base.VoucherTest;
 import common.utils.DateUtils;
+import common.utils.RedisUtils;
+import common.utils.scheduler.StateCoordinator;
 import ordercenter.constants.VoucherBatchStatus;
 import ordercenter.constants.VoucherStatus;
 import ordercenter.constants.VoucherType;
@@ -11,6 +13,7 @@ import ordercenter.models.Voucher;
 import ordercenter.models.VoucherBatch;
 import ordercenter.services.VoucherService;
 import org.joda.time.DateTime;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,6 +22,7 @@ import utils.Global;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -35,6 +39,7 @@ public class VoucherServiceTest extends BaseTest implements VoucherTest {
      * 测试运行之前将数据库所有的代金券活动状态置为无效
      */
     @Before
+    @After
     public void init() {
         setAllVoucherBatchToInvalid();
     }
@@ -134,20 +139,28 @@ public class VoucherServiceTest extends BaseTest implements VoucherTest {
             return null;
         });
 
-
+        //将所有代金券活动设置为取消,消除对数据库的影响
+        setAllVoucherBatchToInvalid();
 
     }
 
 
     @Test
-    @Ignore
     public void test1() throws Exception {
 
-        DateTime now = DateUtils.current();
-        Optional<Integer> period = of(100);
-        int quantity = 10;
-        VoucherBatch voucherBatch = initVoucherBatchWithValid(VoucherType.RECEIVE_BY_ACTIVITY, now, empty(), period, empty(), empty());
-        assertRequestVouchersSuccess(voucherBatch, 9, quantity);
+//        DateTime now = DateUtils.current();
+//        Optional<Integer> period = of(100);
+//        int quantity = 10;
+//        VoucherBatch voucherBatch = initVoucherBatchWithValid(VoucherType.RECEIVE_BY_ACTIVITY, now, empty(), period, empty(), empty());
+//        assertRequestVouchersSuccess(voucherBatch, 9, quantity);
+
+        RedisUtils.withJedisClient(jedis -> {
+
+            String result = jedis.set(RedisUtils.buildKey("state_coordinator", "shop"), UUID.randomUUID().toString(), "NX", "EX", 60);
+            Logger.info("result: " + result);
+
+            return null;
+        });
 
     }
 

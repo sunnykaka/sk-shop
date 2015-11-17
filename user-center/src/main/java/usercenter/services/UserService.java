@@ -244,8 +244,9 @@ public class UserService {
      * @return
      */
     @Transactional
-    public User loginByRegister(User user, boolean rememberMe) {
+    public User loginByRegister(Integer userId, boolean rememberMe) {
 
+        User user = getById(userId);
 
         doLogin(user, new LoginForm.LoginInfo(null, MarketChannel.WEB.getValue(), null));
 

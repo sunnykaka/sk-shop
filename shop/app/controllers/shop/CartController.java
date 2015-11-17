@@ -7,6 +7,7 @@ import ordercenter.models.Cart;
 import ordercenter.models.Voucher;
 import ordercenter.services.CartService;
 import ordercenter.services.VoucherService;
+import ordercenter.util.CartUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -20,6 +21,7 @@ import utils.secure.SecuredAction;
 import views.html.shop.chooseAddress;
 import views.html.shop.showCart;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,9 +180,11 @@ public class CartController extends Controller {
 
             User user = SessionUtils.currentUser();
 
+            List<Integer> selCartItemIdList = CartUtil.getCartItemIdList(selCartItems);
+
             Cart cart = cartService.buildUserCart(user.getId());
 
-            cartService.selectCartItems(cart, selCartItems);
+            cartService.selectCartItems(cart, selCartItemIdList);
 
             return ok(new JsonResult(true,"选中购物车项选中状态更新成功").toNode());
 
@@ -196,8 +200,7 @@ public class CartController extends Controller {
      */
     @SecuredAction
     public Result chooseAddress(String selCartItems) {
-        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split("_")).stream().
-                map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> selCartItemIdList = CartUtil.getCartItemIdList(selCartItems);
         User curUser = SessionUtils.currentUser();
         Cart cart = cartService.buildUserCartBySelItem(curUser.getId(), selCartItemIdList);
         List<Address> addressList = addressService.queryAllAddress(curUser.getId(), true);

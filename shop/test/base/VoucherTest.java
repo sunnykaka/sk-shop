@@ -27,7 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public interface VoucherTest extends LoginTest {
 
     /**
-     * 子类需要在@Before中调用这个方法
+     * 子类需要在@Before和@After中调用这个方法
      */
     default void setAllVoucherBatchToInvalid() {
         doInTransactionWithGeneralDao(generalDao -> {

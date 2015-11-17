@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class SchedulerTask implements Runnable {
 
+    protected final Logger.ALogger LOGGER = Logger.of("schedulerTask");
+
     private AtomicBoolean running = new AtomicBoolean(false);
 
     @Override
@@ -21,14 +23,14 @@ public abstract class SchedulerTask implements Runnable {
             try {
                 doRun();
             } catch (Throwable e) {
-                Logger.error(className + "运行的时候发生错误: " + e.getMessage(), e);
+                LOGGER.error(className + "运行的时候发生错误: " + e.getMessage(), e);
             } finally {
                 running.set(false);
                 stopwatch.stop();
-                Logger.info(className + "定时任务运行结束, 耗时: " + stopwatch.toString());
+                LOGGER.info(className + "定时任务运行结束, 耗时: " + stopwatch.toString());
             }
         } else {
-            Logger.warn(className + "定时任务已经在运行...");
+            LOGGER.warn(className + "定时任务已经在运行...");
         }
     }
 

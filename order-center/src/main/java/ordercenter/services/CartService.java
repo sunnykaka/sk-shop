@@ -8,6 +8,7 @@ import common.utils.Money;
 import ordercenter.excepiton.CartException;
 import ordercenter.models.Cart;
 import ordercenter.models.CartItem;
+import ordercenter.util.CartUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -298,17 +299,14 @@ public class CartService {
     /**
      * 选择购物车中的项
      * @param cart
-     * @param selCartItems 选中的购物车ID, 多个ID以","分隔
+     * @param selCartItemIdList
      */
     @Transactional
-    public void selectCartItems(Cart cart, String selCartItems) {
+    public void selectCartItems(Cart cart, List<Integer> selCartItemIdList) {
 
-        if(selCartItems == null || selCartItems.trim().length() == 0) {
+        if(selCartItemIdList.isEmpty()) {
             throw new CartException(ErrorCode.Conflict, "请先选择购物车中的商品");
         }
-
-        List<Integer> selCartItemIdList = Lists.newArrayList(selCartItems.split("_")).stream().
-                map(Integer::parseInt).collect(Collectors.toList());
 
         verifyCart(cart, selCartItemIdList);
 
@@ -439,8 +437,7 @@ public class CartService {
             cart = fakeCartForPromptlyPay(skuId, number);
 
         } else {
-            List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split("_")).stream().
-                    map(Integer::parseInt).collect(Collectors.toList());
+            List<Integer> selCartItemIdList = CartUtil.getCartItemIdList(selItems);
             cart = buildUserCartBySelItem(userId, selCartItemIdList);
             verifyCart(cart, selCartItemIdList);
 
@@ -460,8 +457,7 @@ public class CartService {
             return;
         }
 
-        List<Integer> selCartItemIdList = Lists.newArrayList(selItems.split("_")).stream().
-                map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> selCartItemIdList = CartUtil.getCartItemIdList(selItems);
 
         selCartItemIdList.forEach(this::deleteCartItemById);
 

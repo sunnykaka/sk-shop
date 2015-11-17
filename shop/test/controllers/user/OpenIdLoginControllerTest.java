@@ -27,7 +27,7 @@ public class OpenIdLoginControllerTest extends BaseTest {
         String state = RandomStringUtils.randomAlphanumeric(8);
         WeixinLogin weixinLogin = new WeixinLogin();
 
-        User user = weixinLogin.handleCallback(code, state, "");
+        User user = (User)weixinLogin.handleCallback(code, state, "")[0];
 
         assertThat(user.getId(), is(notNullValue()));
 
@@ -39,7 +39,7 @@ public class OpenIdLoginControllerTest extends BaseTest {
 
         String code = "79275c8d32d99667dc2750ace0e98e50";
         String state = RandomStringUtils.randomAlphanumeric(8);
-        User user = new WeiboLogin().handleCallback(code, state, "", "", "");
+        User user = (User)new WeiboLogin().handleCallback(code, state, "", "", "")[0];
 
         assertThat(user.getId(), is(notNullValue()));
 
@@ -51,7 +51,7 @@ public class OpenIdLoginControllerTest extends BaseTest {
 
         String code = "A1A11C17A4DE690A89ECAE4EC61FEEF7";
         String state = RandomStringUtils.randomAlphanumeric(8);
-        User user = new QQLogin().handleCallback(code, state, "", "");
+        User user = (User)new QQLogin().handleCallback(code, state, "", "")[0];
 
         assertThat(user.getId(), is(notNullValue()));
 

@@ -41,6 +41,19 @@
         </encoder>
     </appender>
 
+    <appender name="SCHEDULER_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/home/admin/log/sk/scheduler.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Daily rollover with compression -->
+            <fileNamePattern>/home/admin/log/sk/scheduler-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- keep 30 days worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %C{0} in %thread %n%message%n%xException%n</pattern>
+        </encoder>
+    </appender>
+
 
     <logger name="play" level="INFO" />
     <logger name="application" level="DEBUG" />
@@ -60,9 +73,12 @@
         <appender-ref ref="TRADE_FILE" />
     </logger>
 
+    <logger name="schedulerTask" level="INFO" additivity="false">
+        <appender-ref ref="SCHEDULER_FILE"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="FILE"/>
-        <appender-ref ref="TRADE_FILE"/>
     </root>
 
 </configuration>

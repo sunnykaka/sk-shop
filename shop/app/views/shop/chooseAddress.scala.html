@@ -2,6 +2,8 @@
         isPromptlyPay:Boolean, voucherList: List[ordercenter.models.Voucher])
 
 @import productcenter.models.Seo;
+@import common.utils.DateUtils;
+
 @main(new Seo(Messages("title.cart"),Messages("seo.description"),Messages("seo.Keywords")))() {
     <script src="@routes.Assets.versioned("js/jquery.iDialog.min.js")"></script>
     <script src="@routes.Assets.versioned("js/selectArea.js")"></script>
@@ -108,10 +110,10 @@
                 <h3>代金劵</h3>
                 <table>
                     <tr>
-                        <th>序号</th>
-                        <th>金额</th>
-                        <th>最小订单金额</th>
-                        <th>有效期</th>
+                        <th>编号</th>
+                        <th>面额</th>
+                        <th>使用条件</th>
+                        <th>截止日期</th>
                         <th class="control">操作</th>
                     </tr>
 
@@ -119,11 +121,15 @@
                         <tr>
                             <td class="coupon-uniqueNo">@voucher.getUniqueNo</td>
                             <td class="coupon-money">@voucher.getAmount</td>
-                            <td>  @voucher.getMinOrderAmount</td>
-                            <td>  @voucher.getCreateTime  至 @voucher.getDeadline</td>
+                            @if(voucher.getMinOrderAmount.getAmount == 0d) {
+                                <td>无限制</td>
+                            } else {
+                                <td>消费满@{voucher.getMinOrderAmount}元可以使用</td>
+                            }
+                            <td>  @DateUtils.printDate(voucher.getUseTime)</td>
                             <td>
                             @if(voucher.getMinOrderAmount.greaterThan(cart.getTotalMoney)  ){
-                                <span>还差@{voucher.getMinOrderAmount.getAmount()-cart.getTotalMoney.getAmount()}元，去 <a class="goList" href="@controllers.product.routes.ProductController.list()" target="_blank">凑单</a></span>
+                                <span>还差@{voucher.getMinOrderAmount.subtract(cart.getTotalMoney)}元，去 <a class="goList" href="@controllers.product.routes.ProductController.list()" target="_blank">凑单</a></span>
                             }else{
                                 <span class="Coupon-Btn">使用</span>
                             }

@@ -35,7 +35,7 @@ public class WeixinLogin extends OpenIDConnector {
     }
 
     @SuppressWarnings("unchecked")
-    public User handleCallback(String code, String state, String registerIP) {
+    public Object[] handleCallback(String code, String state, String registerIP) {
 
         if (StringUtils.isBlank(code) || StringUtils.isBlank(state)) {
             Logger.error("微信登录回调的时候发现code或者state值为空");

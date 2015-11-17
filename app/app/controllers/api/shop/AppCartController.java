@@ -2,12 +2,14 @@ package controllers.api.shop;
 
 import api.response.order.VoucherDto;
 import api.response.shop.CartDto;
+import com.google.common.collect.Lists;
 import common.utils.JsonUtils;
 import controllers.BaseController;
 import ordercenter.models.Cart;
 import ordercenter.models.Voucher;
 import ordercenter.services.CartService;
 import ordercenter.services.VoucherService;
+import ordercenter.util.CartUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.mvc.Result;
 import usercenter.models.User;
@@ -15,6 +17,7 @@ import usercenter.models.address.Address;
 import usercenter.services.AddressService;
 import utils.secure.SecuredAction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,9 +144,11 @@ public class AppCartController extends BaseController {
 
         User user = currentUser();
 
-        Cart cart = cartService.buildUserCart(user.getId());
+        List<Integer> selCartItemIdList = CartUtil.getCartItemIdList(selCartItems);
 
-        cartService.selectCartItems(cart, selCartItems);
+        Cart cart = cartService.buildUserCartBySelItem(user.getId(), selCartItemIdList);
+
+        cartService.selectCartItems(cart, selCartItemIdList);
 
         Address defaultAddress = addressService.queryDefaultAddress(user.getId());
         List<Voucher> voucherList = voucherService.findUserAvailableVouchers(user.getId());

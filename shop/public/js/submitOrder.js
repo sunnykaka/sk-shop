@@ -236,10 +236,7 @@ $(function(){
                     }
 
                 } else {
-                    var valObj = data.message,errMsg;
-                    $.each(valObj,function(key,value) {
-                        errMsg = value[0];
-                    });
+                    var errMsg = data.message;
 
                     $(formId).find('#addMsg').text(errMsg);
                 }

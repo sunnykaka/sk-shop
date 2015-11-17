@@ -26,17 +26,23 @@ public class UserOuterService {
     @Autowired
     private GeneralDao generalDao;
 
+    /**
+     * 返回数组的第一个元素是User，第二个是User是否是第一次登录
+     * @param openUserInfo
+     * @param registerIP
+     * @return
+     */
     @Transactional
-    public User handleOpenIdCallback(OpenUserInfo openUserInfo, String registerIP) {
+    public Object[] handleOpenIdCallback(OpenUserInfo openUserInfo, String registerIP) {
 
         UserOuter userOuter = findUserOuterByOuterId(openUserInfo.getUnionId());
         if(userOuter == null) {
 
-            return userService.registerByOpenId(openUserInfo, registerIP);
+            return new Object[]{userService.registerByOpenId(openUserInfo, registerIP), true};
 
         } else {
 
-            return userOuter.getUser();
+            return new Object[]{userOuter.getUser(), false};
         }
 
     }

@@ -14,6 +14,7 @@ import ordercenter.services.CartService;
 import ordercenter.services.OrderService;
 import ordercenter.services.VoucherService;
 import org.joda.time.DateTime;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import play.Logger;
@@ -46,6 +47,7 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
      * 测试运行之前将数据库所有的代金券活动状态置为无效
      */
     @Before
+    @After
     public void init() {
         setAllVoucherBatchToInvalid();
     }

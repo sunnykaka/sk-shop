@@ -72,7 +72,13 @@ public abstract class OpenIDConnector {
         }
     }
 
-    protected User getUser(String registerIP, F.Promise<OpenUserInfo> openUserInfoPromise) {
+    /**
+     * 返回数组的第一个元素是User，第二个是User是否是第一次登录
+     * @param registerIP
+     * @param openUserInfoPromise
+     * @return
+     */
+    protected Object[] getUser(String registerIP, F.Promise<OpenUserInfo> openUserInfoPromise) {
 
         OpenUserInfo openUserInfo;
         try {

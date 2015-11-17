@@ -5,13 +5,13 @@ import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.FormUtils;
 import common.utils.JsonResult;
-import common.utils.RegExpUtils;
-import org.apache.commons.lang3.StringUtils;
+import ordercenter.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import usercenter.constants.AccountType;
 import usercenter.constants.MarketChannel;
 import usercenter.domain.QQLogin;
 import usercenter.domain.SmsSender;
@@ -24,8 +24,8 @@ import usercenter.services.UserService;
 import usercenter.utils.SessionUtils;
 import views.html.user.login;
 import views.html.user.register;
-import views.html.user.openIDCallback;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @org.springframework.stereotype.Controller
@@ -33,6 +33,9 @@ public class LoginController extends Controller {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    VoucherService voucherService;
 
     public Result registerPage() {
 
@@ -48,7 +51,13 @@ public class LoginController extends Controller {
             try {
                 registerForm.get().setChannel(MarketChannel.WEB.getValue());
                 User user = userService.register(registerForm.get(), request().remoteAddress());
-                userService.loginByRegister(user, true);
+                try {
+                    //发放注册代金券
+                    voucherService.requestForRegister(user.getId(), 1);
+                } catch (Exception e) {
+                    Logger.error("用户注册的时候请求代金券失败", e);
+                }
+                userService.loginByRegister(user.getId(), true);
                 String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
                 return ok(new JsonResult(true, null, originalUrl).toNode());
 
@@ -133,23 +142,10 @@ public class LoginController extends Controller {
     public Result weixinLoginCallback(String code, String state) {
 
         Logger.debug(String.format("微信回调参数: code[%s], state[%s]", code, state));
-        Stopwatch stopwatch = Stopwatch.createStarted();
 
-        try {
-            User user = new WeixinLogin().handleCallback(code, state, request().remoteAddress());
-            userService.loginByRegister(user, true);
-            String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
-            return redirect(originalUrl);
+        return handleCallbackResults(AccountType.WeiXin, new String[]{code, state, request().remoteAddress()});
+    }
 
-        } catch (AppBusinessException e) {
-            Logger.error("第三方登录失败", e);
-            return redirect(routes.LoginController.loginPage());
-
-        } finally {
-                stopwatch.stop();
-                Logger.info("微信回调任务运行结束, 耗时: " + stopwatch.toString());
-            }
-        }
 
     public Result weiboLogin() {
 
@@ -160,15 +156,8 @@ public class LoginController extends Controller {
 
         Logger.debug(String.format("微博回调参数: code[%s], state[%s], error[%s], error_code[%s]", code, state, error, error_code));
 
-        try {
-            User user = new WeiboLogin().handleCallback(code, state, error, error_code, request().remoteAddress());
-            userService.loginByRegister(user, true);
-            String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
+        return handleCallbackResults(AccountType.Sina, new String[]{code, state, error, error_code, request().remoteAddress()});
 
-            return redirect(originalUrl);
-        } catch (AppBusinessException e) {
-            return redirect(routes.LoginController.loginPage());
-        }
     }
 
     public Result qqLogin() {
@@ -178,21 +167,69 @@ public class LoginController extends Controller {
 
     public Result qqLoginCallback(String code, String state, String msg) {
 
-        try{
-            Logger.debug(String.format("QQ回调参数: code[%s], state[%s], msg[%s]", code, state, msg));
+        Logger.debug(String.format("QQ回调参数: code[%s], state[%s], msg[%s]", code, state, msg));
 
-            User user = new QQLogin().handleCallback(code, state, msg, request().remoteAddress());
-            userService.loginByRegister(user, true);
+        return handleCallbackResults(AccountType.QQ, new String[]{code, state, msg, request().remoteAddress()});
+
+    }
+
+    /**
+     * 处理第三方登录回调结果
+     * @param accountType
+     * @param args
+     * @return
+     */
+    private Result handleCallbackResults(AccountType accountType, String[] args) {
+
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
+        try {
+            Object[] results;
+            switch (accountType) {
+                case WeiXin: {
+                    results = new WeixinLogin().handleCallback(args[0], args[1], args[2]);
+                    break;
+                }
+                case Sina: {
+                    results = new WeiboLogin().handleCallback(args[0], args[1], args[2], args[3], args[4]);
+                    break;
+                }
+                case QQ: {
+                    results = new QQLogin().handleCallback(args[0], args[1], args[2], args[3]);
+                    break;
+                }
+                default: {
+                    Logger.error(String.format("未知的第三方登录回调结果: %s, 参数: %s", accountType, Arrays.toString(args)));
+                    return redirect(routes.LoginController.loginPage());
+                }
+            }
+
+            User user = (User)results[0];
+            boolean isCreate = (Boolean)results[1];
+            if(isCreate) {
+                try {
+                    //发放注册代金券
+                    voucherService.requestForRegister(user.getId(), 1);
+                } catch (Exception e) {
+                    Logger.error("用户注册的时候请求代金券失败", e);
+                }
+            }
+            userService.loginByRegister(user.getId(), true);
             String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
             return redirect(originalUrl);
 
         } catch (AppBusinessException e) {
+
             Logger.error("第三方登录失败", e);
             return redirect(routes.LoginController.loginPage());
+
+        } finally {
+            stopwatch.stop();
+            Logger.debug(accountType.toString() + "回调任务运行结束, 耗时: " + stopwatch.toString());
         }
 
-    }
 
+    }
 
 
 

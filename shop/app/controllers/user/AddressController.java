@@ -1,6 +1,7 @@
 package controllers.user;
 
 import common.exceptions.AppBusinessException;
+import common.utils.FormUtils;
 import common.utils.JsonResult;
 import common.utils.SQLUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -142,7 +143,7 @@ public class AddressController extends Controller {
             }
         }
 
-        return ok(new JsonResult(false, addressForm.errorsAsJson().toString()).toNode());
+        return ok(new JsonResult(false, FormUtils.showErrorInfo(addressForm.errors())).toNode());
 
     }
 

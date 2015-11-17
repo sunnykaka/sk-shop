@@ -27,6 +27,8 @@ public class MessageJobService {
 
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(10);
 
+    private final Logger.ALogger SCHEDULER_LOGGER = Logger.of("schedulerTask");
+
     @Transactional
     public void executeUnprocessedMessageJobs() {
 
@@ -38,7 +40,7 @@ public class MessageJobService {
         List<MessageJob> messageJobs = generalDao.query(jpql, Optional.empty(), params);
         if(messageJobs.isEmpty()) return;
 
-        Logger.debug("message job tasks准备执行, 任务数量: " + messageJobs.size());
+        SCHEDULER_LOGGER.debug("message job tasks准备执行, 任务数量: " + messageJobs.size());
         List<Object[]> futureList = new ArrayList<>();
         messageJobs.forEach(messageJob -> {
             Future<Boolean> f = EXECUTOR.submit(() -> executeJob(messageJob));
@@ -54,12 +56,12 @@ public class MessageJobService {
                 result = f.get(5, TimeUnit.SECONDS);
             } catch (CancellationException | InterruptedException | TimeoutException e) {
                 processInfo = e.getMessage();
-                Logger.error(String.format("MessageJob[id=%d]处理失败: " + e.getMessage(), messageJob.getId()));
+                SCHEDULER_LOGGER.error(String.format("MessageJob[id=%d]处理失败: " + e.getMessage(), messageJob.getId()));
             } catch (ExecutionException e) {
                 Throwable cause = e.getCause();
                 if (cause != null) {
                     processInfo = cause.getMessage();
-                    Logger.error(String.format("MessageJob[id=%d]处理失败: " + cause.getMessage(), messageJob.getId()));
+                    SCHEDULER_LOGGER.error(String.format("MessageJob[id=%d]处理失败: " + cause.getMessage(), messageJob.getId()));
                 }
             }
 

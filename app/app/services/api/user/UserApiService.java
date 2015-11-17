@@ -5,9 +5,11 @@ import api.response.user.UserDto;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import dtos.UserToken;
+import ordercenter.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import play.Logger;
 import usercenter.dtos.LoginForm;
 import usercenter.dtos.RegisterForm;
 import usercenter.models.User;
@@ -29,6 +31,9 @@ public class UserApiService {
     @Autowired
     UserTokenProvider userTokenProvider;
 
+    @Autowired
+    VoucherService voucherService;
+
     @Transactional
     public LoginResult login(LoginForm loginForm) {
 
@@ -46,6 +51,13 @@ public class UserApiService {
     public LoginResult register(RegisterForm registerForm, String ip) {
 
         User user = userService.register(registerForm, ip);
+
+        try {
+            //发放注册代金券
+            voucherService.requestForRegister(user.getId(), 1);
+        } catch (Exception e) {
+            Logger.error("用户注册的时候请求代金券失败", e);
+        }
 
         userService.doLogin(user, new LoginForm.LoginInfo(registerForm.getDeviceId(), registerForm.getChannel(), registerForm.getDeviceInfo()));
 

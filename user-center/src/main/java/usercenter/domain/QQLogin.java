@@ -36,7 +36,7 @@ public class QQLogin extends OpenIDConnector {
     }
 
     @SuppressWarnings("unchecked")
-    public User handleCallback(String code, String state, String msg, String registerIP) {
+    public Object[] handleCallback(String code, String state, String msg, String registerIP) {
 
         if (!StringUtils.isBlank(msg) || StringUtils.isBlank(state)) {
             Logger.error(String.format("QQ登录回调失败, msg: [%s], code: [%s]", msg, code));

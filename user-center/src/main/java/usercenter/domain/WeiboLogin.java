@@ -34,7 +34,7 @@ public class WeiboLogin extends OpenIDConnector {
     }
 
     @SuppressWarnings("unchecked")
-    public User handleCallback(String code, String state, String error, String error_code,
+    public Object[] handleCallback(String code, String state, String error, String error_code,
                                String registerIP) {
 
         if (StringUtils.isBlank(code) || StringUtils.isBlank(state)) {
