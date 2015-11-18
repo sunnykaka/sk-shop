@@ -484,7 +484,7 @@ table .pro{width: 360px;}
 .products-list .products-list-body h3,.products-list .products-list-body h4{width:275px;font-weight: normal;font-size: 14px;}
 .products-list .products-list-body h4{color: #FF2D54;padding: 0 4px 4px 4px;height: 18px;overflow: hidden;text-align: left;}
 .products-list .products-list-body h4 b{font-weight: normal;float: left;}
-.products-list .products-list-body h4 .delete-price {float: right;padding-right: 20px;text-decoration: line-through;color: #999999;}
+.products-list .products-list-body h4 .delete-price ,.designer-brand-inner .delete-price{float: right;padding-right: 20px;text-decoration: line-through;color: #999999;}
 
 .products-list .products-list-body a{display:block;width: 283px;margin:0;height:462px;overflow: hidden; }
 .products-list .products-list-body li:hover{box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);}
@@ -653,10 +653,16 @@ table .pro{width: 360px;}
     margin-bottom: 20px;cursor: pointer;
 }
 .detail-inner .img-list .hide-detail{display: none;}
-.detail-inner .comment-header{width: 803px;height: 48px;line-height:48px;border: 1px solid #eaeaea;background: #f8f8f8;
-    margin-bottom: 30px;overflow: hidden;
+.detail-inner .comment-header{width: 803px;height: 48px;line-height:48px;  overflow: hidden;
 }
 .detail-inner .comment-con{overflow:hidden;}
+.detail-inner .comment-con  #commit-comment{margin-bottom: 50px;}
+.detail-inner .comment-con #commit-content{width:761px;padding:20px;height: 110px;border:1px solid #e5e5e5;margin-bottom: 10px;}
+.detail-inner .comment-con #commit-content p{float: left;}
+.detail-inner .comment-con #text-count{color: #ff2d54;font-size: 18px;}
+.detail-inner .comment-con #replyN{color: #ff2d54;cursor: pointer;}
+.detail-inner .comment-con .commit-btn{float:right;width:128px;height:36px;line-height:36px;color: #fff;background: #000;text-align: center;cursor: pointer;}
+.detail-inner .comment-con .commit-btn:hover{background-color: #29292c;border-color: #29292c;}
 .detail-inner .comment-header ul{height: 50px;}
 .detail-inner .comment-header li{float: left;margin-right:30px;position: relative;font-size: 14px;padding:0 20px;
     cursor: pointer;
@@ -667,13 +673,17 @@ table .pro{width: 360px;}
 .detail-inner .comment-list{border-top:1px solid #eaeaea;margin-bottom: 20px;overflow: hidden;}
 .detail-inner .img-list img{margin-bottom: 0;display: block;}
 .detail-inner .img-list .img-con{margin-bottom: 32px;}
-.detail-inner .comment-item{border-bottom:1px solid #eaeaea;border-top: none;padding: 10px 30px 20px 30px;}
-.detail-inner .comment-item .comment-content{height: 90px;overflow: hidden;margin-top:15px;}
-.detail-inner .comment-item .comment-content div{float: left;}
+.detail-inner .comment-item{border-bottom:1px solid #eaeaea;border-top: none;padding: 10px 30px 20px 30px;line-height: 24px;}
+.detail-inner .comment-item .comment-content{overflow: hidden;margin-top:15px;}
+.detail-inner .comment-item .comment-content .comment-detail{width: 100%;overflow: hidden;margin-bottom: 16px;}
+.detail-inner .comment-item .comment-content .reply-comment{margin-left: 100px;padding: 20px;background:#f2f2f2; border-radius: 10px;}
+.detail-inner .comment-item .comment-content .reply-comment .admin{color: #ff2d54;display: block;width: 100%;margin-bottom: 10px;}
 .detail-inner .comment-item .comment-content img{margin-bottom: 8px;display: block;width: 47px;height: 45px;overflow: hidden;}
 .detail-inner .comment-item .comment-content .star{text-align: center;}
 .detail-inner .comment-item .comment-title{height: 34px;line-height: 34px;text-align: right;}
-.detail-inner .comment-item .comment-title .user{float: left;}
+.detail-inner .comment-item .comment-title .user{float: left;color: #FF2D54;}
+.detail-inner .comment-item .comment-title .user b{font-weight: normal;color: #000;}
+.detail-inner .comment-item .comment-title .comment-reply,.detail-inner .comment-item .comment-title .del{color: #FF2D54;cursor: pointer;}
 .detail-inner .comment-item .comment-img{width: 50px;height: 90px;overflow: hidden;margin-right: 20px;padding-top: 5px;}
 .detail-inner .container .comment-page{padding-left:630px;margin-bottom: 20px;}
 .detail-inner .container .comment-page li{float:left;margin-right: 10px;}
@@ -950,12 +960,12 @@ table .pro{width: 360px;}
 .designer-brand-inner .brand-start-fashion li h3,.designer-brand-inner .ready-online li h3,.designer-brand-inner .hot-sale li h3{font-weight: normal;
     font-size: 14px;padding: 12px 0 4px 6px;}
 .designer-brand-inner .brand-start-fashion li h4,.designer-brand-inner .ready-online li h4,.designer-brand-inner .hot-sale li h4{color: #FF2D54;
-    padding: 4px 4px 4px 8px;font-weight: normal;}
-
+    padding: 4px 4px 4px 8px;font-weight: normal;height: 18px;overflow: hidden;}
+.designer-brand-inner .brand-start-fashion li h4 b,.designer-brand-inner .ready-online li h4 b,.designer-brand-inner .hot-sale li h4 b{font-weight: normal;float: left;}
+.designer-brand-inner .brand-start-fashion li h4 .delete-price,.designer-brand-inner .ready-online li h4 .delete-price,.designer-brand-inner .hot-sale li h4 .delete-price{float: right;}
 .designer-brand-inner .brand-start-fashion li:hover,.designer-brand-inner .ready-online li:hover,.designer-brand-inner .hot-sale li:hover{box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);}
 .designer-brand-inner .brand-start-fashion li .cover,.designer-brand-inner .ready-online li .cover,.designer-brand-inner .hot-sale li .cover{position: absolute;width:283px;top: 462px;z-index: 10;height: 60px;}
 .designer-brand-inner .brand-start-fashion li .cover .design-cover,.designer-brand-inner .ready-online li  .cover .design-cover,.designer-brand-inner .hot-sale li .cover .design-cover{position: absolute;width:283px;top: 0;height: 60px;background: #000;opacity: .6;filter:alpha(opacity=60);z-index: -1;}
-
 .designer-brand-inner .brand-start-fashion .info,.designer-brand-inner .ready-online .info,.designer-brand-inner .hot-sale .info{height: 60px;}
 .designer-brand-inner .brand-start-fashion .info p,.designer-brand-inner .ready-online .info p,.designer-brand-inner .hot-sale .info p{color: #fff;text-align: center;padding: 20px 0;}
 .designer-brand-inner .ready-online .info p,.designer-brand-inner .hot-sale .info p{padding-top: 20px;}

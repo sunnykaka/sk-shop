@@ -110,6 +110,113 @@ $(function () {
     //固定购物车
     fixedcart($('#cart'), $('#detail'));
 
+
+    //评论提交
+    var commitContent = $('#commit-content').val();
+    if($('#commit-content').size()>0) {
+        var count = commitContent.length;
+        $('#commit-content').keyup(function(){
+            var comment_pre = $("#comment_pre").val();
+            var commentPreLength  = comment_pre.length;
+            var totalCount = 300 + commentPreLength;
+            var countVal = $('#commit-content').val();
+            var countNow = countVal.length;
+            $('#text-count').text(totalCount-countNow);
+        });
+    }
+
+
+    $('.commit-btn').on('click',function(){
+        var commitContent = $('#commit-content').val(),replayId = $('#replayId').val(),comment_pre = $("#comment_pre").val();
+        if(replayId !="null"){
+           data =  {content:commitContent.replace(comment_pre,''),productId:productId,replyUserId:replayId};
+        }else{
+            data =  {content:commitContent.replace(comment_pre,''),productId:productId};
+        }
+        if(commitContent.replace(comment_pre,'').length<5 || commitContent.replace(comment_pre,'').length>300){
+            $.dialog({
+                title: '提示',
+                lock: true,
+                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>评论不能小于10个字或者大于300字限制</p></div>',
+                width: 500,
+                height: 248,
+                padding: "20",
+                btn: {
+                    ok : {
+                        val : '关闭',
+                        type : 'red'
+                    }
+                }
+            });
+            return false;
+        }
+        //提交评论
+        $.ajax({
+            type:'post',
+            url:'/my/valuation/save',
+            data:data,
+            success:function(data){
+                    if(data.result){
+                        $('#commit-content').val('');
+                        $('#text-count').html(300);
+                        $("#replayId").val(null);
+                        $("#comment_pre").val('');
+                        $('.comment-header li:first').trigger('click');
+                        $('#commentTotal').html(data.data);
+                    }
+            }
+        });
+    });
+
+    //回复按钮触发
+    $('.comment-list').on('click','.comment-reply',function(){
+        $('html,body').animate({scrollTop:$('.comment-con').offset().top},'slow');
+        $('#commit-content').val('回复：'+$(this).attr('replyName')+" ").focus();
+        $("#comment_pre").val('回复：'+$(this).attr('replyName')+" ");
+        $('#replayId').val($(this).attr('replyId'));
+    });
+
+    //评论删除按钮
+    $('.comment-list').on('click','.del',function(){
+
+        var id = $(this).attr('id');
+        $.dialog({
+            title:'提示',
+            lock:true,
+            content:'<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>确定要删除该评论吗？</p></div>',
+            width:540,
+            height:248,
+            drag:false,
+            btn: {
+                cancle: {
+                    val: '取消'
+                },
+                ok: {
+                    val: '确定',
+                    type: 'red',
+                    click: function(btn) {
+                        $.ajax({
+                            type:'post',
+                            url:'/my/valuation/delete/'+id,
+                            data:{id:id},
+                            success:function(data){
+                                if(data.result){
+                                    $("#replayId").val(null);
+                                    $("#comment_pre").val('');
+                                    $('.comment-header li:first').trigger('click');
+                                    $('#commentTotal').html(data.data);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    });
+
+
+
+    //评论分页
     function createPagehtml(curPage,totalPage){
 
         var prevPage,nextPage;
@@ -159,14 +266,13 @@ $(function () {
             url:'/product/valuations',
             data:pointer,
             success:function(data){
+                if(currentUserId !=0){data.data.currentUserId = currentUserId}
                 var html =  tpl('#demo', data.data);
                 $('.comment-page').html('').append(createPagehtml(data.data.pageNo,data.data.totalPage));
                 $('.comment-list').html('').append(html).hide().fadeIn();
             }
         });
     });
-
-
 
     //显示评论
     var commentFlag = true;
@@ -193,11 +299,12 @@ $(function () {
             url:'/product/valuations',
             data:pointer,
             success:function(data){
-                if(data.data.totalCount == 0 && commentFlag && typeof(pointer.point) == 'undefined'){
-                    $('.comment-con,.comment-page').css('display','none');
-                    commentFlag = false;
-                    return;
-                }
+                //if(data.data.totalCount == 0 && commentFlag && typeof(pointer.point) == 'undefined'){
+                //    $('.comment-con,.comment-page').css('display','none');
+                //    commentFlag = false;
+                //    return;
+                //}
+                if(currentUserId !=0){data.data.currentUserId = currentUserId}
                 var html =  tpl('#demo', data.data);
                 $('.comment-page').html('').append(createPagehtml(data.data.pageNo,data.data.totalPage));
                 $('.comment-list').html('').append(html).hide().fadeIn();
@@ -208,6 +315,12 @@ $(function () {
 
     //初始显示全部评价
     $('.comment-header li:first').trigger('click');
+
+    $('#commit-content').on('focus',function(){
+        if($('.logined .login').size()>0){
+            createLoginReg();
+        }
+    });
 
     //显示尺码表
     $('#show-size').on('click',function(){
@@ -529,22 +642,22 @@ $(function () {
                         _price = currentSku.marketPrice;
                         if(saleStatus == "FIRSTSELL" || saleStatus == "PRESELL" || saleStatus == "PLANSELL"){ //判断是否是首发
                             if ($("#start-price").length) {
-                                $("#start-price").html(currentSku.price);
+                                $("#start-price").html(Number(currentSku.price).toFixed(2));
                             }
 
                             if (currentSku.marketPrice) {
                                 if ($("#market-price").length) {
-                                    $("#market-price").html(currentSku.marketPrice);
+                                    $("#market-price").html(Number(currentSku.marketPrice).toFixed(2));
                                 }
                             }
                         }else{
                             if ($("#start-price").length) {
-                                $("#start-price").html(currentSku.marketPrice);
+                                $("#start-price").html(Number(currentSku.marketPrice).toFixed(2));
                             }
 
                             if (currentSku.marketPrice) {
                                 if ($("#market-price").length) {
-                                    $("#market-price").html(currentSku.price);
+                                    $("#market-price").html(Number(currentSku.price).tofixed(2));
                                 }
                             }
                         }

@@ -20,10 +20,14 @@
             echo(
             '<div class="comment-item">'+
             '<div class="comment-title">'+
-            '<p><span class="user">'+result[i].userName+'</span>发表于 <span class="comment-time">'+result[i].updateDate+'</span></p>'+
+            '<p><span class="user">'+result[i].userName+(result[i].replyUserName ==undefined?"":"<b>　回复了：</b>"+result[i].replyUserName)+
+            '</span>'+(result[i].userId == currentUserId?"<span class='del' id='"+result[i].id+"'>删除</span>":"")+
+            ' <span class="comment-reply" replyId ="'+result[i].userId+'" replyName = "'+result[i].userName+'">回复</span></p>'+
             '</div>'+
             '<div class="comment-content clearfix">'+
-            '<div class="comment-detail">'+result[i].content+'</div></div></div>'
+            '<div class="comment-detail">'+result[i].content+'</div>'+
+            (result[i].operator == "尚客官方客服"?"<div class='reply-comment'><span class='admin'>尚客官方客服：</span><div class='reply-details'>"+result[i].replyContent+"</div></div>":"")+
+            '</div></div>'
             );
         }
     #>
@@ -39,6 +43,10 @@
     var saleStatus = "@pd.getBase.getProduct.getSaleStatus";
 
     var productId = @pd.getBase.getProduct.getId;
+      var currentUserId = 0
+    @if(user != null){
+         currentUserId = @user.getId
+    }
 
     </script>
     <script src="@routes.Assets.versioned("js/details.js")"></script>
@@ -89,10 +97,6 @@
                 }
                 </div>
                 <div class="img-list">
-                    @*<div class="open-detail" id="openDetail">*@
-                    @*<p>点击查看详情 <span class="ico"></span></p>*@
-                    @*</div>*@
-
                     <div class="container">
                         @if(pd.getBase.getSpecList.size > 0) {
                             <div class="product-info">
@@ -164,13 +168,24 @@
                             <!--结束 套餐配套 -->
 
                         <div class="comment-con">
+                                    <div id="commit-comment" class="clearfix">
+                                        <div class="commit-box">
+                                            <textarea  id="commit-content" placeholder="发布评论,评论不能小于10个字或者大于300字限制" maxlength="300"></textarea>
+                                        </div>
+                                        <span class="commit-btn">提交评论</span>
+                                        <p class="tips-comment">*评论不能小于10个字或者大于300字限制,还能输入 <span id="text-count">300</span> 字。</p>
+                                        <input type="hidden" name="replayUserId" id="replayId" value="null" />
+                                        <input type="hidden" id="comment_pre" value="">
+                                    </div>
+
                             <div class="comment-header">
-                                <ul class="clearfix">
+                                <ul class="clearfix" style="display: none">
                                     <li class="current first" data-id="全部评价">全部评价(@pd.getAllValuationCount)</li>
                                     <li class="" data-id="好评">好评(@pd.getGoodValuationCount)</li>
                                     <li class="" data-id="中评">中评(@pd.getNormalValuationCount)</li>
                                     <li class="" data-id="差评">差评(@pd.getBadValuationCount)</li>
                                 </ul>
+                                <h3>评论数（<b id="commentTotal">@pd.getAllValuationCount</b></b>）</h3>
                             </div>
                             <div class="comment-list">
 
@@ -192,11 +207,15 @@
                 </div>
                 <div id="debut-box">
                     <div class="debut-info clearfix">
-
-                    @if(pd.getBase.isInDiscount) {
-                        <div class="debut-info-left">
-                            <p>@{pd.getBase.getPriceName}：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
-                            @if(pd.getBase.getProduct.isOnline && pd.getBase.getExhibitionEndTime != null) {
+                        @if(pd.getBase.getProduct.getSaleStatus == "FIRSTSELL") {
+                                <!-- 首发 -->
+                            <div class="debut-info-left">
+                                <p>首发价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                                <p class="label">
+                                @for(priceLabel <- pd.getBase.getPriceLabels) {
+                                            <span>@priceLabel</span>
+                                }
+                                </p>
                                 <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
                                     首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
                                     结束</span></span></p>
@@ -272,6 +291,7 @@
                             }
                         }
                     }
+                }
                     <div class="detail-like">
                         @if(!pd.getBase.getProduct.getCustomer.getIsDelete && pd.getBase.getProduct.getCustomer.getIsPublished) {
                             <span class="about-designer"><a target="_blank" target="_blank" href="@routes.Application.designerProd(pd.getBase.getProduct.getCustomer.getId)">
