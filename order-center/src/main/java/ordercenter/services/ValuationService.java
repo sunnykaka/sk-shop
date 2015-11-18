@@ -159,9 +159,28 @@ public class ValuationService {
             put(2, 0);
         }};
 
-        results.forEach(array -> map.put((Integer)array[0], ((Long)array[1]).intValue()));
+        results.forEach(array -> map.put((Integer) array[0], ((Long) array[1]).intValue()));
 
         return ArrayUtils.toPrimitive(map.values().toArray(new Integer[map.values().size()]));
+
+    }
+
+    /**
+     * 获取总数
+     *
+     * @param productId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int countValuation(int productId){
+
+        String jpql = "select v from Valuation v where v.deleted = false and v.productId = :productId";
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("productId", productId);
+
+        List<Valuation> list = generalDao.query(jpql, Optional.empty(), queryParams);
+
+        return list == null ? 0 : list.size();
 
     }
 

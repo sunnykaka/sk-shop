@@ -96,7 +96,9 @@ public class MyValuationController extends Controller {
 
                 valuationService.saveValuation(valuation);
 
-                return ok(new JsonResult(true,null,valuation).toNode());
+                int count = valuationService.countValuation(valuationF.getProductId());
+
+                return ok(new JsonResult(true, null, count).toNode());
 
             } catch (AppBusinessException e) {
                 valuationForm.reject("errors", e.getMessage());
@@ -118,7 +120,9 @@ public class MyValuationController extends Controller {
         oldValuation.setDeleted(true);
         valuationService.updateValuation(oldValuation);
 
-        return ok(new JsonResult(true, "删除成功").toNode());
+        int count = valuationService.countValuation(oldValuation.getProductId());
+
+        return ok(new JsonResult(true, "删除成功" , count).toNode());
     }
 
 }
