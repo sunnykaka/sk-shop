@@ -118,7 +118,7 @@ public class MyValuationController extends Controller {
         oldValuation.setDeleted(true);
         valuationService.updateValuation(oldValuation);
 
-        return ok();
+        return ok(new JsonResult(true, "删除成功").toNode());
     }
 
 }
