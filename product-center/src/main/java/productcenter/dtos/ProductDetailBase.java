@@ -252,15 +252,19 @@ public class ProductDetailBase {
             switch (saleStatus) {
                 case FIRSTSELL:
                     saleStatusName = "首发";
+                    priceLabels.add(saleStatusName);
                     break;
                 case HOTSELL:
                     saleStatusName = "促销";
+                    priceLabels.add(saleStatusName);
                     break;
                 case PLANSELL:
                     saleStatusName = "开售";
+                    priceLabels.add(saleStatusName);
                     break;
                 case PRESELL:
                     saleStatusName = "预售";
+                    priceLabels.add(saleStatusName);
                     break;
                 case NONE:
                     saleStatusName = "售卖";
@@ -276,7 +280,6 @@ public class ProductDetailBase {
                 productDetailBase.inDiscount = false;
                 productDetailBase.priceName = "售卖价";
             }
-            priceLabels.add(saleStatusName);
 
             productDetailBase.priceLabels = priceLabels;
 
