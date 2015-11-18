@@ -4,7 +4,6 @@ import base.BaseTest;
 import base.VoucherTest;
 import common.utils.DateUtils;
 import common.utils.RedisUtils;
-import common.utils.scheduler.StateCoordinator;
 import ordercenter.constants.VoucherBatchStatus;
 import ordercenter.constants.VoucherStatus;
 import ordercenter.constants.VoucherType;
@@ -36,12 +35,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class VoucherServiceTest extends BaseTest implements VoucherTest {
 
     /**
-     * 测试运行之前将数据库所有的代金券活动状态置为无效
+     * 测试运行之前将数据库所有的代金券活动状态置为已删除
      */
     @Before
     @After
     public void init() {
-        setAllVoucherBatchToInvalid();
+        setAllVoucherBatchToDeleted();
     }
 
 
@@ -61,7 +60,7 @@ public class VoucherServiceTest extends BaseTest implements VoucherTest {
             VoucherBatch voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             assertRequestVouchersSuccess(voucherBatch, userId, quantity);
 
-            setAllVoucherBatchToInvalid();
+            setAllVoucherBatchToDeleted();
 
             //活动请求，代金券有截止日期
             voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, deadline, empty());
@@ -140,27 +139,21 @@ public class VoucherServiceTest extends BaseTest implements VoucherTest {
         });
 
         //将所有代金券活动设置为取消,消除对数据库的影响
-        setAllVoucherBatchToInvalid();
+        setAllVoucherBatchToDeleted();
 
     }
 
 
     @Test
+    @Ignore
     public void test1() throws Exception {
 
-//        DateTime now = DateUtils.current();
-//        Optional<Integer> period = of(100);
-//        int quantity = 10;
-//        VoucherBatch voucherBatch = initVoucherBatchWithValid(VoucherType.RECEIVE_BY_ACTIVITY, now, empty(), period, empty(), empty());
-//        assertRequestVouchersSuccess(voucherBatch, 9, quantity);
+        DateTime now = DateUtils.current();
+        Optional<Integer> period = of(100);
+        int quantity = 10;
+        VoucherBatch voucherBatch = initVoucherBatchWithValid(VoucherType.RECEIVE_BY_ACTIVITY, now, empty(), period, empty(), empty());
+        assertRequestVouchersSuccess(voucherBatch, 9, quantity);
 
-        RedisUtils.withJedisClient(jedis -> {
-
-            String result = jedis.set(RedisUtils.buildKey("state_coordinator", "shop"), UUID.randomUUID().toString(), "NX", "EX", 60);
-            Logger.info("result: " + result);
-
-            return null;
-        });
 
     }
 

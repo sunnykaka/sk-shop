@@ -255,7 +255,7 @@ public class ProductDetailBase {
                     priceLabels.add(saleStatusName);
                     break;
                 case HOTSELL:
-                    saleStatusName = "促销";
+                    saleStatusName = "热卖";
                     priceLabels.add(saleStatusName);
                     break;
                 case PLANSELL:
@@ -267,18 +267,16 @@ public class ProductDetailBase {
                     priceLabels.add(saleStatusName);
                     break;
                 case NONE:
-                    saleStatusName = "售卖";
                     break;
             }
+            productDetailBase.priceName = saleStatusName + "价";
 
             LimitTimeDiscount discount = discountService.findDiscount4Product(productDetailBase.product.getId());
             if(discount != null && !saleStatus.equals(SaleStatus.NONE)) {
                 productDetailBase.inDiscount = true;
-                productDetailBase.priceName = saleStatusName + "价";
                 priceLabels.add(discount.getDiscountTitle());
             } else {
                 productDetailBase.inDiscount = false;
-                productDetailBase.priceName = "售卖价";
             }
 
             productDetailBase.priceLabels = priceLabels;
