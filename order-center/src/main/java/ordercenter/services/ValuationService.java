@@ -131,7 +131,7 @@ public class ValuationService {
     @Transactional(readOnly = true)
     public Optional<Page<Valuation>> findByProduct(Optional<Page<Valuation>> page, int productId){
 
-        String jpql = "select v from Valuation v where v.productId = :productId ";
+        String jpql = "select v from Valuation v where v.productId = :productId order by v.updateDate desc";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
 

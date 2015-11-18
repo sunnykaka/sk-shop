@@ -17,6 +17,7 @@ import productcenter.models.Product;
 import productcenter.services.ProductListService;
 import services.product.ProductDetailService;
 import usercenter.models.Designer;
+import usercenter.models.User;
 import usercenter.services.DesignerService;
 import usercenter.utils.SessionUtils;
 import utils.Global;
@@ -91,13 +92,13 @@ public class ProductController extends Controller {
 //                skuId = Integer.parseInt(array[1]);
 //            }
 //        }
-
-        ProductDetail productDetail = productDetailService.showDetail(productId, null, SessionUtils.currentUser());
+        User user = SessionUtils.currentUser();
+        ProductDetail productDetail = productDetailService.showDetail(productId, null, user);
         if (productDetail == null) {
             return Global.show404();
         }
 
-        return ok(detail.render(productDetail, (int) (Math.random() * 10) % 6 + 1));
+        return ok(detail.render(productDetail, user, (int) (Math.random() * 10) % 6 + 1));
     }
 
     public Result valuations(Integer productId) {

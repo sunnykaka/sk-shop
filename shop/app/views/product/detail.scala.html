@@ -1,8 +1,9 @@
-@(pd: dtos.ProductDetail, imgsNum: Integer)
+@(pd: dtos.ProductDetail, user: usercenter.models.User, imgsNum: Integer)
 
 @import common.utils.DateUtils
 @import common.utils.JsonUtils._
 @import org.apache.commons.lang3.StringUtils._
+
 @main(pd.getSeo)() {
     <script src="@routes.Assets.versioned("js/FormValidate.js")"></script>
     <script src="@routes.Assets.versioned("js/login-reg.js")"></script>
