@@ -48,6 +48,8 @@
          currentUserId = @user.getId
     }
 
+    var inDiscount = @pd.getBase.isInDiscount;
+
     </script>
     <script src="@routes.Assets.versioned("js/details.js")"></script>
     <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["weixin","tsina","sqq","qzone","douban"],"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
@@ -207,25 +209,24 @@
                 </div>
                 <div id="debut-box">
                     <div class="debut-info clearfix">
-                        @if(pd.getBase.getProduct.getSaleStatus == "FIRSTSELL") {
-                                <!-- 首发 -->
-                            <div class="debut-info-left">
-                                <p>首发价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
-                                <p class="label">
-                                @for(priceLabel <- pd.getBase.getPriceLabels) {
-                                            <span>@priceLabel</span>
-                                }
-                                </p>
-                                <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
-                                    首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
-                                    结束</span></span></p>
+                    @if(pd.getBase.isInDiscount) {
+                        <div class="debut-info-left">
+                            <p>首发价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                            <p class="label">
+                            @for(priceLabel <- pd.getBase.getPriceLabels) {
+                                        <span>@priceLabel</span>
+                            }
+                            </p>
+                            <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
+                                首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
+                                结束</span></span></p>
                         </div>
                         <div class="debut-info-right">
                             <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
                         </div>
                     } else {
                         <div class="debut-info-left">
-                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice </span></p>
                             @if(pd.getBase.getProduct.isOnline && pd.getBase.getExhibitionEndTime != null) {
                                 <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
                                     首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
