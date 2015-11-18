@@ -2,6 +2,7 @@ package controllers.shop;
 
 import common.utils.JsonResult;
 import common.utils.Money;
+import controllers.user.*;
 import ordercenter.constants.BizType;
 import ordercenter.models.Order;
 import ordercenter.models.Trade;
@@ -78,9 +79,17 @@ public class OrderAndPayController extends Controller {
         //生成订单相关信息
         List<Integer> orderIds = orderService.submitOrder(SessionUtils.currentUser(), selItems, addressId, MarketChannel.WEB, vouchers);
 
-        String orderIdsStr = String.join("_", orderIds.stream().map(String::valueOf).collect(Collectors.toList()));
+        if(orderService.needToPay(orderIds)) {
 
-        return ok(new JsonResult(true, "生成订单成功", orderIdsStr).toNode());
+            String orderIdsStr = String.join("_", orderIds.stream().map(String::valueOf).collect(Collectors.toList()));
+            return ok(new JsonResult(true, "生成订单成功", orderIdsStr).toNode());
+
+        } else {
+
+            return ok(new JsonResult(true, "生成订单成功", controllers.user.routes.MyOrderController.index(0, 1, 10).url()).toNode());
+        }
+
+
     }
 
     /**

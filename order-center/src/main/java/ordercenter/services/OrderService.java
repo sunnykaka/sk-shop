@@ -641,4 +641,9 @@ public class OrderService {
         return order;
     }
 
+    @Transactional(readOnly = true)
+    public boolean needToPay(List<Integer> orderIds) {
+        return !orderIds.stream().map(this::getOrderById).allMatch(order -> order.getTotalMoney().getAmount() == 0);
+    }
+
 }
