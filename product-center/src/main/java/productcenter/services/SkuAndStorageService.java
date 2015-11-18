@@ -34,6 +34,9 @@ public class SkuAndStorageService {
     @Autowired
     private PropertyAndValueService propertyAndValueService;
 
+    @Autowired
+    private DiscountService discountService;
+
     /**
      * 获取数据库中所有sku记录(包含sku属性)
      *
@@ -316,7 +319,7 @@ public class SkuAndStorageService {
 
 
     /**
-     * 判断当前SKU当前的价格，会根据销售状态，是否首发，预售
+     * 判断当前SKU当前的价格，如果有折扣信息，为price，否则为marketPrice
      * @param sku
      * @return
      */
@@ -325,11 +328,11 @@ public class SkuAndStorageService {
             return Money.valueOf(0);
         }
 
-        Integer prodId = sku.getProductId();
-        if (productService.useFirstSellPrice(prodId)) {
+        if (discountService.findDiscount4Product(sku.getProductId()) != null) {
             return sku.getPrice();
+        } else {
+            return sku.getMarketPrice();
         }
-        return sku.getMarketPrice();
 
     }
 

@@ -6,9 +6,11 @@ import productcenter.dtos.SkuCandidate;
 import productcenter.dtos.SkuInfo;
 import productcenter.models.Html;
 import productcenter.models.ProductPicture;
-import productcenter.models.ProductSpec;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +27,10 @@ public class ProductDetailDto {
     private DesignerSizeDto designerSize;
 
     //CMS相关
-    private boolean isInExhibition;
+    private DateTime exhibitionEndTime;
+
+    //是否有打折
+    protected boolean inDiscount;
 
     //是否收藏
     private boolean isFavorites = false;
@@ -35,8 +40,6 @@ public class ProductDetailDto {
 
     //收藏数量
     private int favoritesNum;
-
-    private DateTime exhibitionEndTime;
 
     //key为skuPropertiesInDb, value为一个sku的DTO
     //该字段会在页面输出json字符串, 让前端可以根据skuPropertiesInDb得到skuInfo对象
@@ -80,14 +83,6 @@ public class ProductDetailDto {
 
     public void setDesignerSize(DesignerSizeDto designerSize) {
         this.designerSize = designerSize;
-    }
-
-    public boolean isInExhibition() {
-        return isInExhibition;
-    }
-
-    public void setInExhibition(boolean isInExhibition) {
-        this.isInExhibition = isInExhibition;
     }
 
     public boolean isFavorites() {
@@ -154,6 +149,14 @@ public class ProductDetailDto {
         this.productPictureList = productPictureList;
     }
 
+    public boolean isInDiscount() {
+        return inDiscount;
+    }
+
+    public void setInDiscount(boolean inDiscount) {
+        this.inDiscount = inDiscount;
+    }
+
     public static ProductDetailDto build(ProductDetailBase base) {
         ProductDetailDto productDetailDto = new ProductDetailDto();
         productDetailDto.setDefaultSku(base.getDefaultSku());
@@ -163,22 +166,12 @@ public class ProductDetailDto {
         productDetailDto.setIsBooked(base.isBooked());
         productDetailDto.setFavoritesNum(base.getFavoritesNum());
         productDetailDto.setHtmlList(base.getHtmlList().stream().map(Html::getContent).collect(Collectors.toList()));
-        productDetailDto.setInExhibition(base.isInExhibition());
         productDetailDto.setProduct(ProductDto.build(base.getProduct()));
         productDetailDto.setSkuCandidateList(base.getSkuCandidateList());
         productDetailDto.setSkuMap(base.getSkuMap());
         productDetailDto.setProductPictureList(base.getProductPictureList().stream().map(ProductPicture::getPictureUrl).collect(Collectors.toList()));
-//        productDetailDto.setSpecMap(base.getSpecList().
-//                stream().
-//                collect(Collectors.toMap(
-//                        ProductSpec::getName,
-//                        ProductSpec::getValue
-//                ))
-//        );
-        List<ProductSpecDto> specList = new ArrayList<>();
-        for(ProductSpec productSpec:base.getSpecList()){
-            specList.add(ProductSpecDto.build(productSpec));
-        }
+        productDetailDto.setInDiscount(base.isInDiscount());
+        List<ProductSpecDto> specList = base.getSpecList().stream().map(ProductSpecDto::build).collect(Collectors.toList());
         productDetailDto.setSpecList(specList);
 
         return productDetailDto;

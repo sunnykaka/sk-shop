@@ -34,7 +34,19 @@ public class ProductDetailBase {
     protected DesignerSize designerSize;
 
     //是否首发或者预售
+    @Deprecated
     protected boolean isInExhibition;
+
+    //活动结束时间
+    protected DateTime exhibitionEndTime;
+
+    //是否有打折
+    protected boolean inDiscount;
+
+    //价格名称，例如售卖价，促销价，首发价等
+    protected String priceName;
+
+    protected List<String> priceLabels;
 
     //是否收藏
     protected boolean isFavorites = false;
@@ -44,8 +56,6 @@ public class ProductDetailBase {
 
     //收藏数量
     protected int favoritesNum;
-
-    protected DateTime exhibitionEndTime;
 
     //SKU
     //SkuDetail为StockKeepingUnit的包装类, 多出了库存字段
@@ -87,6 +97,7 @@ public class ProductDetailBase {
         this.designerSize = designerSize;
     }
 
+    @Deprecated
     public boolean isInExhibition() {
         return isInExhibition;
     }
@@ -147,6 +158,18 @@ public class ProductDetailBase {
         this.matchProductList = matchProductList;
     }
 
+    public boolean isInDiscount() {
+        return inDiscount;
+    }
+
+    public String getPriceName() {
+        return priceName;
+    }
+
+    public List<String> getPriceLabels() {
+        return priceLabels;
+    }
+
     public static class Builder {
 
         public static final String NOT_EXIST_KEY = "";
@@ -161,6 +184,7 @@ public class ProductDetailBase {
         private CategoryPropertyService categoryPropertyService = BaseGlobal.ctx.getBean(CategoryPropertyService.class);
         private ProductCollectService productCollectService = BaseGlobal.ctx.getBean(ProductCollectService.class);
         private DesignerService designerService = BaseGlobal.ctx.getBean(DesignerService.class);
+        private DiscountService discountService = BaseGlobal.ctx.getBean(DiscountService.class);
 
 
         public static Builder newBuilder(Product product, Integer defaultSkuId, User user) {
@@ -220,6 +244,41 @@ public class ProductDetailBase {
                 productDetailBase.isInExhibition = productService.useFirstSellPrice(productDetailBase.product.getId());
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
             }
+
+            List<String> priceLabels = new ArrayList<>();
+
+            SaleStatus saleStatus = SaleStatus.valueOf(productDetailBase.product.getSaleStatus());
+            String saleStatusName = "售卖";
+            switch (saleStatus) {
+                case FIRSTSELL:
+                    saleStatusName = "首发";
+                    break;
+                case HOTSELL:
+                    saleStatusName = "促销";
+                    break;
+                case PLANSELL:
+                    saleStatusName = "开售";
+                    break;
+                case PRESELL:
+                    saleStatusName = "预售";
+                    break;
+                case NONE:
+                    saleStatusName = "售卖";
+                    break;
+            }
+
+            LimitTimeDiscount discount = discountService.findDiscount4Product(productDetailBase.product.getId());
+            if(discount != null && !saleStatus.equals(SaleStatus.NONE)) {
+                productDetailBase.inDiscount = true;
+                productDetailBase.priceName = saleStatusName + "价";
+                priceLabels.add(discount.getDiscountTitle());
+            } else {
+                productDetailBase.inDiscount = false;
+                productDetailBase.priceName = "售卖价";
+            }
+            priceLabels.add(saleStatusName);
+
+            productDetailBase.priceLabels = priceLabels;
 
             return this;
         }
