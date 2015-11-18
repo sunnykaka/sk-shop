@@ -226,7 +226,7 @@
                         </div>
                     } else {
                         <div class="debut-info-left">
-                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice </span></p>
+                            <p>售卖价：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice </span> </p>
                             @if(pd.getBase.getProduct.isOnline && pd.getBase.getExhibitionEndTime != null) {
                                 <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
                                     首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
