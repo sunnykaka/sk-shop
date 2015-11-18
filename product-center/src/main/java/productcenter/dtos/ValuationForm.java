@@ -18,7 +18,7 @@ public class ValuationForm {
     private Integer replyUserId;
 
     @Constraints.Required(message = "内容不能为空")
-    @Constraints.MinLength(value = 10, message = "输入不能少于10字符")
+    @Constraints.MinLength(value = 5, message = "输入不能少于5字符")
     @Constraints.MaxLength(value = 300, message = "输入超过最大300字符限制")
     private String content;
 
