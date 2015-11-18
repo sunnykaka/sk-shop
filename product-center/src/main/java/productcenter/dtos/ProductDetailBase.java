@@ -43,7 +43,7 @@ public class ProductDetailBase {
     //是否有打折
     protected boolean inDiscount;
 
-    //价格名称，例如售卖价，促销价，首发价等
+    //价格名称，例如售卖价，热卖价，首发价等
     protected String priceName;
 
     protected List<String> priceLabels;
@@ -240,7 +240,7 @@ public class ProductDetailBase {
 
             Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(new DateTime(list.get(0).getTime())) : Optional.empty();
 
-            if (exhibitionEndTime.isPresent()) {
+            if (exhibitionEndTime.isPresent() && exhibitionEndTime.get().isAfterNow()) {
                 productDetailBase.isInExhibition = productService.useFirstSellPrice(productDetailBase.product.getId());
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
             }
