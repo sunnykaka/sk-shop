@@ -74,7 +74,7 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
 
     private String replyUserName;
 
-    private boolean delete;
+    private boolean deleted;
 
     public static Map<Integer, String> pointName = new HashMap<>();
 
@@ -284,11 +284,11 @@ public class Valuation implements EntityClass<Integer>,TableTimeData {
     }
 
     @Column(name = "isDelete")
-    public boolean isDelete() {
-        return delete;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setDelete(boolean delete) {
-        this.delete = delete;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

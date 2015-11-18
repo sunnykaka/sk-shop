@@ -92,7 +92,7 @@ public class ValuationService {
     @Transactional(readOnly = true)
     public Valuation findByOrderItemId(int userId,int orderItemId){
 
-        String jpql = "select v from Valuation v where 1=1 ";
+        String jpql = "select v from Valuation v where 1=1 and v.deleted = false ";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and v.orderItemId = :orderItemId ";
         queryParams.put("orderItemId", orderItemId);
@@ -111,7 +111,7 @@ public class ValuationService {
 
     @Transactional(readOnly = true)
     public Valuation findValuationById(int userId, int id){
-        String jpql = "select v from Valuation v where 1=1 ";
+        String jpql = "select v from Valuation v where 1=1 and v.deleted = false ";
         Map<String, Object> queryParams = new HashMap<>();
         jpql += " and v.id = :id ";
         queryParams.put("id", id);
@@ -131,7 +131,7 @@ public class ValuationService {
     @Transactional(readOnly = true)
     public Optional<Page<Valuation>> findByProduct(Optional<Page<Valuation>> page, int productId){
 
-        String jpql = "select v from Valuation v where v.productId = :productId order by v.updateDate desc";
+        String jpql = "select v from Valuation v where v.deleted = false and v.productId = :productId order by v.updateDate desc";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
 
@@ -148,7 +148,7 @@ public class ValuationService {
     @Transactional(readOnly = true)
     public int[] countValuationGroupByPoint(int productId){
 
-        String jpql = "select v.point, count(v.id) from Valuation v where v.productId = :productId group by v.point order by v.point";
+        String jpql = "select v.point, count(v.id) from Valuation v where v.deleted = false and v.productId = :productId group by v.point order by v.point";
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("productId", productId);
         List<Object[]> results = generalDao.query(jpql, Optional.empty(), queryParams);

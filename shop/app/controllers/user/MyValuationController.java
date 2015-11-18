@@ -115,7 +115,7 @@ public class MyValuationController extends Controller {
             return ok(new JsonResult(false, "没有权限删除").toNode());
         }
 
-        oldValuation.setDelete(true);
+        oldValuation.setDeleted(true);
         valuationService.updateValuation(oldValuation);
 
         return ok();

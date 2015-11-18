@@ -7,6 +7,7 @@ import common.utils.JsonResult;
 import common.utils.page.Page;
 import ordercenter.models.Valuation;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import play.Logger;
 import play.mvc.Http;
@@ -25,6 +26,7 @@ import static play.test.Helpers.*;
 public class ProductControllerTest extends BaseTest implements DbTest {
 
     @Test
+    @Ignore
     public void testListProductValuations() throws Exception {
 
         int size = 100;
