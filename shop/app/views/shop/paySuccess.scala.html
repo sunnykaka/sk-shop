@@ -1,4 +1,4 @@
-@(resultMap:Map[String, Object])
+@(orders: List[ordercenter.models.Order], totalMoney: common.utils.Money)
 
 @import productcenter.models.Seo;
 @main(new Seo(Messages("title.play.success"),Messages("seo.description"),Messages("seo.Keywords")))()() {
@@ -7,13 +7,13 @@
                 <!-- pay-info -->
             <div class="pay-success-info">
                 <h3>订单支付成功，我们将尽快为您打包发货！</h3>
-                @if(resultMap.get("tradeOrderList") != null) {
+                @if(orders.nonEmpty) {
                     <ul>
-                    @for(tradeOrder <- resultMap.get("tradeOrderList").asInstanceOf[java.util.List[ordercenter.models.TradeOrder]]) {
-                        <li>订单编号：<span class="pay-number">@tradeOrder.getOrderNo()</span><a href="/my/order/info?orderId=@tradeOrder.getOrderId()" class="check-order">查看订单&gt;&gt;</a></li>
+                    @for(order <- orders) {
+                        <li>订单编号：<span class="pay-number">@order.getOrderNo</span><a href="/my/order/info?orderId=@order.getId" class="check-order">查看订单&gt;&gt;</a></li>
                     }
                     </ul>
-                    <p>支付金额：<span class="pay-money">@resultMap.get("payTotalFee")</span></p>
+                    <p>支付金额：<span class="pay-money">@totalMoney</span></p>
                 }
                 <a href="@routes.Application.index()" class="continueShopping">继续购物</a>
             </div>

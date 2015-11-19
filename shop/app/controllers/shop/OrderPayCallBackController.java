@@ -1,13 +1,17 @@
 package controllers.shop;
 
 import common.utils.JsonResult;
+import common.utils.Money;
 import common.utils.play.BaseGlobal;
+import ordercenter.models.Order;
 import ordercenter.models.Trade;
+import ordercenter.models.TradeOrder;
 import ordercenter.payment.CallBackResult;
 import ordercenter.payment.PayResponseHandler;
 import ordercenter.payment.alipay.AlipayUtil;
 import ordercenter.payment.constants.ResponseType;
 import ordercenter.payment.constants.TradeStatus;
+import ordercenter.services.OrderService;
 import ordercenter.services.TradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
@@ -17,10 +21,8 @@ import utils.secure.SecuredAction;
 import views.html.shop.payFail;
 import views.html.shop.paySuccess;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 支付通用控制器类
@@ -32,6 +34,10 @@ public class OrderPayCallBackController extends Controller {
 
     @Autowired
     TradeService tradeService;
+
+    @Autowired
+    OrderService orderService;
+
 
     private void recordLog(String way) {
         Logger.info(way + "支付平台返回的数据 : \n");
@@ -70,16 +76,7 @@ public class OrderPayCallBackController extends Controller {
      */
     public Result normalReturn() {
         recordLog("normalReturn");
-        PayResponseHandler handler = new PayResponseHandler(request());
-        CallBackResult result = handler.handleCallback(ResponseType.RETURN);
-
-        Map<String, Object> resultMap = result.getData();
-
-        if(result.success()) {
-            return ok(paySuccess.render(resultMap));
-        } else {
-            return ok(payFail.render(resultMap));
-        }
+        return getReturnResult(ResponseType.RETURN);
     }
 
     /**
@@ -88,15 +85,28 @@ public class OrderPayCallBackController extends Controller {
      */
     public Result notifyReturn() {
         recordLog("notifyReturn");
+        return getReturnResult(ResponseType.NOTIFY);
+    }
+
+    private Result getReturnResult(ResponseType responseType) {
         PayResponseHandler handler = new PayResponseHandler(request());
-        CallBackResult result = handler.handleCallback(ResponseType.NOTIFY);
+        CallBackResult result = handler.handleCallback(responseType);
+
         Map<String, Object> resultMap = result.getData();
+
         if(result.success()) {
-            return ok(paySuccess.render(resultMap));
+            List<Order> orders = new ArrayList<>();
+            List<TradeOrder> tradeOrderList = (List<TradeOrder>) resultMap.get("tradeOrderList");
+            if(tradeOrderList != null) {
+                orders = tradeOrderList.stream().map(tradeOrder -> orderService.getOrderById(tradeOrder.getOrderId())).collect(Collectors.toList());
+            }
+
+            return ok(paySuccess.render(orders, (Money)resultMap.get("payTotalFee")));
         } else {
             return ok(payFail.render(resultMap));
         }
     }
+
 
     /**
      * 检查支付情况
@@ -176,4 +186,16 @@ public class OrderPayCallBackController extends Controller {
             return ok(new JsonResult(false,"产生支付宝测试回调地址出现异常，请重试！").toNode());
         }
     }
+
+    public Result success(List<Integer> orderIds) {
+        List<Order> orders = new ArrayList<>();
+        Money payTotalFee = Money.valueOf(0d);
+        if(orderIds != null) {
+            orders = orderIds.stream().map(orderService::getOrderById).collect(Collectors.toList());
+            payTotalFee = orders.stream().map(Order::getTotalMoney).reduce(Money.valueOf(0d), Money::add);
+        }
+
+        return ok(paySuccess.render(orders, payTotalFee));
+    }
+
 }

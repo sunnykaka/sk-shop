@@ -561,6 +561,12 @@ public class OrderService {
                 }
                 order.setVoucherFee(splitVoucherMoney);
                 order.setTotalMoney(order.calcTotalMoney());
+
+                if(order.getTotalMoney().getAmount() == 0) {
+                    //0元订单直接支付成功
+                    order.setOrderState(OrderState.Pay);
+                }
+
             }
 
             saveOrder(order);
@@ -641,9 +647,14 @@ public class OrderService {
         return order;
     }
 
+    /**
+     * 过滤不需要支付的订单ID并返回
+     * @param orderIds
+     * @return
+     */
     @Transactional(readOnly = true)
-    public boolean needToPay(List<Integer> orderIds) {
-        return !orderIds.stream().map(this::getOrderById).allMatch(order -> order.getTotalMoney().getAmount() == 0);
+    public List<Integer> filterNotNeedPayOrderId(List<Integer> orderIds) {
+        return orderIds.stream().filter(id -> getOrderById(id).getTotalMoney().getAmount() > 0d).collect(Collectors.toList());
     }
 
 }
