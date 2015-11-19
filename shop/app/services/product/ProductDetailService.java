@@ -31,13 +31,15 @@ public class ProductDetailService {
 
         ProductDetail productDetail = new ProductDetail();
         ProductDetailBase productDetailBase = productDetailBaseService.showDetail(productId, skuId, user);
-        int[] counts = valuationService.countValuationGroupByPoint(productDetailBase.getProduct().getId());
+        //评论需求变动，不显示评论分类
+        //int[] counts = valuationService.countValuationGroupByPoint(productDetailBase.getProduct().getId());
+        int count = valuationService.countValuation(productId);
 
         productDetail.setBase(productDetailBase);
-        productDetail.setGoodValuationCount(counts[0]);
-        productDetail.setNormalValuationCount(counts[1]);
-        productDetail.setBadValuationCount(counts[2]);
-        productDetail.setAllValuationCount(IntStream.of(counts).sum());
+//        productDetail.setGoodValuationCount(counts[0]);
+//        productDetail.setNormalValuationCount(counts[1]);
+//        productDetail.setBadValuationCount(counts[2]);
+        productDetail.setAllValuationCount(count);
 
         productDetail.setSeo(seoService.getProductSeo(productDetailBase.getProduct()));
 
