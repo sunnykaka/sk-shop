@@ -269,7 +269,7 @@ public class ProductDetailBase {
                 case NONE:
                     break;
             }
-            productDetailBase.priceName = saleStatusName + "价";
+            productDetailBase.priceName = saleStatusName;
 
             LimitTimeDiscount discount = discountService.findDiscount4Product(productDetailBase.product.getId());
             if(discount != null && !saleStatus.equals(SaleStatus.NONE)) {

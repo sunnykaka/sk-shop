@@ -157,6 +157,17 @@ public class VoucherServiceTest extends BaseTest implements VoucherTest {
 
     }
 
+    @Test
+    @Ignore
+    public void test2() throws Exception {
+
+        VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
+
+        voucherService.requestForRegister(9, 10);
+
+    }
+
+
 
 
 
