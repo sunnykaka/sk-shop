@@ -107,10 +107,11 @@
             }
         @if(voucherList != null && !voucherList.isEmpty) {
             <div class="select-voucher">
-                <h3>代金劵</h3>
+                <h3>代金劵　<span class="voucher-tips">(提示：同一种类型的代金劵不能叠加使用)</span></h3>
                 <table>
                     <tr>
                         <th>编号</th>
+                        <th>类型</th>
                         <th>面额</th>
                         <th>使用条件</th>
                         <th>截止日期</th>
@@ -118,8 +119,9 @@
                     </tr>
 
                     @for(voucher <- voucherList) {
-                        <tr>
+                        <tr type="@voucher.getType">
                             <td class="coupon-uniqueNo">@voucher.getUniqueNo</td>
+                            <td class="coupon-type" >@voucher.getType.value</td>
                             <td class="coupon-money">@voucher.getAmount</td>
                             @if(voucher.getMinOrderAmount.getAmount == 0d) {
                                 <td>无限制</td>
@@ -211,7 +213,7 @@
                 <tr>
                     <td class="alginLeft">商品总计：</td>
                     <td style="width: 100px;"></td>
-                    <td class="alginRight">￥@cart.getTotalMoney</td>
+                    <td class="alginRight">￥<span id="getTotalMoney">@cart.getTotalMoney</span></td>
                 </tr>
                 <tr>
                     <td class="alginLeft">运费：</td>

@@ -20,7 +20,7 @@
             echo(
             '<div class="comment-item">'+
             '<div class="comment-title">'+
-            '<p><span class="user">'+result[i].userName+(result[i].replyUserName ==undefined?"":"<b>　回复了：</b>"+result[i].replyUserName)+
+            '<p><span class="user">'+result[i].userName+(result[i].replyUserName ==undefined?"":"<b>　回复了　</b>"+result[i].replyUserName)+
             '</span>'+(result[i].userId == currentUserId?"<span class='del' id='"+result[i].id+"'>删除</span>":"")+
             ' <span class="comment-reply" replyId ="'+result[i].userId+'" replyName = "'+result[i].userName+'">回复</span></p>'+
             '</div>'+
@@ -172,10 +172,10 @@
                         <div class="comment-con">
                                     <div id="commit-comment" class="clearfix">
                                         <div class="commit-box">
-                                            <textarea  id="commit-content" placeholder="发布评论,评论不能小于10个字或者大于300字限制" maxlength="300"></textarea>
+                                            <textarea  id="commit-content" placeholder="发表评论" maxlength="300"></textarea>
                                         </div>
                                         <span class="commit-btn">提交评论</span>
-                                        <p class="tips-comment">*评论不能小于5个字或者大于300字限制,还能输入 <span id="text-count">300</span> 字。</p>
+                                        <p class="tips-comment">*评论不能小于5个字！还能输入 <span id="text-count">300</span> 字。</p>
                                         <input type="hidden" name="replayUserId" id="replayId" value="null" />
                                         <input type="hidden" id="comment_pre" value="">
                                     </div>
