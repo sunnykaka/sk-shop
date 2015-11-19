@@ -126,6 +126,10 @@ $(function () {
 
 
     $('.commit-btn').on('click',function(){
+        if($('.logined .login').size()>0){
+            createLoginReg();
+            return false;
+        }
         var commitContent = $('#commit-content').val(),replayId = $('#replayId').val(),comment_pre = $("#comment_pre").val();
         if(replayId !="null"){
            data =  {content:commitContent.replace(comment_pre,''),productId:productId,replyUserId:replayId};
@@ -179,7 +183,6 @@ $(function () {
 
     //评论删除按钮
     $('.comment-list').on('click','.del',function(){
-
         var id = $(this).attr('id');
         $.dialog({
             title:'提示',
