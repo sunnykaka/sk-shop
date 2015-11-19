@@ -38,9 +38,6 @@ $(function () {
         $('.sliderBtn').fadeOut();
     });
 
-
-
-
     //倒计时
     setInterval(function(){
         $(".time-detail:not(:contains(已结束))").each(function(){
