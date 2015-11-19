@@ -137,7 +137,7 @@ $(function () {
             $.dialog({
                 title: '提示',
                 lock: true,
-                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>评论不能小于10个字或者大于300字限制</p></div>',
+                content: '<div class="warning-inner clearfix"><p class="warning"><i class="icon iconfont">&#xe60c;</i>评论不能小于5个字或者大于300字限制</p></div>',
                 width: 500,
                 height: 248,
                 padding: "20",
