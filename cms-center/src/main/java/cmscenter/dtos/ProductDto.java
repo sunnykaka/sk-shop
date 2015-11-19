@@ -29,7 +29,8 @@ public class ProductDto {
     public static ProductDto build(ProductInSellList productInSellList){
         ProductDto productDto = new ProductDto();
         productDto.setProductId(productInSellList.getProduct().getId());
-        productDto.setPrice(productInSellList.getPrice().toString());
+        String price = productInSellList.getDiscount() != null ? productInSellList.getPrice().toString() : productInSellList.getMarketPrice().toString();
+        productDto.setPrice(price);
         productDto.setProductName(productInSellList.getProduct().getName());
         productDto.setProductUrl(productInSellList.getMinorPic().getPictureUrl());
         return productDto;
