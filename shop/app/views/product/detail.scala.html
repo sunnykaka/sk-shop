@@ -190,10 +190,10 @@
                                 <h3>评论数（<b id="commentTotal">@pd.getAllValuationCount</b></b>）</h3>
                             </div>
                             <div class="comment-list">
-                                @if(pd.getAllValuationCount <= 0){
-                                    <p>还没有人评论过，赶快抢沙发吧！</p>
-                                }
                             </div>
+                            @if(pd.getAllValuationCount <= 0){
+                                <p style="text-align: center;color:#ff2d54;">还没有人评论过，赶快抢沙发吧！</p>
+                            }
                         </div>
                         <div class="comment-page">
 

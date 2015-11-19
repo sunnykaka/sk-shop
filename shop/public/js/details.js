@@ -169,7 +169,9 @@ $(function () {
 
     //回复按钮触发
     $('.comment-list').on('click','.comment-reply',function(){
-        $('html,body').animate({scrollTop:$('.comment-con').offset().top},'slow');
+        $('html,body').animate({scrollTop:$('.comment-con').offset().top},'slow',function(){
+            $('#commit-content').trigger('click');
+        });
         $('#commit-content').val('回复：'+$(this).attr('replyName')+" ").focus();
         $("#comment_pre").val('回复：'+$(this).attr('replyName')+" ");
         $('#replayId').val($(this).attr('replyId'));
@@ -218,25 +220,29 @@ $(function () {
     //评论分页
     function createPagehtml(curPage,totalPage){
 
-        var prevPage,nextPage;
+        var prevPage,nextPage,firstPage,lastPage;
         if(curPage == 1){
-            prevPage = '<li>上一页</li>';
+            firstPage = '<li><a href="javascript:void(0);"  data-page="0" style="cursor: not-allowed;color: #e5e5e5;">首页</a></li>';
+            prevPage = '<li><a href="javascript:void(0);" data-page="0"  style="cursor: not-allowed;color: #e5e5e5;">上一页</a></li>';
+            lastPage = '<li><a href="javascript:void(0);"  data-page="'+(totalPage)+'">末页</a></li>';
         }else{
+            firstPage = '<li><a href="javascript:void(0);"  data-page="1">首页</a></li>';
             prevPage = '<li><a href="javascript:void(0);"  data-page="'+(curPage-1)+'">上一页</a></li>';
+            lastPage =  '<li><a href="javascript:void(0);"  data-page="'+(totalPage)+'">末页</a></li>';
         }
 
         if(curPage == totalPage){
-            nextPage = '<li>下一页</li>';
+            nextPage = '<li><a href="javascript:void(0);" data-page="0"  style="cursor: not-allowed;color: #e5e5e5;">下一页</a></li>';
+            lastPage= '<li><a href="javascript:void(0);" data-page="0"  style="cursor: not-allowed;color: #e5e5e5;">末页</a></li>';
         }else{
             nextPage = '<li><a href="javascript:void(0);"  data-page="'+(curPage+1)+'">下一页</a></li>';
         }
-
         //假如没有有评论时
         if(totalPage == 0){
             html = "";
         }else{
             var html = '<ul class="clearfix">'+
-                '<li>第<span class="current-page">'+curPage+'</span>/<span class="total-page">'+totalPage+'</span>页</li>'+prevPage+nextPage+'</ul>';
+                '<li>第<span class="current-page">'+curPage+'</span>/<span class="total-page">'+totalPage+'</span>页</li>'+firstPage +prevPage+nextPage+lastPage+'</ul>';
         }
 
         return html;
@@ -245,6 +251,7 @@ $(function () {
     //分页添加事件
     $('.comment-page').on('click','a',function(){
        var page = $(this).attr('data-page');
+        if(page == "0") return;
        switch ($('.comment-header .current').attr('data-id')){
            case '全部评价':
                pointer = {id:productId,page:page,limit:10};
@@ -315,7 +322,7 @@ $(function () {
     //初始显示全部评价
     $('.comment-header li:first').trigger('click');
 
-    $('#commit-content').on('focus',function(){
+    $('#commit-content').on('click',function(){
         if($('.logined .login').size()>0){
             createLoginReg();
         }
