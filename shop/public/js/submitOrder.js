@@ -10,7 +10,13 @@ $(function(){
         //代金劵值
         $('#couponVal').text((Number(curMoney)+Number(conponVal)).toFixed(2));
         //总价格
-        $('#actualVal').text((Number($('#actualVal').text()) - Number(curMoney)).toFixed(2));
+        var getTotalM = Number($('#actualVal').text())- Number(curMoney).toFixed(2);
+        if(getTotalM>0){
+            $('#actualVal').text(getTotalM);
+        }else{
+            $('#actualVal').text(0);
+        }
+
        $(this).text('已使用').addClass('used-status');
         $(this).off('click');
     });
@@ -520,7 +526,11 @@ $(function(){
             cache: false,
             success: function (data) {
                 if(data.result){
-                    window.location.href = '/order/toOrderPlay?orderIds='+data.data;
+                    if(/\//.test(data.data)){
+                        window.location.href =  data.data;
+                    }else{
+                        window.location.href = '/order/toOrderPlay?orderIds='+data.data;
+                    }
                 }else{
                     $.dialog({
                         title:'提示',

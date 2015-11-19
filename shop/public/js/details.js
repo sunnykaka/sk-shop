@@ -77,7 +77,6 @@ $(function () {
         window.location.href = "/cart/showCart";
     });
 
-
     //侧栏固定
     function fixed(obj, scopeObj) {
         var t = obj.offset().top;
