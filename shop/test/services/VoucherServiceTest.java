@@ -163,7 +163,7 @@ public class VoucherServiceTest extends BaseTest implements VoucherTest {
 
         VoucherService voucherService = Global.ctx.getBean(VoucherService.class);
 
-        voucherService.requestForRegister(9, 10);
+        voucherService.requestForRegister(9, 20);
 
     }
 
