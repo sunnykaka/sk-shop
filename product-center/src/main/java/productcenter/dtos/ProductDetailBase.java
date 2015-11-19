@@ -43,7 +43,7 @@ public class ProductDetailBase {
     //是否有打折
     protected boolean inDiscount;
 
-    //价格名称，例如售卖价，促销价，首发价等
+    //价格名称，例如售卖价，热卖价，首发价等
     protected String priceName;
 
     protected List<String> priceLabels;
@@ -240,7 +240,7 @@ public class ProductDetailBase {
 
             Optional<DateTime> exhibitionEndTime = (list != null && list.size() > 0) ? Optional.of(new DateTime(list.get(0).getTime())) : Optional.empty();
 
-            if (exhibitionEndTime.isPresent()) {
+            if (exhibitionEndTime.isPresent() && exhibitionEndTime.get().isAfterNow()) {
                 productDetailBase.isInExhibition = productService.useFirstSellPrice(productDetailBase.product.getId());
                 productDetailBase.exhibitionEndTime = exhibitionEndTime.get();
             }
@@ -255,7 +255,7 @@ public class ProductDetailBase {
                     priceLabels.add(saleStatusName);
                     break;
                 case HOTSELL:
-                    saleStatusName = "促销";
+                    saleStatusName = "热卖";
                     priceLabels.add(saleStatusName);
                     break;
                 case PLANSELL:
@@ -267,18 +267,16 @@ public class ProductDetailBase {
                     priceLabels.add(saleStatusName);
                     break;
                 case NONE:
-                    saleStatusName = "售卖";
                     break;
             }
+            productDetailBase.priceName = saleStatusName + "价";
 
             LimitTimeDiscount discount = discountService.findDiscount4Product(productDetailBase.product.getId());
             if(discount != null && !saleStatus.equals(SaleStatus.NONE)) {
                 productDetailBase.inDiscount = true;
-                productDetailBase.priceName = saleStatusName + "价";
                 priceLabels.add(discount.getDiscountTitle());
             } else {
                 productDetailBase.inDiscount = false;
-                productDetailBase.priceName = "售卖价";
             }
 
             productDetailBase.priceLabels = priceLabels;

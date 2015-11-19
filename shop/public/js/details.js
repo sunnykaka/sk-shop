@@ -77,7 +77,6 @@ $(function () {
         window.location.href = "/cart/showCart";
     });
 
-
     //侧栏固定
     function fixed(obj, scopeObj) {
         var t = obj.offset().top;
@@ -641,25 +640,31 @@ $(function () {
                     if (len == _skuAttrNum) {
                         _price = currentSku.marketPrice;
                         if(saleStatus == "FIRSTSELL" || saleStatus == "PRESELL" || saleStatus == "PLANSELL"){ //判断是否是首发
-                            if ($("#start-price").length) {
-                                $("#start-price").html(Number(currentSku.price).toFixed(2));
-                            }
-
-                            if (currentSku.marketPrice) {
-                                if ($("#market-price").length) {
-                                    $("#market-price").html(Number(currentSku.marketPrice).toFixed(2));
+                                if ($("#start-price").length) {
+                                    if(!inDiscount){//折扣商品  没有折扣
+                                        $("#start-price").html(Number(currentSku.marketPrice).toFixed(2));
+                                    }else{
+                                        $("#start-price").html(Number(currentSku.price).toFixed(2));
+                                    }
                                 }
-                            }
+                                if (currentSku.marketPrice) {
+                                    if ($("#market-price").length) {
+                                        $("#market-price").html(Number(currentSku.marketPrice).toFixed(2));
+                                    }
+                                }
                         }else{
-                            if ($("#start-price").length) {
-                                $("#start-price").html(Number(currentSku.marketPrice).toFixed(2));
-                            }
-
-                            if (currentSku.marketPrice) {
-                                if ($("#market-price").length) {
-                                    $("#market-price").html(Number(currentSku.price).tofixed(2));
+                                if ($("#start-price").length) {
+                                    if(!inDiscount){//折扣商品  没有折扣
+                                        $("#start-price").html(Number(currentSku.marketPrice).toFixed(2));
+                                    }else{
+                                        $("#start-price").html(Number(currentSku.price).toFixed(2));
+                                    }
                                 }
-                            }
+                                if (currentSku.marketPrice) {
+                                    if ($("#market-price").length) {
+                                        $("#market-price").html(Number(currentSku.price).tofixed(2));
+                                    }
+                                }
                         }
                         if (currentSku.imageList && currentSku.imageList.length > 0) {
                             var bigImgUrl = currentSku.imageList[0];

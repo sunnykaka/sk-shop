@@ -11,7 +11,9 @@ public enum VoucherBatchStatus implements ViewEnum {
 
     VALID("有效"),
 
-    INVALID("无效");
+    INVALID("无效"),
+
+    DELETED("已删除");
 
     public String value;
 

@@ -29,10 +29,10 @@ public interface VoucherTest extends LoginTest {
     /**
      * 子类需要在@Before和@After中调用这个方法
      */
-    default void setAllVoucherBatchToInvalid() {
+    default void setAllVoucherBatchToDeleted() {
         doInTransactionWithGeneralDao(generalDao -> {
             Map<String, Object> params = new HashMap<>();
-            params.put("status", VoucherBatchStatus.INVALID);
+            params.put("status", VoucherBatchStatus.DELETED);
             generalDao.update("update VoucherBatch vb set vb.status = :status", params);
             return null;
         });

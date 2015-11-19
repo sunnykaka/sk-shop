@@ -20,6 +20,7 @@ import usercenter.services.AddressService;
 import utils.secure.SecuredAction;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,11 +67,18 @@ public class AppOrderAndPayController extends BaseController {
         }
 
         List<Integer> orderIds = orderService.submitOrder(currentUser(), selItems, addressId, channel, vouchers);
+        orderIds = orderService.filterNotNeedPayOrderId(orderIds);
 
-        Map<String, String> payInfoMap = submitToPay(payOrg, clientIp, orderIds);
+        Map<String, String> resultMap;
+        if(orderIds.isEmpty()) {
+            //不需要支付
+            resultMap = new HashMap<>();
+            resultMap.put("needToPay", "false");
+        } else {
+            resultMap = submitToPay(payOrg, clientIp, orderIds);
+        }
 
-        JsonNode jsonNode = JsonUtils.object2Node(payInfoMap);
-
+        JsonNode jsonNode = JsonUtils.object2Node(resultMap);
         Logger.info("submitToPay方法返回结果：" + jsonNode.toString());
 
         return ok(jsonNode);

@@ -49,7 +49,7 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
     @Before
     @After
     public void init() {
-        setAllVoucherBatchToInvalid();
+        setAllVoucherBatchToDeleted();
     }
 
     @Test
@@ -95,19 +95,19 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
             List<Voucher> vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             //购物车中选中1个产品，数量为1提交订单
             testSubmitOrder(userId, 1, 1, false, vouchers);
-            setAllVoucherBatchToInvalid();
+            setAllVoucherBatchToDeleted();
 
             voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             //购物车中选中3个产品，每个数量为2提交订单
             testSubmitOrder(userId, 3, 2, false, vouchers);
-            setAllVoucherBatchToInvalid();
+            setAllVoucherBatchToDeleted();
 
             voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
             //1个产品，数量为5立即购买
             testSubmitOrder(userId, 1, 5, true, vouchers);
-            setAllVoucherBatchToInvalid();
+            setAllVoucherBatchToDeleted();
 
             voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
@@ -132,7 +132,7 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
         for(VoucherType type : VoucherType.values()) {
             VoucherBatch voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             List<Voucher> vouchers = assertRequestVouchersSuccess(voucherBatch, userId2, quantity);
-            setAllVoucherBatchToInvalid();
+            setAllVoucherBatchToDeleted();
             boolean exceptionThrown = false;
             try {
                 //使用其他人的优惠券
@@ -147,7 +147,7 @@ public class OrderServiceTest extends BaseTest implements CartTest, VoucherTest 
 
             voucherBatch = initVoucherBatchWithValid(type, now, empty(), period, empty(), empty());
             vouchers = assertRequestVouchersSuccess(voucherBatch, userId, quantity);
-            setAllVoucherBatchToInvalid();
+            setAllVoucherBatchToDeleted();
             exceptionThrown = false;
             try {
                 //同种类型的优惠券使用多张

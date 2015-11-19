@@ -305,14 +305,6 @@ public class VoucherService {
         generalDao.persist(voucherBatch);
     }
 
-    @Transactional
-    public void updateVoucherBatchToInvalid(int batchId) {
-        VoucherBatch voucherBatch = getVoucherBatch(batchId);
-        voucherBatch.setStatus(VoucherBatchStatus.INVALID);
-        generalDao.persist(voucherBatch);
-    }
-
-
     @Transactional(readOnly = true)
     public Voucher getVoucher(Integer id) {
         return generalDao.get(Voucher.class, id);

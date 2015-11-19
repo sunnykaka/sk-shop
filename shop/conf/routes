@@ -152,6 +152,7 @@ GET         /payOrder/notifyReturn                                @controllers.s
 POST        /payOrder/notifyReturn                                @controllers.shop.OrderPayCallBackController.notifyReturn
 GET         /payOrder/checkPayState                               @controllers.shop.OrderPayCallBackController.checkPayState(tradeNo:String)
 GET         /payOrder/generateAliPayPayReturnUrl                  @controllers.shop.OrderPayCallBackController.generateAliPayPayReturnUrl(tradeNo:String)
+GET         /payOrder/success                                     @controllers.shop.OrderPayCallBackController.success(orderIds: java.util.List[Integer] ?= null)
 
 #product
 GET         /product/valuations                                   @controllers.product.ProductController.valuations(id: Int)

@@ -691,9 +691,11 @@ table .pro{width: 360px;}
 .detail-inner .right{width: 373px;}
 .detail-inner .debut-img{width: 373px;height: 226px;margin:58px 0 23px 0; }
 .detail-inner #debut-box{width: 373px;overflow: hidden;}
-.debut-info,.detail-size-color{padding-bottom: 32px;border-bottom: 1px solid #e5e5e5;*height:1%;}
+.debut-info,.detail-size-color{padding-bottom: 10px;border-bottom: 1px solid #e5e5e5;*height:1%;}
 .debut-info .debut-info-left{float: left;width:235px;}
 .debut-info-left p{line-height: 34px;font-size: 12px;}
+.debut-info-left .label{height: 34px;}
+.debut-info-left .label span{margin: 8px 8px 0 0;padding: 3px 14px;border: 1px solid #ff2d54;background: #ff2d54;color: #fff;}
 .debut-info-left .start-price{color: #FF2D54;font-size: 20px;}
 .debut-info-left .debut-time i{font-size: 16px;}
 .debut-info .debut-info-right{float: right;width:130px;position: relative;}
@@ -714,8 +716,8 @@ table .pro{width: 360px;}
 .debut-info-right .info-tip{position: absolute;width: 163px;height: 38px;background:url("../images/sk-sprite.png") no-repeat 0 -1227px;
     font-size: 12px;padding: 8px 5px 2px 6px;left: 0;top: 27px;color: #7b7b7b;display: none;
 }
-.detail-size-color{padding: 35px 0;position: relative;}
-.detail-size-color .show-size-btn{position: absolute;right: 0;top: 14px;padding: 3px 10px;border: 1px solid #fd2049;color:#fd2049;cursor:pointer;border-radius: 30px;}
+.detail-size-color{padding: 20px 0 10px 0;position: relative;}
+.detail-size-color .show-size-btn{position: absolute;right: 0;top: 16px;padding: 3px 10px;border: 1px solid #fd2049;color:#fd2049;cursor:pointer;border-radius: 30px;}
 .detail-size-color .detail-size{padding-bottom: 28px;*height:1%;}
 .size-detail-inner{}
 .size-detail-inner .size-detail-header h4{font-size: 18px;font-weight: normal;}
@@ -734,7 +736,7 @@ table .pro{width: 360px;}
 #choose-sku .disabled:hover{color: #ccc;background: #fff;border: 1px solid #ccc;}
 #choose-sku .selected{background: #FF2D54;color: #ffffff;border: 1px solid #FF2D54;}
 #choose-sku .selected:hover{background: #FF2D54;color: #fff;}
-.detail-quantity{padding: 25px 0;overflow: hidden;*height:1%;}
+.detail-quantity{padding: 20px 0;overflow: hidden;*height:1%;}
 .detail-quantity dt{margin-bottom: 12px;}
 .detail-quantity dd{*margin-left:-40px;}
 .detail-quantity .amount{line-height: 28px;height:30px;position: relative;}
@@ -757,7 +759,7 @@ table .pro{width: 360px;}
 .detail-quantity .amount a:hover{text-decoration: none}
 .detail-quantity .amount .btn-sub{border-width:1px;}
 .detail-quantity .amount .text-number{width:43px;background: #fff;font-weight: normal;}
-.detail-btn{height: 38px;padding: 4px 0 0 0;overflow:hidden;margin-bottom: 25px;*height:1%;}
+.detail-btn{height: 38px;padding: 4px 0 0 0;overflow:hidden;margin-bottom: 20px;*height:1%;}
 .detail-btn .btn-wrap{width: 130px;height:38px;overflow: hidden;float: left;margin-right:10px;}
 .detail-btn  .loading-after{display:none;width:130px;background: #d0d0d0;color: #fff; position: relative;cursor: not-allowed;}
 .detail-btn  .loading .loading-after{margin-top: -38px;}
@@ -770,7 +772,7 @@ table .pro{width: 360px;}
 .detail-btn .addToCart{background: #fff;color: #000;}
 .detail-btn p{clear: both;padding: 12px 0;}
 .detail-btn .soldOut{background: #ccc;border: none;}
-.detail-like{height: 30px;padding-top: 22px;border-top: 1px solid #e5e5e5;margin-bottom: 5px;}
+.detail-like{height: 30px;padding-top: 20px;border-top: 1px solid #e5e5e5;margin-bottom: 5px;}
 .detail-like .like,.detail-like .about-designer{padding: 3px 12px;border: 1px solid #FF2D54;border-radius: 50px;position: relative;cursor: pointer;color: #fd2049;}
 .detail-like .like{margin-left: 6px;}
 .detail-like i,.detail-like a{color: #fd2049;}
