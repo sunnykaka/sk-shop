@@ -260,7 +260,7 @@ public class ProductDetailBase {
                     break;
                 case PLANSELL:
                     saleStatusName = "开售";
-                    priceLabels.add(saleStatusName);
+                    priceLabels.add("即将" + saleStatusName);
                     break;
                 case PRESELL:
                     saleStatusName = "预售";
