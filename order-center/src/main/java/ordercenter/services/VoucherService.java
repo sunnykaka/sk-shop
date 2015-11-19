@@ -323,7 +323,7 @@ public class VoucherService {
         params.put("userId", userId);
         params.put("status", currentStatus);
 
-        String jpql = "select v from Voucher v where v.userId = :userId and v.status = :status";
+        String jpql = "select v from Voucher v where v.userId = :userId and v.status = :status order by v.amount desc";
 
         generalDao.query(jpql, of(page), params);
 

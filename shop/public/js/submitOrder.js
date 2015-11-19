@@ -4,30 +4,41 @@
 $(function(){
 
     //使用优惠劵
-    $('.Coupon-Btn').on('click',function(){
-        if($(this).text() == "已使用") return false;
-        var curMoney = $(this).parent('td').siblings('.coupon-money').text(), conponVal = $('#couponVal').text(),currentType= $(this).parents('tr').attr('type'),voucherT = 0;
-
+    $('.select-voucher').on('click','.Coupon-Btn',function(e){
+        var currentType= $(this).parents('tr').attr('type'),voucherT = 0;
         //先找出同一类型的劵
        $(this).parents('table').find('tr[type="'+currentType+'"]').removeClass('used');
-        $(this).parents('table').find('tr[type="'+currentType+'"] .Coupon-Btn').text('使用').removeClass('used-status');
+        $(this).parents('table').find('tr[type="'+currentType+'"] .control span:not(.coudan)').text('使用').removeClass('used-status').addClass('Coupon-Btn');
         $(this).parents('tr').addClass('used');
         //代金劵值
-       // $('#couponVal').text((Number(curMoney)+Number(conponVal)).toFixed(2));
         $(this).parents('table').find('.used').each(function(i,item){
            voucherT +=  Number($(item).find('.coupon-money').text());
         });
         $('#couponVal').text(voucherT.toFixed(2));
         //总价格
-        var getTotalM = (Number($('#actualVal').text())- Number(voucherT)).toFixed(2);
-
+        var getTotalM = (Number($('#getTotalMoney').text())- Number(voucherT)).toFixed(2);
         if(getTotalM>0){
             $('#actualVal').text(getTotalM);
         }else{
             $('#actualVal').text(0);
         }
-
-       $(this).text('已使用').addClass('used-status');
+       $(this).text('已使用').addClass('used-status').removeClass('Coupon-Btn');
+    });
+    //已使用按钮
+    $('.select-voucher').on('click','.used-status',function(){
+        $(this).removeClass('used-status').text('使用');
+        $(this).parents('tr').removeClass('used');
+        var curMoney = $(this).parent('td').siblings('.coupon-money').text(),conponVal = $('#couponVal').text();
+        //代金劵金额
+        $('#couponVal').text((Number(conponVal) - Number(curMoney)).toFixed(2));
+        //应付金额
+        var getTotalM = (Number($('#getTotalMoney').text())- Number($('#couponVal').text())).toFixed(2);
+        if(getTotalM>0){
+            $('#actualVal').text(getTotalM);
+        }else{
+            $('#actualVal').text(0);
+        }
+        $(this).addClass('Coupon-Btn');
     });
 
     //地址鼠标移动 事件委托

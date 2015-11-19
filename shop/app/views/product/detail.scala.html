@@ -190,10 +190,10 @@
                                 <h3>评论数（<b id="commentTotal">@pd.getAllValuationCount</b></b>）</h3>
                             </div>
                             <div class="comment-list">
-                                @if(pd.getAllValuationCount <= 0){
-                                    <p>还没有人评论过，赶快抢沙发吧！</p>
-                                }
                             </div>
+                            @if(pd.getAllValuationCount <= 0){
+                                <p style="text-align: center;color:#ff2d54;">还没有人评论过，赶快抢沙发吧！</p>
+                            }
                         </div>
                         <div class="comment-page">
 
@@ -211,33 +211,26 @@
                 </div>
                 <div id="debut-box">
                     <div class="debut-info clearfix">
-                    @if(pd.getBase.isInDiscount) {
                         <div class="debut-info-left">
-                            <p>@{pd.getBase.getPriceName}：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getPrice </span></p>
+                            <p>@{pd.getBase.getPriceName}价：￥<span class="start-price" id="start-price">
+                                @{if(pd.getBase.isInDiscount) pd.getBase.getDefaultSku.getPrice else pd.getBase.getDefaultSku.getMarketPrice }
+                            </span></p>
                             <p class="label">
                             @for(priceLabel <- pd.getBase.getPriceLabels) {
-                                        <span>@priceLabel</span>
+                                <span>@priceLabel</span>
                             }
                             </p>
                             @if(pd.getBase.getProduct.isOnline && pd.getBase.getExhibitionEndTime != null) {
                                 <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
-                                    首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
+                                    @{pd.getBase.getPriceName}还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
                                     结束</span></span></p>
                             }
                         </div>
-                        <div class="debut-info-right">
-                            <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
-                        </div>
-                    } else {
-                        <div class="debut-info-left">
-                            <p>@{pd.getBase.getPriceName}：￥<span class="start-price" id="start-price">@pd.getBase.getDefaultSku.getMarketPrice </span> </p>
-                            @if(pd.getBase.getProduct.isOnline && pd.getBase.getExhibitionEndTime != null) {
-                                <p class="debut-time"><i class="icon iconfont">&#xe605;</i><span class="time-text">
-                                    首发还剩<span class="time-detail" value="@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)">@DateUtils.printDateTime(pd.getBase.getExhibitionEndTime)</span><span class="over-text">
-                                    结束</span></span></p>
-                            }
-                        </div>
-                    }
+                        @if(pd.getBase.isInDiscount) {
+                            <div class="debut-info-right">
+                                <p>售卖价:￥<span class="market-price" id="market-price">@pd.getBase.getDefaultSku.getMarketPrice</span></p>
+                            </div>
+                        }
                     </div>
                     @if(pd.getBase.getSkuCandidateList.nonEmpty) {
                         <div class="detail-size-color" id="choose-sku">

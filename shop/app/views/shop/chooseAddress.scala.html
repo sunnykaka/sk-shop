@@ -117,7 +117,6 @@
                         <th>截止日期</th>
                         <th class="control">操作</th>
                     </tr>
-
                     @for(voucher <- voucherList) {
                         <tr type="@voucher.getType">
                             <td class="coupon-uniqueNo">@voucher.getUniqueNo</td>
@@ -129,9 +128,9 @@
                                 <td>消费满@{voucher.getMinOrderAmount}元可以使用</td>
                             }
                             <td>  @DateUtils.printDate(voucher.getUseTime)</td>
-                            <td>
+                            <td class="control">
                             @if(voucher.getMinOrderAmount.greaterThan(cart.getTotalMoney)  ){
-                                <span>还差@{voucher.getMinOrderAmount.subtract(cart.getTotalMoney)}元，去 <a class="goList" href="@controllers.product.routes.ProductController.list()" target="_blank">凑单</a></span>
+                                <span class="coudan">还差@{voucher.getMinOrderAmount.subtract(cart.getTotalMoney)}元，去 <a class="goList" href="@controllers.product.routes.ProductController.list()" target="_blank">凑单</a></span>
                             }else{
                                 <span class="Coupon-Btn">使用</span>
                             }

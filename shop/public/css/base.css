@@ -160,8 +160,8 @@ table .pro{width: 360px;}
 .btm-img a{display: block;height: 40px;width: 100%;}
 .btm-img .icon{float: left;width: 40px;height: 40px;margin-right: -40px;background:  url("../images/btm-sprite.png") no-repeat 0 0;}
 .btm-img .icon-1{background-position: -126px 0;}
-.btm-img .icon-2{background-position: -290px 0;}
-.btm-img .icon-3{background-position: -423px 0;}
+.btm-img .icon-2{background-position: -423px 0;}
+.btm-img .icon-3{background-position: -290px 0;}
 .btm-img .wrap{float: left;margin-left: 55px;padding-top: 4px;}
 .btm-img .slogan{display: block;height: 20px;color: #333;font-weight: 700;}
 .btm-img .desc{display: block;color: #999;white-space: nowrap;}
@@ -379,7 +379,7 @@ table .pro{width: 360px;}
 .order-submit .total-info h3{margin-bottom: 0;height: 30px;line-height: 30px;margin-left: 22px;}
 .order-submit .total-info h3 i{font-size: 30px;margin-right: 4px;}
 .order-submit .select-address,.order-submit .confirm-product,.order-submit .select-voucher{margin-bottom: 30px;}
-.order-submit h3 a{float: right;background: black;color:#fff;padding: 5px 10px;font-size: 12px;margin-right: 8px;_display:inline;}
+.order-submit h3 a{float: right;background: black;color:#fff;padding: 5px 10px;font-size: 12px;margin-right: 50px;_display:inline;}
 .order-submit .select-address ul{width:1214px;}
 .order-submit .select-address li,.address-list li{
     float: left;padding: 20px;width: 249px;border:1px solid #cccccc;margin-right: 10px;cursor: pointer;
@@ -418,8 +418,9 @@ table .pro{width: 360px;}
 .confirm-product tr,.mycart-list thead,.mycart-list tbody tr{border-bottom: 1px solid #e5e5e5;}
 .mycart-list tbody .disabled{color: #ccc;}
 .mycart-list tbody .disabled p,.mycart-list tbody .disabled a{color: #ccc;}
-.select-voucher .Coupon-Btn{cursor: pointer;}
-.select-voucher .used-status{cursor: not-allowed;color: #ff2d54;}
+.select-voucher .Coupon-Btn{padding:4px 14px;border:1px solid #e5e5e5;cursor: pointer;}
+/*.select-voucher .used{border: 1px solid #ff2d54;background: #ff2d54;}*/
+.select-voucher .used-status{padding:4px 14px;color: #ff2d54;cursor: pointer;border:1px solid  #ff2d54;}
 .select-voucher .control{width: 180px;}
 
 .mycart-list .toDelete{}
@@ -688,7 +689,7 @@ table .pro{width: 360px;}
 .detail-inner .comment-item .comment-title .del{display: none;}
 .detail-inner .comment-item:hover .del{display: inline;}
 .detail-inner .comment-item .comment-img{width: 50px;height: 90px;overflow: hidden;margin-right: 20px;padding-top: 5px;}
-.detail-inner .container .comment-page{padding-left:630px;margin-bottom: 20px;}
+.detail-inner .container .comment-page{padding-left:560px;margin-bottom: 20px;}
 .detail-inner .container .comment-page li{float:left;margin-right: 10px;}
 .detail-inner .container .comment-page a:hover{text-decoration: none;}
 .detail-inner .right{width: 373px;}
