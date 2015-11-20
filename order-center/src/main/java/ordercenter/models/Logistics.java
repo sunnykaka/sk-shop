@@ -91,6 +91,7 @@ public class Logistics implements EntityClass<Integer> {
         this.setTelephone(address.getTelephone());
         this.setMobile(address.getMobile());
         this.setName(address.getName());
+        this.setZipCode(address.getZipCode());
     }
 
 //    public LogisticsRedundancy getLogisticsRedundancy() {
