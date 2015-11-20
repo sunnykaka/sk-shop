@@ -65,7 +65,7 @@ public abstract class BaseController extends Controller {
         Integer userId = (Integer)Http.Context.current().args.get(SessionUtils.USER_ID_KEY);
         if(userId == null) {
             String accessToken = ParamUtils.getByKey(request(), UserTokenProvider.ACCESS_TOKEN_KEY);
-            Optional<Integer> userIdOption = Global.ctx.getBean(UserTokenProvider.class).retrieveUserIdByAccessToken(accessToken);
+            Optional<Integer> userIdOption = Global.ctx.getBean(UserService.class).retrieveUserIdByAccessToken(accessToken);
             if(userIdOption.isPresent()) {
                 userId = userIdOption.get();
                 Http.Context.current().args.put(SessionUtils.USER_ID_KEY, userId);

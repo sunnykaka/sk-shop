@@ -9,6 +9,7 @@ import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import services.api.user.UserTokenProvider;
+import usercenter.services.UserService;
 import usercenter.utils.SessionUtils;
 import utils.Global;
 
@@ -31,7 +32,7 @@ public class Secured extends Action<SecuredAction> {
     public F.Promise<Result> call(final Http.Context ctx) throws Throwable {
 
         String accessToken = ParamUtils.getByKey(ctx.request(), UserTokenProvider.ACCESS_TOKEN_KEY);
-        Optional<Integer> userId = Global.ctx.getBean(UserTokenProvider.class).retrieveUserIdByAccessToken(accessToken);
+        Optional<Integer> userId = Global.ctx.getBean(UserService.class).retrieveUserIdByAccessToken(accessToken);
         if(userId.isPresent()) {
             Http.Context.current().args.put(SessionUtils.USER_ID_KEY, userId.get());
             Http.Context.current().args.remove(SessionUtils.USER_KEY);

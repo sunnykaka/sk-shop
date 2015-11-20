@@ -1,21 +1,19 @@
 package services.api.user;
 
 import api.response.user.RefreshTokenResult;
-import common.utils.DateUtils;
-import common.utils.RedisUtils;
 import common.utils.play.BaseGlobal;
 import dtos.UserToken;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import play.Logger;
 import play.Play;
 import play.cache.CacheApi;
 import usercenter.models.User;
+import usercenter.services.UserService;
 
-import java.nio.charset.Charset;
-import java.util.Base64;
 import java.util.Optional;
+
+import static usercenter.utils.UserTokenUtils.*;
 
 /**
  * Created by liubin on 15-8-6.
@@ -23,8 +21,10 @@ import java.util.Optional;
 @Service
 public class UserTokenProvider {
 
-    private Charset DEFAULT_CHARSET = Charset.forName("ISO8859-1");
     public static final String ACCESS_TOKEN_KEY = "accessToken";
+
+    @Autowired
+    private UserService userService;
 
 
     private static CacheApi cacheApi() {
@@ -68,31 +68,6 @@ public class UserTokenProvider {
 
     }
 
-
-    private String getRefreshTokenKey(String refreshToken) {
-        return RedisUtils.buildKey("user_tokens", "refresh_token", refreshToken);
-    }
-
-    private String getAccessTokenKey(String accessToken) {
-        return RedisUtils.buildKey("user_tokens", "access_token", accessToken);
-    }
-
-    private String generateToken(String subject) {
-        String keySource = subject + DateUtils.current().getMillis() + RandomStringUtils.randomAlphanumeric(8);
-        byte [] tokenByte = Base64.getEncoder().encode(keySource.getBytes(DEFAULT_CHARSET));
-        return new String(tokenByte, DEFAULT_CHARSET);
-    }
-
-    public Optional<Integer> retrieveUserIdByAccessToken(String accessToken) {
-        if(StringUtils.isNoneBlank(accessToken)) {
-            String[] array = retrieveTokenValueFromCache(cacheApi().get(getAccessTokenKey(accessToken)));
-            if(array.length == 3) {
-                return Optional.ofNullable(Integer.parseInt(array[1]));
-            }
-        }
-        return Optional.empty();
-    }
-
     public Optional<RefreshTokenResult> refreshToken(String refreshToken) {
         if(StringUtils.isNotBlank(refreshToken)) {
             String[] array = retrieveTokenValueFromCache(cacheApi().get(getRefreshTokenKey(refreshToken)));
@@ -100,7 +75,7 @@ public class UserTokenProvider {
                 String accessToken = array[0];
                 String username = array[2];
 
-                Optional<Integer> userId = retrieveUserIdByAccessToken(accessToken);
+                Optional<Integer> userId = userService.retrieveUserIdByAccessToken(accessToken);
                 if(!userId.isPresent()) {
                     userId = Optional.of(Integer.parseInt(array[1]));
                     //accessToken已过期,生成新的
@@ -115,17 +90,6 @@ public class UserTokenProvider {
         }
 
         return Optional.empty();
-    }
-
-    private String createTokenValueInCache(String token, Integer userId, String username) {
-        return token + "," + userId + "," + username;
-    }
-
-    private String[] retrieveTokenValueFromCache(String value) {
-        if(StringUtils.isNotBlank(value)) {
-            return value.split(",");
-        }
-        return new String[0];
     }
 
     public void deleteByAccessToken(String accessToken) {

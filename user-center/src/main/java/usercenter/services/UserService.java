@@ -8,6 +8,7 @@ import common.services.GeneralDao;
 import common.utils.DateUtils;
 import common.utils.PasswordHash;
 import common.utils.RegExpUtils;
+import common.utils.play.BaseGlobal;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
+import play.cache.CacheApi;
 import usercenter.constants.AccountType;
 import usercenter.constants.MarketChannel;
 import usercenter.domain.SmsSender;
@@ -35,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static usercenter.utils.UserTokenUtils.*;
+
 /**
  * Created by liubin on 15-4-24.
  */
@@ -43,6 +47,11 @@ public class UserService {
 
     @Autowired
     GeneralDao generalDao;
+
+    private static CacheApi cacheApi() {
+        return BaseGlobal.injector.instanceOf(CacheApi.class);
+    }
+
 
     /**
      * 获取账号
@@ -520,5 +529,21 @@ public class UserService {
 
         return null;
     }
+
+    /**
+     * 根据AccessToken拿到用户ID
+     * @param accessToken
+     * @return
+     */
+    public Optional<Integer> retrieveUserIdByAccessToken(String accessToken) {
+        if(StringUtils.isNoneBlank(accessToken)) {
+            String[] array = retrieveTokenValueFromCache(cacheApi().get(getAccessTokenKey(accessToken)));
+            if(array.length == 3) {
+                return Optional.ofNullable(Integer.parseInt(array[1]));
+            }
+        }
+        return Optional.empty();
+    }
+
 
 }
