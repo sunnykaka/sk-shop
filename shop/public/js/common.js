@@ -226,6 +226,18 @@ function fixedcart(obj, scopeObj) {
     });
 }
 
+$('.like-product').hover(function(){
+    $(this).find('img').fadeIn();
+},function(){
+    $(this).find('img').fadeOut();
+});
+
+$('.like-designer').hover(function(){
+    $(this).find('img').fadeIn();
+},function(){
+    $(this).find('img').fadeOut();
+});
+
 //获取购物车 商品数量
 $.ajax({
     url: '/cart/getUserCartItemNum',
