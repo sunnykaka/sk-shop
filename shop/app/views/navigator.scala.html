@@ -2,14 +2,15 @@
 
 <div class="header">
     <div class="header-inner">
-        <div class="header-wrap clearfix">
-            <div class="left">
-                <h1><a  href="@controllers.routes.Application.index()"><img src="@routes.Assets.versioned("images/logo-1.png")" alt="" width="336" height="90"/></a></h1>
-            </div>
-            <div class="right">
-                <a href="/cart/showCart"><i class="iconfont" style="padding-right:4px;">&#xe606;</i>购物车 <span class="quantity">0</span></a>
-            </div>
-        </div>
+        @* <div class="header-wrap clearfix">*@
+            @*<div class="left">*@
+                @*<h1><a  href="@controllers.routes.Application.index()"><img src="@routes.Assets.versioned("images/logo-1.png")" alt="" width="336" height="90"/></a></h1>*@
+            @*</div>*@
+            @*<div class="right">*@
+                @*<a href="/cart/showCart"><i class="iconfont" style="padding-right:4px;">&#xe606;</i>购物车 <span class="quantity">0</span></a>*@
+            @*</div>*@
+            @*</div>*@
+        <img id="logo" src="@routes.Assets.versioned("images/logo.png")" alt="" width="165" height="160"/>
     </div>
     <div class="nav-wrap">
         <ul class="nav width1200 clearfix">
@@ -17,6 +18,11 @@
                 <a @if("index".equals(name)) {
                     class="current"
                 } href="@controllers.routes.Application.index()">首页</a>
+            </li>
+            <li>
+                <a @if("product".equals(name)) {
+                    class="current"
+                } href="@controllers.product.routes.ProductController.list()">所有客品</a>
             </li>
             <li>
                 <a @if("product_first".equals(name)) {
@@ -27,11 +33,6 @@
                 <a @if("product_host".equals(name)) {
                     class="current"
                 } href="@controllers.product.routes.ProductController.list(status="HOTSELL",m="product_host")">最热</a>
-            </li>
-            <li>
-                <a @if("product".equals(name)) {
-                    class="current"
-                } href="@controllers.product.routes.ProductController.list()">所有客品</a>
             </li>
             <li>
                 <a @if("product_nav15".equals(name)) {

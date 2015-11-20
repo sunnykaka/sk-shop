@@ -669,7 +669,7 @@ $(function () {
                                 }
                                 if (currentSku.marketPrice) {
                                     if ($("#market-price").length) {
-                                        $("#market-price").html(Number(currentSku.price).tofixed(2));
+                                        $("#market-price").html(Number(currentSku.price).toFixed(2));
                                     }
                                 }
                         }
