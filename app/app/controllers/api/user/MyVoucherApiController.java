@@ -3,6 +3,9 @@ package controllers.api.user;
 import api.response.order.MyVouchersDto;
 import api.response.user.OrderDto;
 import api.response.user.OrderInfoDto;
+import cmscenter.constants.VoucherActivityKey;
+import cmscenter.models.VoucherActivity;
+import cmscenter.services.VoucherActivityService;
 import common.exceptions.AppBusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.JsonUtils;
@@ -45,6 +48,9 @@ public class MyVoucherApiController extends BaseController {
     @Autowired
     private VoucherService voucherService;
 
+    @Autowired
+    private VoucherActivityService voucherActivityService;
+
     /**
      * 个人中心代金券列表
      *
@@ -85,6 +91,12 @@ public class MyVoucherApiController extends BaseController {
 
         if(StringUtils.isEmpty(batchUniqueNo)){
             throw new AppBusinessException(ErrorCode.OperationError, "没有该代金券");
+        }
+
+        VoucherActivity voucherActivity = voucherActivityService.getMyVoucherActivity(batchUniqueNo, VoucherActivityKey.VOUCHER_ACTIVITY_DOUBLE12, user.getId());
+
+        if(voucherActivity != null){
+            throw new AppBusinessException(ErrorCode.OperationError, "已领取该代金券");
         }
 
         try{

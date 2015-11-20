@@ -210,7 +210,7 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public List<Order> getOrderByUserId(Optional<Page<Order>> page, int userId,int querytType) {
-        OrderState[] type_1 = {OrderState.Confirm,OrderState.Print,OrderState.Verify,OrderState.Send};
+        OrderState[] type_1 = {OrderState.Send};
         OrderState[] type_2 = {OrderState.Receiving,OrderState.Success};
 
         String jpql = "select o from Order o join o.orderItemList oi where 1=1 ";
