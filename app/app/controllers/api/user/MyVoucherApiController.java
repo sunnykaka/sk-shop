@@ -93,14 +93,18 @@ public class MyVoucherApiController extends BaseController {
             throw new AppBusinessException(ErrorCode.OperationError, "没有该代金券");
         }
 
-        VoucherActivity voucherActivity = voucherActivityService.getMyVoucherActivity(batchUniqueNo, VoucherActivityKey.VOUCHER_ACTIVITY_DOUBLE12, user.getId());
+        VoucherActivity voucherActivityOld = voucherActivityService.getMyVoucherActivity(batchUniqueNo, VoucherActivityKey.VOUCHER_ACTIVITY_DOUBLE12, user.getId());
 
-        if(voucherActivity != null){
+        if(voucherActivityOld != null){
             throw new AppBusinessException(ErrorCode.OperationError, "已领取该代金券");
         }
 
         try{
-            voucherService.requestForActivity(Optional.of(batchUniqueNo),user.getId(),1);
+            VoucherActivity voucherActivity = new VoucherActivity();
+            voucherActivity.setActivityId(VoucherActivityKey.VOUCHER_ACTIVITY_DOUBLE12);
+            voucherActivity.setUniqueNo(batchUniqueNo);
+            voucherActivity.setUserId(user.getId());
+            voucherActivityService.createVoucherActivity(voucherActivity);
         }catch (VoucherException v){
             throw new AppBusinessException(ErrorCode.OperationError, v.getMessage());
         }

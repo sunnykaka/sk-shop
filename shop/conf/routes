@@ -173,7 +173,7 @@ GET         /activity/loukong                                     @controllers.a
 GET         /activity/federico                                    @controllers.activity.ActivityController.federico()
 GET         /activity/louise                                      @controllers.activity.ActivityController.louise()
 GET         /activity/earlyAutumn                                 @controllers.activity.ActivityController.earlyAutumn()
-GET         /activity/double12                                    @controllers.activity.VoucherActivityController.double12Activity(userId: Integer ?= null)
+GET         /activity/double12                                    @controllers.activity.VoucherActivityController.double12Activity()
 
 
 # app show

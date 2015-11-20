@@ -2,6 +2,7 @@ package cmscenter.services;
 
 import cmscenter.models.VoucherActivity;
 import common.services.GeneralDao;
+import ordercenter.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,9 @@ public class VoucherActivityService {
     @Autowired
     GeneralDao generalDAO;
 
+    @Autowired
+    private VoucherService voucherService;
+
     /**
      * 用户领取活动代金券
      *
@@ -28,6 +32,7 @@ public class VoucherActivityService {
     @Transactional
     public void createVoucherActivity(VoucherActivity voucherActivity){
         generalDAO.persist(voucherActivity);
+        voucherService.requestForActivity(Optional.of(voucherActivity.getUniqueNo()),voucherActivity.getUserId(),1);
     }
 
     /**
