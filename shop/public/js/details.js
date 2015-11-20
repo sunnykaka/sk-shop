@@ -162,6 +162,7 @@ $(function () {
                         $("#replayId").val(null);
                         $("#comment_pre").val('');
                         $('.comment-header li:first').trigger('click');
+                        $('#shafa').size()>0?$('#shafa').hide():"";
                         $('#commentTotal').html(data.data);
                     }
             }
@@ -669,7 +670,7 @@ $(function () {
                                 }
                                 if (currentSku.marketPrice) {
                                     if ($("#market-price").length) {
-                                        $("#market-price").html(Number(currentSku.price).toFixed(2));
+                                        $("#market-price").html(Number(currentSku.marketPrice).toFixed(2));
                                     }
                                 }
                         }

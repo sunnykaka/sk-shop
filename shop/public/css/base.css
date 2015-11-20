@@ -57,11 +57,11 @@ border: 1px solid transparent;
 .btn-default {  color: #fff;  background-color: #FF2D54;  border-color: #e85650; }
 
 @font-face {font-family: "iconfont";
-    src: url('iconfont1447057063_2258577.eot'); /* IE9*/
-    src: url('iconfont1447057063_2258577.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('iconfont1447057063_2258577.woff') format('woff'), /* chrome、firefox */
-    url('iconfont1447057063_2258577.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-    url('iconfont1447057063_2258577.svg#iconfont') format('svg'); /* iOS 4.1- */
+    src: url('iconfont1447988469_6160038.eot'); /* IE9*/
+    src: url('iconfont1447988469_6160038.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('iconfont1447988469_6160038.woff') format('woff'), /* chrome、firefox */
+    url('iconfont1447988469_6160038.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('iconfont1447988469_6160038.svg#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -82,6 +82,7 @@ border: 1px solid transparent;
 .icon-fankui:before { content: "\e614"; }
 .icon-shouji:before{content:"\e617";}
 .icon-comfirmyemiandagou:before { content: "\e604"; }
+.icon-weixin:before { content: "\e618"; }
 .icon-shijian:before { content: "\e605"; }
 .icon-gouwuche2:before { content: "\e606"; }
 .icon-guanbi:before { content: "\e607"; }
@@ -135,7 +136,7 @@ table .pro{width: 360px;}
 .header-inner .right a .quantity{background: #FF2D54;  border-radius: 8px;  padding: 0 8px;  color: #fff;  line-height: 150%;}
 .header-inner .right a:hover{color: #ff2d54;}
 .header .nav-wrap{width: 100%;height: 39px;border-bottom:1px solid #E8E8E8;}
-.header .nav-wrap ul{padding-left: 176px;}
+.header .nav-wrap ul{}
 .header li{float:left;height:39px;width: 133px;}
 .header li a{float:left;width: 60%;height: 37px;margin:0 auto;font-size:14px;line-height: 37px;text-align: center;
     text-decoration: none;color: #4a4a4a;border-bottom: 2px solid #fff;
@@ -1094,7 +1095,7 @@ table .pro{width: 360px;}
 /*end likeProduct*/
 /*footer*/
 .footer{width: 100%;background: #f3f7f6;}
-.footer .step ul{height: 60px; padding:30px 0;border-bottom: 1px solid  #e8e8e8;width: 1300px;}
+.footer .step ul{height: 60px; padding:30px 0;border-bottom: 1px solid  #e8e8e8;width: 1200px;}
 .footer .step ul li{float:left;height: 60px;margin-right: 85px;}
 .footer .step li b{float: left;  width: 60px;  height: 60px;  margin-right: -60px;  background: url("../images/footer-top-sprite.png") no-repeat 0 0;}
 .footer .step li .wrap{    float: left;  margin-left: 75px;  padding-top: 4px;}
@@ -1125,43 +1126,47 @@ table .pro{width: 360px;}
 .footer-inner a:hover{color: #fd2049;}
 /*end footer*/
 .sider-bar{
-    position: absolute;width:62px;border-left: 1px solid #ccc;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;border-top: 6px solid #FF2D54;
+    position: absolute;width:62px;
     left: 50%;margin-left: 600px;top: 741px;
 }
-.small-sider{width: 36px;border-top: 3px solid #FF2D54;margin-left: 592px;}
+.small-sider{width: 36px;margin-left: 592px;}
 .sider-bar li{width: 62px;height: 63px;border-bottom: 1px solid #ccc;
     /*background: url("../images/sk-sprite.png") no-repeat -132px -199px;*/
     text-align: center;line-height: 63px;
+    border-left: 1px solid #ccc;border-right: 1px solid #ccc;
     }
 .sider-bar li i{font-size: 23px;color: #7B7B7B;}
 .sider-bar li:hover i{color: #FF2D54;}
-.sider-bar .cart{position: relative;}
+.sider-bar .cart{position: relative;border-top: 6px solid #FF2D54;}
 .sider-bar .cart:hover{background-position: -70px -199px;}
 .sider-bar .quantity{position: absolute;top:8px;right: 5px;background: #FF2D54;border-radius: 8px;padding: 0 8px;color: #fff;line-height: 150%;}
 .sider-bar #msg{position: absolute;color: #FF2D54;left:20px;font-size: 14px;font-weight: 700;}
-.sider-bar .like-product{background-position:-132px -262px;}
+.sider-bar .like-product{position: relative;}
 .sider-bar .like-product:hover{background-position: -70px -262px;}
-.sider-bar .like-designer{background-position: -132px -325px;}
+.sider-bar .like-designer{position: relative;}
+.sider-bar .like-product img{position:absolute;top: -34px;left:-99px; }
+.sider-bar .like-designer img{position:absolute;top: 0;left:-99px; }
+.sider-bar .like-product:hover{background-position: -70px -262px;}
 .sider-bar .like-designer:hover{background-position: -70px -325px;}
-.sider-bar .go-top{border-bottom: none;background-position: -132px -388px;}
-.sider-bar .fan-kui{}
+.sider-bar .go-top{border-bottom: 1px solid #ccc;position: relative;}
+.sider-bar .fan-kui{position: relative;}
 .sider-bar .fan-kui i{font-size: 30px;}
 .sider-bar .go-top:hover{background-position: -70px -388px;}
 .sider-bar a,.sider-bar #gotoTop,.sider-bar #cart-quantity-btn{float: left;width: 62px;height: 63px;cursor:pointer;}
+.sider-bar  .text{position: absolute;border: none;top: 0;left: 0;background: #fff;width: 32px;height: 33px;padding: 15px;line-height: 18px;display: none;}
+.sider-bar .like-designer:hover .text,.sider-bar .like-product:hover .text,.sider-bar .go-top:hover .text,.sider-bar .fan-kui:hover .text{display: block;}
+
+
 
 .small-sider li{width: 36px;height:37px;line-height: 37px;}
 .small-sider li i{font-size: 14px;}
-.small-sider .cart{position: relative;}
+.small-sider .cart{position: relative;border-top: 3px solid #FF2D54;}
 .small-sider .cart:hover{background-position:-122px -454px; }
 .small-sider .quantity{position: absolute;top:1px;right: 0;border-radius: 4px;padding: 0 3px;color: #fff;}
-.small-sider .like-product{background-position: -158px -491px;}
-.small-sider .like-product:hover{background-position: -122px -491px;}
-.small-sider .like-designer{background-position: -158px -528px;}
-.small-sider .like-designer:hover{background-position: -122px -528px;}
-.small-sider .go-top{border-bottom: none;background-position: -158px -565px;}
 .small-sider .fan-kui i{font-size: 18px;}
-.small-sider .go-top:hover{border-bottom: none;background-position: -122px -565px;}
 .small-sider a,.small-sider #gotoTop,.small-sider #cart-quantity-btn{float: left;width: 36px;height: 37px;cursor:pointer;}
+.small-sider  .text{position: absolute;border: none;top: 0;left: 0;background: #fff;width: 35px;height: 37px;padding: 0;line-height: 18px;display: none;}
+.small-sider .like-designer:hover .text,.sider-bar .like-product:hover .text,.sider-bar .go-top:hover .text,.sider-bar .fan-kui:hover .text{display: block;}
 /* 提示信息 */
 .com_tip{ border: 1px solid #FF2D54; padding: 2px 6px; line-height: 18px; background: #fef6f1; font-size: 12px; z-index: 9999 }
 .com_tip a{color:#FF2D54;}

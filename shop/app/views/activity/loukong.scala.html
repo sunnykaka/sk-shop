@@ -270,11 +270,15 @@
     </div>
     <!--siderbar-->
     <ul class="sider-bar" id="cart">
-        <li class="cart" title="购物车"><span  id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">0</span></li>
-        <li class="like-product"><a title="喜欢商品" href="@controllers.user.routes.ProductFavoritesController.index()"><i class="iconfont">&#xe602;</i></a></li>
-        <li class="like-designer"><a title="喜欢设计师"  href="@controllers.user.routes.DesignerFavoritesController.index()"><i class="iconfont">&#xe601;</i></a></li>
-        <li class="fan-kui"><a title="意见反馈"  href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i></a></li>
-        <li class="go-top" title="返回顶部"><span id="gotoTop"><i class="iconfont">&#xe60b;</i></span></li>
+        <li class="cart" title="购物车"><span id="cart-quantity-btn"><i class="iconfont">&#xe606;</i></span><span class="quantity" id="cart-quantity">
+            0</span></li>
+        <li class="like-product">
+            <a  href="javascript:void(0);"><i class="iconfont">&#xe618;</i><span class="text">微信客服</span> <img src="@routes.Assets.versioned("images/img-code.gif")" width="98" height="98" style="display: none;" alt=""/></a></li>
+        <li class="like-designer">
+            <a  href="javascript:void(0);"><i class="iconfont">&#xe617;</i> <span class="text">下载App</span><img src="@routes.Assets.versioned("images/app-2.png")" width="98" height="98" style="display: none;" alt=""/></a></li>
+        <li class="fan-kui"><a target="_blank"   href="@controllers.help.routes.HelpCenterController.index("feedback")"><i class="iconfont">&#xe614;</i> <span class="text">意见反馈</span></a></li>
+        <li class="go-top"><a  href="javascript:void(0);" id="gotoTop"><i class="iconfont">&#xe60b;</i> <span class="text">返回顶部</span></a></li>
+
     </ul>
     <!--end sideebar-->
 }
