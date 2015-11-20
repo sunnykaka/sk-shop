@@ -136,7 +136,7 @@ table .pro{width: 360px;}
 .header-inner .right a .quantity{background: #FF2D54;  border-radius: 8px;  padding: 0 8px;  color: #fff;  line-height: 150%;}
 .header-inner .right a:hover{color: #ff2d54;}
 .header .nav-wrap{width: 100%;height: 39px;border-bottom:1px solid #E8E8E8;}
-.header .nav-wrap ul{padding-left: 176px;}
+.header .nav-wrap ul{}
 .header li{float:left;height:39px;width: 133px;}
 .header li a{float:left;width: 60%;height: 37px;margin:0 auto;font-size:14px;line-height: 37px;text-align: center;
     text-decoration: none;color: #4a4a4a;border-bottom: 2px solid #fff;
@@ -1095,7 +1095,7 @@ table .pro{width: 360px;}
 /*end likeProduct*/
 /*footer*/
 .footer{width: 100%;background: #f3f7f6;}
-.footer .step ul{height: 60px; padding:30px 0;border-bottom: 1px solid  #e8e8e8;width: 1300px;}
+.footer .step ul{height: 60px; padding:30px 0;border-bottom: 1px solid  #e8e8e8;width: 1200px;}
 .footer .step ul li{float:left;height: 60px;margin-right: 85px;}
 .footer .step li b{float: left;  width: 60px;  height: 60px;  margin-right: -60px;  background: url("../images/footer-top-sprite.png") no-repeat 0 0;}
 .footer .step li .wrap{    float: left;  margin-left: 75px;  padding-top: 4px;}
