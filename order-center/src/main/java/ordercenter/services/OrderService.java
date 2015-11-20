@@ -219,7 +219,7 @@ public class OrderService {
         queryParams.put("userId", userId);
 
         if(querytType == 1){//待收货
-            jpql += " and o.orderState in (:type0, :type1, :type2, :type3) ";
+            jpql += " and o.orderState in (:type0) ";
             for(int i=0; i<type_1.length; i++) {
                 queryParams.put("type" + i, type_1[i]);
             }
