@@ -67,7 +67,7 @@ public class Value implements EntityClass<Integer>, OperableData {
 
         Value value = (Value) o;
 
-        if (id != value.id) return false;
+        if (!id.equals(value.id)) return false;
         if (valueName != null ? !valueName.equals(value.valueName) : value.valueName != null) return false;
 
         return true;

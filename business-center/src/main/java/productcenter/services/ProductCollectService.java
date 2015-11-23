@@ -53,9 +53,8 @@ public class ProductCollectService {
         ProductCollect productCollect = generalDAO.get(ProductCollect.class,id);
         if(null != productCollect){
             productCollect.setDeleted(SQLUtils.SQL_DELETE_TRUE);
+            updateProductCollect(productCollect);
         }
-
-        updateProductCollect(productCollect);
 
     }
 

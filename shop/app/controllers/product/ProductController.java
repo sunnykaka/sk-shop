@@ -94,7 +94,7 @@ public class ProductController extends Controller {
 //        }
         User user = SessionUtils.currentUser();
         ProductDetail productDetail = productDetailService.showDetail(productId, null, user);
-        if (productDetail == null) {
+        if (productDetail.getBase() == null) {
             return Global.show404();
         }
 

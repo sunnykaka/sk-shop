@@ -53,9 +53,8 @@ public class DesignerCollectService {
         DesignerCollect DesignerCollect = generalDAO.get(DesignerCollect.class,id);
         if(null != DesignerCollect){
             DesignerCollect.setDeleted(SQLUtils.SQL_DELETE_TRUE);
+            updateDesignerCollect(DesignerCollect);
         }
-
-        updateDesignerCollect(DesignerCollect);
 
     }
 

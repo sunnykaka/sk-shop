@@ -13,6 +13,6 @@ public class QiNiuFileUpload implements FileUpload {
     @Override
     public Optional<String> upload(File file, FileContentType type) {
         //TODO  七牛上传
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

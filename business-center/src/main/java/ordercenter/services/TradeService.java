@@ -320,7 +320,7 @@ public class TradeService {
 
             //更新订单项
             List<OrderItem> orderItemList = orderService.queryOrderItemsByOrderId(preOrder.getId());
-            if (orderItemList == null || orderItemList.size() < 0) {
+            if (orderItemList == null || orderItemList.size() <= 0) {
                 Logger.error(errPrefix + "第三方支付成功，返回系统后找不到支付订单的相关内容");
             } else {
                 for (OrderItem orderItem : orderItemList) {

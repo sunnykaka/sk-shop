@@ -88,7 +88,7 @@ public class UrlUtils {
 
         Map<String, List<String>> newParams = disposeQueryString(buildQueryString(params));
 
-        System.out.println();
+        System.out.println(newParams);
 
     }
 

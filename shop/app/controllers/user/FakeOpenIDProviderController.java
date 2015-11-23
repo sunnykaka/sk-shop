@@ -143,7 +143,7 @@ public class FakeOpenIDProviderController extends Controller {
         boolean error = false;
         if(StringUtils.isBlank(client_id) || StringUtils.isBlank(redirect_uri) || StringUtils.isBlank(response_type) ||
                 StringUtils.isBlank(state)) {
-            Logger.error(String.format("微博重定向请求参数有误, 某参数为空: client_id[%s], redirect_uri[%s], response_type[%s], scope[%s], state[%s]",
+            Logger.error(String.format("微博重定向请求参数有误, 某参数为空: client_id[%s], redirect_uri[%s], response_type[%s], state[%s]",
                     client_id, redirect_uri, response_type, state));
             error = true;
         }
@@ -242,7 +242,7 @@ public class FakeOpenIDProviderController extends Controller {
         boolean error = false;
         if(StringUtils.isBlank(client_id) || StringUtils.isBlank(redirect_uri) || StringUtils.isBlank(response_type) ||
                 StringUtils.isBlank(state)) {
-            Logger.error(String.format("QQ重定向请求参数有误, 某参数为空: client_id[%s], redirect_uri[%s], response_type[%s], scope[%s], state[%s]",
+            Logger.error(String.format("QQ重定向请求参数有误, 某参数为空: client_id[%s], redirect_uri[%s], response_type[%s], state[%s]",
                     client_id, redirect_uri, response_type, state));
             error = true;
         }

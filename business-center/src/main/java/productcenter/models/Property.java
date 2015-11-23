@@ -68,7 +68,7 @@ public class Property implements EntityClass<Integer>, OperableData {
 
         Property property = (Property) o;
 
-        if (id != property.id) return false;
+        if (!id.equals(property.id)) return false;
         if (name != null ? !name.equals(property.name) : property.name != null) return false;
 
         return true;

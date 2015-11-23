@@ -59,11 +59,12 @@ public class PayResponseHandler {
             throw new IllegalArgumentException("交易不存在");
         }
         tradeInfo = tradeService.getTradeByTradeNo(tradeNo);
-        statusBeforeBack = TradeStatus.valueOf(tradeInfo.getTradeStatus());
 
         if (tradeInfo == null) {
             throw new IllegalArgumentException("交易不存在");
         }
+
+        statusBeforeBack = TradeStatus.valueOf(tradeInfo.getTradeStatus());
 
         /**
          * 接下来要从完request中提取信息完善request对象
