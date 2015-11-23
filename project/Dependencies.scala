@@ -43,13 +43,7 @@ object Dependencies {
 
   val commonDependencies: Seq[ModuleID] = common ++ springHibernate ++ playDependencies
 
-  val userDependencies: Seq[ModuleID] = Seq()
-
-  val productDependencies: Seq[ModuleID] = Seq()
-
-  val orderDependencies: Seq[ModuleID] = Seq("jdom" % "jdom" % "1.0")
-
-  val cmsDependencies: Seq[ModuleID] = Seq()
+  val businessDependencies: Seq[ModuleID] = Seq("jdom" % "jdom" % "1.0")
 
   val adminDependencies: Seq[ModuleID] = Seq("mysql" % "mysql-connector-java" % mysqlConnectorVersion)
 

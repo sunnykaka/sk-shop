@@ -196,7 +196,7 @@ public class ProductTestDataService {
 
         for(StockKeepingUnit sku : skuList) {
             //首发价的区间为(0.5, +∞), 售卖价的区间为(1, +∞)
-            double price = 0.5d + new java.util.Random().nextDouble();
+            double price = 0.5d + new Random().nextDouble();
             double marketPrice = price + 0.5d;
             sku.setPrice(Money.valueOf(price));
             sku.setMarketPrice(Money.valueOf(marketPrice));

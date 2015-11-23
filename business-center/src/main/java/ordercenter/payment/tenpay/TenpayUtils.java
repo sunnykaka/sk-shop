@@ -305,7 +305,7 @@ public class TenpayUtils {
          * 获取结果内容
          *
          * @return String
-         * @throws IOException
+         * @throws java.io.IOException
          */
         public String getResContent() {
             try {
@@ -462,7 +462,7 @@ public class TenpayUtils {
          *
          * @param url
          * @param postData
-         * @throws IOException
+         * @throws java.io.IOException
          */
         protected void httpPostMethod(String url, byte[] postData)
                 throws IOException {
@@ -476,7 +476,7 @@ public class TenpayUtils {
          * 以http get方式通信
          *
          * @param url
-         * @throws IOException
+         * @throws java.io.IOException
          */
         protected void httpGetMethod(String url) throws IOException {
 
@@ -498,7 +498,7 @@ public class TenpayUtils {
          *
          * @param url
          * @param sslContext
-         * @throws IOException
+         * @throws java.io.IOException
          */
         protected void httpsGetMethod(String url, SSLContext sslContext)
                 throws IOException {
@@ -552,7 +552,7 @@ public class TenpayUtils {
         /**
          * 处理应答
          *
-         * @throws IOException
+         * @throws java.io.IOException
          */
         protected void doResponse() throws IOException {
 
@@ -579,7 +579,7 @@ public class TenpayUtils {
          *
          * @param conn
          * @param postData
-         * @throws IOException
+         * @throws java.io.IOException
          */
         protected void doPost(HttpURLConnection conn, byte[] postData)
                 throws IOException {
@@ -615,7 +615,7 @@ public class TenpayUtils {
          * get方式处理
          *
          * @param conn
-         * @throws IOException
+         * @throws java.io.IOException
          */
         protected void doGet(HttpURLConnection conn) throws IOException {
 
@@ -653,7 +653,7 @@ public class TenpayUtils {
          *
          * @param strUrl url地址
          * @return HttpURLConnection
-         * @throws IOException
+         * @throws java.io.IOException
          */
         public static HttpURLConnection getHttpURLConnection(String strUrl)
                 throws IOException {
@@ -668,7 +668,7 @@ public class TenpayUtils {
          *
          * @param strUrl url地址
          * @return HttpsURLConnection
-         * @throws IOException
+         * @throws java.io.IOException
          */
         public static HttpsURLConnection getHttpsURLConnection(String strUrl)
                 throws IOException {
@@ -773,7 +773,7 @@ public class TenpayUtils {
          *
          * @param reader
          * @return String
-         * @throws IOException
+         * @throws java.io.IOException
          */
         public static String bufferedReader2String(BufferedReader reader) throws IOException {
             StringBuffer buf = new StringBuffer();
@@ -793,7 +793,7 @@ public class TenpayUtils {
          * @param out
          * @param data
          * @param len
-         * @throws IOException
+         * @throws java.io.IOException
          */
         public static void doOutput(OutputStream out, byte[] data, int len)
                 throws IOException {
@@ -822,12 +822,12 @@ public class TenpayUtils {
          * @param trustPasswd
          * @param keyPasswd
          * @return
-         * @throws NoSuchAlgorithmException
-         * @throws KeyStoreException
-         * @throws IOException
-         * @throws CertificateException
-         * @throws UnrecoverableKeyException
-         * @throws KeyManagementException
+         * @throws java.security.NoSuchAlgorithmException
+         * @throws java.security.KeyStoreException
+         * @throws java.io.IOException
+         * @throws java.security.cert.CertificateException
+         * @throws java.security.UnrecoverableKeyException
+         * @throws java.security.KeyManagementException
          */
         public static SSLContext getSSLContext(
                 FileInputStream trustFileInputStream, String trustPasswd,
@@ -861,8 +861,8 @@ public class TenpayUtils {
          *
          * @param cafile CA证书文件
          * @return Certificate
-         * @throws CertificateException
-         * @throws IOException
+         * @throws java.security.cert.CertificateException
+         * @throws java.io.IOException
          */
         public static Certificate getCertificate(File cafile)
                 throws CertificateException, IOException {
@@ -892,10 +892,10 @@ public class TenpayUtils {
          * @param alias
          * @param password
          * @param out
-         * @throws KeyStoreException
-         * @throws NoSuchAlgorithmException
-         * @throws CertificateException
-         * @throws IOException
+         * @throws java.security.KeyStoreException
+         * @throws java.security.NoSuchAlgorithmException
+         * @throws java.security.cert.CertificateException
+         * @throws java.io.IOException
          */
         public static void storeCACert(Certificate cert, String alias,
                                        String password, OutputStream out) throws KeyStoreException,
@@ -930,7 +930,7 @@ public class TenpayUtils {
          * @param strxml
          * @return
          * @throws JDOMException
-         * @throws IOException
+         * @throws java.io.IOException
          */
         public static Map doXMLParse(String strxml) throws JDOMException, IOException {
             if (null == strxml || "".equals(strxml)) {
@@ -996,7 +996,7 @@ public class TenpayUtils {
          *
          * @param strxml
          * @return
-         * @throws IOException
+         * @throws java.io.IOException
          * @throws JDOMException
          */
         public static String getXMLEncoding(String strxml) throws JDOMException, IOException {

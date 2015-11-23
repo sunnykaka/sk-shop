@@ -141,7 +141,7 @@ public class ProductInSellList implements Comparable<ProductInSellList> {
             this.productId = product.getId();
             this.productInSellList.product = product;
             buildPicture().buildPriceAndStatus(product);
-            this.productInSellList.brandName = list.stream().filter(designer -> designer.getId() == product.getCustomerId()).findFirst().get().getName();
+            this.productInSellList.brandName = list.stream().filter(designer -> designer.getId().equals(product.getCustomerId())).findFirst().get().getName();
             return productInSellList;
         }
 

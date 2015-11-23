@@ -14,33 +14,12 @@ object ApplicationBuild extends Build {
       unmanagedBase := baseDirectory.value / "lib"
     )
 
-  lazy val user = (project in file("user-center")).
+  lazy val business = (project in file("business-center")).
     settings(Commons.settings: _*).
     settings(
-      libraryDependencies ++= userDependencies
+      libraryDependencies ++= businessDependencies
     ).
     dependsOn(common)
-
-  lazy val product = (project in file("product-center")).
-    settings(Commons.settings: _*).
-    settings(
-      libraryDependencies ++= productDependencies
-    ).
-    dependsOn(common).dependsOn(user)
-
-  lazy val order = (project in file("order-center")).
-    settings(Commons.settings: _*).
-    settings(
-      libraryDependencies ++= orderDependencies
-    ).
-    dependsOn(common).dependsOn(product).dependsOn(user)
-
-  lazy val cms = (project in file("cms-center")).
-    settings(Commons.settings: _*).
-    settings(
-      libraryDependencies ++= cmsDependencies
-    ).
-    dependsOn(common).dependsOn(product).dependsOn(user).dependsOn(order)
 
   lazy val shop = webProject("shop", shopDependencies)
 
@@ -62,7 +41,7 @@ object ApplicationBuild extends Build {
       unmanagedSourceDirectories in Compile += (sourceManaged in Compile).value,
       pipelineStages := Seq(digest, gzip)
     ).dependsOn(common % "test->test;compile->compile").
-    dependsOn(user).dependsOn(product).dependsOn(order).dependsOn(cms)
+    dependsOn(business)
 
 
   lazy val root = (project in file(".")).
