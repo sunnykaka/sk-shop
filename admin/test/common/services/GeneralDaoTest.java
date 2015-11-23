@@ -1,5 +1,6 @@
 package common.services;
 
+import base.BaseTest;
 import base.PrepareTestObject;
 import ordercenter.constants.PlatformType;
 import ordercenter.constants.TestObjectStatus;
@@ -7,7 +8,6 @@ import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
-import play.test.WithApplication;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,14 +16,15 @@ import java.util.Map;
 /**
  * Created by liubin on 15-4-2.
  */
-public class GeneralDaoTest extends WithApplication implements PrepareTestObject {
-
+public class GeneralDaoTest extends BaseTest implements PrepareTestObject{
 
     /**
      * 测试merge和update
      */
     @Test
     public void testGeneralDaoMergeAndUpdate() {
+
+        System.out.println("=========== in test 1 ============");
 
         prepareTestObjects(0, 0);
 
@@ -76,6 +77,23 @@ public class GeneralDaoTest extends WithApplication implements PrepareTestObject
             assert testObject.getStatus() == TestObjectStatus.INVOICED;
             return null;
         });
+
+        //测试persist能够修改持久态对象
+        doInTransactionWithGeneralDao(generalDao -> {
+
+            TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
+            testObject.setStatus(TestObjectStatus.INVALID);
+            generalDao.persist(testObject);
+            return null;
+        });
+
+        doInTransactionWithGeneralDao(generalDao -> {
+            //校验确实是testObject2的更新起作用
+            TestObject testObject = generalDao.get(TestObject.class, testObject1.getId());
+            assert testObject.getStatus() == TestObjectStatus.INVALID;
+            return null;
+        });
+
 
         //测试update方法
         doInTransactionWithGeneralDao(generalDao -> {

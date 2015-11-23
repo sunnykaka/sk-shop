@@ -2,8 +2,10 @@ package base;
 
 import common.utils.DateUtils;
 import common.utils.Money;
-import common.utils.test.BaseTest;
-import ordercenter.constants.*;
+import common.utils.test.DbTest;
+import ordercenter.constants.PlatformType;
+import ordercenter.constants.TestObjectItemStatus;
+import ordercenter.constants.TestObjectStatus;
 import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -12,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liubin on 15/4/6.
+ * Created by liubin on 15-11-20.
  */
-public interface PrepareTestObject extends BaseTest {
+public interface PrepareTestObject extends DbTest {
 
     default void prepareTestObjects(int size, int itemSize) {
         doInTransaction(em -> {
@@ -64,4 +66,6 @@ public interface PrepareTestObject extends BaseTest {
 
         return testObject;
     }
+
+
 }

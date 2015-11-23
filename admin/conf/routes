@@ -21,3 +21,4 @@ GET         /test/objects/:id/json            @controllers.test.TestObjectContro
 #testCache
 GET         /cache/:key                       @controllers.test.CacheController.getCache(key)
 PUT         /cache/:key                       @controllers.test.CacheController.setCache(key, value)
+

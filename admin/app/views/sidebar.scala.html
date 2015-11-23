@@ -17,7 +17,7 @@
             <span class="menu-text"> Typography </span>
         </a>
     </li>
-    
+
     <li>
         <a href="#" class="dropdown-toggle">
             <i class="icon-desktop"></i>
@@ -27,16 +27,17 @@
         </a>
 
         <ul class="submenu">
-            <li>
+            <li menu-container="true">
                 <a href="@controllers.test.routes.TestObjectController.list()">
                     <i class="icon-double-angle-right"></i>
                     测试对象查询
                 </a>
+            </li>
+            <li menu-container="true">
                 <a href="@controllers.test.routes.TestObjectController.addPage()">
                     <i class="icon-double-angle-right"></i>
                     测试对象新增
                 </a>
-
             </li>
         </ul>
     </li>
@@ -48,3 +49,17 @@
 </div>
 
 <script>try{ace.settings.check('sidebarexi' , 'collapsed')}catch(e){}</script>
+<script>
+//加载页面的时候根据url选中左边的菜单
+(function() {
+    var uri = "@{requestHeader.uri}";
+
+    if(uri != "/") {
+        var selectedA = $("li[menu-container='true'] > a").filter(function(index) {
+            return $(this).attr("href") == uri;
+        });
+        selectedA.parent("li").addClass("active");
+        selectedA.parentsUntil("ul[class='nav nav-list']", "li").last().addClass("active open");
+    }
+})();
+</script>

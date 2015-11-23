@@ -13,10 +13,11 @@ import services.api.user.UserTokenProvider;
 import java.util.HashMap;
 import java.util.Map;
 
+import static common.utils.TestUtils.UserRegisterInfo;
+import static common.utils.TestUtils.mockUserRegisterInfo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static play.test.Helpers.*;
-import static common.utils.TestUtils.*;
 
 /**
  * Created by liubin on 15-4-2.

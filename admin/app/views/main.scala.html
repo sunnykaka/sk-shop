@@ -12,15 +12,15 @@
         <link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet" />
         <link rel="stylesheet" href="@routes.Assets.at("css/font-awesome.min.css")" />
 
-        <!--[if IE 7]>
+            <!--[if IE 7]>
         <link rel="stylesheet" href=@routes.Assets.at("/css/font-awesome-ie7.min.css")" />
-        <![endif]-->
+            <![endif]-->
 
-        <!-- fonts -->
+            <!-- fonts -->
 
         <link rel="stylesheet" href="@routes.Assets.at("css/ace-fonts.css")" />
 
-        <!-- ace styles -->
+            <!-- ace styles -->
 
         <link rel="stylesheet" href="@routes.Assets.at("css/ace.min.css")" />
         <link rel="stylesheet" href="@routes.Assets.at("css/ace-rtl.min.css")" />
@@ -28,26 +28,36 @@
         <link rel="stylesheet" href="@routes.Assets.at("css/jquery-ui-1.10.3.full.min.css")" />
         <link rel="stylesheet" href="@routes.Assets.at("css/jquery-ui-1.10.3.custom.min.css")" />
 
-        <!--[if lte IE 8]>
+            <!--[if lte IE 8]>
         <link rel="stylesheet" href="@routes.Assets.at("css/ace-ie.min.css")" />
-        <![endif]-->
+            <![endif]-->
 
-        <!-- inline styles related to this page -->
+            <!-- inline styles related to this page -->
 
         <link rel="stylesheet" href="@routes.Assets.at("css/bootstrap-datetimepicker.min.css")" />
 
-        <!-- ace settings handler -->
+            <!-- ace settings handler -->
 
         <script src="@routes.Assets.at("js/ace-extra.min.js")"></script>
 
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
-        <!--[if lt IE 9]>
+            <!--[if lt IE 9]>
         <script src="@routes.Assets.at("js/html5shiv.js")"></script>
         <script src="@routes.Assets.at("js/respond.min.js")"></script>
         <![endif]-->
 
+        <!--[if !IE]> -->
+        <script type="text/javascript">
+        window.jQuery || document.write("<script src='@routes.Assets.at("js/jquery-2.0.3.min.js")'>"+"<"+"/script>");
+        </script>
+            <!-- <![endif]-->
 
+            <!--[if IE]>
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='@routes.Assets.at("assets/js/jquery-1.10.2.min.js")'>"+"<"+"/script>");
+        </script>
+        <![endif]-->
 
     </head>
 
@@ -56,7 +66,7 @@
             <script type="text/javascript">try{ace.settings.check('navbar' , 'fixed')}catch(e){}</script>
 
             <div class="navbar-container" id="navbar-container">
-                @header()
+            @header()
             </div><!-- /.container -->
         </div>
 
@@ -69,11 +79,11 @@
                 </a>
 
                 <div class="sidebar" id="sidebar">
-                    @sidebar()
+                @sidebar()
                 </div>
 
                 <div class="main-content">
-                    @content
+                @content
                 </div><!-- /.main-content -->
 
             </div><!-- /.main-container-inner -->
@@ -84,17 +94,6 @@
         </div><!-- /.main-container -->
 
         <!-- basic scripts -->
-        <!--[if !IE]> -->
-        <script type="text/javascript">
-        window.jQuery || document.write("<script src='@routes.Assets.at("js/jquery-2.0.3.min.js")'>"+"<"+"/script>");
-        </script>
-            <!-- <![endif]-->
-
-            <!--[if IE]>
-        <script type="text/javascript">
-            window.jQuery || document.write("<script src='@routes.Assets.at("assets/js/jquery-1.10.2.min.js")'>"+"<"+"/script>");
-        </script>
-        <![endif]-->
 
         <script type="text/javascript">
         if("ontouchend" in document) document.write("<script src='@routes.Assets.at("js/jquery.mobile.custom.min.js")'>"+"<"+"/script>");
@@ -116,14 +115,12 @@
         <script src="@routes.Assets.at("js/jquery.validate.min.js")"></script>
         <script src="@routes.Assets.at("js/bootbox.min.js")"></script>
 
-        <!-- ace scripts -->
+            <!-- ace scripts -->
 
         <script src="@routes.Assets.at("js/ace-elements.min.js")"></script>
         <script src="@routes.Assets.at("js/ace.min.js")"></script>
 
             <!-- inline scripts related to this page -->
-
-
         @staticFile
 
     </body>

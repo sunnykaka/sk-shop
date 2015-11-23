@@ -1,13 +1,13 @@
 package controllers.test;
 
+import base.BaseTest;
 import base.PrepareTestObject;
 import common.utils.JsonUtils;
 import ordercenter.models.TestObject;
 import ordercenter.models.TestObjectItem;
 import org.junit.Test;
+import play.mvc.Http;
 import play.mvc.Result;
-import play.test.FakeRequest;
-import play.test.WithApplication;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,19 +21,19 @@ import static play.test.Helpers.*;
 /**
  * Created by liubin on 15-4-2.
  */
-public class TestObjectControllerTest extends WithApplication implements PrepareTestObject {
+public class TestObjectControllerTest extends BaseTest implements PrepareTestObject {
 
     @Test
     public void testCreateOrderByJson() throws Exception {
 
         TestObject testObject = initTestObject(3);
 
-        FakeRequest request = new FakeRequest(POST, controllers.test.routes.TestObjectController.createByJson().url()).
-                withJsonBody(JsonUtils.object2Node(testObject));
+        Http.RequestBuilder request = new Http.RequestBuilder().method(POST).uri(routes.TestObjectController.createByJson().url()).
+                bodyJson(JsonUtils.object2Node(testObject));
 
         Result result = route(request);
-        assertThat(status(result), is(OK));
-        assertThat(contentType(result), is("application/json"));
+        assertThat(result.status(), is(OK));
+        assertThat(result.contentType(), is("application/json"));
         assertThat(contentAsString(result), is("{\"result\":\"ok\"}"));
 
 
@@ -49,11 +49,11 @@ public class TestObjectControllerTest extends WithApplication implements Prepare
             List<TestObject> results = generalDao.query("select o from TestObject o", Optional.empty(), new HashMap<>());
             TestObject testObject = results.get(0);
 
-            FakeRequest request = new FakeRequest(GET, controllers.test.routes.TestObjectController.viewByJson(testObject.getId()).url());
+            Http.RequestBuilder request = new Http.RequestBuilder().method(GET).uri(controllers.test.routes.TestObjectController.viewByJson(testObject.getId()).url());
             Result result = route(request);
             System.out.println(contentAsString(result));
-            assertThat(status(result), is(OK));
-            assertThat(contentType(result), is("application/json"));
+            assertThat(result.status(), is(OK));
+            assertThat(result.contentType(), is("application/json"));
             TestObject testObjectAfter = JsonUtils.json2Object(contentAsString(result), TestObject.class);
 
             assertThat(testObjectAfter.getId(), is(testObject.getId()));

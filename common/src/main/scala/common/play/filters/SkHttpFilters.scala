@@ -1,6 +1,7 @@
-package utils
+package common.play.filters
 
 import javax.inject.Inject
+
 import common.play.kamon.KamonRequestFilter
 import play.api.Configuration
 import play.api.http.HttpFilters

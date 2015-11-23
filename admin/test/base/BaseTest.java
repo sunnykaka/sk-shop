@@ -58,35 +58,6 @@ public abstract class BaseTest {
         }
     }
 
-    public static Result routeWithExceptionHandle(Http.RequestBuilder requestBuilder) {
-
-        Result result;
-        Http.RequestImpl req = requestBuilder.build();
-
-        try {
-            result = Helpers.route(requestBuilder);
-        } catch (Exception e) {
-            try {
-                BaseGlobal global = (BaseGlobal)Class.forName("utils.Global").newInstance();
-                return global.onError(req, e).get(3000000L);
-            } catch (Exception e1) {
-                Logger.error(e1.getMessage(), e1);
-                throw new AssertionError(e1.getMessage());
-            }
-        }
-
-        String s = Helpers.contentAsString(result);
-        Logger.debug(String.format("request: %s, response: %s", req.toString(), s));
-        return result;
-    }
-
-    protected void assertResultAsError(Result result, ErrorCode expectedErrorCode) {
-        assertThat(result.status(), is(expectedErrorCode.status));
-        api.response.Error error = JsonUtils.json2Object(contentAsString(result), api.response.Error.class);
-        assertThat(error.getCode(), is(expectedErrorCode.getName()));
-    }
-
-
 
 
 }

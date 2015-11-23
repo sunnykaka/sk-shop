@@ -1,35 +1,29 @@
 package configs;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import common.exceptions.AppBusinessException;
+import common.utils.play.BaseGlobal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import play.db.Database;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-
-import play.Play;
-
-import java.beans.PropertyVetoException;
 import java.util.HashMap;
-
-import play.Logger;
 
 @Configuration
 @EnableTransactionManagement
 public class DataConfig {
 
     @Bean
+    @Lazy
     public EntityManagerFactory entityManagerFactory() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setShowSql(true);
+        vendorAdapter.setShowSql(false);
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setPackagesToScan("**.models");
         entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
@@ -51,6 +45,7 @@ public class DataConfig {
     }
 
     @Bean
+    @Lazy
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager(entityManagerFactory());
 
@@ -58,35 +53,10 @@ public class DataConfig {
     }
 
     @Bean
+    @Lazy
     public DataSource dataSource(){
-
-        play.Configuration configuration = Play.application().configuration();
-
-        try {
-            ComboPooledDataSource ds = new ComboPooledDataSource();
-            ds.setDriverClass(configuration.getString("db.default.driver"));
-            ds.setJdbcUrl(configuration.getString("db.default.url"));
-            ds.setUser(configuration.getString("db.default.user"));
-            ds.setPassword(configuration.getString("db.default.password"));
-            ds.setMaxPoolSize(configuration.getInt("db.default.maxPoolSize"));
-            ds.setMinPoolSize(configuration.getInt("db.default.minPoolSize"));
-            ds.setInitialPoolSize(configuration.getInt("db.default.initialPoolSize"));
-            ds.setAcquireIncrement(configuration.getInt("db.default.acquireIncrement"));
-            ds.setMaxIdleTime(configuration.getInt("db.default.maxIdleTime"));
-            ds.setIdleConnectionTestPeriod(configuration.getInt("db.default.idleConnectionTestPeriod"));
-            ds.setMaxStatements(configuration.getInt("db.default.maxStatements"));
-            ds.setCheckoutTimeout(configuration.getInt("db.default.checkoutTimeout"));
-            ds.setBreakAfterAcquireFailure(configuration.getBoolean("db.default.breakAfterAcquireFailure"));
-            ds.setTestConnectionOnCheckin(configuration.getBoolean("db.default.testConnectionOnCheckin"));
-            ds.setPreferredTestQuery(configuration.getString("db.default.preferredTestQuery"));
-
-            return ds;
-
-        } catch (PropertyVetoException e) {
-            Logger.error("", e);
-            throw new AppBusinessException("启动加载数据库连接配置失败");
-        }
-
+        return BaseGlobal.injector.instanceOf(Database.class).getDataSource();
     }
+
 
 }

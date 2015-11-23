@@ -46,6 +46,8 @@ object ApplicationBuild extends Build {
 
   lazy val app = webProject("app", appDependencies)
 
+  lazy val admin = webProject("admin", adminDependencies)
+
   def webProject(name: String, dependencies: Seq[ModuleID]) = Project(name, file(name)).
     enablePlugins(play.sbt.PlayJava).
     settings(Commons.settings: _*).
@@ -65,5 +67,5 @@ object ApplicationBuild extends Build {
 
   lazy val root = (project in file(".")).
     settings(Commons.settings: _*).
-    aggregate(shop, app)
+    aggregate(shop, app, admin)
 }
