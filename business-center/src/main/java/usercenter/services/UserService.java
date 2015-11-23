@@ -9,6 +9,7 @@ import common.utils.DateUtils;
 import common.utils.PasswordHash;
 import common.utils.RegExpUtils;
 import common.utils.play.BaseGlobal;
+import ordercenter.services.VoucherService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -47,6 +48,9 @@ public class UserService {
 
     @Autowired
     GeneralDao generalDao;
+
+    @Autowired
+    private VoucherService voucherService;
 
     private static CacheApi cacheApi() {
         return BaseGlobal.injector.instanceOf(CacheApi.class);
@@ -142,6 +146,13 @@ public class UserService {
 
         Logger.debug(String.format("用户%s注册成功", user.getUserName()));
 
+        try {
+            //发放注册代金券
+            voucherService.requestForRegister(user.getId(), 1);
+        } catch (Exception e) {
+            Logger.error("用户注册的时候请求代金券失败", e);
+        }
+
         return user;
     }
 
@@ -189,6 +200,15 @@ public class UserService {
         userOuter.setOuterId(openUserInfo.getUnionId());
         userOuter.setUserId(user.getId());
         generalDao.persist(userOuter);
+
+        Logger.debug(String.format("用户%s注册成功", user.getUserName()));
+
+        try {
+            //发放注册代金券
+            voucherService.requestForRegister(user.getId(), 1);
+        } catch (Exception e) {
+            Logger.error("用户注册的时候请求代金券失败", e);
+        }
 
         return user;
     }
@@ -248,7 +268,7 @@ public class UserService {
 
     /**
      * Web在注册成功之后自动登录
-     * @param user
+     * @param userId
      * @param rememberMe
      * @return
      */

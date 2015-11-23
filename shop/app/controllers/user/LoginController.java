@@ -5,7 +5,6 @@ import common.exceptions.AppBusinessException;
 import common.exceptions.AppException;
 import common.utils.FormUtils;
 import common.utils.JsonResult;
-import ordercenter.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.data.Form;
@@ -34,9 +33,6 @@ public class LoginController extends Controller {
     @Autowired
     UserService userService;
 
-    @Autowired
-    VoucherService voucherService;
-
     public Result registerPage() {
 
         return ok(register.render());
@@ -51,12 +47,6 @@ public class LoginController extends Controller {
             try {
                 registerForm.get().setChannel(MarketChannel.WEB.getValue());
                 User user = userService.register(registerForm.get(), request().remoteAddress());
-                try {
-                    //发放注册代金券
-                    voucherService.requestForRegister(user.getId(), 1);
-                } catch (Exception e) {
-                    Logger.error("用户注册的时候请求代金券失败", e);
-                }
                 userService.loginByRegister(user.getId(), true);
                 String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
                 return ok(new JsonResult(true, null, originalUrl).toNode());
@@ -205,15 +195,6 @@ public class LoginController extends Controller {
             }
 
             User user = (User)results[0];
-            boolean isCreate = (Boolean)results[1];
-            if(isCreate) {
-                try {
-                    //发放注册代金券
-                    voucherService.requestForRegister(user.getId(), 1);
-                } catch (Exception e) {
-                    Logger.error("用户注册的时候请求代金券失败", e);
-                }
-            }
             userService.loginByRegister(user.getId(), true);
             String originalUrl = SessionUtils.getOriginalUrlOrDefault(controllers.routes.Application.index().url());
             return redirect(originalUrl);
