@@ -145,8 +145,10 @@ table .pro{width: 360px;}
 /*end header*/
 /*index slider-box*/
 .flexslider{height:501px;margin-bottom: 16px;overflow:hidden; background: #fff; position: relative}
-.flexslider .slides { zoom: 1; position: relative;  width: 100%;  height: 501px;  overflow: hidden;}
+.flexslider .slides { position: absolute;left: 50%;top: 0; margin-left: -960px; width: 100%;  height: 501px; }
+.flexslider .slides li{position: absolute;}
 .flexslider .slides a{display: block;width: 100%;height: 100%;}
+.flexslider .slides img{display: block;width: 1920px;height: 501px;}
 .flex-direction-nav {*height: 0;}
 .flex-direction-nav a{display: block; width: 40px; height: 108px; line-height: 108px; margin: -54px 0 0; position: absolute; top: 50%; z-index: 10; overflow: hidden; background: #000;opacity: .2; cursor: pointer; color: #fff; filter:alpha(opacity=20);}
 .flex-direction-nav a:hover{opacity: .4;filter:alpha(opacity=40);}
@@ -1430,3 +1432,7 @@ table .pro{width: 360px;}
 /*placehold*/
 ::-webkit-input-placeholder{color:#a9a9a9;opacity:1}:focus::-webkit-input-placeholder{color:transparent}.ph-fix :focus::-webkit-input-placeholder{color:#e0e0e0}:-moz-placeholder{color:#a9a9a9;opacity:1}:focus:-moz-placeholder{color:transparent}.ph-fix :focus:-moz-placeholder{color:#e0e0e0}::-moz-placeholder{color:#a9a9a9;opacity:1}:focus::-moz-placeholder{color:transparent}.ph-fix :focus::-moz-placeholder{color:#e0e0e0}:-ms-input-placeholder{color:#a9a9a9;opacity:1}:focus:-ms-input-placeholder{color:transparent}.ph-fix :focus:-ms-input-placeholder{color:#e0e0e0}.ph-fix :-ms-input-placeholder{color:transparent}.ph-safari ::-webkit-input-placeholder{color:transparent}.ph-label{position:relative;border:none !important;background:transparent !important;vertical-align:top;color:#a9a9a9 !important;*margin-top:1px;}.ph-label span{position:absolute;white-space:nowrap;overflow:hidden;color:#a9a9a9 !important;pointer-events:none;-ms-user-select:none;user-select:none}.ph-focus span{color:#e0e0e0 !important}.ph-hide{display:none !important}
 .lazy{background:url("../images/grey-holder.gif") center center no-repeat}
+
+@media screen and (min-width: 1920px) {
+    .flexslider{width: 1920px;margin:0 auto 16px;}
+}

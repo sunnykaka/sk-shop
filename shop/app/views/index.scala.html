@@ -40,10 +40,10 @@
             <div class="flexslider">
                 <ul class="slides">
                 @for((content, index) <- modules(0).getContents.zipWithIndex) {
-                    <li  style="height:501px;background-image: url(@content.getPic); background-position: 50% 50%;">
+                    <li  style="height:501px;">
                         <a target="_blank" @if(content.getLink != null && content.getLink != "") {
                         href="@content.getLink"
-                        } alt="@content.getTitle"></a>
+                        } alt="@content.getTitle"><img class="lazy" data-original="@content.getPic" alt="@content.getTitle"  src="@routes.Assets.versioned("images/grey.gif")"   width="1920px" height="501px"/></a>
                     </li>
                 }
                 </ul>
