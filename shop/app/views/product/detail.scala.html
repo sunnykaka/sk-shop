@@ -261,6 +261,13 @@
                         <div class="detail-btn">
                             <span class="btn remind loading-before">开售提醒</span>
                         </div>
+                        <p style="color: #FF2D54;margin-bottom: 20px;padding-right: 10px;">
+                            @if(StringUtils.isEmpty(pd.getBase.getProduct.getOnboardInfo)){
+                                @pd.getBase.getProduct.getCustomer.getRemarks
+                            }else{
+                                @pd.getBase.getProduct.getOnboardInfo
+                            }
+                        </p>
                     } else {
                         @if(!pd.getBase.getProduct.isOnline) {
                             <div class="detail-btn">
