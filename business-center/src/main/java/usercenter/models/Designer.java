@@ -53,6 +53,11 @@ public class Designer implements EntityClass<Integer> {
      */
     private Integer priority;
 
+    /**
+     * 设计师备注，商品详情展示时需要(优先展示商品备注，商品备注没有再展示设计师备注，若都没有则不展示)
+     */
+    private String remarks;
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Override
@@ -127,5 +132,14 @@ public class Designer implements EntityClass<Integer> {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    @Column(name = "remarks")
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

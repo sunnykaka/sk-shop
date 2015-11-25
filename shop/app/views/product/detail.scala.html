@@ -1,3 +1,4 @@
+@import org.apache.commons.lang3.StringUtils
 @(pd: dtos.ProductDetail, user: usercenter.models.User, imgsNum: Integer)
 
 @import common.utils.DateUtils
@@ -281,7 +282,14 @@
                                         @*<p>* 此商品为下季新款，到货时间以设计师为准！</p>*@
                                     @*}*@
                                 </div>
-                                <p style="color: #FF2D54;margin-bottom: 20px;padding-right: 10px;"> @pd.getBase.getProduct.getOnboardInfo</p>
+                                <p style="color: #FF2D54;margin-bottom: 20px;padding-right: 10px;">
+                                    @if(StringUtils.isEmpty(pd.getBase.getProduct.getOnboardInfo)){
+                                        @pd.getBase.getProduct.getCustomer.getRemarks
+                                    }else{
+                                        @pd.getBase.getProduct.getOnboardInfo
+                                    }
+
+                                </p>
                             }
                         }
                     }
