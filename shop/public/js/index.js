@@ -11,6 +11,7 @@ $(function(){
 
     $(function() {
         $(".flexslider").flexslider({
+            animation:"fade",
             pauseOnHover:true,
             touch: false
         });
