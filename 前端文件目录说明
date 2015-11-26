@@ -1,0 +1,15 @@
+前端目录静态资源:
+shop/public/
+样式目录：css
+         appcss.css :主要是移动端页面的样式
+        base.css: 商城前台样式
+        dialog.css：弹窗样式
+        iconfontxxxx:是字体图标文件，通过iconfont,通过http://www.iconfont.cn/获取
+images: 目录
+           about-us：关于我们的图片目录
+           activity: 活动图片目录
+           app: 关于app图片目录
+           debut：首发图片目录
+           detail ：详情页面图片目录
+js: 目录
+            js是基于jquery1.7.2版本
