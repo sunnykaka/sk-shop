@@ -130,6 +130,8 @@ public class LoginApiController extends BaseController {
 
         SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
 
+        Logger.info("send message in recoverCheckPhone");
+
         smsSender.sendPhoneVerificationMessage();
 
         return noContent();
