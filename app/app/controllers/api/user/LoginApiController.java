@@ -71,6 +71,8 @@ public class LoginApiController extends BaseController {
         String phone = ParamUtils.getByKey(request(), "phone");
         SmsSender smsSender = new SmsSender(phone, request().remoteAddress(), SmsSender.Usage.REGISTER);
 
+        Logger.info("send message in api request phone code");
+
         smsSender.sendPhoneVerificationMessage();
 
         return noContent();
