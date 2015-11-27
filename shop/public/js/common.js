@@ -252,11 +252,12 @@ $.ajax({
 });
 
 //生成随机验证码
+/*
 function randomCode(){
     var arr = [71,104,99,107,103,95,107,47,119,114,84,115,74,109,63,98],str = '';
     for(var i in arr){str += String.fromCharCode(arr[i] + 3);}
     return str;
-}
+}*/
 //判断窗口宽度
 $(window).on('resize load',function(){
 

@@ -132,11 +132,11 @@
             evt.preventDefault();
             fun(getCodeBtn);
             //根据手机号码获取验证码
-            var randomCodeStr = randomCode();
+            //var randomCodeStr = "UAhyq0uxt3JgWQ4T";
             $.ajax({
                 type: 'POST',
                 async: false,
-                url: '/user/phone/get_code?phone='+phoneNumber+"&code="+randomCodeStr,
+                url: '/user/phone/get_code?phone='+phoneNumber+"&code=UAhyq0uxt3JgWQ4T",
                 data: {
                     phone: phoneNum
                 },
