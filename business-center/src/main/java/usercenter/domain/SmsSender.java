@@ -21,11 +21,11 @@ import java.util.Map;
 public class SmsSender {
 
     public static int SEND_MESSAGE_MAX_TIMES_IN_DAY = 10;
-    public static int ALL_SEND_MESSAGE_MAX_TIMES_IN_DAY = 500;
+    public static int ALL_SEND_MESSAGE_MAX_TIMES_IN_DAY = 200;
     public static int VERIFICATION_CODE_EXPIRE_TIME = 7200;
     public static int VERIFICATION_CODE_LENGTH = 6;
 
-    public static String SECURITY_CODE = "Jkfnjbn2zuWvMpBe";
+    public static String SECURITY_CODE = "UAhyq0uxt3JgWQ4T";
 
     public static final String PHONE_VERIFICATION_CODE_MESSAGE_FORMAT = "您的短信验证码是%s，两小时内有效。";
 
