@@ -69,8 +69,24 @@
         }
     })();
 
-
-
+    function requestPhoneCode(phoneNum) {
+        return {
+            type: 'POST',
+            async: false,
+            data: {
+                phone: phoneNum
+            },
+            dataType: "json",
+            success: function (response) {
+                if(!response.result){
+                    $('#errormsg-phoneCode').text(response.message);
+                    that.attr('disabled',null);
+                    that.text('获取验证码');
+                    clearInterval(timer);
+                }
+            }
+        };
+    }
 
     function register(){
         var regBtn = $('#reg-btn'),msgEle=$('#errormsg-confirm-pw'),getCodeBtn = $('#get-code-btn');
@@ -88,23 +104,10 @@
             evt.preventDefault();
             fun(getCodeBtn);
             //根据手机号码获取验证码
-            $.ajax({
-                type: 'POST',
-                async: false,
-                url: '/user/phone/get_code?phone='+phoneNum+"&code=UAhyq0uxt3JgWQ4T",
-                data: {
-                    phone: phoneNum
-                },
-                dataType: "json",
-                success: function (response) {
-                    if(!response.result){
-                        $('#errormsg-phoneNum').text(response.message);
-                        that.attr('disabled',null);
-                        that.text('获取验证码');
-                        clearInterval(timer);
-                    }
-                }
-            });
+            var rBlock = requestPhoneCode(phoneNum);
+            rBlock.uri='/user/phone/get_code?phone='+phoneNum+"&code=UAhyq0uxt3JgWQ4T";
+            rBlock.url = rBlock.uri;
+            $.ajax(rBlock);
         });
 
         var options = {

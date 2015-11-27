@@ -121,34 +121,39 @@
         delayHideLabel(options.items);
     }
 
+    function requestPhoneCode(phoneNum) {
+        return {
+            type: 'POST',
+            async: false,
+            data: {
+                phone: phoneNum
+            },
+            dataType: "json",
+            success: function (response) {
+                if(!response.result){
+                    $('#errormsg-phoneCode').text(response.message);
+                    that.attr('disabled',null);
+                    that.text('获取验证码');
+                    clearInterval(timer);
+                }
+            }
+        };
+    }
 
     //找回密码第二步
     function forgetSecPw(){
 
         var getCodeBtn = $('#get-code-btn'),that = $(this);
 
-        getCodeBtn.on('click',function(evt){
+            getCodeBtn.on('click',function(evt){
             var phoneNum=$('#phoneNum').val();
             evt.preventDefault();
             fun(getCodeBtn);
             //根据手机号码获取验证码
-            $.ajax({
-                type: 'POST',
-                async: false,
-                url: '/user/phone/get_code?phone='+phoneNum+"&code=UAhyq0uxt3JgWQ4T",
-                data: {
-                    phone: phoneNum
-                },
-                dataType: "json",
-                success: function (response) {
-                    if(!response.result){
-                        $('#errormsg-phoneCode').text(response.message);
-                        that.attr('disabled',null);
-                        that.text('获取验证码');
-                        clearInterval(timer);
-                    }
-                }
-            });
+            var rBlock = requestPhoneCode(phoneNum);
+            rBlock.uri='/user/phone/get_code?phone='+phoneNum+"&code=UAhyq0uxt3JgWQ4T";
+            rBlock.url = rBlock.uri;
+            $.ajax(rBlock);
         }).trigger('click');
 
 
